@@ -3,3 +3,11 @@
 .playwright-mcp/
 data/
 .codegraph/
+.DS_Store
+__pycache__/
+*.pyc
+
+# Component-extraction batch cruft — reusable logic lives in slide-system/scripts/.
+# Per-batch ad-hoc helpers and svg-extractor audit dumps must never be committed.
+outputs/component-extractions/**/_*.py
+outputs/component-extractions/**/*-svg-manifest.json
