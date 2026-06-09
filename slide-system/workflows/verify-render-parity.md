@@ -8,5 +8,9 @@
    primary visual, logo, and folio.
 6. Run at least one fix-and-verify cycle.
 7. Store the policy, metrics, reviewer notes, checksums, and final status.
+8. Treat per-slide capture, render, overlay, and difference images as ephemeral.
+   Once parity passes, keep only `qa-report.md` plus the metrics and checksums;
+   delete `qa/export-renders/`. Keep the images only while a parity check is
+   still failing.
 
 Use `render-equivalent`, not `pixel-identical`, for cross-renderer acceptance.

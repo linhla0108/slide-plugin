@@ -15,5 +15,8 @@ background.
 
 Never describe a full-slide image deck as editable.
 
+The run holds only the exported `.pptx`. Keep any one-off generator script under
+`slide-system/scripts/`, not inside the run output.
+
 Run ZIP, slide-count, exact-content, native-object, font, crop, z-order, and
 render-parity checks.

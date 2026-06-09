@@ -6,7 +6,11 @@ Build only after approval.
 - Keep slide content as static, editable HTML.
 - Keep each text item in a leaf element.
 - Use the approved brand pack and published visual-item versions.
-- Copy only required assets into the run.
+- Reference shared assets in place; never copy them per run. Brand fonts,
+  icons, and brand images load from the canonical brand-pack location.
+- Keep one shared `<job-id>/assets/` folder for job-scoped assets not in a
+  brand pack. Every run references that folder; runs never re-copy it.
+- Copy an asset into a run only when it is unique to that single run.
 - Separate raster assets into base background layers and complex overlay layers.
   Do not bake complex visual elements into the background image.
 - Use background-only raster assets only for passive canvas treatments.

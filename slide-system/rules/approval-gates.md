@@ -2,6 +2,9 @@
 
 ## Slide Generation
 
+Intake closes with a plain-language brief recap the user must confirm before any
+build work begins. That confirmed brief is the input to the approval package.
+
 Use one explicit approval gate before build. The package includes requirements,
 capabilities, content plan, visual plan, selections and rejections, export
 strategy, risks, limitations, and requested overrides.

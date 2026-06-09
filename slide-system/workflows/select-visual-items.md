@@ -9,4 +9,7 @@
 7. Record selected and rejected candidates with reasons.
 8. Record an extraction recommendation when useful. Never trigger extraction.
 
+Write one `analysis/visual-requests.json` and one `analysis/selection-report.json`
+per run, keyed by section. Do not emit a separate file per section.
+
 Select structure by semantic intent before visual resemblance.

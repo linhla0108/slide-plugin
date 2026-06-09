@@ -1,6 +1,7 @@
 # Plan Slide Deck
 
-Normalize prompt-only, file-only, or mixed inputs into:
+Start from the confirmed intake brief (`workflows/intake-and-triage.md`).
+Expand it into:
 
 - Requirement brief and audience.
 - Exact content model and source authority.
