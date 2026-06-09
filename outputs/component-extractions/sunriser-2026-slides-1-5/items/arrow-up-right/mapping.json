@@ -1,0 +1,65 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "arrow-up-right",
+  "candidate_stable_id": "sun.icon.arrow-up-right",
+  "status": "staging",
+  "type": "icon",
+  "category": "icon",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 3,
+    "region": {
+      "x": 0.03,
+      "y": 0.82,
+      "width": 0.075,
+      "height": 0.12,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "3dcff3fb04b9cfe8f31ed683a75b6b88f05d3d405afc41c05d90c53debb903e3",
+    "semantic_signature_sha256": "d583bc83927a5274daa0881d319266d7cb0d0f3a65f3bbc44c017f581d2ab861",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "arrow",
+    "direction",
+    "decorative-mark"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [
+    "currentColor"
+  ],
+  "variants": [],
+  "compatibility": {
+    "html": "supported",
+    "pptx": "supported",
+    "pdf": "supported",
+    "canva": "untested"
+  },
+  "limitations": [
+    "Recurs on slides 3 and 5; color via currentColor."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": null,
+  "name": "Arrow Up-Right Icon",
+  "tags": [
+    "icon",
+    "arrow",
+    "mark"
+  ],
+  "paths": {
+    "artifact": "artifact/arrow-up-right.svg",
+    "preview": "preview/index.html"
+  }
+}

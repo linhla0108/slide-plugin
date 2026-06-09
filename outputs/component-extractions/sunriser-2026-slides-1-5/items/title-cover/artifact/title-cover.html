@@ -1,0 +1,58 @@
+<!-- sun.template.title-cover
+     Source: SUN.RISER 2026, slide 1 (deck opener) — LAYOUT CONTRACT ONLY.
+     No source copy is reproduced; all text below is placeholder. Composes:
+       - sun.background.orange-pinstripe (backdrop)
+       - sun.asset.logo (top-left)
+       - sun.component.header-tag (top-right)
+       - two-line display title (foreground slot)
+     16:9 stage; slots are positioned in normalized percentages of the stage. -->
+<div class="sun-title-cover sun-bg-orange-pinstripe">
+  <img class="sun-title-cover__logo" src="{{logo_src}}" alt="SUN.STUDIO" />
+
+  <div class="sun-title-cover__tag">
+    <div class="sun-header-tag" data-variant="filled">
+      <span class="sun-header-tag__label">{{tag_label}}</span>
+      <span class="sun-header-tag__counter">{{tag_counter}}</span>
+    </div>
+  </div>
+
+  <h1 class="sun-title-cover__title">
+    <span>{{title_line_1}}</span>
+    <span>{{title_line_2}}</span>
+  </h1>
+</div>
+
+<style>
+  .sun-title-cover {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    font-family: "Inter", system-ui, sans-serif;
+    color: #fff;
+  }
+  .sun-title-cover__logo {
+    position: absolute;
+    left: 2.8%;
+    top: 4.5%;
+    width: 13.5%;
+    height: auto;
+  }
+  .sun-title-cover__tag {
+    position: absolute;
+    right: 3%;
+    top: 3%;
+  }
+  .sun-title-cover__title {
+    position: absolute;
+    left: 4%;
+    bottom: 16%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-weight: 800;
+    font-size: clamp(28px, 7vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+</style>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SUN.RISER 2026 — Extraction preview (slides 1–5)</title>
+<style>
+  :root { --line:#e6e6e6; --ink:#111; --muted:#777; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:Inter,system-ui,sans-serif; color:var(--ink); background:#f6f6f7; }
+  header.top { padding:22px 28px; background:#fff; border-bottom:1px solid var(--line); }
+  header.top h1 { margin:0 0 4px; font-size:20px; }
+  header.top p { margin:0; color:var(--muted); font-size:13px; }
+  .legend { display:flex; gap:14px; margin-top:10px; font-size:12px; }
+  .pill { padding:3px 10px; border-radius:999px; font-weight:700; }
+  .pill.new { background:#e8f7ee; color:#137a3e; }
+  .pill.dup { background:#fdeaea; color:#b42323; }
+  section.group { padding:20px 28px; }
+  section.group h2 { font-size:14px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:0 0 14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:18px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+  .card .meta { padding:10px 14px; border-bottom:1px solid var(--line); }
+  .card .meta b { font-size:14px; }
+  .card .meta code { display:block; color:var(--muted); font-size:12px; margin-top:2px; }
+  .card .tags { font-size:11px; color:var(--muted); margin-top:6px; }
+  .card iframe { width:100%; height:280px; border:0; background:#fff; }
+  .card .links { padding:8px 14px; font-size:12px; border-top:1px solid var(--line); display:flex; gap:14px; }
+  .card .links a { color:#1558d6; text-decoration:none; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>SUN.RISER 2026 — Component extraction preview</h1>
+  <p>Trial batch: slides 1–5 · <code>sunriser-2026-slides-1-5</code> · 9 new + 5 duplicates · status: staging (chưa publish)</p>
+  <div class="legend">
+    <span class="pill new">NEW = staging, chờ duyệt</span>
+    <span class="pill dup">DUP = đã có trong thư viện</span>
+  </div>
+</header>
+
+<section class="group">
+  <h2>9 component mới (staging)</h2>
+  <div class="grid" id="new"></div>
+</section>
+
+<section class="group">
+  <h2>5 vùng trùng (tái dùng item cũ — không publish lại)</h2>
+  <div class="grid" id="dup"></div>
+</section>
+
+<script>
+const NEW = [
+  ["title-cover","sun.template.title-cover","template · slide 1"],
+  ["orange-pinstripe","sun.background.orange-pinstripe","background · slide 1"],
+  ["header-tag","sun.component.header-tag","component · slide 1 (lặp 2–5)"],
+  ["orange-arcs","sun.background.orange-arcs","background · slide 2"],
+  ["numbered-heading","sun.component.numbered-heading","component · slide 2"],
+  ["arrow-up-right","sun.icon.arrow-up-right","icon · slide 3 (lặp 5)"],
+  ["blue-arcs","sun.background.blue-arcs","background · slide 4"],
+  ["prompt-questions","sun.component.prompt-questions","component · slide 5"],
+  ["quote-mark","sun.icon.quote-mark","icon · slide 5"],
+];
+const DUP = [
+  ["logo","sun.asset.logo","asset · slide 1"],
+  ["qr-stack","sun.component.qr-stack","component · slide 2"],
+  ["agenda","sun.section.agenda","section · slide 3"],
+  ["divider","sun.section.divider","section · slide 4"],
+  ["folio","sun.component.folio","component · slide 5"],
+];
+function card(id, cid, sub) {
+  return `<div class="card">
+    <div class="meta"><b>${cid.split('.').pop()}</b><code>${cid}</code><div class="tags">${sub}</div></div>
+    <iframe loading="lazy" src="items/${id}/preview/index.html"></iframe>
+    <div class="links">
+      <a href="items/${id}/preview/index.html" target="_blank">preview ↗</a>
+      <a href="items/${id}/evidence/notes.md" target="_blank">evidence</a>
+      <a href="items/${id}/report.md" target="_blank">report</a>
+    </div></div>`;
+}
+document.getElementById('new').innerHTML = NEW.map(a=>card(...a)).join('');
+document.getElementById('dup').innerHTML = DUP.map(a=>card(...a)).join('');
+</script>
+</body>
+</html>

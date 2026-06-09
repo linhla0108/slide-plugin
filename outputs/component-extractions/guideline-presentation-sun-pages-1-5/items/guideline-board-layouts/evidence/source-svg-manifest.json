@@ -1,0 +1,3516 @@
+{
+  "source": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/evidence/source-with-text.svg",
+  "sha256": "dc78280680e0f72b723305027328ed16bfaddccc28073ad5698268e9d2d64236",
+  "valid_xml": true,
+  "width": "2938.83",
+  "height": "2623.16",
+  "viewBox": "0 0 2938.83 2623.16",
+  "preserveAspectRatio": null,
+  "aspect_ratio": 1.1203395904176643,
+  "tag_counts": {
+    "clipPath": 20,
+    "defs": 1,
+    "g": 25,
+    "path": 111,
+    "svg": 1,
+    "text": 23,
+    "tspan": 78
+  },
+  "id_count": 20,
+  "text_mode": "native-text",
+  "texts": [
+    {
+      "node_index": 61,
+      "tag": "text",
+      "text": "Checklist cho Quản lýManager nên hỏi / trao đổiMục tiêuCác bước"
+    },
+    {
+      "node_index": 62,
+      "tag": "tspan",
+      "text": "Checklist cho Quản lýManager nên hỏi / trao đổiMục tiêuCác bước"
+    },
+    {
+      "node_index": 63,
+      "tag": "text",
+      "text": "1.Context – Giải thích Goal của teamNhân viên hiểu bức tranh chung"
+    },
+    {
+      "node_index": 64,
+      "tag": "tspan",
+      "text": "1.Context – Giải thích Goal"
+    },
+    {
+      "node_index": 65,
+      "tag": "tspan",
+      "text": "của team"
+    },
+    {
+      "node_index": 66,
+      "tag": "tspan",
+      "text": "Nhân viên hiểu bức tranh chung"
+    },
+    {
+      "node_index": 78,
+      "tag": "text",
+      "text": "•Theo em phần nào trong công việc của mình ảnh hưởng nhiều nhất đến goal team?•Em nghĩ kết quả nào chứng minh mình làm tốt?"
+    },
+    {
+      "node_index": 79,
+      "tag": "tspan",
+      "text": "•Theo em phần nào trong công việc của mình ảnh hưởng"
+    },
+    {
+      "node_index": 80,
+      "tag": "tspan",
+      "text": "nhiều nhất đến goal team?"
+    },
+    {
+      "node_index": 81,
+      "tag": "tspan",
+      "text": "•Em nghĩ kết quả nào chứng minh mình làm tốt?"
+    },
+    {
+      "node_index": 82,
+      "tag": "text",
+      "text": "2. Contribution – Xác định đóng góp của nhân viênTìm ra vai trò của nhân viên trong goal team"
+    },
+    {
+      "node_index": 83,
+      "tag": "tspan",
+      "text": "2. Contribution – Xác định"
+    },
+    {
+      "node_index": 84,
+      "tag": "tspan",
+      "text": "đóng góp của nhân viên"
+    },
+    {
+      "node_index": 85,
+      "tag": "tspan",
+      "text": "Tìm ra vai trò của nhân viên trong"
+    },
+    {
+      "node_index": 86,
+      "tag": "tspan",
+      "text": "goal team"
+    },
+    {
+      "node_index": 94,
+      "tag": "text",
+      "text": "3. Deﬁne – Viết Goal & Key Results (Project Goal)Chuyển ý tưởng thành goal đo được"
+    },
+    {
+      "node_index": 95,
+      "tag": "tspan",
+      "text": "3. Deﬁne – Viết Goal & Key"
+    },
+    {
+      "node_index": 96,
+      "tag": "tspan",
+      "text": "Results (Project Goal)"
+    },
+    {
+      "node_index": 97,
+      "tag": "tspan",
+      "text": "Chuyển ý tưởng thành goal đo được"
+    },
+    {
+      "node_index": 103,
+      "tag": "text",
+      "text": "4. Deﬁne – Viết Goal & Key Results (Functional Goal)"
+    },
+    {
+      "node_index": 104,
+      "tag": "tspan",
+      "text": "4. Deﬁne – Viết Goal & Key"
+    },
+    {
+      "node_index": 105,
+      "tag": "tspan",
+      "text": "Results (Functional Goal)"
+    },
+    {
+      "node_index": 111,
+      "tag": "text",
+      "text": "5. Deﬁne - Development Goal"
+    },
+    {
+      "node_index": 112,
+      "tag": "tspan",
+      "text": "5. Deﬁne - Development Goal"
+    },
+    {
+      "node_index": 122,
+      "tag": "text",
+      "text": "6. Feasibility – Kiểm tra tính khả thiĐảm bảo goal thực tế"
+    },
+    {
+      "node_index": 123,
+      "tag": "tspan",
+      "text": "6. Feasibility – Kiểm tra tính"
+    },
+    {
+      "node_index": 124,
+      "tag": "tspan",
+      "text": "khả thi"
+    },
+    {
+      "node_index": 125,
+      "tag": "tspan",
+      "text": "Đảm bảo goal thực tế"
+    },
+    {
+      "node_index": 135,
+      "tag": "text",
+      "text": "7. Weight - Cân đối tỷ trọngĐảm bảo tỷ trọng các goal cân đối và phù hợp với khả năng tác động"
+    },
+    {
+      "node_index": 136,
+      "tag": "tspan",
+      "text": "7. Weight - Cân đối tỷ trọng"
+    },
+    {
+      "node_index": 137,
+      "tag": "tspan",
+      "text": "Đảm bảo tỷ trọng các goal cân đối"
+    },
+    {
+      "node_index": 138,
+      "tag": "tspan",
+      "text": "và phù hợp với khả năng tác động"
+    },
+    {
+      "node_index": 148,
+      "tag": "text",
+      "text": "8. Commitment –Đồng thuận goalHai bên thống nhất và cam kết thực hiện"
+    },
+    {
+      "node_index": 149,
+      "tag": "tspan",
+      "text": "8. Commitment –"
+    },
+    {
+      "node_index": 150,
+      "tag": "tspan",
+      "text": "Đồng thuận goal"
+    },
+    {
+      "node_index": 151,
+      "tag": "tspan",
+      "text": "Hai bên thống nhất và"
+    },
+    {
+      "node_index": 152,
+      "tag": "tspan",
+      "text": "cam kết thực hiện"
+    },
+    {
+      "node_index": 153,
+      "tag": "text",
+      "text": "Giải thích goal của team, giúp nhân viên hiểu vì sao goal quan trọngGiúp nhân viên hiểu team đang có 1-2 ưu tiên chính"
+    },
+    {
+      "node_index": 154,
+      "tag": "tspan",
+      "text": "Giải thích goal của team, giúp nhân viên hiểu vì sao goal quan trọng"
+    },
+    {
+      "node_index": 155,
+      "tag": "tspan",
+      "text": "Giúp nhân viên hiểu team đang có 1-2 ưu tiên chính"
+    },
+    {
+      "node_index": 159,
+      "tag": "text",
+      "text": "Lắng nghe Nguyện vọng trong công việc của nhân viênLắng nghe Goal do nhân viên đề xuất"
+    },
+    {
+      "node_index": 160,
+      "tag": "tspan",
+      "text": "Lắng nghe Nguyện vọng trong công việc của nhân viên"
+    },
+    {
+      "node_index": 161,
+      "tag": "tspan",
+      "text": "Lắng nghe Goal do nhân viên đề xuất"
+    },
+    {
+      "node_index": 165,
+      "tag": "text",
+      "text": "Xác định Goal của nhân viên là outcome, không phải taskƯu tiên 3-5 goal chính có tác động chính đến goal chungMỗi goal có 2–3 Key ResultsCó chỉ số đo và thời gian"
+    },
+    {
+      "node_index": 166,
+      "tag": "tspan",
+      "text": "Xác định Goal của nhân viên là outcome, không phải task"
+    },
+    {
+      "node_index": 167,
+      "tag": "tspan",
+      "text": "Ưu tiên 3-5 goal chính có tác động chính đến goal chung"
+    },
+    {
+      "node_index": 168,
+      "tag": "tspan",
+      "text": "Mỗi goal có 2–3 Key Results"
+    },
+    {
+      "node_index": 169,
+      "tag": "tspan",
+      "text": "Có chỉ số đo và thời gian"
+    },
+    {
+      "node_index": 175,
+      "tag": "text",
+      "text": "•Em cần tập trung vào dự án nào? •Dự án mới em cần theo sát năm nay?•Em sẽ ưu tiên goal nào hơn để đảm bảo hoàn thành?•Kết quả nào chứng minh goal đã đạt?•Chúng ta sẽ đo kết quả bằng chỉ số nào?•Khi nào goal được coi là hoàn thành?•Có khó khăn nào ảnh hưởng đến goal không?•Em cần hỗ trợ gì từ Quản lý?•Goal này có khả thi với khối lượng công việc hiện tại không?•Goal nào là ưu tiên chính trong công việc hiện tại?•Goal nào nên chiếm nhiều thời gian và công sức hơn?•Kế hoạch để em thực hiện mục tiêu như thế nào?•Chúng ta sẽ theo dõi tiến độ như thế nào?•Năng lực / Kỹ năng cần nào cần đặt mục tiêu cải thiện/phát triển trong năm nay để phục vụ hoàn thành mục tiêu công việc? Goal này có liên quan đến công việc hiện tại của nhân viênGoal khả thi với thời gian và nguồn lựcRủi ro chính đã được xác định"
+    },
+    {
+      "node_index": 176,
+      "tag": "tspan",
+      "text": "•Em cần tập trung vào dự án nào?"
+    },
+    {
+      "node_index": 177,
+      "tag": "tspan",
+      "text": "•Dự án mới em cần theo sát năm nay?"
+    },
+    {
+      "node_index": 178,
+      "tag": "tspan",
+      "text": "•Em sẽ ưu tiên goal nào hơn để đảm bảo hoàn thành?"
+    },
+    {
+      "node_index": 179,
+      "tag": "tspan",
+      "text": "•Kết quả nào chứng minh goal đã đạt?"
+    },
+    {
+      "node_index": 180,
+      "tag": "tspan",
+      "text": "•Chúng ta sẽ đo kết quả bằng chỉ số nào?"
+    },
+    {
+      "node_index": 181,
+      "tag": "tspan",
+      "text": "•Khi nào goal được coi là hoàn thành?"
+    },
+    {
+      "node_index": 182,
+      "tag": "tspan",
+      "text": "•Có khó khăn nào ảnh hưởng đến goal không?"
+    },
+    {
+      "node_index": 183,
+      "tag": "tspan",
+      "text": "•Em cần hỗ trợ gì từ Quản lý?"
+    },
+    {
+      "node_index": 184,
+      "tag": "tspan",
+      "text": "•Goal này có khả thi với khối lượng công việc hiện tại không?"
+    },
+    {
+      "node_index": 185,
+      "tag": "tspan",
+      "text": "•Goal nào là ưu tiên chính trong công việc hiện tại?"
+    },
+    {
+      "node_index": 186,
+      "tag": "tspan",
+      "text": "•Goal nào nên chiếm nhiều thời gian và công sức hơn?"
+    },
+    {
+      "node_index": 187,
+      "tag": "tspan",
+      "text": "•Kế hoạch để em thực hiện mục tiêu như thế nào?"
+    },
+    {
+      "node_index": 188,
+      "tag": "tspan",
+      "text": "•Chúng ta sẽ theo dõi tiến độ như thế nào?"
+    },
+    {
+      "node_index": 189,
+      "tag": "tspan",
+      "text": "•Năng lực / Kỹ năng cần nào cần đặt mục tiêu cải thiện/phát"
+    },
+    {
+      "node_index": 190,
+      "tag": "tspan",
+      "text": "triển trong năm nay để phục vụ hoàn thành mục tiêu công"
+    },
+    {
+      "node_index": 191,
+      "tag": "tspan",
+      "text": "việc?"
+    },
+    {
+      "node_index": 192,
+      "tag": "tspan",
+      "text": "Goal này có liên quan đến công việc hiện tại của nhân viên"
+    },
+    {
+      "node_index": 193,
+      "tag": "tspan",
+      "text": "Goal khả thi với thời gian và nguồn lực"
+    },
+    {
+      "node_index": 194,
+      "tag": "tspan",
+      "text": "Rủi ro chính đã được xác định"
+    },
+    {
+      "node_index": 199,
+      "tag": "text",
+      "text": "Quản lý hiểu và cam kết hỗ trợ nhân viênHai bên đồng thuận goalThống nhất kế hoạch triển khai & lịch check-in tiến độ"
+    },
+    {
+      "node_index": 200,
+      "tag": "tspan",
+      "text": "Quản lý hiểu và cam kết hỗ trợ nhân viên"
+    },
+    {
+      "node_index": 201,
+      "tag": "tspan",
+      "text": "Hai bên đồng thuận goal"
+    },
+    {
+      "node_index": 202,
+      "tag": "tspan",
+      "text": "Thống nhất kế hoạch triển khai & lịch check-in tiến độ"
+    },
+    {
+      "node_index": 207,
+      "tag": "text",
+      "text": "Goal đúng với vai trò của nhân viên cần có tỷ trọng caoGiảm tỷ trọng các goal có phụ thuộc vào yếu tố bên ngoài"
+    },
+    {
+      "node_index": 208,
+      "tag": "tspan",
+      "text": "Goal đúng với vai trò của nhân viên cần có tỷ trọng cao"
+    },
+    {
+      "node_index": 209,
+      "tag": "tspan",
+      "text": "Giảm tỷ trọng các goal có phụ thuộc vào yếu tố bên ngoài"
+    },
+    {
+      "node_index": 213,
+      "tag": "text",
+      "text": "BOARD"
+    },
+    {
+      "node_index": 214,
+      "tag": "tspan",
+      "text": "BOARD"
+    },
+    {
+      "node_index": 215,
+      "tag": "text",
+      "text": "1. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT  BẢNG"
+    },
+    {
+      "node_index": 216,
+      "tag": "tspan",
+      "text": "1. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT  BẢNG"
+    },
+    {
+      "node_index": 217,
+      "tag": "text",
+      "text": "26"
+    },
+    {
+      "node_index": 218,
+      "tag": "tspan",
+      "text": "26"
+    },
+    {
+      "node_index": 223,
+      "tag": "text",
+      "text": "XÂY DỰNG ĐỘI NGŨ AI"
+    },
+    {
+      "node_index": 224,
+      "tag": "tspan",
+      "text": "XÂY DỰNG ĐỘI NGŨ AI"
+    },
+    {
+      "node_index": 229,
+      "tag": "text",
+      "text": "XÂY DỰNG HỆ THỐNGTỰ ĐỘNG HOÁ"
+    },
+    {
+      "node_index": 230,
+      "tag": "tspan",
+      "text": "XÂY DỰNG HỆ THỐNG"
+    },
+    {
+      "node_index": 231,
+      "tag": "tspan",
+      "text": "TỰ ĐỘNG HOÁ"
+    },
+    {
+      "node_index": 244,
+      "tag": "text",
+      "text": "Nâng cấp các công cụ AI phục vụ công việcChia sẻ best practices vàuse cases trong các teamNâng cao tiếng anh để tiếp cận với AIXây dựng thư viện prompts & AI workﬂows dùng chungTổ chức workshop &training về AIKhuyến khíchthử nghiệm AI"
+    },
+    {
+      "node_index": 245,
+      "tag": "tspan",
+      "text": "Nâng cấp các công cụ AI"
+    },
+    {
+      "node_index": 246,
+      "tag": "tspan",
+      "text": "phục vụ công việc"
+    },
+    {
+      "node_index": 247,
+      "tag": "tspan",
+      "text": "Chia sẻ best practices và"
+    },
+    {
+      "node_index": 248,
+      "tag": "tspan",
+      "text": "use cases trong các team"
+    },
+    {
+      "node_index": 249,
+      "tag": "tspan",
+      "text": "Nâng cao tiếng anh"
+    },
+    {
+      "node_index": 250,
+      "tag": "tspan",
+      "text": "để tiếp cận với AI"
+    },
+    {
+      "node_index": 251,
+      "tag": "tspan",
+      "text": "Xây dựng thư viện prompts"
+    },
+    {
+      "node_index": 252,
+      "tag": "tspan",
+      "text": "& AI workﬂows dùng chung"
+    },
+    {
+      "node_index": 253,
+      "tag": "tspan",
+      "text": "Tổ chức workshop &"
+    },
+    {
+      "node_index": 254,
+      "tag": "tspan",
+      "text": "training về AI"
+    },
+    {
+      "node_index": 255,
+      "tag": "tspan",
+      "text": "Khuyến khích"
+    },
+    {
+      "node_index": 256,
+      "tag": "tspan",
+      "text": "thử nghiệm AI"
+    },
+    {
+      "node_index": 257,
+      "tag": "text",
+      "text": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH"
+    },
+    {
+      "node_index": 258,
+      "tag": "tspan",
+      "text": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH"
+    }
+  ],
+  "nodes": [
+    {
+      "index": 0,
+      "parent_index": null,
+      "tag": "svg",
+      "id": null,
+      "attributes": {
+        "width": "2938.83",
+        "height": "2623.16",
+        "viewBox": "0 0 2938.83 2623.16"
+      }
+    },
+    {
+      "index": 1,
+      "parent_index": 0,
+      "tag": "defs",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 2,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_1",
+      "attributes": {}
+    },
+    {
+      "index": 3,
+      "parent_index": 2,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 4,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_2",
+      "attributes": {}
+    },
+    {
+      "index": 5,
+      "parent_index": 4,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 6,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_3",
+      "attributes": {}
+    },
+    {
+      "index": 7,
+      "parent_index": 6,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 8,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_4",
+      "attributes": {}
+    },
+    {
+      "index": 9,
+      "parent_index": 8,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 10,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_5",
+      "attributes": {}
+    },
+    {
+      "index": 11,
+      "parent_index": 10,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 12,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_6",
+      "attributes": {}
+    },
+    {
+      "index": 13,
+      "parent_index": 12,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 14,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_7",
+      "attributes": {}
+    },
+    {
+      "index": 15,
+      "parent_index": 14,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 16,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_8",
+      "attributes": {}
+    },
+    {
+      "index": 17,
+      "parent_index": 16,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 18,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_9",
+      "attributes": {}
+    },
+    {
+      "index": 19,
+      "parent_index": 18,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 20,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_10",
+      "attributes": {}
+    },
+    {
+      "index": 21,
+      "parent_index": 20,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 22,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_11",
+      "attributes": {}
+    },
+    {
+      "index": 23,
+      "parent_index": 22,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 24,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_12",
+      "attributes": {}
+    },
+    {
+      "index": 25,
+      "parent_index": 24,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 26,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_13",
+      "attributes": {}
+    },
+    {
+      "index": 27,
+      "parent_index": 26,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 28,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_14",
+      "attributes": {}
+    },
+    {
+      "index": 29,
+      "parent_index": 28,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 30,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_15",
+      "attributes": {}
+    },
+    {
+      "index": 31,
+      "parent_index": 30,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 32,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_16",
+      "attributes": {}
+    },
+    {
+      "index": 33,
+      "parent_index": 32,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 34,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_17",
+      "attributes": {}
+    },
+    {
+      "index": 35,
+      "parent_index": 34,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 36,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_18",
+      "attributes": {}
+    },
+    {
+      "index": 37,
+      "parent_index": 36,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "e4eb7cd2837fdbdb6ba6d13e498040a82d546f1beff8adf556aa3a52141fc807",
+        "d_length": 41
+      }
+    },
+    {
+      "index": 38,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_19",
+      "attributes": {}
+    },
+    {
+      "index": 39,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "b9749364a6257f852492fc757b22514bc4f6e5dc5b03125b0a3d57a1137ceb36",
+        "d_length": 41
+      }
+    },
+    {
+      "index": 40,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_20",
+      "attributes": {}
+    },
+    {
+      "index": 41,
+      "parent_index": 40,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "e4eb7cd2837fdbdb6ba6d13e498040a82d546f1beff8adf556aa3a52141fc807",
+        "d_length": 41
+      }
+    },
+    {
+      "index": 42,
+      "parent_index": 0,
+      "tag": "g",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 43,
+      "parent_index": 42,
+      "tag": "g",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 44,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_1)"
+      }
+    },
+    {
+      "index": 45,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1836.3233,467.93824)",
+        "d_sha256": "c02b8a1b62ae5ee7145ed2c24e9890cb401bb48e4b810781dd350db3f632a2ad",
+        "d_length": 179,
+        "fill": "#ff5533"
+      }
+    },
+    {
+      "index": 46,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2512.6187,366.93434)",
+        "d_sha256": "c28ba2aac36cfe0550f28e5a9ee04aae012b4748926d523558762dbff4364894",
+        "d_length": 372,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 47,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1839.5244,576.6638)",
+        "d_sha256": "b98fa08f7b404270b7a8e8a0eecdb73e026ce83ac94f97542aea1ba8ce3f6733",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 48,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2515.3653,469.938)",
+        "d_sha256": "bef18ea00afb55dc04d88a42e66a68d9ba7bd734d450472a555cf03febe83855",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 49,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1197.2442,467.93824)",
+        "d_sha256": "1309d4db87b70dac1de65a86390b19131a769f3fa0dc9b7f8342157b713bd294",
+        "d_length": 179,
+        "fill": "#ff5533"
+      }
+    },
+    {
+      "index": 50,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1784.1782,366.93434)",
+        "d_sha256": "5f8e0824b239c99b39e8d951901765b1f9f18eaa0951d3fa7f75d635fb98a2c8",
+        "d_length": 374,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 51,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,576.6638)",
+        "d_sha256": "09ff2086a0948fb223d11ebd85b6f3ff294b0178fd347b05621b319ecff09ef4",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 52,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,469.938)",
+        "d_sha256": "c41678ee7a51d7571fb6c8db0891f3689009d3e57f94ffe5b8e7bdd423abe0a2",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 53,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,459.5107,467.93824)",
+        "d_sha256": "d1d70e071780a9a774a0c4703ae00174f7c2eb2eacbf2bde89ded87c6e90f477",
+        "d_length": 176,
+        "fill": "#ff5533"
+      }
+    },
+    {
+      "index": 54,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,765.7162,366.93434)",
+        "d_sha256": "4cf51d4d17548a23a412bbf0009f27c368d2cac6109d282f8bbd9ee6c88071ab",
+        "d_length": 372,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 55,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,576.6638)",
+        "d_sha256": "10605f9ee128d2c29e8a5985325518b98df45060adfbdc011bab3056ec85b2a1",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 56,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,469.938)",
+        "d_sha256": "268eda9db4b6087b6a39b608a827b7a00cc5c33cfebec022b4dee617098861bc",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 57,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,813.8085,467.93824)",
+        "d_sha256": "ead63662f3df8aa6187a531b190e6457dbca5076023d51e11631688fd1505b93",
+        "d_length": 179,
+        "fill": "#ff5533"
+      }
+    },
+    {
+      "index": 58,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.7066,366.93434)",
+        "d_sha256": "6ff5ac53a53dd717e0eda4e160e199661921d18abc640523165725a600d8a03e",
+        "d_length": 372,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 59,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,814.0361,576.6638)",
+        "d_sha256": "71bf7fb3ff43db6fd717050ae8e8960f8398964f3dd13f820546ae3367ed8e9e",
+        "d_length": 181,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 60,
+      "parent_index": 44,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.4795,469.938)",
+        "d_sha256": "b2a67aa925dcb212fe8ee74422b671975166f4cb8fb38a9de33d0b6eee3d1709",
+        "d_length": 369,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 61,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "fill": "#f9f9f9",
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "25.1786",
+        "font-family": "ProximaNova-BoldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "Checklist cho Quản lýManager nên hỏi / trao đổiMục tiêuCác bước"
+    },
+    {
+      "index": 62,
+      "parent_index": 61,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2194.957",
+        "x": "2096.296 2113.4903 2127.852 2141.6627 2154.0255 2167.2945 2173.4859 2179.7327 2191.602 2200.1124 2206.558 2218.921 2233.2955 2247.7454 2254.1912 2273.5084 2287.933 2302.519 2317.0975 2323.5433 2329.8128 1339.2006 1360.7283 1375.357 1389.7315 1404.3275 1418.8455 1432.5427 1441.607 1448.0527 1462.402 1476.1016 1490.6799 1497.1256 1511.4573 1525.7311 1532.1013 1538.547 1546.8308 1553.2765 1561.8901 1570.8789 1585.4321 1599.8847 1606.3303 1620.7149 1634.9887 931.8612 953.33609 967.66018 980.22427 986.6699 995.281 1001.4321 1015.0538 559.4193 576.5911 591.1343 603.6984 610.14419 624.6521 638.8755 653.2021"
+      },
+      "text": "Checklist cho Quản lýManager nên hỏi / trao đổiMục tiêuCác bước"
+    },
+    {
+      "index": 63,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "1.Context – Giải thích Goal của teamNhân viên hiểu bức tranh chung"
+    },
+    {
+      "index": 64,
+      "parent_index": 63,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2104.4727",
+        "x": "479.166 486.99427 497.171 511.08885 522.8024 534.23379 540.5973 551.9215 562.54946 569.12106 574.4154 586.6316 591.92599 606.69668 611.5584 623.43679 628.40158 633.6959 640.1625 651.72976 656.58328 666.6426 678.34378 683.6381 698.43356 710.23776 722.13259 727.09738"
+      },
+      "text": "1.Context – Giải thích Goal"
+    },
+    {
+      "index": 65,
+      "parent_index": 63,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2079.7518",
+        "x": "497.171 507.13557 518.7172 530.6863 535.9807 542.3443 553.7571 565.654"
+      },
+      "text": "của team"
+    },
+    {
+      "index": 66,
+      "parent_index": 63,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2094.0074",
+        "x": "834.3633 849.17727 860.72189 872.6188 884.2994 889.59378 899.9374 904.7332 916.043 927.72366 933.018 944.58529 949.3626 960.5859 972.2665 977.56088 989.37539 1001.0807 1011.3192 1016.6136 1023.08016 1030.1483 1042.0452 1053.602 1065.3032 1070.5977 1080.6549 1092.0966 1103.6947 1115.2351"
+      },
+      "text": "Nhân viên hiểu bức tranh chung"
+    },
+    {
+      "index": 67,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_2)"
+      }
+    },
+    {
+      "index": 68,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1839.5244,685.3894)",
+        "d_sha256": "b98fa08f7b404270b7a8e8a0eecdb73e026ce83ac94f97542aea1ba8ce3f6733",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 69,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2515.3653,578.6638)",
+        "d_sha256": "bef18ea00afb55dc04d88a42e66a68d9ba7bd734d450472a555cf03febe83855",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 70,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,685.3894)",
+        "d_sha256": "09ff2086a0948fb223d11ebd85b6f3ff294b0178fd347b05621b319ecff09ef4",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 71,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,578.6638)",
+        "d_sha256": "c41678ee7a51d7571fb6c8db0891f3689009d3e57f94ffe5b8e7bdd423abe0a2",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 72,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,685.3894)",
+        "d_sha256": "10605f9ee128d2c29e8a5985325518b98df45060adfbdc011bab3056ec85b2a1",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 73,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,578.6638)",
+        "d_sha256": "268eda9db4b6087b6a39b608a827b7a00cc5c33cfebec022b4dee617098861bc",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 74,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,814.0361,685.3894)",
+        "d_sha256": "71bf7fb3ff43db6fd717050ae8e8960f8398964f3dd13f820546ae3367ed8e9e",
+        "d_length": 181,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 75,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.4795,578.6638)",
+        "d_sha256": "b2a67aa925dcb212fe8ee74422b671975166f4cb8fb38a9de33d0b6eee3d1709",
+        "d_length": 369,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 76,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,814.0361,1046.3591)",
+        "d_sha256": "8f65fd458ab68172aa8d674e3201a6ec3a36e02b197978d31a22290d9a754ab6",
+        "d_length": 182,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 77,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.4795,687.38967)",
+        "d_sha256": "1b47cba592391639a59d692f92e4e7acec454a6ba0fda1061c019135ea097e48",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 78,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "•Theo em phần nào trong công việc của mình ảnh hưởng nhiều nhất đến goal team?•Em nghĩ kết quả nào chứng minh mình làm tốt?"
+    },
+    {
+      "index": 79,
+      "parent_index": 78,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2008.6777",
+        "x": "1217.7266 1235.7316 1247.3297 1258.7507 1270.2439 1282.0275 1287.3424 1298.7737 1315.6663 1320.9812 1332.8184 1344.1549 1355.0054 1366.5211 1371.836 1383.2241 1394.0704 1405.854 1411.169 1417.4605 1424.1907 1435.8919 1447.3355 1459.222 1464.537 1474.4088 1486.1079 1497.5515 1509.4381 1514.753 1525.0534 1529.7277 1541.2538 1551.4717 1556.7866 1566.8295 1578.2875 1589.2471 1594.562 1611.3248 1615.9846 1627.3748 1638.9111 1644.2261 1655.0785 1666.4686 1678.005 1683.32 1694.7266 1706.1022 1717.8858 1729.3294 1741.216"
+      },
+      "text": "•Theo em phần nào trong công việc của mình ảnh hưởng"
+    },
+    {
+      "index": 80,
+      "parent_index": 78,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1983.9569",
+        "x": "1235.7316 1247.1217 1258.5015 1263.1963 1274.6276 1286.1433 1291.4583 1302.8484 1314.2838 1325.1527 1331.4566 1336.7715 1348.4541 1359.8174 1371.3331 1376.6481 1388.4625 1400.1184 1410.94 1415.7399 1421.0548 1427.0435 1438.4418 1449.2572 1465.2166"
+      },
+      "text": "nhiều nhất đến goal team?"
+    },
+    {
+      "index": 81,
+      "parent_index": 78,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1959.2361",
+        "x": "1217.7266 1235.7316 1247.4924 1264.385 1269.7001 1281.1438 1292.9067 1304.3423 1309.1423 1314.4574 1324.6795 1336.1253 1342.4291 1347.7442 1359.5071 1370.9652 1381.9248 1387.2399 1398.6321 1409.468 1421.2517 1426.5668 1436.6199 1448.0327 1459.7896 1471.2333 1483.12 1488.435 1505.204 1509.8804 1521.2726 1532.807 1538.1221 1554.891 1559.5509 1570.9431 1582.4796 1587.7947 1592.4711 1603.2864 1620.179 1625.494 1631.5176 1643.1983 1649.1271"
+      },
+      "text": "•Em nghĩ kết quả nào chứng minh mình làm tốt?"
+    },
+    {
+      "index": 82,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "2. Contribution – Xác định đóng góp của nhân viênTìm ra vai trò của nhân viên trong goal team"
+    },
+    {
+      "index": 83,
+      "parent_index": 82,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1995.7405",
+        "x": "479.1709 491.56016 496.60734 501.9017 515.8195 527.5331 538.9644 545.433 552.36306 557.2042 569.027 580.5943 587.06289 591.869 603.5826 615.2632 620.55758 632.77377 638.0681 651.02188 662.8487 673.0872 678.3816 690.4062 695.2288 706.78378 718.4849"
+      },
+      "text": "2. Contribution – Xác định"
+    },
+    {
+      "index": 84,
+      "parent_index": 82,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1971.0197",
+        "x": "479.1709 491.0946 502.75874 514.30337 526.2518 531.54617 543.3648 555.0887 566.9959 572.2903 582.2548 593.83657 605.80557 611.0999 622.65487 634.20156 646.0964 657.777 663.07138 673.415 678.2108 689.5227"
+      },
+      "text": "đóng góp của nhân viên"
+    },
+    {
+      "index": 85,
+      "parent_index": 82,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1996.3173",
+        "x": "825.73648 838.2534 843.15438 860.31478 865.60916 872.6752 884.64419 889.93856 900.06179 911.9566 916.9214 922.21578 928.6843 935.74008 947.54428 952.8386 962.8011 974.3849 986.3539 991.64828 1003.20529 1014.7499 1026.6467 1038.3273 1043.6217 1053.9653 1058.7611 1070.073 1081.7536 1087.048 1093.5166 1100.5724 1112.2819 1123.8244 1135.7727"
+      },
+      "text": "Tìm ra vai trò của nhân viên trong"
+    },
+    {
+      "index": 86,
+      "parent_index": 82,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1971.5964",
+        "x": "934.44638 946.26498 958.06918 969.96609 974.93087 980.2253 986.58889 998.00167 1009.8965"
+      },
+      "text": "goal team"
+    },
+    {
+      "index": 87,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_3)"
+      }
+    },
+    {
+      "index": 88,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1839.5244,1046.3591)",
+        "d_sha256": "8193cbc8e0d5e8680934b099cecd77913607523dad20595966018213c9eb0294",
+        "d_length": 185,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 89,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2515.3653,687.38967)",
+        "d_sha256": "950827884566ba4543b3e71d384cbf4a11d97cf006ddfa71d22c3a0e2634a488",
+        "d_length": 381,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 90,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,794.11599)",
+        "d_sha256": "cb6cc29b7cecf1bdeaefc20e7440098a2a037f3960163dbbf5b6370c7dc57a60",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 91,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,687.38967)",
+        "d_sha256": "c41678ee7a51d7571fb6c8db0891f3689009d3e57f94ffe5b8e7bdd423abe0a2",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 92,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,794.11599)",
+        "d_sha256": "7391bbb6d4d0ac43a9b6c343b9eb55b8b60cff60c85cc1d81face0421988d39a",
+        "d_length": 176,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 93,
+      "parent_index": 87,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,687.38967)",
+        "d_sha256": "268eda9db4b6087b6a39b608a827b7a00cc5c33cfebec022b4dee617098861bc",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 94,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "3. Deﬁne – Viết Goal & Key Results (Project Goal)Chuyển ý tưởng thành goal đo được"
+    },
+    {
+      "index": 95,
+      "parent_index": 94,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1887.0205",
+        "x": "479.166 491.15766 496.20484 501.4992 516.1587 527.4273 538.62588 550.1499 561.6245 566.9189 579.1351 584.42947 598.3081 603.08547 614.3231 620.8947 626.1891 640.9845 652.7887 664.6856 669.6504 674.94479 688.2116 693.506 705.42556 716.484 726.8462"
+      },
+      "text": "3. Deﬁne – Viết Goal & Key"
+    },
+    {
+      "index": 96,
+      "parent_index": 94,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1862.2997",
+        "x": "479.166 491.89723 503.21113 512.72866 524.32687 529.14749 535.78298 545.5065 550.80087 556.28067 568.5278 575.5835 587.295 592.0909 603.49337 613.9626 620.5342 625.82858 640.6219 652.4261 664.323 669.0509"
+      },
+      "text": "Results (Project Goal)"
+    },
+    {
+      "index": 97,
+      "parent_index": 94,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1767.8248",
+        "x": "816.66726 830.6922 842.1338 853.7629 863.85519 875.17117 886.85177 892.1461 902.5083 907.8027 914.1353 925.6532 937.478 949.0206 960.96908 966.2634 972.732 984.2766 996.1735 1007.7305 1019.4317 1024.7261 1036.5447 1048.3489 1060.2457 1065.2105 1070.5049 1082.4286 1094.2328 1099.5272 1111.3375 1122.8554 1134.6266"
+      },
+      "text": "Chuyển ý tưởng thành goal đo được"
+    },
+    {
+      "index": 98,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_4)"
+      }
+    },
+    {
+      "index": 99,
+      "parent_index": 98,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,934.65798)",
+        "d_sha256": "4f73b54f58e774748a7e4170d07fd29d645a3bfe973eab8cfb6f555e91606789",
+        "d_length": 188,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 100,
+      "parent_index": 98,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,796.1155)",
+        "d_sha256": "e8f04999c0081d928f72e55f409c44b661640e7226fec22af58947052aa6839f",
+        "d_length": 387,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 101,
+      "parent_index": 98,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,934.65798)",
+        "d_sha256": "0c59c025adbd259583daf14133d6661a5fe38ceddae14de8b33ec53e27d33352",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 102,
+      "parent_index": 98,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,796.1155)",
+        "d_sha256": "6b05cc1ee07e6319038c536b2081691013bd3f62cfbdc951caadc29c17f5cc72",
+        "d_length": 387,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 103,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "4. Deﬁne – Viết Goal & Key Results (Functional Goal)"
+    },
+    {
+      "index": 104,
+      "parent_index": 103,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1762.3867",
+        "x": "479.166 491.2874 496.3346 501.62898 516.28848 527.55709 538.7556 550.27969 561.7543 567.04867 579.26486 584.5592 598.43789 603.2152 614.45089 621.02249 626.31686 641.11227 652.91647 664.81338 669.77816 675.0725 688.33938 693.6337 705.5533 716.61386 726.976"
+      },
+      "text": "4. Deﬁne – Viết Goal & Key"
+    },
+    {
+      "index": 105,
+      "parent_index": 103,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1737.6659",
+        "x": "479.166 491.89723 503.21113 512.72866 524.32687 529.14749 535.78298 545.5065 550.80087 556.28067 567.5863 579.1845 590.70858 601.1778 607.6464 612.4526 624.16409 635.6984 647.59536 652.5601 657.8545 672.6499 684.452 696.34896 701.07687"
+      },
+      "text": "Results (Functional Goal)"
+    },
+    {
+      "index": 106,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_5)"
+      }
+    },
+    {
+      "index": 107,
+      "parent_index": 106,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,1046.3591)",
+        "d_sha256": "6685fe550a6f4a92fbae76b934612b0819d88ea828848f745f9995b00ebb4f09",
+        "d_length": 184,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 108,
+      "parent_index": 106,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,936.65798)",
+        "d_sha256": "46246b3edaf184566489a2033ec74ddb0e682ea46dc267c47b25cf874bd17497",
+        "d_length": 381,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 109,
+      "parent_index": 106,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,1045.114)",
+        "d_sha256": "7391bbb6d4d0ac43a9b6c343b9eb55b8b60cff60c85cc1d81face0421988d39a",
+        "d_length": 176,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 110,
+      "parent_index": 106,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,938.38796)",
+        "d_sha256": "51c59f76043320fb240c29ed58872fd8978d682d0a7d5627639f04262582a7ea",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 111,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "5. Deﬁne - Development Goal"
+    },
+    {
+      "index": 112,
+      "parent_index": 111,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1625.4346",
+        "x": "479.166 491.6953 496.7425 502.03688 516.6943 527.96499 539.1615 550.6876 562.16226 567.4566 573.63687 578.9312 593.5886 604.63888 614.7476 626.0615 630.8636 642.538 654.3979 671.4244 682.73629 694.1676 700.7392 706.03359 720.829 732.6332 744.528"
+      },
+      "text": "5. Deﬁne - Development Goal"
+    },
+    {
+      "index": 113,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_6)"
+      }
+    },
+    {
+      "index": 114,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1839.5244,1156.2166)",
+        "d_sha256": "92e44e2575b4b0c600b5bca180fd933e750a99f705d83b00ee887affc998a2d7",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 115,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2515.3653,1049.4905)",
+        "d_sha256": "68bf7a3c49816200af9dbe267dc45b372f8b40574c7fc0c0d95a4d46defcb841",
+        "d_length": 379,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 116,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,1156.2166)",
+        "d_sha256": "cb6cc29b7cecf1bdeaefc20e7440098a2a037f3960163dbbf5b6370c7dc57a60",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 117,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,1049.4905)",
+        "d_sha256": "ddf5f25dc0a220a63e7a33f31207cdcbbef67f0dce9a0fbafc2fa4280c6279d9",
+        "d_length": 379,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 118,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,1156.2166)",
+        "d_sha256": "7391bbb6d4d0ac43a9b6c343b9eb55b8b60cff60c85cc1d81face0421988d39a",
+        "d_length": 176,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 119,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,1049.4905)",
+        "d_sha256": "46ce14024273e1fa977ab27e6524956d8ceb7623bfd5830de47fb06983d1c8f5",
+        "d_length": 379,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 120,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,814.0361,1156.2166)",
+        "d_sha256": "3468f1441f1062bfdbd64f9356906fa0c92f71f955392ce27649364816dd3845",
+        "d_length": 177,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 121,
+      "parent_index": 113,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.4795,1049.4905)",
+        "d_sha256": "3988040abefe5e717eada02077c988a3a12ad71c154dc33585e96ff379c8c752",
+        "d_length": 373,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 122,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "6. Feasibility – Kiểm tra tính khả thiĐảm bảo goal thực tế"
+    },
+    {
+      "index": 123,
+      "parent_index": 122,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1524.9209",
+        "x": "479.166 491.68299 496.73014 502.0245 513.4785 524.89138 536.7759 546.3325 551.1737 563.0624 567.90359 572.74478 577.5756 584.52426 594.88638 600.1807 612.39486 617.6892 630.3195 635.09689 646.41287 663.57327 668.8676 675.33627 682.4002 694.3692 699.6636 706.1322 710.9734 722.5304 734.23159"
+      },
+      "text": "6. Feasibility – Kiểm tra tính"
+    },
+    {
+      "index": 124,
+      "parent_index": 122,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1500.2001",
+        "x": "479.166 489.87837 501.40446 513.3735 518.66787 525.1385 536.7037"
+      },
+      "text": "khả thi"
+    },
+    {
+      "index": 125,
+      "parent_index": 122,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1514.4558",
+        "x": "881.271 896.3136 908.19198 925.35238 930.6467 942.6054 954.42819 966.23239 971.52676 983.3454 995.1496 1007.0465 1012.0113 1017.30569 1023.77426 1035.2077 1046.913 1057.1515 1062.4459 1068.789"
+      },
+      "text": "Đảm bảo goal thực tế"
+    },
+    {
+      "index": 126,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_7)"
+      }
+    },
+    {
+      "index": 127,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1839.5244,1263.2351)",
+        "d_sha256": "94e1fbe14189c5ce0ea2227f1a3d33d35e5358954908d4e7ce389ce4d9993798",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 128,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2515.3653,1156.509)",
+        "d_sha256": "bef18ea00afb55dc04d88a42e66a68d9ba7bd734d450472a555cf03febe83855",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 129,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1200.0791,1263.2351)",
+        "d_sha256": "563413e2ad566419dbc8537cfadef4495f63736eb733cf49c8e53c3e5c1a2067",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 130,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.5586,1156.509)",
+        "d_sha256": "c41678ee7a51d7571fb6c8db0891f3689009d3e57f94ffe5b8e7bdd423abe0a2",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 131,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,461.1835,1263.2351)",
+        "d_sha256": "ced497fd46e3399616cef1cd22c220bd93aa78a78d76053780bc2aa7b7e4e7f8",
+        "d_length": 176,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 132,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,764.0439,1156.509)",
+        "d_sha256": "268eda9db4b6087b6a39b608a827b7a00cc5c33cfebec022b4dee617098861bc",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 133,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,814.0361,1263.2351)",
+        "d_sha256": "2f3ac05493e9e1656a68f2556c86a6145417548036ca812839850ef16df9e158",
+        "d_length": 177,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 134,
+      "parent_index": 126,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1147.4795,1156.509)",
+        "d_sha256": "b2a67aa925dcb212fe8ee74422b671975166f4cb8fb38a9de33d0b6eee3d1709",
+        "d_length": 369,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 135,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "7. Weight - Cân đối tỷ trọngĐảm bảo tỷ trọng các goal cân đối và phù hợp với khả năng tác động"
+    },
+    {
+      "index": 136,
+      "parent_index": 135,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1405.6758",
+        "x": "479.166 488.33329 493.38047 498.67485 516.64486 527.9567 532.8535 544.73397 556.17556 562.74716 568.0415 574.22177 579.5161 593.43399 605.3309 617.0115 622.30587 634.04 645.7494 650.7142 656.00857 662.9386 673.3008 678.59518 685.0617 692.0989 703.7939 715.33236"
+      },
+      "text": "7. Weight - Cân đối tỷ trọng"
+    },
+    {
+      "index": 137,
+      "parent_index": 135,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1417.8713",
+        "x": "822.12649 837.16909 849.0474 866.2078 871.5022 883.4609 895.28158 907.08578 912.3801 919.3102 929.67239 934.96676 941.4333 948.47048 960.1634 971.7039 983.65237 988.9467 998.96487 1010.7917 1021.0302 1026.3246 1038.1411 1049.9453 1061.8422 1066.8069 1072.1013 1082.1194 1094.0142 1105.6947 1110.9891 1122.7233 1134.4328 1139.3975"
+      },
+      "text": "Đảm bảo tỷ trọng các goal cân đối"
+    },
+    {
+      "index": 138,
+      "parent_index": 135,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1393.1505",
+        "x": "824.41317 834.5364 846.5054 851.79977 863.6596 875.1012 886.7818 892.0762 903.60226 915.38998 927.2972 932.59158 942.6859 954.51278 959.47756 964.7719 975.4843 987.0104 998.9794 1004.27377 1015.7875 1027.6658 1039.2062 1051.1546 1056.449 1062.8331 1074.66 1084.8986 1090.193 1101.9271 1113.6222 1125.1626"
+      },
+      "text": "và phù hợp với khả năng tác động"
+    },
+    {
+      "index": 139,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_8)"
+      }
+    },
+    {
+      "index": 140,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1838.2383,1372.0056)",
+        "d_sha256": "92e44e2575b4b0c600b5bca180fd933e750a99f705d83b00ee887affc998a2d7",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 141,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2514.079,1265.2796)",
+        "d_sha256": "bef18ea00afb55dc04d88a42e66a68d9ba7bd734d450472a555cf03febe83855",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 142,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1198.6338,1372.0056)",
+        "d_sha256": "cb6cc29b7cecf1bdeaefc20e7440098a2a037f3960163dbbf5b6370c7dc57a60",
+        "d_length": 180,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 143,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1785.1128,1265.2796)",
+        "d_sha256": "6128fff0645ed8424c37d15ef345ca44f63909c8829fae31c76894f92b3b01a0",
+        "d_length": 375,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 144,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,459.7372,1372.0056)",
+        "d_sha256": "7391bbb6d4d0ac43a9b6c343b9eb55b8b60cff60c85cc1d81face0421988d39a",
+        "d_length": 176,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 145,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,762.5981,1265.2796)",
+        "d_sha256": "b435814a4a417b0dde3193afa638a3be8b06e968944b49c886e01d97fa124179",
+        "d_length": 371,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 146,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,812.5898,1372.0056)",
+        "d_sha256": "3468f1441f1062bfdbd64f9356906fa0c92f71f955392ce27649364816dd3845",
+        "d_length": 177,
+        "fill": "#f3f9ff"
+      }
+    },
+    {
+      "index": 147,
+      "parent_index": 139,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1146.0337,1265.2796)",
+        "d_sha256": "b2a67aa925dcb212fe8ee74422b671975166f4cb8fb38a9de33d0b6eee3d1709",
+        "d_length": 369,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 148,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-SemiboldIt",
+        "font-weight": "bold",
+        "font-style": "italic"
+      },
+      "text": "8. Commitment –Đồng thuận goalHai bên thống nhất và cam kết thực hiện"
+    },
+    {
+      "index": 149,
+      "parent_index": 148,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1309.1318",
+        "x": "477.7217 490.24076 495.2879 500.58229 514.50839 526.2219 543.27938 560.3368 565.16769 571.6363 588.6607 599.9746 611.40597 617.97549 623.26986"
+      },
+      "text": "8. Commitment –"
+    },
+    {
+      "index": 150,
+      "parent_index": 148,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1284.411",
+        "x": "477.7217 492.78083 504.48204 516.0225 527.97097 533.2654 539.734 551.17568 562.75326 574.63168 586.31228 591.6067 603.4253 615.2295 627.1264"
+      },
+      "text": "Đồng thuận goal"
+    },
+    {
+      "index": 151,
+      "parent_index": 148,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1310.1001",
+        "x": "876.96328 891.8782 903.7751 908.73989 914.03427 926.00326 937.3151 948.9957 954.2901 960.75668 972.2827 983.9942 995.5347 1007.48318 1012.7775 1024.3345 1035.8606 1047.6998 1054.2715 1059.5659 1069.6891 1081.6581"
+      },
+      "text": "Hai bên thống nhất và"
+    },
+    {
+      "index": 152,
+      "parent_index": 148,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1285.3793",
+        "x": "898.1202 908.1383 920.0352 937.1956 942.49 952.8707 964.1084 970.68 975.97439 982.44296 993.8763 1005.5816 1015.8201 1021.1145 1032.6818 1037.459 1048.8141"
+      },
+      "text": "cam kết thực hiện"
+    },
+    {
+      "index": 153,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "Giải thích goal của team, giúp nhân viên hiểu vì sao goal quan trọngGiúp nhân viên hiểu team đang có 1-2 ưu tiên chính"
+    },
+    {
+      "index": 154,
+      "parent_index": 153,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2104.3397",
+        "x": "1888.2927 1903.0675 1907.7623 1918.6004 1923.4003 1928.7152 1935.0067 1946.405 1951.036 1961.0933 1972.6296 1977.9446 1989.759 2001.417 2012.2365 2017.0364 2022.3513 2032.3942 2043.8522 2054.8118 2060.1268 2066.1153 2077.5115 2088.3289 2105.2215 2110.1246 2115.4395 2127.2293 2131.8646 2143.263 2155.1497 2160.4647 2171.8548 2183.2552 2194.0704 2205.5863 2210.9012 2221.2015 2225.8409 2237.2723 2248.788 2254.103 2265.483 2270.1553 2281.5845 2293.1004 2298.4154 2308.7156 2313.5157 2318.8306 2328.3956 2339.2418 2351.0255 2356.3404 2368.155 2379.813 2390.6324 2395.4324 2400.7474 2412.5084 2423.9315 2434.7467 2446.2625 2451.5775 2457.8709 2464.6343 2476.3707 2487.8145"
+      },
+      "text": "Giải thích goal của team, giúp nhân viên hiểu vì sao goal quan trọng"
+    },
+    {
+      "index": 155,
+      "parent_index": 153,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2079.6187",
+        "x": "1888.2927 1903.0675 1907.7026 1919.101 1930.9876 1936.3025 1947.6946 1959.0929 1969.9104 1981.4262 1986.7411 1997.0414 2001.6807 2013.1119 2024.6277 2029.9426 2041.3224 2045.9946 2057.4239 2068.9398 2074.2547 2080.2432 2091.6417 2102.4569 2119.3494 2124.6644 2136.4932 2147.3106 2158.7545 2170.641 2175.956 2185.826 2197.6097 2202.9246 2210.8868 2216.354 2228.529 2233.844 2245.5679 2257.0838 2262.3988 2268.69 2273.3272 2284.7606 2296.2764 2301.5914 2311.6466 2323.0469 2327.7852 2339.1754 2350.7117"
+      },
+      "text": "Giúp nhân viên hiểu team đang có 1-2 ưu tiên chính"
+    },
+    {
+      "index": 156,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_9)"
+      }
+    },
+    {
+      "index": 157,
+      "parent_index": 156,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "a388d0f4d4c0bace3f2042137f1ba8d3a4bbd3d12be9f9e26bea818e53889f6a",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 158,
+      "parent_index": 156,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "b0ba91628fc741bcd99921872d3bebdd90a31f6521004abdfecb574c52d0d94d",
+        "d_length": 90
+      }
+    },
+    {
+      "index": 159,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "Lắng nghe Nguyện vọng trong công việc của nhân viênLắng nghe Goal do nhân viên đề xuất"
+    },
+    {
+      "index": 160,
+      "parent_index": 159,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1995.2422",
+        "x": "1888.3067 1898.8583 1909.6819 1921.1255 1933.0121 1938.327 1949.7706 1961.5398 1972.9588 1984.4951 1989.81 2004.628 2016.389 2027.9769 2037.9044 2049.3709 2060.8868 2066.2017 2076.1395 2087.8758 2099.3197 2111.2064 2116.5213 2122.8126 2129.543 2141.2442 2152.6859 2164.5726 2169.8875 2179.7593 2191.4605 2202.9044 2214.791 2220.106 2230.4063 2235.0806 2246.6068 2256.8248 2262.1397 2272.1827 2283.6409 2294.6004 2299.9154 2311.3055 2322.7059 2333.521 2345.0369 2350.3519 2360.652 2365.2916 2376.723"
+      },
+      "text": "Lắng nghe Nguyện vọng trong công việc của nhân viên"
+    },
+    {
+      "index": 161,
+      "parent_index": 159,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1970.5214",
+        "x": "1888.3067 1898.8583 1909.6819 1921.1255 1933.0121 1938.327 1949.7706 1961.5398 1972.9588 1984.4951 1989.81 2004.6735 2016.3314 2027.1509 2031.9508 2037.2658 2049.0885 2060.872 2066.187 2077.5772 2088.9776 2099.7928 2111.3087 2116.6236 2126.9239 2131.5633 2142.9947 2154.5106 2159.8255 2171.4998 2183.0362 2188.351 2198.3385 2209.7967 2220.6656"
+      },
+      "text": "Lắng nghe Goal do nhân viên đề xuất"
+    },
+    {
+      "index": 162,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_10)"
+      }
+    },
+    {
+      "index": 163,
+      "parent_index": 162,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "88a11fc45402d46534fcbf94c70090d01f526c991f333d5eedb1fc5d248c9202",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 164,
+      "parent_index": 162,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "afac0f46fbfd367d702da91bbf38889bab50e34e4e2acabe96561e2b0e3a5974",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 165,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "Xác định Goal của nhân viên là outcome, không phải taskƯu tiên 3-5 goal chính có tác động chính đến goal chungMỗi goal có 2–3 Key ResultsCó chỉ số đo và thời gian"
+    },
+    {
+      "index": 166,
+      "parent_index": 165,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1810.0742",
+        "x": "1888.3067 1901.5714 1912.3806 1922.5985 1927.9135 1940.0658 1944.7813 1956.1714 1967.7078 1973.0227 1987.8861 1999.5441 2010.3635 2015.1635 2020.4784 2030.5192 2041.9793 2052.9388 2058.2537 2069.6439 2081.0443 2091.8594 2103.3753 2108.6903 2118.9906 2123.63 2135.0614 2146.5772 2151.892 2156.5645 2167.524 2172.8389 2184.507 2196.0003 2201.9786 2211.8504 2223.5516 2240.3616 2251.5889 2256.492 2261.807 2272.4864 2283.9073 2295.6065 2307.0523 2318.939 2324.254 2336.091 2347.5267 2358.3646 2363.1646 2368.4796 2374.7708 2385.623 2395.1488"
+      },
+      "text": "Xác định Goal của nhân viên là outcome, không phải task"
+    },
+    {
+      "index": 167,
+      "parent_index": 165,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1768.8728",
+        "x": "1888.3067 1902.5891 1914.1049 1919.4198 1925.7092 1930.3485 1941.7798 1953.2955 1958.6105 1970.8123 1977.1201 1989.3776 1994.6925 2006.507 2018.1649 2028.9844 2033.7843 2039.0993 2049.1524 2060.5528 2065.291 2076.6812 2088.2176 2093.5325 2103.4044 2115.188 2120.503 2126.7943 2137.6033 2147.8214 2153.1363 2164.8189 2176.5552 2187.9969 2199.8836 2205.1986 2215.2537 2226.654 2231.3924 2242.7825 2254.3189 2259.6339 2271.3165 2282.6798 2294.1956 2299.5106 2311.3253 2322.9832 2333.8026 2338.6026 2343.9176 2353.9708 2365.3465 2376.7449 2388.1888"
+      },
+      "text": "Ưu tiên 3-5 goal chính có tác động chính đến goal chung"
+    },
+    {
+      "index": 168,
+      "parent_index": 165,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1727.6714",
+        "x": "1888.3067 1905.3023 1916.9932 1921.7931 1927.108 1938.9246 1950.5805 1961.3999 1966.1998 1971.5148 1981.3866 1993.1702 1998.4851 2010.1184 2022.2439 2033.8833 2039.1983 2051.0147 2062.2359 2072.4744 2077.7894 2090.2364 2101.645 2111.1339 2122.5323 2127.3323 2133.9554"
+      },
+      "text": "Mỗi goal có 2–3 Key Results"
+    },
+    {
+      "index": 169,
+      "parent_index": 165,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1686.47",
+        "x": "1888.3067 1902.2946 1914.0781 1919.3931 1929.4483 1940.8651 1945.665 1950.98 1960.5057 1972.2893 1977.6043 1989.4558 2001.2394 2006.5543 2016.6857 2027.6453 2032.9602 2039.2517 2050.7078 2062.4813 2067.2813 2072.5963 2084.386 2089.044 2099.8656"
+      },
+      "text": "Có chỉ số đo và thời gian"
+    },
+    {
+      "index": 170,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_11)"
+      }
+    },
+    {
+      "index": 171,
+      "parent_index": 170,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "18c7d10cf068367d763dc02b9ba54f2c5a44b70a4b2f126f08ff73d6c8b57dbb",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 172,
+      "parent_index": 170,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "d72b257bb8db38733ff82c8cb5e431c2f3f6d6e7731c1fcea8fe7997c9f48d0c",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 173,
+      "parent_index": 170,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "8cf648d6d95b4f4e52858b65d0ff43b6d4b16ba0e5aacf04c1b1751f0b42acfc",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 174,
+      "parent_index": 170,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "8aea17345b5a7a72ddc17e136ea28ddb5041405594ce2af16ca3f650782c93f8",
+        "d_length": 88
+      }
+    },
+    {
+      "index": 175,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "•Em cần tập trung vào dự án nào? •Dự án mới em cần theo sát năm nay?•Em sẽ ưu tiên goal nào hơn để đảm bảo hoàn thành?•Kết quả nào chứng minh goal đã đạt?•Chúng ta sẽ đo kết quả bằng chỉ số nào?•Khi nào goal được coi là hoàn thành?•Có khó khăn nào ảnh hưởng đến goal không?•Em cần hỗ trợ gì từ Quản lý?•Goal này có khả thi với khối lượng công việc hiện tại không?•Goal nào là ưu tiên chính trong công việc hiện tại?•Goal nào nên chiếm nhiều thời gian và công sức hơn?•Kế hoạch để em thực hiện mục tiêu như thế nào?•Chúng ta sẽ theo dõi tiến độ như thế nào?•Năng lực / Kỹ năng cần nào cần đặt mục tiêu cải thiện/phát triển trong năm nay để phục vụ hoàn thành mục tiêu công việc? Goal này có liên quan đến công việc hiện tại của nhân viênGoal khả thi với thời gian và nguồn lựcRủi ro chính đã được xác định"
+    },
+    {
+      "index": 176,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1887.1865",
+        "x": "1217.7266 1235.7316 1247.4926 1264.3851 1269.7001 1279.918 1290.7704 1302.2861 1307.6011 1313.9255 1324.776 1336.6626 1341.9776 1348.269 1355.1044 1366.5027 1377.9463 1389.8329 1395.1478 1405.2813 1416.1255 1427.909 1433.224 1445.0282 1456.544 1461.8589 1472.6475 1484.1632 1489.4782 1500.8683 1511.7125 1522.5011 1531.9774"
+      },
+      "text": "•Em cần tập trung vào dự án nào?"
+    },
+    {
+      "index": 177,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1862.4657",
+        "x": "1217.7266 1235.7316 1250.3168 1261.8325 1267.1475 1277.936 1289.4518 1294.7667 1311.6119 1323.3832 1328.1831 1333.498 1344.9293 1361.8219 1367.1369 1377.3671 1388.2175 1399.7333 1405.0482 1411.3397 1422.7608 1434.2539 1446.0375 1451.3524 1460.9174 1471.7493 1478.0531 1483.368 1494.7931 1505.6436 1522.5361 1527.8511 1539.2412 1549.8444 1559.9181"
+      },
+      "text": "•Dự án mới em cần theo sát năm nay?"
+    },
+    {
+      "index": 178,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1787.1907",
+        "x": "1217.7266 1235.7316 1247.4926 1264.3851 1269.7001 1279.2361 1290.7725 1296.0874 1307.8132 1319.329 1324.6439 1330.9354 1335.5747 1347.006 1358.5217 1363.8367 1375.6511 1387.3091 1398.1286 1402.9285 1408.2434 1419.6336 1430.4778 1442.2614 1447.5763 1459.0324 1470.8159 1482.3317 1487.6466 1499.3292 1510.8656 1516.1806 1527.8425 1538.693 1555.5856 1560.9005 1572.717 1583.5963 1595.3799 1600.6948 1612.1159 1623.7717 1634.5872 1646.1029 1651.4179 1657.7094 1669.1098 1679.9252 1691.3153 1701.8876"
+      },
+      "text": "•Em sẽ ưu tiên goal nào hơn để đảm bảo hoàn thành?"
+    },
+    {
+      "index": 179,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1762.4699",
+        "x": "1217.7266 1235.7316 1247.5831 1259.0289 1265.3328 1270.6478 1282.4109 1293.869 1304.8286 1310.1437 1321.5359 1332.3718 1344.1555 1349.4706 1359.5258 1370.9386 1382.6954 1394.1392 1406.0258 1411.3408 1428.1098 1432.7861 1444.1784 1455.7149 1461.0299 1472.8466 1484.5066 1495.326 1500.1261 1505.4412 1517.2722 1528.2318 1533.5469 1545.347 1556.2139 1562.1427"
+      },
+      "text": "•Kết quả nào chứng minh goal đã đạt?"
+    },
+    {
+      "index": 180,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1737.749",
+        "x": "1217.7266 1235.7316 1249.565 1260.9365 1272.3348 1283.7764 1295.663 1300.9779 1307.2694 1318.229 1323.544 1333.082 1344.6184 1349.9334 1361.7849 1373.5685 1378.8834 1389.1076 1400.5532 1406.857 1412.172 1423.933 1435.391 1446.3506 1451.6655 1463.482 1474.3325 1485.7761 1497.6627 1502.9777 1513.0328 1524.4497 1529.2496 1534.5646 1544.0903 1555.8739 1561.1889 1572.579 1583.4232 1594.2118"
+      },
+      "text": "•Chúng ta sẽ đo kết quả bằng chỉ số nào?"
+    },
+    {
+      "index": 181,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1713.0282",
+        "x": "1217.7266 1235.7316 1248.3103 1259.6902 1264.4902 1269.8053 1281.1975 1292.0335 1303.8171 1309.1322 1320.9468 1332.6068 1343.4263 1348.2263 1353.5414 1365.4136 1376.7893 1388.5956 1398.8136 1404.1287 1414.0005 1425.6605 1430.4606 1435.7756 1440.452 1451.4116 1456.7267 1468.1395 1479.7996 1490.617 1502.1328 1507.4479 1513.7393 1525.1398 1535.9551 1547.3473 1557.9197"
+      },
+      "text": "•Khi nào goal được coi là hoàn thành?"
+    },
+    {
+      "index": 182,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1537.3866",
+        "x": "1217.7266 1235.7316 1249.7195 1261.503 1266.818 1277.4974 1288.9185 1300.702 1306.017 1316.6964 1328.1318 1338.9823 1350.498 1355.813 1367.2031 1378.0474 1389.8309 1395.1459 1405.9963 1417.3865 1428.9229 1434.2378 1445.6444 1457.02 1468.8036 1480.2472 1492.1338 1497.4487 1509.1293 1520.4926 1532.0083 1537.3233 1549.1377 1560.7957 1571.6151 1576.415 1581.73 1592.4074 1603.8305 1615.5296 1626.9732 1637.9636"
+      },
+      "text": "•Có khó khăn nào ảnh hưởng đến goal không?"
+    },
+    {
+      "index": 183,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1512.6658",
+        "x": "1217.7266 1235.7316 1247.4926 1264.3851 1269.7001 1279.918 1290.7704 1302.2861 1307.6011 1319.055 1330.8386 1336.1536 1342.4451 1349.2083 1360.9918 1366.3068 1378.1254 1382.9253 1388.2402 1394.3566 1405.8723 1411.1873 1427.0313 1438.4913 1449.3418 1460.8576 1466.1725 1471.0219 1481.1903"
+      },
+      "text": "•Em cần hỗ trợ gì từ Quản lý?"
+    },
+    {
+      "index": 184,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1487.945",
+        "x": "1217.7266 1235.7316 1250.595 1262.2529 1273.0724 1277.8723 1283.1873 1294.5753 1305.1806 1315.4191 1320.734 1330.6058 1342.3894 1347.7044 1358.3817 1369.8192 1380.7788 1386.0938 1392.3832 1403.763 1408.5629 1413.8778 1423.8156 1435.5868 1440.3867 1445.7017 1456.3811 1467.8372 1479.491 1484.2909 1489.6058 1494.2904 1505.666 1517.4496 1528.8932 1540.7798 1546.0947 1555.9666 1567.6677 1579.1093 1590.9959 1596.3108 1606.6111 1611.2854 1622.8218 1633.0397 1638.3546 1649.7324 1654.4067 1665.873 1677.3888 1682.7037 1689.0303 1699.8683 1704.6682 1709.9832 1720.6605 1732.0816 1743.7827 1755.2263 1766.2168"
+      },
+      "text": "•Goal này có khả thi với khối lượng công việc hiện tại không?"
+    },
+    {
+      "index": 185,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1418.706",
+        "x": "1217.7266 1235.7316 1250.595 1262.2529 1273.0724 1277.8723 1283.1873 1294.5753 1305.4216 1317.2052 1322.5202 1327.1945 1338.154 1343.469 1355.1948 1366.7106 1372.0255 1378.317 1382.9542 1394.3876 1405.9033 1411.2183 1421.2734 1432.6738 1437.412 1448.8021 1460.3385 1465.6535 1471.945 1478.6752 1490.3764 1501.82 1513.7066 1519.0215 1528.8933 1540.5945 1552.036 1563.9226 1569.2376 1579.5379 1584.2122 1595.7485 1605.9664 1611.2814 1622.6592 1627.3335 1638.7998 1650.3156 1655.6305 1661.957 1672.795 1677.595"
+      },
+      "text": "•Goal nào là ưu tiên chính trong công việc hiện tại?"
+    },
+    {
+      "index": 186,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1393.9852",
+        "x": "1217.7266 1235.7316 1250.595 1262.2529 1273.0724 1277.8723 1283.1873 1294.5753 1305.4216 1317.2052 1322.5202 1333.9308 1345.362 1356.8778 1362.1928 1372.2459 1383.6256 1388.2999 1399.6632 1416.5558 1421.8707 1433.2609 1444.6406 1449.3355 1460.7667 1472.2825 1477.5974 1483.8889 1495.345 1507.1183 1511.9182 1517.2332 1529.023 1533.6828 1544.5022 1556.018 1561.3329 1571.4663 1582.4259 1587.7409 1597.6127 1609.3139 1620.7575 1632.644 1637.959 1647.4827 1658.9675 1669.1854 1674.5004 1685.9564 1697.74 1708.3019"
+      },
+      "text": "•Goal nào nên chiếm nhiều thời gian và công sức hơn?"
+    },
+    {
+      "index": 187,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1309.9343",
+        "x": "1217.7266 1235.7316 1247.5831 1259.1195 1264.4345 1275.8555 1287.5464 1298.4277 1308.4808 1320.0172 1325.3322 1337.0148 1348.5512 1353.8661 1365.2953 1382.1879 1387.5028 1393.7943 1405.2009 1416.6879 1426.9058 1432.2207 1443.6026 1448.2748 1459.7411 1471.2568 1476.5718 1493.3655 1504.8441 1515.062 1520.377 1526.6705 1531.3078 1542.702 1554.2178 1559.5327 1570.9229 1582.3336 1593.8494 1599.1643 1605.4558 1616.9119 1628.4483 1633.7632 1645.1533 1655.9976 1666.7861"
+      },
+      "text": "•Kế hoạch để em thực hiện mục tiêu như thế nào?"
+    },
+    {
+      "index": 188,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1285.2135",
+        "x": "1217.7266 1235.7316 1249.565 1260.9365 1272.3348 1283.7764 1295.663 1300.9779 1307.2694 1318.229 1323.544 1333.082 1344.6184 1349.9334 1356.2228 1367.6438 1379.137 1390.9205 1396.2355 1408.0603 1419.7162 1424.5161 1429.831 1436.1226 1440.7969 1452.1602 1463.6759 1468.9909 1480.6735 1492.457 1497.772 1509.1621 1520.5729 1532.0886 1537.4036 1543.6972 1555.1532 1566.6896 1572.0045 1583.3947 1594.2389 1605.0275"
+      },
+      "text": "•Chúng ta sẽ theo dõi tiến độ như thế nào?"
+    },
+    {
+      "index": 189,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1648.4863",
+        "x": "1217.7266 1235.7316 1250.5126 1261.363 1272.8067 1284.6932 1290.0082 1294.6928 1306.1797 1316.3976 1321.7125 1328.0164 1333.3313 1345.3086 1355.5471 1360.862 1372.2852 1383.1376 1394.5812 1406.4678 1411.7827 1422.0006 1432.853 1444.3688 1449.6837 1461.0739 1471.9202 1483.7037 1489.0187 1499.2489 1510.0994 1521.6151 1526.93 1538.7301 1549.597 1555.9009 1561.2158 1578.0075 1589.4861 1599.704 1605.0189 1611.3104 1615.9497 1627.344 1638.8598 1644.1747 1654.3926 1665.2327 1670.0326 1675.3475 1681.639 1693.0188 1697.6931 1709.1594 1720.7617 1726.4826 1738.3197 1749.7201 1760.552 1766.8558"
+      },
+      "text": "•Năng lực / Kỹ năng cần nào cần đặt mục tiêu cải thiện/phát"
+    },
+    {
+      "index": 190,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1623.7655",
+        "x": "1235.7316 1242.0231 1248.8584 1253.5307 1264.997 1276.5127 1281.8276 1288.1192 1294.8494 1306.5505 1317.9942 1329.8807 1335.1957 1346.6207 1357.4712 1374.3638 1379.6787 1391.0668 1401.672 1411.9105 1417.2255 1428.906 1440.4424 1445.7573 1457.5945 1469.0011 1480.4797 1490.6976 1496.0126 1506.3479 1517.8637 1523.1786 1534.5996 1546.2576 1557.073 1568.5888 1573.9037 1580.1952 1591.5956 1602.4131 1613.8012 1625.3375 1630.6525 1647.4462 1658.9248 1669.1427 1674.4577 1680.7471 1685.3864 1696.7807 1708.2964 1713.6113 1723.4832 1735.1843 1746.6279 1758.5145"
+      },
+      "text": "triển trong năm nay để phục vụ hoàn thành mục tiêu công"
+    },
+    {
+      "index": 191,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1599.0447",
+        "x": "1235.7316 1246.0319 1250.7062 1262.2426 1271.5005 1280.9768"
+      },
+      "text": "việc?"
+    },
+    {
+      "index": 192,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1537.3867",
+        "x": "1888.3206 1903.184 1914.8419 1925.6614 1930.4613 1935.7763 1947.1643 1957.7695 1968.008 1973.323 1983.1948 1994.9784 2000.2933 2004.9635 2009.6028 2021.034 2032.5498 2037.8648 2049.6258 2061.0489 2071.8663 2083.382 2088.697 2100.3797 2111.743 2123.2589 2128.5738 2138.4456 2150.1468 2161.5906 2173.4774 2178.7923 2189.0926 2193.7669 2205.3033 2215.5213 2220.8363 2232.216 2236.8905 2248.3568 2259.8726 2265.1876 2271.5118 2282.3519 2287.1519 2292.4669 2302.5118 2313.9678 2324.9273 2330.2423 2341.6324 2353.0328 2363.848 2375.3638 2380.6788 2390.979 2395.6185 2407.0477"
+      },
+      "text": "Goal này có liên quan đến công việc hiện tại của nhân viên"
+    },
+    {
+      "index": 193,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1512.6659",
+        "x": "1888.3206 1903.184 1914.8419 1925.6614 1930.4613 1935.7763 1946.4536 1957.889 1968.8486 1974.1636 1980.4551 1991.8348 1996.6348 2001.9497 2011.8875 2023.6587 2028.4586 2033.7736 2040.0651 2051.5213 2063.2947 2068.0948 2073.4097 2085.2017 2089.8597 2100.6812 2112.197 2117.512 2127.6456 2138.605 2143.92 2155.3638 2167.1248 2178.5623 2190.2987 2201.8145 2207.1295 2211.814 2223.301"
+      },
+      "text": "Goal khả thi với thời gian và nguồn lực"
+    },
+    {
+      "index": 194,
+      "parent_index": 175,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1487.9451",
+        "x": "1888.3206 1900.9116 1912.3656 1917.1655 1922.4805 1929.2107 1940.9943 1946.3092 1956.3644 1967.7648 1972.5029 1983.8931 1995.4295 2000.7444 2012.5753 2023.5349 2028.8499 2040.722 2052.0977 2063.904 2074.122 2079.437 2089.2596 2100.0687 2110.2867 2115.6016 2127.752 2132.4696 2143.8597"
+      },
+      "text": "Rủi ro chính đã được xác định"
+    },
+    {
+      "index": 195,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_12)"
+      }
+    },
+    {
+      "index": 196,
+      "parent_index": 195,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "fc7a306dbbdd3cb7aad35b03676b747545da9f28ff58a20d3629eac1cb73b022",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 197,
+      "parent_index": 195,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "149546c6469989d1158cc01abeb82a1c7f4cff8ddfebcc3352954ad277cbfc7d",
+        "d_length": 93
+      }
+    },
+    {
+      "index": 198,
+      "parent_index": 195,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "dee80697a1ee6812bae46e0a73da456ff9accfaa565e2da74cb12a580cf164a2",
+        "d_length": 90
+      }
+    },
+    {
+      "index": 199,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "Quản lý hiểu và cam kết hỗ trợ nhân viênHai bên đồng thuận goalThống nhất kế hoạch triển khai & lịch check-in tiến độ"
+    },
+    {
+      "index": 200,
+      "parent_index": 199,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1321.0166",
+        "x": "1888.3067 1904.1527 1915.6107 1926.4612 1937.9769 1943.2919 1948.1412 1958.3798 1963.6947 1975.0745 1979.7488 1991.178 2002.6937 2008.0087 2018.1421 2029.1017 2034.4166 2044.6118 2055.427 2072.3197 2077.6346 2087.8587 2099.3045 2105.6082 2110.923 2122.3792 2134.1629 2139.4779 2145.769 2152.5345 2164.318 2169.633 2181.0213 2192.4217 2203.239 2214.755 2220.0699 2230.37 2235.0096 2246.441"
+      },
+      "text": "Quản lý hiểu và cam kết hỗ trợ nhân viên"
+    },
+    {
+      "index": 201,
+      "parent_index": 199,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1296.2958",
+        "x": "1888.3067 1903.131 1913.934 1918.7339 1924.0488 1935.9396 1947.3709 1958.8866 1964.2015 1975.9501 1987.6863 1999.1299 2011.0165 2016.3314 2022.6209 2033.9945 2045.4525 2056.303 2067.8189 2073.1339 2084.9464 2096.6043 2107.4237"
+      },
+      "text": "Hai bên đồng thuận goal"
+    },
+    {
+      "index": 202,
+      "parent_index": 199,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1271.575",
+        "x": "1888.3067 1899.9048 1911.3609 1923.0208 1934.4644 1946.351 1951.6659 1963.056 1974.4915 1985.3604 1991.6642 1996.9791 2007.2033 2018.7396 2024.0546 2035.4756 2047.1685 2058.0477 2068.1029 2079.6392 2084.954 2091.2454 2098.0787 2102.753 2114.2174 2125.7332 2131.048 2141.7276 2153.128 2163.931 2168.731 2174.046 2187.2716 2192.5865 2197.2896 2201.9639 2212.019 2223.5555 2228.8704 2238.9256 2250.3446 2261.8377 2271.8929 2281.915 2288.3199 2293.0006 2304.5164 2309.8314 2316.1226 2320.7969 2332.1602 2343.676 2348.991 2360.6737"
+      },
+      "text": "Thống nhất kế hoạch triển khai & lịch check-in tiến độ"
+    },
+    {
+      "index": 203,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_13)"
+      }
+    },
+    {
+      "index": 204,
+      "parent_index": 203,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "ad4d5c70f0b3a178695fb78ca9eed2b8615a8c0cb2e074a0fa63a32f3fb3f918",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 205,
+      "parent_index": 203,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "a836c63c08a545820514aac30504dc2f2450962304a6df209850158501d64d86",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 206,
+      "parent_index": 203,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "6ce0f80daaa19264f4e757a6e9896f28c6d59b5bc2bafba6c810c55f9f114354",
+        "d_length": 94
+      }
+    },
+    {
+      "index": 207,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20.6007",
+        "font-family": "ProximaNova-Medium"
+      },
+      "text": "Goal đúng với vai trò của nhân viên cần có tỷ trọng caoGiảm tỷ trọng các goal có phụ thuộc vào yếu tố bên ngoài"
+    },
+    {
+      "index": 208,
+      "parent_index": 207,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1417.5635",
+        "x": "1888.3067 1903.17 1914.828 1925.6475 1930.4474 1935.7623 1947.5995 1958.9978 1970.4393 1982.3259 1987.6409 1997.5786 2009.3519 2014.1519 2019.4668 2029.6023 2040.4033 2045.2033 2050.5184 2056.8096 2063.54 2075.3238 2080.6387 2090.6817 2102.1378 2113.0972 2118.412 2129.8004 2141.2008 2152.0159 2163.5318 2168.8468 2179.147 2183.7864 2195.2178 2206.7337 2212.0487 2222.2667 2233.117 2244.6329 2249.9478 2259.8197 2271.6033 2276.9183 2283.7535 2293.992 2299.307 2305.5982 2312.3636 2324.0999 2335.5438 2347.4305 2352.7454 2362.9407 2373.7847"
+      },
+      "text": "Goal đúng với vai trò của nhân viên cần có tỷ trọng cao"
+    },
+    {
+      "index": 209,
+      "parent_index": 207,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-1392.8427",
+        "x": "1888.3067 1903.0814 1907.7763 1918.6307 1935.5233 1940.8383 1947.6757 1957.9142 1963.2291 1969.5186 1976.2838 1988.02 1999.4636 2011.3502 2016.6652 2026.8604 2037.6696 2047.8875 2053.2025 2065.017 2076.673 2087.4947 2092.2947 2097.6097 2107.4815 2119.2652 2124.58 2136.4173 2147.8238 2159.3397 2164.6546 2170.9459 2182.3175 2193.7962 2205.5614 2215.7794 2221.0943 2231.2257 2242.0718 2253.8555 2259.1705 2269.098 2280.4613 2291.977 2297.292 2303.3155 2315.099 2320.414 2332.3048 2343.736 2355.252 2360.567 2372.0108 2383.8255 2395.4815 2406.2864"
+      },
+      "text": "Giảm tỷ trọng các goal có phụ thuộc vào yếu tố bên ngoài"
+    },
+    {
+      "index": 210,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_14)"
+      }
+    },
+    {
+      "index": 211,
+      "parent_index": 210,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "ea695520cf6932b52124d86518df6a860d304bbe45599e1f04c06f9469e8f342",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 212,
+      "parent_index": 210,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "72801c012c37c95209e507c293d258131670bfdfc291e312a5585e45803c88a9",
+        "d_length": 92
+      }
+    },
+    {
+      "index": 213,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "60",
+        "font-family": "ProximaNova-Extrabld"
+      },
+      "text": "BOARD"
+    },
+    {
+      "index": 214,
+      "parent_index": 213,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2424.8165",
+        "x": "329.875 370.675 414.71498 456.53498 496.19499"
+      },
+      "text": "BOARD"
+    },
+    {
+      "index": 215,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "36",
+        "font-family": "ProximaNova-Semibold",
+        "font-weight": "bold"
+      },
+      "text": "1. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT  BẢNG"
+    },
+    {
+      "index": 216,
+      "parent_index": 215,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-2353.455",
+        "x": "329.875 343.771 352.591 361.84303 382.01744 408.04545 433.10145 460.84666 486.66227 512.47427 521.72628 547.00546 572.8894 598.705 624.517 633.76907 659.6638 680.4358 689.6878 713.0698 722.4154 743.0578 768.9418 778.1938 798.36819 824.479 833.803 843.055 867.553 890.5678 915.1198 924.3718 948.7186 972.853 998.66867 1024.4806 1033.7326 1057.6618 1085.0974 1110.4379 1130.6122 1151.5929 1176.9297 1197.7017 1206.9536 1216.2056 1239.026 1263.1604 1288.9761"
+      },
+      "text": "1. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT  BẢNG"
+    },
+    {
+      "index": 217,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "fill": "#2c2c2c",
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "20",
+        "font-family": "ProximaNova-Semibold",
+        "font-weight": "bold"
+      },
+      "text": "26"
+    },
+    {
+      "index": 218,
+      "parent_index": 217,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-161.877",
+        "x": "2298.2149 2309.8948"
+      },
+      "text": "26"
+    },
+    {
+      "index": 219,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_15)"
+      }
+    },
+    {
+      "index": 220,
+      "parent_index": 219,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1717.5833,1909.1382)",
+        "d_sha256": "4f05be6e463eac817b09e30300c24d026929113246fe93d286d31e69573e44d2",
+        "d_length": 40,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 221,
+      "parent_index": 219,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1659.1127,2037.7601)",
+        "d_sha256": "93ec1025d45303fcee32ca3cfdcabd5d345662f35719bcd72e3ff584b95068a9",
+        "d_length": 27,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 222,
+      "parent_index": 219,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1183.0984,1909.1382)",
+        "d_sha256": "9166afc2b4921f42af9e70753153160273740e869429d9ef2bd6490c8471e706",
+        "d_length": 26,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 223,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "fill": "#ffec06",
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "28",
+        "font-family": "ProximaNova-ExtrabldIt",
+        "font-style": "italic"
+      },
+      "text": "XÂY DỰNG ĐỘI NGŨ AI"
+    },
+    {
+      "index": 224,
+      "parent_index": 223,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-640.2612",
+        "x": "1267.6644 1287.2813 1304.4817 1322.8217 1329.9896 1349.9116 1371.0685 1391.6653 1411.9093 1419.0773 1439.8645 1461.1725 1469.3485 1476.5165 1497.1133 1516.9541 1537.9541 1545.1221 1564.3076"
+      },
+      "text": "XÂY DỰNG ĐỘI NGŨ AI"
+    },
+    {
+      "index": 225,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_16)"
+      }
+    },
+    {
+      "index": 226,
+      "parent_index": 225,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1717.5833,2154.4844)",
+        "d_sha256": "4f05be6e463eac817b09e30300c24d026929113246fe93d286d31e69573e44d2",
+        "d_length": 40,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 227,
+      "parent_index": 225,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1659.1127,2283.1065)",
+        "d_sha256": "3edc21f6c664e37f0b09be01748e6c6a78e6faab5678cb3a89c9e1c062369cb6",
+        "d_length": 26,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 228,
+      "parent_index": 225,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1183.0984,2154.4844)",
+        "d_sha256": "0659110f697ab7f4d07f4d7fe59ab77d96e7c58028263d0b979e27b4cc10f95c",
+        "d_length": 27,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 229,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "fill": "#ffec06",
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "28",
+        "font-family": "ProximaNova-ExtrabldIt",
+        "font-style": "italic"
+      },
+      "text": "XÂY DỰNG HỆ THỐNGTỰ ĐỘNG HOÁ"
+    },
+    {
+      "index": 230,
+      "parent_index": 229,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-406.0493",
+        "x": "1273.2832 1292.9 1310.1005 1328.4406 1335.6087 1355.5307 1376.6875 1397.2955 1417.5368 1424.7048 1445.4445 1461.9365 1469.1046 1484.849 1505.485 1526.821 1547.4291"
+      },
+      "text": "XÂY DỰNG HỆ THỐNG"
+    },
+    {
+      "index": 231,
+      "parent_index": 229,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-372.44929",
+        "x": "1323.0392 1338.7976 1359.7976 1366.9657 1387.7501 1409.061 1429.6691 1449.9103 1457.0784 1477.7144 1498.3869"
+      },
+      "text": "TỰ ĐỘNG HOÁ"
+    },
+    {
+      "index": 232,
+      "parent_index": 43,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_17)"
+      }
+    },
+    {
+      "index": 233,
+      "parent_index": 232,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "opacity": ".199997"
+      }
+    },
+    {
+      "index": 234,
+      "parent_index": 233,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_18)"
+      }
+    },
+    {
+      "index": 235,
+      "parent_index": 234,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1786.3978,2105.7296)",
+        "stroke-width": "1",
+        "fill": "none",
+        "stroke": "#000000",
+        "d_sha256": "df96405fe6a94cf9387c251bed1da151631075b34bcb390c19a68bfecdd382db",
+        "d_length": 165
+      }
+    },
+    {
+      "index": 236,
+      "parent_index": 234,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "opacity": ".600006"
+      }
+    },
+    {
+      "index": 237,
+      "parent_index": 236,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_19)"
+      }
+    },
+    {
+      "index": 238,
+      "parent_index": 237,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1980.2675,2105.7296)",
+        "stroke-width": "1",
+        "fill": "none",
+        "stroke": "#000000",
+        "d_sha256": "870211b345580a488ea4edbd6cdea6534131bd8ebb4a763778d8d5006f3328f0",
+        "d_length": 170
+      }
+    },
+    {
+      "index": 239,
+      "parent_index": 234,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "opacity": ".300003"
+      }
+    },
+    {
+      "index": 240,
+      "parent_index": 239,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_20)"
+      }
+    },
+    {
+      "index": 241,
+      "parent_index": 240,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2197.388,2105.7296)",
+        "stroke-width": "1",
+        "fill": "none",
+        "stroke": "#000000",
+        "d_sha256": "b8eb7a64150883ebe2ce2b51d9b23090ea58ff78486c15b7dce24a71cde93aff",
+        "d_length": 172
+      }
+    },
+    {
+      "index": 242,
+      "parent_index": 232,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1457.3533,2086.2718)",
+        "d_sha256": "14747fa3ddeead556d3fc94b09507351306609d0f3636aa781e673df4fd3f869",
+        "d_length": 80,
+        "fill": "#3333ff"
+      }
+    },
+    {
+      "index": 243,
+      "parent_index": 232,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "456e37752b5643eeae2af39a126d1efc4091a69d95fec73164499f109bf9dff9",
+        "d_length": 43,
+        "fill": "#9898ff"
+      }
+    },
+    {
+      "index": 244,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "28",
+        "font-family": "ZXRVXQ+ProximaNova-Semibold",
+        "font-weight": "bold"
+      },
+      "text": "Nâng cấp các công cụ AI phục vụ công việcChia sẻ best practices vàuse cases trong các teamNâng cao tiếng anh để tiếp cận với AIXây dựng thư viện prompts & AI workﬂows dùng chungTổ chức workshop &training về AIKhuyến khíchthử nghiệm AI"
+    },
+    {
+      "index": 245,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-743.4775",
+        "x": "729.792 749.92398 764.62118 780.30398 796.54397 803.7399 817.6279 832.39517 848.57919 855.77517 869.6268 884.36318 898.2792 905.47518 918.86758 934.6736 950.3564 966.5964 973.79238 987.3948 1003.27078 1010.46676 1029.2968 1036.5487"
+      },
+      "text": "Nâng cấp các công cụ AI"
+    },
+    {
+      "index": 246,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-709.8775",
+        "x": "729.792 745.8248 761.4152 777.0924 791.0084 798.2044 812.3332 828.20919 835.40518 848.79757 864.6036 880.2864 896.52639 903.72238 917.80636 924.3191 939.8479"
+      },
+      "text": "phục vụ công việc"
+    },
+    {
+      "index": 247,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-537.4815",
+        "x": "624.344 643.1432 658.72518 665.18478 680.19277 687.38876 700.40878 716.00479 723.20077 739.33438 754.66439 767.9588 776.8908 784.0868 800.1196 809.6256 824.362 838.7736 847.5824 854.05599 867.4344 882.7644 895.9804 903.1764 917.0392"
+      },
+      "text": "Chia sẻ best practices và"
+    },
+    {
+      "index": 248,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-503.8815",
+        "x": "624.344 640.05477 653.0355 668.63156 675.8275 689.67636 704.42398 717.4047 732.73477 745.95077 753.1467 761.9583 771.4083 787.21438 802.89437 819.13436 826.3303 840.18197 854.91836 868.83438 876.03036 884.51156 899.92837 914.62557"
+      },
+      "text": "use cases trong các team"
+    },
+    {
+      "index": 249,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-743.47756",
+        "x": "1822.464 1842.5961 1857.2933 1872.9761 1889.2161 1896.4121 1910.2609 1924.9973 1941.0413 1948.2373 1957.0462 1963.559 1978.9058 1994.5885 2010.8285 2018.0245 2032.7218 2048.2843 2064.1883"
+      },
+      "text": "Nâng cao tiếng anh"
+    },
+    {
+      "index": 250,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-709.87759",
+        "x": "1822.464 1838.3484 1853.9443 1861.1404 1869.9492 1876.462 1891.806 1907.99 1915.186 1929.0769 1943.8134 1959.6893 1966.8854 1980.4989 1996.4085 2003.1565 2010.3526 2029.1825"
+      },
+      "text": "để tiếp cận với AI"
+    },
+    {
+      "index": 251,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-537.48159",
+        "x": "1899.968 1918.1065 1932.5629 1946.6469 1953.8429 1969.8364 1985.9141 2001.5968 2017.8368 2025.0328 2033.8445 2049.4349 2065.3109 2072.5069 2086.5909 2093.1038 2108.4786 2124.3546 2131.5506 2147.5836 2157.0335 2172.8394 2195.8695 2211.9613 2221.2432 2234.4593"
+      },
+      "text": "Xây dựng thư viện prompts"
+    },
+    {
+      "index": 252,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-503.88157",
+        "x": "1899.968 1918 1925.196 1944.026 1951.278 1958.474 1979.1492 1994.9523 2004.4022 2019.8079 2034.995 2050.6024 2071.608 2084.824 2092.02 2107.9744 2123.5479 2139.2279 2155.4678 2162.6639 2176.2298 2191.7838 2207.3572 2223.04"
+      },
+      "text": "& AI workﬂows dùng chung"
+    },
+    {
+      "index": 253,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-334.39759",
+        "x": "1822.464 1837.1836 1853.2276 1860.4236 1873.9896 1889.5801 1905.3076 1919.2236 1926.4197 1947.095 1962.9009 1972.3508 1987.0789 2000.0568 2015.7228 2031.5287 2047.7127 2054.9088"
+      },
+      "text": "Tổ chức workshop &"
+    },
+    {
+      "index": 254,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-300.79759",
+        "x": "1822.464 1831.2756 1840.7844 1855.4481 1861.9218 1877.4757 1883.9465 1899.6293 1915.8693 1923.0653 1936.6649 1952.2609 1959.4569 1978.2869"
+      },
+      "text": "training về AI"
+    },
+    {
+      "index": 255,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-334.39759",
+        "x": "870.464 887.7708 903.322 919.2036 932.8032 948.15 964.026 971.222 985.8576 1001.4256 1007.8376 1021.4176"
+      },
+      "text": "Khuyến khích"
+    },
+    {
+      "index": 256,
+      "parent_index": 244,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-300.79759",
+        "x": "870.464 879.2756 894.86599 910.74197 917.9379 933.6179 949.5555 965.13748 971.6502 987.02786 1010.3518 1017.5478 1036.3778"
+      },
+      "text": "thử nghiệm AI"
+    },
+    {
+      "index": 257,
+      "parent_index": 43,
+      "tag": "text",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1 0 -0 1 0 2623.16)",
+        "font-size": "36",
+        "font-family": "ProximaNova-Semibold",
+        "font-weight": "bold"
+      },
+      "text": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH"
+    },
+    {
+      "index": 258,
+      "parent_index": 257,
+      "tag": "tspan",
+      "id": null,
+      "attributes": {
+        "y": "-945.2793",
+        "x": "329.875 351.6586 360.4786 369.73063 389.90504 415.93305 440.98905 468.73426 494.54988 520.3619 529.6139 554.89309 580.77706 606.59268 632.40469 641.6567 667.5515 688.3235 697.5755 720.9575 730.3031 750.9455 776.82949 786.0815 806.25588 832.3667 841.6907 850.9427 875.4407 898.4555 923.0075 932.2595 956.6063 980.7407 1006.55636 1032.3683 1041.6203 1065.5494 1092.9851 1118.3256 1138.4999 1159.4806 1184.821 1205.593 1214.845 1237.2369 1263.5818 1284.829 1307.761 1317.013 1344.3694 1369.0798 1393.2142 1419.217"
+      },
+      "text": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH"
+    }
+  ],
+  "references": [
+    {
+      "kind": "fragment",
+      "target": "clip_1",
+      "node_index": 44,
+      "attribute": "clip-path",
+      "raw": "#clip_1"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_2",
+      "node_index": 67,
+      "attribute": "clip-path",
+      "raw": "#clip_2"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_3",
+      "node_index": 87,
+      "attribute": "clip-path",
+      "raw": "#clip_3"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_4",
+      "node_index": 98,
+      "attribute": "clip-path",
+      "raw": "#clip_4"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_5",
+      "node_index": 106,
+      "attribute": "clip-path",
+      "raw": "#clip_5"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_6",
+      "node_index": 113,
+      "attribute": "clip-path",
+      "raw": "#clip_6"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_7",
+      "node_index": 126,
+      "attribute": "clip-path",
+      "raw": "#clip_7"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_8",
+      "node_index": 139,
+      "attribute": "clip-path",
+      "raw": "#clip_8"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_9",
+      "node_index": 156,
+      "attribute": "clip-path",
+      "raw": "#clip_9"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_10",
+      "node_index": 162,
+      "attribute": "clip-path",
+      "raw": "#clip_10"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_11",
+      "node_index": 170,
+      "attribute": "clip-path",
+      "raw": "#clip_11"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_12",
+      "node_index": 195,
+      "attribute": "clip-path",
+      "raw": "#clip_12"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_13",
+      "node_index": 203,
+      "attribute": "clip-path",
+      "raw": "#clip_13"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_14",
+      "node_index": 210,
+      "attribute": "clip-path",
+      "raw": "#clip_14"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_15",
+      "node_index": 219,
+      "attribute": "clip-path",
+      "raw": "#clip_15"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_16",
+      "node_index": 225,
+      "attribute": "clip-path",
+      "raw": "#clip_16"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_17",
+      "node_index": 232,
+      "attribute": "clip-path",
+      "raw": "#clip_17"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_18",
+      "node_index": 234,
+      "attribute": "clip-path",
+      "raw": "#clip_18"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_19",
+      "node_index": 237,
+      "attribute": "clip-path",
+      "raw": "#clip_19"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_20",
+      "node_index": 240,
+      "attribute": "clip-path",
+      "raw": "#clip_20"
+    }
+  ],
+  "warnings": []
+}

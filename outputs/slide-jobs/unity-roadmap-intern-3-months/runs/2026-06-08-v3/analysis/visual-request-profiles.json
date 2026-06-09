@@ -1,0 +1,10 @@
+{
+  "request_id": "unity-roadmap-profiles",
+  "brand": "sun-studio",
+  "intent": ["roles", "responsibility", "feature-grid"],
+  "tags": ["roles", "profile", "support", "cards"],
+  "content_structure": ["titled-cards"],
+  "density": "medium",
+  "required_exports": ["html"],
+  "recommend_extraction": false
+}

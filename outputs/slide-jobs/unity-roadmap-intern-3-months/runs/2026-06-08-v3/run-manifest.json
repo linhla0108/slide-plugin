@@ -1,0 +1,124 @@
+{
+  "job_id": "unity-roadmap-intern-3-months",
+  "run_id": "2026-06-08-v3",
+  "status": "complete",
+  "created_at": "2026-06-08T13:05:00+07:00",
+  "updated_at": "2026-06-08T16:10:00+07:00",
+  "approval": {
+    "status": "approved",
+    "approved_at": "2026-06-08T12:05:00+07:00",
+    "approved_by": "user",
+    "overrides": [
+      "Use dark-neon game UI visual direction instead of the default light SUN.STUDIO look while retaining SUN.STUDIO resources and local fonts."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "input/Prompt.md",
+      "role": "mixed",
+      "checksum": "48fb72080a24c04eee3b0a48a935e1d61df52d3d7c4f7a75cdd50d600e10fb50"
+    }
+  ],
+  "selected_visual_items": [
+    {
+      "slide": 2,
+      "item_id": "custom.neon-game-hud.skill-tree",
+      "action": "custom-local",
+      "score": 100.0
+    },
+    {
+      "slide": 3,
+      "item_id": "custom.neon-game-hud.training-board",
+      "action": "custom-local",
+      "score": 100.0
+    },
+    {
+      "slide": 4,
+      "item_id": "custom.neon-game-hud.production-pipeline",
+      "action": "custom-local",
+      "score": 100.0
+    },
+    {
+      "slide": 5,
+      "item_id": "custom.neon-game-hud.launch-pad",
+      "action": "custom-local",
+      "score": 100.0
+    },
+    {
+      "slide": 6,
+      "item_id": "custom.neon-game-hud.support-radar",
+      "action": "custom-local",
+      "score": 100.0
+    }
+  ],
+  "capability_report": "analysis/capability-report.json",
+  "limitations": [
+    "No real Unity 3D model asset was provided; cover uses local Unity/gamepad iconography and CSS isometric geometry.",
+    "This run targets HTML only. PPTX/PDF can be generated in a later run with documented renderer limitations.",
+    "v3 is a creative Neon Game HUD redesign based on v2 and preserves the same source intent within an 8-slide structure.",
+    "Slides 2, 4, 6, and 7 received an additional polish pass for connector alignment, layout balance, UI cohesion, and visual hierarchy.",
+    "Latest draft pass removes visible XP/mission language, fixes slide progress placement, improves body/footer spacing, expands and raises the cover cube stack, adds stronger cube-face glow, simplifies slide 1 hero copy, aligns slide 2 unlock-card styling with final unlock, adds slide 5 launch-number glow, polishes slide 6 support cards, spaces slide 7 readiness meter content, polishes slide 4 back into a balanced pipeline/console layout, and updates slide 8 DIO to the soft Spotlight Stage background.",
+    "Export fallback used because gen_pptx is unavailable: PDF is generated from HTML render captures; PPTX is a hybrid editable file with native text overlays on rendered backgrounds.",
+    "The PDF is the visual-authority artifact. The PPTX prioritizes visual parity for complex CSS effects while keeping primary slide text editable as native PowerPoint text.",
+    "Three small support-role chips on slide 6 remain embedded in the PPTX background to preserve visual parity."
+  ],
+  "outputs": [
+    {
+      "type": "html",
+      "path": "html/index.html",
+      "status": "complete"
+    },
+    {
+      "type": "qa-report",
+      "path": "qa/qa-report.md",
+      "status": "complete"
+    },
+    {
+      "type": "delivery-report",
+      "path": "reports/delivery-report.md",
+      "status": "complete"
+    },
+    {
+      "type": "redesign-notes",
+      "path": "analysis/polish-notes.md",
+      "status": "complete"
+    },
+    {
+      "type": "pptx-editable-hybrid",
+      "path": "pptx/unity-roadmap-intern-3-months-v3-editable-hybrid.pptx",
+      "status": "complete"
+    },
+    {
+      "type": "pdf",
+      "path": "pdf/unity-roadmap-intern-3-months-v3.pdf",
+      "status": "complete"
+    },
+    {
+      "type": "export-script",
+      "path": "pptx/build_v3_hybrid_editable.py",
+      "status": "complete"
+    },
+    {
+      "type": "export-layout",
+      "path": "qa/export-layout.json",
+      "status": "complete"
+    },
+    {
+      "type": "export-renders",
+      "path": "qa/export-renders/",
+      "status": "complete"
+    }
+  ],
+  "checksums": {
+    "html/index.html": "b0bbe652b1f12e9905d3ab00a05d2c093c32f8076569ef0f9dbafa84cdbdfa93",
+    "html/deck-stage.js": "eac2199dccb470b7ee752c62808131ede4f54ce3990d79a87336e67f53e7f30f",
+    "approval-package.md": "082f6554b47878e2c286180b81e7dbe5ecaa038a9f832f3e14028b852aff3262",
+    "analysis/polish-notes.md": "f01dd88c84ed0f30fee94d5ecf401acaff9ca8959708b41f6290b2da32f27b6e",
+    "qa/qa-report.md": "e266d54823a68972b6bd1c62896f022dbe4867c2c316a6821930bb1d22e0b9ed",
+    "reports/delivery-report.md": "2e39d5df1a983a2c987a420dbea4a491c9c4714c33163fae54cf556c7af45602",
+    "qa/export-layout.json": "9e4e77b6a7caf2008acffe92362af158ca01d5f6c21119964b7c420c4a1c4897",
+    "pptx/build_v3_hybrid_editable.py": "8281864197d543ece219c733d0a1974f058f0d9de6f39870efa87cec4bfde016",
+    "pptx/unity-roadmap-intern-3-months-v3-editable-hybrid.pptx": "404ddadc61ede7d62b08ab234c3006158ee2b87fdc46430e2ea0cfc4208e0495",
+    "pdf/unity-roadmap-intern-3-months-v3.pdf": "1f340594fb051a0df924bb0b193f4745f95988ad2bad79d7602f5dd55bd227c9"
+  }
+}

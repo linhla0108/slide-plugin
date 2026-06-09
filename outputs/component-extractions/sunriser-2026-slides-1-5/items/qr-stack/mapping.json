@@ -1,0 +1,58 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "qr-stack",
+  "candidate_stable_id": "sun.component.qr-stack",
+  "status": "duplicate",
+  "type": "component",
+  "category": "component",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 2,
+    "region": {
+      "x": 0.595,
+      "y": 0.1,
+      "width": 0.3,
+      "height": 0.62,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "18f8a1e66633e8bf9e3c75993c602f49a02fb6044eb99e087cb274877cde87a3",
+    "semantic_signature_sha256": "dd3bb9a1adf5f490c99c531f65ada9eb5578ad9dc40954d00b02348a1c7d0360",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "qr",
+    "action",
+    "link"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [],
+  "variants": [],
+  "compatibility": {
+    "html": "untested",
+    "pptx": "untested",
+    "pdf": "untested",
+    "canva": "untested"
+  },
+  "limitations": [
+    "Already in library as sun.component.qr-stack (qa v0.9.0); do not re-publish."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": "sun.component.qr-stack",
+  "name": "QR Stack",
+  "tags": [
+    "duplicate"
+  ],
+  "notes_resolution": "Maps to existing sun.component.qr-stack."
+}

@@ -1,0 +1,351 @@
+{
+  "request_id": "unity-roadmap-staircase",
+  "generated_at": "2026-06-08T11:59:59+07:00",
+  "decision": {
+    "action": "reuse",
+    "item_id": "sun.component.chevron-flow",
+    "score": 93.0,
+    "reason": "The best published item meets the reuse threshold.",
+    "extraction_recommended": true
+  },
+  "candidates": [
+    {
+      "item_id": "sun.component.chevron-flow",
+      "eligible": true,
+      "score": 93.0,
+      "criteria": {
+        "semantic_intent": 28.0,
+        "content_structure": 20.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.phase-timeline",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.acronym",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.numbered-qa",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.value-grid",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.asset.logo",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.character.dio",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.background.xo-pattern",
+      "eligible": true,
+      "score": 45.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.swimlane",
+      "eligible": true,
+      "score": 41.0,
+      "criteria": {
+        "semantic_intent": 7.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 5.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.ratio-donut",
+      "eligible": true,
+      "score": 39.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.section.agenda",
+      "eligible": true,
+      "score": 39.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.section.divider",
+      "eligible": true,
+      "score": 39.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.formula",
+      "eligible": true,
+      "score": 39.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.folio",
+      "eligible": true,
+      "score": 39.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.component.competency",
+      "eligible": true,
+      "score": 34.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 5.0
+      },
+      "reasons": []
+    },
+    {
+      "item_id": "sun.card.metric-card",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.component.goal-target",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.component.level-expectation",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 7.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.component.goal-sun-stack",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.template.q4-objectives",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.component.qr-stack",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 4.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.style.goal-target-rings",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    },
+    {
+      "item_id": "sun.style.level-expectation-gradient",
+      "eligible": false,
+      "score": 0.0,
+      "criteria": {
+        "semantic_intent": 0.0,
+        "content_structure": 0.0,
+        "density": 10.0,
+        "brand": 10.0,
+        "export_compatibility": 15.0,
+        "accessibility": 10.0
+      },
+      "reasons": [
+        "Rejected status: qa"
+      ]
+    }
+  ]
+}

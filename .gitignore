@@ -1,2 +1,5 @@
 
 .ppt-master/
+.playwright-mcp/
+data/
+.codegraph/

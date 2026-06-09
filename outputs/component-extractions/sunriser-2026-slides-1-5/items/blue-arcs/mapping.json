@@ -1,0 +1,70 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "blue-arcs",
+  "candidate_stable_id": "sun.background.blue-arcs",
+  "status": "staging",
+  "type": "background",
+  "category": "background",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 4,
+    "region": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1.0,
+      "height": 1.0,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "d848d8c84de72633b60fda0f8657f557fa78103fc9aea731960859b85289ba6b",
+    "semantic_signature_sha256": "ee315ded5400647ba2c9fd299561ca4c6dac01baa0e898864909c6ceafc05dea",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "section-background",
+    "concentric-arcs",
+    "cool-gradient"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [
+    "--sun-blue",
+    "--sun-blue-mid",
+    "--sun-blue-pale"
+  ],
+  "variants": [],
+  "compatibility": {
+    "html": "supported",
+    "pptx": "raster",
+    "pdf": "supported",
+    "canva": "raster"
+  },
+  "limitations": [
+    "Repeating radial gradient may not round-trip in PPTX/Canva; use PNG fallback.",
+    "Cool-tone sibling of sun.background.orange-arcs (shared geometry)."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": null,
+  "name": "Blue Arcs Background",
+  "tags": [
+    "background",
+    "blue",
+    "gradient",
+    "arcs",
+    "section"
+  ],
+  "paths": {
+    "artifact": "artifact/blue-arcs.css",
+    "preview": "preview/index.html"
+  }
+}

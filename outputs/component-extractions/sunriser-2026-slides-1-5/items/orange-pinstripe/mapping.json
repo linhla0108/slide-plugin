@@ -1,0 +1,70 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "orange-pinstripe",
+  "candidate_stable_id": "sun.background.orange-pinstripe",
+  "status": "staging",
+  "type": "background",
+  "category": "background",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 1,
+    "region": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1.0,
+      "height": 1.0,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "f3887c42e243779d94888ae15fae021a87f602aa2e542e4f637c56612c0362c6",
+    "semantic_signature_sha256": "121331b6428dada9c8dd895667210761d5643b2a7705aeec49f02347c59fb9e9",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "brand-background",
+    "warm-gradient",
+    "pinstripe-texture"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [
+    "--sun-orange",
+    "--sun-orange-deep",
+    "--sun-orange-pale"
+  ],
+  "variants": [],
+  "compatibility": {
+    "html": "supported",
+    "pptx": "raster",
+    "pdf": "supported",
+    "canva": "raster"
+  },
+  "limitations": [
+    "Layered gradients may not round-trip in PPTX/Canva; use PNG fallback.",
+    "Color tokens are approximate; reconcile with canonical design system."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": null,
+  "name": "Orange Pinstripe Background",
+  "tags": [
+    "background",
+    "orange",
+    "gradient",
+    "pinstripe",
+    "title"
+  ],
+  "paths": {
+    "artifact": "artifact/orange-pinstripe.css",
+    "preview": "preview/index.html"
+  }
+}

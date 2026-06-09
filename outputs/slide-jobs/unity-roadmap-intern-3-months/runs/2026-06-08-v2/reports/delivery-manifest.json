@@ -1,0 +1,142 @@
+{
+  "packaged_at": "2026-06-08T12:27:00+07:00",
+  "run_dir": "/Users/home/Documents/work-space/sun-riser-2026/outputs/slide-jobs/unity-roadmap-intern-3-months/runs/2026-06-08-v2",
+  "file_count": 27,
+  "files": [
+    {
+      "path": "analysis/capability-report.json",
+      "bytes": 4152,
+      "sha256": "04599e25cbae8a51533d3cb75cae3e5694bf802d5ccf0f138057f52bb434b3aa"
+    },
+    {
+      "path": "analysis/content-plan.md",
+      "bytes": 2809,
+      "sha256": "0c816646bfccaeaab2d7c10e8f9aa12defb3060a7fc3cf250bbc0b8c3fe4f932"
+    },
+    {
+      "path": "analysis/polish-notes.md",
+      "bytes": 1427,
+      "sha256": "91b3801d8df2e6fe177692ce98f61f3d725e3b4be57c0d548862d39400641ecc"
+    },
+    {
+      "path": "analysis/selection-report-overview.json",
+      "bytes": 8288,
+      "sha256": "4404ffd6fd1a22d778f0e25096001f30032f4a6e2306b040a1c591530b004f5e"
+    },
+    {
+      "path": "analysis/selection-report-profiles.json",
+      "bytes": 8272,
+      "sha256": "492532eece9faa61ddb9d88fe7b92357ae536a04a9c0d7cd3cda8830d35128ac"
+    },
+    {
+      "path": "analysis/selection-report-staircase.json",
+      "bytes": 8284,
+      "sha256": "74f14754539268004f7b1ee36a9a69faf68e2ab5e006220387c915c907067664"
+    },
+    {
+      "path": "analysis/selection-report-week-grid.json",
+      "bytes": 8283,
+      "sha256": "bbc35baf5ed4455a508a8557e6a92127551cbb31904b01a54ee078596aa05568"
+    },
+    {
+      "path": "analysis/selection-report-workflow.json",
+      "bytes": 8283,
+      "sha256": "a2fc0f56a74734cae244c2452e3f3f40d922d66866794b7802bb2443df0417de"
+    },
+    {
+      "path": "analysis/visual-request-overview.json",
+      "bytes": 321,
+      "sha256": "f69c3bca0498872f3895968fdf8cabafe6bd577749b8015ed12dceaa723bf642"
+    },
+    {
+      "path": "analysis/visual-request-profiles.json",
+      "bytes": 307,
+      "sha256": "6f01094dde922cec84887bea0cb5cd75863eb70cb0f11e38390a96e8102ec0f9"
+    },
+    {
+      "path": "analysis/visual-request-staircase.json",
+      "bytes": 291,
+      "sha256": "702170c9db869660db70b01c289ff159d1bbca2550b3a2402d64593153c5309f"
+    },
+    {
+      "path": "analysis/visual-request-week-grid.json",
+      "bytes": 301,
+      "sha256": "9da36fed6e4f5e4ce78cd2b76db8db2201ef7d5d34626afecf4ace8ec8cdfa37"
+    },
+    {
+      "path": "analysis/visual-request-workflow.json",
+      "bytes": 315,
+      "sha256": "89fd0b51af0b86372b01d6d97ab8ca0581d2bc871df8faa2225f836e43e26c92"
+    },
+    {
+      "path": "approval-package.md",
+      "bytes": 2963,
+      "sha256": "082f6554b47878e2c286180b81e7dbe5ecaa038a9f832f3e14028b852aff3262"
+    },
+    {
+      "path": "html/assets/fonts/Proxima-Nova-Bold.otf",
+      "bytes": 205184,
+      "sha256": "7a2fed857e51db936e8829156feb848e59db2f91a9391664031da08e1afeee46"
+    },
+    {
+      "path": "html/assets/fonts/Proxima-Nova-Regular.otf",
+      "bytes": 197696,
+      "sha256": "b97622578f2703f47181581720b5801b266c60e741558115e008f77d7817ae40"
+    },
+    {
+      "path": "html/assets/fonts/Proxima-Nova-SemiBold.otf",
+      "bytes": 200348,
+      "sha256": "a4a52b4c69923fec0460859b92e5d5177eb586538cf721e3ca4244022d1da9b0"
+    },
+    {
+      "path": "html/assets/icons/badge-check.svg",
+      "bytes": 976,
+      "sha256": "866f2f2f580e96d9ebf28692fb6cc97122e7861c71cdaddb496c415b4b6316cc"
+    },
+    {
+      "path": "html/assets/icons/gamepad.svg",
+      "bytes": 588,
+      "sha256": "bc101492ea02398306b16b2c223a2c616bc3946a46f5fe07f4af113025e8c65b"
+    },
+    {
+      "path": "html/assets/icons/unity.svg",
+      "bytes": 654,
+      "sha256": "b5b66fda997db7445483ff2917b1c17abb8da607d43905835551991aeb940753"
+    },
+    {
+      "path": "html/assets/images/dio-wink.png",
+      "bytes": 374619,
+      "sha256": "d4392ee0d33f23ea03b03154814a240f8e0a9b39c177b1eab0192823cc80a981"
+    },
+    {
+      "path": "html/assets/images/logo.png",
+      "bytes": 37600,
+      "sha256": "f74691c933440dfacc4c8618e8f93ba422bbd15c6d3e261218d6e5d673ff7feb"
+    },
+    {
+      "path": "html/deck-stage.js",
+      "bytes": 76360,
+      "sha256": "eac2199dccb470b7ee752c62808131ede4f54ce3990d79a87336e67f53e7f30f"
+    },
+    {
+      "path": "html/index.html",
+      "bytes": 38130,
+      "sha256": "e739fbb84cfc165b4303d96882e8b698f4bd2449d44203869d2a80339d7ce5ba"
+    },
+    {
+      "path": "qa/qa-report.md",
+      "bytes": 1728,
+      "sha256": "94f5d5261d973bb84db5c6c9fdab4a71ff43876b4c709e47c50e8acb87cbb561"
+    },
+    {
+      "path": "reports/delivery-report.md",
+      "bytes": 1096,
+      "sha256": "f2488c120289be913808b1ea65459b7860bebe792f83457aea2ced1a9f51e4f8"
+    },
+    {
+      "path": "run-manifest.json",
+      "bytes": 2750,
+      "sha256": "f6e43a036ea935e6645595464a18b6e226382e720898fa5ad53cef39c3eb3b92"
+    }
+  ]
+}

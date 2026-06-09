@@ -1,0 +1,10 @@
+{
+  "request_id": "unity-roadmap-staircase",
+  "brand": "sun-studio",
+  "intent": ["process", "sequence", "flow"],
+  "tags": ["steps", "process", "progression"],
+  "content_structure": ["ordered-items"],
+  "density": "medium",
+  "required_exports": ["html"],
+  "recommend_extraction": true
+}
