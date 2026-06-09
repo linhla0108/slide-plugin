@@ -1,0 +1,21 @@
+.sun-guideline-icon {
+  width: var(--icon-size, 48px);
+  height: var(--icon-size, 48px);
+  color: var(--icon-color, #171717);
+}
+
+.sun-guideline-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sun-guideline-icon [fill]:not([fill="none"]) {
+  fill: currentColor;
+}
+
+.sun-guideline-icon [stroke]:not([stroke="none"]) {
+  stroke: currentColor;
+  vector-effect: non-scaling-stroke;
+}

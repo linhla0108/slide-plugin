@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "skills": {
+    "component-extractor": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/component-extractor/SKILL.md",
+      "computedHash": "691568762fd7c4b8ef0db9102521beee2515f1651b6bab79395116a2cbb5a424"
+    },
+    "export-as-editable-pptx": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/export-as-editable-pptx/SKILL.md",
+      "computedHash": "82af563257e55c914f12cc10662bd4a42c4ca2bc249dbd7759c769b5a4dc5256"
+    },
+    "hi-fi-design": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/hi-fi-design/SKILL.md",
+      "computedHash": "fdc06d34a1b33964bb48c260fedf0b71d53ffe0b1fee3cc653a076d2933cd81b"
+    },
+    "interactive-prototype": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/interactive-prototype/SKILL.md",
+      "computedHash": "aeae76b8abcfac3876460b1207c27d1f8d101e6b0eefc572923a4f18865fb80d"
+    },
+    "make-a-deck": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/make-a-deck/SKILL.md",
+      "computedHash": "e99e97557d566fbdcaf3a99ff4b2598777f830d393183342209bc7c50392a547"
+    },
+    "make-tweakable": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/make-tweakable/SKILL.md",
+      "computedHash": "a898b0bd8c4572292290ad27580efd237d44926b802deae7b68fe35ab919221f"
+    },
+    "ppt-master": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/ppt-master/SKILL.md",
+      "computedHash": "57126b5551a1b8cde0d53dc1b55ac708daae375348256618a5165810030da0a0"
+    },
+    "pptx": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/pptx/SKILL.md",
+      "computedHash": "e5b0df918cbe9d62508b3cf808d73899633f82fc19f6258a25ef9f0de7e62125"
+    },
+    "send-to-canva": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/send-to-canva/SKILL.md",
+      "computedHash": "d544bac595d12455b7141050e6d557041cb58e60afe4ffab409c275e1ec07644"
+    },
+    "slide-generator": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/slide-generator/SKILL.md",
+      "computedHash": "d87bac2d5dc734291f1969d4f4f19c610e0afa32d39575e3d690048db06a7243"
+    },
+    "sun-studio-design-system": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/sun-studio-design-system/SKILL.md",
+      "computedHash": "93dbe326639afa1e1aa352e270c62e2c009c7df350d2aa775d5b83e2a1d1aaf7"
+    },
+    "svg-extractor": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/svg-extractor/SKILL.md",
+      "computedHash": "2d6da1c082b559940054792b29d2a970e41c68b881c1a135d960d4099a58c372"
+    }
+  }
+}
+

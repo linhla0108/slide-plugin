@@ -1,0 +1,63 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "divider",
+  "candidate_stable_id": "sun.section.divider",
+  "status": "duplicate",
+  "type": "section",
+  "category": "section",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 4,
+    "region": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1.0,
+      "height": 1.0,
+      "unit": "normalized"
+    },
+    "object_ids": [
+      "bg-blue-arcs",
+      "section-number",
+      "section-title",
+      "section-sublabel"
+    ]
+  },
+  "fingerprints": {
+    "region_identity_sha256": "fe064ad7e21b913a8fbd9c269391dff66858331142f647ff4f2297c80214df4a",
+    "semantic_signature_sha256": "de0c9088e89ac3b9a4f53b450eeb8c0183c845cb64dfa704b67023c34a094e6f",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "section-divider",
+    "chapter",
+    "transition"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [],
+  "variants": [],
+  "compatibility": {
+    "html": "untested",
+    "pptx": "untested",
+    "pdf": "untested",
+    "canva": "untested"
+  },
+  "limitations": [
+    "Already in library as sun.section.divider (published v1.0.0); do not re-publish."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": "sun.section.divider",
+  "name": "Section Divider",
+  "tags": [
+    "duplicate"
+  ],
+  "notes_resolution": "Maps to existing sun.section.divider."
+}

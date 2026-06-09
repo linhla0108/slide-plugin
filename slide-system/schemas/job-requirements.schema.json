@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/job-requirements.schema.json",
+  "title": "Slide Job Requirements",
+  "type": "object",
+  "required": ["job_id", "brand_pack", "inputs", "authority", "exports", "editability", "required_tools"],
+  "properties": {
+    "job_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "title": { "type": "string" },
+    "brand_pack": { "type": "string" },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "properties": {
+          "path": { "type": "string" },
+          "role": { "enum": ["content", "appearance", "mixed", "asset"] },
+          "checksum": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["content", "appearance"],
+      "properties": {
+        "content": { "type": "string" },
+        "appearance": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "exports": {
+      "type": "array",
+      "items": { "enum": ["html", "pptx-editable", "pptx-ppt-master", "pptx-image-fallback", "pdf"] },
+      "uniqueItems": true
+    },
+    "editability": {
+      "type": "object",
+      "required": ["text", "foreground_shapes", "backgrounds"],
+      "properties": {
+        "text": { "type": "boolean" },
+        "foreground_shapes": { "type": "boolean" },
+        "backgrounds": { "enum": ["editable", "hybrid", "raster-allowed"] }
+      },
+      "additionalProperties": false
+    },
+    "visual_needs": { "type": "array", "items": { "type": "string" } },
+    "fonts": { "type": "array", "items": { "type": "string" } },
+    "effects": { "type": "array", "items": { "type": "string" } },
+    "unsupported_effects": { "type": "array", "items": { "type": "string" } },
+    "required_tools": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "approvals": { "type": "array", "items": { "type": "string" } },
+    "overrides": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

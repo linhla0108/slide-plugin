@@ -1,0 +1,4 @@
+interface:
+  display_name: "Slide Generator"
+  short_description: "Plan, build, export, and validate AI slide decks"
+  default_prompt: "Use $slide-generator to create this deck through requirement checking, planning, visual selection, export, and QA."

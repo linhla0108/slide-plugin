@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make a Deck"
+  short_description: "Create polished self-contained HTML decks"
+  default_prompt: "Use $make-a-deck to create a polished self-contained HTML presentation deck."

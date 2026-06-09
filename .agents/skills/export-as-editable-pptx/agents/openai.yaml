@@ -1,0 +1,4 @@
+interface:
+  display_name: "Export as Editable PPTX"
+  short_description: "Export HTML decks to editable PowerPoint"
+  default_prompt: "Use $export-as-editable-pptx to export this HTML deck as an editable PowerPoint presentation."

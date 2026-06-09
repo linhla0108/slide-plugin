@@ -1,0 +1,23 @@
+{
+  "extraction_id": "example-extraction",
+  "source_path": "/absolute/path/to/source.pptx",
+  "items": [
+    {
+      "item_id": "item-01",
+      "slide_or_page": 1,
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "unit": "normalized"
+      },
+      "object_ids": [],
+      "requested_type": "component",
+      "semantic_intent": ["example"],
+      "notes": "",
+      "replacement_for": null
+    }
+  ]
+}
+

@@ -1,0 +1,32 @@
+{
+  "extraction_id": "guideline-presentation-sun-pages-1-5",
+  "created_at": "2026-06-08T18:08:05+07:00",
+  "source_path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+  "items": [
+    {
+      "item_id": "guideline-icon-library",
+      "status": "staging",
+      "candidate_id": "sun.asset.guideline-icon-library"
+    },
+    {
+      "item_id": "guideline-card-variants",
+      "status": "staging",
+      "candidate_id": "sun.component.guideline-card-variants"
+    },
+    {
+      "item_id": "guideline-shape-variants",
+      "status": "staging",
+      "candidate_id": "sun.style.guideline-shape-variants"
+    },
+    {
+      "item_id": "guideline-board-layouts",
+      "status": "staging",
+      "candidate_id": "sun.component.guideline-board-layouts"
+    },
+    {
+      "item_id": "guideline-image-layouts",
+      "status": "staging",
+      "candidate_id": "sun.template.guideline-image-layouts"
+    }
+  ]
+}

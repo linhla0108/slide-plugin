@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/run-manifest.schema.json",
+  "title": "Slide Run Manifest",
+  "type": "object",
+  "required": ["job_id", "run_id", "status", "created_at", "approval", "inputs", "outputs"],
+  "properties": {
+    "job_id": { "type": "string" },
+    "run_id": { "type": "string" },
+    "status": { "enum": ["requirements", "awaiting-approval", "building", "qa", "complete", "blocked"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "approval": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "approved_at": { "type": ["string", "null"], "format": "date-time" },
+        "approved_by": { "type": ["string", "null"] },
+        "overrides": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "inputs": { "type": "array", "items": { "type": "object" } },
+    "selected_visual_items": { "type": "array", "items": { "type": "object" } },
+    "capability_report": { "type": ["string", "null"] },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "outputs": { "type": "array", "items": { "type": "object" } },
+    "checksums": { "type": "object", "additionalProperties": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
+

@@ -1,0 +1,4 @@
+interface:
+  display_name: "SVG Extractor"
+  short_description: "Inspect SVG structure, geometry, text, and assets"
+  default_prompt: "Use $svg-extractor to validate this SVG and produce an auditable structural manifest."

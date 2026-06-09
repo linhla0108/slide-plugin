@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/capabilities.schema.json",
+  "title": "Capability Registry",
+  "type": "object",
+  "required": ["schema_version", "environment_fingerprint", "tools"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "environment_fingerprint": { "type": "string", "minLength": 1 },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tool_id", "status", "capabilities", "last_checked", "environment_fingerprint"],
+        "properties": {
+          "tool_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "status": { "enum": ["available", "unavailable", "unknown"] },
+          "path": { "type": ["string", "null"] },
+          "version": { "type": ["string", "null"] },
+          "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "last_checked": { "type": ["string", "null"], "format": "date-time" },
+          "environment_fingerprint": { "type": "string" },
+          "last_failure": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

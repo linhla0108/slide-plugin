@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Preview harness</title>
+<link rel="stylesheet" href="deck.css">
+<style>
+  html,body{ background:#15151a; margin:0; }
+  .ph-wrap{ display:none; }
+  .ph-wrap.on{ display:block; }
+  .ph-stage{ box-shadow:0 0 0 1px #333; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="image-slot.js"></script>
+<script>
+  let scale = 1;
+  function fit(){
+    scale = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    document.querySelectorAll('.ph-stage').forEach(s=> s.style.transform='scale('+scale+')');
+    document.body.style.height = (1080*scale)+'px';
+  }
+  window.addEventListener('resize', fit);
+  window.show = function(n){
+    document.querySelectorAll('.ph-wrap').forEach((w,i)=> w.classList.toggle('on', i===n));
+    fit();
+  };
+  (async function(){
+    const res = await fetch('Be%20Professional%20%40%20SUN.STUDIO.html');
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const slides = doc.querySelectorAll('deck-stage > section');
+    const root = document.getElementById('root');
+    slides.forEach((sec, i)=>{
+      const wrap = document.createElement('div');
+      wrap.className = 'ph-wrap' + (i===0?' on':'');
+      wrap.id = 'w'+i;
+      const stage = document.createElement('div');
+      stage.className = 'ph-stage';
+      stage.appendChild(sec.cloneNode(true));
+      wrap.appendChild(stage);
+      root.appendChild(wrap);
+    });
+    fit();
+  })();
+</script>
+</body>
+</html>

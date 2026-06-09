@@ -1,0 +1,21 @@
+/* sun.background.orange-arcs
+ * Source: SUN.RISER 2026, slide 2 (Mentimeter), full-slide background.
+ * Concentric orange arcs radiating from the lower-left, fading to pale top-right.
+ * Reconstructed as CSS (simple-background path); PNG fallback for export targets
+ * that cannot round-trip repeating radial gradients.
+ */
+.sun-bg-orange-arcs {
+  --sun-orange: #ff5533;
+  --sun-orange-pale: #ffd8c8;
+  background-color: var(--sun-orange);
+  background-image:
+    repeating-radial-gradient(circle at 5% 60%,
+      rgba(255, 255, 255, 0) 0 64px,
+      rgba(255, 255, 255, 0.05) 64px 132px
+    ),
+    radial-gradient(150% 150% at 0% 60%,
+      var(--sun-orange) 0%,
+      #ff6b45 42%,
+      var(--sun-orange-pale) 100%
+    );
+}

@@ -1,0 +1,100 @@
+/* Extracted QR stack component from the supplied slide image */
+:root {
+  --sun-slide-accent:#3531ff;
+  --sun-qr-paper:#fff;
+  --sun-qr-ink:#050505;
+}
+
+.sun-qr-stack,
+.sun-qr-stack * {
+  box-sizing:border-box;
+}
+
+.sun-qr-stack {
+  --qr-base:var(--sun-slide-accent);
+  --qr-bg-start:color-mix(in srgb, var(--qr-base) 98%, #111);
+  --qr-bg-mid:var(--qr-base);
+  --qr-bg-end:color-mix(in srgb, var(--qr-base) 55%, white);
+  --qr-glow:color-mix(in srgb, var(--qr-base) 10%, #d8ffdc);
+  --qr-layer:255, 255, 255;
+  --qr-shadow:color-mix(in srgb, var(--qr-base) 66%, #05052b);
+  position:relative;
+  width:min(393px, 100%);
+  aspect-ratio:393 / 489;
+  padding:27px 17px 17px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 103% 68%, color-mix(in srgb, var(--qr-glow) 82%, transparent) 0 9%, transparent 27%),
+    radial-gradient(circle at 70% -7%, rgba(255,255,255,.52) 0 9%, transparent 38%),
+    linear-gradient(120deg, var(--qr-bg-start) 0%, var(--qr-bg-mid) 47%, var(--qr-bg-end) 100%);
+  color:var(--sun-qr-ink);
+  isolation:isolate;
+}
+
+.sun-qr-stack__card,
+.sun-qr-stack__layer {
+  position:absolute;
+  left:4.33%;
+  right:6.87%;
+  border-radius:14px;
+}
+
+.sun-qr-stack__card {
+  top:5.52%;
+  z-index:4;
+  aspect-ratio:349 / 349;
+  display:grid;
+  place-items:center;
+  padding:9.16%;
+  background:var(--sun-qr-paper);
+  box-shadow:
+    0 2px 1px rgba(255, 255, 255, .78) inset,
+    0 18px 34px color-mix(in srgb, var(--qr-shadow) 16%, transparent);
+}
+
+.sun-qr-stack__layer {
+  aspect-ratio:349 / 349;
+  box-shadow:0 10px 24px color-mix(in srgb, var(--qr-shadow) 12%, transparent);
+}
+
+.sun-qr-stack__layer:nth-child(1) {
+  top:9.41%;
+  z-index:3;
+  background:rgba(var(--qr-layer), .58);
+}
+
+.sun-qr-stack__layer:nth-child(2) {
+  top:13.29%;
+  z-index:2;
+  background:rgba(var(--qr-layer), .39);
+}
+
+.sun-qr-stack__layer:nth-child(3) {
+  top:17.18%;
+  z-index:1;
+  background:rgba(var(--qr-layer), .25);
+}
+
+.sun-qr-stack__layer:nth-child(4) {
+  top:21.06%;
+  z-index:0;
+  background:rgba(var(--qr-layer), .16);
+  box-shadow:0 18px 24px color-mix(in srgb, var(--qr-shadow) 18%, transparent);
+}
+
+.sun-qr-stack__qr {
+  width:100%;
+  height:100%;
+  display:block;
+  shape-rendering:crispEdges;
+}
+
+.sun-qr-stack__mark {
+  transform-origin:center;
+}
+
+@media (max-width:430px) {
+  .sun-qr-stack {
+    width:100%;
+  }
+}

@@ -1,0 +1,27 @@
+/* Concentric ring style extracted from component-from-slide/sun-goal-target.css */
+:root {
+  --sun-slide-accent:#3531ff;
+  --sun-goal-ring-base:var(--sun-slide-accent);
+  --sun-goal-ring-1:color-mix(in srgb, var(--sun-goal-ring-base) 86%, white);
+  --sun-goal-ring-2:color-mix(in srgb, var(--sun-goal-ring-base) 75%, white);
+  --sun-goal-ring-3:color-mix(in srgb, var(--sun-goal-ring-base) 64%, white);
+  --sun-goal-ring-4:color-mix(in srgb, var(--sun-goal-ring-base) 54%, white);
+  --sun-goal-ring-5:color-mix(in srgb, var(--sun-goal-ring-base) 43%, white);
+  --sun-goal-ring-6:color-mix(in srgb, var(--sun-goal-ring-base) 32%, white);
+  --sun-goal-ring-7:color-mix(in srgb, var(--sun-goal-ring-base) 22%, white);
+}
+
+.sun-goal-rings {
+  background:
+    radial-gradient(
+      circle farthest-side,
+      var(--sun-goal-ring-base) 0 76.2%,
+      var(--sun-goal-ring-1) 76.4% 80.2%,
+      var(--sun-goal-ring-2) 80.4% 84.1%,
+      var(--sun-goal-ring-3) 84.3% 87.9%,
+      var(--sun-goal-ring-4) 88.1% 91.5%,
+      var(--sun-goal-ring-5) 91.7% 94.8%,
+      var(--sun-goal-ring-6) 95% 97.4%,
+      var(--sun-goal-ring-7) 97.6% 100%
+    );
+}

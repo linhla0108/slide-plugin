@@ -1,0 +1,93 @@
+/* =====================================================================
+   SUN.STUDIO — Component base (the standard the components inherit from)
+   ---------------------------------------------------------------------
+   Every component .css starts with  @import url("_base.css");
+   which in turn pulls the canonical tokens from colors_and_type.css.
+   This file adds ONLY the cross-component primitives shared by 2+
+   components — everything component-specific lives in its own file.
+
+   Skin: BRAND-STANDARD (Proxima Nova, orange / blue / ink). No serif,
+   no monospace — matches the 26 existing Design-System cards.
+
+   SCALING:  components are authored at slide scale (good on a 1920
+   canvas inside a ~1500px content zone). Set --cs to shrink/grow the
+   whole component uniformly:
+       .agenda          -> set  --cs: 1     (slide default)
+       .preview .agenda -> set  --cs: .52   (shrunk into a 700px card)
+   Each component multiplies its key sizes by var(--cs) via calc().
+   ===================================================================== */
+
+@import url("../colors_and_type.css");
+
+:root {
+  /* Brand "sun" gradient — mined from deck-03 section washes.
+     Use sparingly as a section-divider wash; respects "orange = energy". */
+  --grad-sun: linear-gradient(105deg, #FF5533 0%, #FF7A52 45%, #FFE3B8 100%);
+
+  /* Component aliases (so component files read cleanly) */
+  --rule:        var(--line);
+  --rule-strong: var(--line-strong);
+  --paper-shade: var(--soft);
+}
+
+/* Global component scale knob — components read var(--cs) */
+.sun-c { --cs: 1; }
+
+/* ---------------------------------------------------------------
+   SHARED PRIMITIVES (used across multiple components)
+   --------------------------------------------------------------- */
+
+/* "WHEN" tag — date / phase label. Replaces the editorial mono label
+   with a brand Proxima treatment (deck-02/05 month tags). */
+.c-when {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: calc(15px * var(--cs));
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sun-orange);
+}
+
+/* Small eyebrow label inside components */
+.c-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: calc(13px * var(--cs));
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Component item title (Proxima Black, tight, uppercase) */
+.c-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(24px * var(--cs));
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Component description (Proxima medium, muted) */
+.c-desc {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: calc(17px * var(--cs));
+  line-height: 1.34;
+  color: var(--muted);
+}
+
+/* Big tabular numeral (agenda / divider / numbered Q&A) */
+.c-num {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+  line-height: .82;
+  color: var(--sun-orange);
+}
+
+/* Small inline highlight em used inside titles */
+.c-em { color: var(--sun-orange); }
+.c-em-blue { color: var(--sun-blue); }

@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Slide 10: Xử lý ứng viên khó đỡ</title>
+  <style>
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Medium.otf") format("opentype");
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-SemiBold.otf") format("opentype");
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Black.otf") format("opentype");
+      font-weight: 900;
+      font-style: normal;
+    }
+
+    :root{
+      --sun-orange:#FF5533;
+      --sun-orange-dark:#EB462D;
+      --sun-orange-25:#FFD4CC;
+      --sun-blue:#3333FF;
+      --sun-blue-25:#CCCCFF;
+      --ink:#171717;
+      --muted:#666666;
+      --line:#E7E7E7;
+      --paper:#FFFFFF;
+      --soft:#FAFAFA;
+      --font-display:"Proxima Nova","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+      --font-body:"Proxima Nova","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:var(--font-body);color:var(--ink)}
+    body{display:grid;place-items:center}
+
+    #stage{
+      width:1920px;
+      height:1080px;
+      position:relative;
+      overflow:hidden;
+      background:var(--paper);
+      transform-origin:center center;
+      box-shadow:0 24px 80px rgba(0,0,0,.35);
+    }
+
+    .slide{
+      position:absolute;
+      inset:0;
+      width:1920px;
+      height:1080px;
+      overflow:hidden;
+      background:var(--paper);
+      padding:84px 96px 78px;
+    }
+
+    .pattern{
+      position:absolute;
+      pointer-events:none;
+      opacity:.1;
+      background:
+        linear-gradient(135deg, transparent 49%, currentColor 50%, currentColor 51%, transparent 52%),
+        linear-gradient(45deg, transparent 49%, currentColor 50%, currentColor 51%, transparent 52%);
+      background-size:84px 84px,64px 64px;
+      color:var(--sun-orange);
+      width:600px;
+      height:600px;
+      right:-160px;
+      top:-180px;
+      transform:rotate(20deg);
+    }
+
+    .kicker{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font:800 16px/1 var(--font-body);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeUp .62s cubic-bezier(.2,.8,.2,1) .1s both;
+    }
+    .kicker:before{
+      content:"";
+      width:42px;
+      height:4px;
+      background:var(--sun-orange);
+      display:block;
+    }
+
+    h1{
+      margin:18px 0 0;
+      font-size:68px;
+      line-height:.98;
+      letter-spacing:-.025em;
+      text-transform:uppercase;
+      font-weight:900;
+      opacity:0;
+      transform:translateY(24px);
+      animation:fadeUp .68s cubic-bezier(.2,.8,.2,1) .2s both;
+    }
+
+    .types{
+      margin-top:52px;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:32px;
+    }
+
+    .type{
+      border-radius:14px;
+      padding:34px 30px;
+      position:relative;
+      overflow:hidden;
+      opacity:0;
+      transform:translateY(32px);
+    }
+
+    .type:nth-child(1){
+      background:#F5F5F5;
+      border:3px solid var(--line);
+      animation:fadeUp .68s cubic-bezier(.2,.8,.2,1) .3s both;
+    }
+
+    .type:nth-child(2){
+      background:linear-gradient(135deg, var(--sun-blue-25) 0%, rgba(51,51,255,.06) 100%);
+      border:3px solid var(--sun-blue);
+      animation:fadeUp .68s cubic-bezier(.2,.8,.2,1) .4s both;
+    }
+
+    .type:nth-child(3){
+      background:linear-gradient(135deg, var(--sun-orange-25) 0%, rgba(255,85,51,.06) 100%);
+      border:3px solid var(--sun-orange);
+      animation:fadeUp .68s cubic-bezier(.2,.8,.2,1) .5s both;
+    }
+
+    .type-icon{
+      width:225px;
+      height:225px;
+      margin:-10px auto 14px;
+      display:block;
+    }
+
+    .type-icon img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .type-title{
+      font-size:28px;
+      line-height:1.15;
+      font-weight:900;
+      letter-spacing:0;
+      text-transform:uppercase;
+      color:var(--ink);
+      margin-bottom:22px;
+      text-align:center;
+    }
+
+    .type-section{
+      margin-bottom:20px;
+    }
+
+    .type-label{
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .type:nth-child(1) .type-label{color:var(--muted)}
+    .type:nth-child(2) .type-label{color:var(--sun-blue)}
+    .type:nth-child(3) .type-label{color:var(--sun-orange)}
+
+    .sign{
+      display:flex;
+      align-items:flex-start;
+      gap:9px;
+      margin-bottom:8px;
+      font-size:23px;
+      line-height:1.3;
+      color:var(--ink);
+      font-weight:650;
+    }
+
+    .sign-bullet{
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:var(--muted);
+      margin-top:7px;
+      flex-shrink:0;
+    }
+
+    .type:nth-child(2) .sign-bullet{background:var(--sun-blue)}
+    .type:nth-child(3) .sign-bullet{background:var(--sun-orange)}
+
+    .tactic{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:10px;
+      padding:11px 14px;
+      background:white;
+      border-radius:8px;
+      font-size:23px;
+      line-height:1.3;
+      font-weight:650;
+      color:var(--ink);
+    }
+
+    .tactic-arrow{
+      font-size:18px;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+
+    .type:nth-child(1) .tactic-arrow{color:var(--muted)}
+    .type:nth-child(2) .tactic-arrow{color:var(--sun-blue)}
+    .type:nth-child(3) .tactic-arrow{color:var(--sun-orange)}
+
+    .tactic em{
+      font-style:italic;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(34px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      font-family: var(--font-body, sans-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--muted, #666);
+      opacity: 0.7;
+      user-select: none;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @media print{
+      html,body{background:white;display:block;overflow:visible}
+      #stage{transform:none!important;box-shadow:none}
+      .slide{position:relative;page-break-after:always}
+    }
+
+
+    /* XO PATTERN V2 — matched to 01-title-xo-pattern-sample.html */
+    :root {
+      --xo-paper: #FFFDF8;
+    }
+
+    .slide {
+      background: var(--xo-paper) !important;
+      isolation: isolate;
+    }
+
+    .pattern {
+      display: none !important;
+    }
+
+    .xo-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: .92;
+      pointer-events: none;
+    }
+
+    .xo-grid {
+      position: absolute;
+      inset: -170px -150px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-auto-rows: 190px;
+      gap: 18px;
+      transform: rotate(-24deg) scale(1.06);
+      transform-origin: 50% 50%;
+    }
+
+    .xo-row {
+      display: grid;
+      grid-template-columns: repeat(13, 190px);
+      gap: 22px;
+    }
+
+    .xo-row.offset {
+      transform: translateX(212px);
+    }
+
+    .xo-cell {
+      display: grid;
+      place-items: center;
+      opacity: .16;
+    }
+
+    .xo-cell svg {
+      width: 86px;
+      height: 86px;
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(16px 20px 0 rgba(24, 24, 27, .18));
+    }
+
+    .xo-cell.x {
+      color: var(--sun-orange, #FF5533);
+      opacity: .25;
+      transform: translateY(-3px);
+    }
+
+    .xo-cell.x svg {
+      filter: drop-shadow(16px 20px 0 rgba(255, 85, 51, .26));
+    }
+
+    .xo-cell.o {
+      color: #000;
+      opacity: .15;
+      transform: translateY(3px);
+    }
+
+    .xo-cell.o svg {
+      filter: drop-shadow(16px 20px 0 rgba(0, 0, 0, .22));
+    }
+
+    .xo-cell.hot {
+      opacity: .82;
+    }
+
+    .xo-cell.hot svg {
+      width: 116px;
+      height: 116px;
+    }
+
+    .xo-cell.hot.x svg {
+      filter: drop-shadow(22px 28px 0 rgba(255, 85, 51, .34));
+    }
+
+    .xo-cell.hot.o svg {
+      filter: drop-shadow(22px 28px 0 rgba(0, 0, 0, .30));
+    }
+
+    .wash {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(255, 85, 51, .18), transparent 24%),
+        linear-gradient(90deg, var(--xo-paper) 0%, rgba(255, 253, 248, .72) 40%, rgba(255, 253, 248, .44) 68%, rgba(255, 253, 248, .10) 100%);
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+  <main id="stage">
+    <section class="slide" data-screen-label="10 Difficult Candidates">
+      <div class="xo-pattern" aria-hidden="true">
+        <div class="xo-grid"></div>
+      </div>
+      <div class="wash" aria-hidden="true"></div>
+      <div class="pattern"></div>
+
+      <div class="kicker">Xử lý tình huống</div>
+      <h1>3 típ ứng viên "khó đỡ" & cách xử lý</h1>
+
+       <div class="types">
+         <div class="type">
+           <div class="type-icon">
+             <img src="../assets/dio/m3-annoyed.png" alt="Annoyed pose - Robot học thuộc bài">
+           </div>
+           <div class="type-title">Robot học thuộc bài</div>
+
+          <div class="type-section">
+            <div class="type-label">Dấu hiệu:</div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Trả lời quá trơn tru</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Câu trả lời giống template</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Thiếu cảm xúc, chi tiết</div>
+            </div>
+          </div>
+
+           <div class="type-section">
+             <div class="type-label">Chiến thuật:</div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Hỏi <em>"What if"</em> bất ngờ</div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Đào sâu vào lỗ hổng logic</div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Yêu cầu ví dụ cụ thể hơn</div>
+             </div>
+           </div>
+        </div>
+
+        <div class="type">
+           <div class="type-icon">
+             <img src="../assets/dio/m6-bored.png" alt="Bored pose - Người kiệm lời">
+           </div>
+           <div class="type-title">Người kiệm lời</div>
+
+          <div class="type-section">
+            <div class="type-label">Dấu hiệu:</div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Trả lời ngắn, thiếu detail</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Không tự elaborate</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Khó đọc được suy nghĩ</div>
+            </div>
+          </div>
+
+           <div class="type-section">
+             <div class="type-label">Chiến thuật:</div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Câu hỏi mở: <em>"Kể thêm về..."</em></div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Silence technique (im lặng 3s)</div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Prompt: <em>"Ví dụ cụ thể?"</em></div>
+             </div>
+           </div>
+        </div>
+
+        <div class="type">
+           <div class="type-icon">
+             <img src="../assets/dio/m5-dancing.png" alt="Dancing pose - Người quá tự tin">
+           </div>
+           <div class="type-title">Người quá tự tin</div>
+
+          <div class="type-section">
+            <div class="type-label">Dấu hiệu:</div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Nói nhiều, ít nghe</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Overstate thành tích</div>
+            </div>
+            <div class="sign">
+              <div class="sign-bullet"></div>
+              <div>Thiếu self-awareness</div>
+            </div>
+          </div>
+
+           <div class="type-section">
+             <div class="type-label">Chiến thuật:</div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Hỏi về thất bại</div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div><em>"Điều gì bạn làm khác?"</em></div>
+             </div>
+             <div class="tactic">
+               <div class="tactic-arrow">
+                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg>
+               </div>
+               <div>Scenario khó, test ego</div>
+             </div>
+           </div>
+        </div>
+      </div>
+
+      <div class="slide-number">#10</div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById("stage");
+    function fit(){
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      stage.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener("resize", fit);
+    fit();
+  </script>
+
+  <script>
+    (function buildXOPatterns() {
+      const xSvg = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24L76 76M76 24L24 76" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" /></svg>';
+      const oSvg = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round" /></svg>';
+      document.querySelectorAll('.xo-grid').forEach((grid) => {
+        if (grid.children.length) return;
+        for (let row = 0; row < 8; row += 1) {
+          const rowEl = document.createElement('div');
+          rowEl.className = `xo-row${row % 2 ? ' offset' : ''}`;
+          for (let col = 0; col < 13; col += 1) {
+            const isX = col % 2 === 0;
+            const cell = document.createElement('span');
+            const hot = (row === 1 && col === 10) || (row === 4 && col === 7) || (row === 6 && col === 2);
+            cell.className = `xo-cell ${isX ? 'x' : 'o'}${hot ? ' hot' : ''}`;
+            cell.innerHTML = isX ? xSvg : oSvg;
+            rowEl.appendChild(cell);
+          }
+          grid.appendChild(rowEl);
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

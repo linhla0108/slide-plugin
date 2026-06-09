@@ -1,0 +1,36 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Section divider</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../components/section-divider.css">
+<style>
+  .brief { font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--muted); margin: -4px 0 2px; }
+  .brief b { color: var(--ink); font-weight: 700; }
+  .vrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+</style>
+</head>
+<body>
+<div class="card-label">Section divider</div>
+<p class="brief">Oversized index + section question. Punctuates the deck. <b>Deck-05</b> sections.</p>
+
+<div class="divider" style="--cs:.5">
+  <div class="eyebrow-tag">Phần 01</div>
+  <div class="idx">01</div>
+  <div class="ttl">Vì sao đánh giá cuối năm quan trọng?</div>
+</div>
+
+<div class="vrow">
+  <div class="divider ink" style="--cs:.34">
+    <div class="idx">02</div>
+    <div class="ttl">Gồm có gì?</div>
+  </div>
+  <div class="divider sun" style="--cs:.34">
+    <div class="idx">03</div>
+    <div class="ttl">Khi nào?</div>
+  </div>
+</div>
+</body>
+</html>

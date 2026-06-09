@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>v2 · 01 Title</title>
+<link rel="stylesheet" href="_v2.css">
+<style>
+  /* Slide-local */
+  /* Single-column hero; right side reserved for DIO bleed only */
+  .hero {
+    position: absolute; left: 96px; right: 96px; top: 196px;
+    display: flex; flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  /* Pull-quote sits in a constrained band BELOW the display, left-aligned,
+     so it never shares horizontal space with the DIO bleed. */
+  .lower-band {
+    position: absolute;
+    left: 96px; bottom: 138px;
+    width: 880px;            /* leaves the right half clear for DIO */
+    z-index: 3;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -.04em;
+    line-height: .82;
+    font-size: 280px;
+    color: var(--ink);
+    margin: 0;
+  }
+  .display .row { display: block; }
+  .display .row.r2 { padding-left: 0; }
+  .display .slash {
+    display: inline-block;
+    transform: translateY(-.04em) rotate(8deg);
+    color: var(--sun-orange);
+    font-style: italic;
+    margin: 0 .02em 0 .04em;
+    font-weight: 900;
+  }
+  .display .ink-block {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0 .08em .12em;
+    margin-left: -.06em;
+  }
+
+  .meta-strip {
+    position: absolute; left: 96px; top: 120px;
+    display: flex; align-items: center; gap: 24px;
+    font-family: var(--font-mono); font-size: 16px;
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .meta-strip .swatch {
+    width: 18px; height: 18px; background: var(--sun-orange);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--ink);
+  }
+  .meta-strip .b { font-weight: 700; }
+  .meta-strip .dim { color: var(--muted); }
+
+  .pull-quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 32px;
+    line-height: 1.32;
+    color: var(--ink-soft);
+    max-width: 540px;
+    text-align: left;
+    margin: 0 0 32px;
+  }
+  .pull-quote .em { color: var(--sun-orange); font-weight: 600; }
+
+  .credit {
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .credit b { color: var(--ink); }
+
+  .right-col {
+    position: relative; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: flex-start;
+    padding-bottom: 0;
+  }
+
+  /* DIO portrait, oversized — pushed to the far-right edge so it doesn't
+     overlap the lower-band copy on the left. */
+  .dio-hero {
+    position: absolute;
+    right: -60px; bottom: -140px;
+    width: 600px;
+    transform: rotate(-4deg);
+    z-index: 2;
+  }
+  .dio-hero img { width: 100%; display: block; }
+
+  /* Pinned stickers */
+  .pin-1 {
+    position: absolute;
+    left: 60%; top: 16%;
+    transform: rotate(-3deg);
+  }
+  .pin-2 {
+    position: absolute;
+    right: 96px; top: 188px;
+    transform: rotate(2.1deg);
+    z-index: 4;
+  }
+
+  /* XO marginalia (loose) */
+  .xo-marks {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  }
+  .xo-marks svg { position: absolute; }
+  .xo-marks .x1 { left: 64px;  bottom: 320px; width: 78px; color: var(--sun-orange); transform: rotate(-12deg); opacity: .85; }
+  .xo-marks .o1 { left: 1180px; top: 64px;     width: 60px; color: var(--ink);        transform: rotate(8deg);  opacity: .8; }
+  .xo-marks .x2 { right: 720px; bottom: 92px;  width: 52px; color: var(--ink);        transform: rotate(18deg); opacity: .55; }
+  .xo-marks .o2 { left: 50px;   top: 64%;      width: 40px; color: var(--sun-orange); transform: rotate(-22deg);opacity: .55; }
+
+  /* Date stamp top-right */
+  .stamp {
+    position: absolute; right: 96px; top: 116px; z-index: 4;
+    transform: rotate(4deg);
+    border: 3px solid var(--sun-orange);
+    border-radius: 6px;
+    padding: 10px 16px 8px;
+    font-family: var(--font-mono);
+    font-size: 14px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--sun-orange);
+    background: transparent;
+    line-height: 1.05;
+  }
+  .stamp b { display:block; font-size: 26px; letter-spacing: .04em; font-weight: 700; margin-top: 2px; font-family: var(--font-display); }
+
+  .by-line {
+    position: absolute; left: 96px; bottom: 60px; z-index: 3;
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+    display: flex; gap: 22px; color: var(--ink);
+  }
+  .by-line .dim { color: var(--muted); }
+
+  /* Slide-local: hide base page-tag (already shown by .by-line / folio) */
+  .page-tag { display: none; }
+</style>
+</head>
+<body>
+  <main id="stage">
+    <section class="slide" data-screen-label="V2 01 Title">
+
+      <div class="meta-strip">
+        <span class="swatch" aria-hidden="true"></span>
+        <span class="b">Interview Workshop</span>
+        <span class="dim">/ Internal</span>
+        <span class="dim">/ Hiring Managers</span>
+      </div>
+
+      <div class="stamp">
+        Tháng <b>05 · 2026</b>
+      </div>
+
+      <!-- Loose XO marks instead of full pattern -->
+      <div class="xo-marks" aria-hidden="true">
+        <svg class="x1" viewBox="0 0 100 100"><path d="M14 14L86 86M86 14L14 86" stroke="currentColor" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
+        <svg class="o1" viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" stroke="currentColor" stroke-width="14" fill="none"/></svg>
+        <svg class="x2" viewBox="0 0 100 100"><path d="M14 14L86 86M86 14L14 86" stroke="currentColor" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
+        <svg class="o2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" stroke="currentColor" stroke-width="14" fill="none"/></svg>
+      </div>
+
+      <!-- Hero composition (display only) -->
+      <div class="hero">
+        <h1 class="display">
+          <span class="row r1">SUN<span class="slash">/</span></span>
+          <span class="row r2">RISER<span class="ink-block">26</span></span>
+        </h1>
+      </div>
+
+      <!-- Lower band, kept left of DIO so it never overlaps -->
+      <div class="lower-band">
+        <p class="pull-quote">
+          “Trang bị kỹ năng phỏng vấn cho Hiring Managers — <span class="em">tìm đúng người, đúng thời điểm.</span>”
+        </p>
+        <div class="credit">
+          Workshop nội bộ &nbsp;·&nbsp; <b>SUN.STUDIO</b> &nbsp;·&nbsp; v2026.05
+        </div>
+      </div>
+
+      <!-- DIO portrait peeking from corner -->
+      <div class="dio-hero">
+        <img src="../assets/dio/m1-side-glance.png" alt="DIO">
+      </div>
+
+      <!-- Pinned stickers -->
+      <div class="sticker pin-1">Sun rises. Game on.</div>
+      <div class="sticker orange pin-2">12 slides · 50 phút</div>
+
+      <div class="by-line">
+        <span>Deck</span><span class="dim">SUN.RISER 2026</span>
+        <span>·</span>
+        <span>HRBP × Talent</span>
+      </div>
+
+      <div class="page-tag">
+        <span class="num">01</span><span class="of">/ 12</span>
+      </div>
+
+      <div class="grain" aria-hidden="true"></div>
+      <div class="crease" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById('stage');
+    function fit() {
+      const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+      stage.style.transform = `scale(${s})`;
+    }
+    addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

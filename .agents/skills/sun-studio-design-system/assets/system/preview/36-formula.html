@@ -1,0 +1,38 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Formula block</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../components/formula.css">
+<style>
+  .brief { font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--muted); margin: -4px 0 2px; }
+  .brief b { color: var(--ink); font-weight: 700; }
+  .vlabel { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="card-label">Formula block</div>
+<p class="brief">Weighted terms joined by + / =. <b>Deck-05</b> rating formula.</p>
+
+<div class="formula" style="--cs:.6">
+  <div class="f-term orange"><span class="val">80%</span><span class="lbl">What</span></div>
+  <div class="f-op">+</div>
+  <div class="f-term blue"><span class="val">20%</span><span class="lbl">How</span></div>
+  <div class="f-op">=</div>
+  <div class="f-term result"><span class="val">Rating+</span><span class="lbl">Kết quả</span></div>
+</div>
+
+<div class="vlabel">Deck-03 · định nghĩa Goal</div>
+<div class="formula" style="--cs:.5">
+  <div class="f-term ink"><span class="val">Goal</span></div>
+  <div class="f-op">=</div>
+  <div class="f-term"><span class="val">Outcome</span><span class="note">Kết quả cần đạt</span></div>
+  <div class="f-op">+</div>
+  <div class="f-term"><span class="val">KR</span><span class="note">Chỉ số đo lường</span></div>
+  <div class="f-op">+</div>
+  <div class="f-term"><span class="val">Time</span><span class="note">Thời hạn</span></div>
+</div>
+</body>
+</html>

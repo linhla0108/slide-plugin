@@ -1,0 +1,22 @@
+{
+  "id": "sun-studio",
+  "name": "SUN.STUDIO",
+  "version": "1.0.0",
+  "root": "../../../.agents/skills/sun-studio-design-system",
+  "canonical": {
+    "skill": "../../../.agents/skills/sun-studio-design-system/SKILL.md",
+    "tokens": "../../../.agents/skills/sun-studio-design-system/assets/system/colors_and_type.css",
+    "fonts": "../../../.agents/skills/sun-studio-design-system/assets/system/fonts",
+    "logo": "../../../.agents/skills/sun-studio-design-system/assets/system/assets/logo.png",
+    "dio": "../../../.agents/skills/sun-studio-design-system/assets/system/assets/dio",
+    "components": "../../../.agents/skills/sun-studio-design-system/assets/system/components",
+    "previews": "../../../.agents/skills/sun-studio-design-system/assets/system/preview"
+  },
+  "selection_rules": "selection-rules.md",
+  "licensing": "licensing.md",
+  "default_canvas": {
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9"
+  }
+}

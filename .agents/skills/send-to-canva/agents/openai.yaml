@@ -1,0 +1,4 @@
+interface:
+  display_name: "Send to Canva"
+  short_description: "Import an HTML design into editable Canva"
+  default_prompt: "Use $send-to-canva to import the current HTML design into Canva as an editable design."

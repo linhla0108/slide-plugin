@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/extraction-request.schema.json",
+  "title": "Component Extraction Request",
+  "type": "object",
+  "required": ["extraction_id", "source_path", "items"],
+  "properties": {
+    "extraction_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "source_path": { "type": "string", "minLength": 1 },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["item_id", "slide_or_page", "region", "requested_type", "semantic_intent"],
+        "properties": {
+          "item_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "slide_or_page": { "type": ["integer", "string"] },
+          "region": {
+            "type": "object",
+            "required": ["x", "y", "width", "height", "unit"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number", "exclusiveMinimum": 0 },
+              "height": { "type": "number", "exclusiveMinimum": 0 },
+              "unit": { "enum": ["px", "pt", "in", "normalized"] }
+            },
+            "additionalProperties": false
+          },
+          "object_ids": { "type": "array", "items": { "type": "string" } },
+          "requested_type": { "type": "string" },
+          "semantic_intent": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "notes": { "type": "string" },
+          "replacement_for": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

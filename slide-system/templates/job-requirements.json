@@ -1,0 +1,21 @@
+{
+  "job_id": "example-job",
+  "title": "Example slide deck",
+  "brand_pack": "sun-studio",
+  "inputs": [],
+  "authority": {
+    "content": "user prompt or named source",
+    "appearance": "brand pack and named references"
+  },
+  "exports": ["html", "pptx-editable", "pdf"],
+  "editability": {
+    "text": true,
+    "foreground_shapes": true,
+    "backgrounds": "raster-allowed"
+  },
+  "visual_needs": [],
+  "required_tools": ["node", "python"],
+  "approvals": [],
+  "overrides": []
+}
+

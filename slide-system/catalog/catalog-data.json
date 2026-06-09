@@ -1,0 +1,3188 @@
+{
+  "generated_at": "2026-06-09T10:51:53+07:00",
+  "counts": {
+    "published": 15,
+    "staging": 22
+  },
+  "items": [
+    {
+      "id": "sun.component.chevron-flow",
+      "version": "1.0.0",
+      "name": "Chevron Flow",
+      "type": "component",
+      "category": "diagrams",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "process",
+        "sequence",
+        "flow"
+      ],
+      "tags": [
+        "chevron",
+        "steps",
+        "process"
+      ],
+      "content_structure": [
+        "ordered-items"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/chevron-flow.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/chevron-flow.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/27-chevron-flow.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "PPTX conversion may rebuild chevrons as native shapes."
+      ]
+    },
+    {
+      "id": "sun.component.swimlane",
+      "version": "1.0.0",
+      "name": "Swimlane",
+      "type": "component",
+      "category": "diagrams",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "roles",
+        "process",
+        "responsibility"
+      ],
+      "tags": [
+        "swimlane",
+        "roles",
+        "phases"
+      ],
+      "content_structure": [
+        "rows",
+        "columns",
+        "cells"
+      ],
+      "density": "high",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/swimlane.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/swimlane.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/28-swimlane.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Dense tables require overflow checks."
+      ]
+    },
+    {
+      "id": "sun.component.phase-timeline",
+      "version": "1.0.0",
+      "name": "Phase Timeline",
+      "type": "component",
+      "category": "diagrams",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "timeline",
+        "roadmap",
+        "phases"
+      ],
+      "tags": [
+        "timeline",
+        "months",
+        "milestones"
+      ],
+      "content_structure": [
+        "ordered-phases",
+        "time-labels"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/phase-timeline.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/phase-timeline.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/29-phase-timeline.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.component.ratio-donut",
+      "version": "1.0.0",
+      "name": "Ratio Donut",
+      "type": "component",
+      "category": "data-display",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "ratio",
+        "proportion",
+        "allocation"
+      ],
+      "tags": [
+        "donut",
+        "ratio",
+        "data"
+      ],
+      "content_structure": [
+        "value-pairs",
+        "labels"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/ratio-donut.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/ratio-donut.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/30-ratio-donut.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Validate SVG or native chart conversion for PPTX."
+      ]
+    },
+    {
+      "id": "sun.component.acronym",
+      "version": "1.0.0",
+      "name": "Acronym Framework",
+      "type": "component",
+      "category": "diagrams",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "framework",
+        "acronym",
+        "principles"
+      ],
+      "tags": [
+        "acronym",
+        "letters",
+        "framework"
+      ],
+      "content_structure": [
+        "letter-items",
+        "definitions"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/acronym.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/acronym.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/31-acronym.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.component.numbered-qa",
+      "version": "1.0.0",
+      "name": "Numbered Q&A",
+      "type": "component",
+      "category": "cards",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "questions",
+        "faq",
+        "paired-content"
+      ],
+      "tags": [
+        "qa",
+        "faq",
+        "numbered"
+      ],
+      "content_structure": [
+        "question-answer-pairs"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/numbered-qa.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/numbered-qa.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/32-numbered-qa.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.component.value-grid",
+      "version": "1.0.0",
+      "name": "Value Grid",
+      "type": "component",
+      "category": "cards",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "values",
+        "benefits",
+        "feature-grid"
+      ],
+      "tags": [
+        "grid",
+        "value",
+        "benefit"
+      ],
+      "content_structure": [
+        "titled-cards"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/value-grid.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/value-grid.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/33-value-grid.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.section.agenda",
+      "version": "1.0.0",
+      "name": "Agenda",
+      "type": "section",
+      "category": "sections",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "agenda",
+        "contents",
+        "navigation"
+      ],
+      "tags": [
+        "agenda",
+        "numbered",
+        "list"
+      ],
+      "content_structure": [
+        "ordered-sections"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/agenda.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/agenda.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/34-agenda.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.section.divider",
+      "version": "1.0.0",
+      "name": "Section Divider",
+      "type": "section",
+      "category": "sections",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "section-divider",
+        "chapter",
+        "transition"
+      ],
+      "tags": [
+        "section",
+        "divider",
+        "index"
+      ],
+      "content_structure": [
+        "section-index",
+        "section-title"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/section-divider.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/section-divider.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/35-section-divider.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.component.formula",
+      "version": "1.0.0",
+      "name": "Formula Block",
+      "type": "component",
+      "category": "diagrams",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "formula",
+        "relationship",
+        "equation"
+      ],
+      "tags": [
+        "formula",
+        "equation",
+        "relationship"
+      ],
+      "content_structure": [
+        "terms",
+        "operators",
+        "result"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/formula.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/formula.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/36-formula.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.component.competency",
+      "version": "1.0.0",
+      "name": "Competency Columns",
+      "type": "component",
+      "category": "cards",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "competency",
+        "comparison",
+        "categories"
+      ],
+      "tags": [
+        "competency",
+        "columns",
+        "comparison"
+      ],
+      "content_structure": [
+        "column-groups",
+        "bullet-items"
+      ],
+      "density": "high",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/competency.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/competency.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/37-competency.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Long content requires column overflow checks."
+      ]
+    },
+    {
+      "id": "sun.component.folio",
+      "version": "1.0.0",
+      "name": "Folio",
+      "type": "component",
+      "category": "components",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "footer",
+        "slide-number",
+        "department-tag"
+      ],
+      "tags": [
+        "folio",
+        "footer",
+        "chrome"
+      ],
+      "content_structure": [
+        "slide-number",
+        "label"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/components/folio.css"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/components/folio.css",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/38-folio.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": []
+    },
+    {
+      "id": "sun.asset.logo",
+      "version": "1.0.0",
+      "name": "SUN.STUDIO Logo",
+      "type": "asset",
+      "category": "assets",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "brand-identification",
+        "logo"
+      ],
+      "tags": [
+        "logo",
+        "brand"
+      ],
+      "content_structure": [],
+      "density": "any",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/assets/logo.png"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/assets/logo.png",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/23-logo.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "supported"
+      },
+      "limitations": [
+        "Use according to SUN.STUDIO brand and licensing rules."
+      ]
+    },
+    {
+      "id": "sun.character.dio",
+      "version": "1.0.0",
+      "name": "Dio Character",
+      "type": "character",
+      "category": "dio",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "character",
+        "mascot",
+        "emphasis"
+      ],
+      "tags": [
+        "dio",
+        "mascot",
+        "character"
+      ],
+      "content_structure": [],
+      "density": "any",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/assets/dio"
+      },
+      "paths": {
+        "artifact": ".agents/skills/sun-studio-design-system/assets/system/assets/dio",
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/24-dio-gallery.html"
+      },
+      "variants": [
+        "normal",
+        "side-glance",
+        "wink",
+        "annoyed",
+        "dancing",
+        "bored",
+        "bewildered",
+        "variant"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "supported"
+      },
+      "limitations": [
+        "Use selectively on title, section, and closing slides."
+      ]
+    },
+    {
+      "id": "sun.background.xo-pattern",
+      "version": "1.0.0",
+      "name": "XO Pattern",
+      "type": "background",
+      "category": "backgrounds",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "brand-background",
+        "texture",
+        "wash"
+      ],
+      "tags": [
+        "xo",
+        "pattern",
+        "background"
+      ],
+      "content_structure": [],
+      "density": "any",
+      "source": {
+        "kind": "canonical",
+        "path": ".agents/skills/sun-studio-design-system/assets/system/preview/25-xo-pattern.html"
+      },
+      "paths": {
+        "artifact": null,
+        "preview": ".agents/skills/sun-studio-design-system/assets/system/preview/25-xo-pattern.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "supported",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Use a background-only PNG when CSS or masking cannot round-trip."
+      ]
+    },
+    {
+      "id": "sun.card.metric-card",
+      "version": "0.9.0",
+      "name": "Metric Card",
+      "type": "card",
+      "category": "data-display",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "metric",
+        "kpi",
+        "highlight-number"
+      ],
+      "tags": [
+        "legacy",
+        "metric",
+        "kpi",
+        "card"
+      ],
+      "content_structure": [
+        "value",
+        "label",
+        "context"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-metric-card.html",
+        "slide": 12
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-metric-card.html",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Uses duplicated tokens and legacy blue #3531FF.",
+        "Evidence package is missing."
+      ]
+    },
+    {
+      "id": "sun.component.goal-target",
+      "version": "0.9.0",
+      "name": "Goal Target",
+      "type": "component",
+      "category": "diagrams",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "goal",
+        "target",
+        "focus"
+      ],
+      "tags": [
+        "legacy",
+        "target",
+        "rings"
+      ],
+      "content_structure": [
+        "center-label",
+        "ring-labels"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-goal-target.html",
+        "slide": null
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-goal-target.html",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Exact source mapping and evidence are missing.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.component.level-expectation",
+      "version": "0.9.0",
+      "name": "Level Expectation",
+      "type": "component",
+      "category": "diagrams",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "level",
+        "expectation",
+        "progression"
+      ],
+      "tags": [
+        "legacy",
+        "level",
+        "circle"
+      ],
+      "content_structure": [
+        "levels",
+        "labels"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-level-expectation.html",
+        "slide": null
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-level-expectation.html",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Exact source mapping and evidence are missing.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.component.goal-sun-stack",
+      "version": "0.9.0",
+      "name": "Goal Sun Stack",
+      "type": "component",
+      "category": "diagrams",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "goals",
+        "objectives",
+        "overlap"
+      ],
+      "tags": [
+        "legacy",
+        "goals",
+        "circles"
+      ],
+      "content_structure": [
+        "overlapping-items"
+      ],
+      "density": "medium",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-goal-sun-stack.html",
+        "slide": null
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-goal-sun-stack.html",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Exact source mapping and evidence are missing.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.template.q4-objectives",
+      "version": "0.9.0",
+      "name": "Q4 Objectives Template",
+      "type": "template",
+      "category": "templates",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "objective-hierarchy",
+        "full-slide-layout"
+      ],
+      "tags": [
+        "legacy",
+        "objectives",
+        "template"
+      ],
+      "content_structure": [
+        "headline",
+        "objective-groups"
+      ],
+      "density": "high",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-q4-objectives.html",
+        "slide": null
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-q4-objectives.html",
+        "preview": "component-from-slide/sun-q4-objectives.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Source copy must not be reused.",
+        "Template contract and evidence are incomplete."
+      ]
+    },
+    {
+      "id": "sun.component.qr-stack",
+      "version": "0.9.0",
+      "name": "QR Stack",
+      "type": "component",
+      "category": "action",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "qr",
+        "action",
+        "link"
+      ],
+      "tags": [
+        "legacy",
+        "qr",
+        "cta"
+      ],
+      "content_structure": [
+        "qr-image",
+        "label",
+        "action"
+      ],
+      "density": "low",
+      "source": {
+        "kind": "legacy",
+        "path": "component-from-slide/sun-qr-stack.html",
+        "slide": null
+      },
+      "paths": {
+        "artifact": "component-from-slide/sun-qr-stack.html",
+        "preview": "component-from-slide/sun-qr-stack.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Shared preview coverage and evidence are incomplete.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.style.goal-target-rings",
+      "version": "0.9.0",
+      "name": "Goal Target Rings",
+      "type": "style",
+      "category": "styles",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "target-background",
+        "concentric-rings"
+      ],
+      "tags": [
+        "legacy",
+        "rings",
+        "background"
+      ],
+      "content_structure": [],
+      "density": "any",
+      "source": {
+        "kind": "legacy",
+        "path": "style-from-slide/goal-target-rings.css"
+      },
+      "paths": {
+        "artifact": "style-from-slide/goal-target-rings.css",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "untested",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Canonical-token migration is pending.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.style.level-expectation-gradient",
+      "version": "0.9.0",
+      "name": "Level Expectation Gradient",
+      "type": "style",
+      "category": "styles",
+      "status": "qa",
+      "brand": "sun-studio",
+      "intent": [
+        "gradient",
+        "accent-wash"
+      ],
+      "tags": [
+        "legacy",
+        "gradient",
+        "background"
+      ],
+      "content_structure": [],
+      "density": "any",
+      "source": {
+        "kind": "legacy",
+        "path": "style-from-slide/level-expectation-gradient.css"
+      },
+      "paths": {
+        "artifact": "style-from-slide/level-expectation-gradient.css",
+        "preview": "component-from-slide/preview.html"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "untested",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Canonical-token migration is pending.",
+        "Uses legacy blue #3531FF."
+      ]
+    },
+    {
+      "id": "sun.component.guideline-card-variants",
+      "version": "0.0.0",
+      "name": "Guideline Card Variants",
+      "type": "component",
+      "category": "cards",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "card-system",
+        "level-cards",
+        "metric-banners",
+        "variants"
+      ],
+      "tags": [
+        "cards",
+        "levels",
+        "metrics",
+        "variants"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-card-variants/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "title"
+        ],
+        "optional": [
+          "level",
+          "description",
+          "icon",
+          "label",
+          "value"
+        ],
+        "text_slots": [
+          {
+            "id": "chuy-n-h-a-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-d-hi-u-ch-r",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "team-ng-g-p-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-n-o",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-blockers",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-s-t-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "feedback-li-n-t-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-b-o-team-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-outcome",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "trao-i-d-n-d-t-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-thu-n-c-ng-nh-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "vi-n-v-c-ch-t-o-ra-k-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "qu-t-c-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategistdrivercoach",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "chuy-n-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "h-ng-i-r-r-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "cho-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-tr-ng-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-d-i-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "li-n-t-c-feedback",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "d-n-d-t-v-ng-h-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-nh-n-vi-n-t-o-ra",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategistdrivercoach-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "card",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "1-th-ng-d-ng-cho-c-c-m-c-c-c-ng-c-p-nh-ng-v-n-kh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "spicy",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autocomplete",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-1",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autonomous",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agenta",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "collaborative",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agent-networks",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-4",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "software",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "factory",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-5",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ai-coding",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "assistants",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "30",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "revenue",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "30-2",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "team-size",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "110-members",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 57,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [
+        "level-yellow",
+        "level-lime",
+        "level-blue",
+        "level-orange",
+        "level-dark",
+        "profile-outline",
+        "metric-orange",
+        "metric-blue"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Gradient card fills and embedded icon artwork should use SVG or PNG fallback when native export changes appearance.",
+        "Source copy is represented by editable content fields rather than reused verbatim.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.guideline-board-layouts",
+      "version": "0.0.0",
+      "name": "Guideline Board Layouts",
+      "type": "component",
+      "category": "boards",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "board-layout",
+        "editable-table",
+        "radial-board",
+        "structured-content"
+      ],
+      "tags": [
+        "board",
+        "table",
+        "radial",
+        "structured-content"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-board-layouts/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "content"
+        ],
+        "optional": [
+          "headers",
+          "rows",
+          "core",
+          "orbit_items"
+        ],
+        "text_slots": [
+          {
+            "id": "checklist-cho-qu-n-l",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "manager-n-n-h-i-trao-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-c-b-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-context-gi-i-th-ch-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-a-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "nh-n-vi-n-hi-u-b-c-tranh-chung",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "theo-em-ph-n-n-o-trong-c-ng-vi-c-c-a-m-nh-nh-h-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "nhi-u-nh-t-n-goal-team",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "em-ngh-k-t-qu-n-o-ch-ng-minh-m-nh-l-m-t-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "2-contribution-x-c-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ng-g-p-c-a-nh-n-vi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-m-ra-vai-tr-c-a-nh-n-vi-n-trong",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "3-de-ne-vi-t-goal-key",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "results-project-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "chuy-n-t-ng-th-nh-goal-o-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "4-de-ne-vi-t-goal-key",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "results-functional-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "5-de-ne-development-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "6-feasibility-ki-m-tra-t-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "kh-thi",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-b-o-goal-th-c-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "7-weight-c-n-i-t-tr-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-b-o-t-tr-ng-c-c-goal-c-n-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "v-ph-h-p-v-i-kh-n-ng-t-c-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "8-commitment",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-thu-n-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hai-b-n-th-ng-nh-t-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "cam-k-t-th-c-hi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "gi-i-th-ch-goal-c-a-team-gi-p-nh-n-vi-n-hi-u-v-s",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-p-nh-n-vi-n-hi-u-team-ang-c-1-2-u-ti-n-ch-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "l-ng-nghe-nguy-n-v-ng-trong-c-ng-vi-c-c-a-nh-n-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "l-ng-nghe-goal-do-nh-n-vi-n-xu-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "x-c-nh-goal-c-a-nh-n-vi-n-l-outcome-kh-ng-ph-i-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "u-ti-n-3-5-goal-ch-nh-c-t-c-ng-ch-nh-n-goal-chun",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-i-goal-c-2-3-key-results",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-ch-s-o-v-th-i-gian",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "em-c-n-t-p-trung-v-o-d-n-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "d-n-m-i-em-c-n-theo-s-t-n-m-nay",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-s-u-ti-n-goal-n-o-h-n-m-b-o-ho-n-th-nh",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-n-o-ch-ng-minh-goal-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-ng-ta-s-o-k-t-qu-b-ng-ch-s-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "khi-n-o-goal-c-coi-l-ho-n-th-nh",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "c-kh-kh-n-n-o-nh-h-ng-n-goal-kh-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-c-n-h-tr-g-t-qu-n-l",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-y-c-kh-thi-v-i-kh-i-l-ng-c-ng-vi-c-hi-n-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-o-l-u-ti-n-ch-nh-trong-c-ng-vi-c-hi-n-t-i",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-o-n-n-chi-m-nhi-u-th-i-gian-v-c-ng-s-c-h",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-ho-ch-em-th-c-hi-n-m-c-ti-u-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-ng-ta-s-theo-d-i-ti-n-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-ng-l-c-k-n-ng-c-n-n-o-c-n-t-m-c-ti-u-c-i-thi-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "tri-n-trong-n-m-nay-ph-c-v-ho-n-th-nh-m-c-ti-u-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "vi-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "goal-n-y-c-li-n-quan-n-c-ng-vi-c-hi-n-t-i-c-a-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-kh-thi-v-i-th-i-gian-v-ngu-n-l-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "r-i-ro-ch-nh-c-x-c-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "qu-n-l-hi-u-v-cam-k-t-h-tr-nh-n-vi-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "hai-b-n-ng-thu-n-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-ng-nh-t-k-ho-ch-tri-n-khai-l-ch-check-in-ti-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-ng-v-i-vai-tr-c-a-nh-n-vi-n-c-n-c-t-tr-ng-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-m-t-tr-ng-c-c-goal-c-ph-thu-c-v-o-y-u-t-b-n-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "board",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "1-th-ng-d-ng-bi-u-th-c-c-d-ng-content-b-ng",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "26",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-i-ng-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-h-th-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-ng-ho",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-ng-c-p-c-c-c-ng-c-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-c-v-c-ng-vi-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "chia-s-best-practices-v",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "use-cases-trong-c-c-team",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-ng-cao-ti-ng-anh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ti-p-c-n-v-i-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-th-vi-n-prompts",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ai-work-ows-d-ng-chung",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-ch-c-workshop",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "training-v-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "khuy-n-kh-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "th-nghi-m-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-xoay-quanh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 81,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [
+        "editable-table-board",
+        "radial-board"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Radial labels require position metadata when instantiated; the staged contract does not hard-code source wording.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.asset.guideline-icon-library",
+      "version": "0.0.0",
+      "name": "Guideline Icon Library",
+      "type": "asset",
+      "category": "icons",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "icon-library",
+        "line-icons",
+        "presentation-symbols"
+      ],
+      "tags": [
+        "icons",
+        "line-icons",
+        "symbols",
+        "svg"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-icon-library/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [
+          "icon",
+          "size",
+          "color"
+        ],
+        "text_slots": [
+          {
+            "id": "icon",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "rewards",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "leadership",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "bod",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "level-expectation",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "company",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "learning-sharing",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-nh-ng-icon-hay-xu-t-hi-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 13,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [
+        "general-line-icons",
+        "featured-category-icons"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "svg"
+      },
+      "limitations": [
+        "The approved region is the full page, so the exact SVG is a page-level icon sheet rather than individually cropped icon files.",
+        "Individual icon publication requires explicit per-icon bounds or source object IDs.",
+        "The source SVG contains 880 paths; preserve its viewBox when scaling.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.template.guideline-image-layouts",
+      "version": "0.0.0",
+      "name": "Guideline Image Layouts",
+      "type": "template",
+      "category": "image-layouts",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "contributor-layout",
+        "character-layout",
+        "photo-layout",
+        "image-content"
+      ],
+      "tags": [
+        "contributors",
+        "portraits",
+        "photo",
+        "character",
+        "image-layout"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "title",
+          "images"
+        ],
+        "optional": [
+          "support",
+          "names",
+          "roles",
+          "subtitle",
+          "cards"
+        ],
+        "text_slots": [
+          {
+            "id": "this-is-a-contributors-slide-insert",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "your-team",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "here",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "patrick-e-shorey",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "recreational-therapist",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "mary-t-middleton",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "physical-meteorologist",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "william-r-hudson",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "timekeeper",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-dolor-sit-amet-consectetur-adipiscin",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "aenean-aliquam-tellus-erat-et-malesuada-ipsum-cu",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "efficitur-vel-vel-libero",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "image",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-character",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-h-nh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "leadership",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "rewards",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "work",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "environment",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "improvement",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "employee-experience",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 24,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [
+        "contributors-three-up",
+        "feature-cards-with-photo"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Photos remain independent cropped image objects; text and card labels remain editable.",
+        "Circular and rounded image masks may require transparent PNG fallback if the target exporter changes clipping.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.style.guideline-shape-variants",
+      "version": "0.0.0",
+      "name": "Guideline Shape Variants",
+      "type": "style",
+      "category": "styles",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "shape-system",
+        "level-indicators",
+        "formula-diagram",
+        "variants"
+      ],
+      "tags": [
+        "shapes",
+        "levels",
+        "formula",
+        "overlap",
+        "variants"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-shape-variants/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "label"
+        ],
+        "optional": [
+          "index",
+          "support",
+          "items"
+        ],
+        "text_slots": [
+          {
+            "id": "lorem-ipsum",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "0101",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "03",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-cho-c-c-t-nh-n-ng-c-c-b-c-h",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "foundation",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "game-app",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "built",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "top1",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "02",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "fb-instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "microsoft",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "text-13",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "xiaomi",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "03-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "web-platforms",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-mu-n-t-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-ch-n-nh-h-ng-con-ng-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-m-chu-i-vi-c-theo-ti-n-tr-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-ngh-a-t-c-ng-n-c-ng-ty",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-ch-o-l-ng-goal-ho-n-th-nh-m-c-n-o",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-th-i-h-n-nh-t-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "o-c-b-ng-s-li-u-m-c-ch-t-l-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "vi-c-t-i-s-l-m",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "danh-s-ch-ho-t-ng-h-nh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-l-m-g-h-m-nay-tu-n-n-y",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "kh-ng-o-c-b-ng-ch-s-kh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-i-l-k-t-qu",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "goal",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "key",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "result",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "task",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 35,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [
+        "halo-blue",
+        "halo-orange",
+        "halo-lime",
+        "hex-formula",
+        "overlap-circles"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Layered halo and blended gradient treatments may require raster or SVG fallback in PPTX and Canva.",
+        "Editable labels must stay outside raster fallback layers.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.template.title-cover",
+      "version": "0.0.0",
+      "name": "Title Cover Template",
+      "type": "template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "title-cover",
+        "full-slide-layout",
+        "deck-opener"
+      ],
+      "tags": [
+        "template",
+        "cover",
+        "title",
+        "full-slide"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": [
+          "bg-orange-pinstripe",
+          "logo",
+          "header-tag",
+          "title-lockup"
+        ]
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/title-cover/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/title-cover/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/title-cover/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/title-cover/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "title_line_1",
+          "logo_src"
+        ],
+        "optional": [
+          "title_line_2",
+          "tag_label",
+          "tag_counter"
+        ]
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Layout contract only; no source copy reused.",
+        "Composes sun.background.orange-pinstripe, sun.asset.logo, sun.component.header-tag."
+      ]
+    },
+    {
+      "id": "sun.background.orange-pinstripe",
+      "version": "0.0.0",
+      "name": "Orange Pinstripe Background",
+      "type": "background",
+      "category": "background",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "brand-background",
+        "warm-gradient",
+        "pinstripe-texture"
+      ],
+      "tags": [
+        "background",
+        "orange",
+        "gradient",
+        "pinstripe",
+        "title"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-pinstripe/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-pinstripe/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-pinstripe/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-pinstripe/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "supported",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Layered gradients may not round-trip in PPTX/Canva; use PNG fallback.",
+        "Color tokens are approximate; reconcile with canonical design system."
+      ]
+    },
+    {
+      "id": "sun.background.orange-arcs",
+      "version": "0.0.0",
+      "name": "Orange Arcs Background",
+      "type": "background",
+      "category": "background",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "brand-background",
+        "concentric-arcs",
+        "warm-gradient"
+      ],
+      "tags": [
+        "background",
+        "orange",
+        "gradient",
+        "arcs"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-arcs/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-arcs/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-arcs/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/orange-arcs/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "supported",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Repeating radial gradient may not round-trip in PPTX/Canva; use PNG fallback."
+      ]
+    },
+    {
+      "id": "sun.background.blue-arcs",
+      "version": "0.0.0",
+      "name": "Blue Arcs Background",
+      "type": "background",
+      "category": "background",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "section-background",
+        "concentric-arcs",
+        "cool-gradient"
+      ],
+      "tags": [
+        "background",
+        "blue",
+        "gradient",
+        "arcs",
+        "section"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/blue-arcs/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/blue-arcs/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/blue-arcs/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/blue-arcs/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "raster",
+        "pdf": "supported",
+        "canva": "raster"
+      },
+      "limitations": [
+        "Repeating radial gradient may not round-trip in PPTX/Canva; use PNG fallback.",
+        "Cool-tone sibling of sun.background.orange-arcs (shared geometry)."
+      ]
+    },
+    {
+      "id": "sun.icon.quote-mark",
+      "version": "0.0.0",
+      "name": "Quote Mark Icon",
+      "type": "icon",
+      "category": "icon",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "quotation-mark",
+        "emphasis",
+        "decorative-mark"
+      ],
+      "tags": [
+        "icon",
+        "quote",
+        "mark",
+        "decoration"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.78,
+          "y": 0.66,
+          "width": 0.18,
+          "height": 0.27,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/quote-mark/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/quote-mark/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/quote-mark/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/quote-mark/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Decorative glyph; path is a clean reconstruction, not a font glyph."
+      ]
+    },
+    {
+      "id": "sun.component.prompt-questions",
+      "version": "0.0.0",
+      "name": "Prompt Questions",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "discussion-prompt",
+        "question-list",
+        "lead-in"
+      ],
+      "tags": [
+        "prompt",
+        "questions",
+        "discussion",
+        "list"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.15,
+          "y": 0.37,
+          "width": 0.72,
+          "height": 0.33,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/prompt-questions/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/prompt-questions/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/prompt-questions/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/prompt-questions/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "lead",
+          "items"
+        ],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Preview uses placeholder copy; source wording stored in evidence only."
+      ]
+    },
+    {
+      "id": "sun.icon.arrow-up-right",
+      "version": "0.0.0",
+      "name": "Arrow Up-Right Icon",
+      "type": "icon",
+      "category": "icon",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "arrow",
+        "direction",
+        "decorative-mark"
+      ],
+      "tags": [
+        "icon",
+        "arrow",
+        "mark"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 3,
+        "region": {
+          "x": 0.03,
+          "y": 0.82,
+          "width": 0.075,
+          "height": 0.12,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/arrow-up-right/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/arrow-up-right/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/arrow-up-right/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/arrow-up-right/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Recurs on slides 3 and 5; color via currentColor."
+      ]
+    },
+    {
+      "id": "sun.component.numbered-heading",
+      "version": "0.0.0",
+      "name": "Numbered Heading",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "step-number",
+        "section-heading",
+        "intro-block"
+      ],
+      "tags": [
+        "heading",
+        "step",
+        "number",
+        "intro"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.04,
+          "y": 0.07,
+          "width": 0.46,
+          "height": 0.42,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/numbered-heading/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/numbered-heading/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/numbered-heading/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/numbered-heading/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "number",
+          "heading"
+        ],
+        "optional": [
+          "support"
+        ]
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Preview uses placeholder copy; source wording stored in evidence only."
+      ]
+    },
+    {
+      "id": "sun.component.header-tag",
+      "version": "0.0.0",
+      "name": "Header Tag",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "section-tag",
+        "deck-chrome",
+        "label-pill"
+      ],
+      "tags": [
+        "chrome",
+        "pill",
+        "label",
+        "counter",
+        "header"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+        "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.735,
+          "y": 0.03,
+          "width": 0.225,
+          "height": 0.06,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/header-tag/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/header-tag/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/header-tag/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sunriser-2026-slides-1-5/items/header-tag/evidence"
+      },
+      "content_fields": {
+        "required": [
+          "label",
+          "counter"
+        ],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [
+        "filled",
+        "dark",
+        "white",
+        "outline"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Four variants observed across slides 1-5; verify the full deck for more."
+      ]
+    }
+  ]
+}

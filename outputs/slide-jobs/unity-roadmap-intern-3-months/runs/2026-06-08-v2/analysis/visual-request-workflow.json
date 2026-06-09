@@ -1,0 +1,10 @@
+{
+  "request_id": "unity-roadmap-workflow",
+  "brand": "sun-studio",
+  "intent": ["roles", "process", "responsibility"],
+  "tags": ["swimlane", "roles", "phases", "workflow"],
+  "content_structure": ["rows", "columns", "cells"],
+  "density": "high",
+  "required_exports": ["html"],
+  "recommend_extraction": false
+}

@@ -1,0 +1,69 @@
+<!-- @dsCard group="Colors" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Semantic</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .sem-block { display:flex; flex-direction:column; gap:10px; }
+  .sem-head {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .sem-name {
+    font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  }
+  .sem-use {
+    display:inline-flex; align-items:center; gap:7px;
+    padding:6px 13px; border-radius:var(--r-pill);
+    font-size:13px; font-weight:700; letter-spacing:.01em; white-space:nowrap;
+  }
+  .sem-use .ic { font-weight:900; }
+  .sem-ramp { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .chip {
+    height:78px; border-radius:var(--r-md); border:1px solid rgba(0,0,0,.06);
+    display:flex; flex-direction:column; justify-content:flex-end; padding:10px 12px;
+  }
+  .chip .role { font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.85; margin-bottom:3px; }
+  .chip .hex { font-size:11px; font-weight:800; letter-spacing:.02em; }
+  .sem-divider { height:1px; background:var(--line); margin:6px 0; }
+</style>
+</head>
+<body>
+<div class="card-label">Semantic — each role: solid · soft surface · deep text</div>
+
+<!-- SUCCESS -->
+<div class="sem-block">
+  <div class="sem-head">
+    <div class="sem-name" style="color:#15803D;">Success</div>
+    <span class="sem-use" style="background:#DCFCE7; color:#15803D;"><span class="ic">✓</span> Goal hit</span>
+  </div>
+  <div class="sem-ramp">
+    <div class="chip" style="background:#22C55E; color:#fff;">
+      <div class="role">Solid · 100</div><div class="hex">#22C55E</div></div>
+    <div class="chip" style="background:#DCFCE7; color:#15803D;">
+      <div class="role">Soft surface</div><div class="hex">#DCFCE7</div></div>
+    <div class="chip" style="background:#15803D; color:#fff;">
+      <div class="role">Deep · text</div><div class="hex">#15803D</div></div>
+  </div>
+</div>
+
+<div class="sem-divider"></div>
+
+<!-- DANGER -->
+<div class="sem-block">
+  <div class="sem-head">
+    <div class="sem-name" style="color:#B91C1C;">Danger</div>
+    <span class="sem-use" style="background:#FEE2E2; color:#B91C1C;"><span class="ic">✕</span> Missed</span>
+  </div>
+  <div class="sem-ramp">
+    <div class="chip" style="background:#EF4444; color:#fff;">
+      <div class="role">Solid · 100</div><div class="hex">#EF4444</div></div>
+    <div class="chip" style="background:#FEE2E2; color:#B91C1C;">
+      <div class="role">Soft surface</div><div class="hex">#FEE2E2</div></div>
+    <div class="chip" style="background:#B91C1C; color:#fff;">
+      <div class="role">Deep · text</div><div class="hex">#B91C1C</div></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hi-fi Design"
+  short_description: "Create polished high-fidelity interface designs"
+  default_prompt: "Use $hi-fi-design to create a polished high-fidelity interface design grounded in the available design context."

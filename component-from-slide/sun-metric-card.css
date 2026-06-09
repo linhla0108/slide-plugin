@@ -1,0 +1,168 @@
+/* Extracted metric card from SUN.SLIDE.pdf slide #12 */
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("../project/fonts/Proxima-Nova-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("../project/fonts/Proxima-Nova-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("../project/fonts/Proxima-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --sun-slide-accent: #3531ff;
+  --sun-blue: var(--sun-slide-accent);
+  --sun-ink: #050505;
+  --sun-paper: #fff;
+  --sun-font:
+    "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+}
+
+.sun-metric-card,
+.sun-metric-card * {
+  box-sizing: border-box;
+}
+
+.sun-metric-card {
+  /*
+    Customization notes
+    - Change --card-w / --card-h to stretch the card horizontally or vertically.
+      The SVG curve follows the box because the SVG uses preserveAspectRatio="none".
+    - Change --arrow-size when the arrow circle should grow/shrink with the card.
+      It remains pinned to the bottom-right via --arrow-offset-x/y.
+    - Change --icon-size / --value-size / --label-size / --body-size when you resize
+      the card by variables instead of transform: scale().
+    - For uniform scaling of everything, wrap the card and use transform: scale().
+  */
+  --card-w: 290px;
+  --card-h: 418px;
+  --card-bg: var(--sun-blue);
+  --card-fg: #fff;
+  --card-pad-x: 20px;
+  --card-pad-y: 28px;
+  --icon-size: 78px;
+  --icon-gap: 30px;
+  --value-size: 74px;
+  --label-size: 20px;
+  --body-size: 20px;
+  --body-w: calc(var(--card-w) - (var(--card-pad-x) * 2) - 15px);
+  --arrow-size: 65px;
+  --arrow-offset-x: 0px;
+  --arrow-offset-y: 0px;
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  flex: 0 0 var(--card-w);
+  color: var(--card-fg);
+  font-family: var(--sun-font);
+  isolation: isolate;
+}
+
+.sun-metric-card__shape {
+  /* The actual custom card silhouette. Edit the <path d="..."> in HTML to tune the curve. */
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  color: var(--card-bg);
+}
+
+.sun-metric-card__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--card-pad-y) var(--card-pad-x) 30px;
+}
+
+.sun-metric-card__icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin: 0 0 var(--icon-gap) 2px;
+  color: currentColor;
+}
+
+.sun-metric-card__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sun-metric-card__value {
+  display: block;
+  margin: 0 0 12px;
+  font-size: var(--value-size);
+  line-height: 0.82;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.sun-metric-card__label {
+  margin: 0 0 23px;
+  font-size: var(--label-size);
+  line-height: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sun-metric-card__body {
+  margin: 0;
+  width: var(--body-w);
+  font-size: var(--body-size);
+  line-height: 1.17;
+  font-weight: 700;
+}
+
+.sun-metric-card__arrow {
+  /* Keep these offsets at 0px when the circle should sit flush with the box edge. */
+  position: absolute;
+  right: var(--arrow-offset-x);
+  bottom: var(--arrow-offset-y);
+  z-index: 2;
+  width: var(--arrow-size);
+  height: var(--arrow-size);
+  border: 2.5px solid var(--sun-ink);
+  border-radius: 999px;
+  background: var(--sun-paper);
+  color: var(--sun-ink);
+  display: grid;
+  place-items: center;
+}
+
+.sun-metric-card__arrow svg {
+  width: calc(var(--arrow-size) * 0.68);
+  height: calc(var(--arrow-size) * 0.68);
+  stroke-width: 4.4;
+}
+
+.sun-metric-card.is-orange {
+  --card-bg: #f05b42;
+}
+
+.sun-metric-card.is-lime {
+  --card-bg: #c9fb55;
+  --card-fg: #050505;
+}
+
+.sun-metric-card.is-violet {
+  --card-bg: #ad75df;
+  --card-fg: #050505;
+}
+
+.sun-metric-card.is-black {
+  --card-bg: #000;
+}

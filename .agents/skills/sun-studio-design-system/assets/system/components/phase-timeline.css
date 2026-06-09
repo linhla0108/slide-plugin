@@ -1,0 +1,94 @@
+/* =====================================================================
+   COMPONENT · Phase timeline
+   Source: deck-02 p3 (PMS year: Thiết lập → Check-in → Đánh giá),
+           deck-03 p5 (farming: Gieo hạt → … → Thu hoạch), deck-03 p6.
+   Horizontal connected nodes, each = when + title + description.
+   Mark the current step with .active (solid orange node).
+   ===================================================================== */
+@import url("_base.css");
+
+.timeline {
+  --cs: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+  position: relative;
+}
+/* connector rail behind the nodes */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: calc(26px * var(--cs));
+  height: calc(3px * var(--cs));
+  background: var(--rule);
+}
+.tl-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: calc(10px * var(--cs));
+  position: relative;
+  padding: 0 calc(12px * var(--cs));
+}
+.tl-step .node {
+  width: calc(54px * var(--cs));
+  height: calc(54px * var(--cs));
+  border-radius: 50%;
+  background: var(--paper);
+  border: calc(3px * var(--cs)) solid var(--ink);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(24px * var(--cs));
+  color: var(--ink);
+  z-index: 2;
+}
+.tl-step.active .node {
+  background: var(--sun-orange);
+  border-color: var(--sun-orange);
+  color: var(--fg-on-orange);
+  box-shadow: var(--shadow-orange);
+}
+.tl-step.done .node { background: var(--ink); border-color: var(--ink); color: var(--fg-on-ink); }
+
+.tl-step .when {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: calc(14px * var(--cs));
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sun-orange);
+}
+.tl-step .t {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(22px * var(--cs));
+  text-transform: uppercase;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.tl-step .d {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: calc(15px * var(--cs));
+  color: var(--muted);
+  line-height: 1.3;
+  max-width: calc(220px * var(--cs));
+}
+
+/* cyclical hint — a looping arrow note under the rail */
+.timeline.cyclic::after {
+  content: "↻";
+  position: absolute;
+  right: 0;
+  top: calc(14px * var(--cs));
+  font-size: calc(28px * var(--cs));
+  color: var(--sun-orange);
+}

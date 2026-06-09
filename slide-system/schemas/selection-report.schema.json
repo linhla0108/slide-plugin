@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/selection-report.schema.json",
+  "title": "Visual Selection Report",
+  "type": "object",
+  "required": ["request_id", "generated_at", "decision", "candidates"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "decision": {
+      "type": "object",
+      "required": ["action", "score"],
+      "properties": {
+        "action": { "enum": ["reuse", "adapt-local", "custom-local", "blocked"] },
+        "item_id": { "type": ["string", "null"] },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reason": { "type": "string" },
+        "extraction_recommended": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "eligible", "score", "criteria", "reasons"],
+        "properties": {
+          "item_id": { "type": "string" },
+          "eligible": { "type": "boolean" },
+          "score": { "type": "number" },
+          "criteria": { "type": "object" },
+          "reasons": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

@@ -1,0 +1,297 @@
+/* =====================================================================
+   SUN.STUDIO — Colors & Type
+   Single source of truth for tokens. Import this in every artifact.
+   ===================================================================== */
+
+/* ---------- Webfont declarations ---------- */
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-Regular.otf") format("opentype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-Regular-Italic.otf") format("opentype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-Medium.otf") format("opentype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-SemiBold.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-SemiBold-Italic.otf") format("opentype");
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-Bold.otf") format("opentype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Bold-Italic.otf") format("opentype");
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Black.otf") format("opentype");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Black-Italic.otf") format("opentype");
+  font-weight: 900; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-ExtraBold-Italic.otf") format("opentype");
+  font-weight: 800; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Light-Italic.otf") format("opentype");
+  font-weight: 300; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/Proxima-Nova-Thin-Italic.otf") format("opentype");
+  font-weight: 100; font-style: italic; font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  /* --- Brand primaries --- */
+  --sun-orange:        #FF5533; /* primary — energy, CTA, highlights */
+  --sun-white:         #FFFFFF; /* base */
+  --sun-blue:          #3333FF; /* secondary — trust, info, backgrounds */
+
+  /* --- Mascot (Dio) palette --- */
+  --dio-base:          #FF5533;
+  --dio-highlight:     #FF735A;
+  --dio-shadow:        #EB462D;
+
+  /* --- Orange tints (use 25 / 50 / 75 / 100) --- */
+  --sun-orange-25:     #FFD4CC;
+  --sun-orange-50:     rgba(255, 85, 51, .50);
+  --sun-orange-75:     rgba(255, 85, 51, .75);
+  --sun-orange-soft:   #FFF3EF; /* tinted background */
+  --sun-orange-dark:   #EB462D; /* press / shadow */
+
+  /* --- Blue tints --- */
+  --sun-blue-25:       #CCCCFF;
+  --sun-blue-50:       rgba(51, 51, 255, .50);
+  --sun-blue-75:       rgba(51, 51, 255, .75);
+  --sun-blue-soft:     #F4F5FF;
+
+  /* --- Neutrals (ink scale) --- */
+  --ink:               #171717; /* primary text */
+  --ink-soft:          #2A2A2A;
+  --muted:             #666666; /* secondary text */
+  --muted-2:           #8A8A8A;
+  --line:              #E7E7E7; /* hairline borders */
+  --line-strong:       #CFCFCF;
+  --soft:              #FAFAFA; /* off-white surface */
+  --paper:             #FFFFFF; /* primary surface */
+  --xo-paper:          #FFFDF8; /* warm paper used behind XO pattern */
+
+  /* --- Semantic accents (used sparingly: do/don't, errors, success) --- */
+  --green:             #22C55E;
+  --green-soft:        #DCFCE7;
+  --red:               #EF4444;
+  --red-soft:          #FEE2E2;
+
+  /* --- Foreground roles --- */
+  --fg-1:              var(--ink);
+  --fg-2:              var(--muted);
+  --fg-on-orange:      #FFFFFF;
+  --fg-on-blue:        #FFFFFF;
+  --fg-on-ink:         #FFFFFF;
+
+  /* --- Typography --- */
+  --font-display: "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-secondary: "Times New Roman", Georgia, serif;     /* letterhead body only */
+  --font-email:   "Aptos", "Calibri", -apple-system, sans-serif;
+
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+  --fw-bold:       700;
+  --fw-extrabold:  800; /* synthesized — we ship 700 + 900 OTFs */
+  --fw-black:      900;
+
+  /* --- Spacing scale (4-pt base) --- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px;
+  --s-12: 48px; --s-16: 64px; --s-20: 80px; --s-24: 96px;
+
+  /* --- Radius --- */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+
+  /* --- Elevation / shadow --- */
+  --shadow-sm: 0 4px 12px rgba(0,0,0,.04);
+  --shadow-md: 0 10px 26px rgba(0,0,0,.06);
+  --shadow-lg: 0 18px 46px rgba(0,0,0,.10);
+  --shadow-xl: 0 24px 80px rgba(0,0,0,.35);          /* stage */
+  --shadow-orange: 0 14px 38px rgba(255,85,51,.24);   /* coloured halo */
+  --shadow-blue:   0 12px 34px rgba(51,51,255,.24);
+  --shadow-press-orange: 18px 18px 0 rgba(255,85,51,.18); /* offset block */
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --t-fast: 180ms;
+  --t-med:  300ms;
+  --t-slow: 620ms;
+}
+
+/* ---------- Semantic type styles ---------- */
+
+html, body { color: var(--ink); font-family: var(--font-body); }
+
+.h-display, .h1-mega {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(72px, 8vw, 136px);
+  line-height: .88;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 72px;
+  line-height: .98;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 52px;
+  line-height: 1.0;
+  letter-spacing: -.015em;
+  text-transform: uppercase;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 34px;
+  line-height: 1.08;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.kicker {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.kicker::before {
+  content: "";
+  width: 42px;
+  height: 4px;
+  background: var(--sun-orange);
+  display: block;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 12px 18px 10px;
+  background: var(--ink);
+  color: var(--sun-white);
+  border-radius: var(--r-lg);
+  font-size: 22px;
+  font-weight: var(--fw-black);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.body-sm {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.caption {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Highlight blocks (signature visual move) ---------- */
+.hi-orange {
+  background: var(--sun-orange);
+  color: var(--fg-on-orange);
+  padding: 2px 14px 6px;
+  border-radius: var(--r-xs);
+  display: inline-block;
+}
+.hi-blue {
+  background: var(--sun-blue);
+  color: var(--fg-on-blue);
+  padding: 2px 14px 6px;
+  border-radius: var(--r-xs);
+  display: inline-block;
+}
+.hi-ink {
+  background: var(--ink);
+  color: var(--fg-on-ink);
+  padding: 2px 14px 6px;
+  border-radius: var(--r-xs);
+  display: inline-block;
+}
+
+/* The signature "orange tab" — h1 word with a right-rounded orange slab */
+.tab-orange {
+  display: inline-block;
+  padding: 10px 28px 16px;
+  border-radius: 0 30px 30px 0;
+  background: var(--sun-orange);
+  color: var(--fg-on-orange);
+  box-shadow: var(--shadow-press-orange);
+}

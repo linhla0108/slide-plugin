@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/visual-item.schema.json",
+  "title": "Visual Library Item",
+  "type": "object",
+  "required": ["id", "version", "name", "type", "category", "status", "intent", "tags", "source", "paths", "compatibility"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+\\.[a-z0-9-]+\\.[a-z0-9-]+$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "type": { "enum": ["card", "component", "section", "template", "style", "icon", "background", "character", "asset"] },
+    "category": { "type": "string" },
+    "status": { "enum": ["staging", "qa", "published", "deprecated", "rejected"] },
+    "brand": { "type": ["string", "null"] },
+    "intent": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "content_structure": { "type": "array", "items": { "type": "string" } },
+    "content_fields": { "type": "object" },
+    "text_contract": {
+      "type": ["object", "null"],
+      "required": ["schema", "visual", "slots", "source_evidence", "slot_count", "coordinate_space", "semantic_text_in_visual"],
+      "properties": {
+        "schema": { "type": "string" },
+        "visual": { "type": "string" },
+        "slots": { "type": "string" },
+        "source_evidence": { "type": "string" },
+        "slot_count": { "type": "integer", "minimum": 0 },
+        "coordinate_space": { "const": "normalized" },
+        "example_content": { "enum": ["source", "none"] },
+        "semantic_text_in_visual": { "const": false },
+        "artwork_text_exemptions": { "type": "array", "items": { "type": "string" } },
+        "overflow_policy": { "enum": ["unmanaged"] },
+        "editable": { "type": "boolean" },
+        "allow_empty": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "density": { "enum": ["low", "medium", "high", "any"] },
+    "source": {
+      "type": "object",
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": { "enum": ["canonical", "legacy", "extraction", "generated", "external"] },
+        "path": { "type": "string" },
+        "slide": { "type": ["integer", "string", "null"] },
+        "region": { "type": ["object", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "paths": {
+      "type": "object",
+      "required": ["preview"],
+      "properties": {
+        "artifact": { "type": ["string", "null"] },
+        "visual": { "type": ["string", "null"] },
+        "text_slots": { "type": ["string", "null"] },
+        "preview": { "type": "string" },
+        "detail": { "type": ["string", "null"] },
+        "evidence": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "variants": { "type": "array", "items": { "type": "string" } },
+    "compatibility": {
+      "type": "object",
+      "required": ["html", "pptx", "pdf", "canva"],
+      "properties": {
+        "html": { "$ref": "#/$defs/support" },
+        "pptx": { "$ref": "#/$defs/support" },
+        "pdf": { "$ref": "#/$defs/support" },
+        "canva": { "$ref": "#/$defs/support" }
+      },
+      "additionalProperties": false
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "support": { "enum": ["supported", "hybrid", "raster", "unsupported", "untested"] }
+  },
+  "additionalProperties": true
+}

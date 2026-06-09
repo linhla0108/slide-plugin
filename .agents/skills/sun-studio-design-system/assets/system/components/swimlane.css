@@ -1,0 +1,78 @@
+/* =====================================================================
+   COMPONENT · Swimlane
+   Source: deck-02 p5 (BOD / Leader / Nhân viên × Mar phases),
+           deck-05 p12 (Nhân viên / Quản lý / BOD × date ranges)
+   Roles (rows) × phases (header columns). Ink header, shaded role labels.
+   ===================================================================== */
+@import url("_base.css");
+
+.swimlane {
+  --cs: 1;
+  --cols: 3;                       /* set inline: style="--cols:3" */
+  display: grid;
+  grid-template-columns: calc(150px * var(--cs)) repeat(var(--cols), 1fr);
+  gap: calc(2px * var(--cs));
+  background: var(--rule);
+  border: calc(2px * var(--cs)) solid var(--rule);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.swimlane .cell { background: var(--paper); padding: calc(16px * var(--cs)) calc(18px * var(--cs)); }
+
+/* top-left corner spacer */
+.swimlane .corner { background: var(--ink); }
+
+/* phase header cells (top row) */
+.swimlane .head {
+  background: var(--ink);
+  color: var(--fg-on-ink);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(19px * var(--cs));
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(3px * var(--cs));
+}
+.swimlane .head .when { color: var(--sun-orange-25); font-size: calc(12px * var(--cs)); letter-spacing: .14em; font-weight: var(--fw-bold); }
+
+/* role label cells (left column) */
+.swimlane .role {
+  background: var(--soft);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(20px * var(--cs));
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  display: flex;
+  align-items: center;
+  color: var(--ink);
+}
+
+/* content cells */
+.swimlane .cell .when {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: calc(12px * var(--cs));
+  letter-spacing: .12em;
+  color: var(--sun-orange);
+  text-transform: uppercase;
+  margin-bottom: calc(6px * var(--cs));
+}
+.swimlane .cell .what {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: calc(16px * var(--cs));
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+/* empty / not-applicable cell — hatched */
+.swimlane .cell.empty {
+  background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--soft) 7px 8px);
+}
+/* highlighted (active) cell */
+.swimlane .cell.active { background: var(--sun-orange-soft); }
+.swimlane .cell.active .what { color: var(--ink); font-weight: 600; }

@@ -1,0 +1,1318 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0.0,
+      0.0,
+      2938.83,
+      2623.16
+    ],
+    "canvas_width": 2938.83,
+    "canvas_height": 2623.16
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "this-is-a-contributors-slide-insert",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "This is a contributors slide. Insert",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2965675,
+        "y": 0.1410877,
+        "width": 0.412126,
+        "height": 0.0380333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 81.7765,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            37
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "your-team",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "your team",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3969645,
+        "y": 0.1722625,
+        "width": 0.1391311,
+        "height": 0.0380333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 81.7765,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "here",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "here.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5237964,
+        "y": 0.1722625,
+        "width": 0.0767502,
+        "height": 0.0380333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 3,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 81.7765,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "patrick-e-shorey",
+      "role": "subheading",
+      "html_tag": "h3",
+      "example_value": "Patrick E. Shorey",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2735088,
+        "y": 0.4651165,
+        "width": 0.1152379,
+        "height": 0.0190166
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 4,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 40.8882,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "recreational-therapist",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Recreational therapist",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2966971,
+        "y": 0.483198,
+        "width": 0.0696531,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 5,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "mary-t-middleton",
+      "role": "subheading",
+      "html_tag": "h3",
+      "example_value": "Mary T. Middleton",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4344207,
+        "y": 0.4651165,
+        "width": 0.1178717,
+        "height": 0.0190166
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 6,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 40.8882,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "physical-meteorologist",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Physical meteorologist",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4584078,
+        "y": 0.483198,
+        "width": 0.0714499,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 7,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "william-r-hudson",
+      "role": "subheading",
+      "html_tag": "h3",
+      "example_value": "William R. Hudson",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5948274,
+        "y": 0.4651165,
+        "width": 0.1222889,
+        "height": 0.0190166
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 8,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 40.8882,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "timekeeper",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Timekeeper",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6371587,
+        "y": 0.483198,
+        "width": 0.0387847,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 9,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "lorem-ipsum-dolor-sit-amet-consectetur-adipiscin",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed tellus sed lacus maximus consectetur.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3360655,
+        "y": 0.2193971,
+        "width": 0.316307,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 10,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            103
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "aenean-aliquam-tellus-erat-et-malesuada-ipsum-cu",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "Aenean aliquam tellus erat, et malesuada ipsum cursus id. Vivamus aliquet eros vel tortor congue",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3435577,
+        "y": 0.2295289,
+        "width": 0.3013311,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 11,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            97
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "efficitur-vel-vel-libero",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "efficitur vel vel libero.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4597181,
+        "y": 0.2396607,
+        "width": 0.067061,
+        "height": 0.0095083
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 12,
+      "typography": {
+        "font_family": "Arial",
+        "font_size": 20.4441,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3232ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            25
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "image",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "IMAGE",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1122471,
+        "y": 0.0545691,
+        "width": 0.0669042,
+        "height": 0.0279053
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 13,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 60.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-character",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT CHARACTER",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1119201,
+        "y": 0.0913574,
+        "width": 0.410247,
+        "height": 0.0184165
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 14,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 39.5978,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            53
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-h-nh",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT HÌNH",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1119201,
+        "y": 0.5328391,
+        "width": 0.3635461,
+        "height": 0.0184165
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 15,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 39.5978,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            48
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "leadership",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Leadership",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4943417,
+        "y": 0.7965974,
+        "width": 0.1160069,
+        "height": 0.0310555
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 16,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 66.7733,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 10,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "development",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Development",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4943417,
+        "y": 0.8220527,
+        "width": 0.1441493,
+        "height": 0.0310555
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 17,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 66.7733,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 10,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "rewards",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Rewards &",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1387218,
+        "y": 0.7532716,
+        "width": 0.1008602,
+        "height": 0.0279499
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 18,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "recognition",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Recognition",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1387218,
+        "y": 0.7761813,
+        "width": 0.1129557,
+        "height": 0.0279499
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 19,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "engagement",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Engagement",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3149983,
+        "y": 0.7532716,
+        "width": 0.1250697,
+        "height": 0.0279499
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 20,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 12,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "work",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "WORK",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1255515,
+        "y": 0.588499,
+        "width": 0.0916809,
+        "height": 0.0414072
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 21,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "environment",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "ENVIRONMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1255515,
+        "y": 0.6224394,
+        "width": 0.221006,
+        "height": 0.0414072
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 22,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "improvement",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "IMPROVEMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1255515,
+        "y": 0.6563797,
+        "width": 0.2209969,
+        "height": 0.0414072
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 23,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "employee-experience",
+      "role": "subheading",
+      "html_tag": "h3",
+      "example_value": "Employee Experience",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1253229,
+        "y": 0.6977303,
+        "width": 0.1326292,
+        "height": 0.0186333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 24,
+      "typography": {
+        "font_family": "ProximaNova-Bold",
+        "font_size": 40.064,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#3333ff"
+      },
+      "source_refs": [
+        {
+          "text_index": 14,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            19
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

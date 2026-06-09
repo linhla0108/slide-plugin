@@ -1,0 +1,58 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "folio",
+  "candidate_stable_id": "sun.component.folio",
+  "status": "duplicate",
+  "type": "component",
+  "category": "component",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 5,
+    "region": {
+      "x": 0.03,
+      "y": 0.92,
+      "width": 0.3,
+      "height": 0.055,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "fa80f4dcdcd68514714975b6319814b3b8dcfe66bedcfaedc7947cf4e038cd71",
+    "semantic_signature_sha256": "44be02916933f449cce913952857d58fe6b1ac9da21454c3b46012a7340fbaa8",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "footer",
+    "copyright",
+    "deck-chrome"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [],
+  "variants": [],
+  "compatibility": {
+    "html": "untested",
+    "pptx": "untested",
+    "pdf": "untested",
+    "canva": "untested"
+  },
+  "limitations": [
+    "Already in library as sun.component.folio (published v1.0.0); do not re-publish."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": "sun.component.folio",
+  "name": "Folio Footer",
+  "tags": [
+    "duplicate"
+  ],
+  "notes_resolution": "Maps to existing sun.component.folio."
+}

@@ -1,0 +1,64 @@
+/* =====================================================================
+   COMPONENT · Value / Benefit grid
+   Source: deck-02 p2 (4 paired benefit blocks),
+           deck-03 p8 ("Tự chọn đúng giống" …), deck-03 p17 (CAM KẾT).
+   A grid of bold label + one-line explanation, separated by hairlines.
+   ===================================================================== */
+@import url("_base.css");
+
+.value-grid {
+  --cs: 1;
+  --cols: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 0 calc(48px * var(--cs));
+}
+.value {
+  padding: calc(18px * var(--cs)) 0;
+  border-top: calc(1px * var(--cs)) solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: calc(7px * var(--cs));
+}
+.value .vt {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(26px * var(--cs));
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  line-height: 1.08;
+  color: var(--ink);
+  margin: 0;
+}
+.value .vt .em { color: var(--sun-orange); }
+.value .vd {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: calc(17px * var(--cs));
+  line-height: 1.34;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* numbered variant — small orange index above the label (deck-03) */
+.value .vn {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(20px * var(--cs));
+  color: var(--sun-orange);
+  font-variant-numeric: tabular-nums;
+}
+
+/* card variant — each value sits in its own bordered tile */
+.value-grid.cards { gap: calc(16px * var(--cs)); }
+.value-grid.cards .value {
+  border: calc(1px * var(--cs)) solid var(--rule);
+  border-top: calc(1px * var(--cs)) solid var(--rule);
+  border-radius: var(--r-md);
+  padding: calc(20px * var(--cs)) calc(22px * var(--cs));
+  box-shadow: var(--shadow-sm);
+}
+.value-grid.cards .value.accent {
+  border: calc(2px * var(--cs)) solid var(--sun-orange);
+  background: var(--sun-orange-soft);
+}

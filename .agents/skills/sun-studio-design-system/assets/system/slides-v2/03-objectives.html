@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>v2 · 03 Objectives</title>
+<link rel="stylesheet" href="_v2.css">
+<style>
+  .head {
+    position: absolute; left: 96px; right: 96px; top: 140px;
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px;
+    z-index: 3;
+  }
+  .head .left { display: flex; flex-direction: column; gap: 22px; }
+  .head h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -.028em;
+    font-size: 84px;
+    line-height: .92;
+    max-width: 1180px;
+    text-wrap: balance;
+  }
+  .head h1 .ink-block {
+    background: var(--ink); color: var(--paper);
+    padding: 0 .18em .12em; margin-left: -.04em;
+  }
+  .head h1 .strike {
+    text-decoration: line-through;
+    text-decoration-color: var(--sun-orange);
+    text-decoration-thickness: 9px;
+    color: var(--muted);
+  }
+
+  .head .right {
+    transform: rotate(2deg) translateY(-12px);
+    text-align: right;
+  }
+
+  /* 4 objectives in a 2×2 grid */
+  .obj-list {
+    position: absolute;
+    left: 96px; right: 720px;
+    top: 560px; bottom: 130px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 38px;
+    row-gap: 0;
+    z-index: 3;
+  }
+  .obj {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    column-gap: 22px;
+    align-items: start;
+    padding: 16px 0 14px;
+    border-top: 1px solid rgba(20,20,20,.20);
+    position: relative;
+  }
+  .obj:nth-child(3), .obj:nth-child(4) { border-bottom: 1px solid rgba(20,20,20,.20); }
+  .obj .n {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 64px;
+    line-height: .9;
+    letter-spacing: -.04em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .obj .n .small {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: .22em;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .obj .body { padding-top: 8px; }
+  .obj .title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 26px;
+    line-height: 1.08;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .obj .title .em { color: var(--sun-orange); }
+  .obj .sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.32;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 480px;
+  }
+  .obj .tag { display: none; }
+
+  /* Highlight the lead objective */
+  .obj.lead .title .em {
+    background: var(--sun-orange); color: #fff;
+    padding: 0 .22em .12em;
+  }
+
+  /* DIO column */
+  .side {
+    position: absolute;
+    right: 96px; top: 560px; bottom: 130px;
+    width: 540px;
+    z-index: 3;
+    display: flex; flex-direction: column; justify-content: flex-start;
+    gap: 28px;
+  }
+  .side .label {
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .side .label::before {
+    content: ""; width: 36px; height: 2px; background: var(--ink);
+    display: block;
+  }
+
+  .dio-box {
+    position: relative;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .dio-box img {
+    width: 88%;
+    transform: rotate(3deg);
+    filter: drop-shadow(12px 16px 0 rgba(0,0,0,.08));
+  }
+  .dio-note {
+    position: absolute;
+    left: 0; bottom: -20px;
+    transform: rotate(-3.5deg);
+    max-width: 360px;
+  }
+
+  .speech {
+    position: relative;
+    background: var(--paper-shade);
+    padding: 18px 22px 18px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--ink);
+    border-radius: 2px;
+    box-shadow: 4px 5px 0 rgba(0,0,0,.08);
+  }
+  .speech::after {
+    content: "";
+    position: absolute;
+    left: 36px; bottom: -16px;
+    width: 0; height: 0;
+    border-top: 18px solid var(--paper-shade);
+    border-left: 0 solid transparent;
+    border-right: 22px solid transparent;
+    transform: skewX(-8deg);
+  }
+  .speech b { font-style: normal; font-weight: 700; color: var(--sun-orange); }
+
+  /* Caption rail at bottom */
+  .rail {
+    position: absolute; left: 96px; right: 96px; bottom: 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--muted);
+    z-index: 3;
+  }
+  .rail .b { color: var(--ink); }
+
+  /* This slide has its own footer rail — hide the base .page-tag */
+  .page-tag { display: none; }
+</style>
+</head>
+<body>
+  <main id="stage">
+    <section class="slide" data-screen-label="V2 03 Objectives">
+
+      <div class="folio">
+        <span>SUN.RISER 2026 &nbsp;·&nbsp; Interview Workshop</span>
+        <span class="right"><span>§03</span><span class="b">Objectives</span><span>05·2026</span></span>
+      </div>
+
+      <div class="head">
+        <div class="left">
+          <div class="kicker-mono">
+            <span class="b">Sau workshop</span><span class="dot">●</span>bạn sẽ rời phòng họp với 4 thứ
+          </div>
+          <h1>
+            Không phải <span class="strike">lý thuyết</span>.<br>
+            Là <span class="ink-block">bộ kỹ năng</span> dùng được ngay
+            <span style="color:var(--sun-orange);">.</span>
+          </h1>
+        </div>
+        <div class="right">
+          <div class="sticker tape">Reading time · 6 phút</div>
+        </div>
+      </div>
+
+      <div class="obj-list">
+        <div class="obj lead">
+          <div class="n">01<span class="small">Mindset</span></div>
+          <div class="body">
+            <h3 class="title">Hire to <span class="em">win</span>, không hire to fill</h3>
+            <p class="sub">Phỏng vấn là một quyết định kinh doanh, không phải thủ tục. Mỗi vòng phỏng vấn đáng giá vài chục triệu đồng — hãy đối xử như vậy.</p>
+          </div>
+          <div class="tag">Mục tiêu chính</div>
+        </div>
+
+        <div class="obj">
+          <div class="n">02<span class="small">Method</span></div>
+          <div class="body">
+            <h3 class="title">Có cấu trúc — 6 bước, 25 phút</h3>
+            <p class="sub">Một khung phỏng vấn lặp lại được, không phụ thuộc cảm giác, để hai HM khác nhau vẫn ra cùng tín hiệu.</p>
+          </div>
+          <div class="tag">Hands-on</div>
+        </div>
+
+        <div class="obj">
+          <div class="n">03<span class="small">Signal</span></div>
+          <div class="body">
+            <h3 class="title">Đọc CV như đọc bản đồ</h3>
+            <p class="sub">Tách thành tích thật khỏi từ khoá tô vẽ, đặt câu hỏi đào sâu vào dòng đáng ngờ thay vì đi vòng quanh.</p>
+          </div>
+          <div class="tag">Workshop</div>
+        </div>
+
+        <div class="obj">
+          <div class="n">04<span class="small">Closing</span></div>
+          <div class="body">
+            <h3 class="title">Xử lý ứng viên <em style="color:var(--sun-orange);font-style:italic;font-family:var(--font-serif);">khó nhằn</em></h3>
+            <p class="sub">Người quá tự tin, người kiệm lời, người học thuộc bài — và 3 câu hỏi có thể bóc tách họ trong 90 giây.</p>
+          </div>
+          <div class="tag">Case study</div>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="label">Voice off · DIO</div>
+        <div class="dio-box">
+          <img src="../assets/dio/m2-wink.png" alt="DIO winking">
+        </div>
+        <div class="dio-note">
+          <div class="speech">
+            Đừng tin <b>cảm giác tốt</b> trong 5 phút đầu — nó nói dối nhiều hơn CV.
+          </div>
+        </div>
+      </div>
+
+      <div class="rail">
+        <span><span class="b">04 mục tiêu</span> · 1 trang · để dán lên tường</span>
+        <span>Slide §03 / Objectives</span>
+      </div>
+
+      <div class="page-tag">
+        <span class="num">03</span><span class="of">/ 12</span>
+      </div>
+
+      <div class="grain" aria-hidden="true"></div>
+      <div class="crease" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById('stage');
+    function fit() { stage.style.transform = `scale(${Math.min(innerWidth/1920, innerHeight/1080)})`; }
+    addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

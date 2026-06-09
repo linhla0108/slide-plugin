@@ -1,0 +1,901 @@
+{
+  "source": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/visual.svg",
+  "sha256": "3b6ccfbc5452a60faa008c913f0aca2e7a2bb23a0cee15522a908bb0f7af4fd8",
+  "valid_xml": true,
+  "width": "2938.83",
+  "height": "2623.16",
+  "viewBox": "0 0 2938.83 2623.16",
+  "preserveAspectRatio": null,
+  "aspect_ratio": 1.1203395904176643,
+  "tag_counts": {
+    "clipPath": 14,
+    "defs": 1,
+    "g": 17,
+    "image": 7,
+    "path": 31,
+    "svg": 1
+  },
+  "id_count": 15,
+  "text_mode": "probable-path-text",
+  "texts": [],
+  "nodes": [
+    {
+      "index": 0,
+      "parent_index": null,
+      "tag": "svg",
+      "id": null,
+      "attributes": {
+        "width": "2938.83",
+        "height": "2623.16",
+        "viewBox": "0 0 2938.83 2623.16"
+      }
+    },
+    {
+      "index": 1,
+      "parent_index": 0,
+      "tag": "defs",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 2,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_1",
+      "attributes": {}
+    },
+    {
+      "index": 3,
+      "parent_index": 2,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 4,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_2",
+      "attributes": {}
+    },
+    {
+      "index": 5,
+      "parent_index": 4,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 6,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_3",
+      "attributes": {}
+    },
+    {
+      "index": 7,
+      "parent_index": 6,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 8,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_4",
+      "attributes": {}
+    },
+    {
+      "index": 9,
+      "parent_index": 8,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 10,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_5",
+      "attributes": {}
+    },
+    {
+      "index": 11,
+      "parent_index": 10,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "6cbd17257ed8f4e56d43f4b9cada9f8fe7b994ddc02af2b36cbcd7bcfb7648b0",
+        "d_length": 243
+      }
+    },
+    {
+      "index": 12,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_6",
+      "attributes": {}
+    },
+    {
+      "index": 13,
+      "parent_index": 12,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "6cbd17257ed8f4e56d43f4b9cada9f8fe7b994ddc02af2b36cbcd7bcfb7648b0",
+        "d_length": 243
+      }
+    },
+    {
+      "index": 14,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_8",
+      "attributes": {}
+    },
+    {
+      "index": 15,
+      "parent_index": 14,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "6532eba59ff56bac4c832e1d1f599ca41cdf3106713b1be3f0ddffdc243034db",
+        "d_length": 226
+      }
+    },
+    {
+      "index": 16,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_9",
+      "attributes": {}
+    },
+    {
+      "index": 17,
+      "parent_index": 16,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "f0483287e20c876b3dc6d648b9f38bcd593b59a359667b1756a85c34b571ee68",
+        "d_length": 238
+      }
+    },
+    {
+      "index": 18,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_10",
+      "attributes": {}
+    },
+    {
+      "index": 19,
+      "parent_index": 18,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 20,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_11",
+      "attributes": {}
+    },
+    {
+      "index": 21,
+      "parent_index": 20,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "e7ddf336e36f4662686f6fbe2ef971ee724b5c3b00bcf2c71ab7fd503c858f01",
+        "d_length": 169
+      }
+    },
+    {
+      "index": 22,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_12",
+      "attributes": {}
+    },
+    {
+      "index": 23,
+      "parent_index": 22,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 24,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_13",
+      "attributes": {}
+    },
+    {
+      "index": 25,
+      "parent_index": 24,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "ac931f4a2d7c935f0a2178faa3362ed7507e4f78bc1f4a190aedcaeb497259dd",
+        "d_length": 121
+      }
+    },
+    {
+      "index": 26,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_14",
+      "attributes": {}
+    },
+    {
+      "index": 27,
+      "parent_index": 26,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "498aa6c98c1c72b2e422c63e61be0f3da5f0467f0ce5b256fcf67b29848a43ec",
+        "d_length": 25
+      }
+    },
+    {
+      "index": 28,
+      "parent_index": 1,
+      "tag": "clipPath",
+      "id": "clip_15",
+      "attributes": {}
+    },
+    {
+      "index": 29,
+      "parent_index": 28,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,0,2623.16)",
+        "d_sha256": "a85155d246ab41d36e9b79c246e4b12224e9078fded6f5dc4718aa2831bae8c6",
+        "d_length": 51
+      }
+    },
+    {
+      "index": 30,
+      "parent_index": 0,
+      "tag": "g",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 31,
+      "parent_index": 30,
+      "tag": "g",
+      "id": null,
+      "attributes": {}
+    },
+    {
+      "index": 32,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_1)"
+      }
+    },
+    {
+      "index": 33,
+      "parent_index": 32,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1183.1611,957.8816)",
+        "d_sha256": "eda5d02c48b1b47a4e17684c91fc95872360eda0f6cc8c427c98e0c054853688",
+        "d_length": 160,
+        "fill": "#999999"
+      }
+    },
+    {
+      "index": 34,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_2)"
+      }
+    },
+    {
+      "index": 35,
+      "parent_index": 34,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1661.0425,957.8816)",
+        "d_sha256": "eda5d02c48b1b47a4e17684c91fc95872360eda0f6cc8c427c98e0c054853688",
+        "d_length": 160,
+        "fill": "#999999"
+      }
+    },
+    {
+      "index": 36,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_3)"
+      }
+    },
+    {
+      "index": 37,
+      "parent_index": 36,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,2138.9239,957.8816)",
+        "d_sha256": "eda5d02c48b1b47a4e17684c91fc95872360eda0f6cc8c427c98e0c054853688",
+        "d_length": 160,
+        "fill": "#999999"
+      }
+    },
+    {
+      "index": 38,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_4)"
+      }
+    },
+    {
+      "index": 39,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1402.1337,2075.942)",
+        "d_sha256": "c66d6e243ec954702044f29345b087b20e08230025a3b72307dc94add104743b",
+        "d_length": 819,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 40,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1442.5161,2093.029)",
+        "d_sha256": "4b8011b6030552094854dab7bf5bfdc80f0de0e5594c335c3c4ed9a17f12237e",
+        "d_length": 513,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 41,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1381.1461,2042.147)",
+        "d_sha256": "5beaf1fe22a0bc1298ea69099f3be51a1476d954f5b747b195e18ca9a14563da",
+        "d_length": 489,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 42,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1414.9905,2398.3465)",
+        "d_sha256": "80f74e84ba732650731b7de97120af2c1e6334bee58f00b7f4dbf4a7d22a1cd8",
+        "d_length": 3991,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 43,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1408.6458,2348.9622)",
+        "d_sha256": "7d5fdc6af002c2adfcf61d469157c678f269c2a3aec18c39df4cebb7e58b1e53",
+        "d_length": 866,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 44,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1405.7393,2339.0343)",
+        "d_sha256": "61d970d1fb49f09389cbe60f1a6b5f8713f6c96d531b1c0e26fba46ab4130f91",
+        "d_length": 357,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 45,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1384.419,2365.9005)",
+        "d_sha256": "434050f94d2ed15f8bf7962eb072c0ba372d672317abe70e8f7a9d26046d8247",
+        "d_length": 287,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 46,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1865.3973,2362.7254)",
+        "d_sha256": "2086e1aceb8b4b6f91be1a46cd0088273590a11a69a878d652809adbd890ce8c",
+        "d_length": 1086,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 47,
+      "parent_index": 38,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1821.708,2383.8516)",
+        "d_sha256": "ffd35dd5c3757d49a9213627a4544784de1b4744452dc93dd88ea41cb4691acd",
+        "d_length": 1021,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 48,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_5)"
+      }
+    },
+    {
+      "index": 49,
+      "parent_index": 48,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "1405",
+        "y": "1932",
+        "width": "934",
+        "height": "474",
+        "href": "assets/image-01-853567b0925e.png"
+      }
+    },
+    {
+      "index": 50,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_6)"
+      }
+    },
+    {
+      "index": 51,
+      "parent_index": 50,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(.23616143,0,0,.2361614,1393.6821,1854.8467)"
+      }
+    },
+    {
+      "index": 52,
+      "parent_index": 51,
+      "tag": "image",
+      "id": "image_7",
+      "attributes": {
+        "width": "4048",
+        "height": "2530",
+        "href": "assets/image-02-4a6e46f998df.png"
+      }
+    },
+    {
+      "index": 53,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_8)"
+      }
+    },
+    {
+      "index": 54,
+      "parent_index": 53,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "371",
+        "y": "1932",
+        "width": "484",
+        "height": "474",
+        "href": "assets/image-03-4c3d5f727fbc.png"
+      }
+    },
+    {
+      "index": 55,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_9)"
+      }
+    },
+    {
+      "index": 56,
+      "parent_index": 55,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "889",
+        "y": "1932",
+        "width": "484",
+        "height": "474",
+        "href": "assets/image-04-05897b79da36.png"
+      }
+    },
+    {
+      "index": 57,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_10)"
+      }
+    },
+    {
+      "index": 58,
+      "parent_index": 57,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,775.8821,2341.5313)",
+        "d_sha256": "ab5d3e10dd89477d0b3aeb61a1e0329ad5afc16afd5dc8b92e26e6e7d70b8a48",
+        "d_length": 991,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 59,
+      "parent_index": 57,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1293.4623,2344.2989)",
+        "d_sha256": "53e398f3658e05232786520355c9f118a1fbe8143ed9a67932c8eb007545f8a8",
+        "d_length": 1759,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 60,
+      "parent_index": 57,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1186.2106,2238.0406)",
+        "d_sha256": "632bab792d41a64bd11b9e64e3c84b5f850f9d3c1d5d7f5dccd96c6233a60f2d",
+        "d_length": 651,
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "index": 61,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_11)"
+      }
+    },
+    {
+      "index": 62,
+      "parent_index": 61,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "1042",
+        "y": "1645",
+        "width": "146",
+        "height": "168",
+        "href": "assets/image-05-73f522c3f724.png"
+      }
+    },
+    {
+      "index": 63,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_12)"
+      }
+    },
+    {
+      "index": 64,
+      "parent_index": 63,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1066.015,1661.5264)",
+        "d_sha256": "60052ddc6e1ee349ce457e68eaac0268f7c405d2c2c7fc18d8e4c73378de4e37",
+        "d_length": 75,
+        "fill": "#ffec06"
+      }
+    },
+    {
+      "index": 65,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_13)"
+      }
+    },
+    {
+      "index": 66,
+      "parent_index": 65,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "1174",
+        "y": "1618",
+        "width": "146",
+        "height": "170",
+        "href": "assets/image-06-1b619d8e7138.png"
+      }
+    },
+    {
+      "index": 67,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_14)"
+      }
+    },
+    {
+      "index": 68,
+      "parent_index": 67,
+      "tag": "path",
+      "id": null,
+      "attributes": {
+        "transform": "matrix(1,0,0,-1,1296.5624,1634.6168)",
+        "d_sha256": "a86fe4c4e1de7238942dad1ca63f7af6823498b943ae934cfe43eb1179539755",
+        "d_length": 60,
+        "fill": "#ffec06"
+      }
+    },
+    {
+      "index": 69,
+      "parent_index": 31,
+      "tag": "g",
+      "id": null,
+      "attributes": {
+        "clip-path": "url(#clip_15)"
+      }
+    },
+    {
+      "index": 70,
+      "parent_index": 69,
+      "tag": "image",
+      "id": null,
+      "attributes": {
+        "x": "1210",
+        "y": "1703",
+        "width": "47",
+        "height": "23",
+        "href": "assets/image-07-127df30793b2.png"
+      }
+    }
+  ],
+  "references": [
+    {
+      "kind": "fragment",
+      "target": "clip_1",
+      "node_index": 32,
+      "attribute": "clip-path",
+      "raw": "#clip_1"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_2",
+      "node_index": 34,
+      "attribute": "clip-path",
+      "raw": "#clip_2"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_3",
+      "node_index": 36,
+      "attribute": "clip-path",
+      "raw": "#clip_3"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_4",
+      "node_index": 38,
+      "attribute": "clip-path",
+      "raw": "#clip_4"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_5",
+      "node_index": 48,
+      "attribute": "clip-path",
+      "raw": "#clip_5"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-01-853567b0925e.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-01-853567b0925e.png",
+      "exists": true,
+      "node_index": 49,
+      "attribute": "href",
+      "raw": "assets/image-01-853567b0925e.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_6",
+      "node_index": 50,
+      "attribute": "clip-path",
+      "raw": "#clip_6"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-02-4a6e46f998df.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-02-4a6e46f998df.png",
+      "exists": true,
+      "node_index": 52,
+      "attribute": "href",
+      "raw": "assets/image-02-4a6e46f998df.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_8",
+      "node_index": 53,
+      "attribute": "clip-path",
+      "raw": "#clip_8"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-03-4c3d5f727fbc.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-03-4c3d5f727fbc.png",
+      "exists": true,
+      "node_index": 54,
+      "attribute": "href",
+      "raw": "assets/image-03-4c3d5f727fbc.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_9",
+      "node_index": 55,
+      "attribute": "clip-path",
+      "raw": "#clip_9"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-04-05897b79da36.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-04-05897b79da36.png",
+      "exists": true,
+      "node_index": 56,
+      "attribute": "href",
+      "raw": "assets/image-04-05897b79da36.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_10",
+      "node_index": 57,
+      "attribute": "clip-path",
+      "raw": "#clip_10"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_11",
+      "node_index": 61,
+      "attribute": "clip-path",
+      "raw": "#clip_11"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-05-73f522c3f724.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-05-73f522c3f724.png",
+      "exists": true,
+      "node_index": 62,
+      "attribute": "href",
+      "raw": "assets/image-05-73f522c3f724.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_12",
+      "node_index": 63,
+      "attribute": "clip-path",
+      "raw": "#clip_12"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_13",
+      "node_index": 65,
+      "attribute": "clip-path",
+      "raw": "#clip_13"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-06-1b619d8e7138.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-06-1b619d8e7138.png",
+      "exists": true,
+      "node_index": 66,
+      "attribute": "href",
+      "raw": "assets/image-06-1b619d8e7138.png"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_14",
+      "node_index": 67,
+      "attribute": "clip-path",
+      "raw": "#clip_14"
+    },
+    {
+      "kind": "fragment",
+      "target": "clip_15",
+      "node_index": 69,
+      "attribute": "clip-path",
+      "raw": "#clip_15"
+    },
+    {
+      "kind": "local-file",
+      "target": "assets/image-07-127df30793b2.png",
+      "resolved": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/guideline-presentation-sun-pages-1-5/items/guideline-image-layouts/artifact/assets/image-07-127df30793b2.png",
+      "exists": true,
+      "node_index": 70,
+      "attribute": "href",
+      "raw": "assets/image-07-127df30793b2.png"
+    }
+  ],
+  "warnings": [
+    "No native text elements found; paths may include converted text."
+  ]
+}

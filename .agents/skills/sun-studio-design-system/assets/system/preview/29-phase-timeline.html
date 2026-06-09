@@ -1,0 +1,39 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Phase timeline</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../components/phase-timeline.css">
+<style>
+  .brief { font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--muted); margin: -4px 0 2px; }
+  .brief b { color: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="card-label">Phase timeline</div>
+<p class="brief">Connected month-tagged steps; current step is the solid orange node. <b>Deck-02</b> PMS year.</p>
+
+<div class="timeline cyclic" style="--cs:.66">
+  <div class="tl-step done">
+    <div class="node">1</div>
+    <div class="when">Tháng 3–4</div>
+    <div class="t">Thiết lập</div>
+    <div class="d">Thống nhất mục tiêu từ đầu năm.</div>
+  </div>
+  <div class="tl-step active">
+    <div class="node">2</div>
+    <div class="when">Tháng 6 &amp; 9</div>
+    <div class="t">Check-in</div>
+    <div class="d">Cập nhật tiến độ, điều chỉnh hướng đi.</div>
+  </div>
+  <div class="tl-step">
+    <div class="node">3</div>
+    <div class="when">Tháng 12–1</div>
+    <div class="t">Đánh giá</div>
+    <div class="d">Nhìn lại kết quả &amp; tưởng thưởng.</div>
+  </div>
+</div>
+</body>
+</html>

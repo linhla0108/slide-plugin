@@ -1,0 +1,279 @@
+{
+  "extraction_id": "guideline-presentation-sun-pages-1-5",
+  "item_id": "guideline-image-layouts",
+  "candidate_stable_id": "sun.template.guideline-image-layouts",
+  "status": "staging",
+  "type": "template",
+  "category": "image-layouts",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+    "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+    "slide_or_page": 5,
+    "region": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1.0,
+      "height": 1.0,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "e986bc578c5f484d78dbd216c442f27978d37fd5e37c565b67b3439911d184f2",
+    "semantic_signature_sha256": "f78d8a0d44265a0abde14abef6f7b0bf87e82b23c10cc64270c001727fd70336",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "contributor-layout",
+    "character-layout",
+    "photo-layout",
+    "image-content"
+  ],
+  "content_fields": {
+    "required": [
+      "title",
+      "images"
+    ],
+    "optional": [
+      "support",
+      "names",
+      "roles",
+      "subtitle",
+      "cards"
+    ],
+    "text_slots": [
+      {
+        "id": "this-is-a-contributors-slide-insert",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "your-team",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "here",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "patrick-e-shorey",
+        "role": "subheading",
+        "html_tag": "h3",
+        "required": false
+      },
+      {
+        "id": "recreational-therapist",
+        "role": "label",
+        "html_tag": "span",
+        "required": false
+      },
+      {
+        "id": "mary-t-middleton",
+        "role": "subheading",
+        "html_tag": "h3",
+        "required": false
+      },
+      {
+        "id": "physical-meteorologist",
+        "role": "label",
+        "html_tag": "span",
+        "required": false
+      },
+      {
+        "id": "william-r-hudson",
+        "role": "subheading",
+        "html_tag": "h3",
+        "required": false
+      },
+      {
+        "id": "timekeeper",
+        "role": "label",
+        "html_tag": "span",
+        "required": false
+      },
+      {
+        "id": "lorem-ipsum-dolor-sit-amet-consectetur-adipiscin",
+        "role": "body",
+        "html_tag": "p",
+        "required": false
+      },
+      {
+        "id": "aenean-aliquam-tellus-erat-et-malesuada-ipsum-cu",
+        "role": "body",
+        "html_tag": "p",
+        "required": false
+      },
+      {
+        "id": "efficitur-vel-vel-libero",
+        "role": "body",
+        "html_tag": "p",
+        "required": false
+      },
+      {
+        "id": "image",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-character",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-h-nh",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "leadership",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "development",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "rewards",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "recognition",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "engagement",
+        "role": "heading",
+        "html_tag": "h2",
+        "required": false
+      },
+      {
+        "id": "work",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "environment",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "improvement",
+        "role": "title",
+        "html_tag": "h1",
+        "required": false
+      },
+      {
+        "id": "employee-experience",
+        "role": "subheading",
+        "html_tag": "h3",
+        "required": false
+      }
+    ]
+  },
+  "variables": [
+    "--sun-blue",
+    "--sun-ink"
+  ],
+  "variants": [
+    "contributors-three-up",
+    "feature-cards-with-photo"
+  ],
+  "compatibility": {
+    "html": "supported",
+    "pptx": "hybrid",
+    "pdf": "supported",
+    "canva": "hybrid"
+  },
+  "limitations": [
+    "Photos remain independent cropped image objects; text and card labels remain editable.",
+    "Circular and rounded image masks may require transparent PNG fallback if the target exporter changes clipping.",
+    "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": null,
+  "name": "Guideline Image Layouts",
+  "tags": [
+    "contributors",
+    "portraits",
+    "photo",
+    "character",
+    "image-layout"
+  ],
+  "paths": {
+    "artifact": "artifact/visual.svg",
+    "visual": "artifact/visual.svg",
+    "text_slots": "artifact/text-slots.json",
+    "artifact_files": [
+      "artifact/visual.svg",
+      "artifact/text-slots.json",
+      "artifact/image-layouts.html",
+      "artifact/image-layouts.css",
+      "artifact/assets/image-01-853567b0925e.png",
+      "artifact/assets/image-02-4a6e46f998df.png",
+      "artifact/assets/image-03-4c3d5f727fbc.png",
+      "artifact/assets/image-04-05897b79da36.png",
+      "artifact/assets/image-05-73f522c3f724.png",
+      "artifact/assets/image-06-1b619d8e7138.png",
+      "artifact/assets/image-07-127df30793b2.png"
+    ],
+    "preview": null,
+    "source_evidence": "evidence/source-with-text.svg"
+  },
+  "background_layers": [
+    {
+      "role": "base-background",
+      "kind": "native",
+      "value": "#FFFFFF",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "unit": "normalized"
+      },
+      "z_order": 0
+    }
+  ],
+  "external_images": {
+    "reference_count": 7,
+    "unique_file_count": 7,
+    "manifest": "evidence/external-images.json"
+  },
+  "text_contract": {
+    "schema": "slide-system/schemas/text-slots.schema.json",
+    "visual": "artifact/visual.svg",
+    "slots": "artifact/text-slots.json",
+    "source_evidence": "evidence/source-with-text.svg",
+    "slot_count": 24,
+    "coordinate_space": "normalized",
+    "example_content": "source",
+    "semantic_text_in_visual": false,
+    "artwork_text_exemptions": [],
+    "overflow_policy": "unmanaged",
+    "editable": true,
+    "allow_empty": true
+  }
+}

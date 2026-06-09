@@ -1,0 +1,6 @@
+{
+  "description": "Starting point only. Calibrate and lock per phase.",
+  "max_normalized_mae": 0.035,
+  "max_normalized_rmse": 0.09,
+  "max_changed_pixel_ratio": 0.12
+}

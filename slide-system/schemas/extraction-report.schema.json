@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/extraction-report.schema.json",
+  "title": "Extraction Report",
+  "type": "object",
+  "required": ["extraction_id", "item_id", "status", "fingerprints", "method", "compatibility", "approval"],
+  "properties": {
+    "extraction_id": { "type": "string" },
+    "item_id": { "type": "string" },
+    "candidate_stable_id": { "type": "string" },
+    "status": { "enum": ["duplicate", "staging", "qa", "approved", "published", "rejected", "failed"] },
+    "fingerprints": { "type": "object" },
+    "duplicate_of": { "type": ["string", "null"] },
+    "method": { "type": "string" },
+    "artifacts": { "type": "array", "items": { "type": "string" } },
+    "compatibility": { "type": "object" },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "approval": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "approved_at": { "type": ["string", "null"] },
+        "approved_by": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}
+

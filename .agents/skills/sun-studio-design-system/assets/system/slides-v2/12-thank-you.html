@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>v2 · 12 Thank you</title>
+<link rel="stylesheet" href="_v2.css">
+<style>
+  /* Override paper to ink for closing slide */
+  #stage { background: #141312; }
+  .grain { mix-blend-mode: screen; opacity: .12; }
+  .crease {
+    background:
+      radial-gradient(ellipse 1200px 700px at 20% 14%, rgba(255,255,255,.06), transparent 60%),
+      radial-gradient(ellipse 900px 700px at 88% 92%, rgba(0,0,0,.4), transparent 70%);
+  }
+
+  .folio { color: var(--paper); }
+  .folio .right { color: rgba(241,236,222,.55); }
+  .folio .right .b { color: var(--paper); }
+  .folio::before, .folio::after { background: rgba(241,236,222,.18); }
+
+  .hero {
+    position: absolute;
+    left: 96px; right: 96px;
+    top: 200px; bottom: 220px;
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 60px;
+    z-index: 3;
+    align-items: center;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 280px;
+    line-height: .82;
+    letter-spacing: -.045em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin: 0;
+  }
+  .display .row { display: block; }
+  .display .em {
+    color: var(--sun-orange);
+  }
+  .display .small {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 56px;
+    color: var(--paper);
+    text-transform: none;
+    letter-spacing: -.01em;
+    margin-left: 18px;
+    vertical-align: 28px;
+    opacity: .8;
+  }
+
+  .colon { color: var(--sun-orange); }
+
+  .sub-stack {
+    margin-top: 38px;
+    display: flex; flex-direction: column; gap: 20px;
+    max-width: 760px;
+  }
+  .sub-stack .line {
+    display: flex; align-items: baseline; gap: 18px;
+    font-family: var(--font-mono);
+    font-size: 16px; letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(241,236,222,.7);
+  }
+  .sub-stack .line b {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: .14em;
+    color: var(--paper);
+  }
+  .sub-stack .line .arrow { color: var(--sun-orange); }
+
+  /* Side column with DIO */
+  .side {
+    position: relative;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: flex-start;
+  }
+  .dio-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .dio-wrap img {
+    width: 100%; max-width: 620px;
+    transform: rotate(-3.5deg);
+    filter: drop-shadow(18px 22px 0 rgba(255,85,51,.22));
+  }
+  .halo {
+    position: absolute;
+    left: 6%; top: 12%;
+    width: 84%; aspect-ratio: 1;
+    background: radial-gradient(circle at center, rgba(255,85,51,.22), transparent 65%);
+    filter: blur(20px);
+    z-index: -1;
+  }
+
+  /* P.S. handwritten-style note */
+  .ps-note {
+    position: absolute;
+    left: -22px; top: 8px;
+    transform: rotate(-4.5deg);
+    background: var(--sun-orange);
+    color: #fff;
+    padding: 14px 22px 12px;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    box-shadow: 5px 6px 0 rgba(0,0,0,.35);
+    max-width: 260px;
+    line-height: 1.2;
+  }
+  .ps-note .small {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 12px; letter-spacing: .22em;
+    font-weight: 500;
+    color: rgba(255,255,255,.85);
+    margin-bottom: 4px;
+  }
+
+  /* Contact rail */
+  .contact-rail {
+    position: absolute;
+    left: 96px; right: 96px; bottom: 120px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(241,236,222,.18);
+    z-index: 3;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field .k {
+    font-family: var(--font-mono);
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(241,236,222,.5);
+  }
+  .field .v {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    letter-spacing: -.005em;
+  }
+  .field .v .em { color: var(--sun-orange); }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: absolute;
+    left: 96px; right: 96px; bottom: 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 3;
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(241,236,222,.55);
+  }
+  .bottom-bar .tag-line {
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: .24em;
+  }
+
+  /* Loose XO marks for closing */
+  .xo-marks { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .xo-marks svg { position: absolute; opacity: .35; }
+  .xo-marks .x1 { left: 60%; top: 90px;  width: 64px; color: var(--sun-orange); transform: rotate(-10deg); }
+  .xo-marks .o1 { left: 78px; top: 64%;  width: 48px; color: rgba(241,236,222,.6); transform: rotate(12deg); }
+  .xo-marks .x2 { right: 80px; top: 200px; width: 38px; color: rgba(241,236,222,.6); transform: rotate(18deg); }
+
+  /* Page tag color fix */
+  .page-tag { color: rgba(241,236,222,.7); }
+  .page-tag .of { color: rgba(241,236,222,.35); }
+
+  /* This slide already has a bottom-bar with its own index — hide base page-tag */
+  .page-tag { display: none; }
+</style>
+</head>
+<body>
+  <main id="stage">
+    <section class="slide" data-screen-label="V2 12 Thank you">
+
+      <div class="folio">
+        <span>SUN.RISER 2026 &nbsp;·&nbsp; Interview Workshop</span>
+        <span class="right"><span>§12</span><span class="b">Closing</span><span>05·2026</span></span>
+      </div>
+
+      <div class="xo-marks" aria-hidden="true">
+        <svg class="x1" viewBox="0 0 100 100"><path d="M14 14L86 86M86 14L14 86" stroke="currentColor" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
+        <svg class="o1" viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" stroke="currentColor" stroke-width="14" fill="none"/></svg>
+        <svg class="x2" viewBox="0 0 100 100"><path d="M14 14L86 86M86 14L14 86" stroke="currentColor" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
+      </div>
+
+      <div class="hero">
+        <div class="left">
+          <h1 class="display">
+            <span class="row">Cảm</span>
+            <span class="row">ơn<span class="colon">.</span></span>
+          </h1>
+
+          <div class="sub-stack">
+            <div class="line"><span class="arrow">→</span><span>Bây giờ, đến lượt <b>bạn</b> đi tìm đúng người.</span></div>
+            <div class="line"><span class="arrow">→</span><span>HM bookings <b>mở từ 20·05</b></span><span>·</span><span>20 slot / tuần</span></div>
+            <div class="line"><span class="arrow">→</span><span>Câu hỏi, ghi chú, mẫu CV scoring</span><span>·</span><span class="b">drive / sunriser 2026</span></div>
+          </div>
+        </div>
+
+        <div class="side">
+          <div class="dio-wrap">
+            <div class="halo" aria-hidden="true"></div>
+            <img src="../assets/dio/m2-wink.png" alt="DIO winking goodbye">
+            <div class="ps-note">
+              <span class="small">P.S. từ DIO</span>
+              Phỏng vấn tốt = ít sai hơn, không phải đúng nhiều hơn.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-rail">
+        <div class="field"><span class="k">Liên hệ</span><span class="v">hr<span class="em">@</span>sun.studio</span></div>
+        <div class="field"><span class="k">Booking phỏng vấn</span><span class="v">talent.sun.studio<span class="em">/book</span></span></div>
+        <div class="field"><span class="k">Workshop tiếp</span><span class="v">SUN.RISER · vòng 4</span></div>
+        <div class="field"><span class="k">Deadline onboard</span><span class="v">08·06·2026</span></div>
+      </div>
+
+      <div class="bottom-bar">
+        <span class="tag-line">SUN RISES&nbsp;&nbsp;·&nbsp;&nbsp;GAME ON</span>
+        <span>End of deck &nbsp;·&nbsp; 12 / 12</span>
+      </div>
+
+      <div class="page-tag">
+        <span class="num">12</span><span class="of">/ 12</span>
+      </div>
+
+      <div class="grain" aria-hidden="true"></div>
+      <div class="crease" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById('stage');
+    function fit() { stage.style.transform = `scale(${Math.min(innerWidth/1920, innerHeight/1080)})`; }
+    addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

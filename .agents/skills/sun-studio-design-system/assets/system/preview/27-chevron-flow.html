@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Chevron flow</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../components/chevron-flow.css">
+<style>
+  .brief { font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--muted); margin: -4px 0 2px; }
+  .brief b { color: var(--ink); font-weight: 700; }
+  .vlabel { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="card-label">Chevron flow</div>
+<p class="brief">Sequential arrow steps, deepening tint to a solid terminal step. <b>Deck-05</b> review flow.</p>
+
+<div class="chevron-flow" style="--cs:.62">
+  <div class="chev"><span class="n">01</span><span class="t">Tự đánh giá</span></div>
+  <div class="chev"><span class="n">02</span><span class="t">Quản lý</span></div>
+  <div class="chev"><span class="n">03</span><span class="t">Công ty</span></div>
+  <div class="chev"><span class="n">04</span><span class="t">Trao đổi</span></div>
+</div>
+
+<div class="vlabel">Blue · process variant</div>
+<div class="chevron-flow blue" style="--cs:.52">
+  <div class="chev"><span class="n">B1</span><span class="t">Gửi form</span></div>
+  <div class="chev"><span class="n">B2</span><span class="t">Duyệt</span></div>
+  <div class="chev"><span class="n">B3</span><span class="t">Phản hồi</span></div>
+</div>
+</body>
+</html>

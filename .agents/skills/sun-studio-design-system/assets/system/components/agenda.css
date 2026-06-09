@@ -1,0 +1,68 @@
+/* =====================================================================
+   COMPONENT · Agenda 01–04
+   Source: deck-05 p2 (01–04 + FAQ), deck-03 p2 (Quy trình / Vai trò / …).
+   Numbered overview list — the big tinted index number is the hook.
+   ===================================================================== */
+@import url("_base.css");
+
+.agenda { --cs: 1; display: flex; flex-direction: column; }
+.ag-item {
+  display: grid;
+  grid-template-columns: calc(96px * var(--cs)) 1fr;
+  align-items: center;
+  gap: calc(28px * var(--cs));
+  padding: calc(16px * var(--cs)) 0;
+  border-top: calc(1px * var(--cs)) solid var(--rule);
+}
+.ag-item:last-child { border-bottom: calc(1px * var(--cs)) solid var(--rule); }
+.ag-item .idx {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(56px * var(--cs));
+  line-height: .82;
+  letter-spacing: -.03em;
+  color: var(--sun-orange);
+  font-variant-numeric: tabular-nums;
+}
+.ag-item .lbl {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: calc(28px * var(--cs));
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  line-height: 1.06;
+  color: var(--ink);
+}
+.ag-item .sub {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: calc(17px * var(--cs));
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-top: calc(5px * var(--cs));
+}
+/* hover/active highlight — number flips to ink, row indents */
+.ag-item.active .idx { color: var(--ink); }
+.ag-item.active .lbl { color: var(--sun-orange); }
+
+/* "FAQ" style trailing pill item (deck-05) */
+.ag-item.tag { border-top: calc(2px * var(--cs)) solid var(--ink); }
+.ag-item.tag .idx {
+  font-size: calc(22px * var(--cs));
+  background: var(--ink);
+  color: var(--fg-on-ink);
+  border-radius: var(--r-pill);
+  width: calc(72px * var(--cs));
+  height: calc(40px * var(--cs));
+  display: grid;
+  place-items: center;
+  letter-spacing: .1em;
+}
+
+/* outline-number variant (deck-03 — hollow numerals) */
+.agenda.outline .ag-item .idx {
+  color: transparent;
+  -webkit-text-stroke: calc(2px * var(--cs)) var(--sun-orange);
+}

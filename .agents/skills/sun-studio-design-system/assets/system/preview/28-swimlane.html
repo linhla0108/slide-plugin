@@ -1,0 +1,40 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Swimlane</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="../components/swimlane.css">
+<style>
+  .brief { font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--muted); margin: -4px 0 2px; }
+  .brief b { color: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="card-label">Swimlane · roles × phases</div>
+<p class="brief">Roles down the side, phases across the top. <b>Deck-02</b> goal-setting process.</p>
+
+<div class="swimlane" style="--cs:.6; --cols:3">
+  <div class="corner"></div>
+  <div class="cell head"><span class="when">Mar 5–12</span>Công ty</div>
+  <div class="cell head"><span class="when">Mar 17–25</span>Phòng ban</div>
+  <div class="cell head"><span class="when">Mar 26–Apr 6</span>Cá nhân</div>
+
+  <div class="cell role">BOD</div>
+  <div class="cell active"><span class="when">Mar 5–12</span><span class="what">Xác định mục tiêu chính của công ty</span></div>
+  <div class="cell empty"></div>
+  <div class="cell empty"></div>
+
+  <div class="cell role">Leader</div>
+  <div class="cell empty"></div>
+  <div class="cell"><span class="when">Mar 17–25</span><span class="what">Chuyển mục tiêu công ty thành mục tiêu team</span></div>
+  <div class="cell"><span class="when">Mar 26+</span><span class="what">Hướng dẫn nhân viên xây dựng mục tiêu</span></div>
+
+  <div class="cell role">Nhân viên</div>
+  <div class="cell empty"></div>
+  <div class="cell empty"></div>
+  <div class="cell"><span class="when">Mar 26–Apr 6</span><span class="what">Soạn mục tiêu cá nhân theo SMART</span></div>
+</div>
+</body>
+</html>

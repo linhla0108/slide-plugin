@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Slide 3: Objectives</title>
+  <style>
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Medium.otf") format("opentype");
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-SemiBold.otf") format("opentype");
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Nova-Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Proxima Nova";
+      src: url("../fonts/Proxima-Black.otf") format("opentype");
+      font-weight: 900;
+      font-style: normal;
+    }
+
+    :root {
+      --sun-orange: #FF5533;
+      --sun-orange-dark: #EB462D;
+      --sun-orange-25: #FFD4CC;
+      --sun-blue: #3333FF;
+      --sun-blue-25: #CCCCFF;
+      --ink: #171717;
+      --muted: #666666;
+      --line: #E7E7E7;
+      --paper: #FFFFFF;
+      --soft: #FAFAFA;
+      --font-display: "Proxima Nova", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-body: "Proxima Nova", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      isolation: isolate;
+      background: #111;
+      font-family: var(--font-body);
+      color: var(--ink)
+    }
+
+    body {
+      display: grid;
+      place-items: center
+    }
+
+    #stage {
+      width: 1920px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--soft);
+      transform-origin: center center;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--soft);
+      padding: 84px 96px 78px;
+    }
+
+    .pattern {
+      position: absolute;
+      pointer-events: none;
+      opacity: .12;
+      background:
+        linear-gradient(135deg, transparent 49%, currentColor 50%, currentColor 51%, transparent 52%),
+        linear-gradient(45deg, transparent 49%, currentColor 50%, currentColor 51%, transparent 52%);
+      background-size: 84px 84px, 64px 64px;
+      color: var(--sun-blue);
+      width: 520px;
+      height: 520px;
+      left: -150px;
+      top: -130px;
+      transform: rotate(13deg);
+    }
+
+    .layout {
+      height: 100%;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 560px 1fr;
+      gap: 54px;
+      align-items: stretch;
+    }
+
+    .dio-avatar {
+      width: 260px;
+      height: auto;
+      margin-top: auto;
+      margin-left: -16px;
+      opacity: 0;
+      animation: fadeUp .78s cubic-bezier(.2, .8, .2, 1) .15s both;
+    }
+
+    .left {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #fff;
+      border: 3px solid var(--sun-orange);
+      border-radius: 28px;
+      padding: 46px 46px 34px;
+      box-shadow: 16px 18px 0 rgba(255, 85, 51, .14);
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .left::after {
+      content: "";
+      position: absolute;
+      right: -78px;
+      bottom: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255, 85, 51, .10);
+      z-index: -1;
+    }
+
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font: 800 16px/1 var(--font-body);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp .62s cubic-bezier(.2, .8, .2, 1) .1s both;
+    }
+
+    .kicker:before {
+      content: "";
+      width: 42px;
+      height: 4px;
+      background: var(--sun-orange);
+      display: block;
+    }
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: 62px;
+      line-height: 1;
+      letter-spacing: -.025em;
+      text-transform: uppercase;
+      font-weight: 900;
+      opacity: 0;
+      animation: fadeUp .68s cubic-bezier(.2, .8, .2, 1) .2s both;
+    }
+
+    .intro {
+      margin-top: 30px;
+      width: min(100%, 600px);
+      padding: 24px 26px 22px;
+      border: 3px solid var(--ink);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 12px 14px 0 rgba(255, 85, 51, .16);
+      opacity: 0;
+      animation: fadeUp .68s cubic-bezier(.2, .8, .2, 1) .3s both;
+    }
+
+    .intro-main {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.18;
+      color: var(--ink);
+      font-weight: 850;
+    }
+
+    .intro-main strong {
+      color: var(--sun-orange);
+      font-weight: 950;
+    }
+
+    .intro-chips {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .intro-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 13px;
+      border: 2px solid rgba(23, 23, 23, .12);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 850;
+      color: var(--ink);
+      letter-spacing: .01em;
+    }
+
+    .intro-chip::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--sun-orange);
+      box-shadow: 0 0 0 4px rgba(255, 85, 51, .13);
+    }
+
+    .intro-chip:nth-child(2)::before {
+      background: var(--sun-blue);
+      box-shadow: 0 0 0 4px rgba(51, 51, 255, .12);
+    }
+
+    .objectives {
+      align-self: stretch;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      padding: 4px;
+      isolation: isolate;
+    }
+
+
+
+    .hub-removed {
+      display: none;
+    }
+
+    .objective {
+      --accent: var(--sun-orange);
+      --accent-wash: rgba(255, 85, 51, .07);
+      --accent-shadow: rgba(255, 85, 51, .16);
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 38px 34px 32px;
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 10px 12px 0 var(--accent-shadow);
+      opacity: 0;
+      transform: translateY(28px);
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      z-index: 2;
+    }
+
+    .objective::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 7px;
+      background: var(--accent);
+      z-index: 1;
+    }
+
+    .objective::after {
+      content: "";
+      position: absolute;
+      right: -46px;
+      bottom: -46px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background: var(--accent-wash);
+      z-index: -1;
+    }
+
+    /* Cards 2 & 3: blue accent (matches highlighted content) */
+    .objective:nth-child(2),
+    .objective:nth-child(3) {
+      --accent: var(--sun-blue);
+      --accent-wash: rgba(51, 51, 255, .07);
+      --accent-shadow: rgba(51, 51, 255, .14);
+    }
+
+    .objective:nth-child(1) {
+      animation: slideIn .55s cubic-bezier(.2, .8, .2, 1) .22s both
+    }
+
+    .objective:nth-child(2) {
+      animation: slideIn .55s cubic-bezier(.2, .8, .2, 1) .36s both
+    }
+
+    .objective:nth-child(3) {
+      animation: slideIn .55s cubic-bezier(.2, .8, .2, 1) .50s both
+    }
+
+    .objective:nth-child(4) {
+      animation: slideIn .55s cubic-bezier(.2, .8, .2, 1) .64s both
+    }
+
+    .num {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+      box-shadow: 0 10px 24px var(--accent-shadow);
+      transform: scale(.72) rotate(-8deg);
+      transition: transform .64s cubic-bezier(.25, 1.45, .35, 1);
+    }
+
+    .objective:nth-child(1) .num {
+      animation: scaleIn .64s cubic-bezier(.25, 1.45, .35, 1) .30s both
+    }
+
+    .objective:nth-child(2) .num {
+      animation: scaleIn .64s cubic-bezier(.25, 1.45, .35, 1) .44s both
+    }
+
+    .objective:nth-child(3) .num {
+      animation: scaleIn .64s cubic-bezier(.25, 1.45, .35, 1) .58s both
+    }
+
+    .objective:nth-child(4) .num {
+      animation: scaleIn .64s cubic-bezier(.25, 1.45, .35, 1) .72s both
+    }
+
+    /* number badge inherits --accent from card */
+
+    .obj-copy {
+      padding-top: 0;
+    }
+
+    .obj-main {
+      font-size: 30px;
+      line-height: 1.14;
+      font-weight: 850;
+      letter-spacing: -.005em;
+      color: var(--ink);
+    }
+
+    .obj-sub {
+      margin-top: 14px;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--muted);
+      font-weight: 520;
+    }
+
+    .highlight-orange,
+    .highlight-blue {
+      color: white;
+      padding: 0 8px 4px;
+      white-space: nowrap;
+    }
+
+    .highlight-orange {
+      background: var(--sun-orange)
+    }
+
+    .highlight-blue {
+      background: var(--sun-blue)
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(34px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(28px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(.72) rotate(-8deg)
+      }
+
+      to {
+        transform: scale(1) rotate(0)
+      }
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      font-family: var(--font-body, sans-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--muted, #666);
+      opacity: 0.7;
+      user-select: none;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @media print {
+
+      html,
+      body {
+        background: white;
+        display: block;
+        overflow: visible
+      }
+
+      #stage {
+        transform: none !important;
+        box-shadow: none
+      }
+
+      .slide {
+        position: relative;
+        page-break-after: always
+      }
+    }
+
+
+    /* XO PATTERN V2 — matched to 01-title-xo-pattern-sample.html */
+    :root {
+      --xo-paper: #FFFDF8;
+    }
+
+    .slide {
+      background: var(--xo-paper) !important;
+      isolation: isolate;
+    }
+
+    .pattern {
+      display: none !important;
+    }
+
+    .xo-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: .92;
+      pointer-events: none;
+    }
+
+    .xo-grid {
+      position: absolute;
+      inset: -170px -150px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-auto-rows: 190px;
+      gap: 18px;
+      transform: rotate(-24deg) scale(1.06);
+      transform-origin: 50% 50%;
+    }
+
+    .xo-row {
+      display: grid;
+      grid-template-columns: repeat(13, 190px);
+      gap: 22px;
+    }
+
+    .xo-row.offset {
+      transform: translateX(212px);
+    }
+
+    .xo-cell {
+      display: grid;
+      place-items: center;
+      opacity: .16;
+    }
+
+    .xo-cell svg {
+      width: 86px;
+      height: 86px;
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(16px 20px 0 rgba(24, 24, 27, .18));
+    }
+
+    .xo-cell.x {
+      color: var(--sun-orange, #FF5533);
+      opacity: .25;
+      transform: translateY(-3px);
+    }
+
+    .xo-cell.x svg {
+      filter: drop-shadow(16px 20px 0 rgba(255, 85, 51, .26));
+    }
+
+    .xo-cell.o {
+      color: #000;
+      opacity: .15;
+      transform: translateY(3px);
+    }
+
+    .xo-cell.o svg {
+      filter: drop-shadow(16px 20px 0 rgba(0, 0, 0, .22));
+    }
+
+    .xo-cell.hot {
+      opacity: .82;
+    }
+
+    .xo-cell.hot svg {
+      width: 116px;
+      height: 116px;
+    }
+
+    .xo-cell.hot.x svg {
+      filter: drop-shadow(22px 28px 0 rgba(255, 85, 51, .34));
+    }
+
+    .xo-cell.hot.o svg {
+      filter: drop-shadow(22px 28px 0 rgba(0, 0, 0, .30));
+    }
+
+    .wash {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(255, 85, 51, .18), transparent 24%),
+        linear-gradient(90deg, var(--xo-paper) 0%, rgba(255, 253, 248, .72) 40%, rgba(255, 253, 248, .44) 68%, rgba(255, 253, 248, .10) 100%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="stage">
+    <section class="slide" data-screen-label="03 Objectives">
+      <div class="xo-pattern" aria-hidden="true">
+        <div class="xo-grid"></div>
+      </div>
+      <div class="wash" aria-hidden="true"></div>
+      <div class="pattern"></div>
+      <div class="layout">
+        <aside class="left">
+          <div class="kicker">Mục tiêu workshop</div>
+          <h1>Tại sao chúng ta ở đây?</h1>
+          <div class="intro">
+            <p class="intro-main">Phỏng vấn tốt không chỉ chọn người giỏi — mà chọn <strong>đúng tiềm năng</strong> để
+              phát triển cùng studio.</p>
+
+          </div>
+          <div class="dio-avatar">
+            <img src="../assets/dio/m2-wink.png" alt="DIO character" style="width: 100%; height: auto;">
+          </div>
+        </aside>
+
+        <div class="objectives">
+          <article class="objective">
+            <div class="num">01</div>
+            <div class="obj-copy">
+              <div class="obj-main">Hiểu rõ mục tiêu tuyển dụng <span class="highlight-orange">SUN.RISER 2026</span>
+              </div>
+              <div class="obj-sub">Hire-to-develop, không phải hire-to-do.</div>
+            </div>
+          </article>
+
+          <article class="objective">
+            <div class="num">02</div>
+            <div class="obj-copy">
+              <div class="obj-main">Chuẩn bị trước buổi phỏng vấn như thế nào?</div>
+              <div class="obj-sub">Đọc JD, CV, portfolio và chuẩn bị câu hỏi đào sâu.</div>
+            </div>
+          </article>
+
+          <article class="objective">
+            <div class="num">03</div>
+            <div class="obj-copy">
+              <div class="obj-main">Cấu trúc một buổi phỏng vấn hiệu quả — <span class="highlight-blue">6 bước</span>
+              </div>
+              <div class="obj-sub">Từ warm-up, khai thác năng lực đến close rõ ràng.</div>
+            </div>
+          </article>
+
+          <article class="objective">
+            <div class="num">04</div>
+            <div class="obj-copy">
+              <div class="obj-main"><span class="highlight-orange">Do &amp; Don't</span> trong phỏng vấn</div>
+              <div class="obj-sub">Tránh bias, quyết đoán dựa trên bằng chứng, ghi chép nhất quán.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="slide-number">#3</div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById("stage");
+    function fit() {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      stage.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener("resize", fit);
+    fit();
+  </script>
+
+  <script>
+    (function buildXOPatterns() {
+      const xSvg = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24L76 76M76 24L24 76" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" /></svg>';
+      const oSvg = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round" /></svg>';
+      document.querySelectorAll('.xo-grid').forEach((grid) => {
+        if (grid.children.length) return;
+        for (let row = 0; row < 8; row += 1) {
+          const rowEl = document.createElement('div');
+          rowEl.className = `xo-row${row % 2 ? ' offset' : ''}`;
+          for (let col = 0; col < 13; col += 1) {
+            const isX = col % 2 === 0;
+            const cell = document.createElement('span');
+            const hot = (row === 1 && col === 10) || (row === 4 && col === 7) || (row === 6 && col === 2);
+            cell.className = `xo-cell ${isX ? 'x' : 'o'}${hot ? ' hot' : ''}`;
+            cell.innerHTML = isX ? xSvg : oSvg;
+            rowEl.appendChild(cell);
+          }
+          grid.appendChild(rowEl);
+        }
+      });
+    })();
+  </script>
+
+
+
+</body>
+
+</html>

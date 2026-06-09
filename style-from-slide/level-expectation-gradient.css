@@ -1,0 +1,18 @@
+/* Gradient extracted from component-from-slide/sun-level-expectation.css */
+:root {
+  --sun-slide-accent:#3531ff;
+  --sun-level-gradient-base:var(--sun-slide-accent);
+  --sun-level-gradient-mid:color-mix(in srgb, var(--sun-level-gradient-base) 74%, white);
+  --sun-level-gradient-light:color-mix(in srgb, var(--sun-level-gradient-base) 24%, white);
+}
+
+.sun-level-gradient {
+  background:
+    linear-gradient(
+      180deg,
+      var(--sun-level-gradient-base) 0%,
+      var(--sun-level-gradient-base) 61%,
+      var(--sun-level-gradient-mid) 76%,
+      var(--sun-level-gradient-light) 100%
+    );
+}

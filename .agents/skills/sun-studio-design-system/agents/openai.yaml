@@ -1,0 +1,4 @@
+interface:
+  display_name: "SUN.STUDIO Design System"
+  short_description: "Apply SUN.STUDIO brand and design standards"
+  default_prompt: "Use $sun-studio-design-system to apply the SUN.STUDIO design system to this visual."

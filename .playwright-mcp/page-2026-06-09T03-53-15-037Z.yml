@@ -1,0 +1,259 @@
+- generic [active] [ref=e1]:
+  - heading "GUIDLINE_PRESENTATION_SUN" [level=1] [ref=e2]
+  - paragraph [ref=e3]: Visual-only SVG + editable HTML text slots. Click any text to edit it.
+  - main [ref=e4]:
+    - article [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - generic [ref=e8]: Page 4
+          - generic [ref=e9]: Guideline Board Layouts
+        - code [ref=e10]: sun.component.guideline-board-layouts
+        - generic [ref=e11]: 81 editable text slots
+      - generic [ref=e12]:
+        - generic:
+          - generic [ref=e13]: Checklist cho Quản lý
+          - paragraph [ref=e14]: Manager nên hỏi / trao đổi
+          - generic [ref=e15]: Mục tiêu
+          - generic [ref=e16]: Các bước
+          - paragraph [ref=e17]: 1.Context – Giải thích Goal
+          - generic [ref=e18]: của team
+          - paragraph [ref=e19]: Nhân viên hiểu bức tranh chung
+          - listitem [ref=e20]: •Theo em phần nào trong công việc của mình ảnh hưởng
+          - paragraph [ref=e21]: nhiều nhất đến goal team?
+          - listitem [ref=e22]: •Em nghĩ kết quả nào chứng minh mình làm tốt?
+          - paragraph [ref=e23]: 2. Contribution – Xác định
+          - generic [ref=e24]: đóng góp của nhân viên
+          - paragraph [ref=e25]: Tìm ra vai trò của nhân viên trong
+          - generic [ref=e26]: goal team
+          - paragraph [ref=e27]: 3. Deﬁne – Viết Goal & Key
+          - generic [ref=e28]: Results (Project Goal)
+          - paragraph [ref=e29]: Chuyển ý tưởng thành goal đo được
+          - paragraph [ref=e30]: 4. Deﬁne – Viết Goal & Key
+          - paragraph [ref=e31]: Results (Functional Goal)
+          - paragraph [ref=e32]: 5. Deﬁne - Development Goal
+          - paragraph [ref=e33]: 6. Feasibility – Kiểm tra tính
+          - generic [ref=e34]: khả thi
+          - generic [ref=e35]: Đảm bảo goal thực tế
+          - paragraph [ref=e36]: 7. Weight - Cân đối tỷ trọng
+          - paragraph [ref=e37]: Đảm bảo tỷ trọng các goal cân đối
+          - paragraph [ref=e38]: và phù hợp với khả năng tác động
+          - generic [ref=e39]: 8. Commitment –
+          - generic [ref=e40]: Đồng thuận goal
+          - generic [ref=e41]: Hai bên thống nhất và
+          - generic [ref=e42]: cam kết thực hiện
+          - paragraph [ref=e43]: Giải thích goal của team, giúp nhân viên hiểu vì sao goal quan trọng
+          - paragraph [ref=e44]: Giúp nhân viên hiểu team đang có 1-2 ưu tiên chính
+          - paragraph [ref=e45]: Lắng nghe Nguyện vọng trong công việc của nhân viên
+          - paragraph [ref=e46]: Lắng nghe Goal do nhân viên đề xuất
+          - paragraph [ref=e47]: Xác định Goal của nhân viên là outcome, không phải task
+          - paragraph [ref=e48]: Ưu tiên 3-5 goal chính có tác động chính đến goal chung
+          - paragraph [ref=e49]: Mỗi goal có 2–3 Key Results
+          - paragraph [ref=e50]: Có chỉ số đo và thời gian
+          - listitem [ref=e51]: •Em cần tập trung vào dự án nào?
+          - listitem [ref=e52]: •Dự án mới em cần theo sát năm nay?
+          - listitem [ref=e53]: •Em sẽ ưu tiên goal nào hơn để đảm bảo hoàn thành?
+          - listitem [ref=e54]: •Kết quả nào chứng minh goal đã đạt?
+          - listitem [ref=e55]: •Chúng ta sẽ đo kết quả bằng chỉ số nào?
+          - listitem [ref=e56]: •Khi nào goal được coi là hoàn thành?
+          - listitem [ref=e57]: •Có khó khăn nào ảnh hưởng đến goal không?
+          - listitem [ref=e58]: •Em cần hỗ trợ gì từ Quản lý?
+          - listitem [ref=e59]: •Goal này có khả thi với khối lượng công việc hiện tại không?
+          - listitem [ref=e60]: •Goal nào là ưu tiên chính trong công việc hiện tại?
+          - listitem [ref=e61]: •Goal nào nên chiếm nhiều thời gian và công sức hơn?
+          - listitem [ref=e62]: •Kế hoạch để em thực hiện mục tiêu như thế nào?
+          - listitem [ref=e63]: •Chúng ta sẽ theo dõi tiến độ như thế nào?
+          - listitem [ref=e64]: •Năng lực / Kỹ năng cần nào cần đặt mục tiêu cải thiện/phát
+          - paragraph [ref=e65]: triển trong năm nay để phục vụ hoàn thành mục tiêu công
+          - generic [ref=e66]: việc?
+          - paragraph [ref=e67]: Goal này có liên quan đến công việc hiện tại của nhân viên
+          - paragraph [ref=e68]: Goal khả thi với thời gian và nguồn lực
+          - paragraph [ref=e69]: Rủi ro chính đã được xác định
+          - paragraph [ref=e70]: Quản lý hiểu và cam kết hỗ trợ nhân viên
+          - generic [ref=e71]: Hai bên đồng thuận goal
+          - paragraph [ref=e72]: Thống nhất kế hoạch triển khai & lịch check-in tiến độ
+          - paragraph [ref=e73]: Goal đúng với vai trò của nhân viên cần có tỷ trọng cao
+          - paragraph [ref=e74]: Giảm tỷ trọng các goal có phụ thuộc vào yếu tố bên ngoài
+          - heading "BOARD" [level=2] [ref=e75]
+          - heading "1. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT BẢNG" [level=2] [ref=e76]
+          - generic [ref=e77]: "26"
+          - heading "XÂY DỰNG ĐỘI NGŨ AI" [level=3] [ref=e78]
+          - heading "XÂY DỰNG HỆ THỐNG" [level=3] [ref=e79]
+          - heading "TỰ ĐỘNG HOÁ" [level=3] [ref=e80]
+          - heading "Nâng cấp các công cụ AI" [level=3] [ref=e81]
+          - heading "phục vụ công việc" [level=3] [ref=e82]
+          - heading "Chia sẻ best practices và" [level=3] [ref=e83]
+          - heading "use cases trong các team" [level=3] [ref=e84]
+          - heading "Nâng cao tiếng anh" [level=3] [ref=e85]
+          - heading "để tiếp cận với AI" [level=3] [ref=e86]
+          - heading "Xây dựng thư viện prompts" [level=3] [ref=e87]
+          - heading "& AI workﬂows dùng chung" [level=3] [ref=e88]
+          - heading "Tổ chức workshop &" [level=3] [ref=e89]
+          - heading "training về AI" [level=3] [ref=e90]
+          - heading "Khuyến khích" [level=3] [ref=e91]
+          - heading "thử nghiệm AI" [level=3] [ref=e92]
+          - heading "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH" [level=2] [ref=e93]
+    - article [ref=e94]:
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]: Page 2
+          - generic [ref=e98]: Guideline Card Variants
+        - code [ref=e99]: sun.component.guideline-card-variants
+        - generic [ref=e100]: 57 editable text slots
+      - generic [ref=e101]:
+        - generic:
+          - generic [ref=e102]: Chuyển hóa mục tiêu
+          - generic [ref=e103]: công ty thành ngôn
+          - generic [ref=e104]: ngữ dễ hiểu, chỉ rõ
+          - generic [ref=e105]: team đóng góp như
+          - generic [ref=e106]: thế nào.
+          - generic [ref=e107]: Chọn trọng tâm và ưu
+          - generic [ref=e108]: tiên cho phòng ban
+          - generic [ref=e109]: Tháo gỡ blockers,
+          - generic [ref=e110]: theo sát tiến độ và
+          - generic [ref=e111]: feedback liên tục để
+          - generic [ref=e112]: đảm bảo team đạt
+          - generic [ref=e113]: được outcome.
+          - generic [ref=e114]: Trao đổi, dẫn dắt và
+          - generic [ref=e115]: đồng thuận cùng nhân
+          - generic [ref=e116]: viên về cách tạo ra kết
+          - generic [ref=e117]: quả tác động đến
+          - generic [ref=e118]: công ty
+          - heading "TRANSLATOR" [level=2] [ref=e119]
+          - heading "STRATEGISTDRIVERCOACH" [level=2] [ref=e120]
+          - generic [ref=e121]: Chuyển mục tiêu
+          - generic [ref=e122]: công ty thành
+          - generic [ref=e123]: hướng đi rõ ràng
+          - generic [ref=e124]: cho team
+          - generic [ref=e125]: Chọn trọng tâm và ưu
+          - generic [ref=e126]: tiên cho phòng ban
+          - generic [ref=e127]: Tháo gỡ trở ngại,
+          - generic [ref=e128]: theo dõi tiến độ và
+          - generic [ref=e129]: liên tục feedback
+          - generic [ref=e130]: để đạt kết quả
+          - generic [ref=e131]: Dẫn dắt và đồng hành
+          - generic [ref=e132]: cùng nhân viên tạo ra
+          - generic [ref=e133]: kết quả
+          - heading "TRANSLATOR" [level=2] [ref=e134]
+          - heading "STRATEGISTDRIVERCOACH" [level=2] [ref=e135]
+          - heading "CARD" [level=2] [ref=e136]
+          - heading "1.THƯỜNG DÙNG CHO CÁC MỤC CÓ CÙNG CẤP ĐỘ NHƯNG VẪN KHÁC NỘI DUNG" [level=2] [ref=e137]
+          - heading "Spicy" [level=2] [ref=e138]
+          - heading "Autocomplete" [level=2] [ref=e139]
+          - heading "Level 1" [level=2] [ref=e140]
+          - heading "Autonomous" [level=2] [ref=e141]
+          - heading "Development" [level=2] [ref=e142]
+          - heading "Agenta" [level=2] [ref=e143]
+          - heading "Level 3" [level=2] [ref=e144]
+          - heading "Collaborative" [level=2] [ref=e145]
+          - heading "Agent Networks" [level=2] [ref=e146]
+          - heading "Level 4" [level=2] [ref=e147]
+          - heading "Software" [level=2] [ref=e148]
+          - heading "Factory" [level=2] [ref=e149]
+          - heading "Level 5" [level=2] [ref=e150]
+          - heading "AI Coding" [level=2] [ref=e151]
+          - heading "Assistants" [level=2] [ref=e152]
+          - heading "Level 2" [level=2] [ref=e153]
+          - heading "+30%" [level=1] [ref=e154]
+          - heading "Revenue" [level=1] [ref=e155]
+          - heading "+30%" [level=1] [ref=e156]
+          - heading "Team Size" [level=1] [ref=e157]
+          - heading "(110 Members)" [level=2] [ref=e158]
+    - article [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]: Page 1
+          - generic [ref=e163]: Guideline Icon Library
+        - code [ref=e164]: sun.asset.guideline-icon-library
+        - generic [ref=e165]: 13 editable text slots
+      - generic [ref=e166]:
+        - generic:
+          - heading "ICON" [level=2] [ref=e167]
+          - generic [ref=e168]: Engagement
+          - generic [ref=e169]: Rewards &
+          - generic [ref=e170]: Recognition
+          - generic [ref=e171]: Leadership
+          - generic [ref=e172]: Development
+          - generic [ref=e173]: BOD
+          - generic [ref=e174]: Level Expectation
+          - generic [ref=e175]: Personal
+          - generic [ref=e176]: Personal
+          - generic [ref=e177]: Company
+          - generic [ref=e178]: Learning & Sharing
+          - heading "1.NHỮNG ICON HAY XUẤT HIỆN" [level=2] [ref=e179]
+    - article [ref=e180]:
+      - generic [ref=e181]:
+        - generic [ref=e182]:
+          - generic [ref=e183]: Page 5
+          - generic [ref=e184]: Guideline Image Layouts
+        - code [ref=e185]: sun.template.guideline-image-layouts
+        - generic [ref=e186]: 24 editable text slots
+      - generic [ref=e187]:
+        - generic:
+          - heading "This is a contributors slide. Insert" [level=1] [ref=e188]
+          - heading "your team" [level=1] [ref=e189]
+          - heading "here." [level=1] [ref=e190]
+          - heading "Patrick E. Shorey" [level=3] [ref=e191]
+          - generic [ref=e192]: Recreational therapist
+          - heading "Mary T. Middleton" [level=3] [ref=e193]
+          - generic [ref=e194]: Physical meteorologist
+          - heading "William R. Hudson" [level=3] [ref=e195]
+          - generic [ref=e196]: Timekeeper
+          - paragraph [ref=e197]: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed tellus sed lacus maximus consectetur.
+          - paragraph [ref=e198]: Aenean aliquam tellus erat, et malesuada ipsum cursus id. Vivamus aliquet eros vel tortor congue
+          - paragraph [ref=e199]: efficitur vel vel libero.
+          - heading "IMAGE" [level=2] [ref=e200]
+          - heading "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT CHARACTER" [level=2] [ref=e201]
+          - heading "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT HÌNH" [level=2] [ref=e202]
+          - heading "Leadership" [level=2] [ref=e203]
+          - heading "Development" [level=2] [ref=e204]
+          - heading "Rewards &" [level=2] [ref=e205]
+          - heading "Recognition" [level=2] [ref=e206]
+          - heading "Engagement" [level=2] [ref=e207]
+          - heading "WORK" [level=1] [ref=e208]
+          - heading "ENVIRONMENT" [level=1] [ref=e209]
+          - heading "IMPROVEMENT" [level=1] [ref=e210]
+          - heading "Employee Experience" [level=3] [ref=e211]
+    - article [ref=e212]:
+      - generic [ref=e213]:
+        - generic [ref=e214]:
+          - generic [ref=e215]: Page 3
+          - generic [ref=e216]: Guideline Shape Variants
+        - code [ref=e217]: sun.style.guideline-shape-variants
+        - generic [ref=e218]: 35 editable text slots
+      - generic [ref=e219]:
+        - generic:
+          - heading "LOREM IPSUM" [level=2] [ref=e220]
+          - generic [ref=e221]: "0101"
+          - generic [ref=e222]: "03"
+          - heading "LOREM IPSUM" [level=2] [ref=e223]
+          - heading "LOREM IPSUM" [level=2] [ref=e224]
+          - heading "2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CHO CÁC TÍNH NĂNG, CÁC BƯỚC, HAY CẤP ĐỘ KHÁC NHAU" [level=2] [ref=e225]
+          - heading "FOUNDATION" [level=2] [ref=e226]
+          - generic [ref=e227]: "01"
+          - heading "GAME APP" [level=2] [ref=e228]
+          - heading "BUILT" [level=2] [ref=e229]
+          - heading "TOP1" [level=1] [ref=e230]
+          - generic [ref=e231]: "02"
+          - heading "INSTANT GAMES" [level=2] [ref=e232]
+          - heading "FB INSTANT GAMES" [level=2] [ref=e233]
+          - heading "MICROSOFT" [level=2] [ref=e234]
+          - heading "&" [level=2] [ref=e235]
+          - heading "XIAOMI" [level=2] [ref=e236]
+          - generic [ref=e237]: "03"
+          - heading "WEB PLATFORMS" [level=2] [ref=e238]
+          - heading "Kết quả muốn đạt được" [level=3] [ref=e239]
+          - heading "•Là đích đến để định hướng con người" [level=3] [ref=e240]
+          - heading "làm chuỗi việc theo tiến trình" [level=3] [ref=e241]
+          - heading "•Kết quả ý nghĩa, tác động đến công ty" [level=3] [ref=e242]
+          - heading "Cách đo lường Goal đã hoàn thành mức nào" [level=3] [ref=e243]
+          - heading "•Có thời hạn nhất định" [level=3] [ref=e244]
+          - heading "•Đo được (bằng số liệu, mức độ chất lượng)" [level=3] [ref=e245]
+          - heading "Việc tôi sẽ làm" [level=3] [ref=e246]
+          - heading "•Danh sách hoạt động / hành động." [level=3] [ref=e247]
+          - heading "•Là “làm gì hôm nay/tuần này\"" [level=3] [ref=e248]
+          - heading "•Không đo được bằng chỉ số, không" [level=3] [ref=e249]
+          - heading "phải là kết quả" [level=3] [ref=e250]
+          - heading "GOAL" [level=2] [ref=e251]
+          - heading "KEY" [level=2] [ref=e252]
+          - heading "RESULT" [level=2] [ref=e253]
+          - heading "TASK" [level=2] [ref=e254]

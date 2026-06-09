@@ -1,0 +1,202 @@
+/* =====================================================
+   SUN.RISER 2026 — Slide deck v2 (editorial / tactile)
+   Shared base
+   ===================================================== */
+
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-Regular-Italic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-Medium.otf") format("opentype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-SemiBold.otf") format("opentype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-SemiBold-Italic.otf") format("opentype"); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Nova-Bold.otf") format("opentype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Bold-Italic.otf") format("opentype"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Black.otf") format("opentype"); font-weight: 900; font-display: swap; }
+@font-face { font-family: "Proxima Nova"; src: url("../fonts/Proxima-Black-Italic.otf") format("opentype"); font-weight: 900; font-style: italic; font-display: swap; }
+
+:root {
+  --sun-orange:      #FF5533;
+  --sun-orange-deep: #D9421F;
+  --sun-blue:        #3333FF;   /* brand Accent Blue — canonical per Brandbook 2025 */
+  --ink:             #141312;
+  --ink-soft:        #2a2823;
+  --paper:           #F1ECDE;   /* warmer cream */
+  --paper-shade:     #E4DCC4;
+  --rule:            #1a1816;
+  --muted:           #6c6757;
+  --muted-2:         #908a78;
+  --tape:            rgba(255,221,99,.74);
+
+  --font-display: "Proxima Nova", -apple-system, system-ui, sans-serif;
+  --font-body:    "Proxima Nova", -apple-system, system-ui, sans-serif;
+  --font-serif:   "Times New Roman", "Georgia", serif;
+  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; width: 100%; height: 100%;
+  overflow: hidden; isolation: isolate;
+  background: #15140f;
+  font-family: var(--font-body); color: var(--ink);
+}
+body { display: grid; place-items: center; }
+
+#stage {
+  width: 1920px; height: 1080px;
+  position: relative; overflow: hidden;
+  background: var(--paper);
+  transform-origin: center center;
+  box-shadow: 0 24px 80px rgba(0,0,0,.42);
+}
+
+/* Paper grain (SVG turbulence as data-URI) */
+.grain {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: .28;
+  mix-blend-mode: multiply;
+}
+/* Subtle paper crease */
+.crease {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 1300px 700px at 16% 12%, rgba(255,255,255,.45), transparent 65%),
+    radial-gradient(ellipse 900px 700px at 92% 96%, rgba(0,0,0,.06), transparent 70%);
+}
+
+.slide {
+  position: absolute; inset: 0;
+  width: 1920px; height: 1080px;
+  overflow: hidden; isolation: isolate;
+  padding: 78px 96px 76px;
+  z-index: 2;
+}
+
+/* --- Type primitives --- */
+.kicker-mono {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink);
+}
+.kicker-mono .dot { color: var(--sun-orange); margin: 0 10px; }
+
+.rule {
+  height: 1px;
+  background: var(--rule);
+  width: 100%;
+}
+.rule.thick { height: 2px; }
+
+.serif-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.32;
+  color: var(--ink-soft);
+}
+
+/* Hand-marked underline using SVG */
+.mark {
+  position: relative;
+  white-space: nowrap;
+}
+.mark::after {
+  content: "";
+  position: absolute;
+  left: -4px; right: -4px;
+  bottom: -18px; height: 26px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 26' preserveAspectRatio='none'><path d='M2 17 C 60 6, 130 23, 220 11 S 296 6, 298 14' fill='none' stroke='%23FF5533' stroke-width='6' stroke-linecap='round'/></svg>") center/100% 100% no-repeat;
+  pointer-events: none;
+}
+.mark.blue::after {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 26' preserveAspectRatio='none'><path d='M2 17 C 60 6, 130 23, 220 11 S 296 6, 298 14' fill='none' stroke='%233333FF' stroke-width='6' stroke-linecap='round'/></svg>");
+}
+
+/* Hand-circled mark for emphasis */
+.circled {
+  position: relative;
+  display: inline-block;
+  padding: 0 .12em;
+}
+.circled::before {
+  content: "";
+  position: absolute;
+  inset: -.18em -.22em -.22em -.22em;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 80' preserveAspectRatio='none'><path d='M 110 8 C 30 10, 6 32, 12 52 C 18 70, 80 78, 140 74 C 196 70, 218 50, 210 30 C 200 8, 140 4, 80 10' fill='none' stroke='%23FF5533' stroke-width='4.2' stroke-linecap='round'/></svg>") center/100% 100% no-repeat;
+  pointer-events: none;
+}
+
+/* Sticker (slightly rotated) */
+.sticker {
+  display: inline-block;
+  padding: 14px 22px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transform: rotate(-2.4deg);
+  box-shadow: 4px 5px 0 rgba(0,0,0,.16);
+}
+.sticker.orange { background: var(--sun-orange); color: #fff; }
+.sticker.tape {
+  background: var(--tape); color: var(--ink);
+  font-family: var(--font-mono); font-weight: 600;
+  letter-spacing: .14em;
+  box-shadow: 2px 3px 0 rgba(0,0,0,.06);
+  border-radius: 0;
+  transform: rotate(-1.4deg);
+}
+
+/* Page tag bottom-right */
+.page-tag {
+  position: absolute;
+  right: 92px; bottom: 60px;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 14px;
+}
+.page-tag .num { font-weight: 700; }
+.page-tag .of { color: var(--muted-2); }
+
+/* Folio top bar */
+.folio {
+  position: absolute; top: 56px; left: 96px; right: 96px;
+  z-index: 3;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 14px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--ink);
+}
+.folio .right { display: flex; align-items: center; gap: 18px; color: var(--muted); }
+.folio .right .b { color: var(--ink); }
+.folio::before, .folio::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 1px;
+  background: var(--rule); opacity: .55;
+}
+.folio::before { top: -16px; }
+.folio::after  { bottom: -14px; }
+
+/* DIO image helpers */
+.dio {
+  position: absolute;
+  z-index: 2;
+  filter: drop-shadow(14px 18px 0 rgba(0,0,0,.10));
+  user-select: none;
+}
+
+@media print {
+  html, body { background: white; display: block; overflow: visible; }
+  #stage { transform: none !important; box-shadow: none; }
+}

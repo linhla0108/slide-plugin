@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/schemas/text-slots.schema.json",
+  "title": "Editable Text Slots",
+  "type": "object",
+  "required": ["schema_version", "coordinate_space", "source", "slots"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "coordinate_space": {
+      "type": "object",
+      "required": ["unit", "width", "height"],
+      "properties": {
+        "unit": {"const": "normalized"},
+        "width": {"const": 1},
+        "height": {"const": 1}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["svg", "view_box"],
+      "properties": {
+        "svg": {"type": "string"},
+        "view_box": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "number"},
+            {"type": "number"},
+            {"type": "number"},
+            {"type": "number"}
+          ],
+          "items": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "artwork_text_exemptions": {
+      "type": "array",
+      "items": {"type": "object"}
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "role",
+          "html_tag",
+          "example_value",
+          "editable",
+          "allow_empty",
+          "bounds",
+          "typography",
+          "source_refs",
+          "style_overrides"
+        ],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "role": {"type": "string"},
+          "html_tag": {"enum": ["h1", "h2", "h3", "p", "span", "li", "th", "td"]},
+          "example_value": {"type": "string"},
+          "editable": {"const": true},
+          "allow_empty": {"const": true},
+          "bounds": {
+            "type": "object",
+            "required": ["x", "y", "width", "height"],
+            "properties": {
+              "x": {"type": "number", "minimum": 0, "maximum": 1},
+              "y": {"type": "number", "minimum": 0, "maximum": 1},
+              "width": {"type": "number", "minimum": 0, "maximum": 1},
+              "height": {"type": "number", "minimum": 0, "maximum": 1}
+            },
+            "additionalProperties": false
+          },
+          "anchor": {"type": "string"},
+          "horizontal_align": {"enum": ["left", "center", "right"]},
+          "vertical_align": {"enum": ["top", "middle", "bottom"]},
+          "rotation": {"type": "number"},
+          "z_order": {"type": "integer"},
+          "typography": {"type": "object"},
+          "source_refs": {"type": "array", "items": {"type": "object"}},
+          "style_overrides": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

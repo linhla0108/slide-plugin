@@ -1,0 +1,67 @@
+{
+  "extraction_id": "sunriser-2026-slides-1-5",
+  "item_id": "orange-arcs",
+  "candidate_stable_id": "sun.background.orange-arcs",
+  "status": "staging",
+  "type": "background",
+  "category": "background",
+  "brand": "sun-studio",
+  "source": {
+    "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.RISER 2026 - Be professional at SUN.STUDIO.pptx",
+    "sha256": "f8d51effcda2444ad1092a839d69a10e8c078908d2db80a4f0d9b7cf22e1d32d",
+    "slide_or_page": 2,
+    "region": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 1.0,
+      "height": 1.0,
+      "unit": "normalized"
+    },
+    "object_ids": []
+  },
+  "fingerprints": {
+    "region_identity_sha256": "b7b61eee823aec834ac78e2a2bb557a5c83cc7d30601eb97b5d2d339f114afdd",
+    "semantic_signature_sha256": "2e5b08b8b0b6da8fc7b3b6169e640d608b6b07b21d21dda969a503c70b39dc21",
+    "perceptual_hash": null
+  },
+  "semantic_intent": [
+    "brand-background",
+    "concentric-arcs",
+    "warm-gradient"
+  ],
+  "content_fields": {
+    "required": [],
+    "optional": []
+  },
+  "variables": [
+    "--sun-orange",
+    "--sun-orange-pale"
+  ],
+  "variants": [],
+  "compatibility": {
+    "html": "supported",
+    "pptx": "raster",
+    "pdf": "supported",
+    "canva": "raster"
+  },
+  "limitations": [
+    "Repeating radial gradient may not round-trip in PPTX/Canva; use PNG fallback."
+  ],
+  "approval": {
+    "status": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "duplicate_of": null,
+  "name": "Orange Arcs Background",
+  "tags": [
+    "background",
+    "orange",
+    "gradient",
+    "arcs"
+  ],
+  "paths": {
+    "artifact": "artifact/orange-arcs.css",
+    "preview": "preview/index.html"
+  }
+}

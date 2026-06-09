@@ -1,0 +1,116 @@
+{
+  "job_id": "unity-roadmap-intern-3-months",
+  "checked_at": "2026-06-08T11:59:58+07:00",
+  "status": "ready",
+  "inputs": [
+    {
+      "path": "input/Prompt.md",
+      "role": "mixed",
+      "checksum": "48fb72080a24c04eee3b0a48a935e1d61df52d3d7c4f7a75cdd50d600e10fb50",
+      "resolved_path": "/Users/home/Documents/work-space/sun-riser-2026/input/Prompt.md",
+      "format": "md",
+      "exists": true,
+      "actual_checksum": "48fb72080a24c04eee3b0a48a935e1d61df52d3d7c4f7a75cdd50d600e10fb50"
+    }
+  ],
+  "tools": [
+    {
+      "tool_id": "node",
+      "status": "available",
+      "path": "/Users/home/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "version": "v24.14.0",
+      "capabilities": [
+        "javascript-runtime",
+        "deck-build-scripts"
+      ],
+      "last_checked": "2026-06-07T00:46:04+07:00",
+      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "last_failure": null
+    },
+    {
+      "tool_id": "python",
+      "status": "available",
+      "path": "/Users/home/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "version": "Python 3.12.13",
+      "capabilities": [
+        "automation",
+        "registry-tools",
+        "image-analysis"
+      ],
+      "last_checked": "2026-06-07T00:46:04+07:00",
+      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "last_failure": null
+    }
+  ],
+  "blockers": [],
+  "unresolved_blockers": [],
+  "warnings": [
+    "Unsupported effects require a raster or approved fallback strategy: No real Unity 3D model asset is provided; cover uses local Unity/gamepad iconography and CSS isometric geometry instead."
+  ],
+  "requested_overrides": [],
+  "brand_pack": {
+    "manifest": "/Users/home/Documents/work-space/sun-riser-2026/slide-system/brand-packs/sun-studio/manifest.json",
+    "exists": true,
+    "references": [
+      {
+        "name": "skill",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/SKILL.md",
+        "exists": true
+      },
+      {
+        "name": "tokens",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/colors_and_type.css",
+        "exists": true
+      },
+      {
+        "name": "fonts",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/fonts",
+        "exists": true
+      },
+      {
+        "name": "logo",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/assets/logo.png",
+        "exists": true
+      },
+      {
+        "name": "dio",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/assets/dio",
+        "exists": true
+      },
+      {
+        "name": "components",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/components",
+        "exists": true
+      },
+      {
+        "name": "previews",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/.agents/skills/sun-studio-design-system/assets/system/preview",
+        "exists": true
+      }
+    ]
+  },
+  "visual_needs": [
+    "Dark neon game UI cover with Unity/gamepad motif",
+    "Three-month horizontal roadmap timeline",
+    "Month 1 four-week badge training grid",
+    "Month 2 cross-functional workflow and weekly milestones",
+    "Month 3 ownership staircase progression",
+    "Profile cards for mentor, GD, artist, QA, PM and HR",
+    "Minimal Q&A and thank-you closing slides"
+  ],
+  "unsupported_effects": [
+    "No real Unity 3D model asset is provided; cover uses local Unity/gamepad iconography and CSS isometric geometry instead."
+  ],
+  "required_workflows": [
+    "build-html-deck",
+    "check-requirements",
+    "package-delivery",
+    "plan-slide-deck",
+    "select-visual-items"
+  ],
+  "required_scripts": [
+    "check_requirements.py",
+    "score_visual_items.py",
+    "package_job.py"
+  ]
+}

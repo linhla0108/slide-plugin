@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Tweakable"
+  short_description: "Add focused controls for design customization"
+  default_prompt: "Use $make-tweakable to add focused controls for the most important design values."
