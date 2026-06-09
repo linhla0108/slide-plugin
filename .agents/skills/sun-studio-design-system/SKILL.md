@@ -1,6 +1,6 @@
 ---
 name: sun-studio-design-system
-description: Apply the canonical SUN.STUDIO brand and slide design system to presentations, prototypes, interfaces, and visual assets. Use when work must follow SUN.STUDIO colors, Proxima Nova typography, logo/DIO rules, XO or editorial slide language, reusable deck components, or company brand voice.
+description: Apply the canonical SUN.STUDIO brand and slide design system to presentations, prototypes, interfaces, and visual assets. Use when work must follow SUN.STUDIO colors, Proxima Nova typography, logo/DIO rules, XO or editorial slide language, reusable layout patterns, or company brand voice.
 ---
 
 # SUN.STUDIO Design System
@@ -11,34 +11,21 @@ the system already defines them.
 
 ## Start Here
 
-1. Read `references/brand-guide.md` for brand voice, visual foundations, logo,
-   DIO, color, typography, layout, and motion rules.
-2. Import or copy
+1. Import or copy
    `assets/system/colors_and_type.css` and `assets/system/fonts/` into the
    artifact. This stylesheet is the canonical token source.
-3. Inspect relevant reusable files before designing:
-   - `assets/system/components/`: 12 topic-agnostic deck components
-   - `assets/system/preview/`: 38 focused design-system specimens
-   - `assets/system/slides/`: 12-slide XO-pattern reference deck
-   - `assets/system/slides-v2/`: editorial/tactile reference slides
-   - `assets/system/assets/`: master logo and DIO pose library
-4. For editorial/tactile slides, also read
-   `references/editorial-slide-guidelines.md`.
-5. For full deck categories, read only the relevant file under
-   `references/deck-prompts/`.
+2. Use `assets/system/assets/logo.png` for the master logo and
+   `assets/system/assets/dio/` for DIO poses.
 
 ## Source Precedence
 
 When sources disagree, follow this order:
 
-1. Official Brandbook rules summarized in `references/brand-guide.md`
+1. Rules in this skill
 2. Exact tokens in `assets/system/colors_and_type.css`
-3. Reusable components in `assets/system/components/`
-4. Reference slides in `assets/system/slides/`
-5. Editorial extension in `assets/system/slides-v2/`
-6. Project-specific extracted components in the consuming repository
+3. Project-specific extracted components in the consuming repository
 
-The Brandbook overrides patterns inferred from one-off legacy decks.
+The rules in this skill override patterns inferred from one-off source decks.
 
 ## Core Rules
 
@@ -47,7 +34,10 @@ The Brandbook overrides patterns inferred from one-off legacy decks.
 - Never alter the master logo. Preserve its proportions and 2x letter-O clear
   space.
 - DIO is the only default character imagery. Use the supplied poses.
-- Headlines and badges use uppercase; body copy uses sentence case.
+- Brand voice is sincere, competent, concise, warm, and action-oriented.
+- Internal Vietnamese communication may use "chúng ta" / "bạn" and English
+  keywords when they are canonical terms.
+- Headlines, badges, and kickers use uppercase; body copy uses sentence case.
 - Keep highlights rare: normally 1-3 emphasized words or blocks per slide.
 - Green and red are semantic colors for explicit success/error or Do/Don't
   communication, not general decoration.
@@ -55,21 +45,26 @@ The Brandbook overrides patterns inferred from one-off legacy decks.
 - Keep supplied content unchanged unless the user approves copy edits. Record
   wording suggestions separately.
 - Use one strong visual anchor per slide.
-- Prefer existing components and reference patterns over creating new visual
+- Prefer canonical tokens, logo, DIO, and layout rules over inventing new visual
   grammar.
 
 ## Choosing A Slide Language
 
-- **XO/poster language:** use `assets/system/slides/` for training, workshops,
-  all-hands, frameworks, and energetic internal communication.
-- **Editorial/tactile language:** use `assets/system/slides-v2/` for onboarding,
-  policy, narrative, or more human and asymmetric communication.
+- **XO/poster language:** use for training, workshops, all-hands, frameworks,
+  metrics, and energetic internal communication. Visual cues: warm paper, XO
+  pattern wash, orange/blue numbered circles, strong h1 tabs, cards, arrows,
+  and a clear bottom action capsule.
+- **Editorial/tactile language:** use for onboarding, policy, narrative, or
+  more human and asymmetric communication. Visual cues: one anchor per slide,
+  deliberate asymmetry, large display type, hairlines, paper texture, italic
+  serif as a secondary voice, and restrained tactile details.
 - Do not mix both languages casually within one deck. Choose a dominant system
   and use contrast slides deliberately.
 
-## Reusable Components
+## Reusable Layout Patterns
 
-The canonical component set under `assets/system/components/` includes:
+The reusable CSS component files have been removed from this skill. Keep these
+as layout vocabulary and rebuild them in-place when a deck needs them:
 
 - chevron flow
 - swimlane
@@ -84,9 +79,6 @@ The canonical component set under `assets/system/components/` includes:
 - competency columns
 - folio/footer chrome
 
-Each component imports `_base.css`, which imports the canonical token file.
-Use the `--cs` custom property to scale components uniformly.
-
 Project-specific reusable visuals must be registered through the shared visual
 library and must not override canonical brand tokens.
 
@@ -99,7 +91,6 @@ paths. At minimum:
 colors_and_type.css
 fonts/
 assets/logo.png or assets/dio/<pose>.png
-components/<component>.css and components/_base.css
 ```
 
 Do not depend on the original Claude Design project path. This skill is

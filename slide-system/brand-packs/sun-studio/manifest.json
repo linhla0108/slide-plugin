@@ -8,9 +8,7 @@
     "tokens": "../../../.agents/skills/sun-studio-design-system/assets/system/colors_and_type.css",
     "fonts": "../../../.agents/skills/sun-studio-design-system/assets/system/fonts",
     "logo": "../../../.agents/skills/sun-studio-design-system/assets/system/assets/logo.png",
-    "dio": "../../../.agents/skills/sun-studio-design-system/assets/system/assets/dio",
-    "components": "../../../.agents/skills/sun-studio-design-system/assets/system/components",
-    "previews": "../../../.agents/skills/sun-studio-design-system/assets/system/preview"
+    "dio": "../../../.agents/skills/sun-studio-design-system/assets/system/assets/dio"
   },
   "selection_rules": "selection-rules.md",
   "licensing": "licensing.md",
