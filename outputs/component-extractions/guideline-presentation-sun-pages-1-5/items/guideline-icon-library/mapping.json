@@ -156,8 +156,7 @@
     "text_slots": "artifact/text-slots.json",
     "artifact_files": [
       "artifact/visual.svg",
-      "artifact/text-slots.json",
-      "artifact/icon-library.css"
+      "artifact/text-slots.json"
     ],
     "preview": null,
     "source_evidence": "evidence/source-with-text.svg"

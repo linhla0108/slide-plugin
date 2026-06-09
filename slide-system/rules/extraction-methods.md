@@ -1,10 +1,18 @@
 # Extraction Methods
 
+The reusable visual is a single source of truth: text-free `artifact/visual.svg`
+paired with `artifact/text-slots.json`. Do **not** also author a parallel
+`.html`/`.css` representation of the same region — the SVG visual plus editable
+text slots is the canonical artifact that every downstream surface (gallery
+preview, catalog, and the consuming job's export) draws from. The extractor does
+not produce per-component PPTX/PDF; the main job embeds `visual.svg` as an image
+when it builds a deck (see `export-compatibility.md`).
+
 | Artifact | Primary method | Export-safe fallback |
 |---|---|---|
-| Card or component | Semantic HTML and scoped CSS | Native PPTX shapes or hybrid visual |
-| Section pattern | Semantic HTML and scoped CSS | Native shapes plus safe assets |
-| Full-slide template | Layout contract without source copy | Hybrid background and editable content |
+| Card or component | Visual-only SVG + editable text slots | SVG-image embed (raster fallback) in the consuming job |
+| Section pattern | Visual-only SVG + editable text slots | SVG-image embed plus safe assets |
+| Full-slide template | Visual-only SVG + editable text slots (layout contract, no source copy) | SVG-image embed with editable text overlay |
 | Simple style | CSS tokens or safe SVG | Native PowerPoint treatment |
 | Simple icon | Clean standalone SVG | Transparent PNG |
 | Complex icon | Simplified safe SVG | Transparent PNG |

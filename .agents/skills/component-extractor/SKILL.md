@@ -18,6 +18,20 @@ Each requested item must include:
 If any value is missing, ask the user before processing. Do not scan a complete
 deck for candidates.
 
+## Preflight
+
+Before the first batch in an environment, confirm the base toolchain with the
+`extract-preflight` skill:
+
+```bash
+python3 slide-system/scripts/check_base_requirements.py
+```
+
+A `ready` marker with a matching environment fingerprint is reused automatically
+— do not re-run setup when it already passed. Stop only on a `blocked` result
+(a required tool is missing). A missing `optional` SVG renderer never blocks
+extraction or preview.
+
 ## Required Reading
 
 1. `slide-system/workflows/extract-components.md`
@@ -33,15 +47,23 @@ deck for candidates.
 2. Fingerprint every requested region.
 3. Check extraction history, aliases, and the shared registry for duplicates.
 4. Scaffold one staging item per region.
-5. Classify the artifact and apply its type-specific extraction method.
+5. Classify the artifact and apply its type-specific extraction method. The
+   reusable visual is text-free `artifact/visual.svg` + `artifact/text-slots.json`
+   only. Do not author a parallel `.html`/`.css` representation of the same
+   region — it is never consumed downstream.
 6. For each item write `mapping.json` (the canonical record: fingerprints,
    content contract, compatibility, approval) plus a lightweight
    `evidence/notes.md` that references the source raster by path. Put the
    reusable output in `artifact/`. Do not copy source images, and do not emit
    per-item `README.md`/`report.md` — `batch-report.md` is the staging summary.
+   Do not commit `*-svg-manifest.json` audit dumps into `evidence/`; the
+   svg-extractor manifest is transient inspection output, not a deliverable.
 7. For SVG artifacts, keep the source-with-text SVG in evidence, remove
    semantic text from the reusable visual, and emit normalized editable slots
-   according to `editable-text-slots.md`.
+   according to `editable-text-slots.md`. Run
+   `scripts/externalize_svg_images.py` to lift embedded rasters into
+   `artifact/assets/` and `scripts/optimize_svg.py` to trim path precision; do
+   not hand-write per-batch `_*.py` helpers into the output folder.
 8. Build one batch-level `gallery.html` as the single review surface, then
    regenerate the catalog staging tab.
 9. Request approval per item.

@@ -23,6 +23,11 @@ authority.
    python3 scripts/extract_svg.py input.svg --output svg-manifest.json
    ```
 
+   The manifest is transient inspection output. Write it to a scratch path and
+   read what you need — never commit `*-svg-manifest.json` into a component
+   extraction's `evidence/` (or any deliverable). It can be several hundred KB
+   per SVG and nothing downstream consumes it.
+
 3. Open or serve the original SVG in a real browser and capture a preview.
    Compare that preview with the corresponding PNG. Do not assume successful XML
    parsing means successful rendering.

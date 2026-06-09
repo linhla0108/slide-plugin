@@ -229,10 +229,8 @@
     "artifact_files": [
       "artifact/visual.svg",
       "artifact/text-slots.json",
-      "artifact/image-layouts.html",
-      "artifact/image-layouts.css",
       "artifact/assets/image-01-853567b0925e.png",
-      "artifact/assets/image-02-4a6e46f998df.png",
+      "artifact/assets/image-02-4a6e46f998df.jpg",
       "artifact/assets/image-03-4c3d5f727fbc.png",
       "artifact/assets/image-04-05897b79da36.png",
       "artifact/assets/image-05-73f522c3f724.png",

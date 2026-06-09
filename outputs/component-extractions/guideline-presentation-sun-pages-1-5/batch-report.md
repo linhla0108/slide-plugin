@@ -1,8 +1,8 @@
-# Extraction Batch - GUIDLINE_PRESENTATION_SUN
+# Extraction Batch - GUIDELINE_PRESENTATION_SUN_PAGES_1_5
 
-Source: `input/GUIDLINE_PRESENTATION_SUN.pdf`
+Source: `/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf`
 
-All five full-page regions remain in staging. Nothing is published.
+All regions remain in staging. Nothing is published.
 
 Reusable SVG contract:
 

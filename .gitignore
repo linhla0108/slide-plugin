@@ -11,3 +11,6 @@ __pycache__/
 # Per-batch ad-hoc helpers and svg-extractor audit dumps must never be committed.
 outputs/component-extractions/**/_*.py
 outputs/component-extractions/**/*-svg-manifest.json
+
+# Environment-specific readiness marker (regenerated per machine via preflight).
+slide-system/registries/extract-readiness.json

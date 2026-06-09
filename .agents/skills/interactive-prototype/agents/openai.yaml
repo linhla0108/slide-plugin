@@ -1,4 +1,0 @@
-interface:
-  display_name: "Interactive Prototype"
-  short_description: "Build realistic interactive product prototypes"
-  default_prompt: "Use $interactive-prototype to turn this design into a realistic interactive prototype."
