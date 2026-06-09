@@ -26,12 +26,10 @@ published and staging visual items.
 - Shared system contracts and scripts remain in `slide-system/`.
 - New deck outputs belong in `outputs/slide-jobs/`.
 - Manual extraction outputs belong in `outputs/component-extractions/`.
-- Legacy files in `project/`, `component-from-slide/`, `style-from-slide/`,
-  `docs/phase-handoff/`, and existing phase output folders remain available for
-  historical compatibility.
+- Legacy files in `project/`, `component-from-slide/`, `style-from-slide/`, and
+  existing phase output folders remain available for historical compatibility.
 
 ## Legacy SUN.RISER Job
 
 `plan.md` and `plan_per_phase.md` describe the earlier SUN.RISER production
 job. They are not the architecture for future AI slide jobs.
-
