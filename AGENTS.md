@@ -11,9 +11,8 @@ For new AI slide work, use:
   component extraction.
 
 The shared architecture is documented in `slide-system/README.md`.
-`plan.md`, `plan_per_phase.md`, existing phase manifests, and existing outputs
-are legacy SUN.RISER job contracts. Keep them unchanged unless the user asks to
-modify that historical job.
+Historical SUN.RISER planning contracts and phase artifacts have been removed;
+use the active skills, rules, workflows, registries, and brand pack instead.
 
 Use `rtk` as required by `/Users/home/.codex/RTK.md`.
 
@@ -29,8 +28,17 @@ For a new slide job, read:
 6. Job inputs and approved requirement package
 7. Published items in `slide-system/registries/visual-library.json`
 
-For legacy SUN.RISER work, also inspect the relevant files in `project/`,
-`chats/`, `project/uploads/`, `other-slides/`, and historical phase outputs.
+## Product Direction
+
+This workspace serves SUN.STUDIO slide creators, reviewers, mentors, and
+internal teams producing training, onboarding, workshop, and presentation
+materials from structured prompts and approved brand resources.
+
+Outputs should be content-faithful, on brand, editable where required, and
+packaged with source authority, QA evidence, checksums, and delivery manifests.
+
+Use a friendly, skilled, reliable voice: energetic but professional, coaching
+rather than lecturing, and concise enough for internal presentations.
 
 ## Canonical SUN.STUDIO Assets
 
@@ -66,9 +74,6 @@ Primary brand values:
   blended gradients that must stay visually faithful.
 - Never trigger extraction automatically from slide generation.
 
-Legacy files in `component-from-slide/` and `style-from-slide/` remain in place
-for compatibility. Their entries are registered as `qa`.
-
 ## Output Boundaries
 
 New slide jobs:
@@ -92,8 +97,17 @@ Each item requires explicit approval before publication.
 
 - Preserve approved source content exactly unless the user approves edits.
 - Record copy suggestions separately.
+- Avoid generic AI slide templates, stock-looking visuals, overused glass
+  cards, decorative gradients without content purpose, unsupported staging
+  components, and unapproved changes to generated outputs.
+- Preserve source authority before visual invention.
+- Use one strong visual anchor per slide.
+- Prefer published reusable resources before creating slide-local structures.
+- Keep foreground content editable and reviewable.
+- Target clear projection readability at `1920x1080`, strong text contrast,
+  restrained motion with reduced-motion support, no overlapping text, and slide
+  layouts that remain legible when scaled in the deck viewer.
 - Record source authority, selected/rejected visual candidates, overrides,
   export limitations, and checksums.
 - Verify HTML content, editable PPTX objects, PDF render, PPTX ZIP integrity,
   font availability, image crop and z-order, and HTML-versus-PPTX evidence.
-

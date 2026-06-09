@@ -1,14 +1,4 @@
 {
   "schema_version": 1,
-  "aliases": {
-    "sun-metric-card": "sun.card.metric-card",
-    "sun-goal-target": "sun.component.goal-target",
-    "sun-level-expectation": "sun.component.level-expectation",
-    "sun-goal-sun-stack": "sun.component.goal-sun-stack",
-    "sun-q4-objectives": "sun.template.q4-objectives",
-    "sun-qr-stack": "sun.component.qr-stack",
-    "goal-target-rings": "sun.style.goal-target-rings",
-    "level-expectation-gradient": "sun.style.level-expectation-gradient"
-  }
+  "aliases": {}
 }
-

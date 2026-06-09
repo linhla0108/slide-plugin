@@ -28,7 +28,6 @@ decks and maintaining a reusable visual library.
 - Manual extraction batches: `outputs/component-extractions/<extraction-id>/`
 - Shared system files never belong inside a job run.
 - Job runs reference published visual IDs and versions.
-- Historical `outputs/phase-*` folders are immutable legacy artifacts.
 
 ## Default Brand
 

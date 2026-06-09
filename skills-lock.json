@@ -19,12 +19,6 @@
       "skillPath": ".agents/skills/hi-fi-design/SKILL.md",
       "computedHash": "fdc06d34a1b33964bb48c260fedf0b71d53ffe0b1fee3cc653a076d2933cd81b"
     },
-    "interactive-prototype": {
-      "source": "local",
-      "sourceType": "local",
-      "skillPath": ".agents/skills/interactive-prototype/SKILL.md",
-      "computedHash": "aeae76b8abcfac3876460b1207c27d1f8d101e6b0eefc572923a4f18865fb80d"
-    },
     "make-a-deck": {
       "source": "local",
       "sourceType": "local",
@@ -75,4 +69,3 @@
     }
   }
 }
-

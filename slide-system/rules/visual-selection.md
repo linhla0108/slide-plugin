@@ -23,3 +23,6 @@ Always record selected and rejected candidates with scores and reasons.
 Extraction may be recommended, but generation must never trigger extraction
 automatically.
 
+Prefer published reusable resources before creating slide-local structures, but
+do not create or modify public reusable components without explicit user
+approval.

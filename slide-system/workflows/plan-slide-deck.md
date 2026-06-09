@@ -7,6 +7,7 @@ Expand it into:
 - Exact content model and source authority.
 - Slide titles and narrative order.
 - Section map and reading order.
+- Divergence summary when supplied sources disagree.
 - Visual direction and brand pack.
 - Export contract and editability level.
 - Known limitations and unresolved decisions.

@@ -1,7 +1,7 @@
 {
   "packaged_at": "2026-06-08T12:27:00+07:00",
   "run_dir": "/Users/home/Documents/work-space/sun-riser-2026/outputs/slide-jobs/unity-roadmap-intern-3-months/runs/2026-06-08-v2",
-  "file_count": 27,
+  "file_count": 24,
   "files": [
     {
       "path": "analysis/capability-report.json",
@@ -74,21 +74,6 @@
       "sha256": "082f6554b47878e2c286180b81e7dbe5ecaa038a9f832f3e14028b852aff3262"
     },
     {
-      "path": "html/assets/fonts/Proxima-Nova-Bold.otf",
-      "bytes": 205184,
-      "sha256": "7a2fed857e51db936e8829156feb848e59db2f91a9391664031da08e1afeee46"
-    },
-    {
-      "path": "html/assets/fonts/Proxima-Nova-Regular.otf",
-      "bytes": 197696,
-      "sha256": "b97622578f2703f47181581720b5801b266c60e741558115e008f77d7817ae40"
-    },
-    {
-      "path": "html/assets/fonts/Proxima-Nova-SemiBold.otf",
-      "bytes": 200348,
-      "sha256": "a4a52b4c69923fec0460859b92e5d5177eb586538cf721e3ca4244022d1da9b0"
-    },
-    {
       "path": "html/assets/icons/badge-check.svg",
       "bytes": 976,
       "sha256": "866f2f2f580e96d9ebf28692fb6cc97122e7861c71cdaddb496c415b4b6316cc"
@@ -120,8 +105,8 @@
     },
     {
       "path": "html/index.html",
-      "bytes": 38130,
-      "sha256": "e739fbb84cfc165b4303d96882e8b698f4bd2449d44203869d2a80339d7ce5ba"
+      "bytes": 38326,
+      "sha256": "a744a7d300f7411213351949d9e8b7a974e3b15e85ba458b6be98baf17195248"
     },
     {
       "path": "qa/qa-report.md",

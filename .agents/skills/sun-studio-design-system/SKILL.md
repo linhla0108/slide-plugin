@@ -87,9 +87,8 @@ The canonical component set under `assets/system/components/` includes:
 Each component imports `_base.css`, which imports the canonical token file.
 Use the `--cs` custom property to scale components uniformly.
 
-The consuming repository may also contain `component-from-slide/` and
-`style-from-slide/`. Treat those as project extensions extracted from additional
-company slides. They do not override canonical brand tokens.
+Project-specific reusable visuals must be registered through the shared visual
+library and must not override canonical brand tokens.
 
 ## Asset Handling
 
@@ -117,4 +116,3 @@ Before delivery:
 - Confirm page numbers and folio treatments are not duplicated.
 - When exporting to PPTX or Canva, state any unsupported CSS or editability
   limitations.
-

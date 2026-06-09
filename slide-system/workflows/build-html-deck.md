@@ -8,6 +8,8 @@ Build only after approval.
 - Use the approved brand pack and published visual-item versions.
 - Reference shared assets in place; never copy them per run. Brand fonts,
   icons, and brand images load from the canonical brand-pack location.
+- Use canonical, self-contained, resolvable font and asset paths; do not depend
+  on removed prototype folders or external workspace paths.
 - Keep one shared `<job-id>/assets/` folder for job-scoped assets not in a
   brand pack. Every run references that folder; runs never re-copy it.
 - Copy an asset into a run only when it is unique to that single run.
