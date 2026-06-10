@@ -72,8 +72,8 @@ on the machine.
 | Input | Allowed provider | Level | Why |
 |---|---|---|---|
 | PDF → source SVG | `PyMuPDF` (`pip install PyMuPDF`), `page.get_svg_image(...)` | required for PDF source extraction | The only approved text-preserving PDF→SVG provider. Emits native SVG with `<text>` nodes and embedded rasters. |
-| PDF → reference PNG | PyMuPDF `page.get_pixmap(...)`; Poppler (`pdftoppm`) acceptable if already installed (Tier 2) | recommended | Raster reference for render-parity QA only. |
-| PPTX | LibreOffice `soffice --headless` → PDF, then PyMuPDF | required for PPTX input | Tier 2 system app per `REQUIREMENTS.md`. Verify fonts are installed before judging fidelity. |
+| PDF → reference PNG | PyMuPDF `page.get_pixmap(...)`; Poppler (`pdftoppm`) acceptable if already installed | recommended | Raster reference for render-parity QA only. |
+| PPTX | LibreOffice `soffice --headless` → PDF, then PyMuPDF | required for PPTX input | System app, approved in `REQUIREMENTS.md`. Verify fonts are installed before judging fidelity. |
 | PNG/JPG | SVG image wrapper `<svg><image .../></svg>` | required for raster input | Preserve appearance exactly; no tracing. |
 
 Provider caveats:
@@ -132,7 +132,7 @@ Only install from the approved list in `REQUIREMENTS.md`:
 - raster optimizer: `sips` is built into macOS; `optimize_svg.py` silently skips raster optimization when absent — never a hard requirement.
 - SVG renderer: use the built-in Playwright/Chromium for parity checks; do not install standalone renderers.
 - PDF provider: `python3 -m pip install PyMuPDF` (the only approved PDF→SVG provider).
-- PPTX provider: `brew install --cask libreoffice` (Tier 2), then verify fonts used by the deck are installed.
+- PPTX provider: `brew install --cask libreoffice`, then verify fonts used by the deck are installed.
 
 A missing `optional` tool never blocks extraction — it is recorded as deferred.
 A missing source provider blocks only that source type, not SVG-package
