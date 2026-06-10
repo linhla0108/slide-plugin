@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T21:25:04+07:00",
+  "generated_at": "2026-06-10T15:21:26+07:00",
   "counts": {
     "published": 2,
-    "staging": 14
+    "staging": 15
   },
   "items": [
     {
@@ -88,6 +88,134 @@
       },
       "limitations": [
         "Use selectively on title, section, and closing slides."
+      ]
+    },
+    {
+      "id": "sun.template.slide-5",
+      "version": "1.0.0",
+      "name": "Slide 5 Template",
+      "type": "template",
+      "category": "full-slide-template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide-template",
+        "layout-template",
+        "sun-riser",
+        "slide-5"
+      ],
+      "tags": [
+        "full-slide",
+        "template",
+        "sun-riser",
+        "slide-5",
+        "what-we-planned"
+      ],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-slide-5-template/items/slide-5/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-connect",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "what-we-planned",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "05",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "what-we",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "planned-for-2025",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "what-we-set-out-to-achieve",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 9,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Complex source decoration is preserved as external PNG image layers referenced from the visual SVG.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
     },
     {

@@ -1,0 +1,13 @@
+{
+  "extraction_id": "sun-slide-5-template",
+  "created_at": "2026-06-10T14:37:45+07:00",
+  "source_path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+  "items": [
+    {
+      "item_id": "slide-5",
+      "status": "staging",
+      "candidate_id": "sun.template.slide-5",
+      "version": "1.0.0"
+    }
+  ]
+}

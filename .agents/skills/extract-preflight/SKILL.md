@@ -63,14 +63,26 @@ When the user provides non-SVG inputs, preflight must check the matching provide
 path before claiming the extraction environment is ready for that input type.
 Keep this as a separate source-normalization layer before `component-extractor`.
 
-| Input | Preferred provider | Level | Why |
+**Allowed-library policy:** the approved install surface is governed by
+`REQUIREMENTS.md` at the repo root. Use only the providers listed below — do not
+try, suggest, or install alternatives (`pdf2svg`, `mutool`, Aspose, `vtracer`,
+`potrace`, `cairosvg`, `rsvg-convert`, `inkscape`, …) even if they are present
+on the machine.
+
+| Input | Allowed provider | Level | Why |
 |---|---|---|---|
-| PDF | `PyMuPDF` / `fitz` or `pdf2svg`/Poppler | required for PDF-only input | Historical PDF extraction used a bundled PDF runtime to generate exact page SVGs. PyMuPDF's `page.get_svg_image(...)` can emit native SVG with embedded raster images. Poppler/pdf2svg is the open-source CLI alternative. |
-| PDF fallback | MuPDF `mutool draw -F svg` | recommended | Strong fallback when Poppler/PyMuPDF output fails or a page needs a second converter. |
-| PPTX | LibreOffice/`soffice --headless` to PDF, then PDF-to-SVG provider | required for PPTX input | Practical local/offline route for PowerPoint sources. Verify fonts are installed before judging fidelity. |
-| PPTX high fidelity | Aspose.Slides local SDK | optional | Commercial fallback when LibreOffice fidelity is not enough. Do not use cloud converters for sensitive sources. |
-| PNG/JPG exact | SVG image wrapper | required for raster input | Preserve appearance by wrapping the raster in `<svg><image .../></svg>` when true vectorization is not appropriate. |
-| PNG/JPG vectorization | `vtracer` or `potrace` | optional | Trace flat art, icons, logos, or monochrome line art only when render parity passes. Do not trace photos/screenshots by default. |
+| PDF → source SVG | `PyMuPDF` (`pip install PyMuPDF`), `page.get_svg_image(...)` | required for PDF source extraction | The only approved text-preserving PDF→SVG provider. Emits native SVG with `<text>` nodes and embedded rasters. |
+| PDF → reference PNG | PyMuPDF `page.get_pixmap(...)`; Poppler (`pdftoppm`) acceptable if already installed (Tier 2) | recommended | Raster reference for render-parity QA only. |
+| PPTX | LibreOffice `soffice --headless` → PDF, then PyMuPDF | required for PPTX input | Tier 2 system app per `REQUIREMENTS.md`. Verify fonts are installed before judging fidelity. |
+| PNG/JPG | SVG image wrapper `<svg><image .../></svg>` | required for raster input | Preserve appearance exactly; no tracing. |
+
+Provider caveats:
+
+- Poppler's `pdftocairo -svg` renders text as vector paths (zero `<text>`
+  nodes), which breaks the editable-text-slot pipeline — never use it as the
+  extraction source SVG.
+- Raster vectorization (`vtracer`/`potrace`) is **not** in the approved set:
+  keep embedded rasters as optimized raster files.
 
 Do not treat missing source-to-SVG providers as a blocker for jobs that already
 provide page-level SVG and PNG reference files. Do treat them as blockers when
@@ -91,17 +103,10 @@ Required handling:
 4. Preserve original SVG geometry: `x`, `y`, `width`, `height`, `transform`,
    `clip-path`, `mask`, z-order, and paint order.
 
-Optional vectorization:
-
-- Use `vtracer` for color flat art, icons, logos, diagrams, and small
-  illustration fragments.
-- Use `potrace` for binary or monochrome line art after thresholding.
-- Never vectorize photos, screenshots, textures, or rich gradients by default;
-  keep them raster and optimize them instead.
-- Replace an `<image>` with traced paths only when HTML/Chromium render parity
-  against the pre-vectorized SVG passes. If parity fails, keep the raster.
-- If an embedded raster sits under a matrix transform, clip, or mask, the traced
-  replacement must preserve that same transform/clip/mask contract.
+Vectorization of embedded rasters is not allowed (`vtracer`/`potrace` are
+outside the approved library set in `REQUIREMENTS.md`). Keep rasters as
+optimized raster files with their original `transform`/`clip-path`/`mask`
+contract intact.
 
 ## Recommended Source Normalization Output
 
@@ -121,12 +126,13 @@ decisions, fallback provider use, and render-parity evidence.
 
 ## Satisfying Missing Requirements
 
+Only install from the approved list in `REQUIREMENTS.md`:
+
 - `xmllint`: ships with libxml2 (preinstalled on macOS; `apt install libxml2-utils` on Debian/Ubuntu).
-- raster optimizer: `sips` is built into macOS; elsewhere install ImageMagick (`magick`/`convert`).
-- SVG renderer: prefer Playwright/Chromium for project parity checks; use `brew install librsvg` (`rsvg-convert`) or `pip install cairosvg` only when its SVG feature coverage is sufficient for the source.
-- PDF providers: `python3 -m pip install PyMuPDF`, `brew install poppler pdf2svg`, or `brew install mupdf`.
-- PPTX provider: `brew install --cask libreoffice`, then verify fonts used by the deck are installed.
-- raster vectorizers: `python3 -m pip install vtracer` and/or `brew install potrace`.
+- raster optimizer: `sips` is built into macOS; `optimize_svg.py` silently skips raster optimization when absent — never a hard requirement.
+- SVG renderer: use the built-in Playwright/Chromium for parity checks; do not install standalone renderers.
+- PDF provider: `python3 -m pip install PyMuPDF` (the only approved PDF→SVG provider).
+- PPTX provider: `brew install --cask libreoffice` (Tier 2), then verify fonts used by the deck are installed.
 
 A missing `optional` tool never blocks extraction — it is recorded as deferred.
 A missing source provider blocks only that source type, not SVG-package

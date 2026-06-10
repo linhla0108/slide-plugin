@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-09T19:52:06+07:00",
+  "updated_at": "2026-06-10T14:52:50+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -191,6 +191,26 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "e986bc578c5f484d78dbd216c442f27978d37fd5e37c565b67b3439911d184f2",
       "semantic_signature_sha256": "f78d8a0d44265a0abde14abef6f7b0bf87e82b23c10cc64270c001727fd70336"
+    },
+    {
+      "attempted_at": "2026-06-10T14:37:45+07:00",
+      "extraction_id": "sun-slide-5-template",
+      "item_id": "slide-5",
+      "stable_id": "sun.template.slide-5",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "d1d136bc02f25b39671cbb110b3ec79f5d25c08affb7745b6ef3347b54f9188e"
+    },
+    {
+      "attempted_at": "2026-06-10T14:52:50+07:00",
+      "extraction_id": "sun-slide-5-v2",
+      "item_id": "slide-5",
+      "stable_id": "sun.template.slide-5",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "77f6d26fa8e92045a03831040c466a5f7a979e0555147788405e3c9ea04055af"
     }
   ]
 }

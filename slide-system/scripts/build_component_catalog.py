@@ -37,7 +37,7 @@ def main() -> int:
             items.append(
                 {
                     "id": mapping["candidate_stable_id"],
-                    "version": "0.0.0",
+                    "version": mapping.get("version", "0.0.0"),
                     "name": mapping.get("name", mapping["item_id"]),
                     "type": mapping["type"],
                     "category": mapping.get("category", mapping["type"]),
