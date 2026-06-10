@@ -141,124 +141,28 @@ Are you using the Claude app?
 
 ---
 
-# Inventory — skills & scripts
+## Requirements per skill / flow
 
-A full audit of what each skill and script does, what it needs installed, and
-whether to keep or trim it. **Audit only** — nothing here was removed.
+What each flow in this repo actually needs. Anything not listed here runs on
+Tier 0 (nothing to install).
 
-**Legend for the "Install" column:**
-`none` = runs on Claude built-ins, zero install ·
-`pip`/`npm` = language package ·
-`system` = full app via `brew`/installer (hardest for non-tech).
+| Flow / skill | Requirement |
+|---|---|
+| Make a new deck — `slide-generator`, `make-a-deck`, `sun-studio-design-system`, `export-as-editable-pptx`, `hi-fi-design`, `make-tweakable` | **Nothing** (Tier 0) |
+| Component extraction — `component-extractor`, `extract-preflight`, `svg-extractor` + all `slide-system/scripts/` | **Nothing** (Tier 0, stdlib scripts). PDF source → add **PyMuPDF** (Tier 2) |
+| Render-parity QA — `compare_renders.py` | `pip install Pillow` |
+| Send a design to Canva — `send-to-canva` | Canva login (MCP), no install |
+| Read an Office file as context | Tier 1: `pip install "markitdown[pptx,docx,xlsx]"` |
+| Polish / rebuild an existing `.pptx` — `pptx` skill | Tier 1 + Pillow; LibreOffice + Poppler only for the PPTX→PDF→image QA loop |
+| Bulk doc→SVG→PPTX engine — `ppt-master` (advanced) | `.agents/skills/ppt-master/requirements.txt` (~13 pip) + pandoc for legacy formats |
+| Standalone machine (no Claude app) | Node 18+ → `./slide-system/scripts/setup.sh` (installs Playwright, python-pptx, Pillow) |
 
-## Skills (`.agents/skills/`)
+Notes:
 
-Ten of the twelve skills are **prompt-only** — they carry no bundled code and
-just drive Claude's built-in tools (`gen_pptx`, Playwright, Canva MCP, the file
-reader, vision). They cost **nothing to install** and should all be kept.
-
-| Skill | What it does | Bundled code | Install | Keep / Cut |
-|-------|--------------|:---:|:---:|------------|
-| `slide-generator` | Master orchestrator: intake → plan → select → build → export → QA | prompt only | none | **Keep** — main entry point |
-| `make-a-deck` | Build a self-contained HTML deck (narrative, typography, notes) | prompt only | none | **Keep** — core HTML build |
-| `sun-studio-design-system` | Apply SUN.STUDIO brand (colors, Proxima Nova, logo/Dio, layouts) | prompt only | none | **Keep** — brand authority + fonts |
-| `export-as-editable-pptx` | HTML deck → editable PPTX via `gen_pptx` | prompt only | none (built-in) | **Keep** — primary PPTX path |
-| `component-extractor` | Extract user-selected regions into reusable library items | prompt only¹ | none | **Keep** — drives slide-system scripts |
-| `svg-extractor` | Inspect SVG structure/geometry/text for reconstruction | 1 py (stdlib) | none | **Keep** — zero cost |
-| `extract-preflight` | Verify toolchain before extraction; write readiness marker | prompt only | none | **Keep** — zero cost |
-| `hi-fi-design` | Polished hi-fi interface/design explorations | prompt only | none | **Keep** — zero cost |
-| `make-tweakable` | Add a "Tweaks" control panel to a design | prompt only | none | **Keep** — zero cost |
-| `send-to-canva` | Publish HTML design → import into Canva (Canva MCP) | prompt only | none (MCP) | **Keep** — zero cost; needs Canva login only |
-| `pptx` | Read / edit / create `.pptx` files directly | 16 py | pip + **system** | **Keep, trim deps** — see below |
-| `ppt-master` | Doc (PDF/DOCX/URL/MD) → SVG pages → PPTX, multi-role engine | 124 py + reqs | pip-heavy + **system** | **Review / candidate cut** — see below |
-
-¹ `component-extractor` has no bundled code itself; it calls the stdlib scripts
-in `slide-system/scripts/` (below).
-
-### The two heavy skills
-
-**`pptx`** — needed only when a user brings an existing `.pptx` to read or edit
-(intake Case 3). Its declared deps: `markitdown[pptx]`, `Pillow` (pip) and
-**LibreOffice + Poppler** (system).
-- **Keep the skill.** **Trim the system deps:** Claude reads `.pptx` text through
-  `markitdown` (pip) and can render previews via the built-in Playwright instead
-  of LibreOffice/Poppler. The two system apps are only needed for the
-  PPTX→PDF→image QA loop; the HTML-first flow avoids them.
-
-**`ppt-master`** — a complete alternate engine (Chinese multi-role SVG→PPTX) that
-converts source documents into slides. Even after the 2026-06 dep trim (TTS,
-watermark, and rotate tooling removed), it carries the **single largest install
-burden** in the repo: `python-pptx`, `PyMuPDF`, `cairosvg`/`svglib`+`reportlab`,
-`Pillow`, `mammoth`, `markdownify`, `ebooklib`, `nbconvert`, `openpyxl`,
-`requests`, `beautifulsoup4`, `flask`, plus `pandoc` (system). Its optional AI
-image backend additionally imports `google-genai` at its own load time (not in
-`requirements.txt`).
-- **Function overlap:** deck creation is already covered by `make-a-deck` +
-  `slide-generator`; PPTX export by `export-as-editable-pptx`.
-- Its **unique** capability is bulk **document-ingestion → SVG pages** (PDF/DOCX/
-  URL → slides) — not offered elsewhere.
-- **Recommendation:** if you never use the doc→SVG bulk flow, **cut this skill**
-  to erase the entire `requirements.txt` burden. If you do, **keep it but mark it
-  advanced** and install its reqs only on demand. This is the #1 lever for a
-  lighter non-tech footprint.
-
-## Scripts (`slide-system/scripts/`)
-
-**Almost every script is pure Python stdlib.** The exceptions: `build_hybrid_pptx.py`
-(python-pptx, Pillow — standalone path), `compare_renders.py` (Pillow — exits with a
-clear install hint when absent), and `test_export_stack.py` (python-pptx — tests the
-standalone path). `_common.py` uses Pillow only for image hashing and degrades
-gracefully without it. The stdlib scripts run on the Claude-bundled Python with
-**zero install** and should all be kept.
-
-| Script | What it does | Install | Used by | Keep / Cut |
-|--------|--------------|:---:|---------|------------|
-| `_common.py` | Shared helpers (paths, hashing, JSON, fingerprints) | none | all scripts | **Keep** |
-| `check_requirements.py` | Validate a job's requirement file vs capabilities | none | slide-generator | **Keep** |
-| `check_base_requirements.py` | Preflight toolchain; write readiness marker (probes only) | none | extract-preflight | **Keep** |
-| `update_capabilities.py` | Refresh cached tool capabilities when needed | none | both pipelines | **Keep** |
-| `score_visual_items.py` | Score published library items for a slide need | none | slide-generator | **Keep** |
-| `validate_registry.py` | Validate registry IDs / paths / statuses / aliases | none | library upkeep | **Keep** |
-| `package_job.py` | Build checksum manifest for a finished run | none | package-delivery | **Keep** |
-| `compare_renders.py` | Visual-diff evidence for two equal-size renders | **pip**: Pillow | render parity QA | **Keep** |
-| `scaffold_extraction.py` | Stage a manual extraction package | none | component-extractor | **Keep** |
-| `publish_extraction.py` | Publish an approved item into the shared library | none | component-extractor | **Keep** |
-| `fingerprint_source.py` | Deterministic source/region fingerprints | none | component-extractor | **Keep** |
-| `extract_editable_text_slots.py` | Split SVG text into editable text-slot contracts | none | component-extractor | **Keep** |
-| `validate_text_slots.py` | Validate the text-slot contract | none | component-extractor | **Keep** |
-| `apply_text_contract.py` | Update batch mappings after text-slot extraction | none | component-extractor | **Keep** |
-| `build_text_slot_gallery.py` | Build a batch review gallery | none | component-extractor | **Keep** |
-| `build_component_catalog.py` | Generate catalog data from registry items | none | rebuild-catalog | **Keep** |
-| `externalize_svg_images.py` | Replace embedded SVG data-URIs with files | none | component-extractor | **Keep** |
-| `optimize_svg.py` | Trim SVG precision; recompress rasters | none² | component-extractor | **Keep** |
-| `build_hybrid_pptx.py` | Renders + DOM layout → editable PPTX (no Claude) | **pip**: python-pptx, Pillow | standalone path | **Keep (fallback)** — see below |
-| `test_export_stack.py` | Self-test for the standalone export stack | **pip**: python-pptx | standalone path | **Keep (fallback)** |
-| `capture-slides.js` | Render slides to PNG + extract DOM layout (Playwright) | **npm**: playwright | standalone path | **Keep (fallback)** |
-| `export-pdf.js` | HTML deck → PDF via headless Chromium (Playwright) | **npm**: playwright | standalone path | **Keep (fallback)** |
-| `setup.sh` | One-shot installer for the standalone path | — | non-Claude machines | **Keep (fallback)** |
-
-² `optimize_svg.py` uses `sips` (built into macOS) when present and silently
-skips raster optimization if absent — never a hard requirement.
-
-## The standalone path is a deliberate fallback — keep it
-
-`build_hybrid_pptx.py`, `capture-slides.js`, `export-pdf.js`, `setup.sh`,
-`package.json`, and their deps (`playwright`, `python-pptx`, `Pillow`) exist so
-the system can run **without the Claude app** — e.g. driven by another LLM or in
-plain CI. **Keep all of it.** These deps install **only** when someone runs
-`setup.sh` on a non-Claude machine; they never burden a Claude-app user.
-
-## Bottom line — what actually needs installing
-
-| Group | Items | Install | Verdict |
-|-------|-------|:---:|---------|
-| 10 prompt skills + 19 stdlib scripts | the whole core flow | **none** | Keep all — free |
-| Office-file reading | `markitdown[pptx,docx,xlsx]` | one `pip` | Keep — light, on demand |
-| Standalone fallback | playwright, python-pptx, Pillow | `setup.sh` | Keep — non-Claude path, on demand |
-| `pptx` system deps | LibreOffice, Poppler | system | **Trimmable** — replace with markitdown + Playwright |
-| `ppt-master` full reqs | ~13 pip + pandoc | pip-heavy + system | **#1 cut candidate** if doc→SVG flow is unused |
-
-**Net:** for a non-tech Claude-app user, the realistic install surface shrinks to
-**zero** (new decks) or **one `pip` line** (Office files). The only genuinely
-heavy thing in the repo is `ppt-master`; cutting or deferring it removes almost
-the entire install burden without touching the core slide pipeline.
+- All `slide-system/scripts/` are pure Python stdlib except
+  `compare_renders.py` (Pillow), `build_hybrid_pptx.py` and
+  `test_export_stack.py` (standalone path, installed by `setup.sh`).
+  `optimize_svg.py` uses macOS `sips` when present and silently skips raster
+  recompression without it.
+- The allowed library set is exactly the tables above — do not add or
+  substitute converters/tools outside them (see the PyMuPDF note in Tier 2).
