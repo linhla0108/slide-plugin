@@ -108,7 +108,7 @@ When the user provides non-Markdown content, convert immediately:
 | PPTX / PowerPoint deck | `python3 ${SKILL_DIR}/scripts/source_to_md/ppt_to_md.py <file>` |
 | EPUB / HTML / LaTeX / RST / other | `python3 ${SKILL_DIR}/scripts/source_to_md/doc_to_md.py <file>` |
 | Web link | `python3 ${SKILL_DIR}/scripts/source_to_md/web_to_md.py <URL>` |
-| WeChat / high-security site | `python3 ${SKILL_DIR}/scripts/source_to_md/web_to_md.py <URL>` (requires `curl_cffi`, included in `requirements.txt`) |
+| WeChat / high-security site | `python3 ${SKILL_DIR}/scripts/source_to_md/web_to_md.py <URL>` (optional: `pip install curl_cffi` for TLS impersonation; falls back to plain `requests`) |
 | Markdown | Read directly |
 
 > **Office vector assets (EMF/WMF) from DOCX/PPTX sources**:
@@ -515,12 +515,6 @@ python3 ${SKILL_DIR}/scripts/svg_to_pptx.py <project_path>
 **Optional custom animations** (only when the user asks to tune animation order/effects/timing for specific objects):
 
 Run the standalone [`customize-animations`](workflows/customize-animations.md) workflow. Default export already has global entrance animation; do not create `animations.json` unless object-level customization was requested.
-
-**Optional recorded narration** (only when the user asks for narrated/video export):
-
-Run the standalone [`generate-audio`](workflows/generate-audio.md) workflow. The AI picks a narration backend (`edge` by default, or a configured cloud provider such as ElevenLabs / MiniMax / Qwen / CosyVoice for high-quality or cloned voices), asks the user once (backend + voice + rate/settings + embed-or-not, all with recommended values), then executes `notes_to_audio.py` and (if chosen) re-exports the PPTX with `--recorded-narration audio`.
-
-Do NOT call `notes_to_audio.py` directly without going through the workflow — `--voice` / `--voice-id` is required and the workflow produces the locale/provider-aware recommendation that makes the choice meaningful.
 
 Full effect list, anchor logic, and limits: [`references/animations.md`](references/animations.md).
 

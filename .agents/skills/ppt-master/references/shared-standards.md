@@ -321,12 +321,13 @@ python3 scripts/svg_to_pptx.py <project_path>
 
 **Optional recorded narration** (only when the user asks for narrated/video export):
 
+Provide one audio file per slide in `audio/` (named to match the split
+`notes/*.md` files), then embed them:
+
 ```bash
-python3 scripts/notes_to_audio.py <project_path> --voice zh-CN-XiaoxiaoNeural
 python3 scripts/svg_to_pptx.py <project_path> --recorded-narration audio
 ```
 
-- `notes_to_audio.py` reads split `notes/*.md` files and writes one audio file per slide to `audio/`. Default `edge` output is MP3; configured cloud providers may output MP3 or WAV depending on provider settings.
 - `--recorded-narration audio` prepares PowerPoint's recorded timings and narrations: every slide needs matching `m4a` / `mp3` / `wav` audio, every duration must be readable by `ffprobe`, and `on-click` object animation is rejected.
 - `--recorded-narration audio` embeds matching audio, keeps speaker notes, and sets slide timings from audio duration.
 - `--narration-audio-dir audio` is the lower-level embedding path for partial audio coverage; it does not prepare a complete recorded-timings export.
