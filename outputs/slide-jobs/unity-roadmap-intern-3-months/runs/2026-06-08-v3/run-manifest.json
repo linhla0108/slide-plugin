@@ -95,8 +95,9 @@
     },
     {
       "type": "export-script",
-      "path": "pptx/build_v3_hybrid_editable.py",
-      "status": "complete"
+      "path": "slide-system/scripts/_reference/build_v3_hybrid_editable.py",
+      "status": "complete",
+      "note": "Promoted out of the run to a repo-level frozen reference; generalized into slide-system/scripts/build_hybrid_pptx.py. Path is repo-root-relative."
     },
     {
       "type": "export-layout",
@@ -115,9 +116,9 @@
     "approval-package.md": "082f6554b47878e2c286180b81e7dbe5ecaa038a9f832f3e14028b852aff3262",
     "analysis/polish-notes.md": "f01dd88c84ed0f30fee94d5ecf401acaff9ca8959708b41f6290b2da32f27b6e",
     "qa/qa-report.md": "e266d54823a68972b6bd1c62896f022dbe4867c2c316a6821930bb1d22e0b9ed",
-    "reports/delivery-report.md": "2e39d5df1a983a2c987a420dbea4a491c9c4714c33163fae54cf556c7af45602",
+    "reports/delivery-report.md": "f2dea89d484c5a7b1be7c9032f40f35d483de34603a1b5b865a65cb70781b446",
     "qa/export-layout.json": "9e4e77b6a7caf2008acffe92362af158ca01d5f6c21119964b7c420c4a1c4897",
-    "pptx/build_v3_hybrid_editable.py": "8281864197d543ece219c733d0a1974f058f0d9de6f39870efa87cec4bfde016",
+    "slide-system/scripts/_reference/build_v3_hybrid_editable.py": "17c0463d6df6bbbc7495f515d2e0a6b46ad7c2d8d725f05e4c61f823f303e301",
     "pptx/unity-roadmap-intern-3-months-v3-editable-hybrid.pptx": "404ddadc61ede7d62b08ab234c3006158ee2b87fdc46430e2ea0cfc4208e0495",
     "pdf/unity-roadmap-intern-3-months-v3.pdf": "1f340594fb051a0df924bb0b193f4745f95988ad2bad79d7602f5dd55bd227c9"
   }

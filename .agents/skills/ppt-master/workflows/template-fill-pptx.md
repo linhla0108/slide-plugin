@@ -182,7 +182,7 @@ The plan structure:
 
 **Speaker notes (the `notes` field)** — distilled from the main pipeline's Logic Construction Phase, scaled to one note per planned slide:
 
-Each `notes` value is **pure spoken narration**: write only what a presenter would say aloud, so the same text also works if the deck is later sent through `notes_to_audio.py`. The note explains and connects; it must not just restate the words already on the slide.
+Each `notes` value is **pure spoken narration**: write only what a presenter would say aloud, so the same text also works for narrated/video export. The note explains and connects; it must not just restate the words already on the slide.
 
 | Rule | Detail |
 |---|---|

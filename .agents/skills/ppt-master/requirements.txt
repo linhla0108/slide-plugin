@@ -16,11 +16,6 @@
 # 默认使用 Office 兼容模式（PNG + SVG 双格式），支持所有 Office 版本
 python-pptx>=0.6.21
 
-# Recorded narration / 录制计时和旁白
-# notes_to_audio.py generates per-slide narration audio on macOS/Linux/Windows.
-# notes_to_audio.py 用于在 macOS/Linux/Windows 上生成逐页旁白音频。
-edge-tts>=7.2.8
-
 # Office compatibility dependencies (choose one, CairoSVG preferred)
 # Office 兼容模式依赖（二选一，优先使用 cairosvg）
 # Converts SVG to PNG fallback images for Office LTSC 2021 etc.
@@ -77,31 +72,13 @@ openpyxl>=3.1.0
 # ─────────────────────────────────────────────────────────────
 # fix_image_aspect.py - Fix image aspect ratio (prevent stretching during PPT shape conversion)
 # fix_image_aspect.py - 修复图片宽高比（防止 PPT 转形状时拉伸）
-# gemini_watermark_remover.py - Remove watermarks from Gemini-generated images
-# gemini_watermark_remover.py - 去除 Gemini 生成图片的水印
 Pillow>=9.0.0
-numpy>=1.20.0
 
 # ─────────────────────────────────────────────────────────────
 # Web to Markdown tool / 网页转 Markdown 工具 (skills/ppt-master/scripts/source_to_md/web_to_md.py)
 # ─────────────────────────────────────────────────────────────
 requests>=2.31.0
 beautifulsoup4>=4.12.0
-# Optional — TLS fingerprint impersonation for sites that block Python's
-# default TLS fingerprint (e.g., WeChat mp.weixin.qq.com). If installed,
-# web_to_md.py uses it automatically; otherwise falls back to requests.
-# Install this to avoid needing Node.js for WeChat / portal pages.
-# 可选 —— 用于绕过 TLS 指纹屏蔽（例如微信公众号等）。装了之后 web_to_md.py
-# 会自动启用；不装则回退到 requests。装了它就不必再装 Node.js。
-curl_cffi>=0.7.0
-
-# ─────────────────────────────────────────────────────────────
-# AI image generation tool / AI 图片生成工具 (skills/ppt-master/scripts/image_gen.py)
-# ─────────────────────────────────────────────────────────────
-# Gemini backend / Gemini 后端 (IMAGE_BACKEND=gemini)
-google-genai>=1.0.0
-# OpenAI-compatible backend uses requests from the web tooling section above.
-# OpenAI 兼容后端复用上方网页工具所需的 requests。
 
 # ─────────────────────────────────────────────────────────────
 # SVG Editor / SVG 编辑器 (skills/ppt-master/scripts/svg_editor/server.py)

@@ -48,11 +48,11 @@ Do not export directly from `svg_output/` when `svg_final/` exists.
 
 ## Recorded Narration Missing
 
-1. Generate audio after `total_md_split.py`, so filenames in `audio/` can match split `notes/*.md` files.
-2. Export with the project-relative audio directory:
+1. Provide one audio file per slide in `audio/`, named to match the split
+   `notes/*.md` files (produced by `total_md_split.py`).
+2. Embed the audio with the project-relative audio directory:
 
 ```bash
-python3 scripts/notes_to_audio.py <project_path> --voice zh-CN-XiaoxiaoNeural
 python3 scripts/svg_to_pptx.py <project_path> --recorded-narration audio
 ```
 
@@ -73,8 +73,5 @@ pip install -r requirements.txt
 
 Important optional packages:
 - `python-pptx` for PPTX export
-- `edge-tts` for `notes_to_audio.py` recorded narration audio
 - `Pillow` for image utilities
-- `numpy` for watermark removal
 - `PyMuPDF` for PDF conversion
-- `google-genai` for Gemini image generation

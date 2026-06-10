@@ -144,21 +144,8 @@ python3 scripts/source_to_md/web_to_md.py -f urls.txt
 python3 scripts/source_to_md/web_to_md.py https://example.com -o output.md
 ```
 
-When `curl_cffi` is installed (included in `requirements.txt`), this script
+When `curl_cffi` is installed (optional — `pip install curl_cffi`), this script
 automatically impersonates a modern Chrome TLS fingerprint, which lets it
 fetch WeChat Official Accounts (`mp.weixin.qq.com`) and other sites that
 block Python's default TLS fingerprint. No extra flags needed. If
 `curl_cffi` is not available, it falls back to plain `requests`.
-
-
-## `rotate_images.py`
-
-Fix image EXIF orientation in downloaded or imported assets.
-
-```bash
-python3 scripts/rotate_images.py auto projects/xxx_files
-python3 scripts/rotate_images.py gen projects/xxx_files
-python3 scripts/rotate_images.py fix fixes.json
-```
-
-Use this when extracted photos appear sideways after conversion or import.

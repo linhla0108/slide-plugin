@@ -1,0 +1,18 @@
+{
+  "name": "sun-riser-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SUN.RISER 2026 slide-system standalone tooling (non-Claude path): capture-slides.js + build_hybrid_pptx.py + export-pdf.js",
+  "scripts": {
+    "setup": "bash slide-system/scripts/setup.sh",
+    "capture-slides": "node slide-system/scripts/capture-slides.js",
+    "build-pptx": "python3 slide-system/scripts/build_hybrid_pptx.py",
+    "export-pdf": "node slide-system/scripts/export-pdf.js"
+  },
+  "dependencies": {
+    "playwright": "^1.44.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

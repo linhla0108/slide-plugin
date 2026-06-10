@@ -7,7 +7,7 @@
 - PDF: `pdf/unity-roadmap-intern-3-months-v3.pdf`
 - Deck helper: `html/deck-stage.js`
 - Assets: `html/assets/`
-- Export builder: `pptx/build_v3_hybrid_editable.py`
+- Export builder (frozen reference, promoted to repo): `slide-system/scripts/_reference/build_v3_hybrid_editable.py`
 - Export render evidence: `qa/export-renders/`
 - Redesign notes: `analysis/polish-notes.md`
 - QA report: `qa/qa-report.md`

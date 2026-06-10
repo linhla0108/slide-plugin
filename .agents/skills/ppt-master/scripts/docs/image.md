@@ -199,23 +199,3 @@ Output:
 Allowed licenses (default): CC0, Public Domain, Pexels License, Pixabay Content License, CC BY, CC BY-SA. Auto-rejected: CC BY-NC, CC BY-ND, CC BY-NC-SA, CC BY-NC-ND, all rights reserved, unknown.
 
 The full role-level reference (intent → query translation, on-slide attribution visual specification) is in [`references/image-searcher.md`](../../references/image-searcher.md).
-
-## `gemini_watermark_remover.py`
-
-Remove Gemini watermark assets after manual download.
-
-```bash
-python3 scripts/gemini_watermark_remover.py <image_path>
-python3 scripts/gemini_watermark_remover.py <image_path> -o output_path.png
-python3 scripts/gemini_watermark_remover.py <image_path> -q
-```
-
-Notes:
-- Requires `scripts/assets/bg_48.png` and `scripts/assets/bg_96.png`
-- Best used after downloading “full size” Gemini images
-
-Dependencies:
-
-```bash
-pip install Pillow numpy
-```
