@@ -30,6 +30,7 @@ INCLUDES=(
   "slide-system"
   "AGENTS.md"
   "README.md"
+  "REQUIREMENTS.md"
   "skills-lock.json"
   ".gitignore"
   ".gitattributes"

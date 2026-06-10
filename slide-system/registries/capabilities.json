@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
-  "updated_at": "2026-06-07T00:46:04+07:00",
+  "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+  "updated_at": "2026-06-10T11:55:43+07:00",
   "tools": [
     {
       "tool_id": "node",
@@ -12,8 +12,8 @@
         "javascript-runtime",
         "deck-build-scripts"
       ],
-      "last_checked": "2026-06-07T00:46:04+07:00",
-      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
       "last_failure": null
     },
     {
@@ -26,8 +26,8 @@
         "registry-tools",
         "image-analysis"
       ],
-      "last_checked": "2026-06-07T00:46:04+07:00",
-      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
       "last_failure": null
     },
     {
@@ -39,33 +39,74 @@
         "xml-validation",
         "pptx-xml-inspection"
       ],
-      "last_checked": "2026-06-07T00:46:04+07:00",
-      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
       "last_failure": null
     },
     {
       "tool_id": "libreoffice",
-      "status": "unavailable",
+      "status": "available",
       "path": "/Users/home/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/soffice",
-      "version": null,
+      "version": "LibreOfficeDev 26.8.0.0.alpha0 2c87e51eeaa2b413ff4ae097b2705eea1995d8e5",
       "capabilities": [
         "pptx-to-pdf",
         "pptx-render"
       ],
-      "last_checked": "2026-06-07T00:46:04+07:00",
-      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
-      "last_failure": "dyld[43337]: Library not loaded: /opt/homebrew/opt/little-cms2/lib/liblcms2.2.dylib"
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_failure": null
     },
     {
       "tool_id": "gen-pptx",
+      "status": "available",
+      "source": "claude-code-builtin",
+      "path": null,
+      "version": "claude-code-builtin",
+      "capabilities": [
+        "editable-pptx-export"
+      ],
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_failure": null
+    },
+    {
+      "tool_id": "capture-slides",
       "status": "unknown",
+      "source": "standalone-script",
+      "path": null,
+      "version": null,
+      "capabilities": [
+        "slide-render-capture"
+      ],
+      "last_checked": null,
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_failure": "npm deps not installed. Run: ./slide-system/scripts/setup.sh"
+    },
+    {
+      "tool_id": "build-hybrid-pptx",
+      "status": "unknown",
+      "source": "standalone-script",
       "path": null,
       "version": null,
       "capabilities": [
         "editable-pptx-export"
       ],
       "last_checked": null,
-      "environment_fingerprint": "00efc28e833cce74ff75919139637877bfadb8ce454db74b60a74d0d8b50fc61",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_failure": "python-pptx not installed. Run: ./slide-system/scripts/setup.sh"
+    },
+    {
+      "tool_id": "playwright-pdf",
+      "status": "available",
+      "source": "claude-code-builtin",
+      "path": null,
+      "version": "claude-code-builtin",
+      "capabilities": [
+        "html-to-pdf",
+        "browser-print"
+      ],
+      "last_checked": "2026-06-10T11:55:43+07:00",
+      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
       "last_failure": null
     }
   ]

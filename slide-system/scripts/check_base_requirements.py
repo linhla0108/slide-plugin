@@ -41,7 +41,25 @@ REQUIREMENTS = [
     ("svg-renderer", "optional", ["rsvg-convert", "resvg", "inkscape", "cairosvg"], ["--version"],
      "Render SVG -> PNG/PDF at export time in the consuming job. Not needed to "
      "extract or preview components. Provision when you wire up export."),
+    # Export tools — optional at preflight; required at job time when exporting.
+    # Claude Code users: gen_pptx and playwright-pdf are built-in (no install).
+    # Non-Claude users: run ./slide-system/scripts/setup.sh to install the
+    # standalone deps (Node.js + Playwright, and python-pptx + Pillow). Then
+    # capture-slides.js, build_hybrid_pptx.py and export-pdf.js become available.
+    ("node", "optional", ["node"], ["--version"],
+     "Required for standalone capture-slides.js and export-pdf.js (non-Claude "
+     "path). Claude Code bundles its own Node.js; external users need Node 18+."),
 ]
+
+# Repo root — two levels up from this script (scripts/ → slide-system/ → repo)
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+
+def _npm_deps_installed() -> bool:
+    """Return True when npm install has been run in the repo root."""
+    return (_REPO_ROOT / "node_modules").is_dir()
+
+def _standalone_script_available(rel: str) -> bool:
+    return (_REPO_ROOT / rel).exists() and _npm_deps_installed()
 
 
 def probe(candidates: list[str], version_args: list[str]) -> tuple[str | None, str | None]:
@@ -77,6 +95,21 @@ def evaluate() -> dict:
                 blockers.append(f"{req_id}: install one of {candidates}")
             elif level == "recommended":
                 warnings.append(f"{req_id}: install one of {candidates} for raster optimization")
+    # Standalone export scripts (non-Claude path)
+    standalone = []
+    for script_rel, tool_id, label in [
+        ("slide-system/scripts/capture-slides.js",    "capture-slides",    "capture-slides.js"),
+        ("slide-system/scripts/build_hybrid_pptx.py", "build-hybrid-pptx", "build_hybrid_pptx.py"),
+        ("slide-system/scripts/export-pdf.js",        "playwright-pdf",    "export-pdf.js"),
+    ]:
+        ok = _standalone_script_available(script_rel)
+        standalone.append({
+            "id": tool_id,
+            "label": label,
+            "status": "available" if ok else "not-installed",
+            "install_hint": "Run ./slide-system/scripts/setup.sh (requires Node.js 18+)",
+        })
+
     return {
         "schema_version": 1,
         "status": "blocked" if blockers else "ready",
@@ -85,6 +118,7 @@ def evaluate() -> dict:
         "requirements": requirements,
         "blockers": blockers,
         "warnings": warnings,
+        "standalone_export_scripts": standalone,
     }
 
 
@@ -112,6 +146,14 @@ def print_summary(result: dict, reused: bool) -> None:
         print(f"  BLOCKER: {blocker}")
     for warning in result["warnings"]:
         print(f"  warning: {warning}")
+    # Standalone export scripts (non-Claude path)
+    sa = result.get("standalone_export_scripts", [])
+    if sa:
+        print(f"  --- standalone export scripts (non-Claude path) ---")
+        for s in sa:
+            mark = "OK " if s["status"] == "available" else "-- "
+            hint = "" if s["status"] == "available" else f"  ← {s['install_hint']}"
+            print(f"  [{mark}] optional     {s['id']:<17} {s['status']}{hint}")
 
 
 def main() -> int:

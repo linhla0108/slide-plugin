@@ -18,6 +18,12 @@ rebuild, delivery packaging, and job resume.
 Open `slide-system/catalog/index.html` through a local HTTP server to review
 published and staging visual items.
 
+## Setup & Supported Inputs
+
+See [`REQUIREMENTS.md`](REQUIREMENTS.md) for what to install before making
+slides and which input file types are supported. For most non-technical users
+making a new deck in the Claude app, the answer is: install nothing.
+
 ## Important Boundaries
 
 - Canonical SUN.STUDIO assets remain in

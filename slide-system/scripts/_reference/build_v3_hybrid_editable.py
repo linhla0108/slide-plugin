@@ -1,3 +1,20 @@
+# =============================================================================
+# FROZEN REFERENCE — do not run, do not edit.
+#
+# This is the PROVEN Phase-1 export script (originally delivered under
+# outputs/slide-jobs/unity-roadmap-intern-3-months/runs/2026-06-08-v3/pptx/).
+# It is job-specific: hardcoded paths, range(1,9), should_skip("UNITY ROADMAP"),
+# LAYOUT_W=804, and the Phase-1 .python-deps. It ran successfully and is kept
+# here only as the source-of-truth sample.
+#
+# The reusable, generalized tool derived from this file is:
+#     slide-system/scripts/build_hybrid_pptx.py
+# It preserves the proven math (font_pt = css_px * 0.5) but turns every hardcode
+# into a CLI arg and consumes the 1920-space layout from capture-slides.js.
+#
+# Use build_hybrid_pptx.py for real work. Read this file to verify lineage.
+# =============================================================================
+
 from __future__ import annotations
 
 import sys

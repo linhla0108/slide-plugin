@@ -119,9 +119,9 @@
       "sha256": "1f340594fb051a0df924bb0b193f4745f95988ad2bad79d7602f5dd55bd227c9"
     },
     {
-      "path": "pptx/build_v3_hybrid_editable.py",
-      "bytes": 5202,
-      "sha256": "8281864197d543ece219c733d0a1974f058f0d9de6f39870efa87cec4bfde016"
+      "path": "slide-system/scripts/_reference/build_v3_hybrid_editable.py",
+      "bytes": 6109,
+      "sha256": "17c0463d6df6bbbc7495f515d2e0a6b46ad7c2d8d725f05e4c61f823f303e301"
     },
     {
       "path": "pptx/unity-roadmap-intern-3-months-v3-editable-hybrid.pptx",
