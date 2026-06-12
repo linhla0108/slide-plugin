@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
-  "updated_at": "2026-06-10T11:55:43+07:00",
+  "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
+  "updated_at": "2026-06-10T17:16:25+07:00",
   "tools": [
     {
       "tool_id": "node",
@@ -12,8 +12,8 @@
         "javascript-runtime",
         "deck-build-scripts"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
     {
@@ -26,8 +26,8 @@
         "registry-tools",
         "image-analysis"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
     {
@@ -39,8 +39,8 @@
         "xml-validation",
         "pptx-xml-inspection"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
     {
@@ -52,8 +52,8 @@
         "pptx-to-pdf",
         "pptx-render"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
     {
@@ -65,8 +65,8 @@
       "capabilities": [
         "editable-pptx-export"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
     {
@@ -79,7 +79,7 @@
         "slide-render-capture"
       ],
       "last_checked": null,
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": "npm deps not installed. Run: ./slide-system/scripts/setup.sh"
     },
     {
@@ -92,7 +92,7 @@
         "editable-pptx-export"
       ],
       "last_checked": null,
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": "python-pptx not installed. Run: ./slide-system/scripts/setup.sh"
     },
     {
@@ -105,8 +105,8 @@
         "html-to-pdf",
         "browser-print"
       ],
-      "last_checked": "2026-06-10T11:55:43+07:00",
-      "environment_fingerprint": "8a330dfa23b19790a4dd40b61dd8d404f1af3bae4ecafb8264f27348a210f211",
+      "last_checked": "2026-06-10T17:16:25+07:00",
+      "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     }
   ]

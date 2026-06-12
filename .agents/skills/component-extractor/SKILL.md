@@ -31,6 +31,11 @@ grep -q '"status": "ready"' slide-system/registries/extract-readiness.json 2>/de
 
 - Marker says `ready` → proceed immediately. Do **not** run
   `check_base_requirements.py` and do not invoke the `extract-preflight` skill.
+- **Exception — input is PDF or PPTX:** the marker's `ready` covers base tools
+  only. Run `python3 slide-system/scripts/check_base_requirements.py --input pdf`
+  (or `--input pptx`) instead — it reuses the marker (cheap) but exits 1 when
+  the required source provider (PyMuPDF / LibreOffice) is missing. Stop on
+  BLOCKER; never substitute another converter or a raster render.
 - Marker missing or not `ready` → the fallback runs the script once; stop only
   on a `blocked` result (a required tool is missing).
 - A tool fails mid-batch despite a `ready` marker → re-run the script with
@@ -44,7 +49,8 @@ Read a doc only when its branch is actually hit in the batch:
 
 | When | Read |
 |---|---|
-| Input is PDF/PPTX/raster (no page-level `source.svg` yet) | `.agents/skills/extract-preflight/SKILL.md` § Source-To-SVG Provider Requirements — PDF uses PyMuPDF (`page.get_svg_image`) only; do not trial other converters (allowed libraries are governed by `REQUIREMENTS.md`) |
+| Input is PDF (no page-level source SVG yet) | Nothing — run `python3 slide-system/scripts/convert_pdf_source.py --pdf <file> --page <n> --item-dir <item>` (PyMuPDF, the only approved path). Do not trial other converters or render pages to PNG (allowed libraries are governed by `REQUIREMENTS.md`) |
+| Input is PPTX/raster | `.agents/skills/extract-preflight/SKILL.md` § Source-To-SVG Provider Requirements |
 | Unsure which extraction method fits an artifact type | `slide-system/rules/extraction-methods.md` |
 | Producing an SVG artifact that carries text | `slide-system/rules/editable-text-slots.md` |
 | Region has blur/shadow/glow/mask/filter/blend/complex background | `slide-system/rules/background-rendering.md` |
@@ -63,13 +69,20 @@ not read it separately.
    reusable visual is text-free `artifact/visual.svg` + `artifact/text-slots.json`
    only. Do not author a parallel `.html`/`.css` representation of the same
    region — it is never consumed downstream.
-3. For SVG artifacts: keep the source-with-text SVG in `evidence/`, remove
-   semantic text from the reusable visual, and emit normalized editable slots
-   per `editable-text-slots.md`. Then run the standard batch scripts — never
-   hand-write per-batch `_*.py` helpers into the output folder:
+3. For SVG artifacts: generate the artifacts with the standard scripts — never
+   hand-write `visual.svg`/`text-slots.json` (their schemas live in the
+   scripts; hand-written files fail validation in rounds) and never hand-write
+   per-batch `_*.py` helpers into the output folder:
 
    ```bash
+   # PDF input only: text-preserving source SVG + QA raster (PyMuPDF)
+   python3 slide-system/scripts/convert_pdf_source.py --pdf <file> --page <n> --item-dir <item>
+   # source-page.svg -> text-free visual.svg + text-slots.json + evidence SVG
+   python3 slide-system/scripts/extract_editable_text_slots.py --item-dir <item> [--item-dir ...]
    python3 slide-system/scripts/externalize_svg_images.py --batch <dir>
+   # merge fragmented PDF background strips into one base PNG (Playwright; pixel-diff gated)
+   python3 slide-system/scripts/flatten_svg_background.py --batch <dir>
+   python3 slide-system/scripts/externalize_svg_images.py --batch <dir>  # refresh manifests after flatten
    python3 slide-system/scripts/optimize_svg.py --batch <dir>
    python3 slide-system/scripts/apply_text_contract.py --batch <dir>
    python3 slide-system/scripts/validate_text_slots.py --item-dir <item> [--item-dir ...]
@@ -89,9 +102,15 @@ not read it separately.
 ## Boundaries
 
 - Extraction is manual-only.
+- Never `mkdir` a folder before having content for it; sweep leftovers with
+  `python3 slide-system/scripts/prune_empty_dirs.py outputs/component-extractions/`.
 - A batch may contain multiple exact regions, but every item has independent
   status and approval.
 - Complex vector, blur, shadow, glow, mask, filter, blend, and multi-stop
   gradient backgrounds become background-only PNG files.
 - Foreground text and semantic content must remain separate and editable.
 - Reusable SVGs must not contain semantic `<text>` or `<tspan>` nodes.
+- Never render a PDF/PPTX page to PNG and use it as the visual: that bakes the
+  text into pixels where `validate_text_slots.py` cannot detect it, and the
+  gallery then shows baked text underneath the editable slots (double text).
+  Background-only PNGs (per `background-rendering.md`) must contain zero text.

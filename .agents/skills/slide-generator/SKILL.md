@@ -54,6 +54,9 @@ Always apply these; the build, select, and QA workflows enforce the detail.
 - `qa/export-renders/` images are intermediate. Delete them once render parity
   passes; keep only `qa-report.md`, metrics, and checksums.
 - Keep one-off build scripts in `slide-system/scripts/`, never in the run.
+- Never `mkdir` a folder before having content for it. `package_job.py`
+  auto-prunes empty directories at packaging; a finished run must contain none
+  (ad-hoc sweep: `python3 slide-system/scripts/prune_empty_dirs.py outputs/`).
 
 ## Boundaries
 

@@ -10,6 +10,19 @@ What to install before using this slide system.
 - Machine **without** the Claude app → Node.js 18+, then `./slide-system/scripts/setup.sh`
 - PDF, SVG, HTML, Markdown, text, data, images as input → never need an install.
 
+**Where `pip install` goes:** into the repo-local venv, on every machine. Modern
+system pythons (Homebrew, Debian/Ubuntu) are PEP 668 externally-managed and
+refuse `pip install` with `error: externally-managed-environment`. Create the
+venv once, then every `pip install X` in this document means:
+
+```bash
+python3 -m venv .venv          # once per machine (setup.sh also does this)
+.venv/bin/pip install X
+```
+
+Run the corresponding python steps with `.venv/bin/python3`. Never use
+`--break-system-packages`.
+
 ## Supported inputs
 
 | Input | Install |

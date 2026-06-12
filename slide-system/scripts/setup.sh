@@ -45,10 +45,18 @@ echo ""
 echo "→ Installing Chromium for Playwright…"
 npx --prefix "${REPO_ROOT}" playwright install chromium --with-deps
 
-# Install Python deps for build_hybrid_pptx.py
+# Install Python deps into a repo-local venv. Installing into the system
+# interpreter fails on PEP 668 externally-managed environments (Homebrew
+# python, Debian/Ubuntu), so the venv is the portable path on every machine.
 echo ""
-echo "→ Installing Python dependencies (python-pptx, Pillow)…"
-python3 -m pip install python-pptx Pillow --quiet
+echo "→ Setting up Python virtual environment (.venv)…"
+VENV_DIR="${REPO_ROOT}/.venv"
+if [ ! -d "${VENV_DIR}" ]; then
+  python3 -m venv "${VENV_DIR}"
+fi
+echo "→ Installing Python dependencies (python-pptx, Pillow, PyMuPDF)…"
+"${VENV_DIR}/bin/python3" -m pip install --quiet --upgrade pip
+"${VENV_DIR}/bin/python3" -m pip install --quiet python-pptx Pillow PyMuPDF
 
 echo ""
 echo "=== Setup complete ==="
@@ -61,8 +69,8 @@ echo "      --url http://localhost:8080 \\"
 echo "      --slides 8 \\"
 echo "      --out-dir outputs/my-job/run-001/qa/export-renders"
 echo ""
-echo "  Step 2 — Build editable hybrid PPTX:"
-echo "    python3 slide-system/scripts/build_hybrid_pptx.py \\"
+echo "  Step 2 — Build editable hybrid PPTX (use the .venv python):"
+echo "    .venv/bin/python3 slide-system/scripts/build_hybrid_pptx.py \\"
 echo "      --layout  outputs/my-job/run-001/qa/export-renders/export-layout.json \\"
 echo "      --renders outputs/my-job/run-001/qa/export-renders \\"
 echo "      --slides  8 \\"

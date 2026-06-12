@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-10T14:52:50+07:00",
+  "updated_at": "2026-06-10T17:52:15+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -211,6 +211,606 @@
       "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
       "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
       "semantic_signature_sha256": "77f6d26fa8e92045a03831040c466a5f7a979e0555147788405e3c9ea04055af"
+    },
+    {
+      "attempted_at": "2026-06-10T15:57:46+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "cover-title-connect",
+      "stable_id": "sun.full-slide-template.cover-title-connect",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
+      "semantic_signature_sha256": "c3d18518819a356f64153de616a95ce9e290d67b3ccd3aae43270f617fa36f6e"
+    },
+    {
+      "attempted_at": "2026-06-10T15:57:46+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "section-header-question",
+      "stable_id": "sun.full-slide-template.section-header-question",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
+      "semantic_signature_sha256": "ac7b0e869b81a99138f34b4c13afe988aae7edbbe4a5a6c543b0ebb4e0d01139"
+    },
+    {
+      "attempted_at": "2026-06-10T15:57:46+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "three-column-cards",
+      "stable_id": "sun.full-slide-template.three-column-cards",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
+      "semantic_signature_sha256": "5058c1a1e5e6a701b9471fd1572b72586d736c1aaf369768e3c2018d418a2cce"
+    },
+    {
+      "attempted_at": "2026-06-10T15:57:46+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "table-of-contents",
+      "stable_id": "sun.full-slide-template.table-of-contents",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
+      "semantic_signature_sha256": "a507073c3e812000641a0fc5b8223a0359c8c02312296c0ea85707ee8d8a208f"
+    },
+    {
+      "attempted_at": "2026-06-10T15:57:46+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "section-divider-heading",
+      "stable_id": "sun.template.slide-5",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "e9fc324f09e942c916245415a98c656f714ec98b23b2e6ffd49e7e8c3cb993b3"
+    },
+    {
+      "attempted_at": "2026-06-10T15:59:00+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "cover-title-connect",
+      "stable_id": "sun.template.cover-title-connect",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "region_identity_sha256": "592a14fe4e813a05xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "semantic_signature_sha256": "a1b2c3d4e5f6a7b8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "attempted_at": "2026-06-10T15:59:00+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "section-header-question",
+      "stable_id": "sun.template.section-header-question",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "region_identity_sha256": "5905d991410e8ee5xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "semantic_signature_sha256": "b2c3d4e5f6a7b8c9xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "attempted_at": "2026-06-10T15:59:00+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "three-column-cards",
+      "stable_id": "sun.template.three-column-cards",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "region_identity_sha256": "277da82984d2bd7bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "semantic_signature_sha256": "c3d4e5f6a7b8c9d0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "attempted_at": "2026-06-10T15:59:00+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "table-of-contents",
+      "stable_id": "sun.template.table-of-contents",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "region_identity_sha256": "df1bf65f432631bbxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "semantic_signature_sha256": "d4e5f6a7b8c9d0e1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "attempted_at": "2026-06-10T15:59:00+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "section-divider-heading",
+      "stable_id": "sun.template.section-divider-heading",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "region_identity_sha256": "94935fc59632d5a8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "semantic_signature_sha256": "e5f6a7b8c9d0e1f2xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "attempted_at": "2026-06-10T16:50:09+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-5",
+      "item_id": "slide-1-full",
+      "stable_id": "sun.full-slide-template.cover-title-connect",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
+      "semantic_signature_sha256": "c3d18518819a356f64153de616a95ce9e290d67b3ccd3aae43270f617fa36f6e"
+    },
+    {
+      "attempted_at": "2026-06-10T16:50:09+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-5",
+      "item_id": "slide-2-full",
+      "stable_id": "sun.full-slide-template.section-header-question",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
+      "semantic_signature_sha256": "ac7b0e869b81a99138f34b4c13afe988aae7edbbe4a5a6c543b0ebb4e0d01139"
+    },
+    {
+      "attempted_at": "2026-06-10T16:50:09+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-5",
+      "item_id": "slide-3-full",
+      "stable_id": "sun.full-slide-template.three-column-cards",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
+      "semantic_signature_sha256": "5058c1a1e5e6a701b9471fd1572b72586d736c1aaf369768e3c2018d418a2cce"
+    },
+    {
+      "attempted_at": "2026-06-10T16:50:09+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-5",
+      "item_id": "slide-4-full",
+      "stable_id": "sun.full-slide-template.table-of-contents",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
+      "semantic_signature_sha256": "a507073c3e812000641a0fc5b8223a0359c8c02312296c0ea85707ee8d8a208f"
+    },
+    {
+      "attempted_at": "2026-06-10T16:50:09+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-5",
+      "item_id": "slide-5-full",
+      "stable_id": "sun.template.slide-5",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "e9fc324f09e942c916245415a98c656f714ec98b23b2e6ffd49e7e8c3cb993b3"
+    },
+    {
+      "attempted_at": "2026-06-10T22:00:00+07:00",
+      "extraction_id": "deepseek-v4-flash-slides-1-5",
+      "item_id": "deepseek-v4-flash-slide-1",
+      "stable_id": "sun.full-slide-template.deepseek-v4-flash-slide-1",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d18b71c9cf1b505cdd2a1e459324195cb367e33a763c3e16051ed762acc69565",
+      "semantic_signature_sha256": "8faa7d1f3149cb9dab8d396384524a3e2074e6e5684d9020c3a21269a310f1b4"
+    },
+    {
+      "attempted_at": "2026-06-10T22:00:00+07:00",
+      "extraction_id": "deepseek-v4-flash-slides-1-5",
+      "item_id": "deepseek-v4-flash-slide-2",
+      "stable_id": "sun.full-slide-template.deepseek-v4-flash-slide-2",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "551ca89d8612fde780a2f5901b94af9d72a610e6e194f6a7e881e9ee2775e096",
+      "semantic_signature_sha256": "1ea51a77257b36ad383b5dac141d50c5cc9f8b34a92ddacf06362b9739d5e364"
+    },
+    {
+      "attempted_at": "2026-06-10T22:00:00+07:00",
+      "extraction_id": "deepseek-v4-flash-slides-1-5",
+      "item_id": "deepseek-v4-flash-slide-3",
+      "stable_id": "sun.full-slide-template.deepseek-v4-flash-slide-3",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "c3ea7eafb0a784e05a3988d43a610e3dd5130dac527b226401a6681bd363b766",
+      "semantic_signature_sha256": "d815c1eed1694baa32a82766a29e5d99741971a2dc1d01fb86c4c14ddafb7075"
+    },
+    {
+      "attempted_at": "2026-06-10T22:00:00+07:00",
+      "extraction_id": "deepseek-v4-flash-slides-1-5",
+      "item_id": "deepseek-v4-flash-slide-4",
+      "stable_id": "sun.full-slide-template.deepseek-v4-flash-slide-4",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "2c2277e5cf729537ac2d2477968d92e6dc31b94ec8f8041ddac0ccabc64ea445",
+      "semantic_signature_sha256": "b45be30e1e7c594876a53e75fca6b61af4abf4d902e226f4441ddd5522d929d3"
+    },
+    {
+      "attempted_at": "2026-06-10T22:00:00+07:00",
+      "extraction_id": "deepseek-v4-flash-slides-1-5",
+      "item_id": "deepseek-v4-flash-slide-5",
+      "stable_id": "sun.full-slide-template.deepseek-v4-flash-slide-5",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "ae4b60c64ceeb12742d4a3de056ab7ac7c1bfaf720f5ac05deca8748c488cfe0",
+      "semantic_signature_sha256": "c981e22f33dfe99321b746a35c9f5dc35a8fa2e601989c08888a5139a08f11dc"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-1-full",
+      "stable_id": "sun.full-slide-template.cover-title-connect",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-2-full",
+      "stable_id": "sun.full-slide-template.section-header-question",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-3-full",
+      "stable_id": "sun.full-slide-template.three-column-cards",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-4-full",
+      "stable_id": "sun.full-slide-template.table-of-contents",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-5-full",
+      "stable_id": "sun.template.slide-5",
+      "status": "duplicate",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-6-full",
+      "stable_id": "sun.full-slide.slide-6-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "399edba413898bcabc2fe5efa5fa29463918f2da2d1cba4b9e2ed5f75eedece9",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-7-full",
+      "stable_id": "sun.full-slide.slide-7-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b6bb91e67bd6c459896588bc00e670962e66916ef6a02f1c3524d6a2a12610be",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-8-full",
+      "stable_id": "sun.full-slide.slide-8-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "2413b31aa5c7ffeeb7d4c0a2f1eb4f20f15966fb4029f8f4dab9ca406ab85e5c",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-9-full",
+      "stable_id": "sun.full-slide.slide-9-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "53dd03e1024360cec21e4a8dd6a480f15209ec864ab8c82184c51551abd4dea0",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-10-full",
+      "stable_id": "sun.full-slide.slide-10-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "c17b4bd3b85056eda9478c3e13ea53e6b88f54b175bb141b64dc38e2c7ef2280",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-11-full",
+      "stable_id": "sun.full-slide.slide-11-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "320175f86160ad68b22c49963d027ee79db9cd865c080cdf35fc6d2c6f870a60",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-12-full",
+      "stable_id": "sun.full-slide.slide-12-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "155de18222c928644140fd3991eca3f8f739a189b8ff3f01acc32d19a85125b8",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-13-full",
+      "stable_id": "sun.full-slide.slide-13-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "3c080b2f08b61f5bec6e90daed572defaec66705b15de6f9ff726206af1b35d0",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-14-full",
+      "stable_id": "sun.full-slide.slide-14-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "fe29710270bfa7726eb1b8d689f9552a2d2ad5f2f22047a23cdbe0d6ad519017",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-15-full",
+      "stable_id": "sun.full-slide.slide-15-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "2937a589b94c684dbcf44cff323cb7ed80cf10b7521f2ac3bee186bd5f6e14cd",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-16-full",
+      "stable_id": "sun.full-slide.slide-16-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "9ec5320dc00a4d1b66bc73f51639cb393456aee13802ed283b8c46606ca3de2d",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-17-full",
+      "stable_id": "sun.full-slide.slide-17-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71b60cbef012044fa81dc53b451868097a2535cc55d2e5f832295f92db5dd1ac",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-18-full",
+      "stable_id": "sun.full-slide.slide-18-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "25466153a1aee6fefc2c52c39f1e0a0666cf047b815e6d33bdf4e023a30bc6a5",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-19-full",
+      "stable_id": "sun.full-slide.slide-19-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "fc6408d3d47207e853122c7130b646e1b8c09b2e5bc1dc79783703b4f18a51d1",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-20-full",
+      "stable_id": "sun.full-slide.slide-20-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "45e68f571414d2db2115938d2de5593d85acd86651188badca1dc01f8bdad590",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-21-full",
+      "stable_id": "sun.full-slide.slide-21-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d0336be2c6d34eaf82e4f36511f101459842a0ea8e79562b10e865ea2acc9eec",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-22-full",
+      "stable_id": "sun.full-slide.slide-22-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "7589c6e500bdc9d7933465e7701e85f54e4fe7d049b0a7be3e9fdd0093e480ba",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-23-full",
+      "stable_id": "sun.full-slide.slide-23-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "20dea792aff0988ca3bff917403728340d7ca0123466054be6a13143ed9362ba",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-24-full",
+      "stable_id": "sun.full-slide.slide-24-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "13c5e4f1e2324c57b77c732dc53ceef07e94182cff09f667270716befcaf2832",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-25-full",
+      "stable_id": "sun.full-slide.slide-25-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "403e903671afa7bbf2f4b2a89d3cba45ba1dd59f1fe29417921d58d2eca6a407",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-26-full",
+      "stable_id": "sun.full-slide.slide-26-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b22ee14fa64ddc64ec31448d1c22f940bd9d4b7d266d633ecfc2c2777d5b7974",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-27-full",
+      "stable_id": "sun.full-slide.slide-27-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b6e358527b1ea429486f9df721a2ccb647a5f293ccc3b798868f7dbe7d941ba3",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-28-full",
+      "stable_id": "sun.full-slide.slide-28-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "459a324fc62ac0c055bad1f3df0f6274ff4abab6f479b25489a73ea520aa240e",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-29-full",
+      "stable_id": "sun.full-slide.slide-29-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "18a52fcfdfaad3cb9dda133f2208a3bfacb851fb852e901a2425d7bd411279c8",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-30-full",
+      "stable_id": "sun.full-slide.slide-30-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "f9ea2afedd6b431c7555cafd636db7f32bf99ef9d8b6798492feefb416ddec4f",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-31-full",
+      "stable_id": "sun.full-slide.slide-31-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "99583126880fb87636d4f1c4e46f3d4fdcac578a9fc3ba397064969c8d35c10d",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-32-full",
+      "stable_id": "sun.full-slide.slide-32-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "759bf0103cf3a057f08c1715b37f64bdedf8b26a9c6eec8f0e3e5666ea43185a",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-33-full",
+      "stable_id": "sun.full-slide.slide-33-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d2d7d92b44b1a8c57b0ccf4b40b078ae6a66681bb32c7c7136e3228305451aeb",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-34-full",
+      "stable_id": "sun.full-slide.slide-34-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "8a8d85899887a31cf7a0d5b517f246a25027855770005f419142074fcf3496e5",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-35-full",
+      "stable_id": "sun.full-slide.slide-35-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "349effbdee40f150dda5b6c0c01b864a87212be682181aa789774e13394c57a6",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-36-full",
+      "stable_id": "sun.full-slide.slide-36-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "0144401f5af086b0632dd27021c568ae639f6498ad2a7065ac44039a8f9493f5",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-37-full",
+      "stable_id": "sun.full-slide.slide-37-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "c27ef03f5bc352185f2be24e511ee0963691155cd972ea212203b6bb8cf6836c",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-38-full",
+      "stable_id": "sun.full-slide.slide-38-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "bed5da40c8e56ee4fe8c41a636c57b3709683951a7fbca33c37c120e7b317a2f",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-39-full",
+      "stable_id": "sun.full-slide.slide-39-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "033d5147e7e9dfba15dfcfbc4387eeea7be2c0229bd7d237dfc1cce040a831a5",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
+    },
+    {
+      "attempted_at": "2026-06-10T17:52:15+07:00",
+      "extraction_id": "gpt-5.4-mini-slides-1-40",
+      "item_id": "slide-40-full",
+      "stable_id": "sun.full-slide.slide-40-full",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "e9fcbdd982720d970b243d54904f901050546804a8068ccedd92a3b88420adbb",
+      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
     }
   ]
 }

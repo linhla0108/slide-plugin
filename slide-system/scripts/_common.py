@@ -102,6 +102,25 @@ def normalized_bounds(region: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def prune_empty_dirs(root: str | Path) -> list[Path]:
+    """Remove empty directories under root (deepest first). Returns removed paths.
+
+    LLM sessions tend to scaffold folder trees ahead of content; anything still
+    empty at packaging/cleanup time is scaffolding noise, not output.
+    """
+    root = Path(root)
+    removed: list[Path] = []
+    for path in sorted((p for p in root.rglob("*") if p.is_dir()), reverse=True):
+        try:
+            next(path.iterdir())
+        except StopIteration:
+            path.rmdir()
+            removed.append(path)
+        except OSError:
+            continue
+    return removed
+
+
 def average_image_hash(path: str | Path) -> str | None:
     try:
         from PIL import Image

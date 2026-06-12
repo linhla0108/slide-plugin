@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-10T15:21:26+07:00",
+  "generated_at": "2026-06-10T16:58:47+07:00",
   "counts": {
     "published": 2,
-    "staging": 15
+    "staging": 29
   },
   "items": [
     {
@@ -88,6 +88,507 @@
       },
       "limitations": [
         "Use selectively on title, section, and closing slides."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.three-column-cards",
+      "version": "0.0.0",
+      "name": "three-column-cards",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "three-column",
+        "card",
+        "icon",
+        "white-background",
+        "feature-list"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/three-column-cards/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "nav-pill",
+            "role": "navigation-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "section-eyebrow",
+            "role": "section-eyebrow",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "brand-title-line-1",
+            "role": "brand-wordmark-line-1",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "brand-title-line-2",
+            "role": "brand-wordmark-line-2",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "intro-body",
+            "role": "intro-body-text",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "card-1-heading",
+            "role": "card-heading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "card-1-body",
+            "role": "card-body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "card-2-heading",
+            "role": "card-heading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "card-2-body",
+            "role": "card-body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "card-3-heading",
+            "role": "card-heading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "card-3-body",
+            "role": "card-body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "footer-copyright",
+            "role": "footer-copyright",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-page",
+            "role": "footer-page-number",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 13,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.section-header-question",
+      "version": "0.0.0",
+      "name": "section-header-question",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "section-header",
+        "question",
+        "radial-gradient",
+        "large-heading",
+        "opener"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/section-header-question/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "nav-pill",
+            "role": "navigation-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "section-eyebrow",
+            "role": "section-eyebrow",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "heading-line-1",
+            "role": "section-heading-line-1",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "heading-line-2",
+            "role": "section-heading-line-2",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "heading-line-3",
+            "role": "section-heading-line-3",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "footer-copyright",
+            "role": "footer-copyright",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-page",
+            "role": "footer-page-number",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 7,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.cover-title-connect",
+      "version": "0.0.0",
+      "name": "cover-title-connect",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "cover",
+        "title",
+        "brand",
+        "gradient-background",
+        "logo",
+        "pill-badge"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/cover-title-connect/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "nav-tag",
+            "role": "navigation-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "brand-line-1",
+            "role": "brand-title-line-1",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "brand-line-2",
+            "role": "brand-title-line-2",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "pill-badge",
+            "role": "badge-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-copyright",
+            "role": "footer-copyright",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-year",
+            "role": "footer-year",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 6,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.table-of-contents",
+      "version": "0.0.0",
+      "name": "table-of-contents",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "table-of-contents",
+        "agenda",
+        "numbered",
+        "white-background",
+        "four-column"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/sun-connect-slides-1-5/items/table-of-contents/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "nav-pill",
+            "role": "navigation-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "page-title",
+            "role": "page-title",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "toc-num-1",
+            "role": "toc-section-number",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-label-1",
+            "role": "toc-section-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-num-2",
+            "role": "toc-section-number",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-label-2",
+            "role": "toc-section-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-num-3",
+            "role": "toc-section-number",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-label-3",
+            "role": "toc-section-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-num-4",
+            "role": "toc-section-number",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "toc-label-4",
+            "role": "toc-section-label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-copyright",
+            "role": "footer-copyright",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "footer-page",
+            "role": "footer-page-number",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 12,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
     },
     {
@@ -2442,6 +2943,1014 @@
       },
       "limitations": [
         "Four variants observed across slides 1-5; verify the full deck for more."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.deepseek-v4-flash-slide-3",
+      "version": "0.0.0",
+      "name": "deepseek-v4-flash-slide-3",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "three-column",
+        "icon",
+        "card",
+        "logo",
+        "feature-list"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-3/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "why",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-connect",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "03",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-connect-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-t-ch-c-t-o-ra-m-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "kh-ng-gian-n-i-ban-l-nh-o-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "sun-ers",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-ng-g-p-g-l-ng-nghe",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "v-nh-n-v-ph-a-tr-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "y-l-l-c-ch-ng-ta-k-t-n-i-c-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ch-nh-h-nh-tr-nh-truy-n-c-m-h-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "v-c-ng-c-t-ti-ng-n-i-nh-h-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "t-ng-lai-c-a",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-studio",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "chia-s-t-nh-h-nh-ho-t-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-n-i-b-t-v-nh-h-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "s-p-t-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "share",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "t-o-kh-ng-gian-k-t-n-i-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "trao-i-tr-c-ti-p-gi-a-bod-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "to-n-th-sun-ers",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "connect",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "l-ng-nghe-v-tr-n-tr-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ki-n-c-a-t-ng-sun-er-c-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "nhau-c-i-ti-n-ph-t-tri-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "v-ki-n-t-o",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "grow",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 29,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.deepseek-v4-flash-slide-4",
+      "version": "0.0.0",
+      "name": "deepseek-v4-flash-slide-4",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "table-of-contents",
+        "agenda",
+        "numbered",
+        "four-column"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-4/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved04",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "what-we",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "planned",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "02",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "what-we-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "achieved",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "03",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "goals",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "priorities",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "04",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "panel",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "discussion",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-connect",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "table-of",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "contents",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 17,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.deepseek-v4-flash-slide-5",
+      "version": "0.0.0",
+      "name": "deepseek-v4-flash-slide-5",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "section-divider",
+        "heading",
+        "subtitle",
+        "folio"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-5/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-connect",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "what-we-planned",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "05",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "what-we",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "planned-for-2025",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "what-we-set-out-to-achieve",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 9,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.deepseek-v4-flash-slide-2",
+      "version": "0.0.0",
+      "name": "deepseek-v4-flash-slide-2",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "section-header",
+        "question",
+        "large-heading",
+        "folio"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-2/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-connect",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "why",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "text-3",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "why-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-connect-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "02",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 8,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.full-slide-template.deepseek-v4-flash-slide-1",
+      "version": "0.0.0",
+      "name": "deepseek-v4-flash-slide-1",
+      "type": "full-slide-template",
+      "category": "template",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "footer",
+        "label",
+        "cover",
+        "numbering"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/SUN.SLIDE.pdf",
+        "sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/artifact",
+        "visual": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/artifact/visual.svg",
+        "text_slots": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/artifact/text-slots.json",
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/deepseek-v4-flash-slides-1-5/items/deepseek-v4-flash-slide-1/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "2025-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2025",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 4,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "untested",
+        "pptx": "untested",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "mimo.v2.5.slide.05",
+      "version": "0.0.0",
+      "name": "Slide 05 - Launch Pad",
+      "type": "full-slide",
+      "category": "full-slide",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "reusable-component"
+      ],
+      "tags": [
+        "full-slide",
+        "pdf-extract",
+        "mimo-v2.5"
+      ],
+      "source": {
+        "path": "input/SUN.SLIDE.pdf",
+        "sha256": null,
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-05/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-05/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-05/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-05/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Full-slide extraction from PDF. Text slots are editable."
+      ]
+    },
+    {
+      "id": "mimo.v2.5.slide.02",
+      "version": "0.0.0",
+      "name": "Slide 02 - Skill Tree",
+      "type": "full-slide",
+      "category": "full-slide",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "reusable-component"
+      ],
+      "tags": [
+        "full-slide",
+        "pdf-extract",
+        "mimo-v2.5"
+      ],
+      "source": {
+        "path": "input/SUN.SLIDE.pdf",
+        "sha256": null,
+        "slide_or_page": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-02/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-02/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-02/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-02/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Full-slide extraction from PDF. Text slots are editable."
+      ]
+    },
+    {
+      "id": "mimo.v2.5.slide.03",
+      "version": "0.0.0",
+      "name": "Slide 03 - Training Board",
+      "type": "full-slide",
+      "category": "full-slide",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "reusable-component"
+      ],
+      "tags": [
+        "full-slide",
+        "pdf-extract",
+        "mimo-v2.5"
+      ],
+      "source": {
+        "path": "input/SUN.SLIDE.pdf",
+        "sha256": null,
+        "slide_or_page": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-03/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-03/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-03/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-03/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Full-slide extraction from PDF. Text slots are editable."
+      ]
+    },
+    {
+      "id": "mimo.v2.5.slide.04",
+      "version": "0.0.0",
+      "name": "Slide 04 - Production Pipeline",
+      "type": "full-slide",
+      "category": "full-slide",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "reusable-component"
+      ],
+      "tags": [
+        "full-slide",
+        "pdf-extract",
+        "mimo-v2.5"
+      ],
+      "source": {
+        "path": "input/SUN.SLIDE.pdf",
+        "sha256": null,
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-04/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-04/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-04/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-04/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Full-slide extraction from PDF. Text slots are editable."
+      ]
+    },
+    {
+      "id": "mimo.v2.5.slide.01",
+      "version": "0.0.0",
+      "name": "Slide 01 - Overview",
+      "type": "full-slide",
+      "category": "full-slide",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "reusable-component"
+      ],
+      "tags": [
+        "full-slide",
+        "pdf-extract",
+        "mimo-v2.5"
+      ],
+      "source": {
+        "path": "input/SUN.SLIDE.pdf",
+        "sha256": null,
+        "slide_or_page": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-01/artifact",
+        "visual": null,
+        "text_slots": null,
+        "preview": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-01/preview",
+        "detail": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-01/README.md",
+        "evidence": "/Users/home/Documents/work-space/sun-riser-2026/outputs/component-extractions/mimo-v2.5-sun-slide-1-5/items/mimo-v2.5-slide-01/evidence"
+      },
+      "content_fields": {
+        "required": [],
+        "optional": []
+      },
+      "text_contract": null,
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "untested",
+        "pdf": "supported",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Full-slide extraction from PDF. Text slots are editable."
       ]
     }
   ]

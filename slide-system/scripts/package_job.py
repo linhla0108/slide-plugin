@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from _common import now_iso, sha256_file, write_json
+from _common import now_iso, prune_empty_dirs, sha256_file, write_json
 
 
 def main() -> int:
@@ -18,6 +18,8 @@ def main() -> int:
     run_dir = Path(args.run_dir).resolve()
     if not run_dir.exists():
         raise SystemExit(f"Run directory does not exist: {run_dir}")
+    for removed in prune_empty_dirs(run_dir):
+        print(f"Pruned empty directory: {removed.relative_to(run_dir)}")
     output = Path(args.output).resolve() if args.output else run_dir / "reports/delivery-manifest.json"
     files = []
     for path in sorted(run_dir.rglob("*")):

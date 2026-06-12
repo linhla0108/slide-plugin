@@ -15,6 +15,12 @@ def main() -> int:
     args = parser.parse_args()
     batch = args.extraction_dir.resolve()
 
+    manifest_path = batch / "manifest.json"
+    title = batch.name
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        title = manifest.get("extraction_id", title)
+
     cards = []
     for mapping_path in sorted(batch.glob("items/*/mapping.json")):
         item_dir = mapping_path.parent
@@ -65,8 +71,9 @@ def main() -> int:
     <code>{html.escape(mapping['candidate_stable_id'])}</code>
     <small>{len(contract['slots'])} editable text slots</small>
   </header>
-  <div class="stage" data-canvas-width="{contract['source']['canvas_width']}">
-    <img src="{relative}/artifact/visual.svg" alt="">
+  <div class="stage" data-canvas-width="{contract['source']['canvas_width']}"
+    style="aspect-ratio:{contract['source']['canvas_width']}/{contract['source']['canvas_height']}">
+    <object type="image/svg+xml" data="{relative}/artifact/visual.svg"></object>
     <div class="text-layer">{''.join(slots)}</div>
   </div>
 </article>"""
@@ -91,9 +98,9 @@ def main() -> int:
     .item header div {{ display:flex; gap:14px; }}
     .item header span {{ color:#ff5533; font-weight:700; }}
     .item header small {{ grid-column:1/-1; color:#777; }}
-    .stage {{ position:relative; width:100%; aspect-ratio:2938.83/2623.16;
-      overflow:hidden; background:#fff; }}
-    .stage > img,.text-layer {{ position:absolute; inset:0; width:100%; height:100%; }}
+    .stage {{ position:relative; width:100%; overflow:hidden; background:#fff; }}
+    .stage > object,.text-layer {{ position:absolute; inset:0; width:100%; height:100%; }}
+    .stage > object {{ pointer-events:none; }}
     .text-layer {{ pointer-events:none; }}
     .text-slot {{ position:absolute; margin:0; padding:0; overflow:visible;
       white-space:pre; pointer-events:auto; outline:0;
@@ -103,7 +110,7 @@ def main() -> int:
   </style>
 </head>
 <body>
-  <h1>GUIDLINE_PRESENTATION_SUN</h1>
+  <h1>{html.escape(title)}</h1>
   <p class="lead">Visual-only SVG + editable HTML text slots. Click any text to edit it.</p>
   <main>{''.join(cards)}</main>
   <script>

@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Arrow up-right">
-  <!-- sun.icon.arrow-up-right
-       Source: SUN.RISER 2026, slides 3 & 5 (corner mark).
-       Clean standalone SVG; color via currentColor (brand orange #ff5533). -->
-  <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="butt" stroke-linejoin="round" style="color:#ff5533">
-    <path d="M10 38 L38 10" />
-    <path d="M16 10 L38 10 L38 32" />
-  </g>
-</svg>

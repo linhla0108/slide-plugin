@@ -83,6 +83,19 @@ def main() -> int:
     for required in ("preview", "evidence"):
         shutil.copytree(item_dir / required, destination / required)
 
+    # Staging keeps one shared asset store at artifact/assets/; evidence SVGs
+    # reference it as ../artifact/assets/. The published layout flattens
+    # artifact/ into the destination root, so the shared store lives at
+    # assets/ and the evidence-relative prefix becomes ../assets/.
+    published_evidence_svg = destination / "evidence" / "source-with-text.svg"
+    if published_evidence_svg.exists():
+        svg_text = published_evidence_svg.read_text(encoding="utf-8")
+        if '"../artifact/assets/' in svg_text:
+            published_evidence_svg.write_text(
+                svg_text.replace('"../artifact/assets/', '"../assets/'),
+                encoding="utf-8",
+            )
+
     registry = load_json(args.registry)
     stable_id = mapping["candidate_stable_id"]
     existing = next((item for item in registry["items"] if item["id"] == stable_id), None)
