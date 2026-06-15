@@ -47,7 +47,10 @@ const fs = require("fs");
 function parseArgs(argv) {
   const a = { url: null, slides: null, outDir: null, showJs: null,
                selector: null, delay: 600, width: 1920, height: 1080,
-               keepBgText: false };
+               keepBgText: false,
+               // v2 (3-layer plan). "flat" = the frozen v1 behaviour below;
+               // "layered" = multi-pass base/overlay/text capture + manifest.
+               mode: "flat", overlayScale: 2, pad: 96, requireFont: null };
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i], v = argv[i + 1];
     if (k === "--url")      { a.url = v; i++; }
@@ -59,6 +62,13 @@ function parseArgs(argv) {
     else if (k === "--width")    { a.width = parseInt(v, 10); i++; }
     else if (k === "--height")   { a.height = parseInt(v, 10); i++; }
     else if (k === "--keep-bg-text") { a.keepBgText = true; }
+    else if (k === "--mode")     { a.mode = v; i++; }
+    else if (k === "--overlay-scale") { a.overlayScale = parseFloat(v); i++; }
+    else if (k === "--pad")      { a.pad = parseInt(v, 10); i++; }
+    else if (k === "--require-font") { a.requireFont = v; i++; }
+  }
+  if (a.mode !== "flat" && a.mode !== "layered") {
+    die(`--mode must be "flat" or "layered", got "${a.mode}"`);
   }
   return a;
 }
@@ -197,6 +207,475 @@ function restoreTextScript() {
   `;
 }
 
+// =========================================================================
+// LAYERED MODE (v2 — EXPORT-PPTX-3LAYER-PLAN.md §3.1)
+// Everything below is layered-only. The flat loop in main() is the frozen v1
+// code path and must not change (isolation rule #1).
+// =========================================================================
+
+const ANTI_ANIMATION = `
+  (function() {
+    if (document.getElementById('__export_no_anim__')) return true;
+    var st = document.createElement('style');
+    st.id = '__export_no_anim__';
+    st.textContent = '*{animation:none !important;transition:none !important;caret-color:transparent !important;}';
+    document.head.appendChild(st);
+    return true;
+  })()`;
+
+// Kill every painted background behind the target so omitBackground yields
+// true alpha (proven by the P1 step-0 prototype gate).
+function transparentCanvasScript(selector) {
+  const root = selector
+    ? `document.querySelector(${JSON.stringify(selector)})`
+    : `document.body`;
+  return `
+    (function() {
+      var els = [document.documentElement, document.body];
+      var root = ${root};
+      for (var n = root; n && n.nodeType === 1; n = n.parentElement) els.push(n);
+      els.forEach(function(el) {
+        el.style.setProperty('background', 'none', 'important');
+        el.style.setProperty('background-color', 'transparent', 'important');
+      });
+      return true;
+    })()`;
+}
+
+// Isolation by visibility-flip: visibility:hidden on the root unpaints
+// EVERYTHING inside it (backgrounds included, wherever they live — the bug a
+// background-killing approach hits when the canvas lives on a child of the
+// capture root), then visibility:visible re-paints exactly the target subtree.
+// No reflow (visibility, not display).
+function isolateOverlayScript(selector, key) {
+  const root = selector
+    ? `document.querySelector(${JSON.stringify(selector)})`
+    : `document.body`;
+  return `
+    (function() {
+      var root = ${root};
+      root.style.setProperty('visibility', 'hidden', 'important');
+      var n = 0;
+      root.querySelectorAll('[data-export-layer="overlay"],[data-export-group],[data-export-native]').forEach(function(el) {
+        var k = el.getAttribute('data-export-group') || el.getAttribute('data-export-id');
+        if (k !== ${JSON.stringify(key)}) return;
+        el.style.setProperty('visibility', 'visible', 'important');
+        n++;
+      });
+      return n;
+    })()`;
+}
+
+function isolateTextScript(selector) {
+  const root = selector
+    ? `document.querySelector(${JSON.stringify(selector)})`
+    : `document.body`;
+  return `
+    (function() {
+      var root = ${root};
+      var TEXT_TAGS = new Set(['p','h1','h2','h3','h4','h5','h6','span','li','td','th','label','strong','em','div','a','b','i']);
+      function inOverlay(el) {
+        for (var n = el; n && n !== root.parentNode; n = n.parentElement) {
+          if (n.nodeType === 1 && (n.getAttribute('data-export-layer') === 'overlay' || n.hasAttribute('data-export-group'))) return true;
+        }
+        return false;
+      }
+      root.style.setProperty('visibility', 'hidden', 'important');
+      var n = 0;
+      root.querySelectorAll('*').forEach(function(el) {
+        if (!TEXT_TAGS.has(el.tagName.toLowerCase())) return;
+        if (inOverlay(el)) return;  // text inside an overlay bakes into that overlay (C7b)
+        var hasText = false;
+        for (var i = 0; i < el.childNodes.length; i++) {
+          if (el.childNodes[i].nodeType === 3 && el.childNodes[i].textContent.trim()) { hasText = true; break; }
+        }
+        if (!hasText) return;
+        el.style.setProperty('visibility', 'visible', 'important');
+        n++;
+      });
+      return n;
+    })()`;
+}
+
+function hideOverlaysScript(selector, exceptKey) {
+  const root = selector
+    ? `document.querySelector(${JSON.stringify(selector)})`
+    : `document.body`;
+  return `
+    (function() {
+      var root = ${root};
+      var except = ${JSON.stringify(exceptKey || null)};
+      var n = 0;
+      root.querySelectorAll('[data-export-layer="overlay"],[data-export-group],[data-export-native]').forEach(function(el) {
+        var key = el.getAttribute('data-export-group') || el.getAttribute('data-export-id');
+        if (except !== null && key === except) return;
+        el.style.setProperty('visibility', 'hidden', 'important');
+        n++;
+      });
+      return n;
+    })()`;
+}
+
+// ONE evaluate per slide: text layout + object inventory from the same DOM
+// state, both carrying a shared document-order z so build can interleave (C8).
+function extractLayeredScript(selector) {
+  const root = selector
+    ? `document.querySelector(${JSON.stringify(selector)})`
+    : `document.body`;
+  return `
+    (function() {
+      var root = ${root};
+      if (!root) return { canvasW: 0, canvasH: 0, text: [], objects: [] };
+      var rootRect = root.getBoundingClientRect();
+      var order = new Map();
+      var idx = 0;
+      root.querySelectorAll('*').forEach(function(el) { order.set(el, idx++); });
+
+      var TEXT_TAGS = new Set(['p','h1','h2','h3','h4','h5','h6','span','li','td','th','label','strong','em','div','a','b','i']);
+      function hasSkipAncestor(el) {
+        for (var n = el; n && n !== root.parentNode; n = n.parentElement) {
+          if (n.nodeType === 1 && n.hasAttribute && n.hasAttribute('data-export-skip')) return true;
+        }
+        return false;
+      }
+      function inOverlay(el) {
+        for (var n = el; n && n !== root.parentNode; n = n.parentElement) {
+          if (n.nodeType === 1 && (n.getAttribute('data-export-layer') === 'overlay' || n.hasAttribute('data-export-group'))) return n;
+        }
+        return null;
+      }
+
+      var text = [];
+      root.querySelectorAll('*').forEach(function(el) {
+        if (!TEXT_TAGS.has(el.tagName.toLowerCase())) return;
+        if (hasSkipAncestor(el)) return;
+        var t = '';
+        var sawText = false;
+        for (var i = 0; i < el.childNodes.length; i++) {
+          var node = el.childNodes[i];
+          if (node.nodeType === 3) { t += node.textContent; sawText = sawText || !!node.textContent.trim(); }
+          else if (node.nodeType === 1 && node.tagName === 'BR') t += '\\n';  // keep explicit line breaks
+        }
+        t = t.replace(/[ \\t]*\\n[ \\t]*/g, '\\n').trim();
+        if (!sawText || !t) return;
+        var r = el.getBoundingClientRect();
+        if (r.width < 1 || r.height < 1) return;
+        var cs = window.getComputedStyle(el);
+        if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) === 0) return;
+        var fontPx = parseFloat(cs.fontSize) || 16;
+        var lh = parseFloat(cs.lineHeight);
+        if (!lh || isNaN(lh)) lh = fontPx * 1.2;
+        var ovl = inOverlay(el);
+        text.push({
+          tag: el.tagName.toLowerCase(),
+          text: t,
+          x: r.left - rootRect.left, y: r.top - rootRect.top,
+          w: r.width, h: r.height,
+          z: order.get(el) || 0,
+          fontSize: cs.fontSize, fontWeight: cs.fontWeight,
+          color: cs.color, align: cs.textAlign,
+          lineHeight: cs.lineHeight,
+          textTransform: cs.textTransform,
+          letterSpacing: cs.letterSpacing,
+          fontFamily: cs.fontFamily,
+          lineCount: Math.max(1, Math.round(r.height / lh)),
+          inOverlay: ovl ? (ovl.getAttribute('data-export-group') || ovl.getAttribute('data-export-id')) : null
+        });
+      });
+
+      // Overlays: single elements (data-export-id) or groups (data-export-group)
+      // → one entry per key with the union bbox of its members. css_effects
+      // flags filter/shadow/blend: the source SVG no longer matches the
+      // rendered look, so svgBlip embedding must be skipped (plan round 5).
+      function effectsOf(el) {
+        var cs = window.getComputedStyle(el);
+        return (cs.filter && cs.filter !== 'none')
+            || (cs.boxShadow && cs.boxShadow !== 'none')
+            || (cs.mixBlendMode && cs.mixBlendMode !== 'normal');
+      }
+      var groups = {};
+      root.querySelectorAll('[data-export-layer="overlay"],[data-export-group]').forEach(function(el) {
+        var key = el.getAttribute('data-export-group') || el.getAttribute('data-export-id');
+        if (!key) return;
+        var r = el.getBoundingClientRect();
+        var g = groups[key] || (groups[key] = {
+          id: key, left: r.left, top: r.top, right: r.right, bottom: r.bottom,
+          z: order.get(el) || 0,
+          vectorSource: el.getAttribute('data-export-vector-source') || null,
+          cssEffects: false
+        });
+        g.left = Math.min(g.left, r.left); g.top = Math.min(g.top, r.top);
+        g.right = Math.max(g.right, r.right); g.bottom = Math.max(g.bottom, r.bottom);
+        g.z = Math.min(g.z, order.get(el) || 0);
+        g.cssEffects = g.cssEffects || effectsOf(el);
+      });
+      var objects = Object.values(groups).map(function(g) {
+        return { id: g.id, z: g.z, vectorSource: g.vectorSource, cssEffects: g.cssEffects,
+                 x: g.left - rootRect.left, y: g.top - rootRect.top,
+                 w: g.right - g.left, h: g.bottom - g.top,
+                 absX: g.left, absY: g.top };
+      });
+
+      // Native shape candidates (P2): simple solid geometry → real PPTX
+      // autoshapes. Gradient fill or css effects can NOT be a native shape —
+      // those are DEMOTED to raster overlay with a warning.
+      var natives = [];
+      root.querySelectorAll('[data-export-native]').forEach(function(el) {
+        var id = el.getAttribute('data-export-id');
+        if (!id) return;
+        var r = el.getBoundingClientRect();
+        var cs = window.getComputedStyle(el);
+        natives.push({
+          id: id, shape: el.getAttribute('data-export-native'),
+          z: order.get(el) || 0,
+          x: r.left - rootRect.left, y: r.top - rootRect.top,
+          w: r.width, h: r.height, absX: r.left, absY: r.top,
+          fill: cs.backgroundColor,
+          radius: parseFloat(cs.borderTopLeftRadius) || 0,
+          borderColor: cs.borderTopColor,
+          borderWidth: parseFloat(cs.borderTopWidth) || 0,
+          demote: effectsOf(el) || (cs.backgroundImage && cs.backgroundImage !== 'none'),
+          opacity: parseFloat(cs.opacity)
+        });
+      });
+
+      // Untagged visual candidates — the tagging-contract gate (plan §1):
+      // svg/img/canvas/video outside any data-export-* subtree will be baked
+      // into the base PNG. That is safe but almost never what a layered
+      // export wants, so they are reported and the validator fails on them
+      // unless explicitly allowed.
+      function inTagged(el) {
+        for (var n = el; n && n !== root.parentNode; n = n.parentElement) {
+          if (n.nodeType === 1 && (n.getAttribute('data-export-layer')
+              || n.hasAttribute('data-export-group')
+              || n.hasAttribute('data-export-native')
+              || n.hasAttribute('data-export-skip'))) return true;
+        }
+        return false;
+      }
+      var untagged = [];
+      root.querySelectorAll('svg,img,canvas,video').forEach(function(el) {
+        if (untagged.length >= 30) return;
+        if (el.parentElement && el.parentElement.closest('svg')) return; // nested svg internals
+        if (inTagged(el)) return;
+        var r = el.getBoundingClientRect();
+        if (r.width < 24 || r.height < 24) return;
+        var cls = typeof el.className === 'string' ? el.className
+                : (el.className && el.className.baseVal) || '';
+        untagged.push({ tag: el.tagName.toLowerCase(), cls: cls,
+                        x: Math.round(r.left - rootRect.left), y: Math.round(r.top - rootRect.top),
+                        w: Math.round(r.width), h: Math.round(r.height) });
+      });
+
+      return { canvasW: Math.round(rootRect.width), canvasH: Math.round(rootRect.height),
+               rootX: rootRect.left, rootY: rootRect.top,
+               text: text, objects: objects, natives: natives, untagged: untagged };
+    })()`;
+}
+
+async function runLayered(a, browser, page, hasDeckStage, showJs, selector) {
+  const crypto = require("crypto");
+  const sha256 = (p) => crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
+  const out = (name) => path.resolve(a.outDir, name);
+  const nn = (i) => String(i + 1).padStart(2, "0");
+
+  // Dedicated 2x context for overlay passes (scale is just deviceScaleFactor —
+  // clip stays in CSS px). Plan §5: 2x so user scaling to ~200% stays sharp.
+  const ctx2x = await browser.newContext({
+    viewport: { width: a.width, height: a.height },
+    deviceScaleFactor: a.overlayScale,
+  });
+  const page2x = await ctx2x.newPage();
+
+  // Every pass starts from a clean page state: goto IS the restore.
+  const prepare = async (pg, slideIdx) => {
+    await pg.goto(a.url, { waitUntil: "networkidle" });
+    await pg.evaluate("document.fonts.ready.then(() => true)");
+    if (hasDeckStage) {
+      await pg.evaluate(`document.querySelector('deck-stage').setAttribute('noscale','')`);
+      await pg.evaluate(`(function(){
+        var ds = document.querySelector('deck-stage');
+        if (!ds || !ds.shadowRoot) return false;
+        if (ds.shadowRoot.getElementById('__export_chrome_hide__')) return true;
+        var st = document.createElement('style');
+        st.id = '__export_chrome_hide__';
+        st.textContent = '.export-hidden{display:none !important;}';
+        ds.shadowRoot.appendChild(st);
+        return true;
+      })()`);
+    }
+    await pg.evaluate(ANTI_ANIMATION);
+    if (showJs) {
+      await pg.evaluate(showJs.replace("{n}", String(slideIdx))).catch(() => {});
+    }
+    await pg.waitForTimeout(a.delay);
+    if (a.requireFont) {
+      const okFont = await pg.evaluate(
+        `document.fonts.check('16px ' + ${JSON.stringify(JSON.stringify(a.requireFont))})`);
+      if (!okFont) die(`required font not loaded: ${a.requireFont} (capture operational error)`);
+    }
+  };
+
+  const shoot = async (pg, name, opts = {}) => {
+    if (selector) {
+      const el = await pg.$(selector);
+      if (!el) die(`Selector "${selector}" not found`);
+      await el.screenshot({ path: out(name), type: "png", ...opts });
+    } else {
+      await pg.screenshot({ path: out(name), type: "png", fullPage: false, ...opts });
+    }
+  };
+
+  const manifest = { manifest_version: 2, mode: "layered",
+                     canvasW: a.width, canvasH: a.height, slides: [] };
+
+  for (let i = 0; i < a.slides; i++) {
+    // Inventory + text layout: ONE evaluate on a fresh page.
+    await prepare(page, i);
+    const inv = await page.evaluate(extractLayeredScript(selector));
+
+    // Pass REF-FULL (before any strip — real text colors). QA-ephemeral.
+    await shoot(page, `slide-${nn(i)}-ref-full.png`);
+
+    // Pass REF-NOTEXT — the v1-style render, tier-1 reference. QA-ephemeral.
+    await prepare(page, i);
+    await page.evaluate(stripTextScript(selector));
+    await shoot(page, `slide-${nn(i)}-ref-notext.png`);
+
+    // Pass BASE — passive canvas only.
+    await prepare(page, i);
+    await page.evaluate(stripTextScript(selector));
+    await page.evaluate(hideOverlaysScript(selector, null));
+    await shoot(page, `slide-${nn(i)}-bg.png`);
+
+    // Native shapes with effects/gradient cannot be real autoshapes — demote
+    // them to raster overlays (warning) so nothing is silently lost.
+    const demoted = (inv.natives || []).filter((n) => n.demote);
+    for (const dn of demoted) {
+      console.warn(`  [capture-slides] WARN slide ${i + 1}: native '${dn.id}' has `
+        + `effects/gradient → demoted to raster overlay`);
+      inv.objects.push({ id: dn.id, z: dn.z, vectorSource: null, cssEffects: true,
+                         x: dn.x, y: dn.y, w: dn.w, h: dn.h,
+                         absX: dn.absX, absY: dn.absY });
+    }
+    const keptNatives = (inv.natives || []).filter((n) => !n.demote);
+
+    // Pass OVERLAY — one per id/group, on the 2x page: visibility-flip leaves
+    // ONLY the target subtree painted; transparent canvas kills html/body +
+    // ancestor backgrounds OUTSIDE the root.
+    const objects = [];
+    for (const ov of inv.objects) {
+      await prepare(page2x, i);
+      await page2x.evaluate(isolateOverlayScript(selector, ov.id));
+      await page2x.evaluate(transparentCanvasScript(selector));
+      // A clean vector_source must use its exact visual bounds. Padding the
+      // PNG capture but attaching an unpadded SVG to that larger PPTX shape
+      // stretches the vector in Office/LibreOffice. Raster/effect overlays
+      // still need padding so shadows, blur, and glow are not clipped.
+      const overlayPad = ov.vectorSource && !ov.cssEffects ? 0 : a.pad;
+      const clipX = Math.max(0, Math.floor(ov.absX - overlayPad));
+      const clipY = Math.max(0, Math.floor(ov.absY - overlayPad));
+      const clip = {
+        x: clipX, y: clipY,
+        width: Math.min(
+          a.width - clipX,
+          Math.ceil(ov.w + (ov.absX - clipX) + overlayPad),
+        ),
+        height: Math.min(
+          a.height - clipY,
+          Math.ceil(ov.h + (ov.absY - clipY) + overlayPad),
+        ),
+      };
+      const png = `slide-${nn(i)}-ov-${ov.id}.png`;
+      await page2x.screenshot({ path: out(png), type: "png", omitBackground: true, clip });
+      if (ov.vectorSource && ov.cssEffects) {
+        console.warn(`  [capture-slides] WARN slide ${i + 1}: overlay '${ov.id}' has `
+          + `vector_source but CSS effects alter its rendered look — svgBlip must be skipped`);
+      }
+      objects.push({
+        id: ov.id, role: "complex-overlay", png,
+        bounds: { x: clip.x - (inv.rootX || 0), y: clip.y - (inv.rootY || 0),
+                  w: clip.width, h: clip.height,
+                  unit: `px@${a.width}x${a.height}` },
+        visual_bounds: { x: ov.x, y: ov.y, w: ov.w, h: ov.h },
+        z: ov.z, transparent: true, rotation: 0,
+        scale_factor: a.overlayScale,
+        vector_source: ov.vectorSource,
+        css_effects: !!ov.cssEffects,
+        sha256: sha256(out(png)),
+      });
+    }
+
+    // Pass NATIVE-QA — natives become real PPTX autoshapes (not pictures), but
+    // the compose-check still needs their pixels: capture a 1x QA-ephemeral
+    // PNG per native, same visibility-flip isolation.
+    const natives = [];
+    for (const nv of keptNatives) {
+      await prepare(page, i);
+      await page.evaluate(isolateOverlayScript(selector, nv.id));
+      await page.evaluate(transparentCanvasScript(selector));
+      const clip = {
+        x: Math.max(0, Math.floor(nv.absX)), y: Math.max(0, Math.floor(nv.absY)),
+        width: Math.ceil(nv.w), height: Math.ceil(nv.h),
+      };
+      const png = `slide-${nn(i)}-native-${nv.id}.png`;
+      await page.screenshot({ path: out(png), type: "png", omitBackground: true, clip });
+      natives.push({
+        id: nv.id, role: "native-shape", shape: nv.shape,
+        bounds: { x: nv.x, y: nv.y, w: nv.w, h: nv.h,
+                  unit: `px@${a.width}x${a.height}` },
+        z: nv.z,
+        fill: nv.fill, radius: nv.radius,
+        border_color: nv.borderColor, border_width: nv.borderWidth,
+        opacity: nv.opacity,
+        qa_png: png,
+      });
+    }
+
+    // Pass TEXT-LAYER — text only, transparent canvas. QA-ephemeral.
+    // visibility-flip hides the root element itself, so element.screenshot
+    // would wait forever — clip a page screenshot to the root rect instead.
+    await prepare(page, i);
+    await page.evaluate(isolateTextScript(selector));
+    await page.evaluate(transparentCanvasScript(selector));
+    await page.screenshot({
+      path: out(`slide-${nn(i)}-text.png`), type: "png", omitBackground: true,
+      clip: { x: Math.max(0, Math.round(inv.rootX || 0)),
+              y: Math.max(0, Math.round(inv.rootY || 0)),
+              width: Math.min(a.width, inv.canvasW || a.width),
+              height: Math.min(a.height, inv.canvasH || a.height) },
+    });
+
+    manifest.slides.push({
+      slide: i + 1,
+      canvasW: inv.canvasW, canvasH: inv.canvasH,
+      base: { png: `slide-${nn(i)}-bg.png`, sha256: sha256(out(`slide-${nn(i)}-bg.png`)) },
+      qa: { ref_full: `slide-${nn(i)}-ref-full.png`,
+            ref_notext: `slide-${nn(i)}-ref-notext.png`,
+            text_layer: `slide-${nn(i)}-text.png` },
+      objects,
+      natives,
+      untagged_visuals: inv.untagged || [],
+      text: inv.text.filter((t) => !t.inOverlay || t.inOverlay === null),
+    });
+    for (const u of inv.untagged || []) {
+      console.warn(`  [capture-slides] WARN slide ${i + 1}: untagged visual `
+        + `<${u.tag}${u.cls ? ` class="${u.cls}"` : ""}> ${u.w}x${u.h}@${u.x},${u.y} `
+        + `— will be BAKED into the background (tag it data-export-layer/native)`);
+    }
+    console.log(`  [capture-slides] layered slide ${i + 1}/${a.slides}: `
+      + `${objects.length} overlays, ${natives.length} natives, ${inv.text.length} text items`
+      + ((inv.untagged || []).length ? `, ${inv.untagged.length} UNTAGGED visuals` : ""));
+  }
+
+  await ctx2x.close();
+  // Isolation rule #3: layered NEVER emits export-layout.json (a v1 build fed
+  // that shim plus a base-only bg.png would silently drop every overlay).
+  const manifestPath = out("export-manifest.json");
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  console.log(`[capture-slides] layered done → ${manifestPath}`);
+}
+
 async function main() {
   const a = parseArgs(process.argv);
   if (!a.url)    die("--url is required");
@@ -254,6 +733,14 @@ async function main() {
   const selector = a.selector || (hasDeckStage
     ? "deck-stage > [data-deck-active]" : null);
 
+  // v2: layered mode takes its own multi-pass path. The loop below stays the
+  // frozen v1 (flat) behaviour — isolation rule #1 of the 3-layer plan.
+  if (a.mode === "layered") {
+    await runLayered(a, browser, page, hasDeckStage, showJs, selector);
+    await browser.close();
+    return;
+  }
+
   const layout = [];
 
   for (let i = 0; i < a.slides; i++) {
@@ -305,6 +792,26 @@ async function main() {
 
   const layoutPath = path.resolve(a.outDir, "export-layout.json");
   fs.writeFileSync(layoutPath, JSON.stringify(layout, null, 2));
+
+  // Flat mode ALSO writes the v2 manifest as an ADDITIVE artifact (isolation
+  // rule: its existence does not count as "v1 output changed"; bg.png and
+  // export-layout.json above are byte-for-byte the frozen v1 outputs).
+  {
+    const crypto = require("crypto");
+    const sha256 = (p) => crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
+    const manifest = {
+      manifest_version: 2, mode: "flat",
+      canvasW: a.width, canvasH: a.height,
+      slides: layout.map((s) => {
+        const png = `slide-${String(s.slide).padStart(2, "0")}-bg.png`;
+        return { slide: s.slide, canvasW: s.canvasW, canvasH: s.canvasH,
+                 base: { png, sha256: sha256(path.resolve(a.outDir, png)) },
+                 objects: [], text: s.items };
+      }),
+    };
+    fs.writeFileSync(path.resolve(a.outDir, "export-manifest.json"),
+      JSON.stringify(manifest, null, 2));
+  }
   console.log(`[capture-slides] Done`);
   console.log(`  renders  → ${a.outDir}/slide-XX-bg.png`);
   console.log(`  layout   → ${layoutPath}`);

@@ -98,10 +98,16 @@ SAMPLE_HTML = """<!doctype html><html><head><meta charset="utf-8"><style>
   h1{font-size:140px;font-weight:800;margin:0}
   p{font-size:56px;margin-top:40px}
   .tag{font-size:40px;color:#3333FF;font-weight:700}
+  .accent{position:absolute;right:160px;top:160px;width:420px;height:420px;border-radius:60px;
+          background:linear-gradient(135deg,#3333FF,#9933FF);box-shadow:0 24px 48px rgba(0,0,0,.4)}
 </style></head><body>
-  <div class="slide s1 active"><h1>SUN.RISER 2026</h1><p>Editable Hybrid Export Test</p></div>
+  <div class="slide s1 active"><h1>SUN.RISER 2026</h1><p>Editable Hybrid Export Test</p>
+       <div class="accent" data-export-layer="overlay" data-export-id="accent-card"></div></div>
   <div class="slide s2"><span class="tag">Section 02</span><h1>Roadmap</h1>
-       <p>This text must stay editable in PowerPoint.</p></div>
+       <p>This text must stay editable in PowerPoint.</p>
+       <div style="position:absolute;left:120px;bottom:120px;width:600px;height:24px;
+                   background:#3333FF;border-radius:12px"
+            data-export-native="rect" data-export-id="footer-bar"></div></div>
 <script>
   function goToSlide(n){
     var s=document.querySelectorAll('.slide');
@@ -296,6 +302,99 @@ def main() -> int:
              else c_lo.fail(f"rc={rc}"))
         results += [c_mi, c_lo]
 
+        # ================= JOB D: 3-layer export (orchestrator end-to-end) ====
+        # Slide 1 declares one overlay → the PPTX must hold 2 pictures (base +
+        # the overlay as its own shape) plus native text. Slide 2 has none →
+        # exactly 1 picture. Layered must NOT emit export-layout.json
+        # (isolation rule #3) — and the flat run above (job A) proves the v1
+        # path still works unchanged on the very same deck.
+        d_run = R("D1 export_pptx.py --mode layered (full chain a→f)")
+        d_struct = R("D2 object separation (overlay = own shape)")
+        if not (node and npm_pw and has_pptx):
+            d_run.skip("needs Node+playwright+python-pptx (see hints above)")
+        else:
+            layered_dir = out_dir / "layered"
+            layered_pptx = out_dir / "deck-layered.pptx"
+            rc, log, ms = run([sys.executable, str(SCRIPTS / "export_pptx.py"),
+                               "--html", str(deck_dir / "index.html"),
+                               "--slides", str(SLIDES),
+                               "--out-dir", str(layered_dir),
+                               "--output", str(layered_pptx),
+                               "--mode", "layered", "--font", "Arial",
+                               "--showJs", "goToSlide({n})",
+                               "--selector", ".slide.active"], timeout=300)
+            if rc == 0 and layered_pptx.exists():
+                d_run.ok(ms, "gate PASS (validate_export_objects)")
+                from pptx import Presentation
+                from pptx.enum.shapes import MSO_SHAPE_TYPE
+                prs = Presentation(str(layered_pptx))
+                pics = [sum(1 for s in sl.shapes
+                            if s.shape_type == MSO_SHAPE_TYPE.PICTURE)
+                        for sl in prs.slides]
+                names = [s.name for sl in prs.slides for s in sl.shapes]
+                no_shim = not (layered_dir / "export-layout.json").exists()
+                if (pics == [2, 1] and "Overlay: accent-card" in names
+                        and "Native: footer-bar" in names and no_shim):
+                    d_struct.ok(note=f"pictures/slide={pics}, overlay + native shapes named, no v1 shim")
+                else:
+                    d_struct.fail(f"pictures={pics}, shim_absent={no_shim}, names={names[:6]}")
+            else:
+                d_run.fail(log.strip().splitlines()[-1] if log.strip() else f"rc={rc}")
+        results += [d_run, d_struct]
+
+        # ================= JOB E: artwork decomposition (anti-B11) ============
+        # A full-page artwork SVG must come apart into per-object overlays:
+        # full-bleed group → base-candidate (kept out of the snippet),
+        # overlapping neighbors → one cluster, a wide multi-object group →
+        # split by its children's disjoint bboxes.
+        e_run = R("E1 decompose_svg_objects.py (artwork → per-object overlays)")
+        if not (node and npm_pw):
+            e_run.skip("needs Node+playwright (see hints above)")
+        else:
+            fixture = out_dir / "decompose-fixture.svg"
+            fixture.write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" '
+                'xmlns:ns1="http://www.inkscape.org/namespaces/inkscape" '
+                'width="1920" height="1080" viewBox="0 0 1920 1080">\n'
+                '<g ns1:groupmode="layer" ns1:label="Layer 1">\n'
+                '<g><rect x="0" y="0" width="1920" height="1080" fill="#eee"/></g>\n'
+                '<g><circle cx="140" cy="140" r="40" fill="red"/></g>\n'
+                '<g><rect x="150" y="150" width="60" height="60" fill="blue"/></g>\n'
+                '<g><rect x="100" y="900" width="50" height="50" fill="green"/>'
+                '<rect x="1500" y="900" width="50" height="50" fill="purple"/></g>\n'
+                '</g>\n</svg>\n', encoding="utf-8")
+            decomp_dir = out_dir / "decompose"
+            rc, log, ms = run([sys.executable,
+                               str(SCRIPTS / "decompose_svg_objects.py"),
+                               "--svg", str(fixture),
+                               "--out-dir", str(decomp_dir),
+                               "--prefix", "fx"], timeout=120)
+            manifest_path = decomp_dir / "decompose-manifest.json"
+            if rc == 0 and manifest_path.exists():
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                objects = manifest["objects"]
+                frags_exist = all((decomp_dir / o["file"]).exists() for o in objects)
+                snippet = (decomp_dir / "snippet.html").read_text(encoding="utf-8")
+                checks = (
+                    len(objects) == 3                       # circle+rect, 2 split rects
+                    and len(manifest["base_candidates"]) == 1  # full-page rect
+                    and sum("children" in p for o in objects for p in o["parts"]) == 2
+                    and frags_exist
+                    and snippet.count("data-export-layer=\"overlay\"") == 3
+                    and all(
+                        'viewBox="0 0 ' in (decomp_dir / o["file"]).read_text()
+                        and 'transform="translate(' in (decomp_dir / o["file"]).read_text()
+                        for o in objects
+                    ))
+                if checks:
+                    e_run.ok(ms, "1 base-candidate + 3 objects (cluster + 2 split)")
+                else:
+                    e_run.fail(f"objects={[(o['id'], o['parts']) for o in objects]}, "
+                               f"base={len(manifest['base_candidates'])}")
+            else:
+                e_run.fail(log.strip().splitlines()[-1] if log.strip() else f"rc={rc}")
+        results += [e_run]
+
     finally:
         httpd.shutdown()
         if not args.keep:
@@ -306,6 +405,8 @@ def main() -> int:
         "A editable PPTX": next(r for r in results if r.name.startswith("A3")).status,
         "B HTML→PDF":      next(r for r in results if r.name.startswith("B1")).status,
         "C read PPTX":     next(r for r in results if r.name.startswith("C1")).status,
+        "D layered 3-lớp": next(r for r in results if r.name.startswith("D2")).status,
+        "E decompose artwork": next(r for r in results if r.name.startswith("E1")).status,
     }
     light_ok = all(s == "PASS" for s in light_jobs.values())
 

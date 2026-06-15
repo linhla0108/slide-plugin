@@ -60,6 +60,19 @@ SLIDE_W = Inches(13.333333)  # 16:9 widescreen
 SLIDE_H = Inches(7.5)
 
 
+def slide_dimensions(canvas_w: float, canvas_h: float) -> tuple[float, float]:
+    """Fit the source aspect ratio within the standard 13.333 x 7.5in box."""
+    if canvas_w <= 0 or canvas_h <= 0:
+        raise ValueError("Canvas dimensions must be positive")
+    aspect = canvas_w / canvas_h
+    widescreen = 13.333333 / 7.5
+    if abs(aspect - 16 / 9) < 1e-6:
+        return 13.333333, 7.5
+    if aspect >= widescreen:
+        return 13.333333, 13.333333 / aspect
+    return 7.5 * aspect, 7.5
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -159,6 +172,291 @@ def add_text_box(slide, item: dict, font_name: str, layout_w: float, layout_h: f
 
 
 # ---------------------------------------------------------------------------
+# LAYERED MODE (v2 — EXPORT-PPTX-3LAYER-PLAN.md §3.2)
+# Reads ONE export-manifest.json and composes base → (overlay|text interleaved
+# by z) per slide. The flat path below is the frozen v1 code and must not
+# change (isolation rule #1); that is why this is a separate function set.
+# ---------------------------------------------------------------------------
+
+def parse_layered_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Layered (3-layer) PPTX build from export-manifest.json")
+    p.add_argument("--manifest", required=True, help="Path to export-manifest.json (layered)")
+    p.add_argument("--renders",  required=True, help="Directory with the PNGs the manifest names")
+    p.add_argument("--output",   required=True, help="Output .pptx path")
+    p.add_argument("--font",     default="Proxima Nova")
+    p.add_argument("--fallback-font", default="Arial")
+    p.add_argument("--vector-root", default=None,
+                   help="Directory vector_source paths resolve against (default: deck dir = renders dir)")
+    return p.parse_args()
+
+
+GENERIC_FAMILIES = {"serif", "sans-serif", "monospace", "cursive", "fantasy",
+                    "system-ui", "ui-serif", "ui-sans-serif", "ui-monospace"}
+
+
+def first_font_family(font_family: str, fallback: str) -> str:
+    """First concrete family from a CSS font-family list (skip generics)."""
+    for token in str(font_family or "").split(","):
+        name = token.strip().strip('"').strip("'")
+        if name and name.lower() not in GENERIC_FAMILIES:
+            return name
+    return fallback
+
+
+def set_run_typefaces(run, name: str) -> None:
+    """latin + ea + cs typefaces — PowerPoint substitutes the ea/cs face for
+    Vietnamese diacritic glyphs unless all three are pinned to the same font."""
+    from pptx.oxml.ns import qn
+    run.font.name = name
+    rpr = run.font._rPr
+    for tag in ("a:ea", "a:cs"):
+        el = rpr.find(qn(tag))
+        if el is None:
+            el = rpr.makeelement(qn(tag), {})
+            rpr.append(el)
+        el.set("typeface", name)
+
+
+def set_letter_spacing(run, letter_spacing: str, canvas_w: float,
+                       slide_w_in: float = 13.333333) -> None:
+    """CSS letter-spacing px → DrawingML spc (hundredths of a point)."""
+    raw = str(letter_spacing or "").replace("px", "").strip()
+    if not raw or raw == "normal":
+        return
+    try:
+        px = float(raw)
+    except ValueError:
+        return
+    pt = px * (slide_w_in * 72.0) / canvas_w  # same px→pt factor as font_pt()
+    run.font._rPr.set("spc", str(int(round(pt * 100))))
+
+
+SVG_BLIP_EXT_URI = "{96DAC541-7B7A-43D3-8B79-37D633B846F1}"
+ASVG_NS = "http://schemas.microsoft.com/office/drawing/2016/SVG/main"
+
+
+def embed_svg_blip(slide, picture, svg_path: Path) -> None:
+    """Attach the source SVG to an existing picture shape (PowerPoint 2016+
+    renders the vector; every other viewer keeps the PNG fallback that is
+    already the picture's blip). python-pptx has no API for this — the part
+    and the <asvg:svgBlip> extension are injected manually."""
+    from lxml import etree
+    from pptx.opc.constants import RELATIONSHIP_TYPE as RT
+    from pptx.opc.package import Part
+    from pptx.oxml.ns import qn
+
+    package = slide.part.package
+    partname = package.next_partname("/ppt/media/image%d.svg")
+    svg_part = Part(partname, "image/svg+xml", package, svg_path.read_bytes())
+    rid = slide.part.relate_to(svg_part, RT.IMAGE)
+
+    blip = picture._element.blipFill.find(qn("a:blip"))
+    ext_lst = blip.find(qn("a:extLst"))
+    if ext_lst is None:
+        ext_lst = etree.SubElement(blip, qn("a:extLst"))
+    ext = etree.SubElement(ext_lst, qn("a:ext"))
+    ext.set("uri", SVG_BLIP_EXT_URI)
+    # nsmap pins the conventional "asvg" prefix — lxml would otherwise emit
+    # an auto prefix (ns0:), which is spec-valid but not what Office writes.
+    svg_blip = etree.SubElement(ext, f"{{{ASVG_NS}}}svgBlip", nsmap={"asvg": ASVG_NS})
+    svg_blip.set(qn("r:embed"), rid)
+
+
+def add_native_shape(slide, payload: dict, canvas_w: float, canvas_h: float,
+                     slide_w_in: float = 13.333333, slide_h_in: float = 7.5):
+    """Real PPTX autoshape for a simple solid element — scales losslessly."""
+    from pptx.enum.shapes import MSO_SHAPE
+
+    b = payload["bounds"]
+    x, y = b["x"] / canvas_w * slide_w_in, b["y"] / canvas_h * slide_h_in
+    w, h = b["w"] / canvas_w * slide_w_in, b["h"] / canvas_h * slide_h_in
+    radius = float(payload.get("radius") or 0)
+    kind = payload.get("shape", "rect")
+    if kind == "ellipse":
+        shape_type = MSO_SHAPE.OVAL
+    elif radius > 0:
+        shape_type = MSO_SHAPE.ROUNDED_RECTANGLE
+    else:
+        shape_type = MSO_SHAPE.RECTANGLE
+
+    shape = slide.shapes.add_shape(shape_type, Inches(x), Inches(y), Inches(w), Inches(h))
+    shape.name = f"Native: {payload['id']}"
+    if shape_type == MSO_SHAPE.ROUNDED_RECTANGLE and min(b["w"], b["h"]) > 0:
+        shape.adjustments[0] = max(0.0, min(0.5, radius / min(b["w"], b["h"])))
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = parse_css_color(payload.get("fill", "rgb(200,200,200)"))
+    border_w = float(payload.get("border_width") or 0)
+    if border_w > 0:
+        shape.line.color.rgb = parse_css_color(payload.get("border_color", "rgb(0,0,0)"))
+        shape.line.width = Pt(border_w * (slide_w_in * 72.0) / canvas_w)
+    else:
+        shape.line.fill.background()
+    shape.shadow.inherit = False
+    return shape
+
+
+def apply_text_transform(text: str, transform: str) -> str:
+    if transform == "uppercase":
+        return text.upper()
+    if transform == "lowercase":
+        return text.lower()
+    if transform == "capitalize":
+        return " ".join(w[:1].upper() + w[1:] if w else w for w in text.split(" "))
+    return text
+
+
+def add_text_box_v2(slide, item: dict, font_name: str, canvas_w: float, canvas_h: float,
+                    slide_w_in: float = 13.333333, slide_h_in: float = 7.5) -> None:
+    """Layered text box: no 1.35 height hack — exact line spacing instead,
+    and computed text-transform applied (P1 wrong-characters fix)."""
+    x = item["x"] / canvas_w * slide_w_in
+    y = item["y"] / canvas_h * slide_h_in
+    w = max(item["w"] / canvas_w * slide_w_in, 0.08)
+    h = max(item["h"] / canvas_h * slide_h_in * 1.05, 0.14)  # 5% slack only
+    box = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
+    box.name = f"Editable: {item['text'][:40]}"
+
+    tf = box.text_frame
+    tf.clear()
+    tf.word_wrap = False
+    tf.auto_size = None
+    for side in ("margin_left", "margin_right", "margin_top", "margin_bottom"):
+        setattr(tf, side, Inches(0))
+
+    align = item.get("align", "start")
+    alignment = PP_ALIGN.CENTER if align == "center" else (
+        PP_ALIGN.RIGHT if align in ("right", "end") else PP_ALIGN.LEFT
+    )
+    font_px = float(str(item.get("fontSize", "18px")).replace("px", "").strip() or 18)
+    lh_raw = str(item.get("lineHeight", "")).replace("px", "").strip()
+    try:
+        line_px = float(lh_raw)
+    except ValueError:
+        line_px = font_px * 1.2
+    line_spacing = round(line_px / font_px, 3) if font_px > 0 else None
+
+    content = apply_text_transform(item["text"], str(item.get("textTransform", "none")))
+    # Explicit <br> breaks arrive as \n from capture — one paragraph per line.
+    for index, line in enumerate(content.split("\n")):
+        para = tf.paragraphs[0] if index == 0 else tf.add_paragraph()
+        para.alignment = alignment
+        if line_spacing:
+            para.line_spacing = line_spacing
+        run = para.add_run()
+        run.text = line
+        set_run_typefaces(run, first_font_family(item.get("fontFamily", ""), font_name))
+        set_letter_spacing(run, item.get("letterSpacing", ""), canvas_w, slide_w_in)
+        css_px = float(str(item.get("fontSize", "18px")).replace("px", "").strip())
+        run.font.size = Pt(max(4.0, round(css_px * slide_w_in * 72.0 / canvas_w, 1)))
+        run.font.bold = int(str(item.get("fontWeight", "400")).replace("bold", "700").replace("normal", "400")) >= 700
+        run.font.color.rgb = parse_css_color(item.get("color", "rgb(248,250,252)"))
+
+
+def build_layered(args: argparse.Namespace) -> None:
+    manifest_path = Path(args.manifest)
+    renders_dir = Path(args.renders)
+    output_path = Path(args.output)
+
+    # Operational errors only — quality verdicts belong to the validator.
+    if not manifest_path.exists():
+        raise SystemExit(f"Manifest not found: {manifest_path}")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise SystemExit(f"Manifest unparseable: {error}")
+    for field in ("manifest_version", "mode", "slides"):
+        if field not in manifest:
+            raise SystemExit(f"Manifest missing required field: {field}")
+    if manifest["manifest_version"] != 2:
+        raise SystemExit(f"Unsupported manifest_version: {manifest['manifest_version']}")
+    if manifest["mode"] != "layered":
+        raise SystemExit(f"--manifest build requires mode=layered, got {manifest['mode']!r} "
+                         "(flat decks use the v1 --layout path)")
+
+    first = manifest["slides"][0] if manifest["slides"] else {}
+    first_cw = float(first.get("canvasW") or manifest.get("canvasW") or 1920)
+    first_ch = float(first.get("canvasH") or manifest.get("canvasH") or 1080)
+    slide_w_in, slide_h_in = slide_dimensions(first_cw, first_ch)
+    prs = Presentation()
+    prs.slide_width = Inches(slide_w_in)
+    prs.slide_height = Inches(slide_h_in)
+    blank_layout = prs.slide_layouts[6]
+
+    text_count = picture_count = 0
+    print(f"[build_hybrid_pptx] layered: {len(manifest['slides'])} slides → {output_path}")
+    for entry in manifest["slides"]:
+        cw = float(entry.get("canvasW") or manifest.get("canvasW") or 1920)
+        ch = float(entry.get("canvasH") or manifest.get("canvasH") or 1080)
+        base_png = renders_dir / entry["base"]["png"]
+        if not base_png.exists():
+            raise SystemExit(f"Render not found: {base_png}")
+
+        slide = prs.slides.add_slide(blank_layout)
+        if abs(cw / ch - first_cw / first_ch) > 1e-6:
+            raise SystemExit("All slides in one PPTX must use the same canvas aspect ratio")
+        slide.shapes.add_picture(
+            str(base_png), 0, 0,
+            width=Inches(slide_w_in), height=Inches(slide_h_in),
+        )
+        picture_count += 1
+
+        # ONE merged z list: overlays, native shapes and text interleave
+        # exactly as captured (C8).
+        layers: list[tuple[int, str, dict]] = []
+        for ov in entry.get("objects", []):
+            layers.append((int(ov.get("z", 0)), "overlay", ov))
+        for nv in entry.get("natives", []):
+            layers.append((int(nv.get("z", 0)), "native", nv))
+        for item in entry.get("text", []):
+            if not item.get("text", "").strip():
+                continue
+            layers.append((int(item.get("z", 0)), "text", item))
+        layers.sort(key=lambda t: t[0])
+
+        vector_root = Path(args.vector_root) if args.vector_root else renders_dir
+        svg_embedded = 0
+        for _, kind, payload in layers:
+            if kind == "overlay":
+                png = renders_dir / payload["png"]
+                if not png.exists():
+                    raise SystemExit(f"Render not found: {png}")
+                b = payload["bounds"]
+                pic = slide.shapes.add_picture(
+                    str(png),
+                    Inches(b["x"] / cw * slide_w_in), Inches(b["y"] / ch * slide_h_in),
+                    width=Inches(b["w"] / cw * slide_w_in),
+                    height=Inches(b["h"] / ch * slide_h_in),
+                )
+                pic.name = f"Overlay: {payload['id']}"
+                picture_count += 1
+                # svgBlip: only when a vector source exists AND css effects do
+                # not alter the rendered look (plan round 5 rule).
+                src = payload.get("vector_source")
+                if src and not payload.get("css_effects"):
+                    svg_path = vector_root / src
+                    if svg_path.exists():
+                        embed_svg_blip(slide, pic, svg_path)
+                        svg_embedded += 1
+                    else:
+                        print(f"  WARNING slide {entry['slide']:02d}: vector_source "
+                              f"'{src}' not found under {vector_root} — PNG only")
+            elif kind == "native":
+                add_native_shape(slide, payload, cw, ch, slide_w_in, slide_h_in)
+            else:
+                add_text_box_v2(
+                    slide, payload, args.font, cw, ch, slide_w_in, slide_h_in
+                )
+                text_count += 1
+        print(f"  slide {entry['slide']:02d} ✓ ({len(entry.get('objects', []))} overlays, "
+              f"{len(entry.get('natives', []))} natives, {svg_embedded} svgBlip)")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    prs.save(str(output_path))
+    # Informational audit only — exit verdicts live in validate_export_objects.py.
+    print(f"[build_hybrid_pptx] layered done: {picture_count} pictures, {text_count} text boxes")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -246,4 +544,8 @@ def build(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    build(parse_args())
+    import sys
+    if "--manifest" in sys.argv:
+        build_layered(parse_layered_args())
+    else:
+        build(parse_args())  # frozen v1 flat path

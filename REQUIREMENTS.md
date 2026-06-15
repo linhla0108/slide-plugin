@@ -41,7 +41,7 @@ Run the corresponding python steps with `.venv/bin/python3`. Never use
 | Send to Canva — `send-to-canva` | Canva login (MCP), no install |
 | Polish / rebuild an existing `.pptx` — `pptx` skill | `markitdown` + Pillow; LibreOffice (`brew install --cask libreoffice`) + Poppler (`brew install poppler`) only for the PPTX→PDF→image QA loop |
 | Bulk doc→SVG→PPTX — `ppt-master` (advanced) | `pip install -r .agents/skills/ppt-master/requirements.txt` (~13 packages) + pandoc for legacy formats |
-| Standalone machine (no Claude app) | Node.js 18+ → `./slide-system/scripts/setup.sh` (installs Playwright, python-pptx, Pillow) |
+| Standalone machine (no Claude app) / Export editable PPTX 3 lớp — `slide-system/scripts/export_pptx.py` (+ `decompose_svg_objects.py` to split full-page artwork into per-object overlays at deck build) | Node.js 18+ → `./slide-system/scripts/setup.sh` (installs Playwright, python-pptx, Pillow). Smoke-test: `python3 slide-system/scripts/test_export_stack.py` |
 
 **PyMuPDF is the only approved PDF→SVG provider.** Do not substitute
 `pdftocairo`, `pdf2svg`, or `mutool` — they emit text as paths and break the

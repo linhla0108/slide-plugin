@@ -1,8 +1,22 @@
 # Export Editable PPTX
 
+Run `python3 slide-system/scripts/export_pptx.py` — the single entry point. It
+chains capture → build → compose → compare → `validate_export_objects.py` (the
+one QA gate) and prints a machine-readable result. Default `--mode layered`
+exports the 3-layer model (base picture + each tagged overlay as its own
+movable shape + native text, interleaved by captured z-order); `--mode flat`
+is the frozen v1 single-background path. Layer membership is declared in the
+HTML via `data-export-layer` / `data-export-group` / `data-export-id`
+(contract: `slide-system/scripts/_reference/export-manifest.schema.json`).
+
+Pre-flight: a deck built from full-page artwork SVGs must have gone through
+`decompose_svg_objects.py` at build time (see `build-html-deck.md`) — the gate
+fails untagged visuals AND any single overlay covering ≥85% of the canvas, so
+a wholesale-embedded `visual.svg` cannot pass in either form.
+
 Priority:
 
-1. Export directly from approved HTML with `gen_pptx`.
+1. Export through `export_pptx.py` from approved HTML.
 2. Extract DOM geometry and generate native PowerPoint objects.
 3. Use a manual native generator only as a documented fallback.
 

@@ -1,6 +1,6 @@
 ---
 name: slide-generator
-description: Orchestrate AI slide generation from prompts, files, or mixed inputs. Checks requirements, plans content, selects published visual items, builds HTML, exports PPTX/PDF, and runs QA.
+description: Orchestrate AI slide generation from prompts, files, or mixed inputs. Interpret natural-language output requests, default PowerPoint/PPT/PPTX requests to editable PPTX, check requirements, plan content, select published visual items, build HTML, export PPTX/PDF, and run QA.
 ---
 
 # Slide Generator
@@ -24,8 +24,10 @@ Use this as the default entry point for new slide-generation jobs.
    default: use plain language, attach a guess to every question, ask one at a
    time, and stop asking once you can predict the answers (cap around five to
    six questions; fill the rest with sensible defaults). Detect the case, confirm
-   it in plain words, and gather the export format here too. Offer a tech escape
-   hatch for users who would rather paste a complete brief. Follow
+   it in plain words, and gather or infer the export format here too. Normalize
+   any request for "PowerPoint", "power point", "PPT", or "PPTX" to editable
+   `.pptx` without asking a follow-up about file type or editability. Offer a
+   tech escape hatch for users who would rather paste a complete brief. Follow
    `workflows/intake-and-triage.md`.
 2. End intake with a plain-language brief recap. Do not start building until the
    user confirms the recap. The recap becomes the job requirements and the
@@ -46,6 +48,11 @@ Use this as the default entry point for new slide-generation jobs.
 Always apply these; the build, select, and QA workflows enforce the detail.
 
 - Export only the formats chosen in step 1. Never produce an unrequested format.
+- Treat "PowerPoint", "power point", "PPT", and "PPTX" as the same output
+  request: editable `.pptx` using layered mode. State this inferred default in
+  the recap, but do not ask the user to confirm format or editability separately.
+  Use flat/frozen PPTX only when the user explicitly asks for a flattened,
+  image-only, frozen, or non-editable presentation.
 - Reference brand and job assets in place. Brand fonts, icons, and brand images
   load from the brand pack; job-scoped assets live once in `<job-id>/assets/`.
   Runs never re-copy assets. Copy into a run only an asset unique to that run.
@@ -54,6 +61,16 @@ Always apply these; the build, select, and QA workflows enforce the detail.
 - `qa/export-renders/` images are intermediate. Delete them once render parity
   passes; keep only `qa-report.md`, metrics, and checksums.
 - Keep one-off build scripts in `slide-system/scripts/`, never in the run.
+- Export PPTX only through `python3 slide-system/scripts/export_pptx.py` — one command
+  runs capture → build → compose → compare → validate. `--mode layered` (default)
+  exports tagged objects as separate movable shapes; `--mode flat` is the frozen v1
+  path. `validate_export_objects.py` is the only pass/fail gate; never hand-stitch steps.
+- Full-page artwork SVGs (extraction `visual.svg`) go through
+  `python3 slide-system/scripts/decompose_svg_objects.py` before deck build — it
+  splits the artwork into per-object fragment SVGs plus a ready-tagged
+  `snippet.html`. Never wrap a whole-page SVG in one overlay tag (the gate
+  fails any overlay covering ≥85% of the canvas) and never hand-split
+  (transforms make static bbox math wrong); see `workflows/build-html-deck.md`.
 - Never `mkdir` a folder before having content for it. `package_job.py`
   auto-prunes empty directories at packaging; a finished run must contain none
   (ad-hoc sweep: `python3 slide-system/scripts/prune_empty_dirs.py outputs/`).

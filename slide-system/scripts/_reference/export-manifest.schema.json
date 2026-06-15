@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "export-manifest.json — 3-layer PPTX export contract (plan §6)",
+  "description": "ONE manifest per capture run. Source of truth for build_hybrid_pptx.py --manifest, the orchestrator compose step, and validate_export_objects.py. objects[] and text[] share the z axis so overlays and text interleave (case C8). mode=flat carries an empty objects[] and exists only as an additive artifact next to the frozen v1 outputs.",
+  "type": "object",
+  "required": ["manifest_version", "mode", "slides"],
+  "properties": {
+    "manifest_version": { "const": 2 },
+    "mode": { "enum": ["layered", "flat"] },
+    "canvasW": { "type": "number" },
+    "canvasH": { "type": "number" },
+    "slides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slide", "base", "text"],
+        "properties": {
+          "slide": { "type": "integer", "minimum": 1 },
+          "canvasW": { "type": "number" },
+          "canvasH": { "type": "number" },
+          "base": {
+            "type": "object",
+            "required": ["png", "sha256"],
+            "properties": {
+              "png": { "type": "string" },
+              "sha256": { "type": "string" }
+            }
+          },
+          "qa": {
+            "description": "QA-ephemeral renders (deleted once parity passes).",
+            "type": "object",
+            "properties": {
+              "ref_full": { "type": "string" },
+              "ref_notext": { "type": "string" },
+              "text_layer": { "type": "string" }
+            }
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "role", "png", "bounds", "z", "transparent", "sha256"],
+              "properties": {
+                "id": { "type": "string" },
+                "role": { "const": "complex-overlay" },
+                "png": { "type": "string" },
+                "bounds": {
+                  "type": "object",
+                  "required": ["x", "y", "w", "h"],
+                  "properties": {
+                    "x": { "type": "number" }, "y": { "type": "number" },
+                    "w": { "type": "number" }, "h": { "type": "number" },
+                    "unit": { "type": "string" }
+                  }
+                },
+                "visual_bounds": { "type": "object" },
+                "z": { "type": "integer" },
+                "transparent": { "type": "boolean" },
+                "rotation": { "type": "number" },
+                "scale_factor": { "type": "number" },
+                "vector_source": { "type": ["string", "null"] },
+                "css_effects": { "type": "boolean", "description": "filter/box-shadow/mix-blend-mode alters the rendered look — svgBlip embedding is skipped" },
+                "sha256": { "type": "string" }
+              }
+            }
+          },
+          "natives": {
+            "description": "Simple solid elements exported as REAL PPTX autoshapes (data-export-native). Gradient/effect elements are demoted to overlays at capture.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "role", "shape", "bounds", "z", "fill"],
+              "properties": {
+                "id": { "type": "string" },
+                "role": { "const": "native-shape" },
+                "shape": { "enum": ["rect", "ellipse", "line"] },
+                "bounds": { "type": "object" },
+                "z": { "type": "integer" },
+                "fill": { "type": "string" },
+                "radius": { "type": "number" },
+                "border_color": { "type": "string" },
+                "border_width": { "type": "number" },
+                "opacity": { "type": "number" },
+                "qa_png": { "type": "string", "description": "QA-ephemeral 1x render used only by the compose-check" }
+              }
+            }
+          },
+          "text": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["text", "x", "y", "w", "h", "fontSize"],
+              "properties": {
+                "text": { "type": "string" },
+                "z": { "type": "integer" },
+                "x": { "type": "number" }, "y": { "type": "number" },
+                "w": { "type": "number" }, "h": { "type": "number" },
+                "fontSize": { "type": "string" },
+                "fontWeight": { "type": "string" },
+                "color": { "type": "string" },
+                "align": { "type": "string" },
+                "lineHeight": { "type": "string" },
+                "textTransform": { "type": "string" },
+                "letterSpacing": { "type": "string" },
+                "fontFamily": { "type": "string" },
+                "lineCount": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

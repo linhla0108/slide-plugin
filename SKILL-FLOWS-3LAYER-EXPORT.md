@@ -51,7 +51,17 @@ Input (prompt / file / hỗn hợp)
         │     data-export-group="<name>"    → gom nhóm semantic thành 1 overlay
         │     data-export-native="rect|…"   → autoshape native        (P2)
         │     data-export-skip              → text nung vào raster    [GIỮ]
-        │     không tag → warning "untagged" + fallback vào base
+        │     không tag → validator FAIL (B10) trừ khi --allow-untagged
+        │     1 tag phủ ≥85% canvas → validator FAIL (B11, full-bleed)
+        │
+        │   [9b] Artwork full-page (visual.svg từ extraction)        [MỚI] decompose BẮT BUỘC:
+        │        python3 slide-system/scripts/decompose_svg_objects.py
+        │                --svg <item>/artifact/visual.svg --out-dir <job>/assets/page-NN
+        │        │  measure_svg_groups.js → bbox từng group (Chromium, resolve transform)
+        │        │  cluster liên tiếp chồng bbox → 1 object (card = ảnh+bóng+mặt)
+        │        │  group rộng ≥50% canvas, con rời nhau → TỰ TÁCH thành object con
+        │        │  cluster ≥85% canvas → base-candidate (CSS background, không tag)
+        │        └─ output: fragment SVGs + snippet.html (div đã tag sẵn) + manifest
         ▼
 [10] Export PPTX — TRƯỚC: 2 lệnh rời, 1 PNG full-slide + text box
      Export PPTX — SAU:   1 lệnh orchestrator, PPTX 3 lớp

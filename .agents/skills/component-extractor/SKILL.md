@@ -1,6 +1,6 @@
 ---
 name: component-extractor
-description: Manually extract exact user-selected slide regions into staged reusable components, sections, templates, styles, icons, backgrounds, characters, or assets with deduplication and review evidence.
+description: Interpret natural-language requests to manually extract user-selected slide regions, full slides, page ranges, or complete decks into staged reusable components, sections, templates, styles, icons, backgrounds, characters, or assets with deduplication and review evidence.
 ---
 
 # Component Extractor
@@ -9,14 +9,44 @@ Use only when the user explicitly asks to extract one or more visual regions.
 
 ## Required Input
 
-Each requested item must include:
+Accept natural-language scope. Normalize the user's wording before deciding
+that information is missing. Do not require the user to repeat their request
+in schema-like language.
+
+Resolve these values from the request:
 
 - Source file or folder path.
-- Slide or page number.
-- Exact region bounds or source object ID.
+- Slide/page scope.
+- Region/object scope.
 
-If any value is missing, ask the user before processing. Do not scan a complete
-deck for candidates.
+Apply these defaults:
+
+- "all slides", "every slide/page", "whole/complete/full deck", or equivalent
+  means page 1 through the final page, inclusive. Inspect the source to
+  determine the final page; do not ask the user for the page count.
+- "everything in/on each slide", "all content on all slides", or equivalent,
+  without words such as "separately", "individual", "each object", or "each
+  element", means one full-slide item per page using the complete page/media
+  box.
+- "this slide/page" means the slide/page explicitly referenced by the user or
+  available from the immediate conversation context.
+- A request naming a visible region semantically, such as "the title block",
+  "the orange diagram", or "the footer", is an exact user selection. Inspect
+  the specified page to derive its bounds; do not demand coordinates first.
+
+Proceed without confirmation when these rules produce one reasonable
+interpretation. Do not ask the user to confirm an inferred final page, full-page
+region, or exhaustive page range.
+
+Ask one focused clarification only when a required value cannot be inferred,
+the request has conflicting interpretations, or the user explicitly requests
+separate object/element extraction from a source that has no reliable semantic
+object boundaries, such as a PDF. Explain the specific ambiguity rather than
+listing every input field again.
+
+An explicit complete-deck or full-page request is exhaustive user selection,
+not an automatic candidate scan. Do not scan a complete deck to invent or
+recommend extraction candidates.
 
 ## Preflight (marker-first — do not run the script by default)
 

@@ -20,6 +20,20 @@ confirmed deck brief.
   the recap rather than asking more.
 - One question per turn, each with a guess. Do not batch.
 
+## Export Format Normalization
+
+- Treat "PowerPoint", "power point", "PPT", and "PPTX" as an explicit request
+  for an editable `.pptx`.
+- Default that request to layered export so supported content remains separate,
+  movable, and editable.
+- Do not ask whether the user means `.ppt` versus `.pptx`, or whether the
+  PowerPoint should be editable. Record "editable PPTX" in the brief recap.
+- Use flat/frozen PPTX only when the user explicitly asks for a flattened,
+  image-only, frozen, or non-editable presentation.
+- If the user requests PowerPoint plus another format, such as PDF, export both.
+- Ask about export format only when the user has not named or clearly implied
+  any output format.
+
 ## Triage
 
 Read the input, guess the case, and confirm it in plain words before asking
@@ -45,7 +59,8 @@ not a separate case.
 ### Case 1 — New from idea or brief
 Ask, measuring confidence and skipping anything already supplied: purpose and
 context, audience, main content and whether wording is fixed or open, style and
-tone, slide count, image and icon needs, brand pack, export format. With a full
+tone, slide count, image and icon needs, brand pack, export format. Apply Export
+Format Normalization before deciding that export format is missing. With a full
 brief, analyze it and ask only about missing or unclear parts.
 
 ### Case 2 — Wants advice

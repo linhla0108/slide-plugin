@@ -1,4 +1,4 @@
 interface:
   display_name: "Component Extractor"
-  short_description: "Extract selected slide regions into a reviewed visual library"
-  default_prompt: "Use $component-extractor to extract the exact slide regions I identify, stage them with evidence, and publish only after approval."
+  short_description: "Extract naturally described slide scopes into a reviewed visual library"
+  default_prompt: "Use $component-extractor to interpret my natural-language slide scope, extract the selected regions or full slides, stage them with evidence, and publish only after approval."

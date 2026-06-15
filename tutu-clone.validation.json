@@ -1,0 +1,35 @@
+{
+  "pptx": "/Users/home/Documents/work-space/sun-riser-2026/tutu-clone.pptx",
+  "mode": "layered",
+  "pass": true,
+  "failures": [],
+  "structure": {
+    "slides": [
+      {
+        "slide": 1,
+        "pictures": 1,
+        "autoshapes": 0,
+        "textboxes": 77,
+        "svg_blips": 0
+      }
+    ]
+  },
+  "parity": [
+    {
+      "report": "/Users/home/Documents/work-space/sun-riser-2026/outputs/slide-jobs/tutu-clone/runs/v1/parity/slide-01/tier1/report.json",
+      "tier": "tier1",
+      "pass": true,
+      "mean_absolute_error": 0.0,
+      "rms_error": 0.0,
+      "changed_pixel_ratio": 0.0
+    },
+    {
+      "report": "/Users/home/Documents/work-space/sun-riser-2026/outputs/slide-jobs/tutu-clone/runs/v1/parity/slide-01/tier2/report.json",
+      "tier": "tier2",
+      "pass": true,
+      "mean_absolute_error": 0.0,
+      "rms_error": 0.0,
+      "changed_pixel_ratio": 0.0
+    }
+  ]
+}
