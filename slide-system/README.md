@@ -61,11 +61,13 @@ outputs/
 
 ## Runtime
 
-For slide, image, document, and PDF work, prefer the bundled workspace Python:
+Python scripts require dependencies (python-pptx, Pillow, PyMuPDF) installed in
+a project-local virtual environment (`.venv`). The agent bootstraps this
+automatically — see the auto-setup rule in `slide-generator/SKILL.md`. For
+manual setup, run `./slide-system/scripts/setup.sh`.
 
-```text
-/Users/home/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
-```
+All `python3` commands in this doc assume `.venv` is activated or the agent
+has set `PATH` to include `.venv/bin` before running scripts.
 
 The capability registry stores the actual executable path and only advertises
 image analysis when Pillow imports successfully.

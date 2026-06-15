@@ -16,7 +16,31 @@ Use this as the default entry point for new slide-generation jobs.
 5. `slide-system/workflows/select-visual-items.md`
 6. `slide-system/rules/background-rendering.md` when any raster background,
    complex raster visual, PPTX export, or PDF export is involved.
-7. Only the build, export, and QA workflows required by the requested outputs.
+7. `slide-system/workflows/build-html-deck.md` — ALWAYS when output is PPTX.
+8. `slide-system/workflows/export-editable-pptx.md` — ALWAYS when output is PPTX.
+9. Other build, export, and QA workflows required by the requested outputs.
+
+## Environment Auto-Setup
+
+Before running any Python script, check that `.venv` exists and has the
+required packages. If not, bootstrap it silently:
+
+```bash
+if [ ! -f .venv/bin/python3 ] || ! .venv/bin/python3 -c "import pptx, PIL, fitz" 2>/dev/null; then
+  ./slide-system/scripts/setup.sh
+fi
+```
+
+After setup, run all `python3` commands through the venv:
+
+```bash
+.venv/bin/python3 slide-system/scripts/<script>.py [args]
+```
+
+This is transparent to the user — they never see terminal output. The agent
+handles setup on first use and reuses `.venv` on subsequent runs. If `setup.sh`
+fails (e.g. Node.js not installed), report the missing prerequisite to the user
+in plain language and link to the download page.
 
 ## Pipeline
 
@@ -39,8 +63,27 @@ Use this as the default entry point for new slide-generation jobs.
 7. Create the slide plan and score published visual-library candidates.
 8. Present one approval package before build.
 9. Build HTML only after approval.
-10. Export only the formats chosen in step 1 and run content, object, render,
-    and parity QA.
+    a. **Decompose (conditional):** when the deck uses full-page artwork SVGs
+       (extraction `visual.svg`), run `decompose_svg_objects.py` FIRST to
+       split each page into per-object fragment SVGs + `snippet.html`. Paste
+       the snippet into the slide div; base-candidates become CSS
+       `background-image` on the slide root (no tag).
+    b. **Tag (unconditional — ALL PPTX builds):** tag every visible visual
+       element with `data-export-layer` / `data-export-id` / etc. per the
+       contract in `build-html-deck.md`. This applies whether visuals come
+       from extraction, from `ppt-master`, or are built from scratch. A deck
+       with untagged visuals or a single overlay covering ≥85% of the canvas
+       will FAIL the export gate.
+    c. **Iterate on old run:** if resuming a run originally built with
+       `--mode flat` (v1, no tags), do NOT attempt layered export on the
+       existing HTML. Either rebuild the HTML with proper tags for a new
+       layered run, or keep `--mode flat` for a patch. Ask the user which
+       path they prefer.
+10. Export PPTX through `export_pptx.py` — the single entry point. Default is
+    `--mode layered` (3-layer: base + overlay shapes + native text). Use
+    `--mode flat` ONLY when the user explicitly asks for frozen/non-editable.
+    Run content, object, render, and parity QA. The validator
+    (`validate_export_objects.py`) is the one pass/fail gate.
 11. Package the run with checksums, reports, and a manifest.
 
 ## Output Discipline
