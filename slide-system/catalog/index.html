@@ -3,46 +3,108 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slide Visual Library</title>
+  <title>Visual Library - SUN.STUDIO</title>
   <link rel="stylesheet" href="catalog.css">
 </head>
 <body>
-  <header>
-    <p class="eyebrow">AI Slide Generation System</p>
-    <h1>Visual Library</h1>
-    <p>Review published visual items and extraction staging packages.</p>
-  </header>
+  <div class="page-wrap">
+    <header>
+      <p class="eyebrow">AI Slide Generation System</p>
+      <h1>Visual Library</h1>
+      <p class="subtitle">Browse published and draft visual items for slide generation.</p>
+    </header>
 
-  <main>
-    <section class="toolbar" aria-label="Catalog controls">
-      <div class="tabs" role="tablist">
-        <button class="tab is-active" data-status="published" role="tab">Published</button>
-        <button class="tab" data-status="staging" role="tab">Staging</button>
+    <main>
+      <section class="toolbar" aria-label="Catalog controls">
+        <div class="tabs" role="tablist">
+          <button class="tab is-active" data-status="published" role="tab" aria-selected="true">
+            Published <span class="tab-count" id="count-published">0</span>
+          </button>
+          <button class="tab" data-status="staging" role="tab" aria-selected="false">
+            Draft <span class="tab-count" id="count-draft">0</span>
+          </button>
+        </div>
+
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/>
+          </svg>
+          <input id="search" class="search-input" type="search" placeholder="Search by name, type, intent, or tag">
+          <button class="search-clear" id="search-clear" aria-label="Clear search">&times;</button>
+        </div>
+
+        <select id="type-filter" class="filter-select" aria-label="Filter by type">
+          <option value="">All types</option>
+        </select>
+        <select id="brand-filter" class="filter-select" aria-label="Filter by brand">
+          <option value="">All brands</option>
+        </select>
+        <select id="compat-filter" class="filter-select" aria-label="Filter by compatibility">
+          <option value="">All compatibility</option>
+          <option value="html">HTML</option>
+          <option value="pptx">PPTX</option>
+          <option value="pdf">PDF</option>
+          <option value="canva">Canva</option>
+        </select>
+      </section>
+
+      <p id="summary" class="summary"></p>
+
+      <div id="skeleton" class="skeleton-grid"></div>
+      <div id="grid" class="grid" style="display:none"></div>
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-backdrop" id="backdrop"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Item detail">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="modal-nav-btn" id="nav-prev" aria-label="Previous item (Shift + Left arrow)">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 3L4.5 7l4 4"/></svg>
+          <span>Prev</span>
+          <kbd class="kbd">Shift<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 7H2.5M6 3.5L2.5 7 6 10.5"/></svg></kbd>
+        </button>
+        <span class="modal-title" id="modal-title"></span>
+        <button class="modal-nav-btn" id="nav-next" aria-label="Next item (Shift + Right arrow)">
+          <kbd class="kbd">Shift<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5"/></svg></kbd>
+          <span>Next</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 3L9.5 7l-4 4"/></svg>
+        </button>
+        <button class="modal-close" id="modal-close" aria-label="Close (Esc)" title="Close (Esc)">&times;</button>
       </div>
-      <input id="search" type="search" placeholder="Search ID, name, intent, tag, or source">
-      <select id="type-filter" aria-label="Filter by type">
-        <option value="">All types</option>
-      </select>
-      <select id="brand-filter" aria-label="Filter by brand">
-        <option value="">All brands</option>
-      </select>
-      <select id="compatibility-filter" aria-label="Filter by compatibility">
-        <option value="">All compatibility</option>
-        <option value="html">HTML</option>
-        <option value="pptx">PPTX</option>
-        <option value="pdf">PDF</option>
-        <option value="canva">Canva</option>
-      </select>
-    </section>
-    <p id="summary" class="summary"></p>
-    <div id="groups"></div>
-  </main>
 
-  <dialog id="detail-dialog">
-    <button id="close-dialog" class="close" aria-label="Close">Close</button>
-    <div id="detail"></div>
-  </dialog>
+      <div class="modal-actionbar">
+        <div class="modal-id" id="modal-id"></div>
+        <div class="copy-actions">
+          <button class="copy-btn" id="copy-id" type="button" title="Copy the component id">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2H4a2 2 0 0 0-2 2v6.5A1.5 1.5 0 0 0 3.5 12H5"/></svg>
+            Copy ID
+          </button>
+          <button class="copy-btn copy-btn-primary" id="copy-prompt" type="button" title="Copy a ready-to-paste prompt to use this component">
+            Copy prompt
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-manage" id="modal-manage"></div>
+
+      <nav class="sub-tabs" id="sub-tabs" role="tablist">
+        <button class="sub-tab is-active" data-tab="preview" role="tab" aria-selected="true">Preview</button>
+        <button class="sub-tab" data-tab="info" role="tab" aria-selected="false">Info</button>
+        <button class="sub-tab" data-tab="compat" role="tab" aria-selected="false">Compatibility</button>
+      </nav>
+
+      <div id="panel-preview" class="tab-panel is-active">
+        <div class="modal-visual" id="modal-visual"></div>
+      </div>
+      <div id="panel-info" class="tab-panel panel-pad"></div>
+      <div id="panel-compat" class="tab-panel panel-pad"></div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" role="region" aria-label="Notifications" aria-live="polite"></div>
+
   <script src="catalog.js"></script>
 </body>
 </html>
-
