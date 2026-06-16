@@ -19,6 +19,8 @@ Use this as the default entry point for new slide-generation jobs.
 7. `slide-system/workflows/build-html-deck.md` — ALWAYS when output is PPTX.
 8. `slide-system/workflows/export-editable-pptx.md` — ALWAYS when output is PPTX.
 9. Other build, export, and QA workflows required by the requested outputs.
+10. `slide-system/workflows/save-as-template.md` — when the template save
+    prompt (step 12) fires.
 
 ## Environment Auto-Setup
 
@@ -63,6 +65,11 @@ in plain language and link to the download page.
 7. Create the slide plan and score published visual-library candidates.
 8. Present one approval package before build.
 9. Build HTML only after approval.
+    - **Template path (conditional):** when a slide's plan sets `base_template`,
+      build that slide from the template — load its `visual.svg` + text-slots
+      from `slide-system/library/templates/<id>/`, decompose the `visual.svg`,
+      and fill slots by role/id — before falling back to a custom build. See
+      the "Template-Based Build" section of `build-html-deck.md`.
     a. **Decompose (conditional):** when the deck uses full-page artwork SVGs
        (extraction `visual.svg`), run `decompose_svg_objects.py` FIRST to
        split each page into per-object fragment SVGs + `snippet.html`. Paste
@@ -85,6 +92,23 @@ in plain language and link to the download page.
     Run content, object, render, and parity QA. The validator
     (`validate_export_objects.py`) is the one pass/fail gate.
 11. Package the run with checksums, reports, and a manifest.
+12. **Template save prompt (PPTX only).** After a successful PPTX export,
+    check whether the user's original prompt contains a template-intent
+    signal. If it does, ask: *"Bạn có muốn thêm bộ deck slide này thành
+    template để lúc sau dùng lại không?"* Follow
+    `workflows/save-as-template.md` for the full flow.
+    - **Hard keywords** (case-insensitive, anywhere in prompt): `extract
+      full slide`, `extract full deck`, `clone`, `template`, `copy slide`,
+      `lưu mẫu`, `save as template`.
+    - **Contextual inference:** when no hard keyword matches but the prompt
+      clearly implies reuse intent (e.g. "tạo lại bộ slide giống hôm
+      trước", "giữ nguyên bố cục, chỉ đổi nội dung"), treat it as a
+      trigger. Only trigger when confidence is high; when uncertain, skip.
+    - **Do NOT trigger** on pure content-generation prompts, non-PPTX
+      exports, or failed exports.
+    - If the user confirms, run the save-as-template pipeline automatically
+      (create template folder, generate artifacts, rebuild catalog). See
+      the workflow for step-by-step details.
 
 ## Output Discipline
 
