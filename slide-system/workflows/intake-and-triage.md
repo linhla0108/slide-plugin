@@ -59,16 +59,23 @@ not a separate case.
 ### Case 1 — New from idea or brief
 Ask, measuring confidence and skipping anything already supplied: purpose and
 context, audience, main content and whether wording is fixed or open, style and
-tone, slide count, image and icon needs, brand pack, export format. Apply Export
-Format Normalization before deciding that export format is missing. With a full
-brief, analyze it and ask only about missing or unclear parts.
+tone. Then, after style and tone but before slide count, offer the published
+templates as a starting point — something like "I have N published slide
+templates ready to go — want to browse and pick one as a starting point?" If
+yes, serve the template picker and record the chosen template id; if no, just
+carry on. Then ask slide count, image and icon needs, brand pack, export format.
+Apply Export Format Normalization before deciding that export format is missing.
+With a full brief, analyze it and ask only about missing or unclear parts.
 
 ### Case 2 — Wants advice
 Use the guided questioning above (one question at a time, each with a guess) to
 surface the real intent — no external interview skill is needed. Offer direction
 with the repo's slide-design skills `make-a-deck` (narrative and slide design)
-and `sun-studio-design-system` (brand and slide language). Keep advice tied to
-slide output. Hand the agreed direction into the Case 1 questions.
+and `sun-studio-design-system` (brand and slide language). When the user is
+unsure of a look, offer to browse the published slide templates together and
+pick one as a concrete starting point — a real layout is often easier to react
+to than an abstract description. Keep advice tied to slide output. Hand the
+agreed direction into the Case 1 questions.
 
 ### Case 3 — Polish existing file
 If the file is directly editable, polish it in place with `pptx` and skip export
@@ -106,6 +113,7 @@ End intake with a short, plain-language recap of everything gathered:
 - Audience
 - Main content and source fidelity
 - Style direction
+- Base template (chosen template id, or none)
 - Slide count
 - Image and icon needs
 - Brand pack

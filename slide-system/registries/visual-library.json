@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-07T00:00:00+07:00",
+  "updated_at": "2026-06-16T17:48:36+07:00",
   "items": [
     {
       "id": "sun.asset.logo",
@@ -85,6 +85,2732 @@
       },
       "limitations": [
         "Use selectively on title, section, and closing slides."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.01-cover",
+      "version": "1.0.0",
+      "name": "01 \u2014 Cover: Interview Workshop",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "cover",
+        "title",
+        "opening"
+      ],
+      "tags": [
+        "cover",
+        "title",
+        "opening",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "2026-sun-studio",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "all-rights-reserved",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "workshop-chu-n-b-n-i-b",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "d-nh-cho-qu-n-l",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "interview",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "workshop",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/01-cover/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/01-cover/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/01-cover/evidence/source-with-text.svg",
+        "slot_count": 7,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/01-cover",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/01-cover/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/01-cover/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/01-cover/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/01-cover/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.02-timeline",
+      "version": "1.0.0",
+      "name": "02 \u2014 Timeline SUN.RISER 2026",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "timeline",
+        "schedule"
+      ],
+      "tags": [
+        "timeline",
+        "schedule",
+        "roadmap",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "subheading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "timeline-sun-riser-2026",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "d-nh-cho-qu-n-l",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-t-k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-riser",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ch-nh-th-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "22-05",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "workshop-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "giao-vi-c-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ph-n-h-i-c-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "vi-c-feedback",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "04-06",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "interns-gia-nh-p",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "sun-studio",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "08-06",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-ng-v-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "v-ng-3",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "tr-c-ti-p-t-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "v-n-ph-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "nay-20-05",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/evidence/source-with-text.svg",
+        "slot_count": 23,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/02-timeline",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.03-objectives",
+      "version": "1.0.0",
+      "name": "03 \u2014 M\u1ee5c ti\u00eau Workshop",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "objectives",
+        "agenda"
+      ],
+      "tags": [
+        "objectives",
+        "goals",
+        "agenda",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "body"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "m-c-ti-u-workshop",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "3",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hi-u-m-c-ti-u",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "tuy-n-d-ng",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "c-ch-chu-n-b",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "tr-c-bu-i",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "c-u-tr-c-v",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "c-ch-o-s-u",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "trong-bu-i",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ph-ng-v-n-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "do-v-don-t",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "trong-v-sau",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "bu-i-ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/evidence/source-with-text.svg",
+        "slot_count": 17,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/03-objectives",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.04-mindset",
+      "version": "1.0.0",
+      "name": "04 \u2014 T\u00e2m th\u1ebf tuy\u1ec3n d\u1ee5ng",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "mindset",
+        "concept"
+      ],
+      "tags": [
+        "mindset",
+        "concept",
+        "criteria",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "list-item"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "t-m-th-thu-th-hay-t-m-ng-c",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "4",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-p-trung-v-o-ti-m-n-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-c-h-c-th-ch-nghi-khi-v-o-m-i-tr-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "m-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-ng-v-m-nh-d-n-l-n-ti-ng-h-i",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "xu-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-duy-logic",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-n-chi-ti-t-t-m-c-n-th-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "am-m-v-ng-l-c-v-i-v-tr-ng-tuy-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "hire-to",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "develop",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "intern",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "t-p-trung-v-o-k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "kinh-nghi-m-th-c-chi-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-n-ng-chuy-n-s-u",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "hire-to-do",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "middle",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/evidence/source-with-text.svg",
+        "slot_count": 21,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/04-mindset",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.05-prep",
+      "version": "1.0.0",
+      "name": "05 \u2014 Chu\u1ea9n b\u1ecb tr\u01b0\u1edbc ph\u1ecfng v\u1ea5n",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "checklist",
+        "steps"
+      ],
+      "tags": [
+        "preparation",
+        "checklist",
+        "steps",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading",
+        "list-item"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "5",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "chu-n-b-tr-c",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "b-c-1-n-m-r-ti-u-ch",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-l-i-jd-v-ti-u-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "h-nh-dung-tr-c-m-t-s-h-nh-vi-c-th-m-t-ng-v-i-t-n",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ti-u-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "b-c-2-soi-cv-t-m-i-m-t-m",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "i-chi-u-ti-u-ch-v-qu-t-keywords-v-key-results",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "h-th-c-s-l-m-hay-ch-tham-gia-bi-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "t-m-b-ng-ch-ng-h-nh-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "t-m-i-m-t-m-g-ch-ch-n",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "nh-ng-i-m-g-n-gi-ng-v-i-m-t-ti-u-ch",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "nh-ng-i-m-tr-i-ng-c",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "s-thay-i-t-ng-t-v-tr-chuy-n-ng-nh",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ghi-ch-l-i-v-chu-n-b-c-u-h-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "g-ch-ch-n-t-nh-t-3-i-m-t-m-nh-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "chu-n-b-c-u-h-i-m-b-o-khai-th-c-y",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "s-t-a-r",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ng-ch-chu-n-b-c-u-h-i",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "chu-n-b-s-t-m",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-folder",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/05-prep/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/05-prep/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/05-prep/evidence/source-with-text.svg",
+        "slot_count": 25,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/05-prep",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/05-prep/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/05-prep/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/05-prep/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/05-prep/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.06-tough-candidates",
+      "version": "1.0.0",
+      "name": "06 \u2014 \u1ee8ng vi\u00ean kh\u00f3 \u0111\u1ee1",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "scenarios",
+        "list"
+      ],
+      "tags": [
+        "scenarios",
+        "candidates",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "6",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-nh-hu-ng-g-p-ng-vi-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "kh-khi-ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "h-i-g-p-n-yrobot-h-c",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "thu-c-b-i",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "over-con-dent",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "d-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "d-bi-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "em-nh-l-thuy-t-abc",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "em-l-m-theo-b-c-1-2",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "3-4-theo-h-ng-d-n",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "em-ngh-l",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "team-em-l-m-r-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "nhi-u-d-n-th-nh-c-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-ch-c-a-em-l-t-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "nh-t-r-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/evidence/source-with-text.svg",
+        "slot_count": 19,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 6,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.07-star-method",
+      "version": "1.0.0",
+      "name": "07 \u2014 Ph\u01b0\u01a1ng ph\u00e1p STAR",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "method",
+        "framework"
+      ],
+      "tags": [
+        "star",
+        "method",
+        "framework",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading",
+        "list-item",
+        "title"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "7",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "star",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "kh-ng-ch-khai-ph-em-l-m-g",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "m-t-p-trung-v-o-em-suy-ngh-nh-th-n-o",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "em-n-i-em-t-ng-th-c-hi-n-m-t-d-n-game-v-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "deadlines-r-t-g-p",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "b-i-c-nh-l-c-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "vai-tr-c-a-em-l-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-s-u-ti-n-theo-c-ch-n-o-t-ng-b-c-l-m",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "t-i-sao-l-i-theo-c-ch",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-u-y-u-c-u-l-i-thay-i-th-nh-xyz-c-ch-l-m-c-a",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-s-thay-i-nh-th-n-o",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-s-em-c-n-u-ti-n-backlog-g-p",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "em-h-nh-dung-b-i-c-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "m-c-ti-u-em-ngh-c-n-t-l-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-s-u-ti-n-theo-c-ch-n-o-quy-tr-nh-em-l-m",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "v-sao-em-ch-n-quy-t-c-u-ti-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-u-stakeholder-i-y-u-c-u-ho-c-xung-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "u-ti-n-th-em-x-l-sao",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "v-d",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "s",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "t",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "a",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "r",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "situation",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "b-n-th-c-s-t-ng-l-m-bi-t-c-i-n-y",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "task",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "b-n-l-m-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "action",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "em-th-c-t-l-m-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "b-c-l-m",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "reason-results",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "t-i-sao-l-i-ch-n-c-ch",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-t-c-l-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-u-b-i-c-nh-thay-i-em-x-l-ra-sao",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "t-duy",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/evidence/source-with-text.svg",
+        "slot_count": 39,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 7,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/07-star-method",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.08-structure-warmup",
+      "version": "1.0.0",
+      "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "structure",
+        "checklist"
+      ],
+      "tags": [
+        "structure",
+        "checklist",
+        "warmup",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "8",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-u-c-u-tr-c-c-a-bu-i-ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "checklist-cho-manager",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-warm-up-t-o-kh-ng-kh-c-i-m-tho-i-m-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-u-tr-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-o-h-i-t-o-kh-ng-kh-tho-i-m-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-i-thi-u-v-b-n-th-n-v-vai-tr-trong-bu-i-ph-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-i-thi-u-m-c-ch-bu-i-ph-ng-v-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "y-u-c-u-ng-vi-n-gi-i-thi-u-b-n-th-n-h-c-v-n-ng-l",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "t-c-u-h-i-khai-th-c-th-m-th-ng-tin-t-ng-qu-t-v-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ghi-ch-i-m-c-n-o-s-u-n-u-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "2-overview-n-m-b-t-th-ng-tin-chung-v-t-ng-quan",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "h-c-v-n-c-ng-vi-c-kinh-nghi-m-c-a-ng-vi-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "3-deep-dive-o-s-u-v-chuy-n-m-n-k",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "n-ng-kinh-nghi-m-ki-n-th-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ch-n-2-3-kinh-nghi-m-k-n-ng-ki-n-th-c-c-th-c-n-k",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "t-c-u-h-i-v-khai-ph-theo-s-t-a-r-h-i-r-vai-tr-th",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "g-i-m-t-nh-hu-ng-g-i-n-u-c-n-nh-ng-kh-ng-cung-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ghi-ch-minh-ch-ng-v-nh-gi",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "nghe-80-follow-up-20",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/evidence/source-with-text.svg",
+        "slot_count": 23,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 8,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
+      "version": "1.0.0",
+      "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "structure",
+        "checklist"
+      ],
+      "tags": [
+        "structure",
+        "checklist",
+        "deep-dive",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "9",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-u-c-u-tr-c-c-a-bu-i-ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "checklist-cho-manager",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "4-deep-dive-o-s-u-ng-l-c-mong-mu-n-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ph-h-p-v-i-v-n-ho-t-ch-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-u-tr-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "l-do-ng-tuy-n-v-sao-b-n-ch-n-c-ng-ty-v-tr-n-y",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "k-v-ng-c-ng-vi-c-b-n-mong-i-i-u-g-c-ng-vi-c-i-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-c-ch-ng-h-c-h-i-g-n-y-b-n-c-t-h-c-hay-c-i-thi",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "nh-h-ng-ngh-nghi-p-m-c-ti-u-1-2-n-m-t-i-c-a-b-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "n-y-nh-th-n-o",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ghi-ch-l-i-k-v-ng-c-a-ng-vi-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "h-i-ng-vi-n-b-n-c-c-u-h-i-n-o-d-nh-cho-team-kh-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "tr-l-i-ng-n-g-n-th-c-t-nh-t-qu-n-v-i-th-ng-tin-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "5-candidate-questions-l-ng-nghe-tr-l-i-c-u-h-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-a-ng-vi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "6-close-th-ng-b-o-c-c-b-c-ti-p-theo-c-m-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "nghe-80-follow-up-20",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-m-n-ng-vi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-ng-b-o-quy-tr-nh-tuy-n-d-ng-ti-p-theo-th-i-gi",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/evidence/source-with-text.svg",
+        "slot_count": 23,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 9,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.10-do-dont",
+      "version": "1.0.0",
+      "name": "10 \u2014 N\u00ean & Tr\u00e1nh (DO/DON'T)",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "comparison",
+        "do-dont"
+      ],
+      "tags": [
+        "do-dont",
+        "comparison",
+        "tips",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "label",
+        "list-item",
+        "body",
+        "heading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "01-robot-h-c-thu-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "tr-l-i-theo-l-thuy-t-k-ch-b-n-quy-tr-nh-c-s-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "kh-ng-c-v-d-th-c-t-r-r-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-h-i-c-c-c-u-ki-n-th-c-kinh-nghi-m-l-m",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "chuy-n-i-sang-c-u-h-i-what-if",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "n-u-s-p-em-t-ch-i-t-ng-em-s-l-m-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "hi-n-t-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "tr-nh-don-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "n-n-do",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-nh-hu-ng-th-ng-g-p",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "02-ng-i-ki-m-l-i-h-i-g-p-n-y",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "tr-l-i-c-c-ng-n-thi-u-n-i-dung-kh-ng-cung",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "c-p-th-m-th-ng-tin-c-th",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ch-h-i-c-c-c-u-ki-n-th-c-kinh-nghi-m-l-m-2",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "tr-nh-c-u-h-i-c-kh-ng-yes-no",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "d-ng-c-u-h-i-m-nh-d-n-d-t-t-ng-b-c-t-s-t-a-r-gi",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ng-vi-n-n-i-c-nhi-u-h-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "trong-t-nh-hu-ng-b-n-l-m-b-c-u-ti-n-l-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "b-n-ch-n-c-ch-v-l-do-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-ra-sao-n-u-l-m-l-i-b-n-thay-i-g",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "03-over-con-dent",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-tin-n-i-r-ng-c-ch-c-a-em-l-t-t-nh-t-em",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "l-m-c-h-t-c-i-g-c-ng-l-m-t-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-u-h-i-d-ng-em-c-bi-t-a-b-c-kh-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "tr-nh-a-ra-nh-n-x-t-khen-ng-i-hay-k-t-lu-n-s-m",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "chuy-n-i-sang-c-u-h-i-what-if-th-th-ch-n-ng-l-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "n-u-deadline-b-i-t-ng-t-b-n-u-ti-n-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-u-team-kh-ng-ng-t-nh-b-n-l-m-g-thuy-t-ph-c",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-u-kpi-th-ng-n-y-fail-b-n-s-x-l-ra-sao",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "04-xuy-n-su-t-bu-i-ph-ng-v-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "tranh-lu-n-v-ph-n-x-t-ng-vi-n-trong-bu-i-ph-ng-v",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "a-k-t-qu-ngay-trong-bu-i-ph-ng-v-n-v-i-ng-vi-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "gi-th-i-trung-l-p-t-m",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "kh-ng-a-ra-k-t-qu-ngay-trong-bu-i-ph-ng-v-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "10",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "trong-ph-ng-v-n-do-don-t",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/evidence/source-with-text.svg",
+        "slot_count": 39,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 10,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.11-scoring",
+      "version": "1.0.0",
+      "name": "11 \u2014 Sau ph\u1ecfng v\u1ea5n: Ch\u1ea5m \u0111i\u1ec3m",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "scoring",
+        "checklist"
+      ],
+      "tags": [
+        "scoring",
+        "evaluation",
+        "decision",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "list-item",
+        "title"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "sau-ph-ng-v-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ng-gi-a-c-c-s-l-a-ch-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "11",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-ch-m-i-m-ri-ng-l-t-ng-ng-vi-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-l-i-ghi-ch-ph-ng-v-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "i-chi-u-v-i-m-i-ti-u-ch-tuy-n-d-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-m-i-m-theo-thang-i-m-1-4",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "text-8",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ph-h-p-v-i-nhu-c-u-hi-n-t-i-c-a-team",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "text-10",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-u-ch-u-ti-n-h-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "text-12",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "x-p-h-ng-theo-ch-m-i-m",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2-so-s-nh-nhi-u-ng-vi-n-n-u-c-nh-ng-tr-nh-b-y",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "so-s-nh-tr-c-ti-p",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-p-trung-v-o-i-m-m-nh-n-i-b-t-c-a-t-ng-ng-vi-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "l-u-nh-ng-r-i-ro-b-n-kho-n-c-th-g-p-ph-i-trong-3",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "th-c-t-p",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "quy-t-nh-pass-fail-d-a-tr-n-u-ti-n-c-a-b-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "kh-ng-t-k-v-ng-kh-ng-c-b-ng-ch-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "t-k-v-ng-m-t-ph-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-ng-k-v-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "v-t-k-v-ng-v-i-b-ng-ch-ng-r-r-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "1",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "3",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "4",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-t",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "t-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "fail-pass",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "tr-c-22-05-2026",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/evidence/source-with-text.svg",
+        "slot_count": 35,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 11,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/11-scoring",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.12-action-items",
+      "version": "1.0.0",
+      "name": "12 \u2014 L\u00e0m ngay cho bu\u1ed5i ti\u1ebfp theo",
+      "type": "template",
+      "category": "template",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "action-items",
+        "roles"
+      ],
+      "tags": [
+        "action-items",
+        "roles",
+        "summary",
+        "interview",
+        "hr"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "subheading"
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "l-m-ngay-cho-bu-i",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ph-ng-v-n-ti-p-theo",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "sun-riser-2026",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "2026-sun-studio-all-rights-reserved",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "12",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hra-department",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategistdrivercoach",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "review-l-i-v",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ghi-nh-ti-u-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "tuy-n-d-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-cv-g-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ch-n-t-nh-t-2",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "i-m-t-m",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "chu-n-b-t-nh-t-2",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-u-h-i-what-if",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-u-nh-th",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "th-ch-ng-vi-n",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "m-b-o-star",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "nh-n-nh-n",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-ng-l-c-th-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-duy-th-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-h-p-th-t",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/visual.svg",
+        "slots": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/text-slots.json",
+        "source_evidence": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/evidence/source-with-text.svg",
+        "slot_count": 23,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/Interview_Workshop_Sunriser.pdf",
+        "slide": 12,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/templates/interview-workshop-sunriser/12-action-items",
+        "visual": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/visual.svg",
+        "text_slots": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/text-slots.json",
+        "preview": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/preview/preview.html",
+        "evidence": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/evidence/notes.md"
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
       ]
     }
   ]

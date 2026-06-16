@@ -9,6 +9,9 @@ Expand it into:
 - Section map and reading order.
 - Divergence summary when supplied sources disagree.
 - Visual direction and brand pack.
+- Base template adoption: when `base_template` is set in the brief, adopt that
+  published template's layout structure as the starting point for matching
+  slides, and plan the remaining slides normally.
 - Export contract and editability level.
 - Known limitations and unresolved decisions.
 

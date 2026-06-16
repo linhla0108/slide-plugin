@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-13T23:26:36.104555",
+  "updated_at": "2026-06-16T17:48:25+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -964,6 +964,216 @@
       "items": 14,
       "date": "2026-06-13",
       "status": "staging"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "three-column-cards",
+      "stable_id": "sun.template.three-column-cards",
+      "status": "published",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
+      "semantic_signature_sha256": "5058c1a1e5e6a701b9471fd1572b72586d736c1aaf369768e3c2018d418a2cce"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "section-header-question",
+      "stable_id": "sun.template.section-header-question",
+      "status": "published",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
+      "semantic_signature_sha256": "ac7b0e869b81a99138f34b4c13afe988aae7edbbe4a5a6c543b0ebb4e0d01139"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "table-of-contents",
+      "stable_id": "sun.template.table-of-contents",
+      "status": "published",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
+      "semantic_signature_sha256": "a507073c3e812000641a0fc5b8223a0359c8c02312296c0ea85707ee8d8a208f"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "sun-slide-5-template",
+      "item_id": "slide-5",
+      "stable_id": "sun.template.slide-5",
+      "status": "published",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "d1d136bc02f25b39671cbb110b3ec79f5d25c08affb7745b6ef3347b54f9188e"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "guideline-presentation-sun-pages-1-5",
+      "item_id": "guideline-image-layouts",
+      "stable_id": "sun.template.guideline-image-layouts",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e986bc578c5f484d78dbd216c442f27978d37fd5e37c565b67b3439911d184f2",
+      "semantic_signature_sha256": "f78d8a0d44265a0abde14abef6f7b0bf87e82b23c10cc64270c001727fd70336"
+    },
+    {
+      "attempted_at": "2026-06-16T14:42:44+07:00",
+      "extraction_id": "sun-connect-slides-1-5",
+      "item_id": "cover-title-connect",
+      "stable_id": "sun.template.cover-title-connect",
+      "status": "published",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
+      "semantic_signature_sha256": "c3d18518819a356f64153de616a95ce9e290d67b3ccd3aae43270f617fa36f6e"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-01",
+      "stable_id": "sun.interview-workshop-sunriser.01-cover",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "ec04e1ffe31c6b6dfda011172e71ec0ea01d635a8af2e16a600880aae5d8951a",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-02",
+      "stable_id": "sun.interview-workshop-sunriser.02-timeline",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "4893b417b11a2f63379a6be54b6192420d98dd4c08698fe020b5d3da8711f2ba",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-03",
+      "stable_id": "sun.interview-workshop-sunriser.03-objectives",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "c10b90c7e6a22f8066a3e75c41c9987c7d9bb1bddbd343dc113e8b42e6571bb1",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-04",
+      "stable_id": "sun.interview-workshop-sunriser.04-mindset",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "4c1ae6be4f89f4f743002f7152a44ac26ba8d2c9a93fcc2655caa1745848af75",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-05",
+      "stable_id": "sun.interview-workshop-sunriser.05-prep",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "5dba9daa40a87c20475abe25044fc46a775019377d4c62f105d6866ced7efcee",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-06",
+      "stable_id": "sun.interview-workshop-sunriser.06-tough-candidates",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "fc12f7a63c471510b304c075f719f6f2a36c77f77498eb956ac8e1da9dfb8d5f",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-07",
+      "stable_id": "sun.interview-workshop-sunriser.07-star-method",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "94b318119d6497386f4cb34877a5707dc779c0c0b96f054ba35f816d79d652b1",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-08",
+      "stable_id": "sun.interview-workshop-sunriser.08-structure-warmup",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "67df081e3cba1a967727780dd6ef744882c340cbd7a2fecb9a33e5f2b76bb4fd",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-09",
+      "stable_id": "sun.interview-workshop-sunriser.09-structure-deepdive",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "67dc3e19fa6365fabe7e3e1a9a5e66167a049e278431ad981ec4c3e5f03d8ce7",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-10",
+      "stable_id": "sun.interview-workshop-sunriser.10-do-dont",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "b0a97eadae821bad055863570b24395c60467a84474704832e5e65cb9d8aeeaf",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-11",
+      "stable_id": "sun.interview-workshop-sunriser.11-scoring",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "a5e8a088feeedebf2817d87970b0daa54be635317d4eab9d61bb8db7c7774ceb",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T15:39:53+07:00",
+      "extraction_id": "interview-workshop-sunriser-full-pages",
+      "item_id": "page-12",
+      "stable_id": "sun.interview-workshop-sunriser.12-action-items",
+      "status": "published",
+      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
+      "region_identity_sha256": "589cfe57bcc2b7f32c31e876768279643572df52d3edd7e482281b5e4c71a3ca",
+      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
+    },
+    {
+      "attempted_at": "2026-06-16T17:09:43+07:00",
+      "extraction_id": "_smoketest",
+      "item_id": "smoke-item",
+      "stable_id": "sun.component.smoke-test",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
+      "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
+    },
+    {
+      "attempted_at": "2026-06-16T17:27:40+07:00",
+      "extraction_id": "_smoketest",
+      "item_id": "smoke-item",
+      "stable_id": "sun.component.smoke-test",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
+      "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
+    },
+    {
+      "attempted_at": "2026-06-16T17:48:25+07:00",
+      "extraction_id": "_smoketest",
+      "item_id": "smoke-item",
+      "stable_id": "sun.component.smoke-test",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
+      "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
     }
   ]
 }

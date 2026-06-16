@@ -55,3 +55,27 @@ Build only after approval.
   with recorded bounds, crop, scale, and z-order.
 - Keep foreground content editable.
 - Verify fonts, images, overflow, navigation, and deterministic capture.
+
+## Template-Based Build
+
+- When the brief has a `base_template`, load that template's
+  `artifact/visual.svg` + `artifact/text-slots.json` from its published library
+  path (`slide-system/library/templates/<id>/`).
+- Run the template's `visual.svg` through the same decomposer as any full-page
+  artwork (do not hand-split, do not embed wholesale):
+  ```
+  python3 slide-system/scripts/decompose_svg_objects.py \
+      --svg slide-system/library/templates/<id>/artifact/visual.svg \
+      --out-dir <job>/assets/page-NN --prefix page-NN \
+      --href-base <path from deck.html to that out-dir>
+  ```
+- Map the plan's content onto slots **by role/id**. Slot semantics from
+  `text-slots.schema.json`: every slot is `editable` and `allow_empty` (both
+  `const true`) — there is no per-slot `required` flag. Text overflow is governed
+  by `text_contract.overflow_policy` at the item level (typically `"unmanaged"`),
+  NOT per slot. Map plan fields (title / subtitle / body / footer) to matching
+  slot roles; leave unmatched slots empty rather than inventing content.
+- For slides beyond the template's coverage, fall back to the normal custom
+  build above.
+- If user content exceeds the available slots or overflows the slot bounds,
+  surface a warning in the approval package — overflow is unmanaged by design.

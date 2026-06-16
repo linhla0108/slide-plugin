@@ -76,12 +76,28 @@ def main() -> int:
 
     item_type = mapping["type"]
     folder = TYPE_FOLDERS.get(item_type, item_type)
-    destination = Path(args.library_root) / folder / mapping["candidate_stable_id"]
+    stable_id = mapping["candidate_stable_id"]
+    if item_type == "template":
+        # Templates are grouped by set on disk: an id shaped `sun.<set>.<slide>`
+        # publishes into templates/<set>/<slide>/ so one source deck stays one
+        # tidy, reusable folder instead of many flat siblings.
+        _brand, set_slug, slide_slug = stable_id.split(".")
+        destination = Path(args.library_root) / folder / set_slug / slide_slug
+    else:
+        destination = Path(args.library_root) / folder / stable_id
     if destination.exists():
         shutil.rmtree(destination)
     shutil.copytree(artifact_dir, destination)
-    for required in ("preview", "evidence"):
-        shutil.copytree(item_dir / required, destination / required)
+    shutil.copytree(item_dir / "preview", destination / "preview")
+    # evidence/reference.png is a staging-only render-parity QA raster
+    # (convert_pdf_source.py, page.get_pixmap) that is pixel-identical to
+    # preview/thumbnail.png. The published library only needs the picker
+    # thumbnail, so drop the duplicate raster from the published evidence.
+    shutil.copytree(
+        item_dir / "evidence",
+        destination / "evidence",
+        ignore=shutil.ignore_patterns("reference.png"),
+    )
 
     # Staging keeps one shared asset store at artifact/assets/; evidence SVGs
     # reference it as ../artifact/assets/. The published layout flattens
@@ -97,7 +113,6 @@ def main() -> int:
             )
 
     registry = load_json(args.registry)
-    stable_id = mapping["candidate_stable_id"]
     existing = next((item for item in registry["items"] if item["id"] == stable_id), None)
     repo_root = Path(__file__).resolve().parents[2]
     try:

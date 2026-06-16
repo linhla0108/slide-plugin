@@ -1,0 +1,2128 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0.0,
+      0.0,
+      1920.0,
+      1080.0
+    ],
+    "canvas_width": 1920.0,
+    "canvas_height": 1080.0
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "01-robot-h-c-thu-c",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "01. Robot học thuộc",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0727331,
+        "y": 0.2962945,
+        "width": 0.1143413,
+        "height": 0.0271111
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 24.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            19
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tr-l-i-theo-l-thuy-t-k-ch-b-n-quy-tr-nh-c-s-n",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Trả lời theo lý thuyết, kịch bản, quy trình có sẵn.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0727331,
+        "y": 0.3214053,
+        "width": 0.2096185,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            52
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "kh-ng-c-v-d-th-c-t-r-r-ng",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Không có ví dụ thực tế rõ ràng.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0727331,
+        "y": 0.3414052,
+        "width": 0.1403916,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 3,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            32
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ch-h-i-c-c-c-u-ki-n-th-c-kinh-nghi-m-l-m",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Chỉ hỏi các câu kiến thức, kinh nghiệm đã làm",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519862,
+        "y": 0.3200552,
+        "width": 0.1967297,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 4,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            46
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "chuy-n-i-sang-c-u-h-i-what-if",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "→ Chuyển đổi sang câu hỏi \"What If\":",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615488,
+        "y": 0.3106386,
+        "width": 0.1620347,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 5,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            37
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-u-s-p-em-t-ch-i-t-ng-em-s-l-m-g",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•\"Nếu sếp em từ chối ý tưởng đó, em sẽ làm gì?\"",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615488,
+        "y": 0.3306385,
+        "width": 0.2073085,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 6,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            47
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "hi-n-t-i",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Hiện tại",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1046875,
+        "y": 0.5424453,
+        "width": 0.0498912,
+        "height": 0.0271111
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 7,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 24.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            8
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tr-nh-don-t",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "TRÁNH (DON’T)",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4191612,
+        "y": 0.2274992,
+        "width": 0.1047461,
+        "height": 0.0293704
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 8,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 26.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            13
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-n-do",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "NÊN (DO)",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7611425,
+        "y": 0.2279806,
+        "width": 0.0697124,
+        "height": 0.0293704
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 9,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 26.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-nh-hu-ng-th-ng-g-p",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Tình huống thường gặp",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.1021805,
+        "y": 0.2274992,
+        "width": 0.1473415,
+        "height": 0.0293704
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 10,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 26.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "02-ng-i-ki-m-l-i-h-i-g-p-n-y",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "02. Người kiệm lời, hỏi gì đáp nấy",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0730001,
+        "y": 0.4309092,
+        "width": 0.1909413,
+        "height": 0.0271111
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 11,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 24.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            34
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tr-l-i-c-c-ng-n-thi-u-n-i-dung-kh-ng-cung",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Trả lời cực ngắn, thiếu nội dung, không cung",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0730001,
+        "y": 0.4560199,
+        "width": 0.1986253,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 12,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            46
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-p-th-m-th-ng-tin-c-th",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "cấp thêm thông tin cụ thể.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0823751,
+        "y": 0.4760199,
+        "width": 0.1120491,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 13,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            26
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ch-h-i-c-c-c-u-ki-n-th-c-kinh-nghi-m-l-m-2",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Chỉ hỏi các câu kiến thức, kinh nghiệm đã làm",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519814,
+        "y": 0.4432532,
+        "width": 0.1967354,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 14,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            46
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tr-nh-c-u-h-i-c-kh-ng-yes-no",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Tránh câu hỏi Có/Không (Yes/No)",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519814,
+        "y": 0.4632532,
+        "width": 0.150209,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 15,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 9,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            32
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "d-ng-c-u-h-i-m-nh-d-n-d-t-t-ng-b-c-t-s-t-a-r-gi",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "Dùng câu hỏi mở nhỏ, dẫn dắt từng bước từ S → T → A → R  giúp",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.4141198,
+        "width": 0.270801,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 16,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 10,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            62
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ng-vi-n-n-i-c-nhi-u-h-n",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "ứng viên nói được nhiều hơn:",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.4341198,
+        "width": 0.1261286,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 17,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 10,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            28
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "trong-t-nh-hu-ng-b-n-l-m-b-c-u-ti-n-l-g",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Trong tình huống đó, bạn làm bước đầu tiên là gì?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.4541198,
+        "width": 0.2234619,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 18,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            52
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "b-n-ch-n-c-ch-v-l-do-g",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Bạn chọn cách đó vì lý do gì?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.4741198,
+        "width": 0.1403233,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 19,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            32
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "k-t-qu-ra-sao-n-u-l-m-l-i-b-n-thay-i-g",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Kết quả ra sao? Nếu làm lại bạn thay đổi gì?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.4941197,
+        "width": 0.1990943,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 20,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            47
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "03-over-con-dent",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "03. Over-conﬁdent",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0730001,
+        "y": 0.5911748,
+        "width": 0.1101413,
+        "height": 0.0271111
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 21,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 24.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 12,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-tin-n-i-r-ng-c-ch-c-a-em-l-t-t-nh-t-em",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Tự tin, nói rằng “cách của em là tốt nhất”,“em",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0730001,
+        "y": 0.6162856,
+        "width": 0.2001928,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 22,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            48
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "l-m-c-h-t-c-i-g-c-ng-l-m-t-t",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "làm được hết”, “cái gì cũng làm tốt”.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0823751,
+        "y": 0.6362856,
+        "width": 0.1501303,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 23,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            37
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-u-h-i-d-ng-em-c-bi-t-a-b-c-kh-ng",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Câu hỏi dạng: “Em có biết A/B/C không?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519814,
+        "y": 0.6059189,
+        "width": 0.1825546,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 24,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            40
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tr-nh-a-ra-nh-n-x-t-khen-ng-i-hay-k-t-lu-n-s-m",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Tránh đưa ra nhận xét khen ngợi hay kết luận sớm.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519814,
+        "y": 0.6259189,
+        "width": 0.2213483,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 25,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            50
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "chuy-n-i-sang-c-u-h-i-what-if-th-th-ch-n-ng-l-c",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "→ Chuyển đổi sang câu hỏi \"What If\" để thử thách năng lực thật:",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.5849523,
+        "width": 0.2739759,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 26,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 14,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            63
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-u-deadline-b-i-t-ng-t-b-n-u-ti-n-th-n-o",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Nếu deadline bị đổi đột ngột, bạn ưu tiên thế nào?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.6049523,
+        "width": 0.2266504,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 27,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 15,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            53
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-u-team-kh-ng-ng-t-nh-b-n-l-m-g-thuy-t-ph-c",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Nếu team không đồng tình, bạn làm gì để thuyết phục?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.6249523,
+        "width": 0.2459327,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 28,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 15,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            55
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-u-kpi-th-ng-n-y-fail-b-n-s-x-l-ra-sao",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•“Nếu KPI tháng này fail, bạn sẽ xử lý ra sao?”",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615439,
+        "y": 0.6449523,
+        "width": 0.1962415,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 29,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 15,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            47
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "04-xuy-n-su-t-bu-i-ph-ng-v-n",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "04. Xuyên suốt buổi phỏng vấn",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0730001,
+        "y": 0.7684851,
+        "width": 0.1771463,
+        "height": 0.0271111
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 30,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 24.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 16,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            29
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "tranh-lu-n-v-ph-n-x-t-ng-vi-n-trong-bu-i-ph-ng-v",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Tranh luận và phán xét ứng viên trong buổi phỏng vấn",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519836,
+        "y": 0.7619481,
+        "width": 0.2332501,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 31,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 17,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            53
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "a-k-t-qu-ngay-trong-bu-i-ph-ng-v-n-v-i-ng-vi-n",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Đưa kết quả ngay trong buổi phỏng vấn với ứng viên",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3519836,
+        "y": 0.7819481,
+        "width": 0.2272144,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 32,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 17,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            51
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "gi-th-i-trung-l-p-t-m",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Giữ thái độ trung lập, tò mò.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615461,
+        "y": 0.7622481,
+        "width": 0.1279484,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 33,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 17,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            30
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "kh-ng-a-ra-k-t-qu-ngay-trong-bu-i-ph-ng-v-n",
+      "role": "list-item",
+      "html_tag": "li",
+      "example_value": "•Không đưa ra kết quả ngay trong buổi phỏng vấn.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6615461,
+        "y": 0.7822481,
+        "width": 0.2183825,
+        "height": 0.0203333
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 34,
+      "typography": {
+        "font_family": "ProximaNova-Medium",
+        "font_size": 18.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 17,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            48
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "sun-riser-2026",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "SUN.RISER 2026",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0376811,
+        "y": 0.0651701,
+        "width": 0.0817656,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 35,
+      "typography": {
+        "font_family": "ProximaNova-Bold",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 18,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "2026-sun-studio-all-rights-reserved",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "©2026 SUN.STUDIO ALL RIGHTS RESERVED",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0376811,
+        "y": 0.913522,
+        "width": 0.2068824,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 36,
+      "typography": {
+        "font_family": "ProximaNova-Regular",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 19,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            36
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "10",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "10",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.9501186,
+        "y": 0.913522,
+        "width": 0.0115208,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 37,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 20,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "hra-department",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "HRA DEPARTMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.8598724,
+        "y": 0.0785151,
+        "width": 0.0906011,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 38,
+      "typography": {
+        "font_family": "ProximaNova-Regular",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 21,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "trong-ph-ng-v-n-do-don-t",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "TRONG PHỎNG VẤN: DO & DON'T",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0380089,
+        "y": 0.1193917,
+        "width": 0.4547928,
+        "height": 0.0621296
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 39,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 55.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 22,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            27
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

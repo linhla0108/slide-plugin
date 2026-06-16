@@ -19,6 +19,17 @@ WEIGHTS = {
     "accessibility": 10,
 }
 
+# Template selection rewards content structure over density. Sum stays 100.
+TEMPLATE_WEIGHTS = {
+    **WEIGHTS,
+    "content_structure": 25,
+    "density": 5,
+}
+
+
+def weights_for(item_type: str | None) -> dict[str, int]:
+    return TEMPLATE_WEIGHTS if item_type == "template" else WEIGHTS
+
 
 def overlap_score(left: Iterable[str], right: Iterable[str]) -> float:
     a = {str(value).lower() for value in left}
@@ -36,13 +47,21 @@ def main() -> int:
         default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
     )
     parser.add_argument("--output", required=True)
+    parser.add_argument(
+        "--item-type",
+        default=None,
+        help="Restrict scoring to registry items whose type equals this value (e.g. template).",
+    )
     args = parser.parse_args()
 
     request = load_json(args.request)
     registry = load_json(args.registry)
+    weights = weights_for(args.item_type)
     candidates = []
 
     for item in registry.get("items", []):
+        if args.item_type is not None and item.get("type") != args.item_type:
+            continue
         reasons: list[str] = []
         eligible = item.get("status") == "published"
         if not eligible:
@@ -72,12 +91,12 @@ def main() -> int:
         limitations = " ".join(item.get("limitations", [])).lower()
         accessibility = 0.5 if "contrast" in limitations or "overflow" in limitations else 1.0
         criteria = {
-            "semantic_intent": round(semantic * WEIGHTS["semantic_intent"], 2),
-            "content_structure": round(structure * WEIGHTS["content_structure"], 2),
-            "density": round(density * WEIGHTS["density"], 2),
-            "brand": round(brand * WEIGHTS["brand"], 2),
-            "export_compatibility": round(export * WEIGHTS["export_compatibility"], 2),
-            "accessibility": round(accessibility * WEIGHTS["accessibility"], 2),
+            "semantic_intent": round(semantic * weights["semantic_intent"], 2),
+            "content_structure": round(structure * weights["content_structure"], 2),
+            "density": round(density * weights["density"], 2),
+            "brand": round(brand * weights["brand"], 2),
+            "export_compatibility": round(export * weights["export_compatibility"], 2),
+            "accessibility": round(accessibility * weights["accessibility"], 2),
         }
         score = round(sum(criteria.values()), 2) if eligible else 0.0
         candidates.append(

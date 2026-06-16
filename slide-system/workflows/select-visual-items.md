@@ -3,6 +3,8 @@
 1. Load only `published` items from `registries/visual-library.json`.
 2. Reject deprecated, staging, brand-incompatible, or export-incompatible items.
 3. Score candidates with `scripts/score_visual_items.py`.
+   For template selection, invoke the scorer with `--item-type template` so only
+   registry items of type `template` are scored.
 4. Reuse scores of 75 or higher.
 5. Use a slide-local adaptation for scores from 55 through 74.
 6. Use a slide-local custom structure below 55.
@@ -13,3 +15,7 @@ Write one `analysis/visual-requests.json` and one `analysis/selection-report.jso
 per run, keyed by section. Do not emit a separate file per section.
 
 Select structure by semantic intent before visual resemblance.
+
+When `base_template` is set in the confirmed brief, auto-assign a score of 100 to
+slides whose intent matches the chosen template, and score the remaining slides
+normally via `scripts/score_visual_items.py`.

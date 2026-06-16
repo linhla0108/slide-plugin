@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-01-01T00:00:00+07:00",
+  "source": "sample-fixture",
+  "count": 4,
+  "deck_count": 2,
+  "decks": [
+    {
+      "deck_id": "sun-sample-deck",
+      "name": "SUN.SAMPLE",
+      "source": "SUN.SAMPLE.pdf",
+      "slide_count": 3,
+      "slides": [
+        {
+          "id": "sun.template.sample-cover",
+          "name": "Cover — Title & Connect",
+          "intent": ["cover", "title", "brand"],
+          "tags": ["cover", "title", "hero"],
+          "content_structure": ["nav-label", "title", "subtitle", "footer"],
+          "slot_count": 6,
+          "slide_number": 1,
+          "preview": "",
+          "thumbnail": "",
+          "use_case": "Cover"
+        },
+        {
+          "id": "sun.template.sample-section",
+          "name": "Section Header — Big Question",
+          "intent": ["section", "divider"],
+          "tags": ["section", "header", "divider"],
+          "content_structure": ["nav-label", "heading", "footer"],
+          "slot_count": 7,
+          "slide_number": 2,
+          "preview": "",
+          "thumbnail": "",
+          "use_case": "Section"
+        },
+        {
+          "id": "sun.template.sample-content",
+          "name": "Three-Column Cards",
+          "intent": ["content", "cards"],
+          "tags": ["content", "cards", "columns"],
+          "content_structure": ["heading", "three-column", "card-title", "card-body"],
+          "slot_count": 13,
+          "slide_number": 3,
+          "preview": "",
+          "thumbnail": "",
+          "use_case": "Content"
+        }
+      ]
+    },
+    {
+      "deck_id": "sun-guideline-sample",
+      "name": "Guideline Sample",
+      "source": "GUIDELINE_SAMPLE.pdf",
+      "slide_count": 1,
+      "slides": [
+        {
+          "id": "sun.template.sample-guideline",
+          "name": "Guideline Image Layouts",
+          "intent": ["guideline", "image", "layout"],
+          "tags": ["guideline", "image", "layout"],
+          "content_structure": ["heading", "image-frame", "caption"],
+          "slot_count": 24,
+          "slide_number": 1,
+          "preview": "",
+          "thumbnail": "",
+          "use_case": "Content"
+        }
+      ]
+    }
+  ]
+}

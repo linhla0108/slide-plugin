@@ -8,6 +8,10 @@
     "job_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
     "title": { "type": "string" },
     "brand_pack": { "type": "string" },
+    "base_template": {
+      "type": ["string", "null"],
+      "description": "Published slide template id chosen as the deck's starting layout (for example sun.template.slide-5), or null when no template was picked. Optional; set during intake when the user browses and selects a published template."
+    },
     "inputs": {
       "type": "array",
       "items": {

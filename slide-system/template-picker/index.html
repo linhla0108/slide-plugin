@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SUN.STUDIO &middot; Template Picker</title>
+  <meta name="description" content="Browse and select published SUN.STUDIO slide templates." />
+  <link rel="stylesheet" href="./picker.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#gallery">Skip to templates</a>
+
+  <header class="site-header">
+    <div class="wordmark">
+      <span class="wordmark-brand">SUN<span class="dot">.</span>STUDIO</span>
+      <span class="wordmark-tag">Template Picker</span>
+    </div>
+    <div class="header-meta">
+      <span class="source-pill" id="source-pill" data-state="loading">Loading&hellip;</span>
+      <span class="count-pill"><span id="template-count">0</span> templates</span>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <p class="kicker">Published Library</p>
+    <h1 id="hero-title">Pick a starting point.</h1>
+    <p class="hero-lede" id="hero-lede">
+      Published templates, grouped into full deck sets. Pick a set to browse
+      every slide, preview it as the original, and build a deck on top of it.
+    </p>
+    <nav class="jump-nav" id="jump-nav" aria-label="Switch template set" hidden></nav>
+  </section>
+
+  <main id="gallery" class="gallery" tabindex="-1">
+    <div class="state-message" id="state-message" hidden></div>
+  </main>
+
+  <!-- Slide viewer -->
+  <div class="viewer-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="stage-name" hidden>
+    <div class="viewer" role="document">
+      <header class="viewer-bar">
+        <div class="viewer-bar-lead">
+          <button class="viewer-close" id="modal-close" type="button" aria-label="Close viewer (Escape)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="viewer-heading">
+            <p class="viewer-deck" id="viewer-deck">Deck</p>
+            <p class="viewer-counter" id="viewer-counter">1 / 1</p>
+          </div>
+        </div>
+        <button class="viewer-setbtn" id="viewer-setbtn" type="button" aria-label="Copy a ready-to-paste prompt for the whole set">Copy prompt</button>
+      </header>
+
+      <div class="viewer-body">
+        <nav class="filmstrip" id="filmstrip" aria-label="Slides in this set"></nav>
+
+        <section class="stage">
+          <div class="stage-viewport">
+            <button class="stage-nav stage-prev" id="stage-prev" type="button" aria-label="Previous slide (Left arrow)">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 5 8 12l7 7" />
+              </svg>
+            </button>
+            <figure class="stage-frame" id="stage-frame" aria-live="polite"></figure>
+            <button class="stage-nav stage-next" id="stage-next" type="button" aria-label="Next slide (Right arrow)">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 5 16 12l-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="stage-info">
+            <div class="stage-info-text">
+              <p class="stage-usecase" id="stage-usecase">Cover</p>
+              <h2 class="stage-name" id="stage-name">Slide name</h2>
+              <div class="stage-chips" id="stage-chips"></div>
+              <code class="stage-id" id="stage-id">sun.deck.slide</code>
+            </div>
+            <div class="stage-info-side">
+              <button class="select-btn" id="select-btn" type="button" aria-label="Copy a ready-to-paste prompt for this slide">Copy prompt</button>
+              <p class="select-hint">Copies a ready-made prompt. Paste it to your agent to build on this slide.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="viewer-hints" aria-hidden="true">
+        <span class="hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> Navigate</span>
+        <span class="hint"><kbd>Home</kbd><kbd>End</kbd> First / last</span>
+        <span class="hint"><kbd>Esc</kbd> Close</span>
+      </footer>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+  <script src="./picker.js" defer></script>
+</body>
+
+</html>
