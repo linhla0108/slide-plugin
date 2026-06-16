@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
-  "updated_at": "2026-06-10T17:16:25+07:00",
+  "updated_at": "2026-06-16T12:07:19+07:00",
   "tools": [
     {
       "tool_id": "node",
@@ -65,7 +65,7 @@
       "capabilities": [
         "editable-pptx-export"
       ],
-      "last_checked": "2026-06-10T17:16:25+07:00",
+      "last_checked": "2026-06-16T12:07:19+07:00",
       "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     },
@@ -105,7 +105,7 @@
         "html-to-pdf",
         "browser-print"
       ],
-      "last_checked": "2026-06-10T17:16:25+07:00",
+      "last_checked": "2026-06-16T12:07:19+07:00",
       "environment_fingerprint": "3e927f79c83f63c03b03c48abf85b683a7bd7025167cd5385d20258b88d173c8",
       "last_failure": null
     }

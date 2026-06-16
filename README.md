@@ -3,6 +3,13 @@
 This repository contains SUN.STUDIO source material, canonical brand assets,
 reusable visual items, slide-generation workflows, and generated outputs.
 
+## For Non-Technical Users
+
+New to this? Start with the friendly, plain-language guide (in Vietnamese):
+[`docs/how-to-use.md`](docs/how-to-use.md) — covers the two basic features,
+**Slide Generator** and **Component Extractor**, with chat examples and
+step-by-step diagrams.
+
 ## New AI Slide Work
 
 Use one of the two manual entry points:
