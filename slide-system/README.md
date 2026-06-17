@@ -19,7 +19,7 @@ decks and maintaining a reusable visual library.
 | `library/` | Published visual artifacts grouped by type |
 | `brand-packs/` | Brand references without asset duplication |
 | `catalog/` | Visual review UI for published and staging items |
-| `templates/` | Starter files for jobs, approvals, and extraction |
+| `boilerplates/` | Starter files for jobs, approvals, and extraction |
 | `scripts/` | Repeatable validation, scoring, publishing, and packaging |
 
 ## Output Boundaries
@@ -51,7 +51,7 @@ slide-system/
 ├── library/        published extraction artifacts
 ├── brand-packs/    brand-neutral manifest implementations
 ├── catalog/        published and staging review application
-├── templates/      starter requirement and report files
+├── boilerplates/   starter requirement and report files
 └── scripts/        repeatable command-line automation
 
 outputs/

@@ -3,25 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Visual Library - SUN.STUDIO</title>
+  <title>SUN.STUDIO — Visual Library</title>
   <link rel="stylesheet" href="catalog.css">
 </head>
 <body>
-  <div class="page-wrap">
-    <header>
-      <p class="eyebrow">AI Slide Generation System</p>
-      <h1>Visual Library</h1>
-      <p class="subtitle">Browse published and draft visual items for slide generation.</p>
-    </header>
+  <header class="site-header">
+    <div class="wordmark">
+      <span class="wordmark-brand">SUN<span class="dot">.</span>STUDIO</span>
+      <span class="wordmark-tag">Visual Library</span>
+    </div>
+    <nav class="top-tabs" role="tablist" aria-label="Library sections">
+      <button class="top-tab is-active" data-section="components" role="tab" aria-selected="true" aria-controls="section-components">
+        Components <span class="top-tab-count" id="count-components">0</span>
+      </button>
+      <button class="top-tab" data-section="templates" role="tab" aria-selected="false" aria-controls="section-templates">
+        Templates <span class="top-tab-count" id="count-templates">0</span>
+      </button>
+    </nav>
+  </header>
 
-    <main>
-      <section class="toolbar" aria-label="Catalog controls">
-        <div class="tabs" role="tablist">
-          <button class="tab is-active" data-status="published" role="tab" aria-selected="true">
-            Published <span class="tab-count" id="count-published">0</span>
+  <!-- ==================== COMPONENTS SECTION ==================== -->
+  <div id="section-components" class="section-pane is-active" role="tabpanel">
+    <div class="page-wrap">
+      <section class="toolbar" aria-label="Component controls">
+        <div class="status-tabs" role="tablist">
+          <button class="status-tab is-active" data-status="published" role="tab" aria-selected="true">
+            Published <span class="status-tab-count" id="count-published">0</span>
           </button>
-          <button class="tab" data-status="staging" role="tab" aria-selected="false">
-            Draft <span class="tab-count" id="count-draft">0</span>
+          <button class="status-tab" data-status="staging" role="tab" aria-selected="false">
+            Draft <span class="status-tab-count" id="count-draft">0</span>
           </button>
         </div>
 
@@ -29,7 +39,7 @@
           <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/>
           </svg>
-          <input id="search" class="search-input" type="search" placeholder="Search by name, type, intent, or tag">
+          <input id="search" class="search-input" type="search" placeholder="Search by name, type, intent, or tag…">
           <button class="search-clear" id="search-clear" aria-label="Clear search">&times;</button>
         </div>
 
@@ -52,23 +62,38 @@
 
       <div id="skeleton" class="skeleton-grid"></div>
       <div id="grid" class="grid" style="display:none"></div>
-    </main>
+    </div>
   </div>
 
-  <!-- Detail Modal -->
+  <!-- ==================== TEMPLATES SECTION ==================== -->
+  <div id="section-templates" class="section-pane" role="tabpanel" hidden>
+    <div class="page-wrap">
+      <div class="tpl-header">
+        <div class="tpl-header-text">
+          <p class="tpl-kicker" id="tpl-kicker">Loading…</p>
+          <h2 class="tpl-title" id="tpl-title">Template Sets</h2>
+          <p class="tpl-lede" id="tpl-lede">Published templates grouped into full deck sets.</p>
+        </div>
+        <nav class="jump-nav" id="jump-nav" aria-label="Switch template set" hidden></nav>
+      </div>
+      <main id="tpl-gallery" class="tpl-gallery" tabindex="-1">
+        <div class="state-message" id="tpl-state-message" hidden></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== COMPONENT DETAIL MODAL ==================== -->
   <div class="modal-backdrop" id="backdrop"></div>
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Item detail">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="modal-nav-btn" id="nav-prev" aria-label="Previous item (Shift + Left arrow)">
+        <button class="modal-nav-btn" id="nav-prev" aria-label="Previous item">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 3L4.5 7l4 4"/></svg>
-          <span>Prev</span>
-          <kbd class="kbd">Shift<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 7H2.5M6 3.5L2.5 7 6 10.5"/></svg></kbd>
+          Prev
         </button>
         <span class="modal-title" id="modal-title"></span>
-        <button class="modal-nav-btn" id="nav-next" aria-label="Next item (Shift + Right arrow)">
-          <kbd class="kbd">Shift<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5"/></svg></kbd>
-          <span>Next</span>
+        <button class="modal-nav-btn" id="nav-next" aria-label="Next item">
+          Next
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 3L9.5 7l-4 4"/></svg>
         </button>
         <button class="modal-close" id="modal-close" aria-label="Close (Esc)" title="Close (Esc)">&times;</button>
@@ -81,7 +106,7 @@
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2H4a2 2 0 0 0-2 2v6.5A1.5 1.5 0 0 0 3.5 12H5"/></svg>
             Copy ID
           </button>
-          <button class="copy-btn copy-btn-primary" id="copy-prompt" type="button" title="Copy a ready-to-paste prompt to use this component">
+          <button class="copy-btn copy-btn-primary" id="copy-prompt" type="button" title="Copy prompt">
             Copy prompt
           </button>
         </div>
@@ -100,6 +125,59 @@
       </div>
       <div id="panel-info" class="tab-panel panel-pad"></div>
       <div id="panel-compat" class="tab-panel panel-pad"></div>
+    </div>
+  </div>
+
+  <!-- ==================== TEMPLATE VIEWER MODAL ==================== -->
+  <div class="viewer-backdrop" id="tpl-modal" role="dialog" aria-modal="true" aria-labelledby="stage-name" hidden>
+    <div class="viewer" role="document">
+      <header class="viewer-bar">
+        <div class="viewer-bar-lead">
+          <button class="viewer-close" id="tpl-modal-close" type="button" aria-label="Close viewer (Escape)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="viewer-heading">
+            <p class="viewer-deck" id="viewer-deck">Deck</p>
+            <p class="viewer-counter" id="viewer-counter">1 / 1</p>
+          </div>
+        </div>
+        <button class="viewer-setbtn" id="viewer-setbtn" type="button" aria-label="Copy prompt for the whole set">Copy set prompt</button>
+      </header>
+
+      <div class="viewer-body">
+        <nav class="filmstrip" id="filmstrip" aria-label="Slides in this set"></nav>
+
+        <section class="stage">
+          <div class="stage-viewport">
+            <button class="stage-nav stage-prev" id="stage-prev" type="button" aria-label="Previous slide">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg>
+            </button>
+            <figure class="stage-frame" id="stage-frame" aria-live="polite"></figure>
+            <button class="stage-nav stage-next" id="stage-next" type="button" aria-label="Next slide">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 16 12l-7 7"/></svg>
+            </button>
+          </div>
+
+          <div class="stage-info">
+            <div class="stage-info-text">
+              <p class="stage-usecase" id="stage-usecase">Cover</p>
+              <h2 class="stage-name" id="stage-name">Slide name</h2>
+              <div class="stage-chips" id="stage-chips"></div>
+              <code class="stage-id" id="stage-id">sun.deck.slide</code>
+            </div>
+            <div class="stage-info-side">
+              <button class="select-btn" id="select-btn" type="button">Copy prompt</button>
+              <p class="select-hint">Copies a ready-made prompt for this slide.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="viewer-hints" aria-hidden="true">
+        <span class="hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> Navigate</span>
+        <span class="hint"><kbd>Home</kbd><kbd>End</kbd> First / last</span>
+        <span class="hint"><kbd>Esc</kbd> Close</span>
+      </footer>
     </div>
   </div>
 
