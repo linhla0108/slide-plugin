@@ -103,4 +103,4 @@ Input (prompt / file / hỗn hợp)
 ```
 
 - **Extraction side: ĐÃ tối ưu xong (2026-06-11)** — flatten background, shared assets, reference 1920px. Không tối ưu lại.
-- **Export side: là phase tiếp theo.** `build_hybrid_pptx.py` hiện rasterize toàn bộ visual.svg thành 1 PNG nền (chỉ text tách rời) — vi phạm mô hình 3 lớp trong `rules/background-rendering.md` (base-background / complex-overlay / editable-foreground). Fix object separation phải làm ở export, không phải extraction.
+- **Export side: P1 3-layer ĐÃ triển khai (2026-06-12).** `export_pptx.py` orchestrator chain capture→build→compose→compare→validate. `--mode layered` (default) tách base + overlay + native text. Chi tiết: xem `docs/flows/3layer-export.md` và `docs/flows/slide-generator-workflow.md`.

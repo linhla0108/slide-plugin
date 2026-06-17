@@ -6,7 +6,7 @@
 > ③ cách ly v1↔v2 — bảng mode, 6 luật, regression flat; ④ chốt open issues — compose-check,
 > ngưỡng 2 tier, chất lượng trước, fixture; ⑤ vector_source giữ vector xuyên pipeline;
 > ⑥ audit toàn trình — capture sinh 3 ảnh QA tham chiếu, compose là bước (c), regression
-> "tương đương cấu trúc"). **Chưa triển khai — đây là đích đến.**
+> "tương đương cấu trúc"). **P1 đã triển khai 2026-06-12.** P2 (autoshape, svgBlip) và P3 (REQUIREMENTS.md, smoke-test) chưa.
 >
 > Ký hiệu: `[GIỮ]` không đổi · `[FIX]` sửa hành vi hiện có · `[MỚI]` thêm mới
 
