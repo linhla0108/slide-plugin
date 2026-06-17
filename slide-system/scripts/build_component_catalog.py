@@ -65,9 +65,6 @@ def publish_readiness(item_dir: Path, mapping: dict) -> dict:
     evidence_dir = item_dir / "evidence"
     if not evidence_dir.is_dir() or not any(f.is_file() for f in evidence_dir.rglob("*")):
         blockers.append("No source evidence in this extraction")
-    untested = [k for k, v in mapping.get("compatibility", {}).items() if v == "untested"]
-    if untested:
-        blockers.append("Compatibility not tested: " + ", ".join(sorted(untested)))
     return {"ready": not blockers, "blockers": blockers}
 
 

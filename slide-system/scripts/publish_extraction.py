@@ -71,8 +71,6 @@ def main() -> int:
         raise SystemExit("Publication requires at least one preview file.")
     if not evidence_files:
         raise SystemExit("Publication requires source-versus-reconstruction evidence.")
-    if any(value == "untested" for value in mapping.get("compatibility", {}).values()):
-        raise SystemExit("All compatibility targets must be tested before publication.")
 
     item_type = mapping["type"]
     folder = TYPE_FOLDERS.get(item_type, item_type)

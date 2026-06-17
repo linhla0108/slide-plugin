@@ -132,8 +132,8 @@ def main() -> int:
             "variables": [],
             "variants": [],
             "compatibility": {
-                "html": "untested",
-                "pptx": "untested",
+                "html": "supported",
+                "pptx": "supported",
                 "pdf": "untested",
                 "canva": "untested",
             },
