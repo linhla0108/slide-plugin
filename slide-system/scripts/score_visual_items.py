@@ -52,6 +52,11 @@ def main() -> int:
         default=None,
         help="Restrict scoring to registry items whose type equals this value (e.g. template).",
     )
+    parser.add_argument(
+        "--prefer-set",
+        default=None,
+        help="Template-set prefix (e.g. interview-workshop-sunriser). Same-set items get a +5 bonus.",
+    )
     args = parser.parse_args()
 
     request = load_json(args.request)
@@ -99,6 +104,11 @@ def main() -> int:
             "accessibility": round(accessibility * weights["accessibility"], 2),
         }
         score = round(sum(criteria.values()), 2) if eligible else 0.0
+        if args.prefer_set and eligible and score > 0:
+            item_set = item["id"].split(".")[1] if item["id"].count(".") >= 2 else ""
+            if item_set == args.prefer_set:
+                score = min(100, score + 5)
+                reasons.append("Set preference bonus: +5")
         candidates.append(
             {
                 "item_id": item["id"],

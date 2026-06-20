@@ -1,6 +1,6 @@
 ---
 name: component-extractor
-description: Interpret natural-language requests to manually extract user-selected slide regions, full slides, page ranges, or complete decks into staged reusable components, sections, templates, styles, icons, backgrounds, characters, or assets with deduplication and review evidence.
+description: Extract user-selected slide regions into staged reusable components, sections, templates, styles, icons, backgrounds, characters, or assets with deduplication and review evidence. Default mode is component-level; full-slide templates are created only after component extraction when the user opts in.
 ---
 
 # Component Extractor
@@ -9,44 +9,57 @@ Use only when the user explicitly asks to extract one or more visual regions.
 
 ## Required Input
 
-Accept natural-language scope. Normalize the user's wording before deciding
-that information is missing. Do not require the user to repeat their request
-in schema-like language.
+Default extraction mode is **component-level**. Every item must target a
+specific visual element — a card, chart, icon, background pattern, section
+layout, or other reusable building block — not an entire page.
 
 Resolve these values from the request:
 
 - Source file or folder path.
 - Slide/page scope.
-- Region/object scope.
+- Region/object scope — the specific visual element(s) to extract.
 
-Apply these defaults:
+### Interpreting scope
 
-- "all slides", "every slide/page", "whole/complete/full deck", or equivalent
-  means page 1 through the final page, inclusive. Inspect the source to
-  determine the final page; do not ask the user for the page count.
-- "everything in/on each slide", "all content on all slides", or equivalent,
-  without words such as "separately", "individual", "each object", or "each
-  element", means one full-slide item per page using the complete page/media
-  box.
-- "this slide/page" means the slide/page explicitly referenced by the user or
-  available from the immediate conversation context.
-- A request naming a visible region semantically, such as "the title block",
-  "the orange diagram", or "the footer", is an exact user selection. Inspect
-  the specified page to derive its bounds; do not demand coordinates first.
+- A request naming a visible element semantically ("the title block",
+  "the orange chart", "the footer") is an exact user selection. Inspect
+  the page to derive its bounds.
+- "all components on this slide" means identify each distinct visual element
+  on the page and extract them separately with semantic names.
+- "this slide" or "this page" without further narrowing: extract as
+  components first — identify and name each visual element. After extraction
+  completes, ask the user whether they also want a full-slide template
+  that reuses the same artifacts.
 
-Proceed without confirmation when these rules produce one reasonable
-interpretation. Do not ask the user to confirm an inferred final page, full-page
-region, or exhaustive page range.
+### Full-page scope
 
-Ask one focused clarification only when a required value cannot be inferred,
-the request has conflicting interpretations, or the user explicitly requests
-separate object/element extraction from a source that has no reliable semantic
-object boundaries, such as a PDF. Explain the specific ambiguity rather than
-listing every input field again.
+When the user explicitly requests full-page or full-deck extraction
+("extract all slides", "extract the whole deck"):
 
-An explicit complete-deck or full-page request is exhaustive user selection,
-not an automatic candidate scan. Do not scan a complete deck to invent or
-recommend extraction candidates.
+1. For each page, inspect the content and auto-assign semantic component
+   names based on visual content (e.g., `cover-title-branded`,
+   `section-divider-numbered`, `agenda-numbered-list`). Do NOT stop to
+   ask the user to approve the breakdown — proceed directly to extraction.
+   The `scaffold_extraction.py` naming gate is the safety net; if a name
+   is too generic, the script will reject it.
+2. After component extraction completes, automatically promote all
+   extracted pages to full-slide templates (full set matching the
+   original deck). Do NOT ask which pages to promote — default is all.
+
+### Naming contract
+
+Every `item_id` must be a semantic descriptor of the visual content.
+
+Prohibited patterns (`scaffold_extraction.py` will reject these):
+- `page-XX`, `page-\d+`
+- `slide-XX-full`, `slide-\d+-full`
+- Any purely numeric or positional identifier
+
+Good examples: `metric-card`, `timeline-horizontal`, `org-chart-radial`,
+`salary-table-header`, `goal-cover-title`, `orange-wave-background`
+
+If any value is missing or ambiguous, ask one focused clarification.
+Do not infer and proceed silently.
 
 ## Preflight (marker-first — do not run the script by default)
 
@@ -128,6 +141,21 @@ not read it separately.
    regenerate the catalog staging tab, and update extraction history.
 6. Request approval per item. Publish only approved items; at publish, author
    the per-item `preview/` and confirm `evidence/` (publish requires both).
+
+### Template promotion (automatic for full-deck extraction)
+
+When the extraction scope was a full page or full deck, promote all
+pages to templates automatically — do not ask which ones:
+
+1. Create a new item in the same batch with `requested_type: "template"`.
+2. The template's `candidate_stable_id` follows `sun.<set-slug>.<slide-slug>`
+   pattern (e.g., `sun.kick-off-2026.01-cover`).
+3. The template reuses the same `artifact/visual.svg` and
+   `artifact/text-slots.json` from the component extraction — do not
+   re-run the extraction pipeline.
+4. Write a new `mapping.json` with type `template` pointing to the shared
+   artifacts.
+5. The template goes through the same approval gate before publishing.
 
 ## Boundaries
 

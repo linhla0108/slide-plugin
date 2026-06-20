@@ -16,10 +16,12 @@ Use this as the default entry point for new slide-generation jobs.
 5. `slide-system/workflows/select-visual-items.md`
 6. `slide-system/rules/background-rendering.md` when any raster background,
    complex raster visual, PPTX export, or PDF export is involved.
-7. `slide-system/workflows/build-html-deck.md` — ALWAYS when output is PPTX.
-8. `slide-system/workflows/export-editable-pptx.md` — ALWAYS when output is PPTX.
-9. Other build, export, and QA workflows required by the requested outputs.
-10. `slide-system/workflows/save-as-template.md` — when the template save
+7. `slide-system/rules/component-composition.md` — when building any slide
+   that uses standalone published items (logo, character, shapes).
+8. `slide-system/workflows/build-html-deck.md` — ALWAYS when output is PPTX.
+9. `slide-system/workflows/export-editable-pptx.md` — ALWAYS when output is PPTX.
+10. Other build, export, and QA workflows required by the requested outputs.
+11. `slide-system/workflows/save-as-template.md` — when the template save
     prompt (step 12) fires.
 
 ## Environment Auto-Setup

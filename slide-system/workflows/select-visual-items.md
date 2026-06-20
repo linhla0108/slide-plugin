@@ -5,6 +5,11 @@
 3. Score candidates with `scripts/score_visual_items.py`.
    For template selection, invoke the scorer with `--item-type template` so only
    registry items of type `template` are scored.
+   When the brief has `base_template` and it belongs to a template set
+   (determined by ID prefix, e.g. `sun.interview-workshop-sunriser.01-cover` →
+   set prefix `interview-workshop-sunriser`), pass
+   `--prefer-set <set-prefix>` to the scorer. This encourages visual
+   consistency across the deck by giving same-set items a +5 bonus.
 4. Reuse scores of 75 or higher.
 5. Use a slide-local adaptation for scores from 55 through 74.
 6. Use a slide-local custom structure below 55.

@@ -63,7 +63,8 @@ tone. Then, after style and tone but before slide count, offer the published
 templates as a starting point — something like "I have N published slide
 templates ready to go — want to browse and pick one as a starting point?" If
 yes, serve the template picker and record the chosen template id; if no, just
-carry on. Then ask slide count, image and icon needs, brand pack, export format.
+carry on. Picking a template from a set keeps the whole deck visually
+consistent — the scorer prefers same-set templates for remaining slides. Then ask slide count, image and icon needs, brand pack, export format.
 Apply Export Format Normalization before deciding that export format is missing.
 With a full brief, analyze it and ask only about missing or unclear parts.
 

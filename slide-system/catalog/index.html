@@ -8,10 +8,10 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="wordmark">
-      <span class="wordmark-brand">SUN<span class="dot">.</span>STUDIO</span>
-      <span class="wordmark-tag">Visual Library</span>
-    </div>
+    <a class="logo-link" href="/slide-system/catalog/" aria-label="SUN.STUDIO home">
+      <img class="logo-img" src="logo.png" alt="SUN.STUDIO" height="28">
+      <span class="logo-tag">Visual Library</span>
+    </a>
     <nav class="top-tabs" role="tablist" aria-label="Library sections">
       <button class="top-tab is-active" data-section="components" role="tab" aria-selected="true" aria-controls="section-components">
         Components <span class="top-tab-count" id="count-components">0</span>
@@ -112,19 +112,27 @@
         </div>
       </div>
 
-      <div class="modal-manage" id="modal-manage"></div>
-
-      <nav class="sub-tabs" id="sub-tabs" role="tablist">
-        <button class="sub-tab is-active" data-tab="preview" role="tab" aria-selected="true">Preview</button>
-        <button class="sub-tab" data-tab="info" role="tab" aria-selected="false">Info</button>
-        <button class="sub-tab" data-tab="compat" role="tab" aria-selected="false">Compatibility</button>
-      </nav>
+      <div class="sub-tabs-row">
+        <nav class="sub-tabs" id="sub-tabs" role="tablist">
+          <button class="sub-tab is-active" data-tab="preview" role="tab" aria-selected="true">Preview</button>
+          <button class="sub-tab" data-tab="info" role="tab" aria-selected="false">Info</button>
+          <button class="sub-tab" data-tab="compat" role="tab" aria-selected="false">Compatibility</button>
+        </nav>
+        <div class="modal-manage" id="modal-manage"></div>
+      </div>
 
       <div id="panel-preview" class="tab-panel is-active">
         <div class="modal-visual" id="modal-visual"></div>
       </div>
       <div id="panel-info" class="tab-panel panel-pad"></div>
       <div id="panel-compat" class="tab-panel panel-pad"></div>
+
+      <footer class="modal-hints" aria-hidden="true">
+        <span class="hint"><kbd>Shift</kbd>+<kbd>&larr;</kbd><kbd>&rarr;</kbd> Prev / next item</span>
+        <span class="hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> Carousel</span>
+        <span class="hint"><kbd>+</kbd><kbd>&minus;</kbd><kbd>0</kbd> Zoom</span>
+        <span class="hint"><kbd>Esc</kbd> Close</span>
+      </footer>
     </div>
   </div>
 
@@ -166,8 +174,8 @@
               <code class="stage-id" id="stage-id">sun.deck.slide</code>
             </div>
             <div class="stage-info-side">
-              <button class="select-btn" id="select-btn" type="button">Copy prompt</button>
-              <p class="select-hint">Copies a ready-made prompt for this slide.</p>
+              <button class="select-btn" id="select-btn" type="button">Copy slide prompt</button>
+              <p class="select-hint">Copies a ready-made prompt for this single slide.</p>
             </div>
           </div>
         </section>

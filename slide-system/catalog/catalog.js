@@ -18,6 +18,36 @@ function escAttr(s) {
   return String(s).replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }
 
+const BRAND_FONT_DIR = "/.agents/skills/sun-studio-design-system/assets/system/fonts/";
+const BRAND_FONT_CSS = [
+  ['ProximaNova-Regular',    'Proxima-Nova-Regular.otf'],
+  ['ProximaNova-Medium',     'Proxima-Nova-Medium.otf'],
+  ['ProximaNova-Semibold',   'Proxima-Nova-SemiBold.otf'],
+  ['ProximaNova-SemiboldIt', 'Proxima-Nova-SemiBold-Italic.otf'],
+  ['ProximaNova-Bold',       'Proxima-Nova-Bold.otf'],
+  ['ProximaNova-BoldIt',     'Proxima-Bold-Italic.otf'],
+  ['ProximaNova-Extrabld',   'Proxima-Black.otf'],
+  ['ProximaNova-ExtrabldIt', 'Proxima-ExtraBold-Italic.otf'],
+].map(([family, file]) =>
+  `@font-face{font-family:"${family}";src:url("${BRAND_FONT_DIR}${file}")format("opentype")}`
+).join("\n");
+
+function injectFontsIntoSvgObject(obj) {
+  try {
+    const doc = obj.contentDocument;
+    if (!doc) return;
+    const svg = doc.querySelector("svg");
+    if (!svg) return;
+    let defs = svg.querySelector("defs");
+    if (!defs) { defs = doc.createElementNS("http://www.w3.org/2000/svg", "defs"); svg.prepend(defs); }
+    if (defs.querySelector(".brand-fonts")) return;
+    const style = doc.createElementNS("http://www.w3.org/2000/svg", "style");
+    style.setAttribute("class", "brand-fonts");
+    style.textContent = BRAND_FONT_CSS;
+    defs.prepend(style);
+  } catch (_) { /* cross-origin or not loaded */ }
+}
+
 function el(tag, cls, text) {
   const node = document.createElement(tag);
   if (cls) node.className = cls;
@@ -236,6 +266,7 @@ function compCompatMatches(item) {
 function compFilterItems() {
   const term = compDom.search.value.trim().toLowerCase();
   compState.filtered = compState.items.filter(item => {
+    if (item.type === "template") return false;
     if (!compStatusMatches(item)) return false;
     if (compDom.typeFilter.value && item.type !== compDom.typeFilter.value) return false;
     if (compDom.brandFilter.value && item.brand !== compDom.brandFilter.value) return false;
@@ -376,7 +407,12 @@ function compRenderModal() {
     const imgSrc = compResolvePath(currentImg.path);
 
     visualHtml += '<div class="carousel-container is-zoomable">';
-    visualHtml += `<img src="${imgSrc}" alt="${escAttr(item.name)}" draggable="false" onerror="this.style.display='none'">`;
+    const isSvg = imgSrc && imgSrc.endsWith(".svg");
+    if (isSvg) {
+      visualHtml += `<object data="${imgSrc}" type="image/svg+xml" class="carousel-svg-obj" aria-label="${escAttr(item.name)}"></object>`;
+    } else {
+      visualHtml += `<img src="${imgSrc}" alt="${escAttr(item.name)}" draggable="false" onerror="this.style.display='none'">`;
+    }
     visualHtml += `
       <div class="zoom-controls" role="group" aria-label="Zoom controls">
         <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">&minus;</button>
@@ -407,6 +443,8 @@ function compRenderModal() {
   }
 
   compDom.modalVisual.innerHTML = visualHtml;
+  const svgObj = compDom.modalVisual.querySelector(".carousel-svg-obj");
+  if (svgObj) svgObj.addEventListener("load", () => injectFontsIntoSvgObject(svgObj));
   if (hasImage) compWireZoom();
 
   if (hasMultipleImages) {
@@ -461,7 +499,7 @@ function compChangeSlide(dir) {
 
 /* Zoom + Pan */
 
-function compCurrentImageEl() { return compDom.modalVisual.querySelector("img"); }
+function compCurrentImageEl() { return compDom.modalVisual.querySelector(".carousel-svg-obj") || compDom.modalVisual.querySelector("img"); }
 
 function compResetZoom() { compState.zoom = 1; compState.pan.x = 0; compState.pan.y = 0; }
 
@@ -894,16 +932,16 @@ function compLoadData() {
     })
     .then(data => {
       compState.items = data.items || [];
-      const pubCount = data.counts?.published ?? compState.items.filter(i => i.status === "published").length;
-      const draftCount = data.counts?.staging ?? compState.items.filter(i => ["staging", "qa"].includes(i.status)).length;
+      const nonTpl = compState.items.filter(i => i.type !== "template");
+      const pubCount = nonTpl.filter(i => i.status === "published").length;
+      const draftCount = nonTpl.filter(i => ["staging", "qa"].includes(i.status)).length;
       compDom.countPublished.textContent = pubCount;
       compDom.countDraft.textContent = draftCount;
 
-      // Update top-level tab count
-      $("#count-components").textContent = compState.items.length;
+      $("#count-components").textContent = nonTpl.length;
 
-      compAddOptions(compDom.typeFilter, compState.items.map(i => i.type));
-      compAddOptions(compDom.brandFilter, compState.items.map(i => i.brand));
+      compAddOptions(compDom.typeFilter, nonTpl.map(i => i.type));
+      compAddOptions(compDom.brandFilter, nonTpl.map(i => i.brand));
 
       compHideSkeleton();
       compRender();
@@ -1006,7 +1044,7 @@ function tplRender(payload, sourceState) {
   const total = tplState.decks.reduce((n, d) => n + tplDeckSlides(d).length, 0);
 
   // Update top-tab count
-  $("#count-templates").textContent = total;
+  $("#count-templates").textContent = tplState.decks.length;
 
   tplDom.kicker.textContent = total + " template" + (total === 1 ? "" : "s") + " · " +
     tplState.decks.length + " set" + (tplState.decks.length === 1 ? "" : "s") +
@@ -1134,8 +1172,9 @@ function tplOpenDeck(deck, i) {
 
   const actions = el("div", "section-actions");
   actions.appendChild(el("span", "section-count", slides.length + (slides.length === 1 ? " slide" : " slides")));
-  const setBtn = el("button", "set-btn", "Copy prompt");
+  const setBtn = el("button", "set-btn", "Copy set prompt");
   setBtn.type = "button";
+  setBtn.title = "Copy a prompt for the whole deck (" + slides.length + " slides)";
   setBtn.addEventListener("click", () => tplSelectDeck(deck));
   actions.appendChild(setBtn);
   head.appendChild(actions);

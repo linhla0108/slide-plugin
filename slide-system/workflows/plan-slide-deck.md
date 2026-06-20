@@ -11,7 +11,9 @@ Expand it into:
 - Visual direction and brand pack.
 - Base template adoption: when `base_template` is set in the brief, adopt that
   published template's layout structure as the starting point for matching
-  slides, and plan the remaining slides normally.
+  slides, and plan the remaining slides normally. Note the template's set prefix
+  (second segment of the ID, e.g. `interview-workshop-sunriser`) for the visual
+  selection step — it drives `--prefer-set` scoring.
 - Export contract and editability level.
 - Known limitations and unresolved decisions.
 
