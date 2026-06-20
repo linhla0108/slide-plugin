@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-16T17:48:25+07:00",
+  "updated_at": "2026-06-17T17:19:53+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -313,56 +313,6 @@
       "semantic_signature_sha256": "e5f6a7b8c9d0e1f2xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     },
     {
-      "attempted_at": "2026-06-10T16:50:09+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-5",
-      "item_id": "slide-1-full",
-      "stable_id": "sun.full-slide-template.cover-title-connect",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
-      "semantic_signature_sha256": "c3d18518819a356f64153de616a95ce9e290d67b3ccd3aae43270f617fa36f6e"
-    },
-    {
-      "attempted_at": "2026-06-10T16:50:09+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-5",
-      "item_id": "slide-2-full",
-      "stable_id": "sun.full-slide-template.section-header-question",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
-      "semantic_signature_sha256": "ac7b0e869b81a99138f34b4c13afe988aae7edbbe4a5a6c543b0ebb4e0d01139"
-    },
-    {
-      "attempted_at": "2026-06-10T16:50:09+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-5",
-      "item_id": "slide-3-full",
-      "stable_id": "sun.full-slide-template.three-column-cards",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
-      "semantic_signature_sha256": "5058c1a1e5e6a701b9471fd1572b72586d736c1aaf369768e3c2018d418a2cce"
-    },
-    {
-      "attempted_at": "2026-06-10T16:50:09+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-5",
-      "item_id": "slide-4-full",
-      "stable_id": "sun.full-slide-template.table-of-contents",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
-      "semantic_signature_sha256": "a507073c3e812000641a0fc5b8223a0359c8c02312296c0ea85707ee8d8a208f"
-    },
-    {
-      "attempted_at": "2026-06-10T16:50:09+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-5",
-      "item_id": "slide-5-full",
-      "stable_id": "sun.template.slide-5",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
-      "semantic_signature_sha256": "e9fc324f09e942c916245415a98c656f714ec98b23b2e6ffd49e7e8c3cb993b3"
-    },
-    {
       "attempted_at": "2026-06-10T22:00:00+07:00",
       "extraction_id": "deepseek-v4-flash-slides-1-5",
       "item_id": "deepseek-v4-flash-slide-1",
@@ -413,526 +363,6 @@
       "semantic_signature_sha256": "c981e22f33dfe99321b746a35c9f5dc35a8fa2e601989c08888a5139a08f11dc"
     },
     {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-1-full",
-      "stable_id": "sun.full-slide-template.cover-title-connect",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-2-full",
-      "stable_id": "sun.full-slide-template.section-header-question",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-3-full",
-      "stable_id": "sun.full-slide-template.three-column-cards",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-4-full",
-      "stable_id": "sun.full-slide-template.table-of-contents",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-5-full",
-      "stable_id": "sun.template.slide-5",
-      "status": "duplicate",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-6-full",
-      "stable_id": "sun.full-slide.slide-6-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "399edba413898bcabc2fe5efa5fa29463918f2da2d1cba4b9e2ed5f75eedece9",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-7-full",
-      "stable_id": "sun.full-slide.slide-7-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "b6bb91e67bd6c459896588bc00e670962e66916ef6a02f1c3524d6a2a12610be",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-8-full",
-      "stable_id": "sun.full-slide.slide-8-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "2413b31aa5c7ffeeb7d4c0a2f1eb4f20f15966fb4029f8f4dab9ca406ab85e5c",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-9-full",
-      "stable_id": "sun.full-slide.slide-9-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "53dd03e1024360cec21e4a8dd6a480f15209ec864ab8c82184c51551abd4dea0",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-10-full",
-      "stable_id": "sun.full-slide.slide-10-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "c17b4bd3b85056eda9478c3e13ea53e6b88f54b175bb141b64dc38e2c7ef2280",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-11-full",
-      "stable_id": "sun.full-slide.slide-11-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "320175f86160ad68b22c49963d027ee79db9cd865c080cdf35fc6d2c6f870a60",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-12-full",
-      "stable_id": "sun.full-slide.slide-12-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "155de18222c928644140fd3991eca3f8f739a189b8ff3f01acc32d19a85125b8",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-13-full",
-      "stable_id": "sun.full-slide.slide-13-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "3c080b2f08b61f5bec6e90daed572defaec66705b15de6f9ff726206af1b35d0",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-14-full",
-      "stable_id": "sun.full-slide.slide-14-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "fe29710270bfa7726eb1b8d689f9552a2d2ad5f2f22047a23cdbe0d6ad519017",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-15-full",
-      "stable_id": "sun.full-slide.slide-15-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "2937a589b94c684dbcf44cff323cb7ed80cf10b7521f2ac3bee186bd5f6e14cd",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-16-full",
-      "stable_id": "sun.full-slide.slide-16-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "9ec5320dc00a4d1b66bc73f51639cb393456aee13802ed283b8c46606ca3de2d",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-17-full",
-      "stable_id": "sun.full-slide.slide-17-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "71b60cbef012044fa81dc53b451868097a2535cc55d2e5f832295f92db5dd1ac",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-18-full",
-      "stable_id": "sun.full-slide.slide-18-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "25466153a1aee6fefc2c52c39f1e0a0666cf047b815e6d33bdf4e023a30bc6a5",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-19-full",
-      "stable_id": "sun.full-slide.slide-19-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "fc6408d3d47207e853122c7130b646e1b8c09b2e5bc1dc79783703b4f18a51d1",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-20-full",
-      "stable_id": "sun.full-slide.slide-20-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "45e68f571414d2db2115938d2de5593d85acd86651188badca1dc01f8bdad590",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-21-full",
-      "stable_id": "sun.full-slide.slide-21-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "d0336be2c6d34eaf82e4f36511f101459842a0ea8e79562b10e865ea2acc9eec",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-22-full",
-      "stable_id": "sun.full-slide.slide-22-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "7589c6e500bdc9d7933465e7701e85f54e4fe7d049b0a7be3e9fdd0093e480ba",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-23-full",
-      "stable_id": "sun.full-slide.slide-23-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "20dea792aff0988ca3bff917403728340d7ca0123466054be6a13143ed9362ba",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-24-full",
-      "stable_id": "sun.full-slide.slide-24-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "13c5e4f1e2324c57b77c732dc53ceef07e94182cff09f667270716befcaf2832",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-25-full",
-      "stable_id": "sun.full-slide.slide-25-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "403e903671afa7bbf2f4b2a89d3cba45ba1dd59f1fe29417921d58d2eca6a407",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-26-full",
-      "stable_id": "sun.full-slide.slide-26-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "b22ee14fa64ddc64ec31448d1c22f940bd9d4b7d266d633ecfc2c2777d5b7974",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-27-full",
-      "stable_id": "sun.full-slide.slide-27-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "b6e358527b1ea429486f9df721a2ccb647a5f293ccc3b798868f7dbe7d941ba3",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-28-full",
-      "stable_id": "sun.full-slide.slide-28-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "459a324fc62ac0c055bad1f3df0f6274ff4abab6f479b25489a73ea520aa240e",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-29-full",
-      "stable_id": "sun.full-slide.slide-29-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "18a52fcfdfaad3cb9dda133f2208a3bfacb851fb852e901a2425d7bd411279c8",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-30-full",
-      "stable_id": "sun.full-slide.slide-30-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "f9ea2afedd6b431c7555cafd636db7f32bf99ef9d8b6798492feefb416ddec4f",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-31-full",
-      "stable_id": "sun.full-slide.slide-31-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "99583126880fb87636d4f1c4e46f3d4fdcac578a9fc3ba397064969c8d35c10d",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-32-full",
-      "stable_id": "sun.full-slide.slide-32-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "759bf0103cf3a057f08c1715b37f64bdedf8b26a9c6eec8f0e3e5666ea43185a",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-33-full",
-      "stable_id": "sun.full-slide.slide-33-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "d2d7d92b44b1a8c57b0ccf4b40b078ae6a66681bb32c7c7136e3228305451aeb",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-34-full",
-      "stable_id": "sun.full-slide.slide-34-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "8a8d85899887a31cf7a0d5b517f246a25027855770005f419142074fcf3496e5",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-35-full",
-      "stable_id": "sun.full-slide.slide-35-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "349effbdee40f150dda5b6c0c01b864a87212be682181aa789774e13394c57a6",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-36-full",
-      "stable_id": "sun.full-slide.slide-36-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "0144401f5af086b0632dd27021c568ae639f6498ad2a7065ac44039a8f9493f5",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-37-full",
-      "stable_id": "sun.full-slide.slide-37-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "c27ef03f5bc352185f2be24e511ee0963691155cd972ea212203b6bb8cf6836c",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-38-full",
-      "stable_id": "sun.full-slide.slide-38-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "bed5da40c8e56ee4fe8c41a636c57b3709683951a7fbca33c37c120e7b317a2f",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-39-full",
-      "stable_id": "sun.full-slide.slide-39-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "033d5147e7e9dfba15dfcfbc4387eeea7be2c0229bd7d237dfc1cce040a831a5",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-10T17:52:15+07:00",
-      "extraction_id": "gpt-5.4-mini-slides-1-40",
-      "item_id": "slide-40-full",
-      "stable_id": "sun.full-slide.slide-40-full",
-      "status": "staging",
-      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
-      "region_identity_sha256": "e9fcbdd982720d970b243d54904f901050546804a8068ccedd92a3b88420adbb",
-      "semantic_signature_sha256": "20f8b36e1ceeaf9dfc5b5038d08a6d19789fae56fa69e5a71db970d7b84ccbab"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-01",
-      "stable_id": "sun.component.page-01",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "ec04e1ffe31c6b6dfda011172e71ec0ea01d635a8af2e16a600880aae5d8951a",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-02",
-      "stable_id": "sun.component.page-02",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "4893b417b11a2f63379a6be54b6192420d98dd4c08698fe020b5d3da8711f2ba",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-03",
-      "stable_id": "sun.component.page-03",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "c10b90c7e6a22f8066a3e75c41c9987c7d9bb1bddbd343dc113e8b42e6571bb1",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-04",
-      "stable_id": "sun.component.page-04",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "4c1ae6be4f89f4f743002f7152a44ac26ba8d2c9a93fcc2655caa1745848af75",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-05",
-      "stable_id": "sun.component.page-05",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "5dba9daa40a87c20475abe25044fc46a775019377d4c62f105d6866ced7efcee",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-06",
-      "stable_id": "sun.component.page-06",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "fc12f7a63c471510b304c075f719f6f2a36c77f77498eb956ac8e1da9dfb8d5f",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-07",
-      "stable_id": "sun.component.page-07",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "94b318119d6497386f4cb34877a5707dc779c0c0b96f054ba35f816d79d652b1",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-08",
-      "stable_id": "sun.component.page-08",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "67df081e3cba1a967727780dd6ef744882c340cbd7a2fecb9a33e5f2b76bb4fd",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-09",
-      "stable_id": "sun.component.page-09",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "67dc3e19fa6365fabe7e3e1a9a5e66167a049e278431ad981ec4c3e5f03d8ce7",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-10",
-      "stable_id": "sun.component.page-10",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "b0a97eadae821bad055863570b24395c60467a84474704832e5e65cb9d8aeeaf",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-11",
-      "stable_id": "sun.component.page-11",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "a5e8a088feeedebf2817d87970b0daa54be635317d4eab9d61bb8db7c7774ceb",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
-      "attempted_at": "2026-06-12T12:22:08+07:00",
-      "extraction_id": "interview-workshop-sunriser-full-pages",
-      "item_id": "page-12",
-      "stable_id": "sun.component.page-12",
-      "status": "staging",
-      "source_sha256": "623e65c113268c8bfd0e2f1221c3afe1980c4a3132cbef651bf338ee7902f4d4",
-      "region_identity_sha256": "589cfe57bcc2b7f32c31e876768279643572df52d3edd7e482281b5e4c71a3ca",
-      "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
-    },
-    {
       "attempted_at": "2026-06-13T14:38:33+07:00",
       "extraction_id": "tutu-optimized-full-page",
       "item_id": "page-01",
@@ -941,29 +371,6 @@
       "source_sha256": "3aea6b60e2ebbbcd9928cc08c361cd266747ab767e4afa28bcdfcbfb263e679f",
       "region_identity_sha256": "c6c4521c18580b85bbd86a9d3766e08e768ae4dc635a748c880960f59aa4c68a",
       "semantic_signature_sha256": "7d612de541a618c5491982ed853cd538e88c93086e1d62cbefc3eef0dcd31009"
-    },
-    {
-      "batch": "sun-goal-2025-full-pages",
-      "source": "input/Sun.Goal_2025-10-01.pdf",
-      "pages": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14
-      ],
-      "items": 14,
-      "date": "2026-06-13",
-      "status": "staging"
     },
     {
       "attempted_at": "2026-06-16T14:42:44+07:00",
@@ -1146,34 +553,1914 @@
       "semantic_signature_sha256": "b89b4d5a40d374651cdd5bbfa412ab16a27adfab1fde184b5f2308fae7935945"
     },
     {
-      "attempted_at": "2026-06-16T17:09:43+07:00",
-      "extraction_id": "_smoketest",
-      "item_id": "smoke-item",
-      "stable_id": "sun.component.smoke-test",
+      "attempted_at": "2026-06-17T14:54:27+07:00",
+      "extraction_id": "guideline-presentation-sun-pages-1-5",
+      "item_id": "guideline-shape-variants",
+      "stable_id": "sun.style.guideline-shape-variants",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "72dba354f8672f611363f89f5a732a138dfc6ea67faa981438e67df86cee9f18",
+      "semantic_signature_sha256": "e8e4a5ee636ea8bd606dbec859af1bb46530950b4b58ebb0cf2640c846b9fdb8"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-cover",
+      "stable_id": "sun.component.goal-setting-cover",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "6ae0b7bd367aa6611ace663d6392da9b99cf0aae90e7f6c23dd43b0001b38782",
+      "semantic_signature_sha256": "a866f294c79a40947e71af39985390c33e2cdad42a1c1ffe56059f310f43ecce"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-overview",
+      "stable_id": "sun.component.goal-setting-overview",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "3d8f1ab6b530f8b7a006f736fef30a91077fa75801aaabc8573faecb4e25b3d0",
+      "semantic_signature_sha256": "9e39d62c04cdda1e2c185fb32263780e19fa39f35d3ee57073f3e76673c7409a"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "pms-timeline",
+      "stable_id": "sun.component.pms-timeline",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "81bf2fa82333d801042d7729502e209e1cd3b8a9a2e66bde0f85d216027df430",
+      "semantic_signature_sha256": "2e27f3571a180fa40ed0651d93ad32e7d6a6472dccdabb615073b1bf2de1f2ce"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-intro",
+      "stable_id": "sun.component.goal-setting-intro",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "9468e1d2e0b539a36527fd6c0b06d5012229e1959e363db1c183b316e35a9044",
+      "semantic_signature_sha256": "af03c66056f9783546ee21cd283bb9b3c464855e1a0360348cbc350ee6bec468"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-process",
+      "stable_id": "sun.component.goal-setting-process",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "3f79a69fe798532a06445f6dfa9503b90e1209465912ad26be10b1449aed9f99",
+      "semantic_signature_sha256": "1c8f6ce4d7d376cca4ba5c80dace4830d345cafebd25f4be59a970000ce18aa8"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-structure-breakdown",
+      "stable_id": "sun.component.goal-structure-breakdown",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "6e8b0e2add27ca55a102e8bef6947092ca6a5d4379e5f1a8c6e85f74e640f778",
+      "semantic_signature_sha256": "4e13582a036dbe360311a9664cddaa8af39fbb5951bcbaa8dce0ea2229f5c899"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "quarterly-check-in",
+      "stable_id": "sun.component.quarterly-check-in",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "e63769c414fd467827520c69cacbee8772000a9fe254c0919c3162017c04c1ad",
+      "semantic_signature_sha256": "0973212fb21c7f61507b03b28df6898711158c0b750f16955a203bfa711b0f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "year-end-review",
+      "stable_id": "sun.component.year-end-review",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "d8f6c7bc58fd868b845515bc9cdbb112674a8dd688074f39b5a6d9add3805df7",
+      "semantic_signature_sha256": "629c8e9b458edc1705591f9d81de1e993a269cda925c97a24c21957b50f4404d"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-thanks",
+      "stable_id": "sun.component.goal-setting-thanks",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "bf3f716fb57053763d380591aac47018a82b8cdf52f396b93fa3c2b3d27389f1",
+      "semantic_signature_sha256": "61446ac750d8209492de17e324444390558e8f6827893cd512211c85b006b77d"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-cover",
+      "stable_id": "sun.component.salary-benefits-cover",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "676ad8c54a90159dcd29a2141b5cdd9f25a43ea36981da6b07936f9157401184",
+      "semantic_signature_sha256": "d7c2a8821ee35f96baece691116004b5dd72274a17c7ea8a18925987b37d8bda"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-why-upgrade",
+      "stable_id": "sun.component.salary-benefits-why-upgrade",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "4a0d7973373c3609dab85c462622c94cd270eb60103eead1ed7defe949a0f5b2",
+      "semantic_signature_sha256": "a7324d18273e49eb5a678e48c3af6d1f4aea5fb5ebe94b6202c6c6770bba1ce2"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "total-package-overview",
+      "stable_id": "sun.component.total-package-overview",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0f924048df9964fd35d6983352b792dc6e5a10f12e174d905d74a781ba6ed9b0",
+      "semantic_signature_sha256": "cbcffe8abfe2bab2098a8bd5b99f1fee93068a127df9cb8724e1184851e57be9"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "compensation-section-divider",
+      "stable_id": "sun.component.compensation-section-divider",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "9a7219e09898b39967baac8a573adfd3274cb3b12e15bf0f351fc02de8c50950",
+      "semantic_signature_sha256": "6c1a0461aee68b9c1a0d1b6f8d6c40b7b6467ce4b969dd8485dc03fbfb392fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "gross-to-net-explainer",
+      "stable_id": "sun.component.gross-to-net-explainer",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "76a003d19119aaff8851aa993a3efc3189f34b1ae9f7967e84500b713c09aaf3",
+      "semantic_signature_sha256": "3149af6b194715144ffa131fdd0117f34cf3ee528421e430274630e1f899df63"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-section-divider",
+      "stable_id": "sun.component.direct-benefits-section-divider",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "788635a235f621a63d07d070781c2f67dde311b0d0c27850822e881264eb07bf",
+      "semantic_signature_sha256": "866e97b8582e5482f55740ea935ce7598089642e1fff8ac08b7da98c59cfcad5"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "monthly-support-benefits",
+      "stable_id": "sun.component.monthly-support-benefits",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "916aa3ff9229e9873036bc27cfe4c8182a50fdda4a100b69014b058377cfb5fd",
+      "semantic_signature_sha256": "135305545b0ee405244ba8ef2fd934e7c36b430b2f6325d0a0212ec394b739c5"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "long-term-benefits",
+      "stable_id": "sun.component.long-term-benefits",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "9d38311a7b0f060449a436861c369cf17a035446d6833383618fe99fc26851c9",
+      "semantic_signature_sha256": "d7a64a29a4249b1a6ecc7ef192e3f1e8c2ad112f58c8047400c275c11ffa5cd8"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-summary",
+      "stable_id": "sun.component.direct-benefits-summary",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0af83c9f34fe5643da2d47ecef16fa02d9bee9af0a730d776eb729fdeccccbf3",
+      "semantic_signature_sha256": "44522aa1b24d88e32e41fa01f22507b3b29fce146ecb0d16f9d52ca4daaa2e38"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-building-benefits",
+      "stable_id": "sun.component.team-building-benefits",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "28083f0591ac9e0d103f4b72bf93dc27307676c84fe31413a054cf05508c1558",
+      "semantic_signature_sha256": "74acfd27bb07875f57f6288ce89c27fea5514b2c9e2cee060dafce004e0a9dde"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-trip-flexibility",
+      "stable_id": "sun.component.team-trip-flexibility",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "a5f641b70c44837f1e43a87f8b73357a5584a5ecfedb70b4fed0137d8b825a68",
+      "semantic_signature_sha256": "e70ad264ef8297b5dfa5a563ed7ca623f8cdea44ce72b15c30c203a580d8986a"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "indirect-benefits-section-divider",
+      "stable_id": "sun.component.indirect-benefits-section-divider",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "c3d12f02f9e6d19654f9d933f924cb27d5418476da4c87946f75669addf76f5f",
+      "semantic_signature_sha256": "4bebed0f4bf60e2f08c943a5a49ec9e0e9a32ad9f4f34912fc588fcde6d01ff9"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "learning-development",
+      "stable_id": "sun.component.learning-development",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "82a8d9b5e392ea88e5a6e2bfbc78eda5edb1f8379a6809de2900a8f26e590a9b",
+      "semantic_signature_sha256": "624b22bd035fd6036b9a38ed7ce322333ee559834368476bf7a3ffc8b917d616"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "company-culture",
+      "stable_id": "sun.component.company-culture",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0f1aff3548d57212a1f2237ea6f961f776f8010185bdf2e698145a35008c20ba",
+      "semantic_signature_sha256": "c7dc9474def74a66bf85d2c5a486ae1e50710a958c5a33eeccbcc5bad2a2c6e4"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "working-environment",
+      "stable_id": "sun.component.working-environment",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "399c8b88600c992a3993de9e32a69cb52adfe1f1e378da0205aff51b0a87909e",
+      "semantic_signature_sha256": "50d3327e62e1f1bdf1ea76885703962a0ba3e2f250feaa9a6ff637be79e03ed9"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "update-summary",
+      "stable_id": "sun.component.update-summary",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "bb3b4d70db8747b1424fed1911409b96ef66ea251033640bf4034123ce4ac149",
+      "semantic_signature_sha256": "8ebda7977e9ec0e160b636c40d330c5ee3f3c404e76e7d46864ee4db323b0fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "employee-notes",
+      "stable_id": "sun.component.employee-notes",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "85a5649f95cd9aa7013ab06e8d8850d860e4ab27f5abb8a2fd2dcba41c5f638b",
+      "semantic_signature_sha256": "16786cde77228b3a3a91f184c19a2f6848fdd1031ce071188b2204e9c847cc24"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:12+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-thanks",
+      "stable_id": "sun.component.salary-benefits-thanks",
+      "status": "staging",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "57cdab397d22b6d09b3e3d05444f19ab1afefa0c035e80898435229653d59862",
+      "semantic_signature_sha256": "61446ac750d8209492de17e324444390558e8f6827893cd512211c85b006b77d"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "cover-hero",
+      "stable_id": "sun.cover.cover-hero",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "caa81e003ee63550addada5765e0578ba8f732f693e59b7f8619722d5002822b",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "agenda-section",
+      "stable_id": "sun.agenda.agenda-section",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3036b55c87699be4cc1a7e9e9acfd7fd3dacb3d4838a426a03a99aabb7d2e7be",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-01",
+      "stable_id": "sun.divider.section-divider-01",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "6cedca5b4fec852b4638b7d4634a1ef097fc7d0b7681e697293bd0555c8ac4d2",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "intro-explanation-layout",
+      "stable_id": "sun.layout.intro-explanation-layout",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "4dc8bf73b96cb36bb5947a875eed12dad88f9662f52b219a06f50940d16fd06d",
+      "semantic_signature_sha256": "97da3e964881227b8eb61b5266231e17d8a44d73fd49c794c12bccbe3335c074"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-02",
+      "stable_id": "sun.divider.section-divider-02",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "c4479f06770ec2d9ca4cc6b24af90a26a82725de8dc9be5bd7ef1e6228174d5d",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-how-rating-framework",
+      "stable_id": "sun.framework.what-how-rating-framework",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "23851fc59397d0363587592275b4a338f8e678aa30f99960b1b6e0a1b6a136f1",
+      "semantic_signature_sha256": "16ea173d5db09523af599f7488d86e647e820ff1c1fbc3019ad13ed45207ae5c"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-definition-card",
+      "stable_id": "sun.card.what-definition-card",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "27760bc67ea1222e455f22abe96a7995c85e611865a805cb885f052886200f78",
+      "semantic_signature_sha256": "ab94a329739b1aec72878d54ce5263e844d7c956b27b6695ea927213ad5cdbbf"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "how-level-expectation-card",
+      "stable_id": "sun.card.how-level-expectation-card",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "12c96b1cabe3cb9dffca4c7d8e181c214bfb53c82cbbf85a0701a33b7b471b77",
+      "semantic_signature_sha256": "af02f91832c4478e5ec5587a564e2e450b091c368699199c5c9173f44de8fe6c"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-how-comparison",
+      "stable_id": "sun.comparison.what-how-comparison",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e54af544587b570d61842cde4bcae311bcea66c58950806cde76ad69ec7fa6fd",
+      "semantic_signature_sha256": "483e7d28f05d3094c74cf17df11d49c7fef4290c5269edf06cd798b52448a20e"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "rating-scale-chart",
+      "stable_id": "sun.chart.rating-scale-chart",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e5c4b27c0a2dbe14db0dbf9652e467d62ae45e84e3e844247b56bb504201bd9a",
+      "semantic_signature_sha256": "d8bbf278756675e01395ec83af5166b83edb8e9ba38119cd05ed004057667702"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-03",
+      "stable_id": "sun.divider.section-divider-03",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3b298b2ddb840cdefd23ca1ff018b7119a9bd380a792d980405bd96548620fe7",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "review-timeline",
+      "stable_id": "sun.timeline.review-timeline",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "9e3027dc12f82557387dd2501bd38f2131fdf5d12613a8582c700ac4bb11f31c",
+      "semantic_signature_sha256": "4f67b6f7f7e1ee59c4b6593b2a1ab1a1e9b283707440ccbd09baf9a886eacea6"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-04",
+      "stable_id": "sun.divider.section-divider-04",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "402d2731fdb006bc1478c2d57a3294ecada9847869ff4a1afe1717db42222eea",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "preparation-checklist",
+      "stable_id": "sun.checklist.preparation-checklist",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "8e1d23e8233a881b521912b36326bba425004d40163ef1d9108d32e298e645d6",
+      "semantic_signature_sha256": "d969c3ddc845eaa49f338b541bbaf8503f6050d6633085f673aa6a541b8aee35"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "factorial-goals-steps",
+      "stable_id": "sun.instructions.factorial-goals-steps",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ef6ffec8501c74a5ddf6d4826d7a82c076beba245385c19a0fbcdb74f57b72b9",
+      "semantic_signature_sha256": "1b81d1a6636cd454498cf1e4cf8556dfb69c5eef0981e5dfa39ef7b442169dea"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "factorial-review-steps",
+      "stable_id": "sun.instructions.factorial-review-steps",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ce91e07174095ca91b3c03ded03f3bd9ad63da1ad05201fc07407cb9738ed98d",
+      "semantic_signature_sha256": "fdd352f3b32cb35038249ed7ee56a53556600d2e58facb957061d79f07e5388e"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-header",
+      "stable_id": "sun.faq.faq-header",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "a03986b98621f1ca1daf4127c635829f5c40b9a1bdc03a02e56401d999addb87",
+      "semantic_signature_sha256": "309424fc726f006d775a9866f0052a29eff80895af3ca9e40cf2ee1df9a66c5f"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-answers-part-1",
+      "stable_id": "sun.faq.faq-answers-part-1",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "86d52894ed751b0ecf33baf4b05c2e7c5a30e54ea04f27e00083c8e6c5c494e8",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-answers-part-2",
+      "stable_id": "sun.faq.faq-answers-part-2",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ca258a778283851b1a928fff5b8de8e2da43cda937e34ce049eaa14c8a87330b",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "closing-thank-you",
+      "stable_id": "sun.closing.closing-thank-you",
+      "status": "staging",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "5cf1f85dbc19a26f1ed1fe91a3bf6bd430478d3c132582f7fbda335b07e3d72e",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "cover-hero",
+      "stable_id": "sun.cover.cover-hero",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "f2988e69b22e40d756dc0a8e1e720328423058c723fc2bc50f75bf1d91dae9ff",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "agenda-layout",
+      "stable_id": "sun.agenda.agenda-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a076eb7dc41386b26cd078716b6a76707c9c11b7b281e8b7fe05aa7a200b0415",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "section-intro",
+      "stable_id": "sun.section.section-intro",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "7a9fbbd213bf5b98c1a0997fd3ca79f25828c0e197b28b2c25e8f3724f2d9e45",
+      "semantic_signature_sha256": "3ff1968b2b5b4f9f9473c8108602fd30b1f804323df6b4a6bb63d6f1a7daed0f"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "contributors-layout",
+      "stable_id": "sun.layout.contributors-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a0da407638cc9c975be0d15820735c8967ca9831a281c0d1582168526b72f43d",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "scan-me-callout",
+      "stable_id": "sun.callout.scan-me-callout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "174e6ccd08231c665fae8cf0d2cf83c251d33a574152f82aa94da6553f19d211",
+      "semantic_signature_sha256": "532e920142e84830ada7255f14cd9b7e89253a3f618eb3f845fc4814029df5ed"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "two-column-content",
+      "stable_id": "sun.layout.two-column-content",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
+      "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "contributors-variant",
+      "stable_id": "sun.layout.contributors-variant",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "3c673f61f060d7ecbc622c40273ee2592a4c2e9797c7840d9d1bbad86c6d67d7",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "next-steps-cta",
+      "stable_id": "sun.cta.next-steps-cta",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "fb859f0a6b40f5d4d5e65c15fc65461728b229c813da29cbf6640ddd2c76c3e4",
+      "semantic_signature_sha256": "38e67b092082b80b4418654de57a27f3a51beb2c7aa9765101c2a98f2d999f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "summary-grid",
+      "stable_id": "sun.grid.summary-grid",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "ffe8d808c798f5b1e4718650847e712ecb558fdf929322d6a65e1b99b825c9ca",
+      "semantic_signature_sha256": "fc9e59da93c265068004a3f5c4019633df3b69cf4072a794470e0ee763f866e4"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "text-heavy-content",
+      "stable_id": "sun.content.text-heavy-content",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "4887ada847fe82889c4cc089b00f9586e02c1dce65aa616bbd8d180479543c00",
+      "semantic_signature_sha256": "27923bc71d3e37b64241777cae732cc1fedfd0004200bea9e4d00f16ea8cfc72"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "mix-chart-layout",
+      "stable_id": "sun.chart.mix-chart-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "0f73d49d57d4e23208a5a82db0373855d1c8af5ccf28c42933dfa838b6d9f3c8",
+      "semantic_signature_sha256": "ce7ff24ba5e3d3b9176bb7edd689d35b52ed7147afb674f6092b68b696805b15"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "statistics-layout",
+      "stable_id": "sun.statistics.statistics-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "e57164becbafd2ddf3289227a1f007728f0d2a59269ab376cf66174029575b68",
+      "semantic_signature_sha256": "3c8e7fc69f7fc9421fa825777e7297cb3b54f30a5302c89cccbb7d0c639f64a7"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "information-structure-layout",
+      "stable_id": "sun.structure.information-structure-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "c5b9427aaa0c0b2aaf3b948571bef421f1cceeec9906eec5310cce8309527b63",
+      "semantic_signature_sha256": "290f85ccd17a6b515870c11a08064ad94f01cab99be9b6e5636710af1d9353f7"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "image-and-text-layout",
+      "stable_id": "sun.layout.image-and-text-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "d9eedb8ea93c0d261e8f837101bbcd1853b8717142192b48e61e5adf8aa0b2f2",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "image-and-text-variant",
+      "stable_id": "sun.layout.image-and-text-variant",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "305ef39ab1c74f2051848c5add3640e263b8af8629a26cead480f32e5cabfadd",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "quote-or-highlight-layout",
+      "stable_id": "sun.highlight.quote-or-highlight-layout",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "697053aca1115926aebc969b32e2cf0198c34d0566fbd4ff186baf514d9b413c",
+      "semantic_signature_sha256": "01c702ceedcbeef4b38d7bfa14f6ed5859b72e0e74ae77d306a0e86d8d9f10ed"
+    },
+    {
+      "attempted_at": "2026-06-17T16:31:34+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "closing-thank-you",
+      "stable_id": "sun.closing.closing-thank-you",
+      "status": "staging",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "47c24435c1f57e06c5599a3edd1e12ac837cc4c005bbc264563200e3f68042a8",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T16:50:09+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-cover",
+      "stable_id": "sun.goal-setting-2026.01-cover",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "6ae0b7bd367aa6611ace663d6392da9b99cf0aae90e7f6c23dd43b0001b38782",
+      "semantic_signature_sha256": "a866f294c79a40947e71af39985390c33e2cdad42a1c1ffe56059f310f43ecce"
+    },
+    {
+      "attempted_at": "2026-06-17T16:50:09+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-cover",
+      "stable_id": "sun.salary-benefits-2026.01-cover",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "676ad8c54a90159dcd29a2141b5cdd9f25a43ea36981da6b07936f9157401184",
+      "semantic_signature_sha256": "d7c2a8821ee35f96baece691116004b5dd72274a17c7ea8a18925987b37d8bda"
+    },
+    {
+      "attempted_at": "2026-06-17T17:00:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "project-presentation-cover-template",
+      "stable_id": "sun.sun-presentation.01-cover",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "f2988e69b22e40d756dc0a8e1e720328423058c723fc2bc50f75bf1d91dae9ff",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:00:50+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "performance-review-cover-template",
+      "stable_id": "sun.sun-studio-performance-review-2025.01-cover",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "caa81e003ee63550addada5765e0578ba8f732f693e59b7f8619722d5002822b",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:04:06+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "performance-review-cover-template",
+      "stable_id": "sun.sun-studio-performance-review-2025.01-cover",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "caa81e003ee63550addada5765e0578ba8f732f693e59b7f8619722d5002822b",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:04:06+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "project-presentation-cover-template",
+      "stable_id": "sun.sun-presentation.01-cover",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "f2988e69b22e40d756dc0a8e1e720328423058c723fc2bc50f75bf1d91dae9ff",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:09:21+07:00",
+      "extraction_id": "guideline-presentation-sun-pages-1-5",
+      "item_id": "guideline-board-layouts",
+      "stable_id": "sun.component.guideline-board-layouts",
       "status": "published",
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
       "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
     },
     {
-      "attempted_at": "2026-06-16T17:27:40+07:00",
-      "extraction_id": "_smoketest",
-      "item_id": "smoke-item",
-      "stable_id": "sun.component.smoke-test",
+      "attempted_at": "2026-06-17T17:09:21+07:00",
+      "extraction_id": "guideline-presentation-sun-pages-1-5",
+      "item_id": "guideline-card-variants",
+      "stable_id": "sun.component.guideline-card-variants",
       "status": "published",
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
-      "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
+      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
+      "semantic_signature_sha256": "a694dbde24669a68905a5bc7bb1d60434d1268bb756dcb4f5fd5bbafc5eed96b"
     },
     {
-      "attempted_at": "2026-06-16T17:48:25+07:00",
-      "extraction_id": "_smoketest",
-      "item_id": "smoke-item",
-      "stable_id": "sun.component.smoke-test",
+      "attempted_at": "2026-06-17T17:09:21+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-intro",
+      "stable_id": "sun.component.goal-setting-intro",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "9468e1d2e0b539a36527fd6c0b06d5012229e1959e363db1c183b316e35a9044",
+      "semantic_signature_sha256": "af03c66056f9783546ee21cd283bb9b3c464855e1a0360348cbc350ee6bec468"
+    },
+    {
+      "attempted_at": "2026-06-17T17:09:21+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-overview",
+      "stable_id": "sun.component.goal-setting-overview",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "3d8f1ab6b530f8b7a006f736fef30a91077fa75801aaabc8573faecb4e25b3d0",
+      "semantic_signature_sha256": "9e39d62c04cdda1e2c185fb32263780e19fa39f35d3ee57073f3e76673c7409a"
+    },
+    {
+      "attempted_at": "2026-06-17T17:09:21+07:00",
+      "extraction_id": "guideline-presentation-sun-pages-1-5",
+      "item_id": "guideline-icon-library",
+      "stable_id": "sun.asset.guideline-icon-library",
       "status": "published",
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "23e96fac60e822fb1b2adf548e4dae5606df8c57502b64d1115f68c23bcaec77",
-      "semantic_signature_sha256": "5bf968bf6886a2897d89d646254496db7c715e4381fd5edd8ceaeedd7859a61f"
+      "region_identity_sha256": "b1803277ec206f6e0c500370f1f2dfa9b198b8edc72c29406541b25079b925ae",
+      "semantic_signature_sha256": "c555adf29660fe33b4a91e8d0203815bf650098e8e24b44d37cc8358048196cf"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:20+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "pms-timeline",
+      "stable_id": "sun.component.pms-timeline",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "81bf2fa82333d801042d7729502e209e1cd3b8a9a2e66bde0f85d216027df430",
+      "semantic_signature_sha256": "2e27f3571a180fa40ed0651d93ad32e7d6a6472dccdabb615073b1bf2de1f2ce"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "quarterly-check-in",
+      "stable_id": "sun.component.quarterly-check-in",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "e63769c414fd467827520c69cacbee8772000a9fe254c0919c3162017c04c1ad",
+      "semantic_signature_sha256": "0973212fb21c7f61507b03b28df6898711158c0b750f16955a203bfa711b0f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "year-end-review",
+      "stable_id": "sun.component.year-end-review",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "d8f6c7bc58fd868b845515bc9cdbb112674a8dd688074f39b5a6d9add3805df7",
+      "semantic_signature_sha256": "629c8e9b458edc1705591f9d81de1e993a269cda925c97a24c21957b50f4404d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "company-culture",
+      "stable_id": "sun.component.company-culture",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0f1aff3548d57212a1f2237ea6f961f776f8010185bdf2e698145a35008c20ba",
+      "semantic_signature_sha256": "c7dc9474def74a66bf85d2c5a486ae1e50710a958c5a33eeccbcc5bad2a2c6e4"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "compensation-section-divider",
+      "stable_id": "sun.component.compensation-section-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "9a7219e09898b39967baac8a573adfd3274cb3b12e15bf0f351fc02de8c50950",
+      "semantic_signature_sha256": "6c1a0461aee68b9c1a0d1b6f8d6c40b7b6467ce4b969dd8485dc03fbfb392fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-section-divider",
+      "stable_id": "sun.component.direct-benefits-section-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "788635a235f621a63d07d070781c2f67dde311b0d0c27850822e881264eb07bf",
+      "semantic_signature_sha256": "866e97b8582e5482f55740ea935ce7598089642e1fff8ac08b7da98c59cfcad5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:26+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-summary",
+      "stable_id": "sun.component.direct-benefits-summary",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0af83c9f34fe5643da2d47ecef16fa02d9bee9af0a730d776eb729fdeccccbf3",
+      "semantic_signature_sha256": "44522aa1b24d88e32e41fa01f22507b3b29fce146ecb0d16f9d52ca4daaa2e38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:35+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "monthly-support-benefits",
+      "stable_id": "sun.component.monthly-support-benefits",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "916aa3ff9229e9873036bc27cfe4c8182a50fdda4a100b69014b058377cfb5fd",
+      "semantic_signature_sha256": "135305545b0ee405244ba8ef2fd934e7c36b430b2f6325d0a0212ec394b739c5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:35+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-thanks",
+      "stable_id": "sun.component.salary-benefits-thanks",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "57cdab397d22b6d09b3e3d05444f19ab1afefa0c035e80898435229653d59862",
+      "semantic_signature_sha256": "61446ac750d8209492de17e324444390558e8f6827893cd512211c85b006b77d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:35+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "indirect-benefits-section-divider",
+      "stable_id": "sun.component.indirect-benefits-section-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "c3d12f02f9e6d19654f9d933f924cb27d5418476da4c87946f75669addf76f5f",
+      "semantic_signature_sha256": "4bebed0f4bf60e2f08c943a5a49ec9e0e9a32ad9f4f34912fc588fcde6d01ff9"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:35+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "learning-development",
+      "stable_id": "sun.component.learning-development",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "82a8d9b5e392ea88e5a6e2bfbc78eda5edb1f8379a6809de2900a8f26e590a9b",
+      "semantic_signature_sha256": "624b22bd035fd6036b9a38ed7ce322333ee559834368476bf7a3ffc8b917d616"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:35+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-why-upgrade",
+      "stable_id": "sun.component.salary-benefits-why-upgrade",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "4a0d7973373c3609dab85c462622c94cd270eb60103eead1ed7defe949a0f5b2",
+      "semantic_signature_sha256": "a7324d18273e49eb5a678e48c3af6d1f4aea5fb5ebe94b6202c6c6770bba1ce2"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "working-environment",
+      "stable_id": "sun.component.working-environment",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "399c8b88600c992a3993de9e32a69cb52adfe1f1e378da0205aff51b0a87909e",
+      "semantic_signature_sha256": "50d3327e62e1f1bdf1ea76885703962a0ba3e2f250feaa9a6ff637be79e03ed9"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-trip-flexibility",
+      "stable_id": "sun.component.team-trip-flexibility",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "a5f641b70c44837f1e43a87f8b73357a5584a5ecfedb70b4fed0137d8b825a68",
+      "semantic_signature_sha256": "e70ad264ef8297b5dfa5a563ed7ca623f8cdea44ce72b15c30c203a580d8986a"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-building-benefits",
+      "stable_id": "sun.component.team-building-benefits",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "28083f0591ac9e0d103f4b72bf93dc27307676c84fe31413a054cf05508c1558",
+      "semantic_signature_sha256": "74acfd27bb07875f57f6288ce89c27fea5514b2c9e2cee060dafce004e0a9dde"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "agenda-layout",
+      "stable_id": "sun.agenda.agenda-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a076eb7dc41386b26cd078716b6a76707c9c11b7b281e8b7fe05aa7a200b0415",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "update-summary",
+      "stable_id": "sun.component.update-summary",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "bb3b4d70db8747b1424fed1911409b96ef66ea251033640bf4034123ce4ac149",
+      "semantic_signature_sha256": "8ebda7977e9ec0e160b636c40d330c5ee3f3c404e76e7d46864ee4db323b0fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "closing-thank-you",
+      "stable_id": "sun.closing.closing-thank-you",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "47c24435c1f57e06c5599a3edd1e12ac837cc4c005bbc264563200e3f68042a8",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:43+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "contributors-layout",
+      "stable_id": "sun.layout.contributors-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a0da407638cc9c975be0d15820735c8967ca9831a281c0d1582168526b72f43d",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "image-and-text-layout",
+      "stable_id": "sun.layout.image-and-text-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "d9eedb8ea93c0d261e8f837101bbcd1853b8717142192b48e61e5adf8aa0b2f2",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "image-and-text-variant",
+      "stable_id": "sun.layout.image-and-text-variant",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "305ef39ab1c74f2051848c5add3640e263b8af8629a26cead480f32e5cabfadd",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "information-structure-layout",
+      "stable_id": "sun.structure.information-structure-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "c5b9427aaa0c0b2aaf3b948571bef421f1cceeec9906eec5310cce8309527b63",
+      "semantic_signature_sha256": "290f85ccd17a6b515870c11a08064ad94f01cab99be9b6e5636710af1d9353f7"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "mix-chart-layout",
+      "stable_id": "sun.chart.mix-chart-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "0f73d49d57d4e23208a5a82db0373855d1c8af5ccf28c42933dfa838b6d9f3c8",
+      "semantic_signature_sha256": "ce7ff24ba5e3d3b9176bb7edd689d35b52ed7147afb674f6092b68b696805b15"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "contributors-variant",
+      "stable_id": "sun.layout.contributors-variant",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "3c673f61f060d7ecbc622c40273ee2592a4c2e9797c7840d9d1bbad86c6d67d7",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "next-steps-cta",
+      "stable_id": "sun.cta.next-steps-cta",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "fb859f0a6b40f5d4d5e65c15fc65461728b229c813da29cbf6640ddd2c76c3e4",
+      "semantic_signature_sha256": "38e67b092082b80b4418654de57a27f3a51beb2c7aa9765101c2a98f2d999f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "cover-hero",
+      "stable_id": "sun.cover.cover-hero",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "f2988e69b22e40d756dc0a8e1e720328423058c723fc2bc50f75bf1d91dae9ff",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:49+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "quote-or-highlight-layout",
+      "stable_id": "sun.highlight.quote-or-highlight-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "697053aca1115926aebc969b32e2cf0198c34d0566fbd4ff186baf514d9b413c",
+      "semantic_signature_sha256": "01c702ceedcbeef4b38d7bfa14f6ed5859b72e0e74ae77d306a0e86d8d9f10ed"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "statistics-layout",
+      "stable_id": "sun.statistics.statistics-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "e57164becbafd2ddf3289227a1f007728f0d2a59269ab376cf66174029575b68",
+      "semantic_signature_sha256": "3c8e7fc69f7fc9421fa825777e7297cb3b54f30a5302c89cccbb7d0c639f64a7"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "summary-grid",
+      "stable_id": "sun.grid.summary-grid",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "ffe8d808c798f5b1e4718650847e712ecb558fdf929322d6a65e1b99b825c9ca",
+      "semantic_signature_sha256": "fc9e59da93c265068004a3f5c4019633df3b69cf4072a794470e0ee763f866e4"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "section-intro",
+      "stable_id": "sun.section.section-intro",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "7a9fbbd213bf5b98c1a0997fd3ca79f25828c0e197b28b2c25e8f3724f2d9e45",
+      "semantic_signature_sha256": "3ff1968b2b5b4f9f9473c8108602fd30b1f804323df6b4a6bb63d6f1a7daed0f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "text-heavy-content",
+      "stable_id": "sun.content.text-heavy-content",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "4887ada847fe82889c4cc089b00f9586e02c1dce65aa616bbd8d180479543c00",
+      "semantic_signature_sha256": "27923bc71d3e37b64241777cae732cc1fedfd0004200bea9e4d00f16ea8cfc72"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "scan-me-callout",
+      "stable_id": "sun.callout.scan-me-callout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "174e6ccd08231c665fae8cf0d2cf83c251d33a574152f82aa94da6553f19d211",
+      "semantic_signature_sha256": "532e920142e84830ada7255f14cd9b7e89253a3f618eb3f845fc4814029df5ed"
+    },
+    {
+      "attempted_at": "2026-06-17T17:10:54+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "two-column-content",
+      "stable_id": "sun.layout.two-column-content",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
+      "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:20+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "agenda-section",
+      "stable_id": "sun.agenda.agenda-section",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3036b55c87699be4cc1a7e9e9acfd7fd3dacb3d4838a426a03a99aabb7d2e7be",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:20+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "closing-thank-you",
+      "stable_id": "sun.closing.closing-thank-you",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "5cf1f85dbc19a26f1ed1fe91a3bf6bd430478d3c132582f7fbda335b07e3d72e",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "cover-hero",
+      "stable_id": "sun.cover.cover-hero",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "caa81e003ee63550addada5765e0578ba8f732f693e59b7f8619722d5002822b",
+      "semantic_signature_sha256": "5b33b2d1d176a01629e26e9d27da422712e7df1d983ef4cfc2d848b7dfde8ce5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "factorial-goals-steps",
+      "stable_id": "sun.instructions.factorial-goals-steps",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ef6ffec8501c74a5ddf6d4826d7a82c076beba245385c19a0fbcdb74f57b72b9",
+      "semantic_signature_sha256": "1b81d1a6636cd454498cf1e4cf8556dfb69c5eef0981e5dfa39ef7b442169dea"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "factorial-review-steps",
+      "stable_id": "sun.instructions.factorial-review-steps",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ce91e07174095ca91b3c03ded03f3bd9ad63da1ad05201fc07407cb9738ed98d",
+      "semantic_signature_sha256": "fdd352f3b32cb35038249ed7ee56a53556600d2e58facb957061d79f07e5388e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-answers-part-1",
+      "stable_id": "sun.faq.faq-answers-part-1",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "86d52894ed751b0ecf33baf4b05c2e7c5a30e54ea04f27e00083c8e6c5c494e8",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-answers-part-2",
+      "stable_id": "sun.faq.faq-answers-part-2",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ca258a778283851b1a928fff5b8de8e2da43cda937e34ce049eaa14c8a87330b",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "faq-header",
+      "stable_id": "sun.faq.faq-header",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "a03986b98621f1ca1daf4127c635829f5c40b9a1bdc03a02e56401d999addb87",
+      "semantic_signature_sha256": "309424fc726f006d775a9866f0052a29eff80895af3ca9e40cf2ee1df9a66c5f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "how-level-expectation-card",
+      "stable_id": "sun.card.how-level-expectation-card",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "12c96b1cabe3cb9dffca4c7d8e181c214bfb53c82cbbf85a0701a33b7b471b77",
+      "semantic_signature_sha256": "af02f91832c4478e5ec5587a564e2e450b091c368699199c5c9173f44de8fe6c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "intro-explanation-layout",
+      "stable_id": "sun.layout.intro-explanation-layout",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "4dc8bf73b96cb36bb5947a875eed12dad88f9662f52b219a06f50940d16fd06d",
+      "semantic_signature_sha256": "97da3e964881227b8eb61b5266231e17d8a44d73fd49c794c12bccbe3335c074"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "preparation-checklist",
+      "stable_id": "sun.checklist.preparation-checklist",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "8e1d23e8233a881b521912b36326bba425004d40163ef1d9108d32e298e645d6",
+      "semantic_signature_sha256": "d969c3ddc845eaa49f338b541bbaf8503f6050d6633085f673aa6a541b8aee35"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "rating-scale-chart",
+      "stable_id": "sun.chart.rating-scale-chart",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e5c4b27c0a2dbe14db0dbf9652e467d62ae45e84e3e844247b56bb504201bd9a",
+      "semantic_signature_sha256": "d8bbf278756675e01395ec83af5166b83edb8e9ba38119cd05ed004057667702"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "review-timeline",
+      "stable_id": "sun.timeline.review-timeline",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "9e3027dc12f82557387dd2501bd38f2131fdf5d12613a8582c700ac4bb11f31c",
+      "semantic_signature_sha256": "4f67b6f7f7e1ee59c4b6593b2a1ab1a1e9b283707440ccbd09baf9a886eacea6"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-01",
+      "stable_id": "sun.divider.section-divider-01",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "6cedca5b4fec852b4638b7d4634a1ef097fc7d0b7681e697293bd0555c8ac4d2",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-02",
+      "stable_id": "sun.divider.section-divider-02",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "c4479f06770ec2d9ca4cc6b24af90a26a82725de8dc9be5bd7ef1e6228174d5d",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-03",
+      "stable_id": "sun.divider.section-divider-03",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3b298b2ddb840cdefd23ca1ff018b7119a9bd380a792d980405bd96548620fe7",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "section-divider-04",
+      "stable_id": "sun.divider.section-divider-04",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "402d2731fdb006bc1478c2d57a3294ecada9847869ff4a1afe1717db42222eea",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-definition-card",
+      "stable_id": "sun.card.what-definition-card",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "27760bc67ea1222e455f22abe96a7995c85e611865a805cb885f052886200f78",
+      "semantic_signature_sha256": "ab94a329739b1aec72878d54ce5263e844d7c956b27b6695ea927213ad5cdbbf"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-how-comparison",
+      "stable_id": "sun.comparison.what-how-comparison",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e54af544587b570d61842cde4bcae311bcea66c58950806cde76ad69ec7fa6fd",
+      "semantic_signature_sha256": "483e7d28f05d3094c74cf17df11d49c7fef4290c5269edf06cd798b52448a20e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:11:21+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "what-how-rating-framework",
+      "stable_id": "sun.framework.what-how-rating-framework",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "23851fc59397d0363587592275b4a338f8e678aa30f99960b1b6e0a1b6a136f1",
+      "semantic_signature_sha256": "16ea173d5db09523af599f7488d86e647e820ff1c1fbc3019ad13ed45207ae5c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-cover",
+      "stable_id": "sun.goal-setting-2026.01-cover",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "6ae0b7bd367aa6611ace663d6392da9b99cf0aae90e7f6c23dd43b0001b38782",
+      "semantic_signature_sha256": "a866f294c79a40947e71af39985390c33e2cdad42a1c1ffe56059f310f43ecce"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-intro",
+      "stable_id": "sun.goal-setting-2026.04-intro",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "9468e1d2e0b539a36527fd6c0b06d5012229e1959e363db1c183b316e35a9044",
+      "semantic_signature_sha256": "af03c66056f9783546ee21cd283bb9b3c464855e1a0360348cbc350ee6bec468"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-overview",
+      "stable_id": "sun.goal-setting-2026.02-overview",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "3d8f1ab6b530f8b7a006f736fef30a91077fa75801aaabc8573faecb4e25b3d0",
+      "semantic_signature_sha256": "9e39d62c04cdda1e2c185fb32263780e19fa39f35d3ee57073f3e76673c7409a"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-process",
+      "stable_id": "sun.goal-setting-2026.05-process",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "3f79a69fe798532a06445f6dfa9503b90e1209465912ad26be10b1449aed9f99",
+      "semantic_signature_sha256": "1c8f6ce4d7d376cca4ba5c80dace4830d345cafebd25f4be59a970000ce18aa8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-setting-thanks",
+      "stable_id": "sun.goal-setting-2026.09-thanks",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "bf3f716fb57053763d380591aac47018a82b8cdf52f396b93fa3c2b3d27389f1",
+      "semantic_signature_sha256": "61446ac750d8209492de17e324444390558e8f6827893cd512211c85b006b77d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "goal-structure-breakdown",
+      "stable_id": "sun.goal-setting-2026.06-structure-breakdown",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "6e8b0e2add27ca55a102e8bef6947092ca6a5d4379e5f1a8c6e85f74e640f778",
+      "semantic_signature_sha256": "4e13582a036dbe360311a9664cddaa8af39fbb5951bcbaa8dce0ea2229f5c899"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "pms-timeline",
+      "stable_id": "sun.goal-setting-2026.03-timeline",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "81bf2fa82333d801042d7729502e209e1cd3b8a9a2e66bde0f85d216027df430",
+      "semantic_signature_sha256": "2e27f3571a180fa40ed0651d93ad32e7d6a6472dccdabb615073b1bf2de1f2ce"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "quarterly-check-in",
+      "stable_id": "sun.goal-setting-2026.07-quarterly-check-in",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "e63769c414fd467827520c69cacbee8772000a9fe254c0919c3162017c04c1ad",
+      "semantic_signature_sha256": "0973212fb21c7f61507b03b28df6898711158c0b750f16955a203bfa711b0f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "kick-off-goal-setting-2026-2-full-pages",
+      "item_id": "year-end-review",
+      "stable_id": "sun.goal-setting-2026.08-year-end-review",
+      "status": "published",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "d8f6c7bc58fd868b845515bc9cdbb112674a8dd688074f39b5a6d9add3805df7",
+      "semantic_signature_sha256": "629c8e9b458edc1705591f9d81de1e993a269cda925c97a24c21957b50f4404d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "company-culture",
+      "stable_id": "sun.salary-benefits-2026.14-company-culture",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0f1aff3548d57212a1f2237ea6f961f776f8010185bdf2e698145a35008c20ba",
+      "semantic_signature_sha256": "c7dc9474def74a66bf85d2c5a486ae1e50710a958c5a33eeccbcc5bad2a2c6e4"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "compensation-section-divider",
+      "stable_id": "sun.salary-benefits-2026.04-compensation-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "9a7219e09898b39967baac8a573adfd3274cb3b12e15bf0f351fc02de8c50950",
+      "semantic_signature_sha256": "6c1a0461aee68b9c1a0d1b6f8d6c40b7b6467ce4b969dd8485dc03fbfb392fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:40+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-section-divider",
+      "stable_id": "sun.salary-benefits-2026.06-direct-benefits-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "788635a235f621a63d07d070781c2f67dde311b0d0c27850822e881264eb07bf",
+      "semantic_signature_sha256": "866e97b8582e5482f55740ea935ce7598089642e1fff8ac08b7da98c59cfcad5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "direct-benefits-summary",
+      "stable_id": "sun.salary-benefits-2026.09-direct-benefits-summary",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0af83c9f34fe5643da2d47ecef16fa02d9bee9af0a730d776eb729fdeccccbf3",
+      "semantic_signature_sha256": "44522aa1b24d88e32e41fa01f22507b3b29fce146ecb0d16f9d52ca4daaa2e38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "employee-notes",
+      "stable_id": "sun.salary-benefits-2026.17-employee-notes",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "85a5649f95cd9aa7013ab06e8d8850d860e4ab27f5abb8a2fd2dcba41c5f638b",
+      "semantic_signature_sha256": "16786cde77228b3a3a91f184c19a2f6848fdd1031ce071188b2204e9c847cc24"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "gross-to-net-explainer",
+      "stable_id": "sun.salary-benefits-2026.05-gross-to-net-explainer",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "76a003d19119aaff8851aa993a3efc3189f34b1ae9f7967e84500b713c09aaf3",
+      "semantic_signature_sha256": "3149af6b194715144ffa131fdd0117f34cf3ee528421e430274630e1f899df63"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "indirect-benefits-section-divider",
+      "stable_id": "sun.salary-benefits-2026.12-indirect-benefits-divider",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "c3d12f02f9e6d19654f9d933f924cb27d5418476da4c87946f75669addf76f5f",
+      "semantic_signature_sha256": "4bebed0f4bf60e2f08c943a5a49ec9e0e9a32ad9f4f34912fc588fcde6d01ff9"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "learning-development",
+      "stable_id": "sun.salary-benefits-2026.13-learning-development",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "82a8d9b5e392ea88e5a6e2bfbc78eda5edb1f8379a6809de2900a8f26e590a9b",
+      "semantic_signature_sha256": "624b22bd035fd6036b9a38ed7ce322333ee559834368476bf7a3ffc8b917d616"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "long-term-benefits",
+      "stable_id": "sun.salary-benefits-2026.08-long-term-benefits",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "9d38311a7b0f060449a436861c369cf17a035446d6833383618fe99fc26851c9",
+      "semantic_signature_sha256": "d7a64a29a4249b1a6ecc7ef192e3f1e8c2ad112f58c8047400c275c11ffa5cd8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "monthly-support-benefits",
+      "stable_id": "sun.salary-benefits-2026.07-monthly-support-benefits",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "916aa3ff9229e9873036bc27cfe4c8182a50fdda4a100b69014b058377cfb5fd",
+      "semantic_signature_sha256": "135305545b0ee405244ba8ef2fd934e7c36b430b2f6325d0a0212ec394b739c5"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-cover",
+      "stable_id": "sun.salary-benefits-2026.01-cover",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "676ad8c54a90159dcd29a2141b5cdd9f25a43ea36981da6b07936f9157401184",
+      "semantic_signature_sha256": "d7c2a8821ee35f96baece691116004b5dd72274a17c7ea8a18925987b37d8bda"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-thanks",
+      "stable_id": "sun.salary-benefits-2026.18-thanks",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "57cdab397d22b6d09b3e3d05444f19ab1afefa0c035e80898435229653d59862",
+      "semantic_signature_sha256": "61446ac750d8209492de17e324444390558e8f6827893cd512211c85b006b77d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "salary-benefits-why-upgrade",
+      "stable_id": "sun.salary-benefits-2026.02-why-upgrade",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "4a0d7973373c3609dab85c462622c94cd270eb60103eead1ed7defe949a0f5b2",
+      "semantic_signature_sha256": "a7324d18273e49eb5a678e48c3af6d1f4aea5fb5ebe94b6202c6c6770bba1ce2"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-building-benefits",
+      "stable_id": "sun.salary-benefits-2026.10-team-building-benefits",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "28083f0591ac9e0d103f4b72bf93dc27307676c84fe31413a054cf05508c1558",
+      "semantic_signature_sha256": "74acfd27bb07875f57f6288ce89c27fea5514b2c9e2cee060dafce004e0a9dde"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "team-trip-flexibility",
+      "stable_id": "sun.salary-benefits-2026.11-team-trip-flexibility",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "a5f641b70c44837f1e43a87f8b73357a5584a5ecfedb70b4fed0137d8b825a68",
+      "semantic_signature_sha256": "e70ad264ef8297b5dfa5a563ed7ca623f8cdea44ce72b15c30c203a580d8986a"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:41+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "total-package-overview",
+      "stable_id": "sun.salary-benefits-2026.03-total-package-overview",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "0f924048df9964fd35d6983352b792dc6e5a10f12e174d905d74a781ba6ed9b0",
+      "semantic_signature_sha256": "cbcffe8abfe2bab2098a8bd5b99f1fee93068a127df9cb8724e1184851e57be9"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:42+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "update-summary",
+      "stable_id": "sun.salary-benefits-2026.16-update-summary",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "bb3b4d70db8747b1424fed1911409b96ef66ea251033640bf4034123ce4ac149",
+      "semantic_signature_sha256": "8ebda7977e9ec0e160b636c40d330c5ee3f3c404e76e7d46864ee4db323b0fd8"
+    },
+    {
+      "attempted_at": "2026-06-17T17:13:42+07:00",
+      "extraction_id": "salary-benefits-sun-studio-2026-suner-full-pages",
+      "item_id": "working-environment",
+      "stable_id": "sun.salary-benefits-2026.15-working-environment",
+      "status": "published",
+      "source_sha256": "5361c447b61375d36cde1bafc0b0bf10045c1014c151f79586e9800f419d50bc",
+      "region_identity_sha256": "399c8b88600c992a3993de9e32a69cb52adfe1f1e378da0205aff51b0a87909e",
+      "semantic_signature_sha256": "50d3327e62e1f1bdf1ea76885703962a0ba3e2f250feaa9a6ff637be79e03ed9"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:45+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "02-agenda-section",
+      "stable_id": "sun.sun-studio-performance-review-2025.02-agenda-section",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3036b55c87699be4cc1a7e9e9acfd7fd3dacb3d4838a426a03a99aabb7d2e7be",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:45+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "20-closing-thank-you",
+      "stable_id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "5cf1f85dbc19a26f1ed1fe91a3bf6bd430478d3c132582f7fbda335b07e3d72e",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:46+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "15-factorial-goals-steps",
+      "stable_id": "sun.sun-studio-performance-review-2025.15-factorial-goals-steps",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ef6ffec8501c74a5ddf6d4826d7a82c076beba245385c19a0fbcdb74f57b72b9",
+      "semantic_signature_sha256": "1b81d1a6636cd454498cf1e4cf8556dfb69c5eef0981e5dfa39ef7b442169dea"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:46+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "16-factorial-review-steps",
+      "stable_id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ce91e07174095ca91b3c03ded03f3bd9ad63da1ad05201fc07407cb9738ed98d",
+      "semantic_signature_sha256": "fdd352f3b32cb35038249ed7ee56a53556600d2e58facb957061d79f07e5388e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:46+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "18-faq-answers-part-1",
+      "stable_id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "86d52894ed751b0ecf33baf4b05c2e7c5a30e54ea04f27e00083c8e6c5c494e8",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:46+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "19-faq-answers-part-2",
+      "stable_id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ca258a778283851b1a928fff5b8de8e2da43cda937e34ce049eaa14c8a87330b",
+      "semantic_signature_sha256": "8ff4b40eb86771c85dc57a1ae866c0a78b510470a888f94c9640682382801d7f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:47+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "17-faq-header",
+      "stable_id": "sun.sun-studio-performance-review-2025.17-faq-header",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "a03986b98621f1ca1daf4127c635829f5c40b9a1bdc03a02e56401d999addb87",
+      "semantic_signature_sha256": "309424fc726f006d775a9866f0052a29eff80895af3ca9e40cf2ee1df9a66c5f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:47+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "08-how-level-expectation-card",
+      "stable_id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "12c96b1cabe3cb9dffca4c7d8e181c214bfb53c82cbbf85a0701a33b7b471b77",
+      "semantic_signature_sha256": "af02f91832c4478e5ec5587a564e2e450b091c368699199c5c9173f44de8fe6c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:47+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "04-intro-explanation-layout",
+      "stable_id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "4dc8bf73b96cb36bb5947a875eed12dad88f9662f52b219a06f50940d16fd06d",
+      "semantic_signature_sha256": "97da3e964881227b8eb61b5266231e17d8a44d73fd49c794c12bccbe3335c074"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:47+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "14-preparation-checklist",
+      "stable_id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "8e1d23e8233a881b521912b36326bba425004d40163ef1d9108d32e298e645d6",
+      "semantic_signature_sha256": "d969c3ddc845eaa49f338b541bbaf8503f6050d6633085f673aa6a541b8aee35"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:48+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "10-rating-scale-chart",
+      "stable_id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e5c4b27c0a2dbe14db0dbf9652e467d62ae45e84e3e844247b56bb504201bd9a",
+      "semantic_signature_sha256": "d8bbf278756675e01395ec83af5166b83edb8e9ba38119cd05ed004057667702"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:48+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "12-review-timeline",
+      "stable_id": "sun.sun-studio-performance-review-2025.12-review-timeline",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "9e3027dc12f82557387dd2501bd38f2131fdf5d12613a8582c700ac4bb11f31c",
+      "semantic_signature_sha256": "4f67b6f7f7e1ee59c4b6593b2a1ab1a1e9b283707440ccbd09baf9a886eacea6"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:48+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "03-section-divider-01",
+      "stable_id": "sun.sun-studio-performance-review-2025.03-section-divider-01",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "6cedca5b4fec852b4638b7d4634a1ef097fc7d0b7681e697293bd0555c8ac4d2",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:48+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "05-section-divider-02",
+      "stable_id": "sun.sun-studio-performance-review-2025.05-section-divider-02",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "c4479f06770ec2d9ca4cc6b24af90a26a82725de8dc9be5bd7ef1e6228174d5d",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:49+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "11-section-divider-03",
+      "stable_id": "sun.sun-studio-performance-review-2025.11-section-divider-03",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3b298b2ddb840cdefd23ca1ff018b7119a9bd380a792d980405bd96548620fe7",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:49+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "13-section-divider-04",
+      "stable_id": "sun.sun-studio-performance-review-2025.13-section-divider-04",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "402d2731fdb006bc1478c2d57a3294ecada9847869ff4a1afe1717db42222eea",
+      "semantic_signature_sha256": "2120aef0e4cb8a926e1d0f1e817630900eac2afd672c84d49b1f3423ff46f660"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:49+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "07-what-definition-card",
+      "stable_id": "sun.sun-studio-performance-review-2025.07-what-definition-card",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "27760bc67ea1222e455f22abe96a7995c85e611865a805cb885f052886200f78",
+      "semantic_signature_sha256": "ab94a329739b1aec72878d54ce5263e844d7c956b27b6695ea927213ad5cdbbf"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:49+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "09-what-how-comparison",
+      "stable_id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e54af544587b570d61842cde4bcae311bcea66c58950806cde76ad69ec7fa6fd",
+      "semantic_signature_sha256": "483e7d28f05d3094c74cf17df11d49c7fef4290c5269edf06cd798b52448a20e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:49+07:00",
+      "extraction_id": "sun-studio-performance-review-2025",
+      "item_id": "06-what-how-rating-framework",
+      "stable_id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
+      "status": "published",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "23851fc59397d0363587592275b4a338f8e678aa30f99960b1b6e0a1b6a136f1",
+      "semantic_signature_sha256": "16ea173d5db09523af599f7488d86e647e820ff1c1fbc3019ad13ed45207ae5c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:50+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "02-agenda-layout",
+      "stable_id": "sun.sun-presentation.02-agenda-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a076eb7dc41386b26cd078716b6a76707c9c11b7b281e8b7fe05aa7a200b0415",
+      "semantic_signature_sha256": "2a21388751bc16eb9ec8ca8b4b0ca06277fb9d0c58e7f7e10bf251b3f4edb56c"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:50+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "17-closing-thank-you",
+      "stable_id": "sun.sun-presentation.17-closing-thank-you",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "47c24435c1f57e06c5599a3edd1e12ac837cc4c005bbc264563200e3f68042a8",
+      "semantic_signature_sha256": "d8067b08fe6094531fb74b7310b30315069586359f37956dfcce439b93a48448"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:50+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "04-contributors-layout",
+      "stable_id": "sun.sun-presentation.04-contributors-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a0da407638cc9c975be0d15820735c8967ca9831a281c0d1582168526b72f43d",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:51+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "07-contributors-variant",
+      "stable_id": "sun.sun-presentation.07-contributors-variant",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "3c673f61f060d7ecbc622c40273ee2592a4c2e9797c7840d9d1bbad86c6d67d7",
+      "semantic_signature_sha256": "644714999b23b36c3746deda6c57e4cb0be27545db8567cfdde0669747da2b38"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:51+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "14-image-and-text-layout",
+      "stable_id": "sun.sun-presentation.14-image-and-text-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "d9eedb8ea93c0d261e8f837101bbcd1853b8717142192b48e61e5adf8aa0b2f2",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:51+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "15-image-and-text-variant",
+      "stable_id": "sun.sun-presentation.15-image-and-text-variant",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "305ef39ab1c74f2051848c5add3640e263b8af8629a26cead480f32e5cabfadd",
+      "semantic_signature_sha256": "8da3a73a804c9bc8d5a124aaf4d4d253ec6de9016fa68f90a8990d9df8dea05d"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:51+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "13-information-structure-layout",
+      "stable_id": "sun.sun-presentation.13-information-structure-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "c5b9427aaa0c0b2aaf3b948571bef421f1cceeec9906eec5310cce8309527b63",
+      "semantic_signature_sha256": "290f85ccd17a6b515870c11a08064ad94f01cab99be9b6e5636710af1d9353f7"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:51+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "11-mix-chart-layout",
+      "stable_id": "sun.sun-presentation.11-mix-chart-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "0f73d49d57d4e23208a5a82db0373855d1c8af5ccf28c42933dfa838b6d9f3c8",
+      "semantic_signature_sha256": "ce7ff24ba5e3d3b9176bb7edd689d35b52ed7147afb674f6092b68b696805b15"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:52+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "08-next-steps-cta",
+      "stable_id": "sun.sun-presentation.08-next-steps-cta",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "fb859f0a6b40f5d4d5e65c15fc65461728b229c813da29cbf6640ddd2c76c3e4",
+      "semantic_signature_sha256": "38e67b092082b80b4418654de57a27f3a51beb2c7aa9765101c2a98f2d999f7e"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:52+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "16-quote-or-highlight-layout",
+      "stable_id": "sun.sun-presentation.16-quote-or-highlight-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "697053aca1115926aebc969b32e2cf0198c34d0566fbd4ff186baf514d9b413c",
+      "semantic_signature_sha256": "01c702ceedcbeef4b38d7bfa14f6ed5859b72e0e74ae77d306a0e86d8d9f10ed"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:52+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "05-scan-me-callout",
+      "stable_id": "sun.sun-presentation.05-scan-me-callout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "174e6ccd08231c665fae8cf0d2cf83c251d33a574152f82aa94da6553f19d211",
+      "semantic_signature_sha256": "532e920142e84830ada7255f14cd9b7e89253a3f618eb3f845fc4814029df5ed"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:53+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "03-section-intro",
+      "stable_id": "sun.sun-presentation.03-section-intro",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "7a9fbbd213bf5b98c1a0997fd3ca79f25828c0e197b28b2c25e8f3724f2d9e45",
+      "semantic_signature_sha256": "3ff1968b2b5b4f9f9473c8108602fd30b1f804323df6b4a6bb63d6f1a7daed0f"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:53+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "12-statistics-layout",
+      "stable_id": "sun.sun-presentation.12-statistics-layout",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "e57164becbafd2ddf3289227a1f007728f0d2a59269ab376cf66174029575b68",
+      "semantic_signature_sha256": "3c8e7fc69f7fc9421fa825777e7297cb3b54f30a5302c89cccbb7d0c639f64a7"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:53+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "09-summary-grid",
+      "stable_id": "sun.sun-presentation.09-summary-grid",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "ffe8d808c798f5b1e4718650847e712ecb558fdf929322d6a65e1b99b825c9ca",
+      "semantic_signature_sha256": "fc9e59da93c265068004a3f5c4019633df3b69cf4072a794470e0ee763f866e4"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:53+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "10-text-heavy-content",
+      "stable_id": "sun.sun-presentation.10-text-heavy-content",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "4887ada847fe82889c4cc089b00f9586e02c1dce65aa616bbd8d180479543c00",
+      "semantic_signature_sha256": "27923bc71d3e37b64241777cae732cc1fedfd0004200bea9e4d00f16ea8cfc72"
+    },
+    {
+      "attempted_at": "2026-06-17T17:19:53+07:00",
+      "extraction_id": "sun-presentation",
+      "item_id": "06-two-column-content",
+      "stable_id": "sun.sun-presentation.06-two-column-content",
+      "status": "published",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
+      "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
     }
   ]
 }

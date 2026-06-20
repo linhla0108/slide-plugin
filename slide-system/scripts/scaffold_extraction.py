@@ -61,10 +61,26 @@ def main() -> int:
     source_hash = sha256_file(source_path)
     batch_items = []
 
+    _BANNED_ID = re.compile(r"^(page-\d+|slide-\d+-full|item-\d+)$")
+    _GENERIC_INTENT = {"full-page extraction", "full-slide", "page"}
+
     for item in request["items"]:
         for key in ("item_id", "slide_or_page", "region", "requested_type", "semantic_intent"):
             if key not in item or item[key] in (None, "", []):
                 raise SystemExit(f"Item {item.get('item_id', '<unknown>')} is missing {key}")
+        if _BANNED_ID.match(item["item_id"]):
+            raise SystemExit(
+                f"Item ID '{item['item_id']}' is a positional placeholder. "
+                f"Use a semantic name describing the visual content "
+                f"(e.g., 'metric-card', 'timeline-horizontal', 'org-chart')."
+            )
+        intent_set = {v.lower().strip() for v in item["semantic_intent"]}
+        if not intent_set or intent_set <= _GENERIC_INTENT:
+            raise SystemExit(
+                f"Item '{item['item_id']}' has only generic semantic_intent "
+                f"{item['semantic_intent']}. Add descriptive intent values "
+                f"(e.g., 'cover', 'salary-table', 'org-chart')."
+            )
         region = normalized_bounds(item["region"])
         identity = {
             "source_sha256": source_hash,
@@ -94,7 +110,12 @@ def main() -> int:
             (entry for entry in registry.get("items", []) if entry["id"] == candidate_id),
             None,
         )
-        status = "duplicate" if exact or registry_match else "staging"
+        if exact or registry_match:
+            status = "duplicate"
+        elif item["requested_type"] == "template":
+            status = "published"
+        else:
+            status = "staging"
         item_dir = output_dir / "items" / item["item_id"]
         # Lean staging: create only the folders a staged item needs. Evidence
         # holds a lightweight note that references (never copies) the source
