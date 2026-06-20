@@ -1,10 +1,38 @@
 # Build HTML Deck
 
-Build only after approval.
+Build only after approval AND after `validate_selection_report.py` exits 0.
+
+## Pre-Build Gate
+
+Before starting HTML construction, confirm:
+1. `analysis/selection-report.json` exists and was validated (step 7b).
+2. For every slide with a `reuse` or `adapt-local` decision, the component's
+   `visual.svg` and `text-slots.json` are accessible in the library path.
+
+## Post-Build Gate
+
+After HTML construction, before PPTX export:
+```bash
+.venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
+    --html <run>/deck.html \
+    --selection-report <run>/analysis/selection-report.json \
+    --brand-pack slide-system/brand-packs/sun-studio/manifest.json
+```
+EXIT 0 required. Fails on: emoji icons, non-brand fonts, excessive non-brand
+colors, claimed reuse with no template reference in HTML.
+
+## Build Rules
 
 - Use a `1920x1080` `<deck-stage>`.
 - Keep slide content as static, editable HTML.
 - Keep each text item in a leaf element.
+- **Colors**: Use ONLY CSS variables from the brand token set (`var(--sun-orange)`,
+  `var(--ink)`, etc.). Never invent hex codes or use raw color values.
+- **Fonts**: Use ONLY `"Proxima Nova"` with brand weights. Never use Georgia,
+  Arial, Helvetica, or other non-brand fonts as primary.
+- **Icons**: Use SVG icons from the brand icon library
+  (`sun.asset.guideline-icon-library`) or slide-local simple SVGs. NEVER use
+  emoji characters as icons.
 - **Tag every visual object for export** (the layered PPTX export reads these;
   `validate_export_objects.py` FAILS the run when a visible `svg`/`img`/
   `canvas`/`video` carries no tag):
@@ -56,16 +84,22 @@ Build only after approval.
 - Keep foreground content editable.
 - Verify fonts, images, overflow, navigation, and deterministic capture.
 
-## Template-Based Build
+## Component/Template-Based Build
 
-- When the brief has a `base_template`, load that template's
-  `artifact/visual.svg` + `artifact/text-slots.json` from its published library
-  path (`slide-system/library/templates/<id>/`).
-- Run the template's `visual.svg` through the same decomposer as any full-page
-  artwork (do not hand-split, do not embed wholesale):
+This path applies to ALL items with `reuse` or `adapt-local` decisions from
+the scorer — not only when `base_template` is set. A standalone component
+(cover-hero, timeline, checklist, comparison, statistics, closing, CTA) with
+a `reuse` decision follows the same decompose→fill-slots flow.
+
+- Load the item's `artifact/visual.svg` + `artifact/text-slots.json` from its
+  published library path. For templates:
+  `slide-system/library/templates/<set>/<slide-id>/`. For standalone components:
+  `slide-system/library/<type>/<item-id>/`.
+- Run the item's `visual.svg` through the decomposer (do not hand-split, do
+  not embed wholesale):
   ```
   python3 slide-system/scripts/decompose_svg_objects.py \
-      --svg slide-system/library/templates/<id>/artifact/visual.svg \
+      --svg <library-path>/artifact/visual.svg \
       --out-dir <job>/assets/page-NN --prefix page-NN \
       --href-base <path from deck.html to that out-dir>
   ```
@@ -75,7 +109,7 @@ Build only after approval.
   by `text_contract.overflow_policy` at the item level (typically `"unmanaged"`),
   NOT per slot. Map plan fields (title / subtitle / body / footer) to matching
   slot roles; leave unmatched slots empty rather than inventing content.
-- For slides beyond the template's coverage, fall back to the normal custom
-  build above.
+- For slides with `custom-local` or `blocked` decisions, fall back to the
+  normal custom build above (with brand color/font/icon rules enforced).
 - If user content exceeds the available slots or overflows the slot bounds,
   surface a warning in the approval package — overflow is unmanaged by design.

@@ -16,6 +16,16 @@ Expand it into:
   selection step — it drives `--prefer-set` scoring.
 - Export contract and editability level.
 - Known limitations and unresolved decisions.
+- **Intent tags per slide** for visual-library matching. Each slide must specify
+  `intent` tags that map to visual-library item types — not just template
+  matching but also standalone component matching. Examples:
+  - A cover slide: `["cover", "title", "brand"]`
+  - A timeline slide: `["timeline", "process", "steps"]`
+  - A checklist slide: `["checklist", "list", "action-items"]`
+  - A comparison slide: `["comparison", "table", "versus"]`
+  - A statistics slide: `["statistics", "metrics", "data"]`
+  - A closing slide: `["closing", "cta", "next-steps"]`
+  These intent tags feed directly into `visual-requests.json` for the scorer.
 
 The title sequence must communicate the deck story without body text. Preserve
 source content verbatim when the request is a reconstruction or polish task.

@@ -1,0 +1,16 @@
+# Harness Enforcement — Progress Log
+# Branch: feat/harness-enforcement-and-component-recognition
+# Started: 2026-06-20
+
+[T1] validate_selection_report.py — DONE — tested against v2-balanced fake report → FAIL (correct)
+[T2] validate_brand_compliance.py — DONE — tested against v2-balanced deck → FAIL: 41 emoji, 20 non-brand colors (correct)
+[T3] score_visual_items.py batch mode — DONE — --batch-request + provenance fields added
+[T4] SKILL.md rewire — DONE — blocking gates 7b + 9b, absolute prohibitions section, workflow docs updated
+[T5] Registry enrichment — DONE — sparse tags 109→0, empty content_structure 111→2 (logo+character OK)
+[T6] Component recognition testing — DONE
+  Test A (standard): 5/5 reuse, avg 95.0 — cover/timeline/checklist/closing/comparison all correct
+  Test B (domain): 5/5 reuse, avg 91.7 — HR/benefits/culture/goal-setting/statistics all correct
+  Zero false matches across 10 test slides
+
+All 6 tasks complete. Gates tested against v2-balanced fake data: both FAIL correctly.
+

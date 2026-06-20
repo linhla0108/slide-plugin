@@ -46,6 +46,31 @@ handles setup on first use and reuses `.venv` on subsequent runs. If `setup.sh`
 fails (e.g. Node.js not installed), report the missing prerequisite to the user
 in plain language and link to the download page.
 
+## Absolute Prohibitions
+
+These rules are enforced by script gates. Violating them blocks the pipeline.
+
+1. **NO emoji icons.** Never use emoji characters (💰📊🎯✅⭐🏨✈📣🛡 etc.)
+   anywhere in slide content. Use SVG icons from the brand icon library
+   (`sun.asset.guideline-icon-library`) or slide-local simple SVGs. The
+   `validate_brand_compliance.py` gate FAILS the build on any emoji.
+
+2. **NO random colors.** Every color in the deck MUST come from the brand
+   token set in `colors_and_type.css`. Never invent hex codes. Use CSS
+   variables (`var(--sun-orange)`, `var(--ink)`, etc.) — not raw hex values.
+   The gate fails builds with more than 5 non-brand colors.
+
+3. **NO hand-written selection reports.** The `selection-report.json` MUST be
+   produced by running `score_visual_items.py`. Writing it by hand or
+   fabricating scores is a pipeline violation. The `validate_selection_report.py`
+   gate detects fake reports by checking schema, candidates array, and
+   criteria sub-scores.
+
+4. **NO skipping published components.** When the scorer recommends `reuse`
+   (score ≥ 75), the HTML build MUST load that component's `visual.svg`,
+   run the decomposer, and use the decomposed fragments. Building raw CSS
+   instead of using a scored component is a violation.
+
 ## Pipeline
 
 1. Run intake and triage before any other work. Treat a new user as non-tech by
@@ -64,14 +89,41 @@ in plain language and link to the download page.
 4. Run the requirement checker using the cached capability registry.
 5. Stop on blocking requirements unless the user approves an override.
 6. Analyze content and source authority.
-7. Create the slide plan and score published visual-library candidates.
-8. Present one approval package before build.
+7. **Score ALL published visual-library items against ALL slides (BLOCKING).**
+   Write `analysis/visual-requests.json` with one entry per slide, then run
+   the scorer in batch mode:
+   ```bash
+   .venv/bin/python3 slide-system/scripts/score_visual_items.py \
+       --batch-request <run>/analysis/visual-requests.json \
+       --output <run>/analysis/selection-report.json
+   ```
+   This is NOT optional. The agent MUST run this script. Hand-writing
+   `selection-report.json` is a pipeline violation that the next gate detects.
+   Score templates AND standalone components (cover, timeline, checklist,
+   comparison, closing, CTA, statistics, dividers, layouts). Pass
+   `--prefer-set <set-prefix>` when the brief has a `base_template`.
+
+7b. **Validate selection report (BLOCKING GATE).**
+    ```bash
+    .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
+        --selection-report <run>/analysis/selection-report.json \
+        --visual-requests <run>/analysis/visual-requests.json
+    ```
+    EXIT 0 required to proceed. EXIT 1 = fix and re-run step 7.
+
+8. Present one approval package before build. Show the scorer's decisions
+   (which components will be reused, adapted, or custom-built).
 9. Build HTML only after approval.
-    - **Template path (conditional):** when a slide's plan sets `base_template`,
-      build that slide from the template — load its `visual.svg` + text-slots
-      from `slide-system/library/templates/<id>/`, decompose the `visual.svg`,
-      and fill slots by role/id — before falling back to a custom build. See
-      the "Template-Based Build" section of `build-html-deck.md`.
+    - **Template/component path (MANDATORY for reuse/adapt-local decisions):**
+      when the scorer recommends `reuse` or `adapt-local`, load that item's
+      `visual.svg` + `text-slots.json` from its published library path, run the
+      decomposer, and fill slots by role/id. Only fall back to custom build when
+      the scorer decision is `custom-local` or `blocked`.
+    - **Custom build styling rules:**
+      - Use ONLY brand CSS variables for colors — `var(--sun-orange)`, never `#FF5533` directly.
+      - Use ONLY `"Proxima Nova"` font family with brand weights.
+      - Use SVG icons from the brand icon library or slide-local SVGs — NEVER emoji.
+      - Reference the brand token CSS file in the HTML head.
     a. **Decompose (conditional):** when the deck uses full-page artwork SVGs
        (extraction `visual.svg`), run `decompose_svg_objects.py` FIRST to
        split each page into per-object fragment SVGs + `snippet.html`. Paste
@@ -88,6 +140,18 @@ in plain language and link to the download page.
        existing HTML. Either rebuild the HTML with proper tags for a new
        layered run, or keep `--mode flat` for a patch. Ask the user which
        path they prefer.
+
+9b. **Validate brand compliance (BLOCKING GATE).**
+    ```bash
+    .venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
+        --html <run>/deck.html \
+        --selection-report <run>/analysis/selection-report.json \
+        --brand-pack slide-system/brand-packs/sun-studio/manifest.json
+    ```
+    EXIT 0 required to proceed to export. EXIT 1 = fix HTML violations and
+    re-validate. Common failures: emoji icons, non-brand fonts, non-brand
+    colors, claimed reuse with no actual template reference in HTML.
+
 10. Export PPTX through `export_pptx.py` — the single entry point. Default is
     `--mode layered` (3-layer: base + overlay shapes + native text). Use
     `--mode flat` ONLY when the user explicitly asks for frozen/non-editable.

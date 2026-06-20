@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Iterable
 
 from _common import load_json, now_iso, write_json
 
+
+SCORER_VERSION = "2.0.0"
 
 WEIGHTS = {
     "semantic_intent": 35,
@@ -19,7 +22,6 @@ WEIGHTS = {
     "accessibility": 10,
 }
 
-# Template selection rewards content structure over density. Sum stays 100.
 TEMPLATE_WEIGHTS = {
     **WEIGHTS,
     "content_structure": 25,
@@ -39,34 +41,15 @@ def overlap_score(left: Iterable[str], right: Iterable[str]) -> float:
     return len(a & b) / len(a)
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--request", required=True)
-    parser.add_argument(
-        "--registry",
-        default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
-    )
-    parser.add_argument("--output", required=True)
-    parser.add_argument(
-        "--item-type",
-        default=None,
-        help="Restrict scoring to registry items whose type equals this value (e.g. template).",
-    )
-    parser.add_argument(
-        "--prefer-set",
-        default=None,
-        help="Template-set prefix (e.g. interview-workshop-sunriser). Same-set items get a +5 bonus.",
-    )
-    args = parser.parse_args()
-
-    request = load_json(args.request)
-    registry = load_json(args.registry)
-    weights = weights_for(args.item_type)
+def score_request(
+    request: dict,
+    registry_items: list[dict],
+    weights: dict[str, int],
+    prefer_set: str | None,
+) -> tuple[dict, list[dict]]:
     candidates = []
 
-    for item in registry.get("items", []):
-        if args.item_type is not None and item.get("type") != args.item_type:
-            continue
+    for item in registry_items:
         reasons: list[str] = []
         eligible = item.get("status") == "published"
         if not eligible:
@@ -104,9 +87,9 @@ def main() -> int:
             "accessibility": round(accessibility * weights["accessibility"], 2),
         }
         score = round(sum(criteria.values()), 2) if eligible else 0.0
-        if args.prefer_set and eligible and score > 0:
+        if prefer_set and eligible and score > 0:
             item_set = item["id"].split(".")[1] if item["id"].count(".") >= 2 else ""
-            if item_set == args.prefer_set:
+            if item_set == prefer_set:
                 score = min(100, score + 5)
                 reasons.append("Set preference bonus: +5")
         candidates.append(
@@ -131,23 +114,86 @@ def main() -> int:
     else:
         action, reason = "custom-local", "Create a slide-local custom structure."
 
-    report = {
-        "request_id": request.get("request_id", "visual-request"),
-        "generated_at": now_iso(),
-        "decision": {
-            "action": action,
-            "item_id": best["item_id"] if best else None,
-            "score": score,
-            "reason": reason,
-            "extraction_recommended": bool(request.get("recommend_extraction", False)),
-        },
-        "candidates": candidates,
+    decision = {
+        "action": action,
+        "item_id": best["item_id"] if best else None,
+        "score": score,
+        "reason": reason,
+        "extraction_recommended": bool(request.get("recommend_extraction", False)),
     }
-    write_json(args.output, report)
-    print(f"{action}: {report['decision']['item_id']} ({score})")
+    return decision, candidates
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument("--request", default=None)
+    source_group.add_argument("--batch-request", default=None, metavar="PATH")
+    parser.add_argument(
+        "--registry",
+        default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
+    )
+    parser.add_argument("--output", required=True)
+    parser.add_argument(
+        "--item-type",
+        default=None,
+        help="Restrict scoring to registry items whose type equals this value (e.g. template).",
+    )
+    parser.add_argument(
+        "--prefer-set",
+        default=None,
+        help="Template-set prefix (e.g. interview-workshop-sunriser). Same-set items get a +5 bonus.",
+    )
+    args = parser.parse_args()
+
+    registry = load_json(args.registry)
+    weights = weights_for(args.item_type)
+
+    registry_items = [
+        item
+        for item in registry.get("items", [])
+        if args.item_type is None or item.get("type") == args.item_type
+    ]
+
+    if args.request:
+        request = load_json(args.request)
+        decision, candidates = score_request(request, registry_items, weights, args.prefer_set)
+        report = {
+            "request_id": request.get("request_id", "visual-request"),
+            "generated_at": now_iso(),
+            "generated_by": "score_visual_items.py",
+            "scorer_version": SCORER_VERSION,
+            "decision": decision,
+            "candidates": candidates,
+        }
+        write_json(args.output, report)
+        print(f"{decision['action']}: {decision['item_id']} ({decision['score']})")
+
+    else:
+        batch = load_json(args.batch_request)
+        job_id = batch.get("job_id", "batch")
+        slide_results = []
+        for slide_req in batch.get("slides", []):
+            decision, candidates = score_request(slide_req, registry_items, weights, args.prefer_set)
+            slide_results.append(
+                {
+                    "request_id": slide_req.get("request_id", ""),
+                    "decision": decision,
+                    "candidates": candidates,
+                }
+            )
+            print(f"{slide_req.get('request_id', '?')}: {decision['action']}: {decision['item_id']} ({decision['score']})")
+        report = {
+            "job_id": job_id,
+            "generated_at": now_iso(),
+            "generated_by": "score_visual_items.py",
+            "scorer_version": SCORER_VERSION,
+            "slides": slide_results,
+        }
+        write_json(args.output, report)
+
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

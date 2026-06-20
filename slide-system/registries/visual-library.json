@@ -12,11 +12,18 @@
       "brand": "sun-studio",
       "intent": [
         "brand-identification",
-        "logo"
+        "logo",
+        "brand-identity",
+        "watermark",
+        "identity-mark"
       ],
       "tags": [
         "logo",
-        "brand"
+        "brand",
+        "sun-studio",
+        "identity",
+        "watermark",
+        "thuong-hieu"
       ],
       "content_structure": [],
       "density": "any",
@@ -50,12 +57,19 @@
       "intent": [
         "character",
         "mascot",
-        "emphasis"
+        "emphasis",
+        "decoration",
+        "visual-accent",
+        "storytelling",
+        "personality"
       ],
       "tags": [
         "dio",
         "mascot",
-        "character"
+        "character",
+        "illustration",
+        "nhan-vat",
+        "hinh-minh-hoa"
       ],
       "content_structure": [],
       "density": "any",
@@ -90,24 +104,36 @@
     {
       "id": "sun.interview-workshop-sunriser.01-cover",
       "version": "1.0.0",
-      "name": "01 \u2014 Cover: Interview Workshop",
+      "name": "01 — Cover: Interview Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "title-slide"
       ],
       "tags": [
         "cover",
         "title",
         "opening",
         "interview",
-        "hr"
+        "hr",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "phong-van",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
         "label",
@@ -212,29 +238,44 @@
     {
       "id": "sun.interview-workshop-sunriser.02-timeline",
       "version": "1.0.0",
-      "name": "02 \u2014 Timeline SUN.RISER 2026",
+      "name": "02 — Timeline SUN.RISER 2026",
       "type": "template",
       "category": "template",
       "status": "published",
       "brand": "sun-studio",
       "intent": [
         "full-slide",
+        "schedule",
         "template",
         "timeline",
-        "schedule"
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "lo-trinh",
+        "ke-hoach"
       ],
       "tags": [
         "timeline",
         "schedule",
         "roadmap",
         "interview",
-        "hr"
+        "hr",
+        "lich-trinh",
+        "lo-trinh",
+        "quy-trinh",
+        "process",
+        "chronology",
+        "phases"
       ],
       "content_structure": [
         "heading",
         "label",
         "body",
-        "subheading"
+        "subheading",
+        "date"
       ],
       "content_fields": {
         "required": [],
@@ -430,7 +471,7 @@
     {
       "id": "sun.interview-workshop-sunriser.03-objectives",
       "version": "1.0.0",
-      "name": "03 \u2014 M\u1ee5c ti\u00eau Workshop",
+      "name": "03 — Mục tiêu Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -439,14 +480,20 @@
         "full-slide",
         "template",
         "objectives",
-        "agenda"
+        "agenda",
+        "learning-objectives",
+        "goals-list",
+        "workshop-goals",
+        "muc-tieu"
       ],
       "tags": [
         "objectives",
         "goals",
         "agenda",
         "interview",
-        "hr"
+        "hr",
+        "muc-tieu",
+        "danh-sach"
       ],
       "content_structure": [
         "heading",
@@ -611,7 +658,7 @@
     {
       "id": "sun.interview-workshop-sunriser.04-mindset",
       "version": "1.0.0",
-      "name": "04 \u2014 T\u00e2m th\u1ebf tuy\u1ec3n d\u1ee5ng",
+      "name": "04 — Tâm thế tuyển dụng",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -620,14 +667,20 @@
         "full-slide",
         "template",
         "mindset",
-        "concept"
+        "concept",
+        "attitude",
+        "principles",
+        "values",
+        "tieu-chuan"
       ],
       "tags": [
         "mindset",
         "concept",
         "criteria",
         "interview",
-        "hr"
+        "hr",
+        "tu-duy",
+        "tieu-chi"
       ],
       "content_structure": [
         "heading",
@@ -817,7 +870,7 @@
     {
       "id": "sun.interview-workshop-sunriser.05-prep",
       "version": "1.0.0",
-      "name": "05 \u2014 Chu\u1ea9n b\u1ecb tr\u01b0\u1edbc ph\u1ecfng v\u1ea5n",
+      "name": "05 — Chuẩn bị trước phỏng vấn",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -826,14 +879,20 @@
         "full-slide",
         "template",
         "checklist",
-        "steps"
+        "steps",
+        "to-do",
+        "action-list",
+        "preparation-guide",
+        "chuan-bi"
       ],
       "tags": [
         "preparation",
         "checklist",
         "steps",
         "interview",
-        "hr"
+        "hr",
+        "chuan-bi",
+        "danh-sach-kiem-tra"
       ],
       "content_structure": [
         "label",
@@ -1048,7 +1107,7 @@
     {
       "id": "sun.interview-workshop-sunriser.06-tough-candidates",
       "version": "1.0.0",
-      "name": "06 \u2014 \u1ee8ng vi\u00ean kh\u00f3 \u0111\u1ee1",
+      "name": "06 — Ứng viên khó đỡ",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1057,13 +1116,18 @@
         "full-slide",
         "template",
         "scenarios",
-        "list"
+        "list",
+        "case-study",
+        "examples",
+        "problem-solving"
       ],
       "tags": [
         "scenarios",
         "candidates",
         "interview",
-        "hr"
+        "hr",
+        "tinh-huong",
+        "ung-vien"
       ],
       "content_structure": [
         "label",
@@ -1241,7 +1305,7 @@
     {
       "id": "sun.interview-workshop-sunriser.07-star-method",
       "version": "1.0.0",
-      "name": "07 \u2014 Ph\u01b0\u01a1ng ph\u00e1p STAR",
+      "name": "07 — Phương pháp STAR",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1250,14 +1314,20 @@
         "full-slide",
         "template",
         "method",
-        "framework"
+        "framework",
+        "methodology",
+        "technique",
+        "star-framework",
+        "behavioral"
       ],
       "tags": [
         "star",
         "method",
         "framework",
         "interview",
-        "hr"
+        "hr",
+        "phuong-phap",
+        "khung"
       ],
       "content_structure": [
         "label",
@@ -1557,23 +1627,34 @@
     {
       "id": "sun.interview-workshop-sunriser.08-structure-warmup",
       "version": "1.0.0",
-      "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
+      "name": "08 — Cấu trúc phỏng vấn (Warm-up)",
       "type": "template",
       "category": "template",
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "structure",
+        "checklist",
         "full-slide",
         "template",
-        "structure",
-        "checklist"
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "opening-phase",
+        "ice-breaker"
       ],
       "tags": [
         "structure",
         "checklist",
         "warmup",
         "interview",
-        "hr"
+        "hr",
+        "cau-truc",
+        "khoi-dong",
+        "hierarchy",
+        "organization",
+        "layout"
       ],
       "content_structure": [
         "label",
@@ -1775,23 +1856,34 @@
     {
       "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
       "version": "1.0.0",
-      "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
+      "name": "09 — Cấu trúc phỏng vấn (Deep-dive)",
       "type": "template",
       "category": "template",
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "structure",
+        "checklist",
         "full-slide",
         "template",
-        "structure",
-        "checklist"
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "in-depth-questions",
+        "assessment-phase"
       ],
       "tags": [
         "structure",
         "checklist",
         "deep-dive",
         "interview",
-        "hr"
+        "hr",
+        "cau-truc",
+        "chi-tiet",
+        "hierarchy",
+        "organization",
+        "layout"
       ],
       "content_structure": [
         "label",
@@ -1993,7 +2085,7 @@
     {
       "id": "sun.interview-workshop-sunriser.10-do-dont",
       "version": "1.0.0",
-      "name": "10 \u2014 N\u00ean & Tr\u00e1nh (DO/DON'T)",
+      "name": "10 — Nên & Tránh (DO/DON'T)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2002,14 +2094,21 @@
         "full-slide",
         "template",
         "comparison",
-        "do-dont"
+        "do-dont",
+        "best-practices",
+        "guidelines",
+        "dos-and-donts",
+        "tips-and-tricks"
       ],
       "tags": [
         "do-dont",
         "comparison",
         "tips",
         "interview",
-        "hr"
+        "hr",
+        "nen-tranh",
+        "luu-y",
+        "so-sanh"
       ],
       "content_structure": [
         "label",
@@ -2307,7 +2406,7 @@
     {
       "id": "sun.interview-workshop-sunriser.11-scoring",
       "version": "1.0.0",
-      "name": "11 \u2014 Sau ph\u1ecfng v\u1ea5n: Ch\u1ea5m \u0111i\u1ec3m",
+      "name": "11 — Sau phỏng vấn: Chấm điểm",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2316,14 +2415,20 @@
         "full-slide",
         "template",
         "scoring",
-        "checklist"
+        "checklist",
+        "assessment",
+        "rating",
+        "decision-making",
+        "scoring-guide"
       ],
       "tags": [
         "scoring",
         "evaluation",
         "decision",
         "interview",
-        "hr"
+        "hr",
+        "cham-diem",
+        "danh-gia"
       ],
       "content_structure": [
         "heading",
@@ -2598,7 +2703,7 @@
     {
       "id": "sun.interview-workshop-sunriser.12-action-items",
       "version": "1.0.0",
-      "name": "12 \u2014 L\u00e0m ngay cho bu\u1ed5i ti\u1ebfp theo",
+      "name": "12 — Làm ngay cho buổi tiếp theo",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2607,14 +2712,20 @@
         "full-slide",
         "template",
         "action-items",
-        "roles"
+        "roles",
+        "next-steps",
+        "responsibilities",
+        "follow-up",
+        "tasks"
       ],
       "tags": [
         "action-items",
         "roles",
         "summary",
         "interview",
-        "hr"
+        "hr",
+        "viec-can-lam",
+        "tiep-theo"
       ],
       "content_structure": [
         "heading",
@@ -2825,16 +2936,28 @@
         "shape-system",
         "level-indicators",
         "formula-diagram",
-        "variants"
+        "variants",
+        "design-guide",
+        "style-guide",
+        "visual-system",
+        "brand-components"
       ],
       "tags": [
         "shapes",
         "levels",
         "formula",
         "overlap",
-        "variants"
+        "variants",
+        "design-system",
+        "components",
+        "hinh-dang"
       ],
-      "content_structure": [],
+      "content_structure": [
+        "heading",
+        "label",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [
           "label"
@@ -3119,21 +3242,37 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "opening-slide",
+        "presentation-cover"
       ],
       "tags": [
         "cover",
         "title",
         "opening",
         "goal-setting",
-        "pms"
+        "pms",
+        "bia",
+        "trang-bia",
+        "muc-tieu",
+        "mo-dau",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
-        "title"
+        "title",
+        "subtitle",
+        "label",
+        "logo"
       ],
       "content_fields": {
         "required": [],
@@ -3208,11 +3347,17 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "compensation-overview",
+        "benefits-presentation"
       ],
       "tags": [
         "cover",
@@ -3220,7 +3365,13 @@
         "opening",
         "salary",
         "benefits",
-        "hr"
+        "hr",
+        "luong",
+        "phuc-loi",
+        "bia",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
         "label",
@@ -3337,13 +3488,32 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
+        "title",
         "cover",
         "hero",
-        "title"
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "opening-slide",
+        "project-cover"
       ],
-      "tags": [],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "presentation",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "thuyet-trinh",
+        "brand",
+        "intro"
+      ],
       "content_structure": [
         "title",
         "subheading",
@@ -3451,13 +3621,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
+        "title",
         "cover",
         "hero",
-        "title"
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "performance-review-cover"
       ],
-      "tags": [],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "performance-review",
+        "bia",
+        "trang-bia",
+        "danh-gia",
+        "brand",
+        "intro"
+      ],
       "content_structure": [
         "title",
         "subheading",
@@ -3577,18 +3764,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "board-layout",
         "editable-table",
+        "structured-content",
+        "board-layout",
         "radial-board",
-        "structured-content"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "layout-guide",
+        "board-design",
+        "table-layout",
+        "radial-layout"
       ],
       "tags": [
         "board",
         "table",
         "radial",
-        "structured-content"
+        "structured-content",
+        "layout",
+        "design-guide",
+        "bang",
+        "content",
+        "body",
+        "information"
       ],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [
           "content"
@@ -4147,10 +4355,34 @@
       "brand": "sun-studio",
       "intent": [
         "intro",
-        "goal setting questions"
+        "goal setting questions",
+        "introduction",
+        "context-setting",
+        "framing",
+        "goal-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "intro",
+        "goal-setting",
+        "questions",
+        "pms",
+        "gioi-thieu",
+        "dat-muc-tieu",
+        "hr",
+        "objectives",
+        "opening",
+        "performance",
+        "planning",
+        "welcome"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -4332,10 +4564,36 @@
       "brand": "sun-studio",
       "intent": [
         "overview",
-        "pms purpose and outcomes"
+        "pms purpose and outcomes",
+        "pms-overview",
+        "context",
+        "background",
+        "purpose-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "overview",
+        "pms",
+        "purpose",
+        "outcomes",
+        "tong-quan",
+        "muc-dich",
+        "ket-qua",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "performance",
+        "planning",
+        "recap",
+        "summary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -4589,10 +4847,31 @@
       "brand": "sun-studio",
       "intent": [
         "thanks",
-        "closing slide"
+        "closing slide",
+        "end-slide",
+        "farewell",
+        "conclusion"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "thanks",
+        "closing",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "performance",
+        "planning"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -4690,10 +4969,35 @@
       "brand": "sun-studio",
       "intent": [
         "process",
-        "goal setting workflow"
+        "goal setting workflow",
+        "process-flow",
+        "workflow",
+        "how-to",
+        "steps"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "process",
+        "workflow",
+        "goal-setting",
+        "steps",
+        "quy-trinh",
+        "buoc",
+        "dat-muc-tieu",
+        "hr",
+        "objectives",
+        "performance",
+        "planning",
+        "procedure"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -4916,11 +5220,38 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "pms yearly schedule",
         "timeline",
-        "pms yearly schedule"
+        "process",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "annual-schedule",
+        "pms-calendar",
+        "year-plan"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "pms",
+        "schedule",
+        "annual",
+        "lich-trinh",
+        "ke-hoach",
+        "lo-trinh",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5084,10 +5415,33 @@
       "brand": "sun-studio",
       "intent": [
         "check-in",
-        "quarterly review questions"
+        "quarterly review questions",
+        "quarterly-review",
+        "progress-check",
+        "1-on-1",
+        "mid-review"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "check-in",
+        "quarterly",
+        "review",
+        "questions",
+        "quy",
+        "kiem-tra",
+        "cau-hoi",
+        "assessment",
+        "evaluation",
+        "performance",
+        "progress"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5287,10 +5641,29 @@
       "brand": "sun-studio",
       "intent": [
         "year-end review",
-        "performance assessment"
+        "performance assessment",
+        "annual-review",
+        "year-end",
+        "performance-evaluation"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "year-end",
+        "review",
+        "performance",
+        "assessment",
+        "cuoi-nam",
+        "danh-gia",
+        "hieu-suat",
+        "evaluation"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5484,10 +5857,32 @@
       "brand": "sun-studio",
       "intent": [
         "company culture",
-        "principles and collaboration"
+        "principles and collaboration",
+        "culture",
+        "values",
+        "teamwork",
+        "collaboration",
+        "principles"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "company-culture",
+        "principles",
+        "collaboration",
+        "values",
+        "van-hoa-cong-ty",
+        "gia-tri",
+        "company",
+        "culture",
+        "team"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5632,11 +6027,32 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "compensation section header",
         "section divider",
-        "compensation section header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "compensation-section"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "compensation",
+        "salary",
+        "phan-cach",
+        "luong",
+        "tieu-de-phan",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5733,11 +6149,31 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "direct benefits header",
         "section divider",
-        "direct benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "direct-benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "benefits",
+        "direct",
+        "phuc-loi-truc-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -5841,10 +6277,32 @@
       "brand": "sun-studio",
       "intent": [
         "summary",
-        "direct benefits overview"
+        "direct benefits overview",
+        "benefits-summary",
+        "overview-slide",
+        "direct-benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "summary",
+        "direct-benefits",
+        "overview",
+        "phuc-loi",
+        "tom-tat",
+        "tong-quan",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "recap",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6002,10 +6460,36 @@
       "brand": "sun-studio",
       "intent": [
         "monthly support",
-        "lunch and parking allowance"
+        "lunch and parking allowance",
+        "allowances",
+        "monthly-benefits",
+        "perks",
+        "support"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "monthly",
+        "support",
+        "lunch",
+        "parking",
+        "allowance",
+        "phu-cap",
+        "ho-tro-hang-thang",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "perks",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6162,11 +6646,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "indirect benefits header",
         "section divider",
-        "indirect benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "indirect-benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "indirect-benefits",
+        "phuc-loi-gian-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6270,10 +6773,28 @@
       "brand": "sun-studio",
       "intent": [
         "learning and development",
-        "career growth pathways"
+        "career growth pathways",
+        "career-growth",
+        "training",
+        "upskilling",
+        "L-and-D"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "learning",
+        "development",
+        "career",
+        "growth",
+        "dao-tao",
+        "phat-trien",
+        "su-nghiep"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6401,10 +6922,35 @@
       "brand": "sun-studio",
       "intent": [
         "overview",
-        "why sun studio upgraded compensation"
+        "why sun studio upgraded compensation",
+        "rationale",
+        "why",
+        "motivation",
+        "context"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "upgrade",
+        "compensation",
+        "reason",
+        "overview",
+        "tai-sao",
+        "nang-cap",
+        "luong",
+        "benefits",
+        "employee",
+        "hr",
+        "recap",
+        "salary",
+        "summary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6622,10 +7168,33 @@
       "brand": "sun-studio",
       "intent": [
         "flexibility",
-        "team trip autonomy"
+        "team trip autonomy",
+        "team-trip",
+        "autonomy",
+        "benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team-trip",
+        "flexibility",
+        "autonomy",
+        "du-lich",
+        "linh-hoat",
+        "quyen-tu-quyet",
+        "company",
+        "culture",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6789,10 +7358,33 @@
       "brand": "sun-studio",
       "intent": [
         "summary",
-        "update rollout timeline"
+        "update rollout timeline",
+        "change-summary",
+        "rollout-plan",
+        "update-timeline",
+        "recap"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "update",
+        "summary",
+        "rollout",
+        "timeline",
+        "cap-nhat",
+        "tom-tat",
+        "trien-khai",
+        "announcement",
+        "changes",
+        "overview",
+        "recap"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "date"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -6919,11 +7511,31 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "thank-you",
         "closing",
-        "thank-you"
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "goodbye",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7008,11 +7620,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "team",
         "contributors",
-        "team"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "speakers"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "members",
+        "thanh-vien",
+        "nhom",
+        "tac-gia",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7242,10 +7882,37 @@
       "brand": "sun-studio",
       "intent": [
         "image",
-        "text"
+        "text",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "media-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "photo",
+        "visual",
+        "hinh-anh",
+        "van-ban",
+        "noi-dung",
+        "media",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7415,10 +8082,36 @@
       "brand": "sun-studio",
       "intent": [
         "image",
-        "text"
+        "text",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "image-text",
+        "visual-content",
+        "alternate-layout",
+        "media-variant"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "photo",
+        "variant",
+        "hinh-anh",
+        "van-ban",
+        "phien-ban",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7587,11 +8280,35 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "structure",
         "information",
-        "structure"
+        "layout",
+        "content",
+        "body",
+        "info-architecture",
+        "structured-content",
+        "hierarchy",
+        "org-chart"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "information",
+        "structure",
+        "hierarchy",
+        "diagram",
+        "thong-tin",
+        "so-do",
+        "co-cau",
+        "layout",
+        "content",
+        "body"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7766,11 +8483,38 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "team",
         "contributors",
-        "team"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "alternate-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "variant",
+        "thanh-vien",
+        "nhom",
+        "phien-ban",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -7909,12 +8653,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "hero",
+        "title",
+        "cover",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "opening-slide",
+        "presentation-cover"
+      ],
+      "tags": [
         "cover",
         "hero",
-        "title"
+        "title",
+        "opening",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "hinh-nen",
+        "brand",
+        "intro"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "subtitle",
+        "logo"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -8030,10 +8798,36 @@
       "brand": "sun-studio",
       "intent": [
         "highlight",
-        "quote"
+        "quote",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "pullquote",
+        "key-message",
+        "emphasis",
+        "highlight-slide",
+        "inspirational"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "quote",
+        "highlight",
+        "pullquote",
+        "emphasis",
+        "trich-dan",
+        "nhan-manh",
+        "noi-bat",
+        "cau-noi",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "label",
+        "body",
+        "heading"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -8172,11 +8966,35 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "data",
         "statistics",
-        "data"
+        "metrics",
+        "numbers",
+        "kpi",
+        "performance",
+        "stats-slide",
+        "numbers-slide",
+        "data-highlights",
+        "so-lieu"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "statistics",
+        "data",
+        "numbers",
+        "metrics",
+        "kpi",
+        "thong-ke",
+        "so-lieu",
+        "chi-so"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -8394,10 +9212,32 @@
       "brand": "sun-studio",
       "intent": [
         "content",
-        "text"
+        "text",
+        "body",
+        "information",
+        "detail",
+        "text-content",
+        "body-slide",
+        "detailed-content",
+        "informational"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "text",
+        "content",
+        "body",
+        "long-form",
+        "detail",
+        "noi-dung",
+        "van-ban",
+        "chi-tiet"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -8741,10 +9581,35 @@
       "brand": "sun-studio",
       "intent": [
         "callout",
-        "scan-me"
+        "scan-me",
+        "note",
+        "important",
+        "attention",
+        "highlight",
+        "qr-code",
+        "interactive",
+        "digital-resource",
+        "link-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "qr-code",
+        "scan",
+        "callout",
+        "link",
+        "interactive",
+        "qr",
+        "quet-ma",
+        "lien-ket",
+        "note",
+        "attention",
+        "important"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -8842,10 +9707,32 @@
       "brand": "sun-studio",
       "intent": [
         "two-column",
-        "content"
+        "content",
+        "layout",
+        "body",
+        "information",
+        "split-layout",
+        "dual-content",
+        "content-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "two-column",
+        "content",
+        "split",
+        "layout",
+        "hai-cot",
+        "noi-dung",
+        "chia-doi",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -9075,10 +9962,32 @@
       "brand": "sun-studio",
       "intent": [
         "agenda",
-        "list"
+        "list",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "agenda",
+        "list",
+        "contents",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "lo-trinh",
+        "program",
+        "schedule"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -9253,12 +10162,35 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "instructions",
         "goals",
-        "factorial"
+        "instructions",
+        "factorial",
+        "how-to",
+        "guide",
+        "steps",
+        "procedure",
+        "step-by-step",
+        "tool-guide",
+        "goals-setup"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "goals",
+        "steps",
+        "instructions",
+        "tool",
+        "huong-dan",
+        "buoc",
+        "guide",
+        "how-to"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -9403,12 +10335,34 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "factorial",
         "instructions",
         "review",
-        "factorial"
+        "how-to",
+        "guide",
+        "steps",
+        "procedure",
+        "step-by-step",
+        "review-process"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "review",
+        "steps",
+        "instructions",
+        "tool",
+        "huong-dan",
+        "buoc",
+        "guide",
+        "how-to"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -9553,11 +10507,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "answers",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap",
+        "phan-1"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -9828,11 +10801,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "answers",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap",
+        "phan-2"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -10091,11 +11083,28 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "header",
         "faq",
-        "header"
+        "questions",
+        "answers",
+        "q-and-a",
+        "faq-section",
+        "questions-header"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "header",
+        "questions",
+        "cau-hoi-thuong-gap",
+        "tieu-de",
+        "hoi-dap",
+        "answers"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -10194,10 +11203,38 @@
       "intent": [
         "definition",
         "how",
-        "level expectation"
+        "level expectation",
+        "cta",
+        "call-to-action",
+        "next-steps",
+        "action-items",
+        "expectation-levels",
+        "performance-levels",
+        "how-definition",
+        "card"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "how",
+        "level",
+        "expectation",
+        "card",
+        "cap-do",
+        "ky-vong",
+        "performance",
+        "danh-gia",
+        "cta",
+        "action",
+        "next-steps",
+        "follow-up"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -10511,11 +11548,35 @@
       "brand": "sun-studio",
       "intent": [
         "intro",
+        "body",
         "explanation",
-        "body"
+        "layout",
+        "content",
+        "information",
+        "introduction",
+        "context-setting",
+        "background"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "intro",
+        "explanation",
+        "body",
+        "context",
+        "layout",
+        "gioi-thieu",
+        "giai-thich",
+        "content",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -10847,11 +11908,37 @@
       "brand": "sun-studio",
       "intent": [
         "checklist",
+        "1:1",
         "preparation",
-        "1:1"
+        "list",
+        "action-items",
+        "todo",
+        "requirements",
+        "pre-meeting",
+        "preparation-guide",
+        "1-on-1-prep",
+        "to-do-list"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "checklist",
+        "preparation",
+        "1-on-1",
+        "meeting",
+        "danh-sach",
+        "chuan-bi",
+        "kiem-tra",
+        "list",
+        "items",
+        "todo"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -11170,12 +12257,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "chart",
+        "scale",
+        "rating",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "rating-scale",
+        "scoring-chart",
+        "evaluation-chart",
+        "performance-scale"
+      ],
+      "tags": [
         "rating",
         "scale",
-        "chart"
+        "chart",
+        "scoring",
+        "thang-diem",
+        "bieu-do",
+        "cham-diem",
+        "performance",
+        "graph",
+        "visualization",
+        "data"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "title",
+        "heading",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -11818,12 +12932,40 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "timeline",
         "schedule",
-        "review"
+        "review",
+        "timeline",
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "review-schedule",
+        "annual-calendar",
+        "performance-timeline"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "review",
+        "schedule",
+        "annual",
+        "lich-trinh",
+        "danh-gia",
+        "ke-hoach",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12077,10 +13219,30 @@
       "brand": "sun-studio",
       "intent": [
         "divider",
-        "section"
+        "section",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide",
+        "phan-muc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "transition",
+        "phan-cach",
+        "chuong",
+        "phan",
+        "break"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12178,10 +13340,30 @@
       "brand": "sun-studio",
       "intent": [
         "divider",
-        "section"
+        "section",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide",
+        "phan-muc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "transition",
+        "phan-cach",
+        "chuong",
+        "phan",
+        "break"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12279,10 +13461,30 @@
       "brand": "sun-studio",
       "intent": [
         "divider",
-        "section"
+        "section",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide",
+        "phan-muc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "transition",
+        "phan-cach",
+        "chuong",
+        "phan",
+        "break"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12380,10 +13582,30 @@
       "brand": "sun-studio",
       "intent": [
         "divider",
-        "section"
+        "section",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide",
+        "phan-muc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "transition",
+        "phan-cach",
+        "chuong",
+        "phan",
+        "break"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12482,10 +13704,32 @@
       "intent": [
         "definition",
         "what",
-        "smart"
+        "smart",
+        "definition-slide",
+        "concept",
+        "what-is",
+        "smart-goals",
+        "terminology"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "definition",
+        "what",
+        "smart",
+        "goals",
+        "khai-niem",
+        "dinh-nghia",
+        "smart-goals",
+        "card",
+        "concept",
+        "explanation"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -12672,12 +13916,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "what",
+        "how",
+        "comparison",
+        "versus",
+        "side-by-side",
+        "contrast",
+        "what-how",
+        "comparison-slide",
+        "two-concepts",
+        "what-vs-how"
+      ],
+      "tags": [
         "comparison",
         "what",
-        "how"
+        "how",
+        "contrast",
+        "so-sanh",
+        "phan-biet",
+        "hai-khai-niem",
+        "versus",
+        "side-by-side"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -13050,13 +14318,40 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "framework",
         "what",
         "how",
-        "rating"
+        "framework",
+        "rating",
+        "model",
+        "methodology",
+        "structure",
+        "concept",
+        "rating-system",
+        "evaluation-framework",
+        "criteria",
+        "assessment-framework"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "framework",
+        "rating",
+        "what",
+        "how",
+        "khung-danh-gia",
+        "tieu-chi",
+        "he-thong",
+        "model",
+        "concept",
+        "methodology"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -13273,11 +14568,40 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "goal setting questions",
         "intro",
-        "goal setting questions"
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "introduction",
+        "framing",
+        "context-setting",
+        "goal-introduction"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "intro",
+        "goal-setting",
+        "questions",
+        "gioi-thieu",
+        "cau-hoi",
+        "dat-muc-tieu",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -13458,11 +14782,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "pms purpose and outcomes",
         "overview",
-        "pms purpose and outcomes"
+        "grid",
+        "summary",
+        "matrix",
+        "multi-item",
+        "introduction",
+        "context",
+        "background",
+        "pms-overview",
+        "purpose-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "overview",
+        "pms",
+        "purpose",
+        "outcomes",
+        "tong-quan",
+        "muc-dich",
+        "ket-qua",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -13715,11 +15067,41 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "goal setting workflow",
         "process",
-        "goal setting workflow"
+        "timeline",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "workflow",
+        "how-to",
+        "methodology"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "process",
+        "workflow",
+        "goal-setting",
+        "steps",
+        "quy-trinh",
+        "buoc",
+        "dat-muc-tieu",
+        "timeline",
+        "chronology",
+        "schedule",
+        "phases"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -13942,11 +15324,34 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "closing slide",
         "thanks",
-        "closing slide"
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14043,11 +15448,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "goal allocation by role",
         "structure breakdown",
-        "goal allocation by role"
+        "structure",
+        "layout",
+        "hierarchy",
+        "organization",
+        "goal-structure",
+        "role-allocation",
+        "breakdown",
+        "distribution"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "structure",
+        "breakdown",
+        "allocation",
+        "roles",
+        "co-cau",
+        "phan-bo",
+        "vai-tro",
+        "hierarchy",
+        "organization",
+        "layout"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14258,11 +15688,38 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "pms yearly schedule",
         "timeline",
-        "pms yearly schedule"
+        "process",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "annual-schedule",
+        "year-plan",
+        "pms-calendar"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "schedule",
+        "pms",
+        "lo-trinh",
+        "lich-trinh",
+        "ke-hoach",
+        "nam",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14426,10 +15883,37 @@
       "brand": "sun-studio",
       "intent": [
         "check-in",
-        "quarterly review questions"
+        "quarterly review questions",
+        "mid-year-review",
+        "progress-check",
+        "quarterly-review",
+        "1-on-1"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "check-in",
+        "quarterly",
+        "review",
+        "questions",
+        "kiem-tra",
+        "quy",
+        "cau-hoi",
+        "assessment",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "performance",
+        "planning",
+        "progress"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14629,10 +16113,34 @@
       "brand": "sun-studio",
       "intent": [
         "year-end review",
-        "performance assessment"
+        "performance assessment",
+        "annual-review",
+        "performance-assessment",
+        "year-end",
+        "evaluation"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "year-end",
+        "review",
+        "performance",
+        "assessment",
+        "cuoi-nam",
+        "danh-gia",
+        "hieu-suat",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "planning"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "body",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14826,10 +16334,37 @@
       "brand": "sun-studio",
       "intent": [
         "company culture",
-        "principles and collaboration"
+        "principles and collaboration",
+        "culture",
+        "values",
+        "principles",
+        "teamwork",
+        "collaboration"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "company-culture",
+        "principles",
+        "collaboration",
+        "van-hoa-cong-ty",
+        "gia-tri",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -14974,11 +16509,32 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "compensation section header",
         "section divider",
-        "compensation section header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "compensation",
+        "header",
+        "phan-cach",
+        "luong",
+        "tieu-de",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15075,11 +16631,31 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "direct benefits header",
         "section divider",
-        "direct benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "benefits-section"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "benefits",
+        "direct",
+        "phuc-loi-truc-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15183,10 +16759,33 @@
       "brand": "sun-studio",
       "intent": [
         "summary",
-        "direct benefits overview"
+        "direct benefits overview",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "benefits-summary",
+        "overview-slide",
+        "recap"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "summary",
+        "direct-benefits",
+        "overview",
+        "phuc-loi",
+        "tom-tat",
+        "tong-quan",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15344,10 +16943,35 @@
       "brand": "sun-studio",
       "intent": [
         "employee notes",
-        "what sun ers should know"
+        "what sun ers should know",
+        "employee-information",
+        "important-notes",
+        "guidelines",
+        "reminders"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "employee",
+        "notes",
+        "important",
+        "sun-ers",
+        "luu-y",
+        "nhan-vien",
+        "can-biet",
+        "benefits",
+        "compensation",
+        "hr",
+        "information",
+        "reference",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15523,10 +17147,33 @@
       "brand": "sun-studio",
       "intent": [
         "explainer",
-        "gross to net salary conversion"
+        "gross to net salary conversion",
+        "explanation",
+        "how-it-works",
+        "salary-breakdown",
+        "calculation"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "gross",
+        "net",
+        "salary",
+        "explainer",
+        "luong-gross",
+        "luong-net",
+        "giai-thich",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15767,11 +17414,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "indirect benefits header",
         "section divider",
-        "indirect benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "indirect-benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "indirect-benefits",
+        "phuc-loi-gian-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -15875,10 +17541,33 @@
       "brand": "sun-studio",
       "intent": [
         "learning and development",
-        "career growth pathways"
+        "career growth pathways",
+        "career-growth",
+        "training",
+        "upskilling",
+        "learning-opportunities"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "learning",
+        "development",
+        "career",
+        "growth",
+        "dao-tao",
+        "phat-trien",
+        "su-nghiep",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16006,10 +17695,33 @@
       "brand": "sun-studio",
       "intent": [
         "long-term benefits",
-        "insurance and union coverage"
+        "insurance and union coverage",
+        "insurance",
+        "long-term-benefits",
+        "union-benefits",
+        "coverage"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "long-term",
+        "insurance",
+        "union",
+        "benefits",
+        "bao-hiem",
+        "phuc-loi-dai-han",
+        "compensation",
+        "employee",
+        "hr",
+        "salary",
+        "security"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16263,10 +17975,36 @@
       "brand": "sun-studio",
       "intent": [
         "monthly support",
-        "lunch and parking allowance"
+        "lunch and parking allowance",
+        "allowances",
+        "monthly-benefits",
+        "support-benefits",
+        "perks"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "monthly",
+        "support",
+        "lunch",
+        "parking",
+        "allowance",
+        "phu-cap",
+        "ho-tro-hang-thang",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "perks",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16423,11 +18161,34 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "closing slide",
         "thanks",
-        "closing slide"
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16543,10 +18304,36 @@
       "brand": "sun-studio",
       "intent": [
         "overview",
-        "why sun studio upgraded compensation"
+        "why sun studio upgraded compensation",
+        "rationale",
+        "motivation",
+        "why-section",
+        "context",
+        "reason"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "upgrade",
+        "overview",
+        "compensation",
+        "reason",
+        "nang-cap",
+        "tai-sao",
+        "luong",
+        "benefits",
+        "employee",
+        "hr",
+        "recap",
+        "salary",
+        "summary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16764,10 +18551,40 @@
       "brand": "sun-studio",
       "intent": [
         "team building",
-        "company trip and culture activities"
+        "company trip and culture activities",
+        "team-culture",
+        "activities",
+        "company-trip",
+        "engagement"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team-building",
+        "company-trip",
+        "culture",
+        "activities",
+        "hoat-dong",
+        "xay-dung-doi",
+        "autonomy",
+        "benefits",
+        "company",
+        "compensation",
+        "employee",
+        "flexibility",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16925,10 +18742,38 @@
       "brand": "sun-studio",
       "intent": [
         "flexibility",
-        "team trip autonomy"
+        "team trip autonomy",
+        "autonomy",
+        "team-trip",
+        "work-life-balance"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team-trip",
+        "flexibility",
+        "autonomy",
+        "linh-hoat",
+        "du-lich",
+        "quyen-tu-quyet",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -17092,10 +18937,37 @@
       "brand": "sun-studio",
       "intent": [
         "package overview",
-        "total compensation structure"
+        "total compensation structure",
+        "grid",
+        "summary",
+        "overview",
+        "matrix",
+        "multi-item",
+        "package-overview",
+        "total-compensation",
+        "benefits-summary"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "package",
+        "overview",
+        "compensation",
+        "total",
+        "goi-tong-the",
+        "tong-quan",
+        "luong",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -17247,10 +19119,36 @@
       "brand": "sun-studio",
       "intent": [
         "summary",
-        "update rollout timeline"
+        "update rollout timeline",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "change-summary",
+        "rollout-plan",
+        "update-timeline",
+        "recap"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "update",
+        "summary",
+        "rollout",
+        "timeline",
+        "cap-nhat",
+        "tom-tat",
+        "trien-khai",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "date"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -17378,10 +19276,36 @@
       "brand": "sun-studio",
       "intent": [
         "working environment",
-        "office and flexibility"
+        "office and flexibility",
+        "work-environment",
+        "office-policy",
+        "flexibility",
+        "workspace"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "working-environment",
+        "office",
+        "flexibility",
+        "moi-truong-lam-viec",
+        "linh-hoat",
+        "autonomy",
+        "benefits",
+        "compensation",
+        "employee",
+        "environment",
+        "hr",
+        "salary",
+        "travel",
+        "trip",
+        "workspace"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -17796,13 +19720,34 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
         "agenda",
-        "list"
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "agenda",
+        "list",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "performance-review",
+        "program",
+        "schedule"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -17977,13 +19922,33 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "thank-you",
+        "closing",
         "full-slide",
         "template",
-        "closing",
-        "thank-you"
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18072,10 +20037,36 @@
         "template",
         "instructions",
         "goals",
-        "factorial"
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "goals-setup"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "goals",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "muc-tieu",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "review",
+        "tool",
+        "workflow"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18224,10 +20215,35 @@
         "template",
         "instructions",
         "review",
-        "factorial"
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "review-process"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "review",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "danh-gia",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "tool",
+        "workflow"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18372,13 +20388,31 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "answers",
         "full-slide",
         "template",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18649,13 +20683,31 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "answers",
         "full-slide",
         "template",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18914,13 +20966,30 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "header",
         "full-slide",
         "template",
         "faq",
-        "header"
+        "questions",
+        "answers",
+        "q-and-a",
+        "faq-section",
+        "questions-header"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "header",
+        "questions",
+        "cau-hoi-thuong-gap",
+        "hoi-dap",
+        "tieu-de",
+        "answers"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -19017,14 +21086,41 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "definition",
+        "level expectation",
+        "how",
         "full-slide",
         "template",
-        "definition",
-        "how",
-        "level expectation"
+        "cta",
+        "call-to-action",
+        "next-steps",
+        "action-items",
+        "expectations",
+        "levels",
+        "performance-levels",
+        "how-definition"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "how",
+        "level",
+        "expectation",
+        "performance",
+        "cap-do",
+        "ky-vong",
+        "danh-gia",
+        "cta",
+        "action",
+        "next-steps",
+        "follow-up"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -19337,14 +21433,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "explanation",
         "full-slide",
+        "intro",
+        "body",
         "template",
+        "layout",
+        "content",
+        "information",
+        "introduction",
+        "context-setting",
+        "background"
+      ],
+      "tags": [
         "intro",
         "explanation",
-        "body"
+        "body",
+        "context",
+        "gioi-thieu",
+        "giai-thich",
+        "nen-tang",
+        "layout",
+        "content",
+        "information"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -19675,14 +21796,38 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "preparation",
+        "1:1",
+        "checklist",
         "full-slide",
         "template",
+        "list",
+        "action-items",
+        "todo",
+        "requirements",
+        "pre-meeting",
+        "preparation-guide",
+        "1-on-1-prep"
+      ],
+      "tags": [
         "checklist",
         "preparation",
-        "1:1"
+        "1-on-1",
+        "meeting",
+        "danh-sach-kiem-tra",
+        "chuan-bi",
+        "list",
+        "items",
+        "todo"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -20001,14 +22146,40 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "chart",
+        "scale",
+        "rating",
         "full-slide",
         "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "rating-scale",
+        "scoring-chart",
+        "evaluation-chart",
+        "performance-scale"
+      ],
+      "tags": [
         "rating",
         "scale",
-        "chart"
+        "chart",
+        "scoring",
+        "thang-diem",
+        "bieu-do",
+        "cham-diem",
+        "graph",
+        "visualization",
+        "data"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "title",
+        "heading",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -20651,14 +22822,41 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
         "timeline",
+        "review",
+        "full-slide",
         "schedule",
-        "review"
+        "template",
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "review-schedule",
+        "annual-calendar"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "review",
+        "schedule",
+        "lich-trinh",
+        "lo-trinh",
+        "danh-gia",
+        "ke-hoach",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -20912,12 +23110,31 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21015,12 +23232,31 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21118,12 +23354,31 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21221,12 +23476,31 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21327,10 +23601,35 @@
         "template",
         "definition",
         "what",
-        "smart"
+        "smart",
+        "definition-slide",
+        "concept",
+        "smart-goals",
+        "what-is"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "definition",
+        "what",
+        "smart",
+        "goals",
+        "khai-niem",
+        "muc-tieu",
+        "smart-goals",
+        "assessment",
+        "card",
+        "concept",
+        "evaluation",
+        "explanation",
+        "performance",
+        "review"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21517,14 +23816,37 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "what",
+        "comparison",
+        "how",
         "full-slide",
         "template",
+        "versus",
+        "side-by-side",
+        "contrast",
+        "what-how",
+        "comparison-slide",
+        "two-concepts",
+        "what-vs-how"
+      ],
+      "tags": [
         "comparison",
         "what",
-        "how"
+        "how",
+        "contrast",
+        "so-sanh",
+        "phan-biet",
+        "versus",
+        "side-by-side"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -21897,15 +24219,42 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "what",
+        "rating",
+        "how",
         "full-slide",
-        "template",
         "framework",
+        "template",
+        "model",
+        "methodology",
+        "structure",
+        "concept",
+        "rating-system",
+        "evaluation-framework",
+        "criteria",
+        "assessment"
+      ],
+      "tags": [
+        "framework",
+        "rating",
         "what",
         "how",
-        "rating"
+        "khung-danh-gia",
+        "tieu-chi",
+        "performance",
+        "model",
+        "concept",
+        "methodology"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22122,13 +24471,35 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
         "agenda",
-        "list"
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "agenda",
+        "list",
+        "contents",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "lo-trinh",
+        "program",
+        "schedule"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "list-item",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22327,13 +24698,33 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "thank-you",
+        "closing",
         "full-slide",
         "template",
-        "closing",
-        "thank-you"
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22424,13 +24815,41 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "team",
         "full-slide",
         "template",
         "contributors",
-        "team"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "nhom"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "members",
+        "thanh-vien",
+        "nhom",
+        "gioi-thieu-nhom",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22662,10 +25081,34 @@
         "full-slide",
         "template",
         "contributors",
-        "team"
+        "team",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "variant"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "variant",
+        "thanh-vien",
+        "nhom",
+        "phien-ban",
+        "company",
+        "credits",
+        "culture",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22804,13 +25247,39 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
         "image",
-        "text"
+        "full-slide",
+        "text",
+        "template",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "media"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "photo",
+        "visual",
+        "hinh-anh",
+        "van-ban",
+        "noi-dung",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -22982,10 +25451,30 @@
         "full-slide",
         "template",
         "image",
-        "text"
+        "text",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "alternate-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "variant",
+        "photo",
+        "hinh-anh",
+        "van-ban",
+        "phien-ban",
+        "media",
+        "visual"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23154,13 +25643,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "structure",
+        "information",
         "full-slide",
         "template",
-        "information",
-        "structure"
+        "layout",
+        "content",
+        "body",
+        "info-architecture",
+        "structured-content",
+        "hierarchy",
+        "diagram"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "information",
+        "structure",
+        "hierarchy",
+        "diagram",
+        "thong-tin",
+        "co-cau",
+        "layout",
+        "content",
+        "body"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23336,12 +25848,33 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "chart",
-        "mix"
+        "mix",
+        "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "chart-slide",
+        "mixed-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "chart",
+        "mix",
+        "data",
+        "visualization",
+        "bieu-do",
+        "du-lieu",
+        "so-lieu",
+        "graph"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "metric",
+        "caption"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23517,12 +26050,30 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
+        "next-steps",
         "template",
         "cta",
-        "next-steps"
+        "call-to-action",
+        "action-items",
+        "follow-up"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "next-steps",
+        "cta",
+        "action",
+        "call-to-action",
+        "buoc-tiep-theo",
+        "hanh-dong",
+        "follow-up"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23632,12 +26183,36 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
+        "quote",
         "template",
         "highlight",
-        "quote"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "pullquote",
+        "emphasis-slide",
+        "key-message"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "quote",
+        "highlight",
+        "pullquote",
+        "emphasis",
+        "trich-dan",
+        "nhan-manh",
+        "noi-bat",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23776,13 +26351,37 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "callout",
         "full-slide",
         "template",
-        "callout",
-        "scan-me"
+        "scan-me",
+        "note",
+        "important",
+        "attention",
+        "highlight",
+        "qr-code",
+        "interactive",
+        "link-slide",
+        "digital-resource"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "qr-code",
+        "scan",
+        "callout",
+        "link",
+        "qr",
+        "quet-ma",
+        "lien-ket",
+        "note",
+        "attention",
+        "important"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "body"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -23880,12 +26479,39 @@
       "brand": "sun-studio",
       "intent": [
         "full-slide",
-        "template",
         "intro",
-        "section"
+        "section",
+        "template",
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "section-header",
+        "chapter-intro",
+        "transition",
+        "divider-with-content"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "section",
+        "intro",
+        "chapter",
+        "phan",
+        "chuong",
+        "gioi-thieu-phan",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "subtitle"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -24006,13 +26632,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "data",
         "full-slide",
         "template",
         "statistics",
-        "data"
+        "metrics",
+        "numbers",
+        "kpi",
+        "performance",
+        "stats-slide",
+        "numbers-slide",
+        "data-highlights"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "statistics",
+        "data",
+        "numbers",
+        "metrics",
+        "thong-ke",
+        "so-lieu",
+        "chi-so",
+        "kpi"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -24229,13 +26878,36 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "grid",
         "full-slide",
         "template",
         "summary",
-        "grid"
+        "overview",
+        "matrix",
+        "multi-item",
+        "recap",
+        "summary-slide",
+        "key-points",
+        "grid-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "summary",
+        "grid",
+        "recap",
+        "overview",
+        "tom-tat",
+        "luoi",
+        "tong-ket",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -24398,13 +27070,35 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "full-slide",
-        "template",
         "content",
-        "text"
+        "full-slide",
+        "text",
+        "template",
+        "body",
+        "information",
+        "detail",
+        "text-content",
+        "body-slide",
+        "detailed-content",
+        "informational"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "text",
+        "content",
+        "body",
+        "long-form",
+        "noi-dung",
+        "van-ban",
+        "chi-tiet",
+        "detail"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -24747,13 +27441,37 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "two-column",
+        "content",
         "full-slide",
         "template",
-        "two-column",
-        "content"
+        "body",
+        "information",
+        "text",
+        "detail",
+        "split-layout",
+        "dual-content",
+        "content-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "two-column",
+        "content",
+        "split",
+        "comparison",
+        "hai-cot",
+        "so-sanh",
+        "noi-dung",
+        "body",
+        "text",
+        "detail"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "list-item"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
