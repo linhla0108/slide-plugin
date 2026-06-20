@@ -1,0 +1,3208 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0.0,
+      0.0,
+      1920.0,
+      1080.0
+    ],
+    "canvas_width": 1920.0,
+    "canvas_height": 1080.0
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "indirect-benefits",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "INDIRECT BENEFITS",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0378805,
+        "y": 0.116442,
+        "width": 0.3945209,
+        "height": 0.0903704
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 80.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "company-culture",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "COMPANY CULTURE",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0378805,
+        "y": 0.1979235,
+        "width": 0.4025291,
+        "height": 0.0903704
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 80.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            15
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "le",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Le",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.440905,
+        "y": 0.805324,
+        "width": 0.0238421,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 3,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "s",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4612376,
+        "y": 0.8080577,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 4,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-2",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "s",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.47038,
+        "y": 0.8092869,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 5,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "p",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "P",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.484608,
+        "y": 0.8111998,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 6,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "roce",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "roce",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4966287,
+        "y": 0.8128159,
+        "width": 0.0411861,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 7,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 5,
+          "run_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-3",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "s",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5342559,
+        "y": 0.8178748,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 8,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-4",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "s",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5433984,
+        "y": 0.8191039,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 9,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "text-2",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": ",",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5527042,
+        "y": 0.8203551,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 10,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "m",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "M",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4136064,
+        "y": 0.8392964,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 11,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ore",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ore",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4304185,
+        "y": 0.8415567,
+        "width": 0.042478,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 12,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "collabo",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Collabo",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4638542,
+        "y": 0.8460521,
+        "width": 0.0698101,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 13,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ration",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ration",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5305431,
+        "y": 0.8550181,
+        "width": 0.0540085,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 4.3248,
+      "z_order": 14,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0212,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 12,
+          "run_index": 0,
+          "character_range": [
+            0,
+            6
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "f",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "F",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4602533,
+        "y": 0.5721325,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 15,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "a",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "a",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4709249,
+        "y": 0.5729786,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 16,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "il",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "il",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4813056,
+        "y": 0.5738015,
+        "width": 0.0188172,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 17,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "fast",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Fast",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4962901,
+        "y": 0.5749895,
+        "width": 0.0442269,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 18,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "text-3",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": ",",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5336907,
+        "y": 0.5779546,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 19,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 5,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "lea",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Lea",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4441529,
+        "y": 0.6084289,
+        "width": 0.0343121,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 20,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            3
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "rn",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "rn",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4749849,
+        "y": 0.6108732,
+        "width": 0.0322509,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 21,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            3
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "f-2",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "F",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4982658,
+        "y": 0.6127188,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 22,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ast",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ast",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5089431,
+        "y": 0.6135653,
+        "width": 0.0335447,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 23,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            3
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "e",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "e",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5354236,
+        "y": 0.6156647,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 24,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "r",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "r",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5458834,
+        "y": 0.6164939,
+        "width": 0.013883,
+        "height": 0.0418203
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 2.5534,
+      "z_order": 25,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0213,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "f-3",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "F",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.374821,
+        "y": 0.3894248,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 26,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "a-2",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "A",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.394393,
+        "y": 0.3851532,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 27,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-5",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "S",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.420036,
+        "y": 0.3795567,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 28,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "T",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4417683,
+        "y": 0.3748136,
+        "width": 0.0487019,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 29,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "text-4",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "&",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4729726,
+        "y": 0.3680033,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 30,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "f-4",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "F",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5063889,
+        "y": 0.3607101,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 31,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "a-3",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "A",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5259609,
+        "y": 0.3564386,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 32,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-6",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "S",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5516039,
+        "y": 0.3508421,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 33,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-2",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "T",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5733362,
+        "y": 0.346099,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 34,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "e-2",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "E",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5939531,
+        "y": 0.3415993,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 35,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "r-2",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "R",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.615678,
+        "y": 0.3368579,
+        "width": 0.0267879,
+        "height": 0.0806945
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -6.9989,
+      "z_order": 36,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 71.4345,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ai",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "AI",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3638387,
+        "y": 0.7188691,
+        "width": 0.0272416,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 37,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "i",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "i",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3877549,
+        "y": 0.7177059,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 38,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n-p",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "n P",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.3926969,
+        "y": 0.7174655,
+        "width": 0.0302535,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 39,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            3
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ro",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ro",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4211137,
+        "y": 0.7160834,
+        "width": 0.0209518,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 40,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "d",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "d",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4392514,
+        "y": 0.7152012,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 41,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 5,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "u",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "u",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4504481,
+        "y": 0.7146566,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 42,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "c",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4617489,
+        "y": 0.7141069,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 43,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-3",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "t",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.4715347,
+        "y": 0.713631,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 44,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ion",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ion",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.478491,
+        "y": 0.7132926,
+        "width": 0.0297579,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 45,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            3
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "text-5",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "&",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5057899,
+        "y": 0.7119649,
+        "width": 0.0188192,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 46,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "o",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "O",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5232335,
+        "y": 0.7111164,
+        "width": 0.0188193,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 47,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "p-2",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "p",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5428919,
+        "y": 0.7101603,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 48,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 12,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "e-3",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "e",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5542004,
+        "y": 0.7096103,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 49,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 13,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "r-3",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "r",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.564659,
+        "y": 0.7091016,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 50,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 14,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "a-4",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "a",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5715959,
+        "y": 0.7087641,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 51,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 15,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-4",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "t",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5819445,
+        "y": 0.7082608,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 52,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 16,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "io",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "io",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5889008,
+        "y": 0.7079225,
+        "width": 0.0188057,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 53,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 17,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "n",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "n",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6047698,
+        "y": 0.7071506,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 54,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 18,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "s-7",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "s",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.6160744,
+        "y": 0.7066008,
+        "width": 0.013883,
+        "height": 0.0418205
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": -1.5672,
+      "z_order": 55,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 37.0214,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffeb"
+      },
+      "source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 19,
+          "run_index": 0,
+          "character_range": [
+            0,
+            1
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "l-ng-ph-c-l-i-2026",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "LƯƠNG & PHÚC LỢI 2026",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0378802,
+        "y": 0.0635298,
+        "width": 0.1239552,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 56,
+      "typography": {
+        "font_family": "ProximaNova-Bold",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "2026-sun-studio-all-rights-reserved",
+      "role": "body",
+      "html_tag": "p",
+      "example_value": "©2026 SUN.STUDIO ALL RIGHTS RESERVED",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0378802,
+        "y": 0.9118817,
+        "width": 0.2068824,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 57,
+      "typography": {
+        "font_family": "ProximaNova-Regular",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            36
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "15",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "15",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.9505573,
+        "y": 0.9118817,
+        "width": 0.0114479,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 58,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            2
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "hra-department",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "HRA DEPARTMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.8600721,
+        "y": 0.0768748,
+        "width": 0.0906011,
+        "height": 0.0225926
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 59,
+      "typography": {
+        "font_family": "ProximaNova-Regular",
+        "font_size": 20.0,
+        "font_size_unit": "source-unit",
+        "font_weight": "400",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

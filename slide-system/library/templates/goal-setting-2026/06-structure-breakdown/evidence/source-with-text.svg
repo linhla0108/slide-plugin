@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+<clipPath id="clip_2">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+<clipPath id="clip_3">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+<clipPath id="clip_4">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+<clipPath id="clip_5">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+<clipPath id="clip_6">
+<path transform="matrix(1,0,0,-1,0,1080)" d="M0 1080H1920V0H0Z" />
+</clipPath>
+</defs>
+<g>
+<g clip-path="url(#clip_1)">
+<path transform="matrix(1,0,0,-1,751.7308,929.5217)" d="M0 0H-447.355C-457.806 0-466.278 8.472-466.278 18.923V68.729C-466.278 79.18-457.806 87.652-447.355 87.652H0C10.451 87.652 18.923 79.18 18.923 68.729V18.923C18.923 8.472 10.451 0 0 0" fill="#3333ff" />
+<path transform="matrix(1,0,0,-1,1607.634,927.48989)" d="M0 0H-447.355C-457.806 0-466.278 8.472-466.278 18.923V68.729C-466.278 79.18-457.806 87.652-447.355 87.652H0C10.451 87.652 18.923 79.18 18.923 68.729V18.923C18.923 8.472 10.451 0 0 0" fill="#3333ff" />
+<path transform="matrix(1,0,0,-1,342.8305,519.8124)" d="M0 0C-6.258-19.106-9.656-39.509-9.656-60.707-9.656-103.368 4.062-142.819 27.313-174.912L185.223-60.707Z" fill="#fff140" />
+<path transform="matrix(1,0,0,-1,528.0535,385.64009)" d="M0 0C-86.43 0-159.706-56.272-185.223-134.172L0-194.88Z" fill="#ff5533" />
+<path transform="matrix(1,0,0,-1,528.0535,385.64009)" d="M0 0V-194.88L-157.91-309.084C-122.501-357.959-64.968-389.759 0-389.759 89.995-389.759 165.729-328.75 188.134-245.839 192.524-229.593 194.879-212.513 194.879-194.88 194.879-87.251 107.629 0 0 0" fill="#3333ff" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="85" font-family="ProximaNova-Extrabld"><tspan y="-873.4219" x="74.4141 132.3586 181.3186 203.0786 244.4651 289.32814 339.64814 361.40815 434.24464 483.45115 525.9512 547.7112 577.74166 598.7536 644.0501 694.3701 716.1301 766.3652 816.64266 866.8777">Cơ cấu mục tiêu 2026</tspan></text>
+<text fill="#3333ff" xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="40" font-family="ProximaNova-ExtrabldIt" font-style="italic"><tspan y="-737.0854" x="359.1523 379.3163 401.0963 424.41633 447.63633 469.23634 484.23634 494.47636 520.43637 530.67636 565.6483 588.9683 612.2363 635.53237 658.68838 680.2883 1290.8323 1320.2044 1343.5923 1366.9122 1390.6283 1400.8683 1421.5844 1431.7843 1453.3843">Leader &amp; ManagerNhân viên</tspan></text>
+<g clip-path="url(#clip_2)">
+<path transform="matrix(1,0,0,-1,165.1121,443.90199)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#1f2324" d="M0 0H270.323" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="60" font-family="ProximaNova-Extrabld"><tspan y="-647.8369" x="165.1123 200.7343 236.9743">20%</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-SemiboldIt" font-weight="bold" font-style="italic"><tspan y="-599.9033" x="165.1118 185.98682 199.92432 212.34932 218.77433 226.59183 232.37934 246.00684">Mục tiêu</tspan><tspan y="-574.9033" x="165.1118 177.2368 191.4218 205.3918 219.8918 226.3168 234.7218">công ty</tspan></text>
+<g clip-path="url(#clip_3)">
+<path transform="matrix(1,0,0,-1,165.1121,616.7431)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#1f2324" d="M0 0H270.323" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="60" font-family="ProximaNova-Extrabld"><tspan y="-474.9961" x="165.1123 191.32631 226.2463">15%</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-SemiboldIt" font-weight="bold" font-style="italic"><tspan y="-427.0625" x="165.1118 180.04682 194.02182 208.37682 216.35182 222.77683 230.59183 238.97182 244.73932 258.43934">Phát triển</tspan><tspan y="-402.0625" x="165.1118 179.05681 193.4418 207.4143 221.9143 228.33931 234.0943 248.2693">năng lực</tspan></text>
+<g clip-path="url(#clip_4)">
+<path transform="matrix(1,0,0,-1,606.8261,616.7431)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#1f2324" d="M0 0H258.978" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="60" font-family="ProximaNova-Extrabld"><tspan y="-474.9961" x="748.6504 784.6504 819.5704">65%</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-SemiboldIt" font-weight="bold" font-style="italic"><tspan y="-427.0625" x="758.4468 774.24679 788.6318 802.8068 809.2319 823.21188 837.6193 851.6119">Vận hành</tspan><tspan y="-402.0625" x="781.0718 799.0718 816.62179 830.79678 837.22177 851.6318">+Dự án</tspan></text>
+<g clip-path="url(#clip_5)">
+<path transform="matrix(1,0,0,-1,1383.9568,385.64009)" d="M0 0V-194.879L-115.277-37.751C-163.545-73.223-194.879-130.387-194.879-194.879-194.879-302.508-107.629-389.759 0-389.759 107.629-389.759 194.879-302.508 194.879-194.879 194.879-87.25 107.629 0 0 0" fill="#3333ff" />
+<path transform="matrix(1,0,0,-1,1383.9568,385.64009)" d="M0 0C-43.137 0-82.993-14.026-115.277-37.751L0-194.879Z" fill="#fff140" />
+<path transform="matrix(1,0,0,-1,1052.5111,439.68544)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#1f2324" d="M0 0H269.64" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="60" font-family="ProximaNova-Extrabld"><tspan y="-652.0537" x="1052.5112 1079.0733 1115.3132">10%</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-SemiboldIt" font-weight="bold" font-style="italic"><tspan y="-604.1201" x="1052.5108 1067.4457 1081.4207 1095.7758 1103.7507 1110.1757 1117.9906 1126.3706 1132.1382 1145.8381">Phát triển</tspan><tspan y="-579.1201" x="1052.5108 1066.4558 1080.8408 1094.8134 1109.3134 1115.7384 1121.4934 1135.6685">năng lực</tspan></text>
+<g clip-path="url(#clip_6)">
+<path transform="matrix(1,0,0,-1,1491.6832,616.7431)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#1f2324" d="M0 0H258.978" />
+</g>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="60" font-family="ProximaNova-Extrabld"><tspan y="-474.9961" x="1633.5073 1670.3173 1706.5573">90%</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-SemiboldIt" font-weight="bold" font-style="italic"><tspan y="-427.0625" x="1643.3037 1659.1038 1673.4888 1687.6638 1694.0889 1708.069 1722.4765 1736.469">Vận hành</tspan><tspan y="-402.0625" x="1665.9287 1683.9287 1701.4788 1715.6537 1722.0786 1736.4885">+Dự án</tspan></text>
+<text fill="#ffffff" xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="ProximaNova-Semibold" font-weight="bold"><tspan y="-202.83751" x="367.50367 380.05616 393.84864 407.11363 421.5061 435.2861 443.9611 450.38609 463.0236 477.1436 490.54359 496.96858 511.21107 524.4311 545.2561 551.6811 566.0661 579.3261 593.6511 600.0761 612.5886 626.3986 634.3736 640.7986 655.1036 669.1636 682.4561 688.5811">Leader vừa đảm bảo kết quả, </tspan><tspan y="-172.83751" x="372.60368 385.24119 399.36119 412.76118 419.18617 433.59367 446.81617 460.99116 467.41615 481.82615 495.05863 503.03364 509.45863 517.0061 530.7986 543.9911 564.8161 571.2411 585.6886 599.7036 612.9061 620.8811 627.3061 635.1836 643.6361 649.4536 663.2636 677.3586">vừa dẫn dắt team phát triển.</tspan><tspan y="-202.83751" x="1187.6036 1194.0287 1212.0087 1226.0236 1239.2161 1253.3911 1259.8162 1272.4236 1278.211 1291.9911 1306.1661 1312.5912 1325.2286 1339.3486 1352.7487 1359.1737 1367.0537 1381.0512 1395.0988 1407.5238 1413.9489 1427.9463 1433.7688 1447.5789 1461.7539 1468.179 1480.1365 1494.3314 1508.3765 1522.8765 1529.3015 1541.9089 1547.7265 1561.6115 1574.1865 1580.3115"> Nhân viên vừa thực hiện công việc, </tspan><tspan y="-172.83751" x="1209.1537 1221.7911 1235.9111 1249.3112 1255.7362 1269.7262 1282.9163 1296.9613 1311.4613 1317.8864 1330.2539 1343.4839 1357.8088 1364.2339 1378.2539 1391.4739 1405.5215 1420.0215 1426.4465 1432.2766 1446.3267 1458.7517 1465.1768 1477.5443 1490.9443 1497.3694 1511.3469 1525.3618 1538.5543 1552.6494">vừa nâng cao năng lực cá nhân.</tspan></text>
+<text fill="#231f20" xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="20" font-family="ProximaNova-Semibold" font-weight="bold"><tspan y="-77.8594" x="1833.5664">6</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="20" font-family="ProximaNova-Semibold" font-weight="bold"><tspan y="-992.57937" x="74.40637 88.75837 103.50437 117.00637 127.346378 132.48638 144.47238 156.01239 167.7564 179.0624 184.3484 198.7844 213.12439 218.26439 229.94838 241.77039 253.45438">GOAL SETTING 2026</tspan><tspan y="-77.859378" x="75.04637 89.942378 101.622379 113.444377 125.124378 137.14438 142.28438 154.10039 168.5804 183.2084 188.42839 200.2704 211.57842 226.05843 240.31243 245.52643">©2026 SUN.STUDIO</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 1080)" font-size="20" font-family="ProximaNova-Regular"><tspan y="-77.859378" x="260.82637 265.98637 279.24238 289.2244 299.4244 304.5844 316.7784 321.5584 335.99644 350.09843 361.3204 373.0404 378.2004 390.3604 401.74043 413.5064 424.8864 436.8384 450.09443 461.47444"> ALL RIGHTS RESERVED</tspan></text>
+</g>
+</svg>

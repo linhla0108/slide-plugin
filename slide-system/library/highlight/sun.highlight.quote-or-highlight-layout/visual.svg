@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:ns1="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="960" height="540" viewBox="0 0 960 540">
+<defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,540)" d="M0 540H960V0H0Z" />
+</clipPath>
+<clipPath id="clip_2">
+<path transform="matrix(1,0,0,-1,0,540)" d="M0 540H960V0H0Z" />
+</clipPath>
+<clipPath id="clip_3">
+<path transform="matrix(1,0,0,-1,0,540)" d="M0 540H960V0H0Z" />
+</clipPath>
+<clipPath id="clip_4">
+<path transform="matrix(1,0,0,-1,0,540)" d="M0 540H960V0H0Z" />
+</clipPath>
+<clipPath id="clip_5">
+<path transform="matrix(1,0,0,-1,0,540)" d="M0 540H960V0H0Z" />
+</clipPath>
+</defs>
+<g>
+<g ns1:groupmode="layer" ns1:label="Layer 1">
+<g clip-path="url(#clip_1)">
+<path transform="matrix(1,0,0,-1,718.65,30)" d="M0 0V0C0 4.74 3.84 8.58 8.58 8.58H104.14C108.88 8.58 112.72 4.74 112.72 0 112.72-4.74 108.88-8.58 104.14-8.58H8.58C3.84-8.58 0-4.74 0 0" fill="#ff5533" />
+</g>
+<g clip-path="url(#clip_2)">
+<path transform="matrix(1,0,0,-1,305,480.3)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V294.91C-254.08 303.2-247.36 309.91-239.08 309.91H0C8.28 309.91 15 303.2 15 294.91V15C15 6.72 8.28 0 0 0" fill="#ff5533" />
+</g>
+<g clip-path="url(#clip_3)">
+<path transform="matrix(1,0,0,-1,305,384.56)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V254.08C-254.08 262.36-247.36 269.08-239.08 269.08H0C8.28 269.08 15 262.36 15 254.08V15C15 6.72 8.28 0 0 0" fill="#bfbfbf" />
+<path transform="matrix(1,0,0,-1,599.54,480.3)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V294.91C-254.08 303.2-247.36 309.91-239.08 309.91H0C8.28 309.91 15 303.2 15 294.91V15C15 6.72 8.28 0 0 0" fill="#3333ff" />
+</g>
+<g clip-path="url(#clip_4)">
+<path transform="matrix(1,0,0,-1,599.54,384.56)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V254.08C-254.08 262.36-247.36 269.08-239.08 269.08H0C8.28 269.08 15 262.36 15 254.08V15C15 6.72 8.28 0 0 0" fill="#bfbfbf" />
+<path transform="matrix(1,0,0,-1,894.08,480.3)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V294.91C-254.08 303.2-247.36 309.91-239.08 309.91H0C8.28 309.91 15 303.2 15 294.91V15C15 6.72 8.28 0 0 0" fill="#bfff4d" />
+</g>
+<g clip-path="url(#clip_5)">
+<path transform="matrix(1,0,0,-1,894.08,384.56)" d="M0 0H-239.08C-247.36 0-254.08 6.72-254.08 15V254.08C-254.08 262.36-247.36 269.08-239.08 269.08H0C8.28 269.08 15 262.36 15 254.08V15C15 6.72 8.28 0 0 0" fill="#bfbfbf" />
+</g>
+</g>
+</g>
+</svg>
