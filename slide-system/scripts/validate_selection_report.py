@@ -12,9 +12,83 @@ from _common import load_json, now_iso, write_json, SYSTEM_ROOT
 VALID_ACTIONS = {"reuse", "adapt-local", "custom-local", "blocked"}
 REQUIRED_CRITERIA = {"semantic_intent", "content_structure", "density", "brand", "export_compatibility", "accessibility"}
 
+# Adapt-local floor — kept in sync with score_visual_items.py decision branch.
+ADAPT_FLOOR = 65
+
+# T1 selection-lock: each content_shape maps to the intent/tag tokens a chosen
+# component must carry. Matched (lowercased) against the registry item's
+# intent + tags. Synonyms are included so the map is lenient on phrasing but
+# strict on category (a `timeline` shape can never lock to a `cover` item).
+SHAPE_TYPE_MAP: dict[str, set[str]] = {
+    "cover": {"cover", "hero", "title", "opening", "intro"},
+    "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
+    "comparison": {"comparison", "versus", "do-dont", "what-how", "pros-cons", "contrast"},
+    "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
+    "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
+    "two-column": {"two-column", "split", "split-layout", "layout"},
+}
+
 
 def _chk(name: str, ok: bool, detail: str) -> dict:
     return {"name": name, "pass": ok, "detail": detail}
+
+
+def _registry_tokens(registry: dict) -> dict[str, set[str]]:
+    """Map item_id -> lowercased set of intent + tags from the registry."""
+    index: dict[str, set[str]] = {}
+    for item in registry.get("items", []):
+        tokens = {str(t).lower() for t in (item.get("intent", []) + item.get("tags", []))}
+        index[item.get("id")] = tokens
+    return index
+
+
+def _content_shapes(vreqs) -> dict[str, str | None]:
+    """Map request_id -> content_shape from visual-requests.json (batch or single)."""
+    shapes: dict[str, str | None] = {}
+    if isinstance(vreqs, list):
+        pool = vreqs
+    elif isinstance(vreqs, dict):
+        pool = vreqs.get("slides") or vreqs.get("requests") or [vreqs]
+    else:
+        pool = []
+    for entry in pool:
+        if isinstance(entry, dict) and entry.get("request_id"):
+            shapes[entry["request_id"]] = entry.get("content_shape")
+    return shapes
+
+
+def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: dict,
+                         strict_shape: bool) -> tuple[list[str], list[str]]:
+    """T1: a reuse/adapt-local item's intent/tags must match the slide's content_shape."""
+    errs: list[str] = []
+    warns: list[str] = []
+    if is_batch:
+        decisions = [(s.get("request_id"), s.get("decision") or {})
+                     for s in rep.get("slides", []) if isinstance(s, dict)]
+    else:
+        decisions = [(rep.get("request_id"), rep.get("decision") or {})]
+    for rid, dec in decisions:
+        action = dec.get("action", "")
+        item_id = dec.get("item_id")
+        if action not in ("reuse", "adapt-local") or not item_id:
+            continue
+        shape = shapes.get(rid)
+        if not shape:
+            msg = f"slide {rid!r}: missing content_shape (required for T1 selection-lock)"
+            (errs if strict_shape else warns).append(msg)
+            continue
+        if shape not in SHAPE_TYPE_MAP:
+            errs.append(f"slide {rid!r}: unknown content_shape {shape!r} "
+                        f"(allowed: {', '.join(sorted(SHAPE_TYPE_MAP))})")
+            continue
+        allowed = SHAPE_TYPE_MAP[shape]
+        tokens = reg_tokens.get(item_id, set())
+        if not (allowed & tokens):
+            errs.append(
+                f"slide {rid!r}: content_shape {shape!r} requires one of {sorted(allowed)}, "
+                f"but chosen item {item_id!r} has intent/tags {sorted(tokens) or '[]'}"
+            )
+    return errs, warns
 
 
 def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: list[str]) -> list[dict]:
@@ -44,6 +118,8 @@ def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: li
     score_val = dec.get("score", 0)
     if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
         warnings.append(f"{prefix}: score {score_val} >= 75 but action is {action!r}")
+    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
+        warnings.append(f"{prefix}: score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
     return checks
 
 
@@ -74,7 +150,7 @@ def _validate_batch(rep: dict, checks: list[dict], errors: list[str], warnings: 
     ok = not slide_errors
     checks.append(_chk("slide_entries", ok, f"All {len(slides)} entries valid" if ok else f"{len(slide_errors)} error(s)"))
     if not ok:
-        for e in slide_errors[:5]:
+        for e in slide_errors:
             fail(e)
     warnings.extend(slide_warnings)
 
@@ -123,15 +199,14 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
     if not ok:
         errors.extend(crit_errors)
 
+    # Equal scores across candidates are legitimate (two items can be equally
+    # relevant, or all blocked items score 0.0). The only implausible case is
+    # eligible items that all scored zero.
     scores = [c.get("score") for c in cands if isinstance(c, dict) and "score" in c]
     eligible_any = any(c.get("eligible") for c in cands if isinstance(c, dict))
-    all_zero = scores and all(s == 0 for s in scores)
-    all_same = len(scores) > 1 and len(set(scores)) == 1
-    plaus_ok = not (eligible_any and all_zero) and not all_same
-    detail = "Scores are plausible" if plaus_ok else (
-        f"All scores identical ({scores[0] if scores else '?'})" if all_same
-        else "All scores are 0 despite eligible items"
-    )
+    all_zero = bool(scores) and all(s == 0 for s in scores)
+    plaus_ok = not (eligible_any and all_zero)
+    detail = "Scores are plausible" if plaus_ok else "All scores are 0 despite eligible items"
     checks.append(_chk("score_plausibility", plaus_ok, detail))
     if not plaus_ok:
         fail(detail)
@@ -145,13 +220,19 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
         fail(f"Adoption: action={action!r} requires non-null item_id")
     if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
         warnings.append(f"Score {score_val} >= 75 but action is {action!r}, expected 'reuse'")
+    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
+        warnings.append(f"Score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--selection-report", required=True)
-    parser.add_argument("--visual-requests", default=None)
-    parser.add_argument("--registry", default=str(SYSTEM_ROOT / "registries/visual-library.json"))
+    parser.add_argument("--visual-requests", default=None,
+                        help="visual-requests.json — required to run the T1 content_shape lock.")
+    parser.add_argument("--registry", default=str(SYSTEM_ROOT / "registries/visual-library.json"),
+                        help="Full registry (default). Must carry intent/tags for shape-lock.")
+    parser.add_argument("--strict-shape", action="store_true",
+                        help="Promote a missing content_shape from WARN to a hard FAIL (T1 rollout).")
     args = parser.parse_args()
 
     report_path = Path(args.selection_report).resolve()
@@ -170,13 +251,32 @@ def main() -> int:
     else:
         _validate_single(rep, checks, errors, warnings, fail)
 
-    # Provenance (soft — both modes)
+    # Provenance (HARD — both modes). The scorer always stamps generated_by;
+    # a report that lacks it or carries any other value was not produced by the
+    # scorer and is rejected. This is what backs the "NO hand-written selection
+    # reports" prohibition — it must be an error, not a warning.
     generated_by = rep.get("generated_by")
-    prov_ok = generated_by in (None, "score_visual_items.py")
+    prov_ok = generated_by == "score_visual_items.py"
     checks.append(_chk("provenance", prov_ok,
-        "generated_by absent or correct" if prov_ok else f"generated_by mismatch: {generated_by!r}"))
+        "generated_by is score_visual_items.py" if prov_ok else f"generated_by is {generated_by!r}, expected 'score_visual_items.py'"))
     if not prov_ok:
-        warnings.append(f"generated_by is {generated_by!r}, expected 'score_visual_items.py'")
+        fail(f"generated_by is {generated_by!r}, expected 'score_visual_items.py' (report not produced by the scorer)")
+
+    # T1 selection-lock: chosen component's intent/tags must match content_shape.
+    # Needs both the registry (for the item's tokens) and visual-requests (for
+    # the per-slide content_shape).
+    if args.visual_requests:
+        try:
+            reg_tokens = _registry_tokens(load_json(args.registry))
+            shapes = _content_shapes(load_json(args.visual_requests))
+            s_errs, s_warns = _validate_shape_lock(rep, is_batch, shapes, reg_tokens, args.strict_shape)
+            ok = not s_errs
+            checks.append(_chk("shape_lock", ok,
+                "content_shape <-> component type consistent" if ok else f"{len(s_errs)} shape mismatch(es)"))
+            errors.extend(s_errs)
+            warnings.extend(s_warns)
+        except Exception as exc:
+            warnings.append(f"shape-lock skipped: {exc}")
 
     # Cross-check with visual-requests (optional)
     if args.visual_requests:

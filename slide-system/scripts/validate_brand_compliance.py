@@ -132,7 +132,7 @@ def check_template_assets(html: str, selection_report: dict) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate HTML deck brand compliance.")
     parser.add_argument("--html", required=True, help="Path to the built HTML deck.")
-    parser.add_argument("--selection-report", default=None, help="Path to selection-report JSON.")
+    parser.add_argument("--selection-report", required=True, help="Path to selection-report JSON (required: the template_assets check must not be skippable).")
     parser.add_argument(
         "--brand-pack",
         default=None,
@@ -158,15 +158,14 @@ def main() -> int:
         warnings.append(f"Non-brand colors detected: {', '.join(color_check['non_brand'])}")
     checks.append(color_check)
 
-    _skip_assets = {"name": "template_assets", "pass": True, "missing": []}
-    if args.selection_report:
-        try:
-            checks.append(check_template_assets(html, load_json(args.selection_report)))
-        except Exception as exc:
-            errors.append(f"Could not load selection-report: {exc}")
-            checks.append({**_skip_assets, "detail": "Skipped (selection-report load error)."})
-    else:
-        checks.append({**_skip_assets, "detail": "Skipped (no --selection-report provided)."})
+    try:
+        checks.append(check_template_assets(html, load_json(args.selection_report)))
+    except Exception as exc:
+        # A selection-report that cannot be loaded is a hard failure, never a
+        # silent pass — otherwise the fidelity check becomes opt-out.
+        errors.append(f"Could not load selection-report: {exc}")
+        checks.append({"name": "template_assets", "pass": False, "missing": [],
+                       "detail": f"FAILED to load selection-report: {exc}"})
 
     failed = [c for c in checks if not c["pass"]]
     valid = len(failed) == 0 and len(errors) == 0

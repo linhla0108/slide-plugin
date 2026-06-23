@@ -25,8 +25,8 @@
    ```
    EXIT 0 required before HTML build. EXIT 1 = re-run step 4.
 6. Reuse scores of 75 or higher.
-7. Use a slide-local adaptation for scores from 55 through 74.
-8. Use a slide-local custom structure below 55.
+7. Use a slide-local adaptation for scores from 65 through 74.
+8. Use a slide-local custom structure below 65 (no strong match).
 9. Record selected and rejected candidates with reasons.
 10. Record an extraction recommendation when useful. Never trigger extraction.
 

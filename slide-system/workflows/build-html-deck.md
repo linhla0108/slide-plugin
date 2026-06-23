@@ -54,11 +54,14 @@ colors, claimed reuse with no template reference in HTML.
 - **Full-page artwork SVG (extraction `visual.svg`) MUST go through the
   decomposer — do not hand-split and do not embed it wholesale:**
   ```
-  python3 slide-system/scripts/decompose_svg_objects.py \
-      --svg <item>/artifact/visual.svg \
+  .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+      --svg <extraction-item>/artifact/visual.svg \
       --out-dir <job>/assets/page-NN --prefix page-NN \
       --href-base <path from deck.html to that out-dir>
   ```
+  (The `artifact/` segment is the **extraction-batch** layout
+  `outputs/component-extractions/<id>/items/<page>/artifact/` — it does NOT
+  apply to published library items, which are flat. See the reuse section below.)
   It measures every source group in Chromium, clusters them into movable
   objects, writes per-object fragment SVGs + `snippet.html` (tagged,
   absolutely-positioned divs — paste inside the slide div) and
@@ -91,19 +94,29 @@ the scorer — not only when `base_template` is set. A standalone component
 (cover-hero, timeline, checklist, comparison, statistics, closing, CTA) with
 a `reuse` decision follows the same decompose→fill-slots flow.
 
-- Load the item's `artifact/visual.svg` + `artifact/text-slots.json` from its
-  published library path. For templates:
-  `slide-system/library/templates/<set>/<slide-id>/`. For standalone components:
-  `slide-system/library/<type>/<item-id>/`.
-- Run the item's `visual.svg` through the decomposer (do not hand-split, do
-  not embed wholesale):
+- Library items are **flat**: `<item-dir>/visual.svg`, `<item-dir>/text-slots.json`,
+  `<item-dir>/preview/preview.html`. There is **no `artifact/` subdir** in the
+  library. For templates: `slide-system/library/templates/<set>/<slide-id>/`;
+  for standalone components: `slide-system/library/<type>/<item-id>/`. Take the
+  path verbatim from `selection-report.json` / registry `paths` — do not glob.
+- Scaffold the slide structure from the component's `preview.html` first (keeps
+  the real `.bg` + `.slot` layout; you only fill text into slots):
   ```
-  python3 slide-system/scripts/decompose_svg_objects.py \
-      --svg <library-path>/artifact/visual.svg \
+  .venv/bin/python3 slide-system/scripts/scaffold_slide_from_component.py \
+      --item-id <id> --registry slide-system/registries/visual-library.json \
+      --out <job>/assets/page-NN/fragment.html
+  ```
+- Run the item's `visual.svg` through the decomposer for the artwork (do not
+  hand-split, do not embed wholesale; the script reads the SVG, you never do):
+  ```
+  .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+      --svg <library-path>/visual.svg \
       --out-dir <job>/assets/page-NN --prefix page-NN \
       --href-base <path from deck.html to that out-dir>
   ```
-- Map the plan's content onto slots **by role/id**. Slot semantics from
+- Map the plan's content onto slots **by role/id**. Get the slot list with
+  `read_text_slots.py --item <library-path> --slots-only` (a ~16 KB projection);
+  never `Read` the full `text-slots.json` (up to ~120 KB). Slot semantics from
   `text-slots.schema.json`: every slot is `editable` and `allow_empty` (both
   `const true`) — there is no per-slot `required` flag. Text overflow is governed
   by `text_contract.overflow_policy` at the item level (typically `"unmanaged"`),

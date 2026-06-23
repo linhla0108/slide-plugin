@@ -5,24 +5,16 @@ description: Orchestrate AI slide generation from prompts, files, or mixed input
 
 # Slide Generator
 
-Use this as the default entry point for new slide-generation jobs.
+## Conditional Reading (read ONLY when needed)
 
-## Required Reading
+- `slide-system/workflows/save-as-template.md` — ONLY when template save
+  prompt fires (step 12).
+- `slide-system/rules/background-rendering.md` — ONLY when raster
+  backgrounds or complex visual overlays are involved.
+- `slide-system/workflows/resume-job.md` — ONLY when iterating an existing run.
 
-1. `slide-system/README.md`
-2. `slide-system/workflows/intake-and-triage.md`
-3. `slide-system/workflows/check-requirements.md`
-4. `slide-system/workflows/plan-slide-deck.md`
-5. `slide-system/workflows/select-visual-items.md`
-6. `slide-system/rules/background-rendering.md` when any raster background,
-   complex raster visual, PPTX export, or PDF export is involved.
-7. `slide-system/rules/component-composition.md` — when building any slide
-   that uses standalone published items (logo, character, shapes).
-8. `slide-system/workflows/build-html-deck.md` — ALWAYS when output is PPTX.
-9. `slide-system/workflows/export-editable-pptx.md` — ALWAYS when output is PPTX.
-10. Other build, export, and QA workflows required by the requested outputs.
-11. `slide-system/workflows/save-as-template.md` — when the template save
-    prompt (step 12) fires.
+Everything else you need is in this file. Do NOT read other workflow or rule
+docs unless explicitly referenced above.
 
 ## Environment Auto-Setup
 
@@ -35,186 +27,166 @@ if [ ! -f .venv/bin/python3 ] || ! .venv/bin/python3 -c "import pptx, PIL, fitz"
 fi
 ```
 
-After setup, run all `python3` commands through the venv:
+Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<script>.py [args]`
 
-```bash
-.venv/bin/python3 slide-system/scripts/<script>.py [args]
-```
+## Absolute Prohibitions (enforced by script gates)
 
-This is transparent to the user — they never see terminal output. The agent
-handles setup on first use and reuses `.venv` on subsequent runs. If `setup.sh`
-fails (e.g. Node.js not installed), report the missing prerequisite to the user
-in plain language and link to the download page.
-
-## Absolute Prohibitions
-
-These rules are enforced by script gates. Violating them blocks the pipeline.
-
-1. **NO emoji icons.** Never use emoji characters (💰📊🎯✅⭐🏨✈📣🛡 etc.)
-   anywhere in slide content. Use SVG icons from the brand icon library
-   (`sun.asset.guideline-icon-library`) or slide-local simple SVGs. The
-   `validate_brand_compliance.py` gate FAILS the build on any emoji.
-
-2. **NO random colors.** Every color in the deck MUST come from the brand
-   token set in `colors_and_type.css`. Never invent hex codes. Use CSS
-   variables (`var(--sun-orange)`, `var(--ink)`, etc.) — not raw hex values.
-   The gate fails builds with more than 5 non-brand colors.
-
-3. **NO hand-written selection reports.** The `selection-report.json` MUST be
-   produced by running `score_visual_items.py`. Writing it by hand or
-   fabricating scores is a pipeline violation. The `validate_selection_report.py`
-   gate detects fake reports by checking schema, candidates array, and
-   criteria sub-scores.
-
-4. **NO skipping published components.** When the scorer recommends `reuse`
-   (score ≥ 75), the HTML build MUST load that component's `visual.svg`,
-   run the decomposer, and use the decomposed fragments. Building raw CSS
-   instead of using a scored component is a violation.
+1. **NO emoji icons.** Use SVG icons from `sun.asset.guideline-icon-library`
+   or slide-local SVGs. Gate: `validate_brand_compliance.py`.
+2. **NO random colors.** Use ONLY CSS variables from brand tokens
+   (`var(--sun-orange)`, `var(--ink)`, etc.). Gate fails >5 non-brand colors.
+3. **NO hand-written selection reports.** Run `score_visual_items.py` — never
+   fabricate `selection-report.json`. Gate: `validate_selection_report.py`.
+4. **NO skipping published components.** When scorer says `reuse` (≥75) or
+   `adapt-local`, pass the item path to `decompose_svg_objects.py` and use the
+   emitted `snippet.html` fragments. No raw CSS, no eyeballing the layout.
+5. **NEVER `Read`/`cat` heavy library files into context.** `visual.svg` (up to
+   12 MB, ~100% base64 PNG), `text-slots.json` (up to ~120 KB), `evidence/*`,
+   `preview/*`, `catalog-data.json`, `picker-data.json`. Route them through
+   scripts — `decompose_svg_objects.py` for the SVG,
+   `read_text_slots.py --slots-only` for slots — and consume only the compact
+   output. A single literal Read of one of these can blow the context window.
 
 ## Pipeline
 
-1. Run intake and triage before any other work. Treat a new user as non-tech by
-   default: use plain language, attach a guess to every question, ask one at a
-   time, and stop asking once you can predict the answers (cap around five to
-   six questions; fill the rest with sensible defaults). Detect the case, confirm
-   it in plain words, and gather or infer the export format here too. Normalize
-   any request for "PowerPoint", "power point", "PPT", or "PPTX" to editable
-   `.pptx` without asking a follow-up about file type or editability. Offer a
-   tech escape hatch for users who would rather paste a complete brief. Follow
-   `workflows/intake-and-triage.md`.
-2. End intake with a plain-language brief recap. Do not start building until the
-   user confirms the recap. The recap becomes the job requirements and the
-   export contract.
-3. Create a job and versioned run under `outputs/slide-jobs/`.
-4. Run the requirement checker using the cached capability registry.
-5. Stop on blocking requirements unless the user approves an override.
-6. Analyze content and source authority.
-7. **Score ALL published visual-library items against ALL slides (BLOCKING).**
-   Write `analysis/visual-requests.json` with one entry per slide, then run
-   the scorer in batch mode:
+1. **Intake.** Treat user as non-tech. Ask one question at a time with a
+   guess attached. Cap at ~5-6 questions; fill rest with defaults. Normalize
+   "PowerPoint/PPT/PPTX" → editable `.pptx` layered mode. Detect case:
+   new-from-brief | polish | rebuild | iterate | rebrand | raw-data.
+   For details on case routing: `slide-system/workflows/intake-and-triage.md`.
+2. **Recap gate.** Plain-language brief recap. Wait for user confirmation.
+3. **Job setup.** Create job + versioned run under `outputs/slide-jobs/`.
+4. **Requirements check.** Run `check_requirements.py` against capabilities.
+5. **Stop on blockers** unless user approves override.
+6. **Content analysis** and source authority.
+7. **Score visual library (BLOCKING).** Write `analysis/visual-requests.json`
+   (one entry per slide with `intent`, `tags`, `content_structure`), then:
    ```bash
    .venv/bin/python3 slide-system/scripts/score_visual_items.py \
        --batch-request <run>/analysis/visual-requests.json \
        --output <run>/analysis/selection-report.json
    ```
-   This is NOT optional. The agent MUST run this script. Hand-writing
-   `selection-report.json` is a pipeline violation that the next gate detects.
-   Score templates AND standalone components (cover, timeline, checklist,
-   comparison, closing, CTA, statistics, dividers, layouts). Pass
-   `--prefer-set <set-prefix>` when the brief has a `base_template`.
-
-7b. **Validate selection report (BLOCKING GATE).**
-    ```bash
-    .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
-        --selection-report <run>/analysis/selection-report.json \
-        --visual-requests <run>/analysis/visual-requests.json
-    ```
-    EXIT 0 required to proceed. EXIT 1 = fix and re-run step 7.
-
-8. Present one approval package before build. Show the scorer's decisions
-   (which components will be reused, adapted, or custom-built).
-9. Build HTML only after approval.
-    - **Template/component path (MANDATORY for reuse/adapt-local decisions):**
-      when the scorer recommends `reuse` or `adapt-local`, load that item's
-      `visual.svg` + `text-slots.json` from its published library path, run the
-      decomposer, and fill slots by role/id. Only fall back to custom build when
-      the scorer decision is `custom-local` or `blocked`.
-    - **Custom build styling rules:**
-      - Use ONLY brand CSS variables for colors — `var(--sun-orange)`, never `#FF5533` directly.
-      - Use ONLY `"Proxima Nova"` font family with brand weights.
-      - Use SVG icons from the brand icon library or slide-local SVGs — NEVER emoji.
-      - Reference the brand token CSS file in the HTML head.
-    a. **Decompose (conditional):** when the deck uses full-page artwork SVGs
-       (extraction `visual.svg`), run `decompose_svg_objects.py` FIRST to
-       split each page into per-object fragment SVGs + `snippet.html`. Paste
-       the snippet into the slide div; base-candidates become CSS
-       `background-image` on the slide root (no tag).
-    b. **Tag (unconditional — ALL PPTX builds):** tag every visible visual
-       element with `data-export-layer` / `data-export-id` / etc. per the
-       contract in `build-html-deck.md`. This applies whether visuals come
-       from extraction, from `ppt-master`, or are built from scratch. A deck
-       with untagged visuals or a single overlay covering ≥85% of the canvas
-       will FAIL the export gate.
-    c. **Iterate on old run:** if resuming a run originally built with
-       `--mode flat` (v1, no tags), do NOT attempt layered export on the
-       existing HTML. Either rebuild the HTML with proper tags for a new
-       layered run, or keep `--mode flat` for a patch. Ask the user which
-       path they prefer.
-
-9b. **Validate brand compliance (BLOCKING GATE).**
+   Score ALL types (templates + standalone components). Pass
+   `--prefer-set <set>` when brief has `base_template`.
+8. **Validate selection (BLOCKING GATE).**
+   ```bash
+   .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
+       --selection-report <run>/analysis/selection-report.json \
+       --visual-requests <run>/analysis/visual-requests.json
+   ```
+   EXIT 0 required. EXIT 1 = fix and re-run step 7.
+9. **Approval.** Show scorer decisions (reuse/adapt/custom per slide).
+10. **Build HTML** (after approval only).
+    - **Reuse/adapt-local slides:** scaffold from the component — do NOT redraw.
+      Run `scaffold_slide_from_component.py --item-id <id>` for a fragment with
+      the real `.bg` + `.slot` structure (from `preview.html`), then fill text
+      into the slots. Decompose artwork via `decompose_svg_objects.py` (it reads
+      the SVG); get slot metadata via `read_text_slots.py --slots-only`. Never
+      `Read` `visual.svg`/`text-slots.json` directly.
+    - **Custom-local slides:** build from scratch with brand rules:
+      colors=CSS vars only, font=Proxima Nova only, icons=SVG only.
+    - Tag ALL visuals with `data-export-layer`/`data-export-id` for PPTX.
+    - Full-page SVGs MUST go through `decompose_svg_objects.py` first.
+    - Canvas: `1920×1080`. Keep text in leaf elements. Keep editable.
+11. **Validate brand compliance (BLOCKING GATE).**
     ```bash
     .venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
         --html <run>/deck.html \
         --selection-report <run>/analysis/selection-report.json \
         --brand-pack slide-system/brand-packs/sun-studio/manifest.json
     ```
-    EXIT 0 required to proceed to export. EXIT 1 = fix HTML violations and
-    re-validate. Common failures: emoji icons, non-brand fonts, non-brand
-    colors, claimed reuse with no actual template reference in HTML.
+    EXIT 0 required. EXIT 1 = fix HTML and re-validate.
+12. **Export PPTX.** Single command:
+    ```bash
+    .venv/bin/python3 slide-system/scripts/export_pptx.py \
+        --html <run>/deck.html --output <run>/<name>.pptx --mode layered
+    ```
+    `validate_export_objects.py` is the pass/fail gate.
+13. **Cleanup (MANDATORY).** Run after export PASS:
+    ```bash
+    .venv/bin/python3 slide-system/scripts/cleanup_run.py <run>
+    ```
+    This deletes parity images, intermediate PNGs, compacts manifests.
+    A finished run should contain ONLY:
+    - `deck.html` — the built deck
+    - `<name>.pptx` — exported presentation
+    - `analysis/selection-report.json` — scorer output
+    - `export-manifest.json` — compact export metadata
+14. **Template save prompt (PPTX only).** Check for template-intent signals
+    (`template`, `clone`, `lưu mẫu`, `save as template`). If found, ask user.
+    Follow `workflows/save-as-template.md` for the flow.
 
-10. Export PPTX through `export_pptx.py` — the single entry point. Default is
-    `--mode layered` (3-layer: base + overlay shapes + native text). Use
-    `--mode flat` ONLY when the user explicitly asks for frozen/non-editable.
-    Run content, object, render, and parity QA. The validator
-    (`validate_export_objects.py`) is the one pass/fail gate.
-11. Package the run with checksums, reports, and a manifest.
-12. **Template save prompt (PPTX only).** After a successful PPTX export,
-    check whether the user's original prompt contains a template-intent
-    signal. If it does, ask: *"Bạn có muốn thêm bộ deck slide này thành
-    template để lúc sau dùng lại không?"* Follow
-    `workflows/save-as-template.md` for the full flow.
-    - **Hard keywords** (case-insensitive, anywhere in prompt): `extract
-      full slide`, `extract full deck`, `clone`, `template`, `copy slide`,
-      `lưu mẫu`, `save as template`.
-    - **Contextual inference:** when no hard keyword matches but the prompt
-      clearly implies reuse intent (e.g. "tạo lại bộ slide giống hôm
-      trước", "giữ nguyên bố cục, chỉ đổi nội dung"), treat it as a
-      trigger. Only trigger when confidence is high; when uncertain, skip.
-    - **Do NOT trigger** on pure content-generation prompts, non-PPTX
-      exports, or failed exports.
-    - If the user confirms, run the save-as-template pipeline automatically
-      (create template folder, generate artifacts, rebuild catalog). See
-      the workflow for step-by-step details.
+## Token Optimization Rules
 
-## Output Discipline
+- **Do NOT read workflow/rule docs** unless listed in Conditional Reading.
+  This file is self-contained for the standard pipeline.
+- **Minimize file creation.** A run needs: deck.html, .pptx, selection-report.
+  Everything else is intermediate — create only if needed, delete after.
+- **No separate approval-package.md** — present approval inline in chat.
+- **No per-section files.** One visual-requests.json, one selection-report.json.
+- **No scaffolding dirs.** Never `mkdir` before having content.
+- **No intermediate reports.** Don't create delivery-manifest.json,
+  validation.json, export-result.json — the cleanup script removes them anyway.
+- **Run cleanup_run.py** at the end of every successful export.
+- **Reuse job-level assets.** Brand fonts/icons/images from brand pack.
+  Job assets in `<job-id>/assets/`. Runs never re-copy.
+- **Compact manifests.** Export-manifest should be <10KB. Strip per-pixel
+  parity data and intermediate checksums.
 
-Always apply these; the build, select, and QA workflows enforce the detail.
+## Component/Template Build Reference
 
-- Export only the formats chosen in step 1. Never produce an unrequested format.
-- Treat "PowerPoint", "power point", "PPT", and "PPTX" as the same output
-  request: editable `.pptx` using layered mode. State this inferred default in
-  the recap, but do not ask the user to confirm format or editability separately.
-  Use flat/frozen PPTX only when the user explicitly asks for a flattened,
-  image-only, frozen, or non-editable presentation.
-- Reference brand and job assets in place. Brand fonts, icons, and brand images
-  load from the brand pack; job-scoped assets live once in `<job-id>/assets/`.
-  Runs never re-copy assets. Copy into a run only an asset unique to that run.
-- Write one `analysis/visual-requests.json` and one `analysis/selection-report.json`
-  per run, keyed by section — not one file per section.
-- `qa/export-renders/` images are intermediate. Delete them once render parity
-  passes; keep only `qa-report.md`, metrics, and checksums.
-- Keep one-off build scripts in `slide-system/scripts/`, never in the run.
-- Export PPTX only through `python3 slide-system/scripts/export_pptx.py` — one command
-  runs capture → build → compose → compare → validate. `--mode layered` (default)
-  exports tagged objects as separate movable shapes; `--mode flat` is the frozen v1
-  path. `validate_export_objects.py` is the only pass/fail gate; never hand-stitch steps.
-- Full-page artwork SVGs (extraction `visual.svg`) go through
-  `python3 slide-system/scripts/decompose_svg_objects.py` before deck build — it
-  splits the artwork into per-object fragment SVGs plus a ready-tagged
-  `snippet.html`. Never wrap a whole-page SVG in one overlay tag (the gate
-  fails any overlay covering ≥85% of the canvas) and never hand-split
-  (transforms make static bbox math wrong); see `workflows/build-html-deck.md`.
-- Never `mkdir` a folder before having content for it. `package_job.py`
-  auto-prunes empty directories at packaging; a finished run must contain none
-  (ad-hoc sweep: `python3 slide-system/scripts/prune_empty_dirs.py outputs/`).
+When scorer says `reuse` or `adapt-local`:
+1. Take the item path **verbatim** from `selection-report.json` / the registry
+   `paths` (`paths.visual`, `paths.preview`). Do NOT glob `library/` — that risks
+   Reading the 12 MB SVGs. Library items are flat: `<item-dir>/visual.svg`,
+   `<item-dir>/text-slots.json`, `<item-dir>/preview/preview.html`. There is no
+   `artifact/` subdirectory.
+2. Scaffold the slide structure from the component's `preview.html`:
+   ```bash
+   .venv/bin/python3 slide-system/scripts/scaffold_slide_from_component.py \
+       --item-id <id> --registry slide-system/registries/visual-library.json \
+       --out <job>/assets/page-NN/fragment.html
+   ```
+3. Decompose the artwork SVG (the script reads it — you never do):
+   ```bash
+   .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+       --svg <library-path>/visual.svg \
+       --out-dir <job>/assets/page-NN --prefix page-NN \
+       --href-base <relative-path-from-deck.html>
+   ```
+4. Paste `snippet.html` into the slide div; set the base art as CSS
+   `background-image` (no overlay tag). Fill text slots by role/id using:
+   ```bash
+   .venv/bin/python3 slide-system/scripts/read_text_slots.py \
+       --item <library-path> --slots-only
+   ```
+   (never `Read` `text-slots.json` whole — it is up to ~120 KB).
+
+## Standalone Item Rules
+
+- **Logo** (`sun.asset.logo`): cover + closing only, top-left or centered,
+  120–180px width, above background / below text.
+- **Dio** (`sun.character.dio`): section dividers and emphasis slides,
+  bottom corner, 80–140px. Variants: normal/side-glance/wink/annoyed/
+  dancing/bored/bewildered.
+- **Shapes** (`sun.style.guideline-shape-variants`): behind content.
+  Variants: halo-blue/halo-orange/halo-lime/hex-formula/overlap-circles.
+- **Icons** (`sun.asset.guideline-icon-library`): the file is ~218 KB — do NOT
+  Read it whole. Run `grep -n 'id="<icon>"'
+  slide-system/library/assets/sun.asset.guideline-icon-library/visual.svg` to
+  find the group's line range, then read only that range. NEVER use emoji.
+
+## Brand Tokens (SUN.STUDIO)
+
+Primary: `--sun-orange:#FF5533`, `--sun-blue:#3333FF`, `--ink:#171717`
+Extended: `--sun-orange-soft:#FFF3EF`, `--sun-blue-soft:#F4F5FF`,
+`--muted:#666666`, `--line:#E7E7E7`, `--soft:#FAFAFA`, `--paper:#FFFFFF`
+Font: `"Proxima Nova"` (300–900 weights)
+Canvas: `1920×1080`, `16:9`
 
 ## Boundaries
 
-- Never publish or extract a shared component from this skill. When a user wants
-  reusable pieces from an existing file, only recommend a hand-off to
-  `/component-extractor`; never run extraction inline.
-- When no published visual item fits, use a slide-local solution and record an
-  extraction recommendation.
-- Never select staging, deprecated, or export-incompatible visual items.
-- Keep historical phase outputs unchanged.
-- Use the SUN.STUDIO brand pack by default unless the user selects another pack.
+- Never extract/publish shared components. Recommend `/component-extractor`.
+- When no published item fits, use slide-local and record extraction rec.
+- Never select staging, deprecated, or export-incompatible items.
+- Use SUN.STUDIO brand pack by default unless user selects another.
