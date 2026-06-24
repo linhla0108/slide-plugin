@@ -12,7 +12,6 @@ from _common import load_json, resolve_repo_path
 
 ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+$")
 VALID_STATUS = {"staging", "qa", "published", "deprecated", "rejected"}
-VALID_SUPPORT = {"supported", "hybrid", "raster", "unsupported", "untested"}
 
 
 def main() -> int:
@@ -42,10 +41,6 @@ def main() -> int:
         ids.add(item_id)
         if item.get("status") not in VALID_STATUS:
             errors.append(f"Invalid status for {item_id}")
-        for target in ("html", "pptx", "pdf", "canva"):
-            support = item.get("compatibility", {}).get(target)
-            if support not in VALID_SUPPORT:
-                errors.append(f"Invalid {target} support for {item_id}: {support}")
         for key in ("artifact", "preview"):
             value = item.get("paths", {}).get(key)
             if not value or args.allow_missing_paths:

@@ -4,7 +4,7 @@ the compact projection deterministically.
 
 Why reconcile, not rebuild: published library folders do NOT retain
 `mapping.json` (`publish_extraction.py` copies only artifact/preview/evidence),
-so the semantic metadata (intent, tags, compatibility, content_structure) lives
+so the semantic metadata (intent, tags, content_structure) lives
 ONLY in `visual-library.json`. That file is therefore the metadata authority and
 cannot be regenerated from disk. This tool keeps it honest against disk:
 
@@ -46,7 +46,7 @@ HISTORY = SYSTEM_ROOT / "registries/extraction-history.json"
 # this list in lockstep with what the scorer actually reads.
 COMPACT_KEYS = [
     "id", "type", "brand", "intent", "tags", "status",
-    "density", "content_structure", "compatibility", "limitations",
+    "density", "content_structure", "limitations",
 ]
 
 

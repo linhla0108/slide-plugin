@@ -188,7 +188,6 @@ def main() -> int:
             "evidence": str(evidence_path),
         },
         "variants": mapping.get("variants", []),
-        "compatibility": mapping["compatibility"],
         "limitations": mapping.get("limitations", []),
     }
     if existing:

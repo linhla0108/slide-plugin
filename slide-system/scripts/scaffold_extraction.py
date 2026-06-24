@@ -167,12 +167,6 @@ def main() -> int:
             "content_fields": {"required": [], "optional": []},
             "variables": [],
             "variants": [],
-            "compatibility": {
-                "html": "supported",
-                "pptx": "supported",
-                "pdf": "untested",
-                "canva": "untested",
-            },
             "limitations": [],
             "approval": {"status": "pending", "approved_by": None, "approved_at": None},
             "duplicate_of": candidate_id if registry_match else None,

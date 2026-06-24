@@ -127,17 +127,6 @@ def score_request(
         if not eligible:
             reasons.append(f"Rejected status: {item.get('status')}")
 
-        required_exports = request.get("required_exports", [])
-        compat = item.get("compatibility", {})
-        incompatible = [
-            target
-            for target in required_exports
-            if compat.get(target, "supported") in {"unsupported", "untested"}
-        ]
-        if incompatible:
-            eligible = False
-            reasons.append(f"Unsupported or untested exports: {', '.join(incompatible)}")
-
         semantic = overlap_score(
             request.get("intent", []) + request.get("tags", []),
             item.get("intent", []) + item.get("tags", []),
@@ -148,7 +137,7 @@ def score_request(
         )
         density = 1.0 if item.get("density") in {"any", request.get("density", "any")} else 0.4
         brand = 1.0 if item.get("brand") in {None, request.get("brand")} else 0.0
-        export = 1.0 if not incompatible else 0.0
+        export = 1.0  # per-item export support is no longer tracked; always passes
         limitations = " ".join(item.get("limitations", [])).lower()
         accessibility = 0.5 if "contrast" in limitations or "overflow" in limitations else 1.0
         criteria = {

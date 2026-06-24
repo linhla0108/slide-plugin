@@ -22,12 +22,6 @@
       "status": "published",
       "density": "any",
       "content_structure": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "supported",
-        "canva": "supported"
-      },
       "limitations": [
         "Use according to SUN.STUDIO brand and licensing rules."
       ]
@@ -56,12 +50,6 @@
       "status": "published",
       "density": "any",
       "content_structure": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "supported",
-        "canva": "supported"
-      },
       "limitations": [
         "Use selectively on title, section, and closing slides."
       ]
@@ -103,12 +91,6 @@
         "subheading",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -155,12 +137,6 @@
         "subheading",
         "date"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -197,12 +173,6 @@
         "label",
         "body"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -240,12 +210,6 @@
         "body",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -284,12 +248,6 @@
         "subheading",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -325,12 +283,6 @@
         "heading",
         "subheading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -370,12 +322,6 @@
         "list-item",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -418,12 +364,6 @@
         "heading",
         "subheading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -466,12 +406,6 @@
         "heading",
         "subheading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -510,12 +444,6 @@
         "body",
         "heading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -554,12 +482,6 @@
         "list-item",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -597,12 +519,6 @@
         "body",
         "subheading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -648,12 +564,6 @@
         "label",
         "logo"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
@@ -698,12 +608,6 @@
         "title",
         "body"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
@@ -747,12 +651,6 @@
         "subheading",
         "label"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -793,12 +691,6 @@
         "subheading",
         "label"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -844,12 +736,6 @@
         "body",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -894,12 +780,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -946,12 +826,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -991,12 +865,6 @@
         "title",
         "body"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1038,12 +906,6 @@
         "title",
         "metric"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1087,12 +949,6 @@
         "date",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1136,12 +992,6 @@
         "body",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1182,12 +1032,6 @@
         "body",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1231,12 +1075,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1274,12 +1112,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1316,12 +1148,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1361,12 +1187,6 @@
         "title",
         "metric"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1408,12 +1228,6 @@
         "title",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1453,12 +1267,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1494,12 +1302,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1539,12 +1341,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1584,12 +1380,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1632,12 +1422,6 @@
         "metric",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1677,12 +1461,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1725,12 +1503,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1777,12 +1549,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1827,12 +1593,6 @@
         "heading",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1876,12 +1636,6 @@
         "title",
         "metric"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1924,12 +1678,6 @@
         "title",
         "date"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -1972,12 +1720,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2017,12 +1759,6 @@
         "title",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2061,12 +1797,6 @@
         "body",
         "heading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2112,12 +1842,6 @@
         "list-item",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2162,12 +1886,6 @@
         "list-item",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2204,12 +1922,6 @@
         "subheading",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2246,12 +1958,6 @@
         "subheading",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2287,12 +1993,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2339,12 +2039,6 @@
         "title",
         "metric"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2389,12 +2083,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2438,12 +2126,6 @@
         "subheading",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2489,12 +2171,6 @@
         "metric",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2541,12 +2217,6 @@
         "date",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2584,12 +2254,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2627,12 +2291,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2670,12 +2328,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2713,12 +2365,6 @@
         "label",
         "title"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2763,12 +2409,6 @@
         "title",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2822,12 +2462,6 @@
         "title",
         "metric"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2875,12 +2509,6 @@
         "metric",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2921,12 +2549,6 @@
         "list-item",
         "body"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -2965,12 +2587,6 @@
         "body",
         "heading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3017,12 +2633,6 @@
         "heading",
         "image"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3065,12 +2675,6 @@
         "heading",
         "image"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3115,12 +2719,6 @@
         "image",
         "caption"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3159,12 +2757,6 @@
         "image",
         "caption"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3206,12 +2798,6 @@
         "heading",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3251,12 +2837,6 @@
         "metric",
         "caption"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3293,12 +2873,6 @@
         "heading",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3341,12 +2915,6 @@
         "body",
         "heading"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3389,12 +2957,6 @@
         "title",
         "body"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3440,12 +3002,6 @@
         "title",
         "subtitle"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3487,12 +3043,6 @@
         "metric",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3534,12 +3084,6 @@
         "body",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3580,12 +3124,6 @@
         "heading",
         "description"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3628,12 +3166,6 @@
         "heading",
         "list-item"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]

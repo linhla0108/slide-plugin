@@ -69,7 +69,7 @@ def _req() -> dict:
 def _item(**over) -> dict:
     base = {"id": "sun.set.x", "status": "published", "intent": ["timeline"],
             "tags": [], "content_structure": ["a"], "density": "any",
-            "brand": None, "compatibility": {}, "limitations": []}
+            "brand": None, "limitations": []}
     base.update(over)
     return base
 

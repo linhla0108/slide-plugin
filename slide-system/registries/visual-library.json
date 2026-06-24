@@ -36,12 +36,6 @@
         "preview": ".agents/skills/sun-studio-design-system/assets/system/assets/logo.png"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "supported",
-        "canva": "supported"
-      },
       "limitations": [
         "Use according to SUN.STUDIO brand and licensing rules."
       ]
@@ -91,12 +85,6 @@
         "bewildered",
         "variant"
       ],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "supported",
-        "canva": "supported"
-      },
       "limitations": [
         "Use selectively on title, section, and closing slides."
       ]
@@ -223,12 +211,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/01-cover/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -456,12 +438,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -643,12 +619,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -855,12 +825,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -1092,12 +1056,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/05-prep/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -1290,12 +1248,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -1612,12 +1564,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -1841,12 +1787,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -2070,12 +2010,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -2391,12 +2325,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -2688,12 +2616,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -2912,12 +2834,6 @@
         "evidence": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
@@ -3018,12 +2934,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/01-cover/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
@@ -3159,12 +3069,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/01-cover/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
@@ -3293,12 +3197,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/01-cover/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3436,12 +3334,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/01-cover/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3650,12 +3542,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/04-intro/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3935,12 +3821,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/02-overview/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -4192,12 +4072,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/05-process/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -4316,12 +4190,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/09-thanks/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -4556,12 +4424,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/06-structure-breakdown/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -4750,12 +4612,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/03-timeline/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -4980,12 +4836,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/07-quarterly-check-in/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -5201,12 +5051,6 @@
         "evidence": "slide-system/library/templates/goal-setting-2026/08-year-end-review/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -5377,12 +5221,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/14-company-culture/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -5499,12 +5337,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/04-compensation-divider/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -5626,12 +5458,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/06-direct-benefits-divider/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -5810,12 +5636,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/09-direct-benefits-summary/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -6014,12 +5834,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/17-employee-notes/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -6282,12 +6096,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/05-gross-to-net-explainer/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -6408,12 +6216,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/12-indirect-benefits-divider/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -6562,12 +6364,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/13-learning-development/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -6842,12 +6638,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/08-long-term-benefits/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7029,12 +6819,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/07-monthly-support-benefits/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7171,12 +6955,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/18-thanks/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7418,12 +7196,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/02-why-upgrade/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7609,12 +7381,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/10-team-building-benefits/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7804,12 +7570,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/11-team-trip-flexibility/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -7986,12 +7746,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/03-total-package-overview/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -8143,12 +7897,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/16-update-summary/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -8588,12 +8336,6 @@
         "evidence": "slide-system/library/templates/salary-benefits-2026/15-working-environment/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "supported",
-        "pdf": "untested",
-        "canva": "untested"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -8790,12 +8532,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/02-agenda-section/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -8901,12 +8637,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/20-closing-thank-you/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -9079,12 +8809,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -9256,12 +8980,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -9551,12 +9269,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -9834,12 +9546,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -9954,12 +9660,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/17-faq-header/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -10301,12 +10001,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -10664,12 +10358,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -11014,12 +10702,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/14-preparation-checklist/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -11690,12 +11372,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -11977,12 +11653,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/12-review-timeline/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -12099,12 +11769,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/03-section-divider-01/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -12221,12 +11885,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/05-section-divider-02/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -12343,12 +12001,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/11-section-divider-03/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -12465,12 +12117,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/13-section-divider-04/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -12684,12 +12330,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/07-what-definition-card/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -13098,12 +12738,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/09-what-how-comparison/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -13350,12 +12984,6 @@
         "evidence": "slide-system/library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -13577,12 +13205,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/02-agenda-layout/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -13694,12 +13316,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/17-closing-thank-you/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -13957,12 +13573,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/04-contributors-layout/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -14126,12 +13736,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/07-contributors-variant/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -14327,12 +13931,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/14-image-and-text-layout/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -14522,12 +14120,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/15-image-and-text-variant/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -14726,12 +14318,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/13-information-structure-layout/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -14928,12 +14514,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/11-mix-chart-layout/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15061,12 +14641,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/08-next-steps-cta/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15230,12 +14804,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/16-quote-or-highlight-layout/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15357,12 +14925,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/05-scan-me-callout/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15511,12 +15073,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/03-section-intro/evidence/external-images.json"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15757,12 +15313,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/12-statistics-layout/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -15949,12 +15499,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/09-summary-grid/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -16320,12 +15864,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/10-text-heavy-content/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -16579,12 +16117,6 @@
         "evidence": "slide-system/library/templates/sun-presentation/06-two-column-content/evidence/notes.md"
       },
       "variants": [],
-      "compatibility": {
-        "html": "supported",
-        "pptx": "hybrid",
-        "pdf": "supported",
-        "canva": "hybrid"
-      },
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
