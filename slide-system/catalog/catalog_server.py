@@ -32,6 +32,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
+HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
 EXTRACTIONS = REPO_ROOT / "outputs" / "component-extractions"
 ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+$")
@@ -86,6 +87,45 @@ def find_staging(item_id: str):
             item_dir = mapping_path.parent
             return item_dir, item_dir.parent.parent, item_dir.name
     return None
+
+
+def find_all_staging(item_id: str) -> list[Path]:
+    """Every staging item dir that resolves to item_id. A draft can be
+    re-scaffolded into several extraction batches (e.g. a re-run marked
+    `duplicate`); the catalog dedupes them to one card, so a delete must sweep
+    ALL of them or an orphan folder is left on disk."""
+    dirs: list[Path] = []
+    if not EXTRACTIONS.exists():
+        return dirs
+    for mapping_path in EXTRACTIONS.glob("*/items/*/mapping.json"):
+        try:
+            mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        ids = {mapping.get("candidate_stable_id"), mapping.get("id"), mapping_path.parent.name}
+        if item_id in ids:
+            dirs.append(mapping_path.parent)
+    return dirs
+
+
+def purge_draft_history(item_id: str) -> int:
+    """Remove every NON-published extraction-history record for item_id (the
+    draft's staging/duplicate trail). A `published` record, if any, belongs to a
+    promoted version and is left intact. Without this, deleting a draft leaves
+    staging/duplicate records that no gate catches -> silent history drift.
+    Returns the count of records removed."""
+    if not HISTORY.exists():
+        return 0
+    history = json.loads(HISTORY.read_text(encoding="utf-8"))
+    attempts = history.get("attempts", [])
+    kept = [a for a in attempts
+            if not (a.get("stable_id") == item_id and a.get("status") != "published")]
+    removed = len(attempts) - len(kept)
+    if removed:
+        history["attempts"] = kept
+        history["updated_at"] = now_iso()
+        HISTORY.write_text(json.dumps(history, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    return removed
 
 
 def find_published(item_id: str):
@@ -175,17 +215,25 @@ def action_delete(item_id: str, status: str) -> tuple[int, dict]:
         regen_catalog()
         return 200, {"ok": True, "message": "Published item deleted", "removed": artifact}
 
-    # draft / staging: remove the whole staging item dir (gitignored = permanent)
-    found = find_staging(item_id)
+    # draft / staging: remove EVERY staging folder for this id (gitignored =
+    # permanent) and purge its history trail so disk, catalog, and history agree.
+    found = find_all_staging(item_id)
     if not found:
         return 404, {"ok": False, "error": f"Draft item not found: {item_id}"}
-    item_dir, _, _ = found
-    target = item_dir.resolve()
-    if not (within_repo(target) and EXTRACTIONS in target.parents):
+    removed: list[str] = []
+    for item_dir in found:
+        target = item_dir.resolve()
+        if not (within_repo(target) and EXTRACTIONS in target.parents):
+            continue  # never delete outside outputs/component-extractions
+        rel = str(item_dir.relative_to(REPO_ROOT))
+        prune_staging(item_dir)  # rmtree + prune emptied items/ and batch dirs
+        removed.append(rel)
+    if not removed:
         return 400, {"ok": False, "error": "Refusing to delete outside extractions."}
-    shutil.rmtree(target)
+    purged = purge_draft_history(item_id)
     regen_catalog()
-    return 200, {"ok": True, "message": "Draft item deleted (permanent)", "removed": str(item_dir.relative_to(REPO_ROOT))}
+    return 200, {"ok": True, "message": "Draft item deleted (permanent)",
+                 "removed": removed, "history_purged": purged}
 
 
 ROUTES = {

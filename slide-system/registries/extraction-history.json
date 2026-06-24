@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-24T07:57:09Z",
+  "updated_at": "2026-06-24T16:07:25+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -1141,56 +1141,6 @@
       "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
       "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
       "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
-    },
-    {
-      "attempted_at": "2026-06-24T10:45:12+07:00",
-      "extraction_id": "guideline-card-test-2026-06-24",
-      "item_id": "level-progression-cards",
-      "stable_id": "sun.component.level-progression-cards",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
-      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
-    },
-    {
-      "attempted_at": "2026-06-24T10:46:50+07:00",
-      "extraction_id": "guideline-card-norm-2026-06-24",
-      "item_id": "level-progression-cards",
-      "stable_id": "sun.component.level-progression-cards",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "182dd9e1b47dabd822a027033df4edebb80bb870f133ec0d853cf9f76db7bba7",
-      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
-    },
-    {
-      "attempted_at": "2026-06-24T10:59:42+07:00",
-      "extraction_id": "guideline-card-ptfix-2026-06-24",
-      "item_id": "level-progression-cards",
-      "stable_id": "sun.component.level-progression-cards",
-      "status": "duplicate",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
-      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
-    },
-    {
-      "attempted_at": "2026-06-24T11:07:45+07:00",
-      "extraction_id": "level-cards-pt-test-2026-06-24",
-      "item_id": "level-progression-cards",
-      "stable_id": "sun.component.level-progression-cards",
-      "status": "duplicate",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
-      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
-    },
-    {
-      "attempted_at": "2026-06-24T12:05:30+07:00",
-      "extraction_id": "level-cards-pt-test-2026-06-24",
-      "item_id": "level-progression-cards",
-      "stable_id": "sun.component.level-progression-cards",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
-      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
     }
   ]
 }

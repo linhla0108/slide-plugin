@@ -671,3 +671,36 @@ stay. Two scopes are logically independent but share 2 files, so done sequential
 - `49a875c2` restore input/*.extraction-request.json (swept in by mistake)
 - `234e846a` build_registry writes canonical JSON
 - All local, not yet pushed.
+
+### §14 — Catalog draft-delete sync bugs (found via browser test)
+
+**Request:** delete a draft item via the catalog UI (http://127.0.0.1:8799/
+slide-system/catalog/) and verify disk/data/history stayed in sync; if not, find
+the cause and fix #1, #2.
+
+**Browser test:** deleted draft `sun.component.level-progression-cards` (typed
+DELETE to confirm). API `POST /api/delete` → 200, UI Draft 1→0. But verification
+found desync:
+- **#1 (disk):** the id had 2 extraction folders on disk; delete removed only 1,
+  leaving `outputs/.../guideline-card-ptfix-2026-06-24/.../level-progression-cards`
+  orphaned. Cause: `catalog_server.py find_staging()` returns the FIRST match only.
+- **#2 (history):** 5 extraction-history records (3 staging + 2 duplicate) for the
+  id survived. Cause: the draft branch of `action_delete` only `rmtree`+regen,
+  never touched extraction-history; no gate catches staging/duplicate orphans.
+- (#3, not fixed here: catalog.js/index.html still reference the removed
+  `compatibility` field — a Scope-1 front-end leftover.)
+
+**Fix (catalog_server.py):**
+- Added `find_all_staging(item_id)` → returns ALL matching folders; draft delete
+  now loops and `prune_staging`s every one (rmtree + prune emptied items/batch).
+- Added `purge_draft_history(item_id)` → removes every NON-published history
+  record for the id (keeps a `published` record if the id was also promoted).
+- Draft delete returns `removed: [..]` + `history_purged: N`.
+
+**Verify (new code, in-process):** re-ran `action_delete` on the leftover →
+`{removed: [guideline-card-ptfix...], history_purged: 5}`; AFTER: 0 disk folders,
+0 history records, catalog staging 0. history 119→114. `test_gates.py` 18/18,
+`validate_registry.py` clean, `build_registry --check` clean.
+
+> NOTE: the running catalog server still has the old code in memory — **restart it**
+> (`python3 slide-system/catalog/catalog_server.py`) for the fix to apply live.
