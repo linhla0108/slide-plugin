@@ -24,6 +24,12 @@ This workflow runs only through the manual component-extractor skill.
    source raster by path), and place the reusable output in `artifact/`. Do not
    copy source images or emit per-item README/report files. Do not commit
    `*-svg-manifest.json` audit dumps into `evidence/`.
+8b. Crop the full-page visual down to the component with
+   `scripts/crop_svg_region.py --item-dir <item>`: it reads `source.region` from
+   `mapping.json`, rewrites `visual.svg`'s viewBox to that window, and
+   re-normalizes `text-slots.json`. REQUIRED for component-level items — the
+   PDF→SVG path emits the whole page, so without this the artifact is the entire
+   slide with text stripped. No-op for a full-page region; idempotent.
 9. Lift embedded rasters with `scripts/externalize_svg_images.py --batch <dir>`,
    merge fragmented background strips with
    `scripts/flatten_svg_background.py --batch <dir>` (Playwright render,
@@ -36,6 +42,13 @@ This workflow runs only through the manual component-extractor skill.
    comparison with `scripts/validate_text_slots.py`.
 11. Update extraction history.
 12. Rebuild the catalog staging tab and one batch-level `gallery.html`. Compose
-    SVG previews from `visual.svg` plus editable HTML text slots.
+    SVG previews from `visual.svg` plus editable HTML text slots. Then serve the
+    catalog for review by starting `python3 slide-system/catalog/catalog_server.py`
+    in the background (reuse it if already on 8799) and hand the user
+    **http://127.0.0.1:8799/slide-system/catalog/**. Do this automatically when
+    the batch is built and whenever the user asks to view the preview. Never
+    serve with a bare static server or Live Server — the Publish/Delete buttons
+    POST to `/api/*`, which only `catalog_server.py` implements (static → 501,
+    Live Server → 405).
 13. Request approval per item. Author the per-item `preview/` only when an
     approved item is prepared for publish.

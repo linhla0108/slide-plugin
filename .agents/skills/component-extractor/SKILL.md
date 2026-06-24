@@ -19,6 +19,14 @@ Resolve these values from the request:
 - Slide/page scope.
 - Region/object scope — the specific visual element(s) to extract.
 
+These values are written into an **extraction-request JSON** — the mandatory
+input interface to the pipeline. `scaffold_extraction.py --request <file.json>`
+(`--request` is required) consumes it; the schema is
+`slide-system/schemas/extraction-request.schema.json` and a starter lives at
+`slide-system/boilerplates/extraction-request.json`. Each item must carry
+`item_id`, `slide_or_page`, `region`, `requested_type`, and `semantic_intent`
+(the scaffold gate rejects missing/empty fields — see Naming contract below).
+
 ### Interpreting scope
 
 - A request naming a visible element semantically ("the title block",
@@ -50,10 +58,18 @@ When the user explicitly requests full-page or full-deck extraction
 
 Every `item_id` must be a semantic descriptor of the visual content.
 
-Prohibited patterns (`scaffold_extraction.py` will reject these):
-- `page-XX`, `page-\d+`
-- `slide-XX-full`, `slide-\d+-full`
-- Any purely numeric or positional identifier
+Prohibited patterns (`scaffold_extraction.py`'s `_BANNED_ID` gate rejects these):
+- Numeric-suffixed placeholders: `page-<n>`, `slide-<n>`, `slide-<n>-full`,
+  `item-<n>` (e.g. `page-01`, `slide-3-full`).
+- A purely numeric id (e.g. `42`).
+- A positional-only id built from direction words — `top`/`bottom`/`left`/
+  `right`/`center`/`centre`/`middle`/`upper`/`lower`, alone or joined
+  (e.g. `top-left`, `center`, `bottom-right`).
+
+A semantic name that merely starts with a direction word is fine
+(`left-rail`, `top-banner`). The gate also rejects items whose
+`semantic_intent` is only generic values (`full-page extraction`,
+`full-slide`, `page`).
 
 Good examples: `metric-card`, `timeline-horizontal`, `org-chart-radial`,
 `salary-table-header`, `goal-cover-title`, `orange-wave-background`
@@ -111,7 +127,10 @@ not read it separately.
    classify the artifact, and apply its type-specific extraction method. The
    reusable visual is text-free `artifact/visual.svg` + `artifact/text-slots.json`
    only. Do not author a parallel `.html`/`.css` representation of the same
-   region — it is never consumed downstream.
+   region — it is never consumed downstream. The PDF→SVG path converts the whole
+   page, so a component-level item MUST be cropped to its `source.region` with
+   `crop_svg_region.py` (step 3) — otherwise the artifact is the entire slide
+   with text stripped, not a single component.
 3. For SVG artifacts: generate the artifacts with the standard scripts — never
    hand-write `visual.svg`/`text-slots.json` (their schemas live in the
    scripts; hand-written files fail validation in rounds) and never hand-write
@@ -122,6 +141,10 @@ not read it separately.
    python3 slide-system/scripts/convert_pdf_source.py --pdf <file> --page <n> --item-dir <item>
    # source-page.svg -> text-free visual.svg + text-slots.json + evidence SVG
    python3 slide-system/scripts/extract_editable_text_slots.py --item-dir <item> [--item-dir ...]
+   # crop the full-page visual down to the selected component region (source.region
+   # in mapping.json). REQUIRED for component-level items — without it visual.svg
+   # stays the whole slide. No-op for a full-page region; idempotent.
+   python3 slide-system/scripts/crop_svg_region.py --item-dir <item> [--item-dir ...]
    python3 slide-system/scripts/externalize_svg_images.py --batch <dir>
    # merge fragmented PDF background strips into one base PNG (Playwright; pixel-diff gated)
    python3 slide-system/scripts/flatten_svg_background.py --batch <dir>
@@ -139,6 +162,19 @@ not read it separately.
    and do not commit `*-svg-manifest.json` audit dumps into `evidence/`.
 5. Build one batch-level `gallery.html` as the single review surface,
    regenerate the catalog staging tab, and update extraction history.
+   Then serve the catalog so the user can review (and Publish/Delete) — do this
+   automatically once the batch is built, and whenever the user asks to "see the
+   preview/catalog":
+
+   ```bash
+   # start in the BACKGROUND (long-running); reuse it if already up on 8799
+   python3 slide-system/catalog/catalog_server.py
+   ```
+
+   Give the user **http://127.0.0.1:8799/slide-system/catalog/**. Always serve
+   via `catalog_server.py`, never `python3 -m http.server` or VS Code Live
+   Server — the Publish/Delete buttons POST to `/api/*`, which only the control
+   server implements (a bare static server returns 501, Live Server returns 405).
 6. Request approval per item. Publish only approved items; at publish, author
    the per-item `preview/` and confirm `evidence/` (publish requires both).
 

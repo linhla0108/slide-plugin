@@ -115,6 +115,20 @@ The reusable contract is `artifact/visual.svg` plus
 `evidence/source-with-text.svg`; review HTML composes the visual and editable
 text rather than reading semantic text from the SVG.
 
+Crop the full-page visual down to the selected component region:
+
+```bash
+python3 slide-system/scripts/crop_svg_region.py \
+  --item-dir outputs/component-extractions/<extraction-id>/items/<item-id>
+```
+
+The PDF→SVG path converts the whole page, so a component-level item must be
+cropped to its `source.region` (from `mapping.json`) — otherwise the artifact is
+the entire slide with text stripped, not a single component. The script rewrites
+`visual.svg`'s viewBox and re-normalizes `text-slots.json`; it is a no-op for a
+full-page region and idempotent (marker `source.region_crop`). `publish_extraction.py`
+blocks publishing a component-level item that lacks this marker.
+
 Build an editable batch review gallery:
 
 ```bash
@@ -137,14 +151,41 @@ python3 slide-system/scripts/publish_extraction.py \
   --item-id <item-id>
 ```
 
+`visual-library.json` is the metadata authority (published folders do not keep
+`mapping.json`, so it cannot be rebuilt from disk). `visual-library-compact.json`
+— the file `score_visual_items.py` actually reads — is a derived projection and
+must never be hand-edited. `publish_extraction.py` regenerates it on every
+publish; for bulk reconciles after manual deletes use:
+
+```bash
+python3 slide-system/scripts/build_registry.py --check   # gate: exit 1 on drift
+python3 slide-system/scripts/build_registry.py --write    # drop dangling entries + rebuild compact
+```
+
+It drops registry entries whose artifact folder is gone and reports library
+folders that have a `visual.svg` but no registry entry (orphans) — it never
+deletes folders itself.
+
 Rebuild and serve the catalog:
 
 ```bash
 python3 slide-system/scripts/build_component_catalog.py
-python3 -m http.server 8000
+# Serve via the control server (static files + Publish/Delete endpoints):
+python3 slide-system/catalog/catalog_server.py
 ```
 
-Then open `/slide-system/catalog/index.html`.
+Then open **http://127.0.0.1:8799/slide-system/catalog/**.
+
+> **Always serve the catalog with `catalog_server.py`, not a bare static
+> server.** The Publish/Delete buttons POST to `/api/publish` and `/api/delete`,
+> which only `catalog_server.py` (port 8799) implements. Open the page from any
+> other origin and those buttons fail on the POST:
+> - `python3 -m http.server` → **501** ("control server not running") — view-only.
+> - VS Code **Live Server** (:5500) → **405 Method Not Allowed**.
+>
+> `fetch` uses an origin-relative path, so the page **must** be opened from
+> `127.0.0.1:8799` for managing to work. A bare static server is fine only for
+> read-only viewing.
 
 Compare equal-size HTML and exported renders:
 

@@ -446,7 +446,8 @@ outputs/slide-jobs/<job-id>/
 | `build_component_catalog.py` | Python | Rebuild visual library review UI |
 | `build_template_picker_data.py` | Python | Rebuild template picker data |
 | `extract_editable_text_slots.py` | Python | Extract text from SVG → text-slots.json + visual.svg |
-| `publish_extraction.py` | Python | Move item from staging → published |
+| `crop_svg_region.py` | Python | Crop full-page visual.svg → selected component region (source.region); re-normalizes text-slots |
+| `publish_extraction.py` | Python | Move item from staging → published (gates component crop) |
 | `export-pdf.js` | Node.js | PDF export via Playwright |
 
 **Environment setup:**
