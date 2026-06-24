@@ -251,6 +251,13 @@ class Handler(SimpleHTTPRequestHandler):
     def log_message(self, fmt, *args):  # quieter
         sys.stderr.write("[catalog] " + (fmt % args) + "\n")
 
+    def end_headers(self):
+        # Local authoring tool: never let the browser serve a stale catalog.js /
+        # index.html after an edit (the source of confusing "I changed it but the
+        # page didn't" bugs). Force revalidation on every asset.
+        self.send_header("Cache-Control", "no-store, max-age=0")
+        super().end_headers()
+
     def _json(self, code: int, payload: dict):
         data = json.dumps(payload).encode("utf-8")
         self.send_response(code)

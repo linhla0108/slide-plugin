@@ -1383,38 +1383,6 @@ h1, h2, h3 {
 
 .pill:hover { background: oklch(0.221 0 0 / 0.08); }
 
-/* Compat grid */
-
-.compat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.compat-cell {
-  text-align: center;
-  padding: 14px 8px;
-  border-radius: var(--radius);
-  background: var(--paper-sink);
-  font-size: 0.72rem;
-}
-
-.compat-cell .compat-icon { font-size: 1.25rem; margin-bottom: 4px; }
-
-.compat-cell .compat-label {
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-
-.compat-cell .compat-status { font-size: 0.68rem; }
-
-.compat-supported { color: var(--green); }
-.compat-hybrid { color: var(--yellow); }
-.compat-raster { color: var(--blue); }
-.compat-untested { color: var(--ink-soft); }
-
 .limitations-list {
   list-style: none;
   padding: 0;
@@ -2553,7 +2521,6 @@ h1, h2, h3 {
   }
 
   .modal { padding: 16px 12px; }
-  .compat-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 760px) {

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SUN.STUDIO — Visual Library</title>
-  <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="catalog.css?v=2">
 </head>
 <body>
   <header class="site-header">
@@ -48,13 +48,6 @@
         </select>
         <select id="brand-filter" class="filter-select" aria-label="Filter by brand">
           <option value="">All brands</option>
-        </select>
-        <select id="compat-filter" class="filter-select" aria-label="Filter by compatibility">
-          <option value="">All compatibility</option>
-          <option value="html">HTML</option>
-          <option value="pptx">PPTX</option>
-          <option value="pdf">PDF</option>
-          <option value="canva">Canva</option>
         </select>
       </section>
 
@@ -116,7 +109,6 @@
         <nav class="sub-tabs" id="sub-tabs" role="tablist">
           <button class="sub-tab is-active" data-tab="preview" role="tab" aria-selected="true">Preview</button>
           <button class="sub-tab" data-tab="info" role="tab" aria-selected="false">Info</button>
-          <button class="sub-tab" data-tab="compat" role="tab" aria-selected="false">Compatibility</button>
         </nav>
         <div class="modal-manage" id="modal-manage"></div>
       </div>
@@ -125,7 +117,6 @@
         <div class="modal-visual" id="modal-visual"></div>
       </div>
       <div id="panel-info" class="tab-panel panel-pad"></div>
-      <div id="panel-compat" class="tab-panel panel-pad"></div>
 
       <footer class="modal-hints" aria-hidden="true">
         <span class="hint"><kbd>Shift</kbd>+<kbd>&larr;</kbd><kbd>&rarr;</kbd> Prev / next item</span>
@@ -191,6 +182,6 @@
 
   <div class="toast-stack" id="toast-stack" role="region" aria-label="Notifications" aria-live="polite"></div>
 
-  <script src="catalog.js"></script>
+  <script src="catalog.js?v=2"></script>
 </body>
 </html>

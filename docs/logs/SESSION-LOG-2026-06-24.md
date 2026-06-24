@@ -704,3 +704,27 @@ found desync:
 
 > NOTE: the running catalog server still has the old code in memory — **restart it**
 > (`python3 slide-system/catalog/catalog_server.py`) for the fix to apply live.
+
+### §15 — Catalog front-end: drop `compatibility` UI (#3) + server restart + no-store
+
+**Request:** restart the catalog server (user couldn't), then fix #3 (front-end
+still referenced the removed `compatibility` field).
+
+- **Server restart:** killed the old in-memory instance(s) and relaunched
+  `catalog_server.py` so #1/#2 are live.
+- **#3 (front-end):** removed every `compatibility` reference:
+  - `catalog.js`: `compatFilter`/`panelCompat` DOM refs, `compCompatMatches` +
+    its filter call, `compRenderCompatPanel` + `compCompatIcon`, and all filter
+    arrays/clear/listeners.
+  - `index.html`: the "Filter by compatibility" `<select>`, the "Compatibility"
+    sub-tab, and `#panel-compat`.
+  - `catalog.css`: `.compat-grid`/`.compat-cell`/`.compat-*` rules + responsive rule.
+- **Caching bug found & fixed:** `SimpleHTTPRequestHandler` sent no cache headers,
+  so the browser kept serving the OLD `catalog.js` against the NEW HTML
+  (`#compat-filter` null → `addEventListener` TypeError). Added
+  `Cache-Control: no-store` to the server's `end_headers`, and version-bumped the
+  asset refs (`catalog.css?v=2`, `catalog.js?v=2`) to flush the stale entry.
+
+**Verify (live browser):** reloaded → 0 console errors; only "Filter by type" +
+"Filter by brand" remain; item detail shows only Preview/Info tabs; counts load
+(Components 2, Templates 5). All three desyncs (#1 disk, #2 history, #3 UI) resolved.

@@ -216,7 +216,6 @@ const compDom = {
   searchClear: $("#search-clear"),
   typeFilter: $("#type-filter"),
   brandFilter: $("#brand-filter"),
-  compatFilter: $("#compat-filter"),
   countPublished: $("#count-published"),
   countDraft: $("#count-draft"),
   backdrop: $("#backdrop"),
@@ -228,7 +227,6 @@ const compDom = {
   subTabs: $("#sub-tabs"),
   panelPreview: $("#panel-preview"),
   panelInfo: $("#panel-info"),
-  panelCompat: $("#panel-compat"),
   navPrev: $("#nav-prev"),
   navNext: $("#nav-next"),
   copyId: $("#copy-id"),
@@ -257,12 +255,6 @@ function compStatusMatches(item) {
     : ["staging", "qa"].includes(item.status);
 }
 
-function compCompatMatches(item) {
-  const target = compDom.compatFilter.value;
-  if (!target) return true;
-  return ["supported", "hybrid", "raster"].includes(item.compatibility?.[target]);
-}
-
 function compFilterItems() {
   const term = compDom.search.value.trim().toLowerCase();
   compState.filtered = compState.items.filter(item => {
@@ -270,7 +262,6 @@ function compFilterItems() {
     if (!compStatusMatches(item)) return false;
     if (compDom.typeFilter.value && item.type !== compDom.typeFilter.value) return false;
     if (compDom.brandFilter.value && item.brand !== compDom.brandFilter.value) return false;
-    if (!compCompatMatches(item)) return false;
     if (term) {
       const hay = [item.id, item.name, item.type, item.brand, ...(item.intent || []), ...(item.tags || [])]
         .filter(Boolean).join(" ").toLowerCase();
@@ -470,7 +461,6 @@ function compRenderModal() {
     <span class="status-dot ${statusClass}">${statusLabel}</span>`;
 
   compRenderInfoPanel(item);
-  compRenderCompatPanel(item);
   compRenderManageBar(item);
   compSetActiveTab(compState.detailTab);
 }
@@ -482,7 +472,7 @@ function compSetActiveTab(id) {
     btn.classList.toggle("is-active", on);
     btn.setAttribute("aria-selected", on ? "true" : "false");
   });
-  [compDom.panelPreview, compDom.panelInfo, compDom.panelCompat].forEach(p => p.classList.remove("is-active"));
+  [compDom.panelPreview, compDom.panelInfo].forEach(p => p.classList.remove("is-active"));
   const panel = $(`#panel-${id}`);
   if (panel) panel.classList.add("is-active");
 }
@@ -616,26 +606,6 @@ function compPill(text) {
   return '<span class="pill">' + escHtml(text) + "</span>";
 }
 
-/* Compat panel */
-
-function compRenderCompatPanel(item) {
-  const targets = ["html", "pptx", "pdf", "canva"];
-  const compat = item.compatibility || {};
-  compDom.panelCompat.innerHTML = '<div class="compat-grid">' + targets.map(t => {
-    const val = compat[t] || "untested";
-    const icon = compCompatIcon(val);
-    const cls = "compat-" + (val === "supported" ? "supported" : val === "hybrid" ? "hybrid" : val === "raster" ? "raster" : "untested");
-    return '<div class="compat-cell ' + cls + '"><div class="compat-icon">' + icon + '</div><div class="compat-label">' + t + '</div><div class="compat-status">' + val + "</div></div>";
-  }).join("") + "</div>";
-}
-
-function compCompatIcon(val) {
-  if (val === "supported") return '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l3.5 3.5L15 7"/></svg>';
-  if (val === "hybrid") return '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6"/><path d="M10 4a6 6 0 010 12" fill="currentColor" opacity=".3"/></svg>';
-  if (val === "raster") return '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="14" height="10" rx="2"/><circle cx="7" cy="9" r="1.5" fill="currentColor"/><path d="M3 13l4-3 3 2 4-4 3 3"/></svg>';
-  return '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 10h8"/></svg>';
-}
-
 /* Filter controls */
 
 function compAddOptions(select, values) {
@@ -651,7 +621,7 @@ function compAddOptions(select, values) {
 }
 
 function compUpdateFilterStyles() {
-  [compDom.typeFilter, compDom.brandFilter, compDom.compatFilter].forEach(sel => {
+  [compDom.typeFilter, compDom.brandFilter].forEach(sel => {
     sel.classList.toggle("has-value", !!sel.value);
   });
 }
@@ -660,7 +630,6 @@ function compClearFilters() {
   compDom.search.value = "";
   compDom.typeFilter.value = "";
   compDom.brandFilter.value = "";
-  compDom.compatFilter.value = "";
   compUpdateFilterStyles();
   compRender();
 }
@@ -867,7 +836,7 @@ $$(".status-tab").forEach(tab => {
   });
 });
 
-[compDom.search, compDom.typeFilter, compDom.brandFilter, compDom.compatFilter].forEach(el => {
+[compDom.search, compDom.typeFilter, compDom.brandFilter].forEach(el => {
   el.addEventListener("input", () => { compUpdateFilterStyles(); compRender(); });
 });
 
