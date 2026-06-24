@@ -12,7 +12,7 @@ Sub-1 values (opacity, tiny deltas) keep up to 3 decimals so faint elements neve
 collapse. Geometry stays sub-pixel accurate at slide scale.
 
 Raster: each file under `artifact/assets/` whose longest side exceeds
-`--max-dimension` (default 2560) is downsampled in place with `sips`, keeping the
+`--max-dimension` (default 1920) is downsampled in place with `sips`, keeping the
 original format (safe, no reference rewrite). Pass `--raster-to-jpeg` to also
 convert opaque (no-alpha) rasters to JPEG and rewrite the referencing SVGs — a
 larger but lossy/format-changing win, so it is opt-in.

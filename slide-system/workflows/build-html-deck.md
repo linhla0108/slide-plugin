@@ -21,6 +21,21 @@ After HTML construction, before PPTX export:
 EXIT 0 required. Fails on: emoji icons, non-brand fonts, excessive non-brand
 colors, claimed reuse with no template reference in HTML.
 
+Then run the component-fidelity gate (T3) — it confirms every `reuse` /
+`adapt-local` slide actually uses its selected component's structure (class
+signature ≥ 70% reuse / ≥ 45% adapt, decomposed asset, or component
+`background-image`), not just a `data-base-component` marker:
+```bash
+.venv/bin/python3 slide-system/scripts/validate_component_fidelity.py \
+    --html <run>/deck.html \
+    --selection-report <run>/analysis/selection-report.json \
+    --registry slide-system/registries/visual-library.json \
+    --warn
+```
+Run with `--warn` during rollout (reports failures, always exits 0) until
+existing decks are rebuilt from scaffold; drop `--warn` to make it blocking.
+Writes `qa/component-fidelity-report.json`.
+
 ## Build Rules
 
 - Use a `1920x1080` `<deck-stage>`.

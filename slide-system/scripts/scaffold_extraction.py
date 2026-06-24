@@ -61,7 +61,14 @@ def main() -> int:
     source_hash = sha256_file(source_path)
     batch_items = []
 
-    _BANNED_ID = re.compile(r"^(page-\d+|slide-\d+-full|item-\d+)$")
+    # Reject positional/placeholder ids: numeric-suffixed (page-01, slide-3,
+    # slide-3-full, item-5), purely numeric (42), and positional-only names
+    # built from direction words (top-left, center). Semantic names that merely
+    # start with a direction word (e.g. left-rail, top-banner) are allowed.
+    _POS = "top|bottom|left|right|center|centre|middle|upper|lower"
+    _BANNED_ID = re.compile(
+        rf"^(?:(?:page|slide|item)-\d+(?:-full)?|\d+|(?:{_POS})(?:-(?:{_POS}))*)$"
+    )
     _GENERIC_INTENT = {"full-page extraction", "full-slide", "page"}
 
     for item in request["items"]:

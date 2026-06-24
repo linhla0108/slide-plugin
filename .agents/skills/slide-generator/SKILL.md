@@ -96,6 +96,16 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
         --brand-pack slide-system/brand-packs/sun-studio/manifest.json
     ```
     EXIT 0 required. EXIT 1 = fix HTML and re-validate.
+    Then run the component-fidelity gate (T3) — confirms `reuse`/`adapt-local`
+    slides actually use their selected component, not just a marker:
+    ```bash
+    .venv/bin/python3 slide-system/scripts/validate_component_fidelity.py \
+        --html <run>/deck.html \
+        --selection-report <run>/analysis/selection-report.json \
+        --registry slide-system/registries/visual-library.json --warn
+    ```
+    Runs in `--warn` mode during rollout (always exits 0); drop `--warn` to
+    make it blocking once existing decks are rebuilt from scaffold.
 12. **Export PPTX.** Single command:
     ```bash
     .venv/bin/python3 slide-system/scripts/export_pptx.py \
