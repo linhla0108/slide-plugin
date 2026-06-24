@@ -27,16 +27,21 @@ User requested a full check of all resources, components, and their references t
   repeatedly — the re-scaffold duplication pattern fixed in `scaffold_extraction.py`
   (duplicate status was driven by history attempts, not the registry).
 
-### Zombie Items (3 ghost published)
-Items marked "published" in extraction-history but NOT in visual-library:
-- `sun.asset.guideline-icon-library` — no physical files
-- `sun.style.guideline-shape-variants` — no physical files
-- `sun.component.guideline-card-variants` — no physical files
+### Zombie Items
+> NOTE: this initial pass under-counted. The fingerprint-verified total is **10
+> true ghosts** (not 3) out of **63 dead ids**. See "Corrected Analysis" below.
+The 3 first spotted (all with no physical files):
+- `sun.asset.guideline-icon-library`
+- `sun.style.guideline-shape-variants`
+- `sun.component.guideline-card-variants`
 
-Root cause: Old IDs never mapped to new canonical IDs. aliases.json is empty.
+Root cause: Old IDs never mapped to new canonical IDs; dead history records left `published`.
 
 ### ID Mapping Gap
-61 items marked "published" in extraction-history have no matching entry in visual-library. They use old-style IDs (e.g., `sun.cover.cover-hero`) while library uses new canonical IDs (e.g., `sun.sun-presentation.01-cover`).
+63 ids marked "published" in extraction-history have no matching entry in visual-library
+(53 are renames to canonical IDs, 10 are true ghosts). They use old-style IDs (e.g.,
+`sun.cover.cover-hero`) while the library uses canonical IDs (e.g.,
+`sun.sun-presentation.01-cover`). See "Corrected Analysis" for the verified split.
 
 ### Staging Items (29 never promoted)
 - 9 from sunriser-2026-slides-1-5 (early batch, superseded)
@@ -71,26 +76,43 @@ Root cause: Old IDs never mapped to new canonical IDs. aliases.json is empty.
 ## Result
 No zombie components that break functionality. Zombies exist only in extraction-history metadata. Active pipeline is healthy.
 
-## Fix Applied (2026-06-24 12:04)
+## Fix Applied — superseded (see Final Fix below)
 
-### Root Cause
-`build_registry.py` had `reconcile_history()` function but only called it for DANGLING items (in registry but folder missing). Ghost-published items completely absent from the registry were never reconciled.
+> The first attempt (commit 43dd659f) appended 63 `unpublished` tombstone records
+> and reported "5 genuine ghosts / 58 renames". **Both the counts and the approach
+> were wrong** — see the corrected analysis and final fix below.
 
-### Fix
-Added `reconcile_history(ghosts)` call in `--write` branch to also correct ghost-published items absent from the registry.
+## Corrected Analysis (fingerprint-verified)
 
-### Reconciliation Results
-- 63 extraction-history records corrected to `unpublished`
-- 5 genuine ghosts (guideline-icon-library, shape-variants, card-variants, board-layouts, image-layouts)
-- 58 old-style IDs published under different canonical names
-- extraction-history now: 145 published, 97 staging, 9 duplicate, 63 unpublished
+Classification was redone by matching `region_identity_sha256` between each dead
+old id's `published` attempt and the live registry ids' `published` attempts:
+
+- **53 RENAMES** — the old id shares an exact region fingerprint with a live
+  registry id (same content, republished under the canonical name). Map is 1:1.
+- **10 TRUE GHOSTS** — no registry id shares the fingerprint; content is gone:
+  `guideline-icon-library`, `guideline-shape-variants`, `guideline-card-variants`,
+  `guideline-board-layouts`, `guideline-image-layouts`, `cover-title-connect`,
+  `section-header-question`, `slide-5`, `table-of-contents`, `three-column-cards`.
+
+The earlier "5 ghosts / 58 renames" was incorrect.
+
+## Final Fix — purge, not tombstone (2026-06-24)
+
+The registry (`visual-library.json`) is the single source of truth. A history
+record for an id that is not in the registry is pure noise, so instead of
+tombstoning we **purge** it outright — no `unpublished` record, no alias.
+
+- All 63 dead old ids (53 renames + 10 ghosts) removed entirely from
+  extraction-history: **195 attempts purged, 119 remain**
+  (76 published, 30 staging, 5 duplicate — every published id now in the registry).
+- `aliases.json` deleted (it was empty; old ids are not referenced anywhere) and
+  its only consumer in `validate_registry.py` removed.
+- `build_registry.py` rewritten: `reconcile_history` (tombstone appender) replaced
+  by `purge_history`; `--check` now GATES on zombies (`history_zombie_ids`, exit 1);
+  `--write` purges them.
 
 ### Verification
-- `build_registry.py --check` → clean (0 dangling, 0 orphan, 78 valid)
-- `test_gates.py` → 17/18 passed (1 pre-existing unrelated failure)
-- Zero remaining ghost published items
-
-## State
-Changes committed: NO
-- `slide-system/scripts/build_registry.py` — added ghost reconciliation
-- `slide-system/registries/extraction-history.json` — 63 records marked unpublished
+- `build_registry.py --check` → `clean: 0 dangling, 0 orphan, 0 zombie, 78 valid items` (exit 0)
+- Negative test: inject a published-not-in-registry record → `--check` exit 1 →
+  `--write` purges it → `--check` exit 0.
+- `test_gates.py` → 18/18 passed. `validate_registry.py` → `Valid registry: 78 items`.

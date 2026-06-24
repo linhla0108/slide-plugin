@@ -518,6 +518,11 @@ ghost published items in extraction-history and reconcile the registry.
 - extraction-history.json now has: 145 published, 97 staging, 9 duplicate,
   63 unpublished (total 314 records)
 
+> ⚠️ **SUPERSEDED (see §13).** The "5 ghosts / 58 renames" counts are WRONG —
+> fingerprint verification shows **10 ghosts / 53 renames**. The tombstone
+> approach was also replaced: §13 PURGES the 63 dead ids outright (no
+> `unpublished` records, no aliases).
+
 **Verification:**
 - `build_registry.py --check` → "clean: 0 dangling, 0 orphan, 78 valid items"
 - `test_gates.py` → 17/18 passed (1 pre-existing failure unrelated to this fix)
@@ -530,7 +535,56 @@ Source PDF (`input/GUIDLINE_PRESENTATION_SUN.pdf`) still exists if needed later.
 
 ---
 
-## 12. Hardening around the zombie fix (publish guard, drift note, test repoint)
+## 12. End-to-end test of component extraction workflow on GUIDLINE_PRESENTATION_SUN.pdf
+
+**Request:** test workflow skill component extraction trên file
+`input/GUIDLINE_PRESENTATION_SUN.pdf` xem đã hoạt động đúng chưa.
+
+**Actions:**
+- Đọc skill `component-extractor`, kiểm tra preflight (READY, PyMuPDF 1.27.2.3)
+- Tạo extraction-request JSON cho Level 1–5 cards (page 2, region pt-unit
+  `[450,415,1840,525]`)
+- Chạy đầy đủ pipeline:
+  1. `scaffold_extraction.py --request` → staging item `level-progression-cards`
+  2. `convert_pdf_source.py --page 2` → source-page.svg + reference.png
+  3. `extract_editable_text_slots.py` → 57 slots, 21 source text elements
+  4. `crop_svg_region.py` → crop_window `[450,415,1840,525]`, 16 kept / 41 dropped
+  5. `externalize_svg_images.py` + `optimize_svg.py` + `apply_text_contract.py`
+  6. `validate_text_slots.py` → **valid** (exit 0)
+
+**Two fixes verified:**
+1. **Fix #1 (pt unit):** `crop_svg_region.py` correctly converts pt-unit region.
+   Before fix: viewBox ~5.4M × 1.4M (2900× too large), 0 slots kept.
+   After fix: crop_window `[450,415,1840,525]`, 16 slots kept, geometrically
+   correct render.
+2. **Fix #2 (crop-vs-validate):** `validate_text_slots.py` excludes cropped-out
+   source text via `dropped_source_refs`. Before fix: exit 1 with 41 unmapped
+   errors. After fix: exit 0, valid.
+
+**Catalog bug found and fixed:**
+- Item appeared as `status: "duplicate"` in catalog → hidden from Draft tab
+- Root cause: `scaffold_extraction.py` HEAD code `if exact or registry_match`
+  triggered "duplicate" from history attempts, not just registry matches
+- Fix (working tree): `if registry_match:` only — registry is sole publication
+  authority
+- After fix: `status: staging`, `publish_readiness: True`, item visible in
+  catalog Draft tab
+
+**Verification:**
+- `test_gates.py`: 18/18 ✅
+- `build_registry.py --check`: clean (78 items) ✅
+- Catalog: 79 items (78 published + 1 staging) ✅
+- `validate_text_slots.py`: valid ✅
+
+**Files created:**
+- `outputs/component-extractions/level-cards-pt-test-2026-06-24/` (test batch)
+- `outputs/component-extractions/_requests/level-cards-pt-test.request.json`
+
+**Committed:** no.
+
+---
+
+## 13. Hardening around the zombie fix (publish guard, drift note, test repoint)
 
 **Request:** "commit it and create solution for this critical bug" — complete and
 commit the history↔registry drift solution (continuation of §11).
@@ -556,5 +610,47 @@ commit the history↔registry drift solution (continuation of §11).
 **Verification:** `test_gates.py` 18/18; `build_registry.py --check` clean
 (0 dangling, 0 orphan, 78 valid); `validate_registry.py` 78 items 0 broken;
 all touched scripts `py_compile` OK.
+
+**Committed:** see commits below.
+
+---
+
+## §13 — Drop `compatibility` field + purge data sources (2026-06-24)
+
+**Request:** (1) Remove the per-item `compatibility` data (html/pptx/pdf/canva) —
+unnecessary noise. (2) Unify the 3 data sources by deleting dead records and
+aliases (no tombstones, no new status vocab). User confirmed export scripts/skills
+stay. Two scopes are logically independent but share 2 files, so done sequentially.
+
+### Scope 1 — Remove `compatibility` field (commit ec20b6ff)
+- Stripped the `compatibility` block from `visual-library.json` +
+  `visual-library-compact.json` (78 items each) via `_common.write_json`.
+- Removed it from 6 code sites: `validate_registry.py` (validation loop +
+  `VALID_SUPPORT`), `score_visual_items.py` (export-eligibility check; the
+  `export_compatibility` scoring dimension now always passes), `build_registry.py`
+  (compact projection keys + docstring), `publish_extraction.py`,
+  `scaffold_extraction.py`, `build_component_catalog.py`, `test_gates.py` fixture.
+- **Verify:** `test_gates.py` 18/18; `validate_registry.py` clean;
+  `build_registry.py --check` clean.
+
+### Scope 2 — Purge dead data (this entry; commit below)
+- **Classification (fingerprint-verified):** of 63 dead ids → **53 renames /
+  10 ghosts** (corrects §11's "5 ghosts / 58 renames").
+- **Purged** all attempts of the 63 dead ids from `extraction-history.json`:
+  **195 attempts removed, 119 remain** (76 published, 30 staging, 5 duplicate;
+  every published id now in the registry; 0 zombies, 0 tombstones).
+- **Deleted** `aliases.json` (empty; old ids unreferenced) + its only consumer
+  in `validate_registry.py`; scrubbed doc refs (`naming-versioning.md`,
+  `flows/slide-generator-workflow.md`).
+- **Rewrote `build_registry.py`:** `reconcile_history` (tombstone appender) →
+  `purge_history`; `history_published_not_in_registry` → `history_zombie_ids`
+  (ever-published, not latest); `--check` now GATES on zombies (exit 1), `--write`
+  purges them.
+- **Verify:** `build_registry.py --check` → `clean: 0 dangling, 0 orphan, 0 zombie,
+  78 valid items` (exit 0). Negative test: inject published-not-in-registry →
+  `--check` exit 1 → `--write` purges → `--check` exit 0. `test_gates.py` 18/18.
+
+**Plan files:** `tasks/plan.md`, `tasks/todo.md` (two-scope plan; the earlier
+"remove HTML/PPTX export scripts/skills" idea was a misread and cancelled).
 
 **Committed:** see commits below.
