@@ -50,6 +50,25 @@ not optional.
   guessed outcomes. If a step was skipped or failed, say so.
 - Group entries by task in request order; ground file/line/count claims in real
   `git status` / command output rather than memory.
+- **Format:** number entries with a single running integer (one `##` heading per
+  entry) and use the same four fields every time. Do **not** mix `§`, `Task:`, or
+  restart numbering, and do not create per-topic log files (`LOG-<date>-<topic>.md`,
+  `REPORT-*.md`) — an audit/report is a task entry inside that day's session log.
+  The canonical template lives at `docs/logs/_TEMPLATE.md`:
+
+  ```markdown
+  ## <N> — <Short imperative title>
+
+  **When:** <YYYY-MM-DD HH:MM>   (optional; only if actually known)
+  **Request:** <user ask, verbatim or faithful paraphrase>
+  **Actions:**
+  - <files/commands/decisions + why>
+  **Result:** <outcome + verification (tests/gates/scans) and status>
+  **State:** Committed <hash> | Not committed
+  ```
+
+  If a later entry overturns an earlier one, add a `> ⚠️ SUPERSEDED by entry <N>`
+  note to the old entry instead of rewriting it.
 
 ## Product Direction
 
