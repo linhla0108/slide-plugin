@@ -113,6 +113,16 @@ def main() -> int:
         shutil.rmtree(destination)
     shutil.copytree(artifact_dir, destination)
     shutil.copytree(item_dir / "preview", destination / "preview")
+    # Defense in depth against "ghost published" zombies: only write the
+    # registry/history below once the physical library folder actually holds
+    # files. A registry entry without a real folder is exactly what
+    # build_registry's dangling-drop later removes, leaving history claiming a
+    # publication that never landed on disk. Fail loudly here instead.
+    if not files_under(destination):
+        raise SystemExit(
+            f"Publish aborted: no files were copied to {destination}; refusing "
+            "to write a registry entry with no backing folder."
+        )
     # evidence/reference.png is a staging-only render-parity QA raster
     # (convert_pdf_source.py, page.get_pixmap) that is pixel-identical to
     # preview/thumbnail.png. The published library only needs the picker

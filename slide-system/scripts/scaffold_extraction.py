@@ -117,7 +117,15 @@ def main() -> int:
             (entry for entry in registry.get("items", []) if entry["id"] == candidate_id),
             None,
         )
-        if exact or registry_match:
+        # "duplicate" means the region already exists as a PUBLISHED library
+        # item — the registry is the only authority for that. A prior history
+        # attempt (`exact`) is NOT proof of publication: it may have stalled in
+        # staging or been abandoned. We still reuse its stable_id above so a
+        # re-scaffold keeps a stable identity (and matches the registry if it
+        # truly published), but it must not by itself force "duplicate" — doing
+        # so leaves the item with no artifact folder and hides it from the
+        # catalog, which only surfaces staging/qa items.
+        if registry_match:
             status = "duplicate"
         elif item["requested_type"] == "template":
             status = "published"
@@ -167,7 +175,7 @@ def main() -> int:
             },
             "limitations": [],
             "approval": {"status": "pending", "approved_by": None, "approved_at": None},
-            "duplicate_of": exact.get("stable_id") if exact else candidate_id if registry_match else None,
+            "duplicate_of": candidate_id if registry_match else None,
         }
         write_json(item_dir / "mapping.json", mapping)
         # Single lightweight evidence note. It references the source raster by

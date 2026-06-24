@@ -46,15 +46,40 @@ def numbers(value: str | None) -> list[float]:
     return [float(item) for item in NUMBER.findall(value or "")]
 
 
-def region_fraction(region: dict) -> tuple[float, float, float, float]:
-    """Return (x, y, w, h) as 0-1 fractions, tolerating percent-encoded units."""
+def region_fraction(
+    region: dict, page_w: float, page_h: float
+) -> tuple[float, float, float, float]:
+    """Return (x, y, w, h) as 0-1 fractions of the page, honoring ``region['unit']``.
+
+    The visual.svg viewBox spans ``page_w`` x ``page_h`` in source units (pt for
+    the PDF->SVG path). Units map to fractions as:
+
+    - ``normalized`` / ``fraction`` (default): values are already 0-1.
+    - ``percent`` / ``percentage`` / ``%``: divide by 100.
+    - ``pt`` / ``px``: absolute coordinates in the viewBox grid -> divide by the
+      page extent (the PyMuPDF source SVG is in pt; px is taken 1:1 with it).
+    - ``in``: inches -> pt (x72), then divide by the page extent.
+
+    Any other unit fails loud — a silently mis-scaled crop (the whole bug this
+    guards against) is worse than a hard stop.
+    """
     unit = str(region.get("unit", "normalized")).lower()
-    scale = 100.0 if unit in ("percent", "percentage", "%") else 1.0
-    return (
-        region["x"] / scale,
-        region["y"] / scale,
-        region["width"] / scale,
-        region["height"] / scale,
+    x, y, w, h = region["x"], region["y"], region["width"], region["height"]
+    if unit in ("normalized", "fraction"):
+        return x, y, w, h
+    if unit in ("percent", "percentage", "%"):
+        return x / 100.0, y / 100.0, w / 100.0, h / 100.0
+    if unit in ("pt", "px", "in"):
+        factor = 72.0 if unit == "in" else 1.0
+        return (
+            x * factor / page_w,
+            y * factor / page_h,
+            w * factor / page_w,
+            h * factor / page_h,
+        )
+    raise SystemExit(
+        f"Unsupported region unit {unit!r}; expected one of: "
+        "normalized, percent, pt, px, in."
     )
 
 
@@ -78,15 +103,10 @@ def crop_item(item_dir: Path) -> dict:
     region = (mapping.get("source") or {}).get("region")
     if not region:
         raise SystemExit(f"{mapping_path} has no source.region to crop to")
-    fx, fy, fw, fh = region_fraction(region)
-    if fw <= 0 or fh <= 0:
-        raise SystemExit(f"Region has non-positive size: {region}")
 
     contract = load_json(slots_path)
     if (contract.get("source") or {}).get("region_crop"):
         return {"status": "already-cropped", "slot_count": len(contract.get("slots", []))}
-    if is_full_page(fx, fy, fw, fh):
-        return {"status": "full-page-noop", "slot_count": len(contract.get("slots", []))}
 
     tree = ET.parse(visual_path)
     root = tree.getroot()
@@ -94,6 +114,14 @@ def crop_item(item_dir: Path) -> dict:
     if len(view_box) != 4 or not view_box[2] or not view_box[3]:
         raise SystemExit(f"visual.svg requires a valid viewBox: {visual_path}")
     min_x, min_y, page_w, page_h = view_box
+
+    # Resolve the region to 0-1 fractions only after the page extent is known,
+    # so absolute units (pt/px/in) can be divided by it.
+    fx, fy, fw, fh = region_fraction(region, page_w, page_h)
+    if fw <= 0 or fh <= 0:
+        raise SystemExit(f"Region has non-positive size: {region}")
+    if is_full_page(fx, fy, fw, fh):
+        return {"status": "full-page-noop", "slot_count": len(contract.get("slots", []))}
 
     # Region (0-1 of the page) -> source units -> crop window.
     crop_x = min_x + fx * page_w
@@ -122,8 +150,12 @@ def crop_item(item_dir: Path) -> dict:
     tree.write(visual_path, encoding="unicode", xml_declaration=True)
 
     # Re-normalize text slots into the cropped space; drop slots centered outside.
+    # Record the source-text refs of dropped slots so validate_text_slots.py can
+    # tell "intentionally cropped out" from "missing coverage" — without this the
+    # full-page source SVG would always report out-of-region text as unmapped.
     kept = []
     dropped = 0
+    dropped_source_refs: list[dict] = []
     for slot in contract.get("slots", []):
         bounds = slot["bounds"]
         # slot bounds were normalized against the full page.
@@ -137,6 +169,12 @@ def crop_item(item_dir: Path) -> dict:
                   and crop_y <= center_y <= crop_y + crop_h)
         if not inside:
             dropped += 1
+            for ref in slot.get("source_refs", []):
+                dropped_source_refs.append({
+                    "text_index": ref["text_index"],
+                    "tspan_index": ref["tspan_index"],
+                    "character_range": list(ref["character_range"]),
+                })
             continue
         nx = (sx - crop_x) / crop_w
         ny = (sy - crop_y) / crop_h
@@ -158,6 +196,7 @@ def crop_item(item_dir: Path) -> dict:
         "page_view_box": [min_x, min_y, page_w, page_h],
         "crop_window": [round(crop_x, 4), round(crop_y, 4),
                         round(crop_w, 4), round(crop_h, 4)],
+        "dropped_source_refs": dropped_source_refs,
     }
     slots_path.write_text(
         json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-17T17:19:53+07:00",
+  "updated_at": "2026-06-24T12:05:30+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -2461,6 +2461,434 @@
       "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
       "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
       "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
+    },
+    {
+      "attempted_at": "2026-06-24T10:45:12+07:00",
+      "extraction_id": "guideline-card-test-2026-06-24",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
+      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
+    },
+    {
+      "attempted_at": "2026-06-24T10:46:50+07:00",
+      "extraction_id": "guideline-card-norm-2026-06-24",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "182dd9e1b47dabd822a027033df4edebb80bb870f133ec0d853cf9f76db7bba7",
+      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
+    },
+    {
+      "attempted_at": "2026-06-24T10:59:42+07:00",
+      "extraction_id": "guideline-card-ptfix-2026-06-24",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "duplicate",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
+      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
+    },
+    {
+      "attempted_at": "2026-06-24T11:07:45+07:00",
+      "extraction_id": "level-cards-pt-test-2026-06-24",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "duplicate",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
+      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
+    },
+    {
+      "attempted_at": "2026-06-24T12:04:54+07:00",
+      "stable_id": "sun.asset.guideline-icon-library",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:04:54+07:00",
+      "stable_id": "sun.style.guideline-shape-variants",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:04:54+07:00",
+      "stable_id": "sun.component.guideline-card-variants",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:04:54+07:00",
+      "stable_id": "sun.component.guideline-board-layouts",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.agenda.agenda-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.agenda.agenda-section",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.callout.scan-me-callout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.card.how-level-expectation-card",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.card.what-definition-card",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.chart.mix-chart-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.chart.rating-scale-chart",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.checklist.preparation-checklist",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.closing.closing-thank-you",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.comparison.what-how-comparison",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.company-culture",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.compensation-section-divider",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.direct-benefits-section-divider",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.direct-benefits-summary",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.goal-setting-intro",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.goal-setting-overview",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.indirect-benefits-section-divider",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.learning-development",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.monthly-support-benefits",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.pms-timeline",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.quarterly-check-in",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.salary-benefits-thanks",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.salary-benefits-why-upgrade",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.team-building-benefits",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.team-trip-flexibility",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.update-summary",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.working-environment",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.component.year-end-review",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.content.text-heavy-content",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.cover.cover-hero",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.cta.next-steps-cta",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.divider.section-divider-01",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.divider.section-divider-02",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.divider.section-divider-03",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.divider.section-divider-04",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.faq.faq-answers-part-1",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.faq.faq-answers-part-2",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.faq.faq-header",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.framework.what-how-rating-framework",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.grid.summary-grid",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.highlight.quote-or-highlight-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.instructions.factorial-goals-steps",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.instructions.factorial-review-steps",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.contributors-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.contributors-variant",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.image-and-text-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.image-and-text-variant",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.intro-explanation-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.layout.two-column-content",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.section.section-intro",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.statistics.statistics-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.structure.information-structure-layout",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.cover-title-connect",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.guideline-image-layouts",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.section-header-question",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.slide-5",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.table-of-contents",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.template.three-column-cards",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:17+07:00",
+      "stable_id": "sun.timeline.review-timeline",
+      "status": "unpublished",
+      "reason": "dangling artifact folder missing; dropped from visual-library.json by build_registry --write"
+    },
+    {
+      "attempted_at": "2026-06-24T12:05:30+07:00",
+      "extraction_id": "level-cards-pt-test-2026-06-24",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c10d4f53362643837a9d45b3ed36e16efa9fa7d6677568c311e621f4fbc5cf2c",
+      "semantic_signature_sha256": "ea5b30e4695256b1d99d9e3c4a947ed207dcd5c48ef0091301f4c2972f0cd34b"
     }
   ]
 }

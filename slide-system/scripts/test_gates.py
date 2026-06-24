@@ -201,9 +201,13 @@ def test_fidelity_pass_and_fail() -> None:
 # read_text_slots
 # --------------------------------------------------------------------------- #
 def test_read_text_slots_projection() -> None:
-    item_dir = (SCRIPTS.parent / "library" / "components" / "diagrams"
-                / "sun.component.guideline-board-layouts")
-    data = read_text_slots.load_json(item_dir / "text-slots.json")
+    # Resolve the slots fixture from the registry (not a hardcoded path) so a
+    # pruned/renamed item can never leave this test bound to a ghost folder —
+    # the exact failure mode that made guideline-board-layouts break it.
+    registry = read_text_slots.load_json(REGISTRY)
+    entry = next(i for i in registry["items"] if i["id"] == ITEM_WITH_SLOTS)
+    slots_path = SCRIPTS.parents[1] / entry["paths"]["text_slots"]
+    data = read_text_slots.load_json(slots_path)
     slim = read_text_slots.project(data["slots"], with_typography=False)
     assert len(slim) == len(data["slots"])
     assert set(slim[0].keys()) == set(read_text_slots.SLIM_FIELDS)
@@ -214,6 +218,7 @@ def test_read_text_slots_projection() -> None:
 # --------------------------------------------------------------------------- #
 import json as _json
 import crop_svg_region as crop
+import validate_text_slots as vts
 
 
 def _crop_fixture(tmp: Path, region: dict) -> Path:
@@ -260,6 +265,66 @@ def test_crop_region_idempotent_and_full_page_noop() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         item = _crop_fixture(Path(tmp), {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"})
         assert crop.crop_item(item)["status"] == "full-page-noop"
+
+
+def test_crop_region_honors_absolute_units() -> None:
+    # On the 1000x600 fixture page, a pt region must crop identically to the
+    # equivalent normalized region (regression: pt was treated as a 0-1 fraction
+    # and silently produced a ~1000x-too-large viewBox with every slot dropped).
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_fixture(Path(tmp), {"x": 500, "y": 60, "width": 400, "height": 240, "unit": "pt"})
+        res = crop.crop_item(item)
+        assert res["status"] == "cropped" and res["slots_dropped"] == 1, res
+        svg = (item / "artifact" / "visual.svg").read_text()
+        assert 'viewBox="0 0 400 240"' in svg, svg
+        slots = crop.load_json(item / "artifact" / "text-slots.json")
+        assert slots["source"]["region_crop"]["crop_window"] == [500.0, 60.0, 400.0, 240.0]
+    # an unsupported unit must fail loud, never silently mis-scale.
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_fixture(Path(tmp), {"x": 1, "y": 1, "width": 1, "height": 1, "unit": "furlongs"})
+        try:
+            crop.crop_item(item)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError("unknown region unit must raise SystemExit")
+
+
+def test_validate_excludes_cropped_out_source_text() -> None:
+    # After a region crop, source text outside the region has no slot. The
+    # full-page source-with-text.svg must NOT report it as unmapped, because
+    # crop_svg_region.py recorded it in source.region_crop.dropped_source_refs.
+    def _build(item: Path, with_marker: bool) -> None:
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+            '<rect width="100" height="100"/></svg>', encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><text>IN</text>'
+            '<text>OUT</text></svg>', encoding="utf-8")
+        source = {}
+        if with_marker:
+            source["region_crop"] = {"dropped_source_refs": [
+                {"text_index": 1, "tspan_index": 0, "character_range": [0, 3]}]}
+        (item / "artifact" / "text-slots.json").write_text(_json.dumps({
+            "schema_version": 1,
+            "slots": [{"id": "s1", "editable": True, "allow_empty": True,
+                       "bounds": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.1},
+                       "source_refs": [{"text_index": 0, "tspan_index": 0,
+                                        "character_range": [0, 2]}]}],
+            "source": source,
+        }), encoding="utf-8")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "card"
+        _build(item, with_marker=True)
+        assert vts.validate(item) == [], "cropped-out text must be excluded"
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "card"
+        _build(item, with_marker=False)
+        errs = vts.validate(item)
+        assert any("Unmapped source text" in e for e in errs), errs
 
 
 # --------------------------------------------------------------------------- #

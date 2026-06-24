@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T09:48:18+07:00",
+  "generated_at": "2026-06-24T12:06:34+07:00",
   "counts": {
     "published": 78,
-    "staging": 0
+    "staging": 1
   },
   "items": [
     {
@@ -17773,6 +17773,184 @@
         }
       ],
       "deletable": true
+    },
+    {
+      "id": "sun.component.level-progression-cards",
+      "version": "0.0.0",
+      "name": "level-progression-cards",
+      "type": "component",
+      "category": "cards",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "five-tier capability ladder",
+        "colored level milestone cards",
+        "level progression cards"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 2,
+        "region": {
+          "x": 450.0,
+          "y": 415.0,
+          "width": 1840.0,
+          "height": 525.0,
+          "unit": "pt"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/artifact",
+        "visual": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/preview",
+        "detail": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/README.md",
+        "evidence": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Reference",
+          "path": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards/evidence/reference.png"
+        }
+      ],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "spicy",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autocomplete",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-1",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autonomous",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agenta",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "collaborative",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agent-networks",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-4",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "software",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "factory",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-5",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ai-coding",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "assistants",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 16,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/level-cards-pt-test-2026-06-24/items/level-progression-cards",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
     }
   ]
 }

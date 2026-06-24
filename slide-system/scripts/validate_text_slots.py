@@ -59,6 +59,17 @@ def validate(item_dir: Path) -> list[str]:
             key = (ref["text_index"], ref["tspan_index"])
             coverage.setdefault(key, []).append(tuple(ref["character_range"]))
 
+    # source-with-text.svg is the WHOLE page. When the item has been cropped to a
+    # component region, crop_svg_region.py records the source-text refs it dropped
+    # (text outside the region); those characters are intentionally not part of the
+    # component, so exclude them from the coverage requirement.
+    excluded: dict[tuple[int, int], set[int]] = {}
+    region_crop = (contract.get("source") or {}).get("region_crop") or {}
+    for ref in region_crop.get("dropped_source_refs", []):
+        key = (ref["text_index"], ref["tspan_index"])
+        start, end = ref["character_range"]
+        excluded.setdefault(key, set()).update(range(start, end))
+
     source_root = ET.parse(source_path).getroot()
     source_texts = list(source_root.iter(f"{SVG}text"))
     for text_index, text_element in enumerate(source_texts):
@@ -71,10 +82,13 @@ def validate(item_dir: Path) -> list[str]:
             covered = set()
             for start, end in ranges:
                 covered.update(range(start, end))
+            excluded_chars = excluded.get((text_index, tspan_index), set())
             missing = [
                 index
                 for index, character in enumerate(text)
-                if not character.isspace() and index not in covered
+                if not character.isspace()
+                and index not in covered
+                and index not in excluded_chars
             ]
             if missing:
                 errors.append(
