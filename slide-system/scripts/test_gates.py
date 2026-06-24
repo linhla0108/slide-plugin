@@ -454,6 +454,31 @@ def test_gc_removes_unreferenced_assets() -> None:
         assert sorted(p.name for p in assets.iterdir()) == ["keep.png"]
 
 
+def test_catalog_preview_skips_fullpage_reference_when_cropped() -> None:
+    # A cropped component must NOT surface the whole-page reference.png as a
+    # preview (that is what made the Draft show the full slide). The cropped
+    # source-with-text.svg is the preview instead.
+    import build_component_catalog as bcc
+    def _build(item: Path, cropped: bool) -> None:
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        src = {"region_crop": {"crop_window": [0, 0, 100, 50]}} if cropped else {}
+        (item / "artifact" / "text-slots.json").write_text(
+            _json.dumps({"slots": [], "source": src}), encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item / "evidence" / "reference.png").write_bytes(b"png")
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "c"
+        _build(item, cropped=True)
+        labels = [im["label"] for im in bcc.collect_images(item)]
+        assert "Reference" not in labels and "Source with text" in labels, labels
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "c"
+        _build(item, cropped=False)
+        labels = [im["label"] for im in bcc.collect_images(item)]
+        assert "Reference" in labels, "full-page items still surface reference.png"
+
+
 # --------------------------------------------------------------------------- #
 # build_registry
 # --------------------------------------------------------------------------- #

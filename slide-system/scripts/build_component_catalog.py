@@ -28,13 +28,26 @@ def collect_images(item_dir: Path) -> list[dict]:
     if bg.exists():
         images.append({"label": "Preview", "path": rel(bg)})
 
+    # A component-level item is cropped to its region (crop_svg_region.py records
+    # source.region_crop and crops source-with-text.svg too). reference.png is the
+    # WHOLE-page QA raster and is NOT cropped, so surfacing it would make the draft
+    # preview show the full slide instead of the extracted component. Skip it for
+    # cropped items — the cropped source-with-text.svg is the faithful preview.
+    slots_path = artifact_dir / "text-slots.json"
+    is_cropped = False
+    if slots_path.exists():
+        try:
+            is_cropped = bool((load_json(slots_path).get("source") or {}).get("region_crop"))
+        except Exception:
+            is_cropped = False
+
     evidence_dir = item_dir / "evidence"
     src_text = evidence_dir / "source-with-text.svg"
     if src_text.exists():
         images.append({"label": "Source with text", "path": rel(src_text)})
 
     ref = evidence_dir / "reference.png"
-    if ref.exists():
+    if ref.exists() and not is_cropped:
         images.append({"label": "Reference", "path": rel(ref)})
 
     for f in sorted(evidence_dir.glob("*")) if evidence_dir.exists() else []:

@@ -288,6 +288,15 @@ PDF→SVG path emits a whole page, so a component-level item must be cropped to 
 
 ---
 
+## 28 — Fix: cropped component Draft still previewed the full slide
+
+**Request:** "tại sao extract component nhưng trong draft thì vẫn hiển thị full page?" — the catalog Draft showed the whole slide, not the extracted component.
+**Actions:** Root-caused in `build_component_catalog.py` → `collect_images()`: a staging item's preview list was built from evidence images — `source-with-text.svg` then **`reference.png`** — and the cropped reusable `visual.svg` was only a last-resort fallback. `reference.png` is the WHOLE-page QA raster (1920×1714, never cropped), so it (and, before §26, the then-uncropped `source-with-text.svg`) made the Draft render the full slide. The front-end tile uses `images[0]` and the modal shows all images in a carousel, so the full page surfaced regardless. Fix: in `collect_images`, detect a cropped item via the `source.region_crop` marker in `artifact/text-slots.json` and **skip `reference.png`** for it (kept for non-cropped full-page templates, where it is correct). `reference.png` is staging-only QA dropped at publish, so this loses nothing. The §26 evidence crop already made `source-with-text.svg` region-scoped, so it is now a faithful region+text preview.
+**Result:** Rebuilt catalog → staging item previews exactly `[Source with text]` (cropped, viewBox `0 0 1975 495`, 21 text / 7 images); server serves it. Browser-verified: Draft modal renders the 5 Level cards (the component), not the slide. `test_gates.py` **25/25** (+`test_catalog_preview_skips_fullpage_reference_when_cropped`). Side note (not fixed, separate from §21): the live catalog still shows a "Compatibility" filter/sub-tab; only console error is a favicon 404.
+**State:** Not committed (awaiting review).
+
+---
+
 ## 25 — E2E retest of `component-extractor` on the guideline PDF (re-verify intent)
 
 **Request:** "check log … test workflow skill component extraction … test thử file `input/GUIDLINE_PRESENTATION_SUN.pdf`" — re-run the skill end-to-end and confirm it still matches intent.
