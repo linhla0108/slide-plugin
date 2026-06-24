@@ -654,3 +654,20 @@ stay. Two scopes are logically independent but share 2 files, so done sequential
 "remove HTML/PPTX export scripts/skills" idea was a misread and cancelled).
 
 **Committed:** see commits below.
+
+### §13b — build_registry canonical JSON (commit 234e846a)
+- Follow-up: `build_registry.py` was the only writer using raw
+  `json.dumps(ensure_ascii=False)` for the registry/compact/history files, while
+  `publish_extraction.py` + `scaffold_extraction.py` use `_common.write_json`
+  (ensure_ascii=True). Harmless now (files pure ASCII, unicode already
+  `\u`-escaped) but a future Vietnamese string would reflow the whole file.
+- Routed all three writes through `write_json`; dropped the unused `json` import.
+- **Verify:** `--write` produces zero diff; `test_gates.py` 18/18; `--check` clean.
+
+### Commit summary (this session)
+- `ec20b6ff` drop per-item compatibility field
+- `a64e43d5` purge zombie history + drop aliases
+- `db37667f` correct zombie counts in logs + add plan files
+- `49a875c2` restore input/*.extraction-request.json (swept in by mistake)
+- `234e846a` build_registry writes canonical JSON
+- All local, not yet pushed.
