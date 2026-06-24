@@ -29,10 +29,9 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
-from _common import load_json, now_iso, resolve_repo_path
+from _common import load_json, now_iso, resolve_repo_path, write_json
 
 SYSTEM_ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = SYSTEM_ROOT / "library"
@@ -98,7 +97,7 @@ def purge_history(zombie_ids: list[str]) -> int:
     if removed:
         history["attempts"] = kept
         history["updated_at"] = now_iso()
-        HISTORY.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n")
+        write_json(HISTORY, history)
     return removed
 
 
@@ -145,13 +144,13 @@ def main() -> int:
     if args.write:
         if dangling:
             registry["items"] = kept
-            REGISTRY.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n")
+            write_json(REGISTRY, registry)
         # Recompute zombies against the post-drop registry, then purge their
         # history records outright (dropping a dangling entry can create a new
         # zombie for that id).
         zombies = history_zombie_ids({i["id"] for i in kept})
         purged = purge_history(zombies)
-        COMPACT.write_text(json.dumps(project_compact(kept), ensure_ascii=False, indent=2) + "\n")
+        write_json(COMPACT, project_compact(kept))
         print(f"wrote compact ({len(kept)} items); dropped {len(dangling)} dangling; "
               f"purged {purged} zombie history record(s); "
               f"{len(orphans)} orphan folder(s) left for review")
