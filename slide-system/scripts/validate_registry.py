@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate visual registry IDs, paths, statuses, aliases, and contracts."""
+"""Validate visual registry IDs, paths, statuses, and contracts."""
 
 from __future__ import annotations
 
@@ -20,15 +20,10 @@ def main() -> int:
         "--registry",
         default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
     )
-    parser.add_argument(
-        "--aliases",
-        default=str(Path(__file__).resolve().parents[1] / "registries/aliases.json"),
-    )
     parser.add_argument("--allow-missing-paths", action="store_true")
     args = parser.parse_args()
 
     registry = load_json(args.registry)
-    aliases = load_json(args.aliases).get("aliases", {})
     errors: list[str] = []
     ids: set[str] = set()
 
@@ -48,14 +43,10 @@ def main() -> int:
             if not resolve_repo_path(value).exists():
                 errors.append(f"Missing {key} path for {item_id}: {value}")
 
-    for alias, item_id in aliases.items():
-        if item_id not in ids:
-            errors.append(f"Alias {alias} points to unknown ID {item_id}")
-
     if errors:
         print("\n".join(errors))
         return 1
-    print(f"Valid registry: {len(ids)} items, {len(aliases)} aliases")
+    print(f"Valid registry: {len(ids)} items")
     return 0
 
 

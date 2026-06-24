@@ -16,6 +16,7 @@ Use semantic versioning:
 - Minor: backward-compatible variant or optional field.
 - Major: required-field, layout-contract, or behavior change.
 
-Never reuse an ID for a different semantic purpose. Legacy names belong in
-`registries/aliases.json`. Replacement and deprecation must retain history.
+Never reuse an ID for a different semantic purpose. A renamed or removed item
+is dropped from `visual-library.json` (the single source of truth); stale
+extraction-history records for it are purged by `build_registry --write`.
 

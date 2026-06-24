@@ -10,13 +10,11 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
 
   * DANGLING — a registry entry whose `paths.artifact` no longer exists. With
     --write these are dropped (a deleted folder self-heals out of the registry).
-    Dropping one ALSO appends a corrective `unpublished` record to
-    extraction-history.json (see reconcile_history): the history log is
-    append-only and previously kept claiming `published` for an item the
-    registry had silently dropped, which is the root cause of "ghost published"
-    zombies (published in history, absent from registry + disk). Reconciling on
-    drop keeps history, registry, and disk from diverging at the one point where
-    they used to.
+  * ZOMBIE  — a stable_id that extraction-history records as `published` but that
+    is absent from the registry (a renamed-away or deleted item). The registry is
+    the single source of truth, so these history records are pure noise that make
+    agents misread current state. With --write they are PURGED outright (every
+    attempt for that id removed) — no tombstone, no alias left behind.
   * ORPHAN  — a library folder containing `visual.svg` that no entry references.
     Reported, never auto-deleted: deletion is an explicit, separate action, and
     an orphan usually means "publish it" or "register it", not "destroy it".
@@ -25,7 +23,7 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
     never drift from it and is never hand-maintained.
 
     python3 slide-system/scripts/build_registry.py --check   # gate: exit 1 on drift
-    python3 slide-system/scripts/build_registry.py --write    # drop dangling + reconcile history + rebuild compact
+    python3 slide-system/scripts/build_registry.py --write    # drop dangling + purge zombie history + rebuild compact
 """
 
 from __future__ import annotations
@@ -70,54 +68,38 @@ def project_compact(items: list[dict]) -> dict:
     return {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in items]}
 
 
-def history_published_not_in_registry(registry_ids: set[str]) -> list[str]:
-    """stable_ids whose LATEST extraction-history status is `published` but
-    which are absent from the registry. This is a superset: it includes both
-    genuine ghosts (folder gone) AND items republished under a renamed
-    canonical id (the content is published, just under a different id). It is
-    reported for observability but never auto-corrected in bulk — only the
-    precise set dropped by THIS reconcile run is corrected (reconcile_history)."""
+def history_zombie_ids(registry_ids: set[str]) -> list[str]:
+    """stable_ids that extraction-history records as `published` in ANY attempt
+    but which are absent from the registry. Using "ever published" (not just the
+    latest status) is deliberate: a tombstoned id whose latest status was flipped
+    to `unpublished` is still a zombie if it is not in the registry. The registry
+    is the single source of truth, so these are stale records to be purged."""
     if not HISTORY.exists():
         return []
-    latest: dict[str, str] = {}
+    ever_published: set[str] = set()
     for attempt in load_json(HISTORY).get("attempts", []):
         sid = attempt.get("stable_id")
-        if sid:
-            latest[sid] = attempt.get("status")
-    return sorted(sid for sid, status in latest.items()
-                  if status == "published" and sid not in registry_ids)
+        if sid and attempt.get("status") == "published":
+            ever_published.add(sid)
+    return sorted(sid for sid in ever_published if sid not in registry_ids)
 
 
-def reconcile_history(dropped_ids: list[str]) -> int:
-    """Append a corrective `unpublished` record to extraction-history.json for
-    each dropped dangling id whose latest history status still claims
-    `published`. Append-only: past events are never rewritten, so the audit
-    trail stays intact while stopping the log from lying about current state.
-    Returns the count of records appended (0 if nothing needed correcting)."""
-    if not dropped_ids or not HISTORY.exists():
+def purge_history(zombie_ids: list[str]) -> int:
+    """Remove EVERY extraction-history attempt for the given zombie ids. No
+    tombstone, no alias — the registry is authority, so a record for an id that
+    is not in the registry is noise. Returns the count of attempts removed."""
+    if not zombie_ids or not HISTORY.exists():
         return 0
     history = load_json(HISTORY)
-    attempts = history.setdefault("attempts", [])
-    latest: dict[str, str] = {}
-    for attempt in attempts:
-        sid = attempt.get("stable_id")
-        if sid:
-            latest[sid] = attempt.get("status")
-    appended = 0
-    for sid in dropped_ids:
-        if latest.get(sid) == "published":
-            attempts.append({
-                "attempted_at": now_iso(),
-                "stable_id": sid,
-                "status": "unpublished",
-                "reason": "dangling artifact folder missing; dropped from "
-                          "visual-library.json by build_registry --write",
-            })
-            appended += 1
-    if appended:
+    attempts = history.get("attempts", [])
+    drop = set(zombie_ids)
+    kept = [a for a in attempts if a.get("stable_id") not in drop]
+    removed = len(attempts) - len(kept)
+    if removed:
+        history["attempts"] = kept
         history["updated_at"] = now_iso()
         HISTORY.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n")
-    return appended
+    return removed
 
 
 def main() -> int:
@@ -146,36 +128,32 @@ def main() -> int:
     for o in orphans:
         print(f"ORPHAN    {o} (visual.svg present, no registry entry)")
 
-    # History/registry drift: history-published ids absent from the registry.
-    # Informational only — it conflates genuine ghosts with renamed-id republishes
-    # and must not gate, but it makes the divergence visible instead of silent.
-    ghosts = history_published_not_in_registry({i["id"] for i in kept})
+    # Zombie history: ids published in extraction-history but absent from the
+    # registry (renamed-away or deleted). The registry is authority, so these are
+    # gated AND purged — they were the root cause of "ghost published" items.
+    zombies = history_zombie_ids({i["id"] for i in kept})
+
+    for z in zombies:
+        print(f"ZOMBIE    {z} (published in history, absent from registry)")
 
     if args.check:
-        drift = len(dangling) + len(orphans)
+        drift = len(dangling) + len(orphans) + len(zombies)
         print(f"{'DRIFT' if drift else 'clean'}: {len(dangling)} dangling, "
-              f"{len(orphans)} orphan, {len(kept)} valid items")
-        if ghosts:
-            print(f"note: {len(ghosts)} history-published id(s) not in registry "
-                  f"(ghosts and/or renamed-id republishes; not gated)")
+              f"{len(orphans)} orphan, {len(zombies)} zombie, {len(kept)} valid items")
         return 1 if drift else 0
 
     if args.write:
-        reconciled = 0
         if dangling:
             registry["items"] = kept
             REGISTRY.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n")
-            reconciled = reconcile_history([i["id"] for i in dangling])
-        # Also reconcile ghost-published items: extraction-history says
-        # "published" but the item is completely absent from the registry
-        # (not even dangling). These are zombies from earlier runs where
-        # extraction-history was updated but the registry entry was never
-        # created or was already dropped by a previous reconcile.
-        if ghosts:
-            reconciled += reconcile_history(ghosts)
+        # Recompute zombies against the post-drop registry, then purge their
+        # history records outright (dropping a dangling entry can create a new
+        # zombie for that id).
+        zombies = history_zombie_ids({i["id"] for i in kept})
+        purged = purge_history(zombies)
         COMPACT.write_text(json.dumps(project_compact(kept), ensure_ascii=False, indent=2) + "\n")
         print(f"wrote compact ({len(kept)} items); dropped {len(dangling)} dangling; "
-              f"reconciled {reconciled} history record(s) to unpublished; "
+              f"purged {purged} zombie history record(s); "
               f"{len(orphans)} orphan folder(s) left for review")
         return 0
 

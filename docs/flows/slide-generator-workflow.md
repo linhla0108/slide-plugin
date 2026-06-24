@@ -475,7 +475,6 @@ fi
 | `export-qa-thresholds.json` | Parity thresholds + overlay coverage limits |
 | `extraction-history.json` | Extraction history, deduplication guard |
 | `extract-readiness.json` | Preflight checks for extraction |
-| `aliases.json` | Item ID aliases |
 
 ---
 
