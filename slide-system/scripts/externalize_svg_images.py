@@ -143,6 +143,28 @@ def collect_records(svg_specs: list[tuple[Path, str]], assets_dir: Path) -> list
     return records
 
 
+def gc_unreferenced_assets(svg_specs: list[tuple[Path, str]], assets_dir: Path) -> int:
+    """Delete files in ``assets_dir`` referenced by none of the item's SVGs.
+
+    After a component crop drops off-canvas <image> elements (from both visual.svg
+    and the evidence SVG), the underlying asset files become orphaned in the
+    shared store; this reclaims them. Only ever removes files no SVG points at, so
+    it cannot break a live reference.
+    """
+    if not assets_dir.is_dir():
+        return 0
+    referenced: set[str] = set()
+    for svg_path, _prefix in svg_specs:
+        for match in ASSET_REF.finditer(svg_path.read_text(encoding="utf-8")):
+            referenced.add(match.group("name"))
+    removed = 0
+    for path in sorted(assets_dir.iterdir()):
+        if path.is_file() and path.name not in referenced:
+            path.unlink()
+            removed += 1
+    return removed
+
+
 def process_item(item_dir: Path) -> bool:
     svg_specs = item_svg_specs(item_dir)
     if not svg_specs:
@@ -154,6 +176,10 @@ def process_item(item_dir: Path) -> bool:
     touched = repair_legacy_evidence_assets(item_dir, assets_dir, by_digest)
     for svg_path, prefix in svg_specs:
         touched = externalize(svg_path, prefix, assets_dir, by_digest) or touched
+
+    # Reclaim assets no SVG references anymore (e.g. off-canvas images dropped by
+    # crop_svg_region.py from both visual.svg and the evidence SVG).
+    touched = gc_unreferenced_assets(svg_specs, assets_dir) > 0 or touched
 
     if not by_digest:
         return touched

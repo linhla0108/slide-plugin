@@ -328,6 +328,133 @@ def test_validate_excludes_cropped_out_source_text() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# crop_svg_region — off-canvas <image> pruning
+# --------------------------------------------------------------------------- #
+import xml.etree.ElementTree as _ET
+
+_SVG = "{http://www.w3.org/2000/svg}"
+
+
+def _crop_image_fixture(tmp: Path, body: str, defs: str = "") -> Path:
+    # 1000x600 page; region -> crop window page-space [500, 60, 400, 240],
+    # i.e. the page-space rectangle x:500..900, y:60..300.
+    item = tmp / "items" / "img-card"
+    (item / "artifact").mkdir(parents=True)
+    (item / "artifact" / "visual.svg").write_text(
+        '<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg" '
+        'viewBox="0 0 1000 600" width="1000" height="600">'
+        f'<defs>{defs}</defs>{body}</svg>', encoding="utf-8")
+    (item / "artifact" / "text-slots.json").write_text(_json.dumps({
+        "slots": [],
+        "source": {"view_box": [0, 0, 1000, 600], "canvas_width": 1000, "canvas_height": 600},
+    }), encoding="utf-8")
+    (item / "mapping.json").write_text(_json.dumps(
+        {"item_id": "img-card", "type": "component",
+         "source": {"region": {"x": 0.5, "y": 0.1, "width": 0.4, "height": 0.4, "unit": "normalized"}}}),
+        encoding="utf-8")
+    return item
+
+
+def _img_ids(item: Path) -> list[str]:
+    root = _ET.parse(item / "artifact" / "visual.svg").getroot()
+    return sorted(im.get("id") for im in root.iter(_SVG + "image"))
+
+
+def test_crop_prunes_offcanvas_body_images() -> None:
+    # inside the window -> keep; straddling the edge (partial overlap) -> keep;
+    # wholly below the window -> drop.
+    body = (
+        '<image id="inside" x="550" y="80" width="100" height="50" href="#a"/>'
+        '<image id="straddle" x="480" y="80" width="60" height="50" href="#b"/>'
+        '<image id="outside" x="50" y="400" width="80" height="40" href="#c"/>'
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_image_fixture(Path(tmp), body)
+        res = crop.crop_item(item)
+        assert res["images_pruned"] == 1, res
+        assert _img_ids(item) == ["inside", "straddle"], _img_ids(item)
+
+
+def test_crop_keeps_defs_images() -> None:
+    # an off-canvas image painted indirectly via <defs> is never pruned.
+    defs = '<image id="d1" x="50" y="400" width="80" height="40" href="#d"/>'
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_image_fixture(Path(tmp), "", defs)
+        res = crop.crop_item(item)
+        assert res["images_pruned"] == 0, res
+        assert _img_ids(item) == ["d1"], _img_ids(item)
+
+
+def test_crop_failsafe_unparseable_transform() -> None:
+    # an off-canvas body image under a non-affine transform (rotate) is KEPT —
+    # we never drop an element we cannot fully reason about.
+    body = ('<g transform="rotate(45)">'
+            '<image id="rot" x="50" y="400" width="80" height="40" href="#e"/></g>')
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_image_fixture(Path(tmp), body)
+        res = crop.crop_item(item)
+        assert res["images_pruned"] == 0, res
+        assert "rot" in _img_ids(item), _img_ids(item)
+
+
+def test_crop_affine_transform_honored() -> None:
+    # 'moved-in' is off-canvas by raw coords but a translate brings it into the
+    # window -> kept. 'moved-out' is on-canvas raw but a translate pushes it
+    # wholly below the window -> dropped.
+    body = (
+        '<g transform="translate(600 0)">'
+        '<image id="moved-in" x="0" y="80" width="100" height="50" href="#f"/></g>'
+        '<g transform="translate(0 400)">'
+        '<image id="moved-out" x="550" y="80" width="100" height="50" href="#g"/></g>'
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_image_fixture(Path(tmp), body)
+        res = crop.crop_item(item)
+        assert res["images_pruned"] == 1, res
+        ids = _img_ids(item)
+        assert "moved-in" in ids and "moved-out" not in ids, ids
+
+
+def test_crop_also_crops_evidence_svg() -> None:
+    # the full-page evidence SVG is cropped to the same window so it stops
+    # referencing off-canvas images; its <text> is preserved (validate relies on
+    # the text enumeration), and the off-canvas image ref is dropped.
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_image_fixture(
+            Path(tmp), '<image id="vis" x="550" y="80" width="100" height="50" href="#a"/>')
+        ev = item / "evidence"
+        ev.mkdir(parents=True)
+        (ev / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">'
+            '<image id="ev-in" x="550" y="80" width="100" height="50" href="#a"/>'
+            '<image id="ev-out" x="50" y="400" width="80" height="40" href="#c"/>'
+            '<text>LABEL</text></svg>', encoding="utf-8")
+        res = crop.crop_item(item)
+        assert res["evidence_images_pruned"] == 1, res
+        root = _ET.parse(ev / "source-with-text.svg").getroot()
+        assert root.get("viewBox") == "0 0 400 240", root.get("viewBox")
+        ids = sorted(im.get("id") for im in root.iter(_SVG + "image"))
+        assert ids == ["ev-in"], ids
+        assert len(list(root.iter(_SVG + "text"))) == 1, "evidence text must survive"
+
+
+def test_gc_removes_unreferenced_assets() -> None:
+    import externalize_svg_images as ext
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "card"
+        assets = item / "artifact" / "assets"
+        assets.mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<image href="assets/keep.png"/></svg>', encoding="utf-8")
+        (assets / "keep.png").write_bytes(b"k")
+        (assets / "orphan.png").write_bytes(b"o")
+        removed = ext.gc_unreferenced_assets(ext.item_svg_specs(item), assets)
+        assert removed == 1, removed
+        assert sorted(p.name for p in assets.iterdir()) == ["keep.png"]
+
+
+# --------------------------------------------------------------------------- #
 # build_registry
 # --------------------------------------------------------------------------- #
 import build_registry as breg

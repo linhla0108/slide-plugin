@@ -262,3 +262,52 @@ PDF→SVG path emits a whole page, so a component-level item must be cropped to 
 **Actions:** Defined one standard: file naming `SESSION-LOG-<YYYY-MM-DD>.md` only; per-entry single-integer numbering with uniform **Request / Actions / Result / State** (+ optional **When**). Rewrote this whole file to that standard (renumbered 1–23, removed the mixed `§`/`Task:`/`N.` schemes and stray non-task sections). Folded the standalone `LOG-2026-06-24-zombie-audit.md` into entry 12 and deleted it. Added `docs/logs/_TEMPLATE.md` and an explicit template block in `AGENTS.md` → "Task Logging".
 **Result:** `docs/logs/` now contains exactly one log type (`SESSION-LOG-<date>.md`) plus `_TEMPLATE.md`; every entry shares one structure.
 **State:** Committed (this entry).
+
+---
+
+## 24 — E2E retest of `component-extractor` on the guideline PDF (intent check)
+
+**Request:** "check log … test workflow skill component extraction … test thử file `input/GUIDLINE_PRESENTATION_SUN.pdf`" — verify the workflow works end-to-end and matches intent.
+**Actions:** Preflight `--input pdf` READY (PyMuPDF 1.27.2.3). Rendered all 5 pages: p1 ICON, p2 CARD, p3 OKR circles/hexagons, p4 BOARD table, p5 IMAGE. Located the Level 1-5 cards on p2 via `get_image_info` (5 images x448-2408 y450-926 pt) instead of guessing. Built request `input/GUIDLINE-level-cards.extraction-request.json` (item `level-progression-cards`, region pt `[440,440,1975,495]`). Ran the full pipeline: `scaffold_extraction.py --request` (→ staging, not duplicate); `convert_pdf_source.py --page 2`; `extract_editable_text_slots.py` (57 slots / 21 text els); `crop_svg_region.py`; externalize → flatten (skipped, 0 leading raster) → externalize → optimize → apply_text_contract → `validate_text_slots.py`; `build_text_slot_gallery.py`; `build_component_catalog.py`. Served via running catalog server on :8799.
+**Result:** Workflow works and matches intent. Verified: pt-unit crop correct (viewBox `0 0 1975 495`, 16 kept / 41 dropped — entry-10 Fix 1 holds); `validate_text_slots.py` exit 0 (entry-10 Fix 2 holds); item `status: staging` not duplicate (entry-14 fix holds); 0 semantic `<text>` nodes; 16 kept slots = exactly the in-region Level 1-5 labels + descriptions with typography (ProximaNova-ExtrabldIt etc.) preserved; inline-render confirms the visible artifact is the 5 text-free level-card backgrounds; catalog data 79 (78 published + 1 staging draft). **New finding (not fixed):** `crop_svg_region.py` rewrites the viewBox and wraps content in `translate(-440,-440)` but does NOT prune `<image>`/elements wholly outside the crop window — so `externalize_svg_images.py` bundles all 11 page images into `artifact/assets/`, of which 6 are off-canvas (the metric bars + other strips at translated y 1382-1975). Result: **59% of the raster payload (59 KB of 100 KB) is dead/invisible** in every component-level PDF extraction. Output renders correctly (clipped by viewBox); this is an efficiency/cleanliness defect, not a correctness bug.
+**State:** Not committed (test/diagnosis). Staging draft + request JSON left under gitignored `outputs/` and `input/`.
+
+---
+
+## 26 — Fix the off-canvas `<image>` defect (crop prune + evidence crop + asset GC)
+
+**Request:** "check plan này và update những phần còn thiếu" then "triển khai fix" — review `tasks/plan-crop-prune-offcanvas-images.md`, correct it, and implement.
+**Actions:**
+- **Plan review:** verified line refs + image classification against live code (all accurate); corrected the impact table with fingerprint-verified sizes (101 KB total; 41 KB/5 keep, 49 KB/4 prune, 11 KB/2 defs → **48% prunable**, not the stale "59%"); pinned the undecided transform-space question (work in page space, exclude wrapper translate); listed all 4 existing crop tests in the no-regression item.
+- **Implement (crop_svg_region.py):** added affine-transform parser (`parse_transform` — translate/scale/matrix only; rotate/skew/junk → None → keep) + `_prune_offcanvas_images` (page-space bbox vs window, fail-safe on missing geometry / defs ancestor / unparseable transform; sweeps empty non-id `<g>`). Refactored the inline wrap into `_apply_geometry_crop` and reused it.
+- **Discovery mid-implement:** pruning `visual.svg` alone reclaimed **0 KB** — `externalize_svg_images.py` harvests assets from `visual.svg` **and** `evidence/source-with-text.svg` (full page) into one shared store, and `publish_extraction.py` ships the evidence SVG, so it pins the 4 off-canvas rasters. Surfaced the tradeoff to the user; they chose **crop evidence + GC**.
+- **Implement (cont.):** `_crop_evidence_svg` crops the evidence SVG to the same window (geometry + image prune, **text retained** — safe because validate's `<text>` enumeration is order-preserving under the wrapper `<g>`; fail-safe skip if viewBox extent ≠ page). Added `gc_unreferenced_assets` to `externalize_svg_images.py` (deletes assets no SVG references). Recorded `images_pruned` + `evidence_images_pruned` in the `region_crop` marker and return.
+- **Tests:** +6 in `test_gates.py` (prune body / keep defs / fail-safe transform / affine honored / evidence crop preserves text / GC).
+**Result:** Live e2e on the Level cards: `images_pruned: 4`, `evidence_images_pruned: 4`; raster **11 files/101 KB → 7 files/52 KB** (49 KB reclaimed); `visual.svg` 7 image refs, **0** semantic text; evidence viewBox `0 0 1975 495` with **21 `<text>` preserved**; `validate_text_slots.py` **valid exit 0**; `test_gates.py` **24/24**; `build_registry --check` clean (78). Updated `crop_svg_region.py` docstring + `tasks/plan-crop-prune-offcanvas-images.md` (status IMPLEMENTED + premise correction).
+**State:** Not committed (awaiting review).
+
+---
+
+## 25 — E2E retest of `component-extractor` on the guideline PDF (re-verify intent)
+
+**Request:** "check log … test workflow skill component extraction … test thử file `input/GUIDLINE_PRESENTATION_SUN.pdf`" — re-run the skill end-to-end and confirm it still matches intent.
+**Actions:** Invoked the `component-extractor` skill. Preflight `--input pdf` READY (PyMuPDF 1.27.2.3; pptx-provider missing but irrelevant). Deleted the leftover staging from entry 24 and re-scaffolded clean from the existing request `input/GUIDLINE-level-cards.extraction-request.json` (item `level-progression-cards`, page 2, region pt `[440,440,1975,495]`). Ran the full pipeline: `scaffold_extraction.py --request` (→ staging, not duplicate) → `convert_pdf_source.py --page 2` → `extract_editable_text_slots.py` (57 slots/21 els) → `crop_svg_region.py` (16 kept / 41 dropped) → externalize → flatten (skipped: 0 leading raster) → externalize → optimize → apply_text_contract → `validate_text_slots.py`. Built `build_text_slot_gallery.py --extraction-dir` (1 item) + `build_component_catalog.py`; reused the running catalog server on :8799 (HTTP 200).
+**Result:** Workflow works and matches intent — all prior fixes hold. Verified: viewBox `0 0 1975 495` (entry-10 Fix 1 pt-unit crop correct); `validate_text_slots.py` → **valid** exit 0 (entry-10 Fix 2); `status: staging` not duplicate (entry-14 fix); **0** semantic `<text>`/`<tspan>` nodes; 16 kept slots = in-region Level 1-5 labels/descriptions; catalog 79 (78 published + 1 staging `sun.component.level-progression-cards`); `build_registry --check` clean (78 valid). **Re-confirmed the entry-24 off-canvas defect (still unfixed):** `visual.svg` carries 11 `<image>` refs; with the `translate(-440,-440)` only the 5 level-card images (orig y=450 → translated y≈10, inside the 0-495 window) are visible — the other 6 (orig y 1822-2189 → translated >1380) sit wholly below the viewBox yet are still bundled into `artifact/assets/` (132 KB on disk). Renders correctly (clipped by viewBox); efficiency/cleanliness defect only.
+**State:** Not committed (test/diagnosis).
+
+---
+
+## 2026-06-24.27 — Research + build agent-efficient log system (level B)
+
+**Request:** "nghiên cứu hệ thống log, cho hiệu quả, agent đọc hiệu quả hiểu context, sử dụng cả codegraph và codebase memory mcp để tối ưu đọc file, sử dụng cả rtk" — chọn: index repo bằng codebase-memory rồi triển khai mức B.
+**Actions:**
+- Khảo sát: log hiện tại 282 dòng/26.8KB/ngày, số chạy toàn cục đã vỡ (thiếu 6/21/22), prose không query-được, số liệu cũ dễ bị tin nhầm. Verify: codegraph đã index; codebase-memory `list_projects` rỗng; rtk 0.42.1 có grep/json/log.
+- `mcp__codebase-memory-mcp__index_repository` (moderate) → indexed 7216 nodes / 7640 edges (loại trừ `slide-system/scripts`, `docs`).
+- NEW `slide-system/scripts/build_log_index.py` — derive `docs/logs/INDEX.jsonl` (1 JSON/entry: id,date,title,status,commit,files,symbols,supersedes,log) từ các SESSION-LOG; `--write`/`--check`; stdlib only; parse được cả số cũ lẫn `<date>.<n>`.
+- NEW `docs/logs/INDEX.jsonl`.
+- `AGENTS.md` + `docs/logs/_TEMPLATE.md` — đổi đánh số sang per-day `<date>.<n>`; thêm trường bắt buộc `Files:`/`Symbols:`; thêm mục "Reading the log efficiently" (rtk grep INDEX → đọc đúng entry → `codegraph node` lấy source hiện tại).
+- NEW `tasks/research-log-system.md` — report nghiên cứu.
+**Result:** `build_log_index.py --write` parse toàn bộ entry; `--check` exit 0; `rtk grep registry INDEX.jsonl` cô lập đúng entry. Giao thức đọc đã verify. (Lưu ý: một agent khác vừa thêm entry `## 26` trong lúc làm — đây là entry thứ 27 của ngày.)
+**Files:** slide-system/scripts/build_log_index.py, docs/logs/INDEX.jsonl, AGENTS.md, docs/logs/_TEMPLATE.md, tasks/research-log-system.md
+**Symbols:** build_log_index.parse_log, build_log_index.build_index, build_log_index.main
+**State:** Not committed.
