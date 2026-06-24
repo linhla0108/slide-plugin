@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T17:19:59+07:00",
+  "generated_at": "2026-06-23T18:27:14+07:00",
   "source": "visual-library.json",
   "count": 76,
   "deck_count": 5,
@@ -13,13 +13,30 @@
           "id": "sun.sun-studio-performance-review-2025.01-cover",
           "name": "01 - Cover: Performance Review 2025",
           "intent": [
-            "full-slide",
-            "template",
+            "title",
             "cover",
             "hero",
-            "title"
+            "full-slide",
+            "template",
+            "opening",
+            "title-page",
+            "brand-intro",
+            "first-slide",
+            "hero-slide",
+            "performance-review-cover"
           ],
-          "tags": [],
+          "tags": [
+            "cover",
+            "hero",
+            "title",
+            "opening",
+            "performance-review",
+            "bia",
+            "trang-bia",
+            "danh-gia",
+            "brand",
+            "intro"
+          ],
           "content_structure": [
             "title",
             "subheading",
@@ -34,13 +51,34 @@
           "id": "sun.sun-studio-performance-review-2025.02-agenda-section",
           "name": "02 - Agenda Section",
           "intent": [
-            "full-slide",
-            "template",
             "agenda",
-            "list"
+            "full-slide",
+            "list",
+            "template",
+            "schedule",
+            "program",
+            "outline",
+            "table-of-contents",
+            "agenda-slide",
+            "noi-dung"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "agenda",
+            "list",
+            "outline",
+            "chuong-trinh",
+            "noi-dung",
+            "performance-review",
+            "program",
+            "schedule"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "list-item"
+          ],
           "slide_number": 2,
           "preview": "../library/templates/sun-studio-performance-review-2025/02-agenda-section/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/02-agenda-section/preview/thumbnail.png",
@@ -51,12 +89,31 @@
           "name": "03 - Section Divider 01",
           "intent": [
             "full-slide",
-            "template",
             "divider",
-            "section"
+            "section",
+            "template",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "transition-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "chapter",
+            "phan-cach",
+            "chuong",
+            "performance-review",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 3,
           "preview": "../library/templates/sun-studio-performance-review-2025/03-section-divider-01/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/03-section-divider-01/preview/thumbnail.png",
@@ -66,14 +123,39 @@
           "id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
           "name": "04 - Intro Explanation Layout",
           "intent": [
+            "explanation",
             "full-slide",
+            "intro",
+            "body",
             "template",
+            "layout",
+            "content",
+            "information",
+            "introduction",
+            "context-setting",
+            "background"
+          ],
+          "tags": [
             "intro",
             "explanation",
-            "body"
+            "body",
+            "context",
+            "gioi-thieu",
+            "giai-thich",
+            "nen-tang",
+            "layout",
+            "content",
+            "information"
           ],
-          "tags": [],
-          "content_structure": [],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 4,
           "preview": "../library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/preview/thumbnail.png",
@@ -84,12 +166,31 @@
           "name": "05 - Section Divider 02",
           "intent": [
             "full-slide",
-            "template",
             "divider",
-            "section"
+            "section",
+            "template",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "transition-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "chapter",
+            "phan-cach",
+            "chuong",
+            "performance-review",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 5,
           "preview": "../library/templates/sun-studio-performance-review-2025/05-section-divider-02/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/05-section-divider-02/preview/thumbnail.png",
@@ -99,15 +200,42 @@
           "id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
           "name": "06 - What How Rating Framework",
           "intent": [
+            "what",
+            "rating",
+            "how",
             "full-slide",
-            "template",
             "framework",
+            "template",
+            "model",
+            "methodology",
+            "structure",
+            "concept",
+            "rating-system",
+            "evaluation-framework",
+            "criteria",
+            "assessment"
+          ],
+          "tags": [
+            "framework",
+            "rating",
             "what",
             "how",
-            "rating"
+            "khung-danh-gia",
+            "tieu-chi",
+            "performance",
+            "model",
+            "concept",
+            "methodology"
           ],
-          "tags": [],
-          "content_structure": [],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "title",
+            "metric",
+            "description"
+          ],
           "slide_number": 6,
           "preview": "../library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/preview/thumbnail.png",
@@ -121,27 +249,79 @@
             "template",
             "definition",
             "what",
-            "smart"
+            "smart",
+            "definition-slide",
+            "concept",
+            "smart-goals",
+            "what-is"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "definition",
+            "what",
+            "smart",
+            "goals",
+            "khai-niem",
+            "muc-tieu",
+            "smart-goals",
+            "assessment",
+            "card",
+            "concept",
+            "evaluation",
+            "explanation",
+            "performance",
+            "review"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "description"
+          ],
           "slide_number": 7,
           "preview": "../library/templates/sun-studio-performance-review-2025/07-what-definition-card/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/07-what-definition-card/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
           "name": "08 - How Level Expectation Card",
           "intent": [
+            "definition",
+            "level expectation",
+            "how",
             "full-slide",
             "template",
-            "definition",
-            "how",
-            "level expectation"
+            "cta",
+            "call-to-action",
+            "next-steps",
+            "action-items",
+            "expectations",
+            "levels",
+            "performance-levels",
+            "how-definition"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "how",
+            "level",
+            "expectation",
+            "performance",
+            "cap-do",
+            "ky-vong",
+            "danh-gia",
+            "cta",
+            "action",
+            "next-steps",
+            "follow-up"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "metric"
+          ],
           "slide_number": 8,
           "preview": "../library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/preview/thumbnail.png",
@@ -151,14 +331,48 @@
           "id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
           "name": "09 - What How Comparison",
           "intent": [
+            "what",
+            "comparison",
+            "how",
             "full-slide",
             "template",
+            "versus",
+            "side-by-side",
+            "contrast",
+            "what-how",
+            "comparison-slide",
+            "two-concepts",
+            "what-vs-how",
+            "pros-cons",
+            "trade-offs",
+            "evaluation",
+            "advantages",
+            "disadvantages",
+            "differences"
+          ],
+          "tags": [
             "comparison",
             "what",
-            "how"
+            "how",
+            "contrast",
+            "so-sanh",
+            "phan-biet",
+            "versus",
+            "side-by-side",
+            "pros-cons",
+            "trade-off",
+            "evaluation",
+            "uu-nhuoc-diem",
+            "danh-gia"
           ],
-          "tags": [],
-          "content_structure": [],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "title",
+            "metric"
+          ],
           "slide_number": 9,
           "preview": "../library/templates/sun-studio-performance-review-2025/09-what-how-comparison/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/09-what-how-comparison/preview/thumbnail.png",
@@ -168,14 +382,40 @@
           "id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
           "name": "10 - Rating Scale Chart",
           "intent": [
+            "chart",
+            "scale",
+            "rating",
             "full-slide",
             "template",
+            "graph",
+            "data-visualization",
+            "analytics",
+            "rating-scale",
+            "scoring-chart",
+            "evaluation-chart",
+            "performance-scale"
+          ],
+          "tags": [
             "rating",
             "scale",
-            "chart"
+            "chart",
+            "scoring",
+            "thang-diem",
+            "bieu-do",
+            "cham-diem",
+            "graph",
+            "visualization",
+            "data"
           ],
-          "tags": [],
-          "content_structure": [],
+          "content_structure": [
+            "body",
+            "label",
+            "list-item",
+            "title",
+            "heading",
+            "metric",
+            "description"
+          ],
           "slide_number": 10,
           "preview": "../library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/preview/thumbnail.png",
@@ -186,12 +426,31 @@
           "name": "11 - Section Divider 03",
           "intent": [
             "full-slide",
-            "template",
             "divider",
-            "section"
+            "section",
+            "template",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "transition-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "chapter",
+            "phan-cach",
+            "chuong",
+            "performance-review",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 11,
           "preview": "../library/templates/sun-studio-performance-review-2025/11-section-divider-03/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/11-section-divider-03/preview/thumbnail.png",
@@ -201,30 +460,76 @@
           "id": "sun.sun-studio-performance-review-2025.12-review-timeline",
           "name": "12 - Review Timeline",
           "intent": [
-            "full-slide",
-            "template",
             "timeline",
+            "review",
+            "full-slide",
             "schedule",
-            "review"
+            "template",
+            "process",
+            "steps",
+            "roadmap",
+            "milestones",
+            "chronology",
+            "review-schedule",
+            "annual-calendar"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "timeline",
+            "review",
+            "schedule",
+            "lich-trinh",
+            "lo-trinh",
+            "danh-gia",
+            "ke-hoach",
+            "process",
+            "chronology",
+            "phases"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "list-item",
+            "subheading",
+            "title",
+            "heading",
+            "date",
+            "description"
+          ],
           "slide_number": 12,
           "preview": "../library/templates/sun-studio-performance-review-2025/12-review-timeline/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/12-review-timeline/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Closing"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.13-section-divider-04",
           "name": "13 - Section Divider 04",
           "intent": [
             "full-slide",
-            "template",
             "divider",
-            "section"
+            "section",
+            "template",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "transition-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "chapter",
+            "phan-cach",
+            "chuong",
+            "performance-review",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 13,
           "preview": "../library/templates/sun-studio-performance-review-2025/13-section-divider-04/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/13-section-divider-04/preview/thumbnail.png",
@@ -234,14 +539,38 @@
           "id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
           "name": "14 - Preparation Checklist",
           "intent": [
+            "preparation",
+            "1:1",
+            "checklist",
             "full-slide",
             "template",
+            "list",
+            "action-items",
+            "todo",
+            "requirements",
+            "pre-meeting",
+            "preparation-guide",
+            "1-on-1-prep"
+          ],
+          "tags": [
             "checklist",
             "preparation",
-            "1:1"
+            "1-on-1",
+            "meeting",
+            "danh-sach-kiem-tra",
+            "chuan-bi",
+            "list",
+            "items",
+            "todo"
           ],
-          "tags": [],
-          "content_structure": [],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "subheading",
+            "title"
+          ],
           "slide_number": 14,
           "preview": "../library/templates/sun-studio-performance-review-2025/14-preparation-checklist/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/14-preparation-checklist/preview/thumbnail.png",
@@ -255,14 +584,40 @@
             "template",
             "instructions",
             "goals",
-            "factorial"
+            "factorial",
+            "step-by-step",
+            "how-to",
+            "goals-setup"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "factorial",
+            "goals",
+            "steps",
+            "instructions",
+            "huong-dan",
+            "muc-tieu",
+            "buoc",
+            "assessment",
+            "evaluation",
+            "performance",
+            "platform",
+            "procedure",
+            "process",
+            "review",
+            "tool",
+            "workflow"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "title"
+          ],
           "slide_number": 15,
           "preview": "../library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
@@ -272,74 +627,172 @@
             "template",
             "instructions",
             "review",
-            "factorial"
+            "factorial",
+            "step-by-step",
+            "how-to",
+            "review-process"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "factorial",
+            "review",
+            "steps",
+            "instructions",
+            "huong-dan",
+            "danh-gia",
+            "buoc",
+            "assessment",
+            "evaluation",
+            "performance",
+            "platform",
+            "procedure",
+            "process",
+            "tool",
+            "workflow"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "title"
+          ],
           "slide_number": 16,
           "preview": "../library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.17-faq-header",
           "name": "17 - Faq Header",
           "intent": [
+            "header",
             "full-slide",
             "template",
             "faq",
-            "header"
+            "questions",
+            "answers",
+            "q-and-a",
+            "faq-section",
+            "questions-header"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "faq",
+            "header",
+            "questions",
+            "cau-hoi-thuong-gap",
+            "hoi-dap",
+            "tieu-de",
+            "answers"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 17,
           "preview": "../library/templates/sun-studio-performance-review-2025/17-faq-header/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/17-faq-header/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Section"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
           "name": "18 - Faq Answers Part 1",
           "intent": [
+            "answers",
             "full-slide",
             "template",
             "faq",
-            "answers"
+            "questions",
+            "q-and-a",
+            "faq-content",
+            "common-questions"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "faq",
+            "answers",
+            "questions",
+            "cau-hoi",
+            "tra-loi",
+            "hoi-dap"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "subheading",
+            "title"
+          ],
           "slide_number": 18,
           "preview": "../library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
           "name": "19 - Faq Answers Part 2",
           "intent": [
+            "answers",
             "full-slide",
             "template",
             "faq",
-            "answers"
+            "questions",
+            "q-and-a",
+            "faq-content",
+            "common-questions"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "faq",
+            "answers",
+            "questions",
+            "cau-hoi",
+            "tra-loi",
+            "hoi-dap"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "subheading",
+            "title"
+          ],
           "slide_number": 19,
           "preview": "../library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
           "name": "20 - Closing Thank You",
           "intent": [
+            "thank-you",
+            "closing",
             "full-slide",
             "template",
-            "closing",
-            "thank-you"
+            "end",
+            "final-slide",
+            "farewell",
+            "end-slide",
+            "conclusion",
+            "ket-thuc"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "closing",
+            "thank-you",
+            "end",
+            "cam-on",
+            "ket-thuc",
+            "bai-cuoi",
+            "farewell",
+            "outro"
+          ],
+          "content_structure": [
+            "label",
+            "title",
+            "body",
+            "heading"
+          ],
           "slide_number": 20,
           "preview": "../library/templates/sun-studio-performance-review-2025/20-closing-thank-you/preview/preview.html",
           "thumbnail": "../library/templates/sun-studio-performance-review-2025/20-closing-thank-you/preview/thumbnail.png",
@@ -357,11 +810,17 @@
           "id": "sun.salary-benefits-2026.01-cover",
           "name": "01 - Cover: Salary & Benefits 2026",
           "intent": [
+            "opening",
+            "title",
+            "cover",
             "full-slide",
             "template",
-            "cover",
-            "title",
-            "opening"
+            "title-page",
+            "hero",
+            "brand-intro",
+            "first-slide",
+            "compensation-overview",
+            "benefits-presentation"
           ],
           "tags": [
             "cover",
@@ -369,7 +828,13 @@
             "opening",
             "salary",
             "benefits",
-            "hr"
+            "hr",
+            "luong",
+            "phuc-loi",
+            "bia",
+            "hero",
+            "brand",
+            "intro"
           ],
           "content_structure": [
             "label",
@@ -387,38 +852,112 @@
           "name": "02 Why Upgrade",
           "intent": [
             "overview",
-            "why sun studio upgraded compensation"
+            "why sun studio upgraded compensation",
+            "rationale",
+            "motivation",
+            "why-section",
+            "context",
+            "reason"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "upgrade",
+            "overview",
+            "compensation",
+            "reason",
+            "nang-cap",
+            "tai-sao",
+            "luong",
+            "benefits",
+            "employee",
+            "hr",
+            "recap",
+            "salary",
+            "summary"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 2,
           "preview": "../library/templates/salary-benefits-2026/02-why-upgrade/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/02-why-upgrade/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Section"
         },
         {
           "id": "sun.salary-benefits-2026.03-total-package-overview",
           "name": "03 Total Package Overview",
           "intent": [
             "package overview",
-            "total compensation structure"
+            "total compensation structure",
+            "grid",
+            "summary",
+            "overview",
+            "matrix",
+            "multi-item",
+            "package-overview",
+            "total-compensation",
+            "benefits-summary"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "package",
+            "overview",
+            "compensation",
+            "total",
+            "goi-tong-the",
+            "tong-quan",
+            "luong",
+            "grid",
+            "summary",
+            "matrix",
+            "cards"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "metric"
+          ],
           "slide_number": 3,
           "preview": "../library/templates/salary-benefits-2026/03-total-package-overview/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/03-total-package-overview/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Closing"
         },
         {
           "id": "sun.salary-benefits-2026.04-compensation-divider",
           "name": "04 Compensation Divider",
           "intent": [
+            "compensation section header",
             "section divider",
-            "compensation section header"
+            "divider",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "transition-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "compensation",
+            "header",
+            "phan-cach",
+            "luong",
+            "tieu-de",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title"
+          ],
           "slide_number": 4,
           "preview": "../library/templates/salary-benefits-2026/04-compensation-divider/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/04-compensation-divider/preview/thumbnail.png",
@@ -429,10 +968,33 @@
           "name": "05 Gross To Net Explainer",
           "intent": [
             "explainer",
-            "gross to net salary conversion"
+            "gross to net salary conversion",
+            "explanation",
+            "how-it-works",
+            "salary-breakdown",
+            "calculation"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "gross",
+            "net",
+            "salary",
+            "explainer",
+            "luong-gross",
+            "luong-net",
+            "giai-thich",
+            "benefits",
+            "compensation",
+            "employee",
+            "hr"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 5,
           "preview": "../library/templates/salary-benefits-2026/05-gross-to-net-explainer/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/05-gross-to-net-explainer/preview/thumbnail.png",
@@ -442,11 +1004,31 @@
           "id": "sun.salary-benefits-2026.06-direct-benefits-divider",
           "name": "06 Direct Benefits Divider",
           "intent": [
+            "direct benefits header",
             "section divider",
-            "direct benefits header"
+            "divider",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "benefits-section"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "benefits",
+            "direct",
+            "phuc-loi-truc-tiep",
+            "phan-cach",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title"
+          ],
           "slide_number": 6,
           "preview": "../library/templates/salary-benefits-2026/06-direct-benefits-divider/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/06-direct-benefits-divider/preview/thumbnail.png",
@@ -457,10 +1039,36 @@
           "name": "07 Monthly Support Benefits",
           "intent": [
             "monthly support",
-            "lunch and parking allowance"
+            "lunch and parking allowance",
+            "allowances",
+            "monthly-benefits",
+            "support-benefits",
+            "perks"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "monthly",
+            "support",
+            "lunch",
+            "parking",
+            "allowance",
+            "phu-cap",
+            "ho-tro-hang-thang",
+            "benefits",
+            "compensation",
+            "employee",
+            "hr",
+            "perks",
+            "salary"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "metric",
+            "description"
+          ],
           "slide_number": 7,
           "preview": "../library/templates/salary-benefits-2026/07-monthly-support-benefits/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/07-monthly-support-benefits/preview/thumbnail.png",
@@ -471,10 +1079,33 @@
           "name": "08 Long Term Benefits",
           "intent": [
             "long-term benefits",
-            "insurance and union coverage"
+            "insurance and union coverage",
+            "insurance",
+            "long-term-benefits",
+            "union-benefits",
+            "coverage"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "long-term",
+            "insurance",
+            "union",
+            "benefits",
+            "bao-hiem",
+            "phuc-loi-dai-han",
+            "compensation",
+            "employee",
+            "hr",
+            "salary",
+            "security"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 8,
           "preview": "../library/templates/salary-benefits-2026/08-long-term-benefits/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/08-long-term-benefits/preview/thumbnail.png",
@@ -485,10 +1116,33 @@
           "name": "09 Direct Benefits Summary",
           "intent": [
             "summary",
-            "direct benefits overview"
+            "direct benefits overview",
+            "grid",
+            "overview",
+            "matrix",
+            "multi-item",
+            "benefits-summary",
+            "overview-slide",
+            "recap"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "summary",
+            "direct-benefits",
+            "overview",
+            "phuc-loi",
+            "tom-tat",
+            "tong-quan",
+            "grid",
+            "matrix",
+            "cards"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "metric"
+          ],
           "slide_number": 9,
           "preview": "../library/templates/salary-benefits-2026/09-direct-benefits-summary/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/09-direct-benefits-summary/preview/thumbnail.png",
@@ -499,10 +1153,40 @@
           "name": "10 Team Building Benefits",
           "intent": [
             "team building",
-            "company trip and culture activities"
+            "company trip and culture activities",
+            "team-culture",
+            "activities",
+            "company-trip",
+            "engagement"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "team-building",
+            "company-trip",
+            "culture",
+            "activities",
+            "hoat-dong",
+            "xay-dung-doi",
+            "autonomy",
+            "benefits",
+            "company",
+            "compensation",
+            "employee",
+            "flexibility",
+            "hr",
+            "salary",
+            "team",
+            "travel",
+            "trip",
+            "values"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 10,
           "preview": "../library/templates/salary-benefits-2026/10-team-building-benefits/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/10-team-building-benefits/preview/thumbnail.png",
@@ -513,10 +1197,38 @@
           "name": "11 Team Trip Flexibility",
           "intent": [
             "flexibility",
-            "team trip autonomy"
+            "team trip autonomy",
+            "autonomy",
+            "team-trip",
+            "work-life-balance"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "team-trip",
+            "flexibility",
+            "autonomy",
+            "linh-hoat",
+            "du-lich",
+            "quyen-tu-quyet",
+            "benefits",
+            "company",
+            "compensation",
+            "culture",
+            "employee",
+            "hr",
+            "salary",
+            "team",
+            "travel",
+            "trip",
+            "values"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "description"
+          ],
           "slide_number": 11,
           "preview": "../library/templates/salary-benefits-2026/11-team-trip-flexibility/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/11-team-trip-flexibility/preview/thumbnail.png",
@@ -526,11 +1238,30 @@
           "id": "sun.salary-benefits-2026.12-indirect-benefits-divider",
           "name": "12 Indirect Benefits Divider",
           "intent": [
+            "indirect benefits header",
             "section divider",
-            "indirect benefits header"
+            "divider",
+            "section-break",
+            "separator",
+            "transition",
+            "section-header",
+            "chapter-break",
+            "indirect-benefits"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "divider",
+            "section",
+            "indirect-benefits",
+            "phuc-loi-gian-tiep",
+            "phan-cach",
+            "break",
+            "transition"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title"
+          ],
           "slide_number": 12,
           "preview": "../library/templates/salary-benefits-2026/12-indirect-benefits-divider/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/12-indirect-benefits-divider/preview/thumbnail.png",
@@ -541,10 +1272,33 @@
           "name": "13 Learning Development",
           "intent": [
             "learning and development",
-            "career growth pathways"
+            "career growth pathways",
+            "career-growth",
+            "training",
+            "upskilling",
+            "learning-opportunities"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "learning",
+            "development",
+            "career",
+            "growth",
+            "dao-tao",
+            "phat-trien",
+            "su-nghiep",
+            "benefits",
+            "compensation",
+            "employee",
+            "hr",
+            "salary"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "description"
+          ],
           "slide_number": 13,
           "preview": "../library/templates/salary-benefits-2026/13-learning-development/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/13-learning-development/preview/thumbnail.png",
@@ -555,10 +1309,37 @@
           "name": "14 Company Culture",
           "intent": [
             "company culture",
-            "principles and collaboration"
+            "principles and collaboration",
+            "culture",
+            "values",
+            "principles",
+            "teamwork",
+            "collaboration"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "company-culture",
+            "principles",
+            "collaboration",
+            "van-hoa-cong-ty",
+            "gia-tri",
+            "benefits",
+            "company",
+            "compensation",
+            "culture",
+            "employee",
+            "hr",
+            "salary",
+            "team",
+            "values"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 14,
           "preview": "../library/templates/salary-benefits-2026/14-company-culture/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/14-company-culture/preview/thumbnail.png",
@@ -569,10 +1350,36 @@
           "name": "15 Working Environment",
           "intent": [
             "working environment",
-            "office and flexibility"
+            "office and flexibility",
+            "work-environment",
+            "office-policy",
+            "flexibility",
+            "workspace"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "working-environment",
+            "office",
+            "flexibility",
+            "moi-truong-lam-viec",
+            "linh-hoat",
+            "autonomy",
+            "benefits",
+            "compensation",
+            "employee",
+            "environment",
+            "hr",
+            "salary",
+            "travel",
+            "trip",
+            "workspace"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "description"
+          ],
           "slide_number": 15,
           "preview": "../library/templates/salary-benefits-2026/15-working-environment/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/15-working-environment/preview/thumbnail.png",
@@ -583,10 +1390,36 @@
           "name": "16 Update Summary",
           "intent": [
             "summary",
-            "update rollout timeline"
+            "update rollout timeline",
+            "grid",
+            "overview",
+            "matrix",
+            "multi-item",
+            "change-summary",
+            "rollout-plan",
+            "update-timeline",
+            "recap"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "update",
+            "summary",
+            "rollout",
+            "timeline",
+            "cap-nhat",
+            "tom-tat",
+            "trien-khai",
+            "grid",
+            "matrix",
+            "cards"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "date"
+          ],
           "slide_number": 16,
           "preview": "../library/templates/salary-benefits-2026/16-update-summary/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/16-update-summary/preview/thumbnail.png",
@@ -597,10 +1430,35 @@
           "name": "17 Employee Notes",
           "intent": [
             "employee notes",
-            "what sun ers should know"
+            "what sun ers should know",
+            "employee-information",
+            "important-notes",
+            "guidelines",
+            "reminders"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "employee",
+            "notes",
+            "important",
+            "sun-ers",
+            "luu-y",
+            "nhan-vien",
+            "can-biet",
+            "benefits",
+            "compensation",
+            "hr",
+            "information",
+            "reference",
+            "salary"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "list-item"
+          ],
           "slide_number": 17,
           "preview": "../library/templates/salary-benefits-2026/17-employee-notes/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/17-employee-notes/preview/thumbnail.png",
@@ -610,11 +1468,34 @@
           "id": "sun.salary-benefits-2026.18-thanks",
           "name": "18 Thanks",
           "intent": [
+            "closing slide",
             "thanks",
-            "closing slide"
+            "closing",
+            "thank-you",
+            "end",
+            "final-slide",
+            "farewell",
+            "end-slide",
+            "conclusion",
+            "ket-thuc"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "thanks",
+            "closing",
+            "thank-you",
+            "cam-on",
+            "ket-thuc",
+            "bai-cuoi",
+            "end",
+            "farewell",
+            "outro"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title"
+          ],
           "slide_number": 18,
           "preview": "../library/templates/salary-benefits-2026/18-thanks/preview/preview.html",
           "thumbnail": "../library/templates/salary-benefits-2026/18-thanks/preview/thumbnail.png",
@@ -632,13 +1513,32 @@
           "id": "sun.sun-presentation.01-cover",
           "name": "01 - Cover: Project Presentation",
           "intent": [
-            "full-slide",
-            "template",
+            "title",
             "cover",
             "hero",
-            "title"
+            "full-slide",
+            "template",
+            "opening",
+            "title-page",
+            "brand-intro",
+            "first-slide",
+            "hero-slide",
+            "opening-slide",
+            "project-cover"
           ],
-          "tags": [],
+          "tags": [
+            "cover",
+            "hero",
+            "title",
+            "opening",
+            "presentation",
+            "bia",
+            "trang-bia",
+            "mo-dau",
+            "thuyet-trinh",
+            "brand",
+            "intro"
+          ],
           "content_structure": [
             "title",
             "subheading",
@@ -653,13 +1553,35 @@
           "id": "sun.sun-presentation.02-agenda-layout",
           "name": "02 - Agenda Layout",
           "intent": [
-            "full-slide",
-            "template",
             "agenda",
-            "list"
+            "full-slide",
+            "list",
+            "template",
+            "schedule",
+            "program",
+            "outline",
+            "table-of-contents",
+            "agenda-slide",
+            "noi-dung"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "agenda",
+            "list",
+            "contents",
+            "outline",
+            "chuong-trinh",
+            "noi-dung",
+            "lo-trinh",
+            "program",
+            "schedule"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title",
+            "list-item",
+            "body"
+          ],
           "slide_number": 2,
           "preview": "../library/templates/sun-presentation/02-agenda-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/02-agenda-layout/preview/thumbnail.png",
@@ -670,12 +1592,39 @@
           "name": "03 - Section Intro",
           "intent": [
             "full-slide",
-            "template",
             "intro",
-            "section"
+            "section",
+            "template",
+            "cover",
+            "opening",
+            "title-page",
+            "hero",
+            "brand-intro",
+            "first-slide",
+            "section-header",
+            "chapter-intro",
+            "transition",
+            "divider-with-content"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "section",
+            "intro",
+            "chapter",
+            "phan",
+            "chuong",
+            "gioi-thieu-phan",
+            "cover",
+            "opening",
+            "hero",
+            "title",
+            "brand"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title",
+            "subtitle"
+          ],
           "slide_number": 3,
           "preview": "../library/templates/sun-presentation/03-section-intro/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/03-section-intro/preview/thumbnail.png",
@@ -685,29 +1634,81 @@
           "id": "sun.sun-presentation.04-contributors-layout",
           "name": "04 - Contributors Layout",
           "intent": [
+            "team",
             "full-slide",
             "template",
             "contributors",
-            "team"
+            "layout",
+            "content",
+            "body",
+            "information",
+            "team-slide",
+            "people-slide",
+            "credits",
+            "authors",
+            "nhom"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "contributors",
+            "team",
+            "people",
+            "members",
+            "thanh-vien",
+            "nhom",
+            "gioi-thieu-nhom",
+            "layout",
+            "content",
+            "body",
+            "information"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "image"
+          ],
           "slide_number": 4,
           "preview": "../library/templates/sun-presentation/04-contributors-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/04-contributors-layout/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-presentation.05-scan-me-callout",
           "name": "05 - Scan Me Callout",
           "intent": [
+            "callout",
             "full-slide",
             "template",
-            "callout",
-            "scan-me"
+            "scan-me",
+            "note",
+            "important",
+            "attention",
+            "highlight",
+            "qr-code",
+            "interactive",
+            "link-slide",
+            "digital-resource"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "qr-code",
+            "scan",
+            "callout",
+            "link",
+            "qr",
+            "quet-ma",
+            "lien-ket",
+            "note",
+            "attention",
+            "important"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "title",
+            "body"
+          ],
           "slide_number": 5,
           "preview": "../library/templates/sun-presentation/05-scan-me-callout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/05-scan-me-callout/preview/thumbnail.png",
@@ -717,17 +1718,41 @@
           "id": "sun.sun-presentation.06-two-column-content",
           "name": "06 - Two Column Content",
           "intent": [
+            "two-column",
+            "content",
             "full-slide",
             "template",
-            "two-column",
-            "content"
+            "body",
+            "information",
+            "text",
+            "detail",
+            "split-layout",
+            "dual-content",
+            "content-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "two-column",
+            "content",
+            "split",
+            "comparison",
+            "hai-cot",
+            "so-sanh",
+            "noi-dung",
+            "body",
+            "text",
+            "detail"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title",
+            "heading",
+            "list-item"
+          ],
           "slide_number": 6,
           "preview": "../library/templates/sun-presentation/06-two-column-content/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/06-two-column-content/preview/thumbnail.png",
-          "use_case": "Content"
+          "use_case": "Data"
         },
         {
           "id": "sun.sun-presentation.07-contributors-variant",
@@ -736,10 +1761,34 @@
             "full-slide",
             "template",
             "contributors",
-            "team"
+            "team",
+            "team-slide",
+            "people-slide",
+            "credits",
+            "authors",
+            "variant"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "contributors",
+            "team",
+            "people",
+            "variant",
+            "thanh-vien",
+            "nhom",
+            "phien-ban",
+            "company",
+            "credits",
+            "culture",
+            "values"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "image"
+          ],
           "slide_number": 7,
           "preview": "../library/templates/sun-presentation/07-contributors-variant/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/07-contributors-variant/preview/thumbnail.png",
@@ -750,12 +1799,30 @@
           "name": "08 - Next Steps Cta",
           "intent": [
             "full-slide",
+            "next-steps",
             "template",
             "cta",
-            "next-steps"
+            "call-to-action",
+            "action-items",
+            "follow-up"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "next-steps",
+            "cta",
+            "action",
+            "call-to-action",
+            "buoc-tiep-theo",
+            "hanh-dong",
+            "follow-up"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "list-item"
+          ],
           "slide_number": 8,
           "preview": "../library/templates/sun-presentation/08-next-steps-cta/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/08-next-steps-cta/preview/thumbnail.png",
@@ -765,13 +1832,36 @@
           "id": "sun.sun-presentation.09-summary-grid",
           "name": "09 - Summary Grid",
           "intent": [
+            "grid",
             "full-slide",
             "template",
             "summary",
-            "grid"
+            "overview",
+            "matrix",
+            "multi-item",
+            "recap",
+            "summary-slide",
+            "key-points",
+            "grid-layout"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "summary",
+            "grid",
+            "recap",
+            "overview",
+            "tom-tat",
+            "luoi",
+            "tong-ket",
+            "matrix",
+            "cards"
+          ],
+          "content_structure": [
+            "label",
+            "title",
+            "heading",
+            "body",
+            "description"
+          ],
           "slide_number": 9,
           "preview": "../library/templates/sun-presentation/09-summary-grid/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/09-summary-grid/preview/thumbnail.png",
@@ -781,13 +1871,35 @@
           "id": "sun.sun-presentation.10-text-heavy-content",
           "name": "10 - Text Heavy Content",
           "intent": [
-            "full-slide",
-            "template",
             "content",
-            "text"
+            "full-slide",
+            "text",
+            "template",
+            "body",
+            "information",
+            "detail",
+            "text-content",
+            "body-slide",
+            "detailed-content",
+            "informational"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "text",
+            "content",
+            "body",
+            "long-form",
+            "noi-dung",
+            "van-ban",
+            "chi-tiet",
+            "detail"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title",
+            "heading",
+            "description"
+          ],
           "slide_number": 10,
           "preview": "../library/templates/sun-presentation/10-text-heavy-content/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/10-text-heavy-content/preview/thumbnail.png",
@@ -798,12 +1910,33 @@
           "name": "11 - Mix Chart Layout",
           "intent": [
             "full-slide",
-            "template",
             "chart",
-            "mix"
+            "mix",
+            "template",
+            "graph",
+            "data-visualization",
+            "analytics",
+            "chart-slide",
+            "mixed-layout"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "chart",
+            "mix",
+            "data",
+            "visualization",
+            "bieu-do",
+            "du-lieu",
+            "so-lieu",
+            "graph"
+          ],
+          "content_structure": [
+            "label",
+            "title",
+            "heading",
+            "body",
+            "metric",
+            "caption"
+          ],
           "slide_number": 11,
           "preview": "../library/templates/sun-presentation/11-mix-chart-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/11-mix-chart-layout/preview/thumbnail.png",
@@ -813,13 +1946,36 @@
           "id": "sun.sun-presentation.12-statistics-layout",
           "name": "12 - Statistics Layout",
           "intent": [
+            "data",
             "full-slide",
             "template",
             "statistics",
-            "data"
+            "metrics",
+            "numbers",
+            "kpi",
+            "performance",
+            "stats-slide",
+            "numbers-slide",
+            "data-highlights"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "statistics",
+            "data",
+            "numbers",
+            "metrics",
+            "thong-ke",
+            "so-lieu",
+            "chi-so",
+            "kpi"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "metric",
+            "description"
+          ],
           "slide_number": 12,
           "preview": "../library/templates/sun-presentation/12-statistics-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/12-statistics-layout/preview/thumbnail.png",
@@ -829,29 +1985,78 @@
           "id": "sun.sun-presentation.13-information-structure-layout",
           "name": "13 - Information Structure Layout",
           "intent": [
+            "structure",
+            "information",
             "full-slide",
             "template",
-            "information",
-            "structure"
+            "layout",
+            "content",
+            "body",
+            "info-architecture",
+            "structured-content",
+            "hierarchy",
+            "diagram"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "information",
+            "structure",
+            "hierarchy",
+            "diagram",
+            "thong-tin",
+            "co-cau",
+            "layout",
+            "content",
+            "body"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title",
+            "heading",
+            "description"
+          ],
           "slide_number": 13,
           "preview": "../library/templates/sun-presentation/13-information-structure-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/13-information-structure-layout/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.sun-presentation.14-image-and-text-layout",
           "name": "14 - Image And Text Layout",
           "intent": [
-            "full-slide",
-            "template",
             "image",
-            "text"
+            "full-slide",
+            "text",
+            "template",
+            "layout",
+            "content",
+            "body",
+            "information",
+            "image-text",
+            "visual-content",
+            "photo-slide",
+            "media"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "image",
+            "text",
+            "photo",
+            "visual",
+            "hinh-anh",
+            "van-ban",
+            "noi-dung",
+            "layout",
+            "content",
+            "body",
+            "information"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title",
+            "image",
+            "caption"
+          ],
           "slide_number": 14,
           "preview": "../library/templates/sun-presentation/14-image-and-text-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/14-image-and-text-layout/preview/thumbnail.png",
@@ -864,10 +2069,30 @@
             "full-slide",
             "template",
             "image",
-            "text"
+            "text",
+            "image-text",
+            "visual-content",
+            "photo-slide",
+            "alternate-layout"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "image",
+            "text",
+            "variant",
+            "photo",
+            "hinh-anh",
+            "van-ban",
+            "phien-ban",
+            "media",
+            "visual"
+          ],
+          "content_structure": [
+            "body",
+            "label",
+            "title",
+            "image",
+            "caption"
+          ],
           "slide_number": 15,
           "preview": "../library/templates/sun-presentation/15-image-and-text-variant/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/15-image-and-text-variant/preview/thumbnail.png",
@@ -878,12 +2103,36 @@
           "name": "16 - Quote Or Highlight Layout",
           "intent": [
             "full-slide",
+            "quote",
             "template",
             "highlight",
-            "quote"
+            "layout",
+            "content",
+            "body",
+            "information",
+            "pullquote",
+            "emphasis-slide",
+            "key-message"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "quote",
+            "highlight",
+            "pullquote",
+            "emphasis",
+            "trich-dan",
+            "nhan-manh",
+            "noi-bat",
+            "layout",
+            "content",
+            "body",
+            "information"
+          ],
+          "content_structure": [
+            "label",
+            "title",
+            "body",
+            "heading"
+          ],
           "slide_number": 16,
           "preview": "../library/templates/sun-presentation/16-quote-or-highlight-layout/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/16-quote-or-highlight-layout/preview/thumbnail.png",
@@ -893,13 +2142,33 @@
           "id": "sun.sun-presentation.17-closing-thank-you",
           "name": "17 - Closing Thank You",
           "intent": [
+            "thank-you",
+            "closing",
             "full-slide",
             "template",
-            "closing",
-            "thank-you"
+            "end",
+            "final-slide",
+            "farewell",
+            "end-slide",
+            "conclusion",
+            "ket-thuc"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "closing",
+            "thank-you",
+            "end",
+            "cam-on",
+            "ket-thuc",
+            "bai-cuoi",
+            "farewell",
+            "outro"
+          ],
+          "content_structure": [
+            "label",
+            "title",
+            "body",
+            "heading"
+          ],
           "slide_number": 17,
           "preview": "../library/templates/sun-presentation/17-closing-thank-you/preview/preview.html",
           "thumbnail": "../library/templates/sun-presentation/17-closing-thank-you/preview/thumbnail.png",
@@ -917,18 +2186,30 @@
           "id": "sun.interview-workshop-sunriser.01-cover",
           "name": "01 \u2014 Cover: Interview Workshop",
           "intent": [
+            "opening",
+            "title",
+            "cover",
             "full-slide",
             "template",
-            "cover",
-            "title",
-            "opening"
+            "title-page",
+            "hero",
+            "brand-intro",
+            "first-slide",
+            "title-slide"
           ],
           "tags": [
             "cover",
             "title",
             "opening",
             "interview",
-            "hr"
+            "hr",
+            "bia",
+            "trang-bia",
+            "mo-dau",
+            "phong-van",
+            "hero",
+            "brand",
+            "intro"
           ],
           "content_structure": [
             "label",
@@ -945,27 +2226,42 @@
           "name": "02 \u2014 Timeline SUN.RISER 2026",
           "intent": [
             "full-slide",
+            "schedule",
             "template",
             "timeline",
-            "schedule"
+            "process",
+            "steps",
+            "roadmap",
+            "milestones",
+            "chronology",
+            "process-flow",
+            "lo-trinh",
+            "ke-hoach"
           ],
           "tags": [
             "timeline",
             "schedule",
             "roadmap",
             "interview",
-            "hr"
+            "hr",
+            "lich-trinh",
+            "lo-trinh",
+            "quy-trinh",
+            "process",
+            "chronology",
+            "phases"
           ],
           "content_structure": [
             "heading",
             "label",
             "body",
-            "subheading"
+            "subheading",
+            "date"
           ],
           "slide_number": 2,
           "preview": "../library/templates/interview-workshop-sunriser/02-timeline/preview/preview.html",
           "thumbnail": "../library/templates/interview-workshop-sunriser/02-timeline/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Content"
         },
         {
           "id": "sun.interview-workshop-sunriser.03-objectives",
@@ -974,14 +2270,20 @@
             "full-slide",
             "template",
             "objectives",
-            "agenda"
+            "agenda",
+            "learning-objectives",
+            "goals-list",
+            "workshop-goals",
+            "muc-tieu"
           ],
           "tags": [
             "objectives",
             "goals",
             "agenda",
             "interview",
-            "hr"
+            "hr",
+            "muc-tieu",
+            "danh-sach"
           ],
           "content_structure": [
             "heading",
@@ -1000,14 +2302,20 @@
             "full-slide",
             "template",
             "mindset",
-            "concept"
+            "concept",
+            "attitude",
+            "principles",
+            "values",
+            "tieu-chuan"
           ],
           "tags": [
             "mindset",
             "concept",
             "criteria",
             "interview",
-            "hr"
+            "hr",
+            "tu-duy",
+            "tieu-chi"
           ],
           "content_structure": [
             "heading",
@@ -1027,14 +2335,20 @@
             "full-slide",
             "template",
             "checklist",
-            "steps"
+            "steps",
+            "to-do",
+            "action-list",
+            "preparation-guide",
+            "chuan-bi"
           ],
           "tags": [
             "preparation",
             "checklist",
             "steps",
             "interview",
-            "hr"
+            "hr",
+            "chuan-bi",
+            "danh-sach-kiem-tra"
           ],
           "content_structure": [
             "label",
@@ -1055,13 +2369,18 @@
             "full-slide",
             "template",
             "scenarios",
-            "list"
+            "list",
+            "case-study",
+            "examples",
+            "problem-solving"
           ],
           "tags": [
             "scenarios",
             "candidates",
             "interview",
-            "hr"
+            "hr",
+            "tinh-huong",
+            "ung-vien"
           ],
           "content_structure": [
             "label",
@@ -1081,14 +2400,20 @@
             "full-slide",
             "template",
             "method",
-            "framework"
+            "framework",
+            "methodology",
+            "technique",
+            "star-framework",
+            "behavioral"
           ],
           "tags": [
             "star",
             "method",
             "framework",
             "interview",
-            "hr"
+            "hr",
+            "phuong-phap",
+            "khung"
           ],
           "content_structure": [
             "label",
@@ -1107,17 +2432,28 @@
           "id": "sun.interview-workshop-sunriser.08-structure-warmup",
           "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
           "intent": [
+            "structure",
+            "checklist",
             "full-slide",
             "template",
-            "structure",
-            "checklist"
+            "layout",
+            "hierarchy",
+            "organization",
+            "interview-structure",
+            "opening-phase",
+            "ice-breaker"
           ],
           "tags": [
             "structure",
             "checklist",
             "warmup",
             "interview",
-            "hr"
+            "hr",
+            "cau-truc",
+            "khoi-dong",
+            "hierarchy",
+            "organization",
+            "layout"
           ],
           "content_structure": [
             "label",
@@ -1128,23 +2464,34 @@
           "slide_number": 8,
           "preview": "../library/templates/interview-workshop-sunriser/08-structure-warmup/preview/preview.html",
           "thumbnail": "../library/templates/interview-workshop-sunriser/08-structure-warmup/preview/thumbnail.png",
-          "use_case": "Content"
+          "use_case": "Cover"
         },
         {
           "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
           "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
           "intent": [
+            "structure",
+            "checklist",
             "full-slide",
             "template",
-            "structure",
-            "checklist"
+            "layout",
+            "hierarchy",
+            "organization",
+            "interview-structure",
+            "in-depth-questions",
+            "assessment-phase"
           ],
           "tags": [
             "structure",
             "checklist",
             "deep-dive",
             "interview",
-            "hr"
+            "hr",
+            "cau-truc",
+            "chi-tiet",
+            "hierarchy",
+            "organization",
+            "layout"
           ],
           "content_structure": [
             "label",
@@ -1164,14 +2511,21 @@
             "full-slide",
             "template",
             "comparison",
-            "do-dont"
+            "do-dont",
+            "best-practices",
+            "guidelines",
+            "dos-and-donts",
+            "tips-and-tricks"
           ],
           "tags": [
             "do-dont",
             "comparison",
             "tips",
             "interview",
-            "hr"
+            "hr",
+            "nen-tranh",
+            "luu-y",
+            "so-sanh"
           ],
           "content_structure": [
             "label",
@@ -1191,14 +2545,20 @@
             "full-slide",
             "template",
             "scoring",
-            "checklist"
+            "checklist",
+            "assessment",
+            "rating",
+            "decision-making",
+            "scoring-guide"
           ],
           "tags": [
             "scoring",
             "evaluation",
             "decision",
             "interview",
-            "hr"
+            "hr",
+            "cham-diem",
+            "danh-gia"
           ],
           "content_structure": [
             "heading",
@@ -1219,14 +2579,20 @@
             "full-slide",
             "template",
             "action-items",
-            "roles"
+            "roles",
+            "next-steps",
+            "responsibilities",
+            "follow-up",
+            "tasks"
           ],
           "tags": [
             "action-items",
             "roles",
             "summary",
             "interview",
-            "hr"
+            "hr",
+            "viec-can-lam",
+            "tiep-theo"
           ],
           "content_structure": [
             "heading",
@@ -1251,21 +2617,37 @@
           "id": "sun.goal-setting-2026.01-cover",
           "name": "01 - Cover: Goal Setting 2026",
           "intent": [
+            "opening",
+            "title",
+            "cover",
             "full-slide",
             "template",
-            "cover",
-            "title",
-            "opening"
+            "title-page",
+            "hero",
+            "brand-intro",
+            "first-slide",
+            "opening-slide",
+            "presentation-cover"
           ],
           "tags": [
             "cover",
             "title",
             "opening",
             "goal-setting",
-            "pms"
+            "pms",
+            "bia",
+            "trang-bia",
+            "muc-tieu",
+            "mo-dau",
+            "hero",
+            "brand",
+            "intro"
           ],
           "content_structure": [
-            "title"
+            "title",
+            "subtitle",
+            "label",
+            "logo"
           ],
           "slide_number": 1,
           "preview": "../library/templates/goal-setting-2026/01-cover/preview/preview.html",
@@ -1276,39 +2658,123 @@
           "id": "sun.goal-setting-2026.02-overview",
           "name": "02 Overview",
           "intent": [
+            "pms purpose and outcomes",
             "overview",
-            "pms purpose and outcomes"
+            "grid",
+            "summary",
+            "matrix",
+            "multi-item",
+            "introduction",
+            "context",
+            "background",
+            "pms-overview",
+            "purpose-slide"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "overview",
+            "pms",
+            "purpose",
+            "outcomes",
+            "tong-quan",
+            "muc-dich",
+            "ket-qua",
+            "grid",
+            "summary",
+            "matrix",
+            "cards"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 2,
           "preview": "../library/templates/goal-setting-2026/02-overview/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/02-overview/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Cover"
         },
         {
           "id": "sun.goal-setting-2026.03-timeline",
           "name": "03 Timeline",
           "intent": [
+            "pms yearly schedule",
             "timeline",
-            "pms yearly schedule"
+            "process",
+            "steps",
+            "schedule",
+            "roadmap",
+            "milestones",
+            "chronology",
+            "annual-schedule",
+            "year-plan",
+            "pms-calendar"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "timeline",
+            "schedule",
+            "pms",
+            "lo-trinh",
+            "lich-trinh",
+            "ke-hoach",
+            "nam",
+            "process",
+            "chronology",
+            "phases"
+          ],
+          "content_structure": [
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "date",
+            "description"
+          ],
           "slide_number": 3,
           "preview": "../library/templates/goal-setting-2026/03-timeline/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/03-timeline/preview/thumbnail.png",
-          "use_case": "Other"
+          "use_case": "Closing"
         },
         {
           "id": "sun.goal-setting-2026.04-intro",
           "name": "04 Intro",
           "intent": [
+            "goal setting questions",
             "intro",
-            "goal setting questions"
+            "cover",
+            "opening",
+            "title-page",
+            "hero",
+            "brand-intro",
+            "first-slide",
+            "introduction",
+            "framing",
+            "context-setting",
+            "goal-introduction"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "intro",
+            "goal-setting",
+            "questions",
+            "gioi-thieu",
+            "cau-hoi",
+            "dat-muc-tieu",
+            "cover",
+            "opening",
+            "hero",
+            "title",
+            "brand"
+          ],
+          "content_structure": [
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "body",
+            "list-item"
+          ],
           "slide_number": 4,
           "preview": "../library/templates/goal-setting-2026/04-intro/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/04-intro/preview/thumbnail.png",
@@ -1318,11 +2784,41 @@
           "id": "sun.goal-setting-2026.05-process",
           "name": "05 Process",
           "intent": [
+            "goal setting workflow",
             "process",
-            "goal setting workflow"
+            "timeline",
+            "steps",
+            "schedule",
+            "roadmap",
+            "milestones",
+            "chronology",
+            "process-flow",
+            "workflow",
+            "how-to",
+            "methodology"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "process",
+            "workflow",
+            "goal-setting",
+            "steps",
+            "quy-trinh",
+            "buoc",
+            "dat-muc-tieu",
+            "timeline",
+            "chronology",
+            "schedule",
+            "phases"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "list-item",
+            "subheading",
+            "title",
+            "description"
+          ],
           "slide_number": 5,
           "preview": "../library/templates/goal-setting-2026/05-process/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/05-process/preview/thumbnail.png",
@@ -1332,11 +2828,36 @@
           "id": "sun.goal-setting-2026.06-structure-breakdown",
           "name": "06 Structure Breakdown",
           "intent": [
+            "goal allocation by role",
             "structure breakdown",
-            "goal allocation by role"
+            "structure",
+            "layout",
+            "hierarchy",
+            "organization",
+            "goal-structure",
+            "role-allocation",
+            "breakdown",
+            "distribution"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "structure",
+            "breakdown",
+            "allocation",
+            "roles",
+            "co-cau",
+            "phan-bo",
+            "vai-tro",
+            "hierarchy",
+            "organization",
+            "layout"
+          ],
+          "content_structure": [
+            "body",
+            "heading",
+            "label",
+            "title",
+            "metric"
+          ],
           "slide_number": 6,
           "preview": "../library/templates/goal-setting-2026/06-structure-breakdown/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/06-structure-breakdown/preview/thumbnail.png",
@@ -1347,10 +2868,37 @@
           "name": "07 Quarterly Check In",
           "intent": [
             "check-in",
-            "quarterly review questions"
+            "quarterly review questions",
+            "mid-year-review",
+            "progress-check",
+            "quarterly-review",
+            "1-on-1"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "check-in",
+            "quarterly",
+            "review",
+            "questions",
+            "kiem-tra",
+            "quy",
+            "cau-hoi",
+            "assessment",
+            "evaluation",
+            "goal-setting",
+            "hr",
+            "objectives",
+            "performance",
+            "planning",
+            "progress"
+          ],
+          "content_structure": [
+            "label",
+            "subheading",
+            "title",
+            "heading",
+            "body",
+            "list-item"
+          ],
           "slide_number": 7,
           "preview": "../library/templates/goal-setting-2026/07-quarterly-check-in/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/07-quarterly-check-in/preview/thumbnail.png",
@@ -1361,10 +2909,34 @@
           "name": "08 Year End Review",
           "intent": [
             "year-end review",
-            "performance assessment"
+            "performance assessment",
+            "annual-review",
+            "performance-assessment",
+            "year-end",
+            "evaluation"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "year-end",
+            "review",
+            "performance",
+            "assessment",
+            "cuoi-nam",
+            "danh-gia",
+            "hieu-suat",
+            "evaluation",
+            "goal-setting",
+            "hr",
+            "objectives",
+            "planning"
+          ],
+          "content_structure": [
+            "heading",
+            "label",
+            "subheading",
+            "title",
+            "body",
+            "list-item"
+          ],
           "slide_number": 8,
           "preview": "../library/templates/goal-setting-2026/08-year-end-review/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/08-year-end-review/preview/thumbnail.png",
@@ -1374,11 +2946,34 @@
           "id": "sun.goal-setting-2026.09-thanks",
           "name": "09 Thanks",
           "intent": [
+            "closing slide",
             "thanks",
-            "closing slide"
+            "closing",
+            "thank-you",
+            "end",
+            "final-slide",
+            "farewell",
+            "end-slide",
+            "conclusion",
+            "ket-thuc"
           ],
-          "tags": [],
-          "content_structure": [],
+          "tags": [
+            "thanks",
+            "closing",
+            "thank-you",
+            "cam-on",
+            "ket-thuc",
+            "bai-cuoi",
+            "end",
+            "farewell",
+            "outro"
+          ],
+          "content_structure": [
+            "label",
+            "subheading",
+            "title",
+            "body"
+          ],
           "slide_number": 9,
           "preview": "../library/templates/goal-setting-2026/09-thanks/preview/preview.html",
           "thumbnail": "../library/templates/goal-setting-2026/09-thanks/preview/thumbnail.png",
@@ -1393,18 +2988,30 @@
       "id": "sun.interview-workshop-sunriser.01-cover",
       "name": "01 \u2014 Cover: Interview Workshop",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "title-slide"
       ],
       "tags": [
         "cover",
         "title",
         "opening",
         "interview",
-        "hr"
+        "hr",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "phong-van",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
         "label",
@@ -1421,27 +3028,42 @@
       "name": "02 \u2014 Timeline SUN.RISER 2026",
       "intent": [
         "full-slide",
+        "schedule",
         "template",
         "timeline",
-        "schedule"
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "lo-trinh",
+        "ke-hoach"
       ],
       "tags": [
         "timeline",
         "schedule",
         "roadmap",
         "interview",
-        "hr"
+        "hr",
+        "lich-trinh",
+        "lo-trinh",
+        "quy-trinh",
+        "process",
+        "chronology",
+        "phases"
       ],
       "content_structure": [
         "heading",
         "label",
         "body",
-        "subheading"
+        "subheading",
+        "date"
       ],
       "slide_number": 2,
       "preview": "../library/templates/interview-workshop-sunriser/02-timeline/preview/preview.html",
       "thumbnail": "../library/templates/interview-workshop-sunriser/02-timeline/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.interview-workshop-sunriser.03-objectives",
@@ -1450,14 +3072,20 @@
         "full-slide",
         "template",
         "objectives",
-        "agenda"
+        "agenda",
+        "learning-objectives",
+        "goals-list",
+        "workshop-goals",
+        "muc-tieu"
       ],
       "tags": [
         "objectives",
         "goals",
         "agenda",
         "interview",
-        "hr"
+        "hr",
+        "muc-tieu",
+        "danh-sach"
       ],
       "content_structure": [
         "heading",
@@ -1476,14 +3104,20 @@
         "full-slide",
         "template",
         "mindset",
-        "concept"
+        "concept",
+        "attitude",
+        "principles",
+        "values",
+        "tieu-chuan"
       ],
       "tags": [
         "mindset",
         "concept",
         "criteria",
         "interview",
-        "hr"
+        "hr",
+        "tu-duy",
+        "tieu-chi"
       ],
       "content_structure": [
         "heading",
@@ -1503,14 +3137,20 @@
         "full-slide",
         "template",
         "checklist",
-        "steps"
+        "steps",
+        "to-do",
+        "action-list",
+        "preparation-guide",
+        "chuan-bi"
       ],
       "tags": [
         "preparation",
         "checklist",
         "steps",
         "interview",
-        "hr"
+        "hr",
+        "chuan-bi",
+        "danh-sach-kiem-tra"
       ],
       "content_structure": [
         "label",
@@ -1531,13 +3171,18 @@
         "full-slide",
         "template",
         "scenarios",
-        "list"
+        "list",
+        "case-study",
+        "examples",
+        "problem-solving"
       ],
       "tags": [
         "scenarios",
         "candidates",
         "interview",
-        "hr"
+        "hr",
+        "tinh-huong",
+        "ung-vien"
       ],
       "content_structure": [
         "label",
@@ -1557,14 +3202,20 @@
         "full-slide",
         "template",
         "method",
-        "framework"
+        "framework",
+        "methodology",
+        "technique",
+        "star-framework",
+        "behavioral"
       ],
       "tags": [
         "star",
         "method",
         "framework",
         "interview",
-        "hr"
+        "hr",
+        "phuong-phap",
+        "khung"
       ],
       "content_structure": [
         "label",
@@ -1583,17 +3234,28 @@
       "id": "sun.interview-workshop-sunriser.08-structure-warmup",
       "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
       "intent": [
+        "structure",
+        "checklist",
         "full-slide",
         "template",
-        "structure",
-        "checklist"
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "opening-phase",
+        "ice-breaker"
       ],
       "tags": [
         "structure",
         "checklist",
         "warmup",
         "interview",
-        "hr"
+        "hr",
+        "cau-truc",
+        "khoi-dong",
+        "hierarchy",
+        "organization",
+        "layout"
       ],
       "content_structure": [
         "label",
@@ -1604,23 +3266,34 @@
       "slide_number": 8,
       "preview": "../library/templates/interview-workshop-sunriser/08-structure-warmup/preview/preview.html",
       "thumbnail": "../library/templates/interview-workshop-sunriser/08-structure-warmup/preview/thumbnail.png",
-      "use_case": "Content"
+      "use_case": "Cover"
     },
     {
       "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
       "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
       "intent": [
+        "structure",
+        "checklist",
         "full-slide",
         "template",
-        "structure",
-        "checklist"
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "in-depth-questions",
+        "assessment-phase"
       ],
       "tags": [
         "structure",
         "checklist",
         "deep-dive",
         "interview",
-        "hr"
+        "hr",
+        "cau-truc",
+        "chi-tiet",
+        "hierarchy",
+        "organization",
+        "layout"
       ],
       "content_structure": [
         "label",
@@ -1640,14 +3313,21 @@
         "full-slide",
         "template",
         "comparison",
-        "do-dont"
+        "do-dont",
+        "best-practices",
+        "guidelines",
+        "dos-and-donts",
+        "tips-and-tricks"
       ],
       "tags": [
         "do-dont",
         "comparison",
         "tips",
         "interview",
-        "hr"
+        "hr",
+        "nen-tranh",
+        "luu-y",
+        "so-sanh"
       ],
       "content_structure": [
         "label",
@@ -1667,14 +3347,20 @@
         "full-slide",
         "template",
         "scoring",
-        "checklist"
+        "checklist",
+        "assessment",
+        "rating",
+        "decision-making",
+        "scoring-guide"
       ],
       "tags": [
         "scoring",
         "evaluation",
         "decision",
         "interview",
-        "hr"
+        "hr",
+        "cham-diem",
+        "danh-gia"
       ],
       "content_structure": [
         "heading",
@@ -1695,14 +3381,20 @@
         "full-slide",
         "template",
         "action-items",
-        "roles"
+        "roles",
+        "next-steps",
+        "responsibilities",
+        "follow-up",
+        "tasks"
       ],
       "tags": [
         "action-items",
         "roles",
         "summary",
         "interview",
-        "hr"
+        "hr",
+        "viec-can-lam",
+        "tiep-theo"
       ],
       "content_structure": [
         "heading",
@@ -1719,21 +3411,37 @@
       "id": "sun.goal-setting-2026.01-cover",
       "name": "01 - Cover: Goal Setting 2026",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "opening-slide",
+        "presentation-cover"
       ],
       "tags": [
         "cover",
         "title",
         "opening",
         "goal-setting",
-        "pms"
+        "pms",
+        "bia",
+        "trang-bia",
+        "muc-tieu",
+        "mo-dau",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
-        "title"
+        "title",
+        "subtitle",
+        "label",
+        "logo"
       ],
       "slide_number": 1,
       "preview": "../library/templates/goal-setting-2026/01-cover/preview/preview.html",
@@ -1744,11 +3452,17 @@
       "id": "sun.salary-benefits-2026.01-cover",
       "name": "01 - Cover: Salary & Benefits 2026",
       "intent": [
+        "opening",
+        "title",
+        "cover",
         "full-slide",
         "template",
-        "cover",
-        "title",
-        "opening"
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "compensation-overview",
+        "benefits-presentation"
       ],
       "tags": [
         "cover",
@@ -1756,7 +3470,13 @@
         "opening",
         "salary",
         "benefits",
-        "hr"
+        "hr",
+        "luong",
+        "phuc-loi",
+        "bia",
+        "hero",
+        "brand",
+        "intro"
       ],
       "content_structure": [
         "label",
@@ -1773,13 +3493,32 @@
       "id": "sun.sun-presentation.01-cover",
       "name": "01 - Cover: Project Presentation",
       "intent": [
-        "full-slide",
-        "template",
+        "title",
         "cover",
         "hero",
-        "title"
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "opening-slide",
+        "project-cover"
       ],
-      "tags": [],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "presentation",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "thuyet-trinh",
+        "brand",
+        "intro"
+      ],
       "content_structure": [
         "title",
         "subheading",
@@ -1794,13 +3533,30 @@
       "id": "sun.sun-studio-performance-review-2025.01-cover",
       "name": "01 - Cover: Performance Review 2025",
       "intent": [
-        "full-slide",
-        "template",
+        "title",
         "cover",
         "hero",
-        "title"
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "performance-review-cover"
       ],
-      "tags": [],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "performance-review",
+        "bia",
+        "trang-bia",
+        "danh-gia",
+        "brand",
+        "intro"
+      ],
       "content_structure": [
         "title",
         "subheading",
@@ -1815,11 +3571,40 @@
       "id": "sun.goal-setting-2026.04-intro",
       "name": "04 Intro",
       "intent": [
+        "goal setting questions",
         "intro",
-        "goal setting questions"
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "introduction",
+        "framing",
+        "context-setting",
+        "goal-introduction"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "intro",
+        "goal-setting",
+        "questions",
+        "gioi-thieu",
+        "cau-hoi",
+        "dat-muc-tieu",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "slide_number": 4,
       "preview": "../library/templates/goal-setting-2026/04-intro/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/04-intro/preview/thumbnail.png",
@@ -1829,25 +3614,83 @@
       "id": "sun.goal-setting-2026.02-overview",
       "name": "02 Overview",
       "intent": [
+        "pms purpose and outcomes",
         "overview",
-        "pms purpose and outcomes"
+        "grid",
+        "summary",
+        "matrix",
+        "multi-item",
+        "introduction",
+        "context",
+        "background",
+        "pms-overview",
+        "purpose-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "overview",
+        "pms",
+        "purpose",
+        "outcomes",
+        "tong-quan",
+        "muc-dich",
+        "ket-qua",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 2,
       "preview": "../library/templates/goal-setting-2026/02-overview/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/02-overview/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Cover"
     },
     {
       "id": "sun.goal-setting-2026.05-process",
       "name": "05 Process",
       "intent": [
+        "goal setting workflow",
         "process",
-        "goal setting workflow"
+        "timeline",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "workflow",
+        "how-to",
+        "methodology"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "process",
+        "workflow",
+        "goal-setting",
+        "steps",
+        "quy-trinh",
+        "buoc",
+        "dat-muc-tieu",
+        "timeline",
+        "chronology",
+        "schedule",
+        "phases"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 5,
       "preview": "../library/templates/goal-setting-2026/05-process/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/05-process/preview/thumbnail.png",
@@ -1857,11 +3700,34 @@
       "id": "sun.goal-setting-2026.09-thanks",
       "name": "09 Thanks",
       "intent": [
+        "closing slide",
         "thanks",
-        "closing slide"
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "body"
+      ],
       "slide_number": 9,
       "preview": "../library/templates/goal-setting-2026/09-thanks/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/09-thanks/preview/thumbnail.png",
@@ -1871,11 +3737,36 @@
       "id": "sun.goal-setting-2026.06-structure-breakdown",
       "name": "06 Structure Breakdown",
       "intent": [
+        "goal allocation by role",
         "structure breakdown",
-        "goal allocation by role"
+        "structure",
+        "layout",
+        "hierarchy",
+        "organization",
+        "goal-structure",
+        "role-allocation",
+        "breakdown",
+        "distribution"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "structure",
+        "breakdown",
+        "allocation",
+        "roles",
+        "co-cau",
+        "phan-bo",
+        "vai-tro",
+        "hierarchy",
+        "organization",
+        "layout"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
       "slide_number": 6,
       "preview": "../library/templates/goal-setting-2026/06-structure-breakdown/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/06-structure-breakdown/preview/thumbnail.png",
@@ -1885,25 +3776,79 @@
       "id": "sun.goal-setting-2026.03-timeline",
       "name": "03 Timeline",
       "intent": [
+        "pms yearly schedule",
         "timeline",
-        "pms yearly schedule"
+        "process",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "annual-schedule",
+        "year-plan",
+        "pms-calendar"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "schedule",
+        "pms",
+        "lo-trinh",
+        "lich-trinh",
+        "ke-hoach",
+        "nam",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "slide_number": 3,
       "preview": "../library/templates/goal-setting-2026/03-timeline/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/03-timeline/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Closing"
     },
     {
       "id": "sun.goal-setting-2026.07-quarterly-check-in",
       "name": "07 Quarterly Check In",
       "intent": [
         "check-in",
-        "quarterly review questions"
+        "quarterly review questions",
+        "mid-year-review",
+        "progress-check",
+        "quarterly-review",
+        "1-on-1"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "check-in",
+        "quarterly",
+        "review",
+        "questions",
+        "kiem-tra",
+        "quy",
+        "cau-hoi",
+        "assessment",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "performance",
+        "planning",
+        "progress"
+      ],
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
       "slide_number": 7,
       "preview": "../library/templates/goal-setting-2026/07-quarterly-check-in/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/07-quarterly-check-in/preview/thumbnail.png",
@@ -1914,10 +3859,34 @@
       "name": "08 Year End Review",
       "intent": [
         "year-end review",
-        "performance assessment"
+        "performance assessment",
+        "annual-review",
+        "performance-assessment",
+        "year-end",
+        "evaluation"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "year-end",
+        "review",
+        "performance",
+        "assessment",
+        "cuoi-nam",
+        "danh-gia",
+        "hieu-suat",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "planning"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "body",
+        "list-item"
+      ],
       "slide_number": 8,
       "preview": "../library/templates/goal-setting-2026/08-year-end-review/preview/preview.html",
       "thumbnail": "../library/templates/goal-setting-2026/08-year-end-review/preview/thumbnail.png",
@@ -1928,10 +3897,37 @@
       "name": "14 Company Culture",
       "intent": [
         "company culture",
-        "principles and collaboration"
+        "principles and collaboration",
+        "culture",
+        "values",
+        "principles",
+        "teamwork",
+        "collaboration"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "company-culture",
+        "principles",
+        "collaboration",
+        "van-hoa-cong-ty",
+        "gia-tri",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 14,
       "preview": "../library/templates/salary-benefits-2026/14-company-culture/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/14-company-culture/preview/thumbnail.png",
@@ -1941,11 +3937,32 @@
       "id": "sun.salary-benefits-2026.04-compensation-divider",
       "name": "04 Compensation Divider",
       "intent": [
+        "compensation section header",
         "section divider",
-        "compensation section header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "compensation",
+        "header",
+        "phan-cach",
+        "luong",
+        "tieu-de",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "slide_number": 4,
       "preview": "../library/templates/salary-benefits-2026/04-compensation-divider/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/04-compensation-divider/preview/thumbnail.png",
@@ -1955,11 +3972,31 @@
       "id": "sun.salary-benefits-2026.06-direct-benefits-divider",
       "name": "06 Direct Benefits Divider",
       "intent": [
+        "direct benefits header",
         "section divider",
-        "direct benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "benefits-section"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "benefits",
+        "direct",
+        "phuc-loi-truc-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "slide_number": 6,
       "preview": "../library/templates/salary-benefits-2026/06-direct-benefits-divider/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/06-direct-benefits-divider/preview/thumbnail.png",
@@ -1970,10 +4007,33 @@
       "name": "09 Direct Benefits Summary",
       "intent": [
         "summary",
-        "direct benefits overview"
+        "direct benefits overview",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "benefits-summary",
+        "overview-slide",
+        "recap"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "summary",
+        "direct-benefits",
+        "overview",
+        "phuc-loi",
+        "tom-tat",
+        "tong-quan",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
       "slide_number": 9,
       "preview": "../library/templates/salary-benefits-2026/09-direct-benefits-summary/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/09-direct-benefits-summary/preview/thumbnail.png",
@@ -1984,10 +4044,35 @@
       "name": "17 Employee Notes",
       "intent": [
         "employee notes",
-        "what sun ers should know"
+        "what sun ers should know",
+        "employee-information",
+        "important-notes",
+        "guidelines",
+        "reminders"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "employee",
+        "notes",
+        "important",
+        "sun-ers",
+        "luu-y",
+        "nhan-vien",
+        "can-biet",
+        "benefits",
+        "compensation",
+        "hr",
+        "information",
+        "reference",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "list-item"
+      ],
       "slide_number": 17,
       "preview": "../library/templates/salary-benefits-2026/17-employee-notes/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/17-employee-notes/preview/thumbnail.png",
@@ -1998,10 +4083,33 @@
       "name": "05 Gross To Net Explainer",
       "intent": [
         "explainer",
-        "gross to net salary conversion"
+        "gross to net salary conversion",
+        "explanation",
+        "how-it-works",
+        "salary-breakdown",
+        "calculation"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "gross",
+        "net",
+        "salary",
+        "explainer",
+        "luong-gross",
+        "luong-net",
+        "giai-thich",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 5,
       "preview": "../library/templates/salary-benefits-2026/05-gross-to-net-explainer/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/05-gross-to-net-explainer/preview/thumbnail.png",
@@ -2011,11 +4119,30 @@
       "id": "sun.salary-benefits-2026.12-indirect-benefits-divider",
       "name": "12 Indirect Benefits Divider",
       "intent": [
+        "indirect benefits header",
         "section divider",
-        "indirect benefits header"
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "indirect-benefits"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "indirect-benefits",
+        "phuc-loi-gian-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
       "slide_number": 12,
       "preview": "../library/templates/salary-benefits-2026/12-indirect-benefits-divider/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/12-indirect-benefits-divider/preview/thumbnail.png",
@@ -2026,10 +4153,33 @@
       "name": "13 Learning Development",
       "intent": [
         "learning and development",
-        "career growth pathways"
+        "career growth pathways",
+        "career-growth",
+        "training",
+        "upskilling",
+        "learning-opportunities"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "learning",
+        "development",
+        "career",
+        "growth",
+        "dao-tao",
+        "phat-trien",
+        "su-nghiep",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "slide_number": 13,
       "preview": "../library/templates/salary-benefits-2026/13-learning-development/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/13-learning-development/preview/thumbnail.png",
@@ -2040,10 +4190,33 @@
       "name": "08 Long Term Benefits",
       "intent": [
         "long-term benefits",
-        "insurance and union coverage"
+        "insurance and union coverage",
+        "insurance",
+        "long-term-benefits",
+        "union-benefits",
+        "coverage"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "long-term",
+        "insurance",
+        "union",
+        "benefits",
+        "bao-hiem",
+        "phuc-loi-dai-han",
+        "compensation",
+        "employee",
+        "hr",
+        "salary",
+        "security"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 8,
       "preview": "../library/templates/salary-benefits-2026/08-long-term-benefits/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/08-long-term-benefits/preview/thumbnail.png",
@@ -2054,10 +4227,36 @@
       "name": "07 Monthly Support Benefits",
       "intent": [
         "monthly support",
-        "lunch and parking allowance"
+        "lunch and parking allowance",
+        "allowances",
+        "monthly-benefits",
+        "support-benefits",
+        "perks"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "monthly",
+        "support",
+        "lunch",
+        "parking",
+        "allowance",
+        "phu-cap",
+        "ho-tro-hang-thang",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "perks",
+        "salary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric",
+        "description"
+      ],
       "slide_number": 7,
       "preview": "../library/templates/salary-benefits-2026/07-monthly-support-benefits/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/07-monthly-support-benefits/preview/thumbnail.png",
@@ -2067,11 +4266,34 @@
       "id": "sun.salary-benefits-2026.18-thanks",
       "name": "18 Thanks",
       "intent": [
+        "closing slide",
         "thanks",
-        "closing slide"
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 18,
       "preview": "../library/templates/salary-benefits-2026/18-thanks/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/18-thanks/preview/thumbnail.png",
@@ -2082,24 +4304,80 @@
       "name": "02 Why Upgrade",
       "intent": [
         "overview",
-        "why sun studio upgraded compensation"
+        "why sun studio upgraded compensation",
+        "rationale",
+        "motivation",
+        "why-section",
+        "context",
+        "reason"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "upgrade",
+        "overview",
+        "compensation",
+        "reason",
+        "nang-cap",
+        "tai-sao",
+        "luong",
+        "benefits",
+        "employee",
+        "hr",
+        "recap",
+        "salary",
+        "summary"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 2,
       "preview": "../library/templates/salary-benefits-2026/02-why-upgrade/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/02-why-upgrade/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Section"
     },
     {
       "id": "sun.salary-benefits-2026.10-team-building-benefits",
       "name": "10 Team Building Benefits",
       "intent": [
         "team building",
-        "company trip and culture activities"
+        "company trip and culture activities",
+        "team-culture",
+        "activities",
+        "company-trip",
+        "engagement"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team-building",
+        "company-trip",
+        "culture",
+        "activities",
+        "hoat-dong",
+        "xay-dung-doi",
+        "autonomy",
+        "benefits",
+        "company",
+        "compensation",
+        "employee",
+        "flexibility",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 10,
       "preview": "../library/templates/salary-benefits-2026/10-team-building-benefits/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/10-team-building-benefits/preview/thumbnail.png",
@@ -2110,10 +4388,38 @@
       "name": "11 Team Trip Flexibility",
       "intent": [
         "flexibility",
-        "team trip autonomy"
+        "team trip autonomy",
+        "autonomy",
+        "team-trip",
+        "work-life-balance"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team-trip",
+        "flexibility",
+        "autonomy",
+        "linh-hoat",
+        "du-lich",
+        "quyen-tu-quyet",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "description"
+      ],
       "slide_number": 11,
       "preview": "../library/templates/salary-benefits-2026/11-team-trip-flexibility/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/11-team-trip-flexibility/preview/thumbnail.png",
@@ -2124,24 +4430,77 @@
       "name": "03 Total Package Overview",
       "intent": [
         "package overview",
-        "total compensation structure"
+        "total compensation structure",
+        "grid",
+        "summary",
+        "overview",
+        "matrix",
+        "multi-item",
+        "package-overview",
+        "total-compensation",
+        "benefits-summary"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "package",
+        "overview",
+        "compensation",
+        "total",
+        "goi-tong-the",
+        "tong-quan",
+        "luong",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
       "slide_number": 3,
       "preview": "../library/templates/salary-benefits-2026/03-total-package-overview/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/03-total-package-overview/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Closing"
     },
     {
       "id": "sun.salary-benefits-2026.16-update-summary",
       "name": "16 Update Summary",
       "intent": [
         "summary",
-        "update rollout timeline"
+        "update rollout timeline",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "change-summary",
+        "rollout-plan",
+        "update-timeline",
+        "recap"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "update",
+        "summary",
+        "rollout",
+        "timeline",
+        "cap-nhat",
+        "tom-tat",
+        "trien-khai",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "date"
+      ],
       "slide_number": 16,
       "preview": "../library/templates/salary-benefits-2026/16-update-summary/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/16-update-summary/preview/thumbnail.png",
@@ -2152,10 +4511,36 @@
       "name": "15 Working Environment",
       "intent": [
         "working environment",
-        "office and flexibility"
+        "office and flexibility",
+        "work-environment",
+        "office-policy",
+        "flexibility",
+        "workspace"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "working-environment",
+        "office",
+        "flexibility",
+        "moi-truong-lam-viec",
+        "linh-hoat",
+        "autonomy",
+        "benefits",
+        "compensation",
+        "employee",
+        "environment",
+        "hr",
+        "salary",
+        "travel",
+        "trip",
+        "workspace"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "slide_number": 15,
       "preview": "../library/templates/salary-benefits-2026/15-working-environment/preview/preview.html",
       "thumbnail": "../library/templates/salary-benefits-2026/15-working-environment/preview/thumbnail.png",
@@ -2165,13 +4550,34 @@
       "id": "sun.sun-studio-performance-review-2025.02-agenda-section",
       "name": "02 - Agenda Section",
       "intent": [
-        "full-slide",
-        "template",
         "agenda",
-        "list"
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "agenda",
+        "list",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "performance-review",
+        "program",
+        "schedule"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "list-item"
+      ],
       "slide_number": 2,
       "preview": "../library/templates/sun-studio-performance-review-2025/02-agenda-section/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/02-agenda-section/preview/thumbnail.png",
@@ -2181,13 +4587,33 @@
       "id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
       "name": "20 - Closing Thank You",
       "intent": [
+        "thank-you",
+        "closing",
         "full-slide",
         "template",
-        "closing",
-        "thank-you"
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "slide_number": 20,
       "preview": "../library/templates/sun-studio-performance-review-2025/20-closing-thank-you/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/20-closing-thank-you/preview/thumbnail.png",
@@ -2201,14 +4627,40 @@
         "template",
         "instructions",
         "goals",
-        "factorial"
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "goals-setup"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "goals",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "muc-tieu",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "review",
+        "tool",
+        "workflow"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "slide_number": 15,
       "preview": "../library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
@@ -2218,75 +4670,180 @@
         "template",
         "instructions",
         "review",
-        "factorial"
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "review-process"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "factorial",
+        "review",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "danh-gia",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "tool",
+        "workflow"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
       "slide_number": 16,
       "preview": "../library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
       "name": "18 - Faq Answers Part 1",
       "intent": [
+        "answers",
         "full-slide",
         "template",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "slide_number": 18,
       "preview": "../library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
       "name": "19 - Faq Answers Part 2",
       "intent": [
+        "answers",
         "full-slide",
         "template",
         "faq",
-        "answers"
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "slide_number": 19,
       "preview": "../library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.17-faq-header",
       "name": "17 - Faq Header",
       "intent": [
+        "header",
         "full-slide",
         "template",
         "faq",
-        "header"
+        "questions",
+        "answers",
+        "q-and-a",
+        "faq-section",
+        "questions-header"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "faq",
+        "header",
+        "questions",
+        "cau-hoi-thuong-gap",
+        "hoi-dap",
+        "tieu-de",
+        "answers"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 17,
       "preview": "../library/templates/sun-studio-performance-review-2025/17-faq-header/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/17-faq-header/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Section"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
       "name": "08 - How Level Expectation Card",
       "intent": [
+        "definition",
+        "level expectation",
+        "how",
         "full-slide",
         "template",
-        "definition",
-        "how",
-        "level expectation"
+        "cta",
+        "call-to-action",
+        "next-steps",
+        "action-items",
+        "expectations",
+        "levels",
+        "performance-levels",
+        "how-definition"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "how",
+        "level",
+        "expectation",
+        "performance",
+        "cap-do",
+        "ky-vong",
+        "danh-gia",
+        "cta",
+        "action",
+        "next-steps",
+        "follow-up"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
       "slide_number": 8,
       "preview": "../library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/preview/thumbnail.png",
@@ -2296,14 +4853,39 @@
       "id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
       "name": "04 - Intro Explanation Layout",
       "intent": [
+        "explanation",
         "full-slide",
+        "intro",
+        "body",
         "template",
+        "layout",
+        "content",
+        "information",
+        "introduction",
+        "context-setting",
+        "background"
+      ],
+      "tags": [
         "intro",
         "explanation",
-        "body"
+        "body",
+        "context",
+        "gioi-thieu",
+        "giai-thich",
+        "nen-tang",
+        "layout",
+        "content",
+        "information"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
       "slide_number": 4,
       "preview": "../library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/preview/thumbnail.png",
@@ -2313,14 +4895,38 @@
       "id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
       "name": "14 - Preparation Checklist",
       "intent": [
+        "preparation",
+        "1:1",
+        "checklist",
         "full-slide",
         "template",
+        "list",
+        "action-items",
+        "todo",
+        "requirements",
+        "pre-meeting",
+        "preparation-guide",
+        "1-on-1-prep"
+      ],
+      "tags": [
         "checklist",
         "preparation",
-        "1:1"
+        "1-on-1",
+        "meeting",
+        "danh-sach-kiem-tra",
+        "chuan-bi",
+        "list",
+        "items",
+        "todo"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
       "slide_number": 14,
       "preview": "../library/templates/sun-studio-performance-review-2025/14-preparation-checklist/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/14-preparation-checklist/preview/thumbnail.png",
@@ -2330,14 +4936,40 @@
       "id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
       "name": "10 - Rating Scale Chart",
       "intent": [
+        "chart",
+        "scale",
+        "rating",
         "full-slide",
         "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "rating-scale",
+        "scoring-chart",
+        "evaluation-chart",
+        "performance-scale"
+      ],
+      "tags": [
         "rating",
         "scale",
-        "chart"
+        "chart",
+        "scoring",
+        "thang-diem",
+        "bieu-do",
+        "cham-diem",
+        "graph",
+        "visualization",
+        "data"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "title",
+        "heading",
+        "metric",
+        "description"
+      ],
       "slide_number": 10,
       "preview": "../library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/preview/thumbnail.png",
@@ -2347,30 +4979,76 @@
       "id": "sun.sun-studio-performance-review-2025.12-review-timeline",
       "name": "12 - Review Timeline",
       "intent": [
-        "full-slide",
-        "template",
         "timeline",
+        "review",
+        "full-slide",
         "schedule",
-        "review"
+        "template",
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "review-schedule",
+        "annual-calendar"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "timeline",
+        "review",
+        "schedule",
+        "lich-trinh",
+        "lo-trinh",
+        "danh-gia",
+        "ke-hoach",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
       "slide_number": 12,
       "preview": "../library/templates/sun-studio-performance-review-2025/12-review-timeline/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/12-review-timeline/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Closing"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.03-section-divider-01",
       "name": "03 - Section Divider 01",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 3,
       "preview": "../library/templates/sun-studio-performance-review-2025/03-section-divider-01/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/03-section-divider-01/preview/thumbnail.png",
@@ -2381,12 +5059,31 @@
       "name": "05 - Section Divider 02",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 5,
       "preview": "../library/templates/sun-studio-performance-review-2025/05-section-divider-02/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/05-section-divider-02/preview/thumbnail.png",
@@ -2397,12 +5094,31 @@
       "name": "11 - Section Divider 03",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 11,
       "preview": "../library/templates/sun-studio-performance-review-2025/11-section-divider-03/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/11-section-divider-03/preview/thumbnail.png",
@@ -2413,12 +5129,31 @@
       "name": "13 - Section Divider 04",
       "intent": [
         "full-slide",
-        "template",
         "divider",
-        "section"
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
       "slide_number": 13,
       "preview": "../library/templates/sun-studio-performance-review-2025/13-section-divider-04/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/13-section-divider-04/preview/thumbnail.png",
@@ -2432,27 +5167,86 @@
         "template",
         "definition",
         "what",
-        "smart"
+        "smart",
+        "definition-slide",
+        "concept",
+        "smart-goals",
+        "what-is"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "definition",
+        "what",
+        "smart",
+        "goals",
+        "khai-niem",
+        "muc-tieu",
+        "smart-goals",
+        "assessment",
+        "card",
+        "concept",
+        "evaluation",
+        "explanation",
+        "performance",
+        "review"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
       "slide_number": 7,
       "preview": "../library/templates/sun-studio-performance-review-2025/07-what-definition-card/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/07-what-definition-card/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
       "name": "09 - What How Comparison",
       "intent": [
+        "what",
+        "comparison",
+        "how",
         "full-slide",
         "template",
+        "versus",
+        "side-by-side",
+        "contrast",
+        "what-how",
+        "comparison-slide",
+        "two-concepts",
+        "what-vs-how",
+        "pros-cons",
+        "trade-offs",
+        "evaluation",
+        "advantages",
+        "disadvantages",
+        "differences"
+      ],
+      "tags": [
         "comparison",
         "what",
-        "how"
+        "how",
+        "contrast",
+        "so-sanh",
+        "phan-biet",
+        "versus",
+        "side-by-side",
+        "pros-cons",
+        "trade-off",
+        "evaluation",
+        "uu-nhuoc-diem",
+        "danh-gia"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric"
+      ],
       "slide_number": 9,
       "preview": "../library/templates/sun-studio-performance-review-2025/09-what-how-comparison/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/09-what-how-comparison/preview/thumbnail.png",
@@ -2462,15 +5256,42 @@
       "id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
       "name": "06 - What How Rating Framework",
       "intent": [
+        "what",
+        "rating",
+        "how",
         "full-slide",
-        "template",
         "framework",
+        "template",
+        "model",
+        "methodology",
+        "structure",
+        "concept",
+        "rating-system",
+        "evaluation-framework",
+        "criteria",
+        "assessment"
+      ],
+      "tags": [
+        "framework",
+        "rating",
         "what",
         "how",
-        "rating"
+        "khung-danh-gia",
+        "tieu-chi",
+        "performance",
+        "model",
+        "concept",
+        "methodology"
       ],
-      "tags": [],
-      "content_structure": [],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric",
+        "description"
+      ],
       "slide_number": 6,
       "preview": "../library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/preview/preview.html",
       "thumbnail": "../library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/preview/thumbnail.png",
@@ -2480,13 +5301,35 @@
       "id": "sun.sun-presentation.02-agenda-layout",
       "name": "02 - Agenda Layout",
       "intent": [
-        "full-slide",
-        "template",
         "agenda",
-        "list"
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "agenda",
+        "list",
+        "contents",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "lo-trinh",
+        "program",
+        "schedule"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "list-item",
+        "body"
+      ],
       "slide_number": 2,
       "preview": "../library/templates/sun-presentation/02-agenda-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/02-agenda-layout/preview/thumbnail.png",
@@ -2496,13 +5339,33 @@
       "id": "sun.sun-presentation.17-closing-thank-you",
       "name": "17 - Closing Thank You",
       "intent": [
+        "thank-you",
+        "closing",
         "full-slide",
         "template",
-        "closing",
-        "thank-you"
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "slide_number": 17,
       "preview": "../library/templates/sun-presentation/17-closing-thank-you/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/17-closing-thank-you/preview/thumbnail.png",
@@ -2512,17 +5375,45 @@
       "id": "sun.sun-presentation.04-contributors-layout",
       "name": "04 - Contributors Layout",
       "intent": [
+        "team",
         "full-slide",
         "template",
         "contributors",
-        "team"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "nhom"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "members",
+        "thanh-vien",
+        "nhom",
+        "gioi-thieu-nhom",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "slide_number": 4,
       "preview": "../library/templates/sun-presentation/04-contributors-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/04-contributors-layout/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-presentation.07-contributors-variant",
@@ -2531,10 +5422,34 @@
         "full-slide",
         "template",
         "contributors",
-        "team"
+        "team",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "variant"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "variant",
+        "thanh-vien",
+        "nhom",
+        "phien-ban",
+        "company",
+        "credits",
+        "culture",
+        "values"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
       "slide_number": 7,
       "preview": "../library/templates/sun-presentation/07-contributors-variant/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/07-contributors-variant/preview/thumbnail.png",
@@ -2544,13 +5459,39 @@
       "id": "sun.sun-presentation.14-image-and-text-layout",
       "name": "14 - Image And Text Layout",
       "intent": [
-        "full-slide",
-        "template",
         "image",
-        "text"
+        "full-slide",
+        "text",
+        "template",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "media"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "photo",
+        "visual",
+        "hinh-anh",
+        "van-ban",
+        "noi-dung",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "slide_number": 14,
       "preview": "../library/templates/sun-presentation/14-image-and-text-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/14-image-and-text-layout/preview/thumbnail.png",
@@ -2563,10 +5504,30 @@
         "full-slide",
         "template",
         "image",
-        "text"
+        "text",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "alternate-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "image",
+        "text",
+        "variant",
+        "photo",
+        "hinh-anh",
+        "van-ban",
+        "phien-ban",
+        "media",
+        "visual"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
       "slide_number": 15,
       "preview": "../library/templates/sun-presentation/15-image-and-text-variant/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/15-image-and-text-variant/preview/thumbnail.png",
@@ -2576,29 +5537,73 @@
       "id": "sun.sun-presentation.13-information-structure-layout",
       "name": "13 - Information Structure Layout",
       "intent": [
+        "structure",
+        "information",
         "full-slide",
         "template",
-        "information",
-        "structure"
+        "layout",
+        "content",
+        "body",
+        "info-architecture",
+        "structured-content",
+        "hierarchy",
+        "diagram"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "information",
+        "structure",
+        "hierarchy",
+        "diagram",
+        "thong-tin",
+        "co-cau",
+        "layout",
+        "content",
+        "body"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "slide_number": 13,
       "preview": "../library/templates/sun-presentation/13-information-structure-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/13-information-structure-layout/preview/thumbnail.png",
-      "use_case": "Other"
+      "use_case": "Content"
     },
     {
       "id": "sun.sun-presentation.11-mix-chart-layout",
       "name": "11 - Mix Chart Layout",
       "intent": [
         "full-slide",
-        "template",
         "chart",
-        "mix"
+        "mix",
+        "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "chart-slide",
+        "mixed-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "chart",
+        "mix",
+        "data",
+        "visualization",
+        "bieu-do",
+        "du-lieu",
+        "so-lieu",
+        "graph"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "metric",
+        "caption"
+      ],
       "slide_number": 11,
       "preview": "../library/templates/sun-presentation/11-mix-chart-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/11-mix-chart-layout/preview/thumbnail.png",
@@ -2609,12 +5614,30 @@
       "name": "08 - Next Steps Cta",
       "intent": [
         "full-slide",
+        "next-steps",
         "template",
         "cta",
-        "next-steps"
+        "call-to-action",
+        "action-items",
+        "follow-up"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "next-steps",
+        "cta",
+        "action",
+        "call-to-action",
+        "buoc-tiep-theo",
+        "hanh-dong",
+        "follow-up"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "list-item"
+      ],
       "slide_number": 8,
       "preview": "../library/templates/sun-presentation/08-next-steps-cta/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/08-next-steps-cta/preview/thumbnail.png",
@@ -2625,12 +5648,36 @@
       "name": "16 - Quote Or Highlight Layout",
       "intent": [
         "full-slide",
+        "quote",
         "template",
         "highlight",
-        "quote"
+        "layout",
+        "content",
+        "body",
+        "information",
+        "pullquote",
+        "emphasis-slide",
+        "key-message"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "quote",
+        "highlight",
+        "pullquote",
+        "emphasis",
+        "trich-dan",
+        "nhan-manh",
+        "noi-bat",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
       "slide_number": 16,
       "preview": "../library/templates/sun-presentation/16-quote-or-highlight-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/16-quote-or-highlight-layout/preview/thumbnail.png",
@@ -2640,13 +5687,37 @@
       "id": "sun.sun-presentation.05-scan-me-callout",
       "name": "05 - Scan Me Callout",
       "intent": [
+        "callout",
         "full-slide",
         "template",
-        "callout",
-        "scan-me"
+        "scan-me",
+        "note",
+        "important",
+        "attention",
+        "highlight",
+        "qr-code",
+        "interactive",
+        "link-slide",
+        "digital-resource"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "qr-code",
+        "scan",
+        "callout",
+        "link",
+        "qr",
+        "quet-ma",
+        "lien-ket",
+        "note",
+        "attention",
+        "important"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "body"
+      ],
       "slide_number": 5,
       "preview": "../library/templates/sun-presentation/05-scan-me-callout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/05-scan-me-callout/preview/thumbnail.png",
@@ -2657,12 +5728,39 @@
       "name": "03 - Section Intro",
       "intent": [
         "full-slide",
-        "template",
         "intro",
-        "section"
+        "section",
+        "template",
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "section-header",
+        "chapter-intro",
+        "transition",
+        "divider-with-content"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "section",
+        "intro",
+        "chapter",
+        "phan",
+        "chuong",
+        "gioi-thieu-phan",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "subtitle"
+      ],
       "slide_number": 3,
       "preview": "../library/templates/sun-presentation/03-section-intro/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/03-section-intro/preview/thumbnail.png",
@@ -2672,13 +5770,36 @@
       "id": "sun.sun-presentation.12-statistics-layout",
       "name": "12 - Statistics Layout",
       "intent": [
+        "data",
         "full-slide",
         "template",
         "statistics",
-        "data"
+        "metrics",
+        "numbers",
+        "kpi",
+        "performance",
+        "stats-slide",
+        "numbers-slide",
+        "data-highlights"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "statistics",
+        "data",
+        "numbers",
+        "metrics",
+        "thong-ke",
+        "so-lieu",
+        "chi-so",
+        "kpi"
+      ],
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric",
+        "description"
+      ],
       "slide_number": 12,
       "preview": "../library/templates/sun-presentation/12-statistics-layout/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/12-statistics-layout/preview/thumbnail.png",
@@ -2688,13 +5809,36 @@
       "id": "sun.sun-presentation.09-summary-grid",
       "name": "09 - Summary Grid",
       "intent": [
+        "grid",
         "full-slide",
         "template",
         "summary",
-        "grid"
+        "overview",
+        "matrix",
+        "multi-item",
+        "recap",
+        "summary-slide",
+        "key-points",
+        "grid-layout"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "summary",
+        "grid",
+        "recap",
+        "overview",
+        "tom-tat",
+        "luoi",
+        "tong-ket",
+        "matrix",
+        "cards"
+      ],
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "description"
+      ],
       "slide_number": 9,
       "preview": "../library/templates/sun-presentation/09-summary-grid/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/09-summary-grid/preview/thumbnail.png",
@@ -2704,13 +5848,35 @@
       "id": "sun.sun-presentation.10-text-heavy-content",
       "name": "10 - Text Heavy Content",
       "intent": [
-        "full-slide",
-        "template",
         "content",
-        "text"
+        "full-slide",
+        "text",
+        "template",
+        "body",
+        "information",
+        "detail",
+        "text-content",
+        "body-slide",
+        "detailed-content",
+        "informational"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "text",
+        "content",
+        "body",
+        "long-form",
+        "noi-dung",
+        "van-ban",
+        "chi-tiet",
+        "detail"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
       "slide_number": 10,
       "preview": "../library/templates/sun-presentation/10-text-heavy-content/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/10-text-heavy-content/preview/thumbnail.png",
@@ -2720,17 +5886,41 @@
       "id": "sun.sun-presentation.06-two-column-content",
       "name": "06 - Two Column Content",
       "intent": [
+        "two-column",
+        "content",
         "full-slide",
         "template",
-        "two-column",
-        "content"
+        "body",
+        "information",
+        "text",
+        "detail",
+        "split-layout",
+        "dual-content",
+        "content-slide"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "two-column",
+        "content",
+        "split",
+        "comparison",
+        "hai-cot",
+        "so-sanh",
+        "noi-dung",
+        "body",
+        "text",
+        "detail"
+      ],
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "list-item"
+      ],
       "slide_number": 6,
       "preview": "../library/templates/sun-presentation/06-two-column-content/preview/preview.html",
       "thumbnail": "../library/templates/sun-presentation/06-two-column-content/preview/thumbnail.png",
-      "use_case": "Content"
+      "use_case": "Data"
     }
   ]
 }

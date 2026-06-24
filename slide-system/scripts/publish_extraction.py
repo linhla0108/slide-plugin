@@ -9,6 +9,7 @@ import shutil
 from pathlib import Path
 
 from _common import load_json, now_iso, write_json
+from build_registry import COMPACT_KEYS
 
 
 TYPE_FOLDERS = {
@@ -65,6 +66,32 @@ def main() -> int:
     artifacts = files_under(artifact_dir)
     if not artifacts:
         raise SystemExit("No artifacts found for publication.")
+
+    # A component-level SVG item must have been cropped to its region. The
+    # PDF->SVG path emits the whole page, so an uncropped visual.svg is the
+    # entire slide with text stripped, not a single component. crop_svg_region.py
+    # stamps source.region_crop into text-slots.json — its absence means the crop
+    # was skipped. Templates legitimately reuse the full-page artifact, and a
+    # region that covers the whole page is intentionally uncropped.
+    item_type = mapping["type"]
+    visual_svg = artifact_dir / "visual.svg"
+    slots_json = artifact_dir / "text-slots.json"
+    region = mapping.get("source", {}).get("region") or {}
+    scale = 100.0 if str(region.get("unit", "")).lower() in ("percent", "percentage", "%") else 1.0
+    is_full_page = (
+        abs(float(region.get("x", 0)) / scale) < 1e-4
+        and abs(float(region.get("y", 0)) / scale) < 1e-4
+        and abs(float(region.get("width", 1)) / scale - 1.0) < 1e-4
+        and abs(float(region.get("height", 1)) / scale - 1.0) < 1e-4
+    ) if region else False
+    if item_type != "template" and visual_svg.exists() and slots_json.exists() and region and not is_full_page:
+        if not (load_json(slots_json).get("source") or {}).get("region_crop"):
+            raise SystemExit(
+                "Component-level item was not cropped to its region. Run "
+                "`python3 slide-system/scripts/crop_svg_region.py --item-dir "
+                f"{item_dir}` before publishing (text-slots.json has no "
+                "source.region_crop marker — the artifact is still the full page)."
+            )
     preview_files = files_under(item_dir / "preview")
     evidence_files = files_under(item_dir / "evidence")
     if not preview_files:
@@ -72,7 +99,6 @@ def main() -> int:
     if not evidence_files:
         raise SystemExit("Publication requires source-versus-reconstruction evidence.")
 
-    item_type = mapping["type"]
     folder = TYPE_FOLDERS.get(item_type, item_type)
     stable_id = mapping["candidate_stable_id"]
     if item_type == "template":
@@ -161,6 +187,14 @@ def main() -> int:
         registry["items"].append(item_record)
     registry["updated_at"] = now_iso()
     write_json(args.registry, registry)
+    # Keep the compact projection (what score_visual_items.py reads) in lockstep
+    # with the full registry so it never drifts. build_registry.py --write does
+    # the same projection for bulk reconciles.
+    compact_path = Path(args.registry).with_name("visual-library-compact.json")
+    write_json(
+        str(compact_path),
+        {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in registry["items"]]},
+    )
 
     mapping["status"] = "published"
     mapping["published_at"] = now_iso()

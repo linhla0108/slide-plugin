@@ -56,6 +56,14 @@ def regen_catalog() -> tuple[bool, str]:
     return run([sys.executable, str(SCRIPTS / "build_component_catalog.py")])
 
 
+def regen_compact() -> tuple[bool, str]:
+    # Keep visual-library-compact.json (the scorer's registry) in lockstep after
+    # a registry mutation. publish goes through publish_extraction.py which already
+    # does this; the published-delete path edits the registry inline, so it must
+    # reproject the compact here or the scorer drifts.
+    return run([sys.executable, str(SCRIPTS / "build_registry.py"), "--write"])
+
+
 def within_repo(path: Path) -> bool:
     try:
         path.resolve().relative_to(REPO_ROOT)
@@ -163,6 +171,7 @@ def action_delete(item_id: str, status: str) -> tuple[int, dict]:
         registry["items"] = [i for i in registry["items"] if i.get("id") != item_id]
         registry["updated_at"] = now_iso()
         REGISTRY.write_text(json.dumps(registry, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+        regen_compact()
         regen_catalog()
         return 200, {"ok": True, "message": "Published item deleted", "removed": artifact}
 

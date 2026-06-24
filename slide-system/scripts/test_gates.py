@@ -201,11 +201,91 @@ def test_fidelity_pass_and_fail() -> None:
 # read_text_slots
 # --------------------------------------------------------------------------- #
 def test_read_text_slots_projection() -> None:
-    item_dir = SCRIPTS.parent / "library" / "chart" / "sun.chart.rating-scale-chart"
+    item_dir = (SCRIPTS.parent / "library" / "components" / "diagrams"
+                / "sun.component.guideline-board-layouts")
     data = read_text_slots.load_json(item_dir / "text-slots.json")
     slim = read_text_slots.project(data["slots"], with_typography=False)
     assert len(slim) == len(data["slots"])
     assert set(slim[0].keys()) == set(read_text_slots.SLIM_FIELDS)
+
+
+# --------------------------------------------------------------------------- #
+# crop_svg_region
+# --------------------------------------------------------------------------- #
+import json as _json
+import crop_svg_region as crop
+
+
+def _crop_fixture(tmp: Path, region: dict) -> Path:
+    item = tmp / "items" / "metric-card"
+    (item / "artifact").mkdir(parents=True)
+    (item / "artifact" / "visual.svg").write_text(
+        '<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg" '
+        'viewBox="0 0 1000 600" width="1000" height="600">'
+        '<defs><clipPath id="c1"><rect width="1000" height="600"/></clipPath></defs>'
+        '<rect x="500" y="60" width="400" height="240" fill="#f60"/></svg>',
+        encoding="utf-8",
+    )
+    (item / "artifact" / "text-slots.json").write_text(_json.dumps({
+        "slots": [
+            {"id": "in", "bounds": {"x": 0.55, "y": 0.12, "width": 0.30, "height": 0.10}, "z_order": 1},
+            {"id": "out", "bounds": {"x": 0.05, "y": 0.80, "width": 0.10, "height": 0.05}, "z_order": 2},
+        ],
+        "source": {"view_box": [0, 0, 1000, 600], "canvas_width": 1000, "canvas_height": 600},
+    }), encoding="utf-8")
+    (item / "mapping.json").write_text(_json.dumps(
+        {"item_id": "metric-card", "type": "component", "source": {"region": region}}), encoding="utf-8")
+    return item
+
+
+def test_crop_region_rewrites_viewbox_and_slots() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_fixture(Path(tmp), {"x": 0.5, "y": 0.1, "width": 0.4, "height": 0.4, "unit": "normalized"})
+        res = crop.crop_item(item)
+        assert res["status"] == "cropped" and res["slots_dropped"] == 1, res
+        svg = (item / "artifact" / "visual.svg").read_text()
+        assert 'viewBox="0 0 400 240"' in svg and "translate(-500.0 -60.0)" in svg, svg
+        slots = crop.load_json(item / "artifact" / "text-slots.json")
+        assert [s["id"] for s in slots["slots"]] == ["in"], "out-of-region slot must drop"
+        b = slots["slots"][0]["bounds"]
+        assert abs(b["x"] - 0.125) < 1e-6 and abs(b["width"] - 0.75) < 1e-6, b
+        assert slots["source"]["region_crop"]["crop_window"] == [500.0, 60.0, 400.0, 240.0]
+
+
+def test_crop_region_idempotent_and_full_page_noop() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_fixture(Path(tmp), {"x": 0.5, "y": 0.1, "width": 0.4, "height": 0.4, "unit": "normalized"})
+        crop.crop_item(item)
+        assert crop.crop_item(item)["status"] == "already-cropped"
+    with tempfile.TemporaryDirectory() as tmp:
+        item = _crop_fixture(Path(tmp), {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"})
+        assert crop.crop_item(item)["status"] == "full-page-noop"
+
+
+# --------------------------------------------------------------------------- #
+# build_registry
+# --------------------------------------------------------------------------- #
+import build_registry as breg
+
+
+def test_build_registry_projection_and_compact_keys() -> None:
+    items = [{"id": "sun.x.y", "type": "card", "intent": ["a"], "tags": ["t"],
+              "status": "published", "name": "drop me", "paths": {"x": 1}}]
+    compact = breg.project_compact(items)
+    row = compact["items"][0]
+    # only the compact keys survive; heavy/identifying extras are dropped.
+    assert set(row.keys()) == set(breg.COMPACT_KEYS)
+    assert "name" not in row and "paths" not in row
+    assert row["id"] == "sun.x.y" and row["intent"] == ["a"]
+
+
+def test_build_registry_live_is_clean() -> None:
+    # the real registry must have no dangling entries (every artifact exists).
+    reg = breg.load_json(breg.REGISTRY)
+    dangling = [i["id"] for i in reg["items"]
+                if i.get("paths", {}).get("artifact")
+                and not breg.resolve_repo_path(i["paths"]["artifact"]).exists()]
+    assert dangling == [], f"dangling registry entries: {dangling}"
 
 
 # --------------------------------------------------------------------------- #

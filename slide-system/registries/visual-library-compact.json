@@ -1,0 +1,3693 @@
+{
+  "items": [
+    {
+      "id": "sun.asset.logo",
+      "type": "asset",
+      "brand": "sun-studio",
+      "intent": [
+        "brand-identification",
+        "logo",
+        "brand-identity",
+        "watermark",
+        "identity-mark"
+      ],
+      "tags": [
+        "logo",
+        "brand",
+        "sun-studio",
+        "identity",
+        "watermark",
+        "thuong-hieu"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "supported"
+      },
+      "limitations": [
+        "Use according to SUN.STUDIO brand and licensing rules."
+      ]
+    },
+    {
+      "id": "sun.character.dio",
+      "type": "character",
+      "brand": "sun-studio",
+      "intent": [
+        "character",
+        "mascot",
+        "emphasis",
+        "decoration",
+        "visual-accent",
+        "storytelling",
+        "personality"
+      ],
+      "tags": [
+        "dio",
+        "mascot",
+        "character",
+        "illustration",
+        "nhan-vat",
+        "hinh-minh-hoa"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "supported"
+      },
+      "limitations": [
+        "Use selectively on title, section, and closing slides."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.01-cover",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "opening",
+        "title",
+        "cover",
+        "full-slide",
+        "template",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "title-slide"
+      ],
+      "tags": [
+        "cover",
+        "title",
+        "opening",
+        "interview",
+        "hr",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "phong-van",
+        "hero",
+        "brand",
+        "intro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "subheading",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.02-timeline",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "schedule",
+        "template",
+        "timeline",
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "lo-trinh",
+        "ke-hoach"
+      ],
+      "tags": [
+        "timeline",
+        "schedule",
+        "roadmap",
+        "interview",
+        "hr",
+        "lich-trinh",
+        "lo-trinh",
+        "quy-trinh",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "subheading",
+        "date"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.03-objectives",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "objectives",
+        "agenda",
+        "learning-objectives",
+        "goals-list",
+        "workshop-goals",
+        "muc-tieu"
+      ],
+      "tags": [
+        "objectives",
+        "goals",
+        "agenda",
+        "interview",
+        "hr",
+        "muc-tieu",
+        "danh-sach"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "body"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.04-mindset",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "mindset",
+        "concept",
+        "attitude",
+        "principles",
+        "values",
+        "tieu-chuan"
+      ],
+      "tags": [
+        "mindset",
+        "concept",
+        "criteria",
+        "interview",
+        "hr",
+        "tu-duy",
+        "tieu-chi"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.05-prep",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "checklist",
+        "steps",
+        "to-do",
+        "action-list",
+        "preparation-guide",
+        "chuan-bi"
+      ],
+      "tags": [
+        "preparation",
+        "checklist",
+        "steps",
+        "interview",
+        "hr",
+        "chuan-bi",
+        "danh-sach-kiem-tra"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.06-tough-candidates",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "scenarios",
+        "list",
+        "case-study",
+        "examples",
+        "problem-solving"
+      ],
+      "tags": [
+        "scenarios",
+        "candidates",
+        "interview",
+        "hr",
+        "tinh-huong",
+        "ung-vien"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.07-star-method",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "method",
+        "framework",
+        "methodology",
+        "technique",
+        "star-framework",
+        "behavioral"
+      ],
+      "tags": [
+        "star",
+        "method",
+        "framework",
+        "interview",
+        "hr",
+        "phuong-phap",
+        "khung"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading",
+        "list-item",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.08-structure-warmup",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "structure",
+        "checklist",
+        "full-slide",
+        "template",
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "opening-phase",
+        "ice-breaker"
+      ],
+      "tags": [
+        "structure",
+        "checklist",
+        "warmup",
+        "interview",
+        "hr",
+        "cau-truc",
+        "khoi-dong",
+        "hierarchy",
+        "organization",
+        "layout"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "structure",
+        "checklist",
+        "full-slide",
+        "template",
+        "layout",
+        "hierarchy",
+        "organization",
+        "interview-structure",
+        "in-depth-questions",
+        "assessment-phase"
+      ],
+      "tags": [
+        "structure",
+        "checklist",
+        "deep-dive",
+        "interview",
+        "hr",
+        "cau-truc",
+        "chi-tiet",
+        "hierarchy",
+        "organization",
+        "layout"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "body",
+        "heading",
+        "subheading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.10-do-dont",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "comparison",
+        "do-dont",
+        "best-practices",
+        "guidelines",
+        "dos-and-donts",
+        "tips-and-tricks"
+      ],
+      "tags": [
+        "do-dont",
+        "comparison",
+        "tips",
+        "interview",
+        "hr",
+        "nen-tranh",
+        "luu-y",
+        "so-sanh"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "list-item",
+        "body",
+        "heading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.11-scoring",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "scoring",
+        "checklist",
+        "assessment",
+        "rating",
+        "decision-making",
+        "scoring-guide"
+      ],
+      "tags": [
+        "scoring",
+        "evaluation",
+        "decision",
+        "interview",
+        "hr",
+        "cham-diem",
+        "danh-gia"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "list-item",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.interview-workshop-sunriser.12-action-items",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "action-items",
+        "roles",
+        "next-steps",
+        "responsibilities",
+        "follow-up",
+        "tasks"
+      ],
+      "tags": [
+        "action-items",
+        "roles",
+        "summary",
+        "interview",
+        "hr",
+        "viec-can-lam",
+        "tiep-theo"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "body",
+        "subheading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Per-item PPTX/Canva fidelity is validated at first deck generation.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.01-cover",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "opening",
+        "title",
+        "cover",
+        "full-slide",
+        "template",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "opening-slide",
+        "presentation-cover"
+      ],
+      "tags": [
+        "cover",
+        "title",
+        "opening",
+        "goal-setting",
+        "pms",
+        "bia",
+        "trang-bia",
+        "muc-tieu",
+        "mo-dau",
+        "hero",
+        "brand",
+        "intro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "title",
+        "subtitle",
+        "label",
+        "logo"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.01-cover",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "opening",
+        "title",
+        "cover",
+        "full-slide",
+        "template",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "compensation-overview",
+        "benefits-presentation"
+      ],
+      "tags": [
+        "cover",
+        "title",
+        "opening",
+        "salary",
+        "benefits",
+        "hr",
+        "luong",
+        "phuc-loi",
+        "bia",
+        "hero",
+        "brand",
+        "intro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "heading",
+        "title",
+        "body"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
+        "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.01-cover",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "title",
+        "cover",
+        "hero",
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "opening-slide",
+        "project-cover"
+      ],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "presentation",
+        "bia",
+        "trang-bia",
+        "mo-dau",
+        "thuyet-trinh",
+        "brand",
+        "intro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "title",
+        "subheading",
+        "label"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.01-cover",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "title",
+        "cover",
+        "hero",
+        "full-slide",
+        "template",
+        "opening",
+        "title-page",
+        "brand-intro",
+        "first-slide",
+        "hero-slide",
+        "performance-review-cover"
+      ],
+      "tags": [
+        "cover",
+        "hero",
+        "title",
+        "opening",
+        "performance-review",
+        "bia",
+        "trang-bia",
+        "danh-gia",
+        "brand",
+        "intro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "title",
+        "subheading",
+        "label"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.04-intro",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "goal setting questions",
+        "intro",
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "introduction",
+        "framing",
+        "context-setting",
+        "goal-introduction"
+      ],
+      "tags": [
+        "intro",
+        "goal-setting",
+        "questions",
+        "gioi-thieu",
+        "cau-hoi",
+        "dat-muc-tieu",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.02-overview",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "pms purpose and outcomes",
+        "overview",
+        "grid",
+        "summary",
+        "matrix",
+        "multi-item",
+        "introduction",
+        "context",
+        "background",
+        "pms-overview",
+        "purpose-slide"
+      ],
+      "tags": [
+        "overview",
+        "pms",
+        "purpose",
+        "outcomes",
+        "tong-quan",
+        "muc-dich",
+        "ket-qua",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.05-process",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "goal setting workflow",
+        "process",
+        "timeline",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "process-flow",
+        "workflow",
+        "how-to",
+        "methodology"
+      ],
+      "tags": [
+        "process",
+        "workflow",
+        "goal-setting",
+        "steps",
+        "quy-trinh",
+        "buoc",
+        "dat-muc-tieu",
+        "timeline",
+        "chronology",
+        "schedule",
+        "phases"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.09-thanks",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "closing slide",
+        "thanks",
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
+      ],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "body"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.06-structure-breakdown",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "goal allocation by role",
+        "structure breakdown",
+        "structure",
+        "layout",
+        "hierarchy",
+        "organization",
+        "goal-structure",
+        "role-allocation",
+        "breakdown",
+        "distribution"
+      ],
+      "tags": [
+        "structure",
+        "breakdown",
+        "allocation",
+        "roles",
+        "co-cau",
+        "phan-bo",
+        "vai-tro",
+        "hierarchy",
+        "organization",
+        "layout"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.03-timeline",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "pms yearly schedule",
+        "timeline",
+        "process",
+        "steps",
+        "schedule",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "annual-schedule",
+        "year-plan",
+        "pms-calendar"
+      ],
+      "tags": [
+        "timeline",
+        "schedule",
+        "pms",
+        "lo-trinh",
+        "lich-trinh",
+        "ke-hoach",
+        "nam",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.07-quarterly-check-in",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "check-in",
+        "quarterly review questions",
+        "mid-year-review",
+        "progress-check",
+        "quarterly-review",
+        "1-on-1"
+      ],
+      "tags": [
+        "check-in",
+        "quarterly",
+        "review",
+        "questions",
+        "kiem-tra",
+        "quy",
+        "cau-hoi",
+        "assessment",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "performance",
+        "planning",
+        "progress"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "body",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.goal-setting-2026.08-year-end-review",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "year-end review",
+        "performance assessment",
+        "annual-review",
+        "performance-assessment",
+        "year-end",
+        "evaluation"
+      ],
+      "tags": [
+        "year-end",
+        "review",
+        "performance",
+        "assessment",
+        "cuoi-nam",
+        "danh-gia",
+        "hieu-suat",
+        "evaluation",
+        "goal-setting",
+        "hr",
+        "objectives",
+        "planning"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "body",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.14-company-culture",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "company culture",
+        "principles and collaboration",
+        "culture",
+        "values",
+        "principles",
+        "teamwork",
+        "collaboration"
+      ],
+      "tags": [
+        "company-culture",
+        "principles",
+        "collaboration",
+        "van-hoa-cong-ty",
+        "gia-tri",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "values"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.04-compensation-divider",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "compensation section header",
+        "section divider",
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "compensation",
+        "header",
+        "phan-cach",
+        "luong",
+        "tieu-de",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.06-direct-benefits-divider",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "direct benefits header",
+        "section divider",
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "benefits-section"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "benefits",
+        "direct",
+        "phuc-loi-truc-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.09-direct-benefits-summary",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "summary",
+        "direct benefits overview",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "benefits-summary",
+        "overview-slide",
+        "recap"
+      ],
+      "tags": [
+        "summary",
+        "direct-benefits",
+        "overview",
+        "phuc-loi",
+        "tom-tat",
+        "tong-quan",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.17-employee-notes",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "employee notes",
+        "what sun ers should know",
+        "employee-information",
+        "important-notes",
+        "guidelines",
+        "reminders"
+      ],
+      "tags": [
+        "employee",
+        "notes",
+        "important",
+        "sun-ers",
+        "luu-y",
+        "nhan-vien",
+        "can-biet",
+        "benefits",
+        "compensation",
+        "hr",
+        "information",
+        "reference",
+        "salary"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.05-gross-to-net-explainer",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "explainer",
+        "gross to net salary conversion",
+        "explanation",
+        "how-it-works",
+        "salary-breakdown",
+        "calculation"
+      ],
+      "tags": [
+        "gross",
+        "net",
+        "salary",
+        "explainer",
+        "luong-gross",
+        "luong-net",
+        "giai-thich",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.12-indirect-benefits-divider",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "indirect benefits header",
+        "section divider",
+        "divider",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "indirect-benefits"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "indirect-benefits",
+        "phuc-loi-gian-tiep",
+        "phan-cach",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.13-learning-development",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "learning and development",
+        "career growth pathways",
+        "career-growth",
+        "training",
+        "upskilling",
+        "learning-opportunities"
+      ],
+      "tags": [
+        "learning",
+        "development",
+        "career",
+        "growth",
+        "dao-tao",
+        "phat-trien",
+        "su-nghiep",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "salary"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.08-long-term-benefits",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "long-term benefits",
+        "insurance and union coverage",
+        "insurance",
+        "long-term-benefits",
+        "union-benefits",
+        "coverage"
+      ],
+      "tags": [
+        "long-term",
+        "insurance",
+        "union",
+        "benefits",
+        "bao-hiem",
+        "phuc-loi-dai-han",
+        "compensation",
+        "employee",
+        "hr",
+        "salary",
+        "security"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.07-monthly-support-benefits",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "monthly support",
+        "lunch and parking allowance",
+        "allowances",
+        "monthly-benefits",
+        "support-benefits",
+        "perks"
+      ],
+      "tags": [
+        "monthly",
+        "support",
+        "lunch",
+        "parking",
+        "allowance",
+        "phu-cap",
+        "ho-tro-hang-thang",
+        "benefits",
+        "compensation",
+        "employee",
+        "hr",
+        "perks",
+        "salary"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.18-thanks",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "closing slide",
+        "thanks",
+        "closing",
+        "thank-you",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
+      ],
+      "tags": [
+        "thanks",
+        "closing",
+        "thank-you",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "end",
+        "farewell",
+        "outro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.02-why-upgrade",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "overview",
+        "why sun studio upgraded compensation",
+        "rationale",
+        "motivation",
+        "why-section",
+        "context",
+        "reason"
+      ],
+      "tags": [
+        "upgrade",
+        "overview",
+        "compensation",
+        "reason",
+        "nang-cap",
+        "tai-sao",
+        "luong",
+        "benefits",
+        "employee",
+        "hr",
+        "recap",
+        "salary",
+        "summary"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.10-team-building-benefits",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "team building",
+        "company trip and culture activities",
+        "team-culture",
+        "activities",
+        "company-trip",
+        "engagement"
+      ],
+      "tags": [
+        "team-building",
+        "company-trip",
+        "culture",
+        "activities",
+        "hoat-dong",
+        "xay-dung-doi",
+        "autonomy",
+        "benefits",
+        "company",
+        "compensation",
+        "employee",
+        "flexibility",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.11-team-trip-flexibility",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "flexibility",
+        "team trip autonomy",
+        "autonomy",
+        "team-trip",
+        "work-life-balance"
+      ],
+      "tags": [
+        "team-trip",
+        "flexibility",
+        "autonomy",
+        "linh-hoat",
+        "du-lich",
+        "quyen-tu-quyet",
+        "benefits",
+        "company",
+        "compensation",
+        "culture",
+        "employee",
+        "hr",
+        "salary",
+        "team",
+        "travel",
+        "trip",
+        "values"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.03-total-package-overview",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "package overview",
+        "total compensation structure",
+        "grid",
+        "summary",
+        "overview",
+        "matrix",
+        "multi-item",
+        "package-overview",
+        "total-compensation",
+        "benefits-summary"
+      ],
+      "tags": [
+        "package",
+        "overview",
+        "compensation",
+        "total",
+        "goi-tong-the",
+        "tong-quan",
+        "luong",
+        "grid",
+        "summary",
+        "matrix",
+        "cards"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.16-update-summary",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "summary",
+        "update rollout timeline",
+        "grid",
+        "overview",
+        "matrix",
+        "multi-item",
+        "change-summary",
+        "rollout-plan",
+        "update-timeline",
+        "recap"
+      ],
+      "tags": [
+        "update",
+        "summary",
+        "rollout",
+        "timeline",
+        "cap-nhat",
+        "tom-tat",
+        "trien-khai",
+        "grid",
+        "matrix",
+        "cards"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "date"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.salary-benefits-2026.15-working-environment",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "working environment",
+        "office and flexibility",
+        "work-environment",
+        "office-policy",
+        "flexibility",
+        "workspace"
+      ],
+      "tags": [
+        "working-environment",
+        "office",
+        "flexibility",
+        "moi-truong-lam-viec",
+        "linh-hoat",
+        "autonomy",
+        "benefits",
+        "compensation",
+        "employee",
+        "environment",
+        "hr",
+        "salary",
+        "travel",
+        "trip",
+        "workspace"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "untested",
+        "canva": "untested"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.02-agenda-section",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "agenda",
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
+      ],
+      "tags": [
+        "agenda",
+        "list",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "performance-review",
+        "program",
+        "schedule"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "thank-you",
+        "closing",
+        "full-slide",
+        "template",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
+      ],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.15-factorial-goals-steps",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "instructions",
+        "goals",
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "goals-setup"
+      ],
+      "tags": [
+        "factorial",
+        "goals",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "muc-tieu",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "review",
+        "tool",
+        "workflow"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "instructions",
+        "review",
+        "factorial",
+        "step-by-step",
+        "how-to",
+        "review-process"
+      ],
+      "tags": [
+        "factorial",
+        "review",
+        "steps",
+        "instructions",
+        "huong-dan",
+        "danh-gia",
+        "buoc",
+        "assessment",
+        "evaluation",
+        "performance",
+        "platform",
+        "procedure",
+        "process",
+        "tool",
+        "workflow"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "answers",
+        "full-slide",
+        "template",
+        "faq",
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
+      ],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "answers",
+        "full-slide",
+        "template",
+        "faq",
+        "questions",
+        "q-and-a",
+        "faq-content",
+        "common-questions"
+      ],
+      "tags": [
+        "faq",
+        "answers",
+        "questions",
+        "cau-hoi",
+        "tra-loi",
+        "hoi-dap"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.17-faq-header",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "header",
+        "full-slide",
+        "template",
+        "faq",
+        "questions",
+        "answers",
+        "q-and-a",
+        "faq-section",
+        "questions-header"
+      ],
+      "tags": [
+        "faq",
+        "header",
+        "questions",
+        "cau-hoi-thuong-gap",
+        "hoi-dap",
+        "tieu-de",
+        "answers"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "definition",
+        "level expectation",
+        "how",
+        "full-slide",
+        "template",
+        "cta",
+        "call-to-action",
+        "next-steps",
+        "action-items",
+        "expectations",
+        "levels",
+        "performance-levels",
+        "how-definition"
+      ],
+      "tags": [
+        "how",
+        "level",
+        "expectation",
+        "performance",
+        "cap-do",
+        "ky-vong",
+        "danh-gia",
+        "cta",
+        "action",
+        "next-steps",
+        "follow-up"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "subheading",
+        "title",
+        "metric"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "explanation",
+        "full-slide",
+        "intro",
+        "body",
+        "template",
+        "layout",
+        "content",
+        "information",
+        "introduction",
+        "context-setting",
+        "background"
+      ],
+      "tags": [
+        "intro",
+        "explanation",
+        "body",
+        "context",
+        "gioi-thieu",
+        "giai-thich",
+        "nen-tang",
+        "layout",
+        "content",
+        "information"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "preparation",
+        "1:1",
+        "checklist",
+        "full-slide",
+        "template",
+        "list",
+        "action-items",
+        "todo",
+        "requirements",
+        "pre-meeting",
+        "preparation-guide",
+        "1-on-1-prep"
+      ],
+      "tags": [
+        "checklist",
+        "preparation",
+        "1-on-1",
+        "meeting",
+        "danh-sach-kiem-tra",
+        "chuan-bi",
+        "list",
+        "items",
+        "todo"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "chart",
+        "scale",
+        "rating",
+        "full-slide",
+        "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "rating-scale",
+        "scoring-chart",
+        "evaluation-chart",
+        "performance-scale"
+      ],
+      "tags": [
+        "rating",
+        "scale",
+        "chart",
+        "scoring",
+        "thang-diem",
+        "bieu-do",
+        "cham-diem",
+        "graph",
+        "visualization",
+        "data"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "title",
+        "heading",
+        "metric",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.12-review-timeline",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "timeline",
+        "review",
+        "full-slide",
+        "schedule",
+        "template",
+        "process",
+        "steps",
+        "roadmap",
+        "milestones",
+        "chronology",
+        "review-schedule",
+        "annual-calendar"
+      ],
+      "tags": [
+        "timeline",
+        "review",
+        "schedule",
+        "lich-trinh",
+        "lo-trinh",
+        "danh-gia",
+        "ke-hoach",
+        "process",
+        "chronology",
+        "phases"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "list-item",
+        "subheading",
+        "title",
+        "heading",
+        "date",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.03-section-divider-01",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "divider",
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.05-section-divider-02",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "divider",
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.11-section-divider-03",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "divider",
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.13-section-divider-04",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "divider",
+        "section",
+        "template",
+        "section-break",
+        "separator",
+        "transition",
+        "section-header",
+        "chapter-break",
+        "transition-slide"
+      ],
+      "tags": [
+        "divider",
+        "section",
+        "chapter",
+        "phan-cach",
+        "chuong",
+        "performance-review",
+        "break",
+        "transition"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.07-what-definition-card",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "definition",
+        "what",
+        "smart",
+        "definition-slide",
+        "concept",
+        "smart-goals",
+        "what-is"
+      ],
+      "tags": [
+        "definition",
+        "what",
+        "smart",
+        "goals",
+        "khai-niem",
+        "muc-tieu",
+        "smart-goals",
+        "assessment",
+        "card",
+        "concept",
+        "evaluation",
+        "explanation",
+        "performance",
+        "review"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "what",
+        "comparison",
+        "how",
+        "full-slide",
+        "template",
+        "versus",
+        "side-by-side",
+        "contrast",
+        "what-how",
+        "comparison-slide",
+        "two-concepts",
+        "what-vs-how",
+        "pros-cons",
+        "trade-offs",
+        "evaluation",
+        "advantages",
+        "disadvantages",
+        "differences"
+      ],
+      "tags": [
+        "comparison",
+        "what",
+        "how",
+        "contrast",
+        "so-sanh",
+        "phan-biet",
+        "versus",
+        "side-by-side",
+        "pros-cons",
+        "trade-off",
+        "evaluation",
+        "uu-nhuoc-diem",
+        "danh-gia"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "what",
+        "rating",
+        "how",
+        "full-slide",
+        "framework",
+        "template",
+        "model",
+        "methodology",
+        "structure",
+        "concept",
+        "rating-system",
+        "evaluation-framework",
+        "criteria",
+        "assessment"
+      ],
+      "tags": [
+        "framework",
+        "rating",
+        "what",
+        "how",
+        "khung-danh-gia",
+        "tieu-chi",
+        "performance",
+        "model",
+        "concept",
+        "methodology"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "title",
+        "metric",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.02-agenda-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "agenda",
+        "full-slide",
+        "list",
+        "template",
+        "schedule",
+        "program",
+        "outline",
+        "table-of-contents",
+        "agenda-slide",
+        "noi-dung"
+      ],
+      "tags": [
+        "agenda",
+        "list",
+        "contents",
+        "outline",
+        "chuong-trinh",
+        "noi-dung",
+        "lo-trinh",
+        "program",
+        "schedule"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "list-item",
+        "body"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.17-closing-thank-you",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "thank-you",
+        "closing",
+        "full-slide",
+        "template",
+        "end",
+        "final-slide",
+        "farewell",
+        "end-slide",
+        "conclusion",
+        "ket-thuc"
+      ],
+      "tags": [
+        "closing",
+        "thank-you",
+        "end",
+        "cam-on",
+        "ket-thuc",
+        "bai-cuoi",
+        "farewell",
+        "outro"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.04-contributors-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "team",
+        "full-slide",
+        "template",
+        "contributors",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "nhom"
+      ],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "members",
+        "thanh-vien",
+        "nhom",
+        "gioi-thieu-nhom",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.07-contributors-variant",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "contributors",
+        "team",
+        "team-slide",
+        "people-slide",
+        "credits",
+        "authors",
+        "variant"
+      ],
+      "tags": [
+        "contributors",
+        "team",
+        "people",
+        "variant",
+        "thanh-vien",
+        "nhom",
+        "phien-ban",
+        "company",
+        "credits",
+        "culture",
+        "values"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "image"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.14-image-and-text-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "image",
+        "full-slide",
+        "text",
+        "template",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "media"
+      ],
+      "tags": [
+        "image",
+        "text",
+        "photo",
+        "visual",
+        "hinh-anh",
+        "van-ban",
+        "noi-dung",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.15-image-and-text-variant",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "template",
+        "image",
+        "text",
+        "image-text",
+        "visual-content",
+        "photo-slide",
+        "alternate-layout"
+      ],
+      "tags": [
+        "image",
+        "text",
+        "variant",
+        "photo",
+        "hinh-anh",
+        "van-ban",
+        "phien-ban",
+        "media",
+        "visual"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "image",
+        "caption"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.13-information-structure-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "structure",
+        "information",
+        "full-slide",
+        "template",
+        "layout",
+        "content",
+        "body",
+        "info-architecture",
+        "structured-content",
+        "hierarchy",
+        "diagram"
+      ],
+      "tags": [
+        "information",
+        "structure",
+        "hierarchy",
+        "diagram",
+        "thong-tin",
+        "co-cau",
+        "layout",
+        "content",
+        "body"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.11-mix-chart-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "chart",
+        "mix",
+        "template",
+        "graph",
+        "data-visualization",
+        "analytics",
+        "chart-slide",
+        "mixed-layout"
+      ],
+      "tags": [
+        "chart",
+        "mix",
+        "data",
+        "visualization",
+        "bieu-do",
+        "du-lieu",
+        "so-lieu",
+        "graph"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "metric",
+        "caption"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.08-next-steps-cta",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "next-steps",
+        "template",
+        "cta",
+        "call-to-action",
+        "action-items",
+        "follow-up"
+      ],
+      "tags": [
+        "next-steps",
+        "cta",
+        "action",
+        "call-to-action",
+        "buoc-tiep-theo",
+        "hanh-dong",
+        "follow-up"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "subheading",
+        "title",
+        "heading",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.16-quote-or-highlight-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "quote",
+        "template",
+        "highlight",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "pullquote",
+        "emphasis-slide",
+        "key-message"
+      ],
+      "tags": [
+        "quote",
+        "highlight",
+        "pullquote",
+        "emphasis",
+        "trich-dan",
+        "nhan-manh",
+        "noi-bat",
+        "layout",
+        "content",
+        "body",
+        "information"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "title",
+        "body",
+        "heading"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.05-scan-me-callout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "callout",
+        "full-slide",
+        "template",
+        "scan-me",
+        "note",
+        "important",
+        "attention",
+        "highlight",
+        "qr-code",
+        "interactive",
+        "link-slide",
+        "digital-resource"
+      ],
+      "tags": [
+        "qr-code",
+        "scan",
+        "callout",
+        "link",
+        "qr",
+        "quet-ma",
+        "lien-ket",
+        "note",
+        "attention",
+        "important"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "body"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.03-section-intro",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "full-slide",
+        "intro",
+        "section",
+        "template",
+        "cover",
+        "opening",
+        "title-page",
+        "hero",
+        "brand-intro",
+        "first-slide",
+        "section-header",
+        "chapter-intro",
+        "transition",
+        "divider-with-content"
+      ],
+      "tags": [
+        "section",
+        "intro",
+        "chapter",
+        "phan",
+        "chuong",
+        "gioi-thieu-phan",
+        "cover",
+        "opening",
+        "hero",
+        "title",
+        "brand"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "heading",
+        "label",
+        "title",
+        "subtitle"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.12-statistics-layout",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "data",
+        "full-slide",
+        "template",
+        "statistics",
+        "metrics",
+        "numbers",
+        "kpi",
+        "performance",
+        "stats-slide",
+        "numbers-slide",
+        "data-highlights"
+      ],
+      "tags": [
+        "statistics",
+        "data",
+        "numbers",
+        "metrics",
+        "thong-ke",
+        "so-lieu",
+        "chi-so",
+        "kpi"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "title",
+        "metric",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.09-summary-grid",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "grid",
+        "full-slide",
+        "template",
+        "summary",
+        "overview",
+        "matrix",
+        "multi-item",
+        "recap",
+        "summary-slide",
+        "key-points",
+        "grid-layout"
+      ],
+      "tags": [
+        "summary",
+        "grid",
+        "recap",
+        "overview",
+        "tom-tat",
+        "luoi",
+        "tong-ket",
+        "matrix",
+        "cards"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "label",
+        "title",
+        "heading",
+        "body",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.10-text-heavy-content",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "content",
+        "full-slide",
+        "text",
+        "template",
+        "body",
+        "information",
+        "detail",
+        "text-content",
+        "body-slide",
+        "detailed-content",
+        "informational"
+      ],
+      "tags": [
+        "text",
+        "content",
+        "body",
+        "long-form",
+        "noi-dung",
+        "van-ban",
+        "chi-tiet",
+        "detail"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "description"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.sun-presentation.06-two-column-content",
+      "type": "template",
+      "brand": "sun-studio",
+      "intent": [
+        "two-column",
+        "content",
+        "full-slide",
+        "template",
+        "body",
+        "information",
+        "text",
+        "detail",
+        "split-layout",
+        "dual-content",
+        "content-slide"
+      ],
+      "tags": [
+        "two-column",
+        "content",
+        "split",
+        "comparison",
+        "hai-cot",
+        "so-sanh",
+        "noi-dung",
+        "body",
+        "text",
+        "detail"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "label",
+        "title",
+        "heading",
+        "list-item"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "hybrid",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.guideline-board-layouts",
+      "type": "component",
+      "brand": "sun-studio",
+      "intent": [
+        "editable-table",
+        "structured-content",
+        "board-layout",
+        "radial-board",
+        "layout",
+        "content",
+        "body",
+        "information",
+        "layout-guide",
+        "board-design",
+        "table-layout",
+        "radial-layout"
+      ],
+      "tags": [
+        "board",
+        "table",
+        "radial",
+        "structured-content",
+        "layout",
+        "design-guide",
+        "bang",
+        "content",
+        "body",
+        "information"
+      ],
+      "status": "published",
+      "density": "any",
+      "content_structure": [
+        "body",
+        "heading",
+        "label",
+        "list-item",
+        "subheading",
+        "title"
+      ],
+      "compatibility": {
+        "html": "supported",
+        "pptx": "supported",
+        "pdf": "supported",
+        "canva": "hybrid"
+      },
+      "limitations": [
+        "Radial labels require position metadata when instantiated; the staged contract does not hard-code source wording.",
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    }
+  ]
+}
