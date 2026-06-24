@@ -24,3 +24,11 @@ outputs/
 
 # Environment-specific readiness marker (regenerated per machine via preflight).
 slide-system/registries/extract-readiness.json
+
+# Local Claude Code state (machine-specific overrides and runtime locks).
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# Personal wallet/account backup — must never be committed.
+backup.cswap
+*.cswap
