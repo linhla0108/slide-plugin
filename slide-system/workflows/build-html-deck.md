@@ -45,9 +45,8 @@ Writes `qa/component-fidelity-report.json`.
   `var(--ink)`, etc.). Never invent hex codes or use raw color values.
 - **Fonts**: Use ONLY `"Proxima Nova"` with brand weights. Never use Georgia,
   Arial, Helvetica, or other non-brand fonts as primary.
-- **Icons**: Use SVG icons from the brand icon library
-  (`sun.asset.guideline-icon-library`) or slide-local simple SVGs. NEVER use
-  emoji characters as icons.
+- **Icons**: Use published shared SVG icons or slide-local simple SVGs. NEVER
+  use emoji characters as icons.
 - **Tag every visual object for export** (the layered PPTX export reads these;
   `validate_export_objects.py` FAILS the run when a visible `svg`/`img`/
   `canvas`/`video` carries no tag):

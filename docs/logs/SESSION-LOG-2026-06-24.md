@@ -272,3 +272,289 @@ trong folder log."
 **Result:** working tree clean (only git-ignored files remain); `test_gates.py`
 16/16; `build_registry.py --check` clean (79 items). **Committed** (this entry
 folded into commit 7 via amend).
+
+---
+
+## 8. End-to-end test of the `component-extractor` skill on `input/GUIDLINE_PRESENTATION_SUN.pdf`
+
+**Request:** run the skill and test the component-extraction workflow on the
+guideline PDF to verify it works end-to-end and matches intent.
+
+**What ran (real commands, ground truth):**
+- PDF preflight `check_base_requirements.py --input pdf` → READY (PyMuPDF
+  1.27.2.3). The deck is **5 pages** (the harness's "551 pages" estimate was
+  wrong); page 2 = the CARD page.
+- Picked one component: **Level 1–5 progression cards**, region verified by
+  rendering crops with PyMuPDF (region pt `[450,415,w1840,h525]`).
+- Built an extraction-request JSON; `scaffold_extraction.py --request` →
+  staging item `sun.component.level-progression-cards` with well-formed
+  `mapping.json` (fingerprints, candidate id). ✅
+- `convert_pdf_source.py --page 2` → `source-page.svg` + reference PNG;
+  `extract_editable_text_slots.py` → 57 slots / 21 source text elements. ✅
+- `crop_svg_region.py` → ran the rest of the pipeline
+  (`externalize_svg_images`, `optimize_svg`, `apply_text_contract`).
+
+**Two real defects found (not yet fixed):**
+
+1. **Unit bug in `crop_svg_region.py` — silent garbage crop, no gate.**
+   The extraction-request **schema allows `unit: ["px","pt","in","normalized"]`**
+   and `scaffold_extraction.py` writes `source.region` verbatim, but
+   `crop_svg_region.py`'s `region_fraction()` **assumes the region is normalized
+   0–1** (only special-cases percent) and ignores `unit`. A schema-valid `pt`
+   region (450/415/1840/525) was multiplied by page size → viewBox
+   `5.40745e6 × 1.37716e6` (≈2900× too large), **all 57 slots dropped**, and the
+   step still exited 0 (`status: cropped`). Re-running with a **normalized**
+   region (0.15312/0.15821/0.6261/0.20014) produced the correct
+   `crop_window [449.99,415.01,1840,525]`, viewBox `0 0 1840 525`, 16 slots kept
+   / 41 dropped, and a geometrically-correct render (5 cards, icons + arrow
+   buttons in place). → The pipeline only works with normalized regions; the
+   `pt`/`px`/`in` units the schema advertises are unhandled and fail silently.
+
+2. **`crop_svg_region.py` vs `validate_text_slots.py` ordering conflict — a
+   cropped component can never pass validation.** The SKILL pipeline runs crop
+   *before* `validate_text_slots.py`. Crop drops out-of-region slots, but
+   `validate_text_slots.py` parses the **full-page** `evidence/source-with-text.svg`
+   (21 text elements) and requires **every** source character to map to a slot.
+   After crop only in-region text is covered, so validation **exits 1** with ~41
+   "Unmapped source text characters" errors for every out-of-region string.
+   Crop never rewrites/crops the evidence source SVG, so this fails structurally
+   for any component-level PDF item. Consistent with there being **0 published
+   items carrying a `region_crop` marker** — this component path has apparently
+   never been driven to completion before. (`publish_extraction.py` only checks
+   the `region_crop` marker exists; it does not itself run
+   `validate_text_slots.py`, so the QA failure wouldn't block a publish — but the
+   documented pipeline's own final gate fails.)
+
+**Verification:** all command outputs above are real (PyMuPDF, the pipeline
+scripts). The geometric crop was visually confirmed against the source crop.
+
+**Committed:** no.
+
+---
+
+## 9. Fix both defects found in task 8
+
+**Request:** "sửa cả 2" — fix both the unit bug and the crop-vs-validate conflict.
+
+**Fix 1 — `crop_svg_region.py` now honors `region.unit`.**
+- Rewrote `region_fraction()` to take `(region, page_w, page_h)` and convert per
+  unit: `normalized`/`fraction` (0-1), `percent`/`%` (÷100), `pt`/`px`
+  (÷ page extent), `in` (×72→pt, ÷ page extent). Any other unit now raises
+  `SystemExit` (fail loud instead of silently mis-scaling).
+- Reordered `crop_item()` so the viewBox (page extent) is parsed *before*
+  resolving the region, since absolute units need it.
+
+**Fix 2 — cropped-out source text no longer fails validation.**
+- `crop_svg_region.py` now records every dropped slot's source-text refs into
+  `source.region_crop.dropped_source_refs` (text intentionally outside the
+  component region).
+- `validate_text_slots.py` reads that list and excludes those characters from
+  the full-page coverage requirement. In-region text is still fully required.
+
+**Verification (real runs):**
+- Fresh `pt`-unit extraction of the same Level 1–5 cards → crop_window
+  `[450,415,1840,525]`, viewBox `0 0 1840 525`, 16 slots kept (identical to the
+  normalized run). ✅ Fix 1.
+- Full pipeline + `validate_text_slots.py` on that item → **`valid`, exit 0**
+  (was exit 1 with 41 unmapped-text errors); 41 dropped refs recorded, 16 kept. ✅ Fix 2.
+- Added two regression tests to `test_gates.py`:
+  `test_crop_region_honors_absolute_units` (pt == normalized crop; unknown unit
+  raises) and `test_validate_excludes_cropped_out_source_text` (passes with the
+  marker, fails without). Suite now **18/18**.
+
+Only caller of `region_fraction` is `crop_item` (updated). `outputs/` is
+gitignored; left one verified test batch
+`outputs/component-extractions/guideline-card-ptfix-2026-06-24/` as evidence.
+
+**Committed:** no.
+
+---
+
+## 10. Complete physical asset inventory of slide-system/library/
+
+**Request:** thorough inventory of all physical assets in slide-system/library/
+cross-referenced against slide-system/registries/visual-library.json, with
+orphaned files and mismatches identified.
+
+**Actions:**
+- Listed all 598 files in slide-system/library/ recursively
+- Read all 79 items from slide-system/registries/visual-library.json (79 total)
+- Verified .agents/skills/sun-studio-design-system/assets/system/ contains
+  canonical assets: logo.png, 9 Dio character poses, 14 Proxima-Nova fonts,
+  colors_and_type.css
+- Cross-referenced all 465 unique registry paths against disk
+- Ran comprehensive analysis via Python script to identify mismatches
+
+**Result:**
+- **598 files** on disk in slide-system/library/
+- **79 registry items** in visual-library.json (schema_version 1, all status: published)
+- **465 unique paths** referenced in registry — all 465 exist on disk (100% match)
+- **0 missing paths** (registry references non-existent files)
+- **213 orphaned files** on disk but not in registry:
+  - 13 README.md placeholder files (directory docs, not assets)
+  - 56 preview/thumbnail.png files (generated slide snapshots, not tracked in registry paths)
+  - 24 evidence/notes.md files (alongside tracked external-images.json)
+  - 120 template asset images (PNGs/JPGs in sun-presentation and
+    sun-studio-performance-review-2025)
+- **Canonical design system assets**: 22 files under
+  .agents/skills/sun-studio-design-system/assets/system/ (logo, dio, fonts, CSS)
+- **6 template decks found**: goal-setting-2026, interview-workshop-sunriser,
+  salary-benefits-2026, sun-presentation, sun-studio-performance-review-2025
+- **1 component**: diagrams/guideline-board-layouts
+
+**Verification:** inventory complete, all 79 registry items listed with
+id/type/status/paths, all orphans classified by category.
+
+**Committed:** no.
+
+---
+
+## Task: Remove dangling references to deleted icon-library & shape-variants assets
+
+**Request:** User deleted `guideline-icon-library` and `guideline-shape-variants`
+from the catalog preview HTML; local files still referenced them. User chose
+"remove all references" (not re-extract).
+
+**Actions:**
+- Confirmed both assets absent on disk (`library/assets/`, `library/styles/` =
+  README-only) and in both registries (0 matches); no scripts reference them.
+- Removed references from 5 files:
+  - `slide-system/rules/icon-selection.md` — dropped brand-icon tier (now 4-tier
+    ladder) + removed "Where to Find Brand Icons".
+  - `slide-system/rules/component-composition.md` — removed shape-variants section
+    + its layer-order entry (now 4 layers).
+  - `.agents/skills/slide-generator/SKILL.md` — reworded prohibition #1 + removed
+    shapes/icon-library composition bullets.
+  - `slide-system/workflows/build-html-deck.md` — icon source reworded.
+  - `docs/slide-generator-token-efficiency-plan.md` — marked "P2 — Icon library"
+    OBSOLETE.
+- Kept `extraction-history.json` (audit log) and gitignored request JSON untouched.
+
+**Verification:** `git grep` of tracked source/docs (excl. history/audit/log) =
+0 remaining references. No scripts referenced the assets, so no gate behavior changed.
+
+**Committed:** no.
+
+---
+
+## Task: Fix scaffold_extraction.py false-duplicate bug
+
+**Request:** User forwarded a bug found in another agent's testing —
+`sun.component.level-progression-cards` was hidden from the catalog because
+scaffold marked it "duplicate".
+
+**Actions:**
+- Root cause: `scaffold_extraction.py:120` set `duplicate` from `exact OR
+  registry_match`, where `exact` = any prior history attempt with a matching
+  region hash regardless of publication. A never-published prior attempt forced
+  `duplicate` → no `artifact/` folder + hidden by catalog (shows staging/qa only).
+- Fix: drive `duplicate` off `registry_match` only (registry = sole publication
+  authority); still reuse `exact.stable_id` for stable identity. Added explanatory
+  comment. Also tightened `duplicate_of` to `candidate_id if registry_match else None`.
+
+**Verification:** `py_compile` OK; `exact` still used for stable_id (no dead var);
+no tests assert old behavior (test_gates targets `scaffold_slide_from_component`).
+
+**Committed:** no.
+
+---
+
+## Task: Verify & correct LOG-2026-06-24-zombie-audit.md
+
+**Request:** User asked to check the zombie-audit log and fix problems.
+
+**Actions:**
+- Verified claims vs live state: library counts (78 items, 76 tpl/1 asset/1 char,
+  all published) ✓; 250 attempts / 174 unique ✓; 3 zombies absent from
+  registry+disk ✓; `aliases.json` empty ✓; 5 empty library subdirs ✓.
+- Corrected line 24: the "139/29/6" figures are deduped per-unique-id final status
+  (=174), not attempt counts; raw attempt status is 145 published / 96 staging /
+  9 duplicate (=250). Noted 96→29 staging collapse = re-scaffold duplication pattern.
+- Corrected line 53: "0 broken references in active code" was FALSE at audit time —
+  icon-library + shape-variants were live in 5 files (also flagged by DOCS-SKILLS-
+  AUDIT); now true post-cleanup. Third zombie (card-variants) only ever in history.
+- Determined the 3 ghost-`published` history records are append-only audit artifacts
+  (shape-variants pruned by commit 0981cbc5; icon-library never committed to
+  registry). `extraction-history.json` has no schema/validator; `validate_registry.py`
+  passes (78 items, 0 broken). Did NOT rewrite history — rewriting point-in-time
+  events would reduce audit accuracy, not improve it.
+
+**Verification:** `validate_registry.py` exit 0; `git grep` confirms 0 active-code
+zombie references remain.
+
+**Committed:** no.
+
+---
+
+## 11. Zombie component root cause fix + extraction-history reconciliation
+
+**Request:** "tôi cần bạn tìm solution cho phần này" — fix the root cause of
+ghost published items in extraction-history and reconcile the registry.
+
+**Root cause analysis:**
+- `build_registry.py` had `reconcile_history()` function (line 91) that appends
+  corrective `unpublished` records to extraction-history.json when dropping
+  dangling entries. BUT it was only called for DANGLING items (in registry but
+  folder missing), NOT for items completely absent from the registry.
+- 5 items from `guideline-presentation-sun-pages-1-5` extraction batch were
+  marked "published" in extraction-history but had NO physical files and NO
+  visual-library entries. These were "ghost published" zombies.
+- Additionally, 54 old-style IDs (e.g., `sun.cover.cover-hero`,
+  `sun.chart.mix-chart-layout`) were "published" in history but mapped to
+  different canonical IDs in visual-library (e.g., `sun.sun-presentation.01-cover`).
+
+**Fix applied to `build_registry.py`:**
+- Added call to `reconcile_history(ghosts)` in the `--write` branch (after the
+  existing dangling reconciliation) to also correct ghost-published items that
+  are completely absent from the registry.
+- Ghost detection was already implemented in `history_published_not_in_registry()`
+  (line 73-88) but only used for informational printing in `--check` mode.
+
+**Reconciliation results:**
+- Ran `build_registry.py --write` → reconciled 63 history records to `unpublished`
+- 5 genuine ghosts (guideline-icon-library, guideline-shape-variants,
+  guideline-card-variants, guideline-board-layouts, guideline-image-layouts)
+- 58 old-style IDs that were published under different canonical names
+- extraction-history.json now has: 145 published, 97 staging, 9 duplicate,
+  63 unpublished (total 314 records)
+
+**Verification:**
+- `build_registry.py --check` → "clean: 0 dangling, 0 orphan, 78 valid items"
+- `test_gates.py` → 17/18 passed (1 pre-existing failure unrelated to this fix)
+- Zero remaining ghost published items (published in history, not in registry)
+
+**Decision:** User chose to skip re-extracting the 5 guideline items.
+Source PDF (`input/GUIDLINE_PRESENTATION_SUN.pdf`) still exists if needed later.
+
+**Committed:** no.
+
+---
+
+## 12. Hardening around the zombie fix (publish guard, drift note, test repoint)
+
+**Request:** "commit it and create solution for this critical bug" — complete and
+commit the history↔registry drift solution (continuation of §11).
+
+**Actions (mine, complementing §11's `build_registry.py` reconcile-all-ghosts):**
+- `build_registry.py` — added `history_published_not_in_registry()` + a non-gating
+  drift note in `--check` so the divergence is visible, not silent (§11 then wired
+  the ghost set into `--write`).
+- `publish_extraction.py` — defense in depth: after `copytree`, abort before
+  writing the registry/history if the destination folder ended up empty, so a
+  failed publish can never create a new ghost-published entry.
+- `test_gates.py` — `test_read_text_slots_projection` was hardcoded to the pruned
+  `guideline-board-layouts` folder (the 17/18 failure noted in §11). Repointed it
+  to resolve the slots path **from the registry** (`ITEM_WITH_SLOTS` = a live item),
+  so a pruned/renamed item can never re-break it. Suite now **18/18**.
+- Note on §11's approach: marking all 63 not-in-registry ids `unpublished` is
+  functionally fine (history is unvalidated metadata nothing reads for pipeline
+  decisions) and enforces the invariant "history `published` ⇒ registry member."
+  The 58 renamed-id records carry the dangling `reason` text, which is imprecise
+  for renames; a precise follow-up would populate `aliases.json` (old→canonical)
+  via `region_identity_sha256` matching instead. Left for the user to decide.
+
+**Verification:** `test_gates.py` 18/18; `build_registry.py --check` clean
+(0 dangling, 0 orphan, 78 valid); `validate_registry.py` 78 items 0 broken;
+all touched scripts `py_compile` OK.
+
+**Committed:** see commits below.

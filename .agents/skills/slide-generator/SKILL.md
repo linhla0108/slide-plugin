@@ -31,8 +31,8 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
 
 ## Absolute Prohibitions (enforced by script gates)
 
-1. **NO emoji icons.** Use SVG icons from `sun.asset.guideline-icon-library`
-   or slide-local SVGs. Gate: `validate_brand_compliance.py`.
+1. **NO emoji icons.** Use published shared SVG icons or slide-local SVGs.
+   Gate: `validate_brand_compliance.py`.
 2. **NO random colors.** Use ONLY CSS variables from brand tokens
    (`var(--sun-orange)`, `var(--ink)`, etc.). Gate fails >5 non-brand colors.
 3. **NO hand-written selection reports.** Run `score_visual_items.py` — never
@@ -179,12 +179,8 @@ When scorer says `reuse` or `adapt-local`:
 - **Dio** (`sun.character.dio`): section dividers and emphasis slides,
   bottom corner, 80–140px. Variants: normal/side-glance/wink/annoyed/
   dancing/bored/bewildered.
-- **Shapes** (`sun.style.guideline-shape-variants`): behind content.
-  Variants: halo-blue/halo-orange/halo-lime/hex-formula/overlap-circles.
-- **Icons** (`sun.asset.guideline-icon-library`): the file is ~218 KB — do NOT
-  Read it whole. Run `grep -n 'id="<icon>"'
-  slide-system/library/assets/sun.asset.guideline-icon-library/visual.svg` to
-  find the group's line range, then read only that range. NEVER use emoji.
+- **Icons**: use published shared SVG icons or slide-local inline SVGs. NEVER
+  use emoji.
 
 ## Brand Tokens (SUN.STUDIO)
 

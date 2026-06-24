@@ -33,35 +33,15 @@ slides. Templates are self-contained and do not need this guide.
 | bewildered | Surprise, unexpected data, plot twists |
 | variant | Alternative neutral pose |
 
-### sun.style.guideline-shape-variants
-
-- **Where:** level indicators, formula diagrams, branded shape accents,
-  section backgrounds.
-- **Placement:** behind or beside content. Never cover body text or data.
-- **Variant selection:**
-
-| Variant | Use case |
-|---------|----------|
-| halo-blue | Primary emphasis, key metrics, highlights |
-| halo-orange | Secondary emphasis, warnings, energy |
-| halo-lime | Tertiary emphasis, growth, success |
-| hex-formula | Process steps, formulas, methodologies |
-| overlap-circles | Relationships, intersections, Venn-style concepts |
-
-- **Limitations:** layered halo and blended gradient treatments may require
-  raster fallback in PPTX/Canva. Editable labels must stay outside raster
-  layers.
-
 ## Layer Order
 
 When composing a slide from multiple published items, stack in this order
 (back to front):
 
 1. **Background** — solid color, gradient, or background PNG from template.
-2. **Style shapes** — `sun.style.guideline-shape-variants` accents.
-3. **Content** — text, tables, charts, data visuals.
-4. **Assets** — `sun.asset.logo` and other brand marks.
-5. **Characters** — `sun.character.dio` on top of everything.
+2. **Content** — text, tables, charts, data visuals.
+3. **Assets** — `sun.asset.logo` and other brand marks.
+4. **Characters** — `sun.character.dio` on top of everything.
 
 ## Set Consistency
 

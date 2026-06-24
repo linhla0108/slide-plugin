@@ -82,11 +82,10 @@ The gap is everything that bypasses that pattern.
   export/contract stack that genuinely needs `typography`.
 
 ### P2 — Icon library: "extract by group/id" implies reading a 223 KB SVG
-- **Where:** `SKILL.md:150-151` — load `guideline-icon-library/visual.svg` (223 KB),
-  "Extract by group/id."
-- **Fix:** instruct `grep -n 'id="<icon>"'` to find the group's line range, then read
-  only that range — never `Read` the whole 223 KB file. (A dedicated extractor is
-  overkill; grep is the cheap mitigation.)
+- **OBSOLETE (2026-06-24):** the brand icon-library asset was removed from the
+  system (no longer extracted/published). Icons now come from published shared
+  SVGs or slide-local inline SVGs, so there is no large icon SVG to read. No fix
+  needed.
 
 ### P2 — Library-tree glob hazard
 - **Where:** `SKILL.md:128` ("Find item in library: …").
