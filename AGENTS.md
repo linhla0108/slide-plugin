@@ -28,6 +28,29 @@ For a new slide job, read:
 6. Job inputs and approved requirement package
 7. Published items in `slide-system/registries/visual-library.json`
 
+## Task Logging (required)
+
+Keep a detailed, append-only log of work done in this repo. This is mandatory,
+not optional.
+
+- **Where:** one file per day at `docs/logs/SESSION-LOG-<YYYY-MM-DD>.md` (date
+  from the `currentDate` context). All session logs live in `docs/logs/` — never
+  loose in `docs/` or the repo root. Append to that day's file across sessions;
+  create it (and the `docs/logs/` folder) if missing.
+- **When:** record each task as soon as it is completed (or meaningfully
+  advanced) — do not wait until the end of a session.
+- **What to record for every task:**
+  1. **Request** — what the user asked, in their words or a faithful paraphrase.
+  2. **Actions** — concrete steps taken: files created/modified/deleted, scripts
+     and commands run, decisions made and why.
+  3. **Result** — outcome, and verification run (tests, gates, scans) with their
+     status.
+  4. **State** — whether changes were committed; if not, say so explicitly.
+- **Faithfulness:** log only what actually happened. No invented steps, no
+  guessed outcomes. If a step was skipped or failed, say so.
+- Group entries by task in request order; ground file/line/count claims in real
+  `git status` / command output rather than memory.
+
 ## Product Direction
 
 This workspace serves SUN.STUDIO slide creators, reviewers, mentors, and
@@ -111,3 +134,14 @@ Each item requires explicit approval before publication.
   export limitations, and checksums.
 - Verify HTML content, editable PPTX objects, PDF render, PPTX ZIP integrity,
   font availability, image crop and z-order, and HTML-versus-PPTX evidence.
+
+<!-- CODEGRAPH_START -->
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+
+- **MCP tools** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them. `codegraph_node` returns one symbol's source + callers, or reads a whole file with line numbers. If the tools are listed but deferred, load them by name via tool search.
+- **Shell** (always works): `codegraph explore "<symbol names or question>"` and `codegraph node <symbol-or-file>` print the same output.
+
+If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
+<!-- CODEGRAPH_END -->
