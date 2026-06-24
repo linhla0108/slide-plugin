@@ -1,174 +1,180 @@
-# Luồng template-picker: thư viện → picker → prompt → slide-generator
+# template-picker flow: library → picker → prompt → slide-generator
 
-> Bản tóm tắt mô phỏng theo cấu trúc thực tế của `slide-system/template-picker/`
-> và pipeline registry (cập nhật 2026-06-16). Cùng style với `SKILL-FLOWS.md`.
+> Summary modeled on the actual structure of `slide-system/template-picker/`
+> and the registry pipeline (updated 2026-06-16). Same style as `SKILL-FLOWS.md`.
 
-Template-picker là một **UI tĩnh** (HTML/CSS/JS, không build step, không framework)
-cho người không kỹ thuật chọn **một slide-template hoàn chỉnh** (full-bleed
-1920×1080) từ thư viện đã publish, rồi copy một **prompt ngôn ngữ thường** để đưa
-sang `/slide-generator`. Picker KHÔNG sinh slide — nó chỉ chọn + sinh prompt.
+The template-picker is a **static UI** (HTML/CSS/JS, no build step, no framework)
+for non-technical users to pick **one complete slide-template** (full-bleed
+1920×1080) from the published library, then copy a **plain-language prompt** to
+hand off to `/slide-generator`. The picker does NOT generate slides — it only
+selects and generates a prompt.
 
 ---
 
-## 1. Pipeline dữ liệu: từ item published → picker-data.json
+## 1. Data pipeline: from published item → picker-data.json
 
 ```
-slide-system/registries/visual-library.json   (nguồn sự thật duy nhất)
-        │   chỉ item: status == "published" && type == "template"
+slide-system/registries/visual-library.json   (single source of truth)
+        │   only items: status == "published" && type == "template"
         ▼
 [A] build_template_picker_data.py
-        │   • lọc published + template (KHÔNG đọc catalog-data.json —
-        │     tránh 14 trang sun-goal-* rò vào picker người dùng)
-        │   • derive_deck(item): gom slide theo DECK NGUỒN từ source.path
-        │       basename → deck_id (slug) + name; slide cùng deck = 1 set
-        │   • derive_thumbnail(): ưu tiên <preview-dir>/thumbnail.png
-        │   • derive_use_case(): bucket theo intent/tags
+        │   • filter published + template (do NOT read catalog-data.json —
+        │     avoids 14 sun-goal-* pages leaking into the user picker)
+        │   • derive_deck(item): group slides by SOURCE DECK from source.path
+        │       basename → deck_id (slug) + name; slides in the same deck = 1 set
+        │   • derive_thumbnail(): prefer <preview-dir>/thumbnail.png
+        │   • derive_use_case(): bucket by intent/tags
         │       (Cover/Section/Data/Content/Closing/Other)
-        │   • path → ĐỔI sang relative theo thư mục picker (../library/...)
-        │   • sort slide trong deck theo slide_number;
-        │     sort deck theo slide_count giảm dần rồi alphabet
+        │   • path → CONVERT to relative to the picker directory (../library/...)
+        │   • sort slides within a deck by slide_number;
+        │     sort decks by slide_count descending then alphabetically
         ▼
-slide-system/template-picker/picker-data.json   (GENERATED — đừng sửa tay)
+slide-system/template-picker/picker-data.json   (GENERATED — do not edit by hand)
         │   { decks: [ { deck_id, name, source, slide_count,
         │               slides: [ {id, name, intent, tags,
         │                          content_structure, slide_number,
         │                          preview, thumbnail, use_case} ] } ],
         │     templates: [...] }
         ▼
-[B] index.html + picker.js + picker.css   (fetch picker-data.json lúc load)
+[B] index.html + picker.js + picker.css   (fetch picker-data.json on load)
         │   • load ./picker-data.json; FAIL → fallback ./picker-data.sample.json
-        │     (fixture checked-in) để UI render trước khi publish gì
+        │     (checked-in fixture) so the UI renders before anything is published
         │   • source-pill: "Live library" / "Sample data" / "Load error"
-        │   • decksOf() nhận CẢ shape deck-grouped LẪN list `templates` phẳng
-        │     (bọc thành 1 deck "Full-slide templates")
+        │   • decksOf() accepts BOTH the deck-grouped shape AND a flat `templates`
+        │     list (wrapped into a single "Full-slide templates" deck)
 ```
 
-**Mấu chốt:** gom set là **registry-driven qua `source.path`**, KHÔNG phụ thuộc
-layout folder. Đổi/di chuyển folder template không làm hỏng grouping — chỉ chuỗi
-path đổi. (Vì vậy đợt restructure gom folder theo set không động tới logic picker.)
+**Key point:** set grouping is **registry-driven via `source.path`**, NOT dependent
+on the layout folder. Renaming/moving a template folder does not break grouping —
+only the path string changes. (So the restructure that grouped folders by set did
+not touch the picker logic.)
 
 ---
 
-## 2. Vòng đời 1 template trên đĩa (sau khi publish)
+## 2. Lifecycle of one template on disk (after publishing)
 
-`/component-extractor` publish item `type=template` với id `sun.<set>.<slide>` →
-`publish_extraction.py` đặt vào layout **gom theo set**:
+`/component-extractor` publishes an item with `type=template` and id `sun.<set>.<slide>` →
+`publish_extraction.py` places it in a layout **grouped by set**:
 
 ```
 slide-system/library/templates/
-  <set-slug>/                          ví dụ interview-workshop-sunriser/
-    <slide-slug>/                      ví dụ 01-cover/   (id: sun.interview-workshop-sunriser.01-cover)
-      visual.svg              ← nền editable, KHÔNG <text>; đổ nội dung mới lên
-      text-slots.json         ← hợp đồng text editable (bounds chuẩn hoá + typography)
+  <set-slug>/                          e.g. interview-workshop-sunriser/
+    <slide-slug>/                      e.g. 01-cover/   (id: sun.interview-workshop-sunriser.01-cover)
+      visual.svg              ← editable background, NO <text>; new content is poured on top
+      text-slots.json         ← editable text contract (normalized bounds + typography)
       preview/
-        thumbnail.png         ← ẢNH PICKER: render PDF gốc (có chữ), 1920×1080
-        preview.html          ← composite editable: visual.svg + slot positioned;
-                                  đây là lớp /slide-generator dùng để dựng slide
+        thumbnail.png         ← PICKER IMAGE: rendered from the original PDF (with text), 1920×1080
+        preview.html          ← editable composite: visual.svg + positioned slots;
+                                  this is the layer /slide-generator uses to build the slide
       evidence/
-        source-with-text.svg  ← bản gốc full slide (bằng chứng, có chữ baked-in)
-        notes.md              ← ghi chú trích xuất
+        source-with-text.svg  ← original full slide (evidence, with text baked in)
+        notes.md              ← extraction notes
 ```
 
-| File | Có chữ? | Vai trò | Picker dùng? |
+| File | Has text? | Role | Used by picker? |
 |---|---|---|---|
-| `visual.svg` | không (cố ý) | nền editable để overlay nội dung mới | gián tiếp (preview.html) |
-| `text-slots.json` | — | hợp đồng vị trí + typography của text | không |
-| `preview/thumbnail.png` | có | ảnh hiển thị trong picker (PDF raster gốc) | **CÓ** |
-| `preview/preview.html` | có (mẫu) | composite editable cho bước build | không |
-| `evidence/source-with-text.svg` | có | bản gốc làm bằng chứng đối chiếu | không |
-| `evidence/notes.md` | — | ghi chú trích xuất | không |
+| `visual.svg` | no (intentional) | editable background to overlay new content | indirectly (preview.html) |
+| `text-slots.json` | — | position + typography contract for text | no |
+| `preview/thumbnail.png` | yes | image shown in the picker (original PDF raster) | **YES** |
+| `preview/preview.html` | yes (sample) | editable composite for the build step | no |
+| `evidence/source-with-text.svg` | yes | original kept as reference evidence | no |
+| `evidence/notes.md` | — | extraction notes | no |
 
-**Tại sao picker dùng `thumbnail.png` chứ không render `source-with-text.svg`:**
-render evidence SVG dễ **nhân đôi chữ** (chữ vector chồng lên raster đã có chữ),
-nên picker lấy thẳng raster PDF gốc cho sạch.
+**Why the picker uses `thumbnail.png` instead of rendering `source-with-text.svg`:**
+rendering the evidence SVG easily **doubles the text** (vector text overlaid on a
+raster that already has text), so the picker takes the original PDF raster directly
+for a clean result.
 
-**`thumbnail.png` là BẮT BUỘC.** Picker (`thumbSrc`) ưu tiên `thumbnail`, fallback
-sang `preview` — nhưng với template `preview` = `preview/preview.html`, không dùng
-làm `<img src>` được → thiếu thumbnail thì ô hiện placeholder "No preview".
+**`thumbnail.png` is REQUIRED.** The picker (`thumbSrc`) prefers `thumbnail`, falling
+back to `preview` — but for templates `preview` = `preview/preview.html`, which can't
+be used as an `<img src>` → if the thumbnail is missing the cell shows a "No preview"
+placeholder.
 
-**`reference.png` là staging-only:** `convert_pdf_source.py` sinh nó làm raster
-QA render-parity (`page.get_pixmap`), pixel-identical với `thumbnail.png`.
-`publish_extraction.py` **loại nó khỏi folder published** (chỉ giữ ở
-`outputs/component-extractions/...` cho QA). Không mang vào library.
+**`reference.png` is staging-only:** `convert_pdf_source.py` generates it as a raster
+for QA render-parity (`page.get_pixmap`), pixel-identical to `thumbnail.png`.
+`publish_extraction.py` **excludes it from the published folder** (kept only in
+`outputs/component-extractions/...` for QA). It is not carried into the library.
 
 ---
 
-## 3. UX picker: hai tầng + slide-viewer modal
+## 3. Picker UX: two tiers + slide-viewer modal
 
 ```
-[1] Sets list   (màn đầu)
-        │   mỗi set = 1 card deck (tên deck, thumbnail đại diện, số slide)
-        │   KHÔNG hiển thị "slot count" ở bất kỳ đâu
-        ▼  click card → smooth scroll (tôn trọng prefers-reduced-motion)
+[1] Sets list   (first screen)
+        │   each set = one deck card (deck name, representative thumbnail, slide count)
+        │   does NOT show "slot count" anywhere
+        ▼  click card → smooth scroll (respects prefers-reduced-motion)
 [2] Deck slide grid   (openDeck)
-        │   lưới các slide trong deck; mỗi ô = thumbnail + tên + nút
-        │   back-bar "All template sets" + jump-nav (set switcher) ở hero —
-        │     jump-nav CHỈ hiện khi ≥2 deck (giờ 1 deck nên ẩn)
+        │   grid of slides in the deck; each cell = thumbnail + name + button
+        │   back-bar "All template sets" + jump-nav (set switcher) in the hero —
+        │     jump-nav ONLY shows when ≥2 decks (with 1 deck it is now hidden)
         ▼  click slide → openModal(deck, index)
 [3] Slide-viewer modal
-        │   • top bar: close · tên deck · "N / M" counter · nút whole-set
-        │   • filmstrip dọc (thumb đánh số, active ring cam, auto scroll-into-view)
-        │   • stage giữa: container-query fit width:min(100cqw,100cqh*16/9) + gutter
-        │   • nav: SVG chevron trái/phải (không glyph), single-step,
-        │     disabled ở đầu/cuối deck
+        │   • top bar: close · deck name · "N / M" counter · whole-set button
+        │   • vertical filmstrip (numbered thumbs, orange active ring, auto scroll-into-view)
+        │   • center stage: container-query fit width:min(100cqw,100cqh*16/9) + gutter
+        │   • nav: SVG left/right chevron (no glyph), single-step,
+        │     disabled at the start/end of the deck
         │   • info bar: kicker(use_case bucket, fallback "Slide N") / name /
         │     intent+tags chips / id
-        │   • footer: gợi ý phím (CHỈ hiện ← → / Home·End / Esc — tập con của
-        │     phím thực sự hoạt động)
+        │   • footer: key hints (ONLY shows ← → / Home·End / Esc — a subset of
+        │     the keys that actually work)
         │
-        │   JS chính: openModal · goTo · renderFilmstrip · next · prev · trapFocus
+        │   main JS: openModal · goTo · renderFilmstrip · next · prev · trapFocus
         ▼
-[4] Copy prompt  (3 nút, đều nhãn "Copy prompt")
-        │   • slidePrompt(card)      → prompt 1 slide (name + id)   [info bar]
-        │   • deckPrompt(deck, ids)  → prompt cả set (tên deck + ids) [top bar + detail head]
-        │   prompt = tiếng Anh, ngôn ngữ thường, KÈM id để generator tra cứu
+[4] Copy prompt  (3 buttons, all labeled "Copy prompt")
+        │   • slidePrompt(card)      → single-slide prompt (name + id)   [info bar]
+        │   • deckPrompt(deck, ids)  → whole-set prompt (deck name + ids) [top bar + detail head]
+        │   prompt = English, plain language, WITH ids so the generator can look them up
         │   clipboard: navigator.clipboard → fallback execCommand
-        │   → toast xác nhận (stack tối đa 3, hover-pause, auto-dismiss ~4.2s)
+        │   → confirmation toast (stack of max 3, hover-pause, auto-dismiss ~4.2s)
         ▼
-   user dán prompt sang /slide-generator → chọn item published → build
+   user pastes the prompt into /slide-generator → selects a published item → build
 ```
 
-**Phím tắt:** `←/→` `↑/↓` `PageUp/PageDown` `Home/End` (điều hướng) ·
-`Esc` (đóng) · `Tab` (trap focus trong modal).
-`C`/`S` đã **gỡ bỏ** (đụng phím hệ thống) — chọn item nay qua nút trên màn hình.
-Footer chỉ quảng cáo một tập con (`← →`, `Home/End`, `Esc`).
+**Shortcuts:** `←/→` `↑/↓` `PageUp/PageDown` `Home/End` (navigation) ·
+`Esc` (close) · `Tab` (trap focus inside the modal).
+`C`/`S` have been **removed** (clashed with system keys) — selecting an item is now
+done via on-screen buttons.
+The footer advertises only a subset (`← →`, `Home/End`, `Esc`).
 
 ---
 
-## 4. Regenerate & validate (chạy sau mỗi lần đổi registry)
+## 4. Regenerate & validate (run after every registry change)
 
 ```
-# từ slide-system/
+# from slide-system/
 python3 scripts/build_template_picker_data.py    # → template-picker/picker-data.json
 python3 scripts/build_component_catalog.py        # → catalog/catalog-data.json
-python3 scripts/validate_registry.py              # gate: id pattern + path tồn tại
+python3 scripts/validate_registry.py              # gate: id pattern + path exists
 
-# xem thử (macOS không có `timeout`):
-python3 -m http.server 8777    # từ repo root
-# mở http://localhost:8777/slide-system/template-picker/index.html
+# preview (macOS has no `timeout`):
+python3 -m http.server 8777    # from repo root
+# open http://localhost:8777/slide-system/template-picker/index.html
 ```
 
 ---
 
-## 5. Luật cứng
+## 5. Hard rules
 
-- `picker-data.json` và `catalog-data.json` là **GENERATED** — luôn regenerate
-  bằng script, KHÔNG sửa tay.
-- Picker chỉ đọc `visual-library.json`, chỉ item `status==published` &
-  `type==template`. Item staging/deprecated không bao giờ lọt vào.
-- "Template" = **một slide hoàn chỉnh** 1920×1080, không phải section/card/icon.
-- Ảnh preview phải là **slide gốc đầy đủ** (PDF raster), không phải bản dựng lại
-  có thể lệch nguồn → dùng `thumbnail.png`, không render `source-with-text.svg`.
-- Gom set theo `source.path` (registry-driven), độc lập với layout folder.
-- Id mirror layout: `sun.<set-slug>.<slide-slug>` ↔ `templates/<set>/<slide>/`.
-- Prompt copy bằng **tiếng Anh**, kèm id; tên slide nhúng có thể là tiếng Việt (data).
-- Mọi animation tôn trọng `prefers-reduced-motion` (modal đóng dùng `is-closing`
-  + `animationend`/fallback 240ms; reduced-motion bỏ qua).
-- Không "slot count" ở bất kỳ đâu trong UI.
+- `picker-data.json` and `catalog-data.json` are **GENERATED** — always regenerate
+  with the script, do NOT edit by hand.
+- The picker only reads `visual-library.json`, only items with `status==published` &
+  `type==template`. Staging/deprecated items never get in.
+- "Template" = **one complete slide** 1920×1080, not a section/card/icon.
+- The preview image must be the **full original slide** (PDF raster), not a rebuild
+  that could drift from the source → use `thumbnail.png`, do not render
+  `source-with-text.svg`.
+- Group sets by `source.path` (registry-driven), independent of the layout folder.
+- Id mirrors layout: `sun.<set-slug>.<slide-slug>` ↔ `templates/<set>/<slide>/`.
+- Copy the prompt in **English**, with id; the embedded slide name may be Vietnamese (data).
+- All animations respect `prefers-reduced-motion` (modal close uses `is-closing`
+  + `animationend`/240ms fallback; reduced-motion skips it).
+- No "slot count" anywhere in the UI.
 
 ---
 
-## 6. Quan hệ với 2 skill gốc
+## 6. Relationship to the 2 source skills
 
 ```
 /component-extractor ──publish──▶ library/templates/<set>/<slide>/
@@ -176,13 +182,14 @@ python3 -m http.server 8777    # từ repo root
                                          ▼  build_template_picker_data.py
                                   template-picker/picker-data.json
                                          │
-                                         ▼  UI tĩnh, Copy prompt
-                                  prompt (id + ngôn ngữ thường)
+                                         ▼  static UI, Copy prompt
+                                  prompt (id + plain language)
                                          │
-                                         ▼  user dán
-                                  /slide-generator (chỉ chọn published)
+                                         ▼  user pastes
+                                  /slide-generator (only selects published)
 ```
 
-Picker nằm **giữa** thư viện published và `/slide-generator`: nó không trích xuất,
-không build slide — chỉ là lớp *khám phá + sinh prompt* để người không kỹ thuật
-chọn đúng template hoàn chỉnh rồi bàn giao cho generator.
+The picker sits **between** the published library and `/slide-generator`: it does not
+extract and does not build slides — it is only a *discovery + prompt-generation* layer
+so non-technical users can pick the right complete template and hand it off to the
+generator.

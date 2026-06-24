@@ -60,8 +60,7 @@ Both scripts already scan `library/templates/` — no registration code needed.
 
 Report completion:
 
-> Đã lưu template `sun.template.<name>` — bạn có thể dùng nó trong các job
-> tiếp theo.
+> Saved template `sun.template.<name>` — you can use it in future jobs.
 
 ## Boundaries
 

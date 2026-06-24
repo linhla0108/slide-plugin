@@ -1,228 +1,230 @@
-# Hướng Dẫn Sử Dụng Plugin
+# Plugin User Guide
 
-Hướng dẫn nhanh, dễ hiểu để tạo slide bằng **ứng dụng Claude trên máy tính**.
-Bạn không cần biết kỹ thuật — chỉ cần trò chuyện, Claude sẽ làm phần còn lại.
+A quick, easy guide to creating slides with the **Claude desktop app**.
+You don't need any technical knowledge — just talk, and Claude does the rest.
 
-> **Mẹo đọc tài liệu:** Mỗi phần đều có **khung hội thoại mẫu** (bạn gõ gì,
-> Claude trả lời gì), **sơ đồ các bước**, và **chỗ để chèn ảnh chụp màn hình**
-> thật của bạn.
+> **Reading tip:** Each section includes a **sample conversation box** (what you
+> type, what Claude replies), a **step diagram**, and **a spot to insert your
+> own real screenshots**.
 
 ---
 
-## Trước Khi Bắt Đầu
+## Before You Begin
 
-- Bạn chỉ cần mở **ứng dụng Claude trên máy tính**.
-- Không cần cài đặt gì cả. Chỉ cần nói chuyện với Claude bằng lời bình thường.
-- Chuẩn bị sẵn nội dung của bạn (văn bản, ghi chú, hoặc file muốn biến thành
-  slide).
+- All you need to do is open the **Claude desktop app**.
+- Nothing to install. Just talk to Claude in plain words.
+- Have your content ready (text, notes, or a file you want to turn into
+  slides).
 
-Vậy là xong. Giờ hãy chọn việc bạn muốn làm.
+That's it. Now pick what you want to do.
 
 <!--
-  CHÈN ẢNH: Màn hình chính của ứng dụng Claude với ô chat trống.
-  ![Màn hình chính của Claude](./images/01-man-hinh-chinh.png)
+  INSERT IMAGE: The Claude app's home screen with an empty chat box.
+  ![Claude home screen](./images/01-man-hinh-chinh.png)
 -->
 
 ---
 
-## 1. Tạo Slide — "Slide Generator"
+## 1. Create Slides — "Slide Generator"
 
-Dùng khi bạn muốn có một bài thuyết trình hoàn toàn mới.
+Use this when you want a brand-new presentation.
 
-### Sơ đồ các bước
+### Step diagram
 
 ```text
   ┌────────────────────────────────────┐
-  │ 1. Bạn nói:                        │
-  │    "Tạo cho tôi bài thuyết trình…" │
+  │ 1. You say:                        │
+  │    "Create a presentation for me…" │
   └──────────────┬─────────────────────┘
                  ▼
   ┌────────────────────────────────────┐
-  │ 2. Claude hỏi vài câu đơn giản     │◀──────────┐
+  │ 2. Claude asks a few simple Qs     │◀──────────┐
   └──────────────┬─────────────────────┘           │
                  ▼                                  │
   ┌────────────────────────────────────┐           │
-  │ 3. Claude đưa bản kế hoạch ngắn    │           │
+  │ 3. Claude gives a short plan       │           │
   └──────────────┬─────────────────────┘           │
                  ▼                                  │
-            ┌─────────┐   "Đổi lại…"                │
-            │ Bạn xem │ ────────────────────────────┘
-            │ & duyệt │
-            └────┬────┘
-                 │ "Làm đi"
+            ┌──────────┐  "Change it…"              │
+            │ You read │ ───────────────────────────┘
+            │ & approve│
+            └────┬─────┘
+                 │ "Go ahead"
                  ▼
   ┌────────────────────────────────────┐
-  │ 4. Claude dựng slide               │
+  │ 4. Claude builds the slides        │
   └──────────────┬─────────────────────┘
                  ▼
   ┌────────────────────────────────────┐
-  │ 5. Nhận file PowerPoint (.pptx)    │
-  │    chỉnh sửa được ✅               │
+  │ 5. Get an editable PowerPoint      │
+  │    (.pptx) file ✅                 │
   └────────────────────────────────────┘
 ```
 
-### Hội thoại mẫu
+### Sample conversation
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│  BẠN:                                                        │
-│  Tạo cho tôi bài thuyết trình 5 slide về chương trình        │
-│  đào tạo nhân viên mới.                                      │
+│  YOU:                                                        │
+│  Create a 5-slide presentation for me about the new          │
+│  employee onboarding program.                                │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
 │  CLAUDE:                                                     │
-│  Tuyệt! Mình hỏi nhanh vài câu nhé:                          │
-│  • Đối tượng xem là nhân viên mới, đúng không? (gợi ý: Đúng) │
-│  • Bạn muốn phong cách trẻ trung, năng động? (gợi ý: Có)     │
-│  Bạn chỉ cần trả lời "đúng" hoặc chọn gợi ý.                 │
+│  Great! A couple of quick questions:                         │
+│  • The audience is new employees, right? (hint: Yes)         │
+│  • Do you want a young, energetic style? (hint: Yes)         │
+│  Just answer "yes" or pick a hint.                           │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
-│  BẠN:  Đúng hết.                                             │
+│  YOU:  Yes to all.                                           │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
 │  CLAUDE:                                                     │
-│  Đây là kế hoạch 5 slide:                                    │
-│   1. Lời chào mừng   2. Mục tiêu   3. Lịch trình             │
-│   4. Người liên hệ   5. Bước tiếp theo                       │
-│  Bạn duyệt thì mình bắt đầu dựng nhé?                        │
+│  Here's the 5-slide plan:                                    │
+│   1. Welcome      2. Goals      3. Schedule                  │
+│   4. Contacts     5. Next steps                              │
+│  Approve it and I'll start building?                         │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
-│  BẠN:  Làm đi.                                               │
+│  YOU:  Go ahead.                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Hoặc nếu bạn đã có ghi chú/file sẵn:**
+**Or if you already have notes/a file ready:**
 
-> "Biến tài liệu này thành bộ slide." *(rồi đính kèm hoặc dán nội dung của bạn)*
+> "Turn this document into a slide deck." *(then attach or paste your content)*
 
-### Bạn sẽ nhận được gì
+### What you'll get
 
-1. Claude hỏi vài câu đơn giản (chủ đề, số slide, phong cách). Mỗi câu đều có
-   sẵn gợi ý — bạn chỉ cần nói "đúng" hoặc chọn.
-2. Claude đưa bản kế hoạch ngắn trước khi dựng. Xem qua rồi nói **"làm đi"** khi
-   thấy ổn.
-3. Claude dựng slide và đưa cho bạn một **file PowerPoint (.pptx)** mà bạn tự mở
-   và chỉnh sửa được.
+1. Claude asks a few simple questions (topic, number of slides, style). Each
+   one comes with a hint — you just say "yes" or pick one.
+2. Claude gives a short plan before building. Look it over, then say **"go
+   ahead"** when it looks good.
+3. Claude builds the slides and gives you a **PowerPoint (.pptx) file** that you
+   can open and edit yourself.
 
-**Cần biết thêm:**
+**Good to know:**
 
-- Nếu bạn nói "PowerPoint", "PPT" hay "PPTX", bạn sẽ nhận file PowerPoint chỉnh
-  sửa được (mặc định).
-- Bạn luôn có thể yêu cầu sửa: *"Rút gọn slide 3"* hoặc *"Dùng màu sáng hơn."*
+- If you say "PowerPoint", "PPT", or "PPTX", you'll get an editable PowerPoint
+  file (the default).
+- You can always ask for changes: *"Shorten slide 3"* or *"Use brighter
+  colors."*
 
 <!--
-  CHÈN ẢNH: Claude đang hỏi lại các câu đơn giản + bản kế hoạch slide.
-  ![Claude hỏi và đưa kế hoạch](./images/02-tao-slide.png)
+  INSERT IMAGE: Claude asking the simple questions + the slide plan.
+  ![Claude asks and gives a plan](./images/02-tao-slide.png)
 
-  CHÈN ẢNH: File PowerPoint .pptx kết quả đã mở lên.
-  ![File PowerPoint kết quả](./images/03-ket-qua-pptx.png)
+  INSERT IMAGE: The resulting .pptx PowerPoint file opened up.
+  ![Resulting PowerPoint file](./images/03-ket-qua-pptx.png)
 -->
 
 ---
 
-## 2. Lấy Một Phần Từ Slide — "Component Extractor"
+## 2. Take a Part From a Slide — "Component Extractor"
 
-Dùng khi bạn thích **một phần của slide có sẵn** và muốn dùng lại — ví dụ một
-biểu đồ, khối tiêu đề, hình nền, hoặc cả một slide.
+Use this when you like **a part of an existing slide** and want to reuse it —
+for example a chart, a title block, a background, or a whole slide.
 
-### Sơ đồ các bước
+### Step diagram
 
 ```text
   ┌────────────────────────────────────┐
-  │ 1. Bạn nói:                        │
-  │    "Lấy phần … từ slide …"         │
+  │ 1. You say:                        │
+  │    "Take the … from slide …"       │
   └──────────────┬─────────────────────┘
                  ▼
   ┌────────────────────────────────────┐
-  │ 2. Cho biết file nào + phần nào    │◀────────────┐
+  │ 2. Tell which file + which part    │◀────────────┐
   └──────────────┬─────────────────────┘             │
                  ▼                                    │
   ┌────────────────────────────────────┐             │
-  │ 3. Claude tách phần đó ra          │             │
+  │ 3. Claude extracts that part       │             │
   └──────────────┬─────────────────────┘             │
                  ▼                                    │
   ┌────────────────────────────────────┐             │
-  │ 4. Claude cho bạn xem trước        │             │
+  │ 4. Claude shows you a preview      │             │
   └──────────────┬─────────────────────┘             │
                  ▼                                    │
-            ┌─────────┐  "Không phải cái này"         │
-            │ Bạn xem │ ─────────────────────────────┘
-            │ & duyệt │
-            └────┬────┘
-                 │ "Lưu lại"
+            ┌──────────┐ "Not this one"                │
+            │ You read │ ──────────────────────────────┘
+            │ & approve│
+            └────┬─────┘
+                 │ "Save it"
                  ▼
   ┌────────────────────────────────────┐
-  │ 5. Phần đó được lưu để dùng lại ✅ │
+  │ 5. That part is saved for reuse ✅ │
   └────────────────────────────────────┘
 ```
 
-### Hội thoại mẫu
+### Sample conversation
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│  BẠN:                                                        │
-│  Lấy biểu đồ màu cam ở slide 4 và lưu lại để tôi dùng lại.   │
+│  YOU:                                                        │
+│  Take the orange chart on slide 4 and save it so I can reuse.│
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
 │  CLAUDE:                                                     │
-│  Được! Mình đã tách biểu đồ màu cam ở slide 4 ra.            │
-│  Đây là bản xem trước 👇  Bạn muốn mình lưu lại chứ?         │
-│  [ xem trước biểu đồ ]                                       │
+│  Done! I've extracted the orange chart from slide 4.         │
+│  Here's a preview 👇  Want me to save it?                    │
+│  [ chart preview ]                                           │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
-│  BẠN:  Đúng rồi, lưu lại đi.                                 │
+│  YOU:  Yes, save it.                                         │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
 │  CLAUDE:                                                     │
-│  Đã lưu! Lần sau bạn chỉ cần nói là mình chèn lại vào        │
-│  slide mới cho bạn.                                          │
+│  Saved! Next time just say the word and I'll drop it back    │
+│  into a new slide for you.                                   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Hoặc lấy cả bộ:**
+**Or take the whole set:**
 
-> "Lưu mọi slide trong file này thành các phần dùng lại được."
-> *(rồi chia sẻ file)*
+> "Save every slide in this file as reusable parts."
+> *(then share the file)*
 
-### Bạn sẽ nhận được gì
+### What you'll get
 
-1. Cho Claude biết **file nào** và **phần nào** bạn muốn (một slide, một dải
-   trang, hoặc một thứ cụ thể như "phần chân trang" hay "tiêu đề").
-2. Claude tách phần đó ra và cho bạn xem trước.
-3. Bạn nói **"đúng, lưu lại"**, và nó được lưu để bạn (hoặc Claude) chèn vào các
-   slide sau này.
+1. Tell Claude **which file** and **which part** you want (a slide, a range of
+   pages, or something specific like "the footer" or "the title").
+2. Claude extracts that part and shows you a preview.
+3. You say **"yes, save it"**, and it's saved so you (or Claude) can drop it
+   into later slides.
 
-**Cần biết thêm:**
+**Good to know:**
 
-- Việc này chỉ xảy ra khi bạn yêu cầu — Claude không tự ý lấy phần nào cả.
-- Bạn duyệt từng phần trước khi nó được lưu.
+- This only happens when you ask — Claude never takes any part on its own.
+- You approve each part before it's saved.
 
 <!--
-  CHÈN ẢNH: Claude hiển thị bản xem trước của phần được tách ra.
-  ![Xem trước phần được tách](./images/04-xem-truoc-component.png)
+  INSERT IMAGE: Claude showing a preview of the extracted part.
+  ![Preview of the extracted part](./images/04-xem-truoc-component.png)
 -->
 
 ---
 
-## Mẹo Đơn Giản
+## Simple Tips
 
-- **Nói chuyện bình thường.** Không cần lệnh đặc biệt — viết thành câu đầy đủ là
-  tốt nhất.
-- **Làm từng việc một.** Tạo slide *hoặc* tách phần, xong rồi mới sang việc tiếp.
-- **Nói "đúng" hoặc "đổi lại".** Claude luôn hỏi bạn trước các bước lớn, nên
-  không có gì xảy ra mà chưa được bạn đồng ý.
-- **Bí quá?** Cứ gõ *"giúp tôi bắt đầu"* và Claude sẽ hướng dẫn từng bước.
+- **Talk normally.** No special commands needed — full sentences work best.
+- **Do one thing at a time.** Create slides *or* extract a part, finish, then
+  move to the next task.
+- **Say "yes" or "change it".** Claude always checks with you before the big
+  steps, so nothing happens without your approval.
+- **Stuck?** Just type *"help me get started"* and Claude will walk you through
+  it step by step.
 
-Vậy là bạn đã sẵn sàng. Chúc bạn làm slide vui vẻ!
+You're all set. Have fun making slides!
 
 ---
 
-### Ghi chú cho người chèn ảnh
+### Notes for whoever inserts the images
 
-Những dòng `<!-- CHÈN ẢNH ... -->` ở trên là chỗ gợi ý để dán ảnh chụp màn hình
-thật. Cách thêm ảnh:
+The `<!-- INSERT IMAGE ... -->` lines above are suggested spots to paste real
+screenshots. How to add an image:
 
-1. Chụp màn hình ứng dụng Claude theo đúng mô tả.
-2. Lưu ảnh vào thư mục `docs/images/` (đặt tên như gợi ý, ví dụ
+1. Take a screenshot of the Claude app matching the description.
+2. Save the image into the `docs/images/` folder (name it as suggested, e.g.
    `02-tao-slide.png`).
-3. Bỏ phần `<!-- -->` để dòng `![...](...)` hiện ra thành ảnh.
+3. Remove the `<!-- -->` so the `![...](...)` line shows up as an image.

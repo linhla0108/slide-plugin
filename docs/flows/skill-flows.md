@@ -1,106 +1,111 @@
-# Mô phỏng luồng skill: /component-extractor & /slide-generator
+# Skill flow simulation: /component-extractor & /slide-generator
 
-> Bản tóm tắt đơn giản, mô phỏng theo `.agents/skills/*/SKILL.md` (cập nhật 2026-06-11).
+> A simple summary, modeled after `.agents/skills/*/SKILL.md` (updated 2026-06-23).
 
 ---
 
-## 1. /component-extractor — trích xuất component từ slide
+## 1. /component-extractor — extract a component from a slide
 
-**Khi dùng:** user chỉ định rõ vùng cần trích (file nguồn + số trang + bounds/object ID). Không bao giờ tự quét cả deck.
+**When to use:** the user explicitly specifies the region to extract (source file + page number + bounds/object ID). Never auto-scan the whole deck.
 
 ```
 Input (PDF/PPTX/SVG + page + region)
         │
         ▼
 [0] Preflight (marker-first)
-        │   grep "ready" trong extract-readiness.json → đi tiếp, KHÔNG chạy script
-        │   Riêng PDF/PPTX: chạy check_base_requirements.py --input pdf|pptx (gate PyMuPDF/LibreOffice)
+        │   grep "ready" in extract-readiness.json → proceed, do NOT run the script
+        │   For PDF/PPTX only: run check_base_requirements.py --input pdf|pptx (PyMuPDF/LibreOffice gate)
         ▼
-[1] Validate request + fingerprint vùng + check trùng lặp
+[1] Validate request + fingerprint the region + check for duplicates
         │   (extraction-history, aliases, shared registry)
         ▼
-[2] Scaffold staging item trong outputs/component-extractions/
-        │   phân loại artifact → chọn extraction method theo type
+[2] Scaffold staging item in outputs/component-extractions/
+        │   classify artifact → choose extraction method by type
         ▼
-[3] Chạy chuỗi script chuẩn (KHÔNG viết tay visual.svg / text-slots.json):
-        │   a. convert_pdf_source.py        ← PDF→SVG, PyMuPDF, đường duy nhất được phép
-        │   b. extract_editable_text_slots.py ← tách text-free visual.svg + text-slots.json + evidence
-        │   c. externalize_svg_images.py    ← tách ảnh ra assets/ dùng chung
-        │   d. flatten_svg_background.py    ← gộp các strip background PDF thành 1 PNG (pixel-diff gated)
-        │   e. externalize_svg_images.py    ← chạy lại để refresh manifest sau flatten
+[3] Run the standard script chain (do NOT hand-write visual.svg / text-slots.json):
+        │   a. convert_pdf_source.py        ← PDF→SVG, PyMuPDF, the only allowed path
+        │   b. extract_editable_text_slots.py ← split out text-free visual.svg + text-slots.json + evidence
+        │   b2. crop_svg_region.py          ← crop visual.svg down to the exact source.region (component-level)
+        │                                     PDF→SVG produces the whole page; skipping this step = the artifact is still the whole slide
+        │                                     no-op when region = full-page; idempotent (marker source.region_crop)
+        │   c. externalize_svg_images.py    ← extract images into shared assets/
+        │   d. flatten_svg_background.py    ← merge PDF background strips into a single PNG (pixel-diff gated)
+        │   e. externalize_svg_images.py    ← run again to refresh the manifest after flatten
         │   f. optimize_svg.py
         │   g. apply_text_contract.py
-        │   h. validate_text_slots.py       ← gate cuối, fail là dừng
+        │   h. validate_text_slots.py       ← final gate, fail means stop
         ▼
-[4] Ghi mapping.json (record chính) + evidence/notes.md
-        │   artifact/ = visual.svg + text-slots.json (không copy ảnh nguồn, không README per-item)
+[4] Write mapping.json (the main record) + evidence/notes.md
+        │   artifact/ = visual.svg + text-slots.json (do not copy source images, no per-item README)
         ▼
-[5] Build 1 gallery.html cho cả batch + cập nhật catalog staging + extraction history
+[5] Build one gallery.html for the whole batch + update catalog staging + extraction history
         ▼
-[6] User duyệt từng item → chỉ publish item được approve
-            (publish_extraction.py: tạo preview/, xác nhận evidence/)
+[6] User reviews each item → publish only approved items
+            (publish_extraction.py: create preview/, confirm evidence/
+             + gate: a component-level item without source.region_crop → block publish)
 ```
 
-**Luật cứng:**
-- Không render trang PDF/PPTX thành PNG làm visual → text bị "nướng" vào pixel, validator không bắt được, gallery hiện double text.
-- SVG tái sử dụng không được chứa `<text>`/`<tspan>` semantic.
-- Background phức tạp (blur/shadow/mask/gradient nhiều stop) → PNG background-only, **zero text**.
-- Thư viện được phép do `REQUIREMENTS.md` quyết định — không tool-shopping.
+**Hard rules:**
+- Do not render a PDF/PPTX page to PNG as the visual → text gets "baked" into pixels, the validator can't catch it, and the gallery shows double text.
+- A component-level item MUST be cropped to its `source.region` (`crop_svg_region.py`) before publishing — PDF→SVG produces the whole page, and without cropping the artifact is the whole slide with text removed, not a single component. The publish gate blocks if the `source.region_crop` marker is missing.
+- A reusable SVG must not contain semantic `<text>`/`<tspan>`.
+- Complex backgrounds (blur/shadow/mask/multi-stop gradient) → background-only PNG, **zero text**.
+- The allowed libraries are decided by `REQUIREMENTS.md` — no tool-shopping.
 
 ---
 
-## 2. /slide-generator — sinh deck slide từ prompt/file
+## 2. /slide-generator — generate a slide deck from a prompt/file
 
-**Khi dùng:** entry point mặc định cho mọi job tạo slide mới.
+**When to use:** the default entry point for every new slide-creation job.
 
 ```
-Input (prompt / file / hỗn hợp)
+Input (prompt / file / mixed)
         │
         ▼
 [1] Intake & triage
-        │   user mới = non-tech: hỏi từng câu một, mỗi câu kèm guess,
-        │   tối đa ~5-6 câu, chốt luôn export format ở đây
+        │   new user = non-technical: ask one question at a time, each with a guess,
+        │   up to ~5-6 questions, lock in the export format here
         ▼
-[2] Recap brief bằng ngôn ngữ thường → user XÁC NHẬN rồi mới build
+[2] Recap the brief in plain language → user CONFIRMS before building
         │   (recap = job requirements + export contract)
         ▼
-[3] Tạo job + versioned run dưới outputs/slide-jobs/<job-id>/
+[3] Create job + versioned run under outputs/slide-jobs/<job-id>/
         ▼
-[4] Chạy requirement checker (dùng capability registry đã cache)
+[4] Run the requirement checker (using the cached capability registry)
         ▼
-[5] Có blocking requirement → DỪNG, trừ khi user duyệt override
+[5] Blocking requirement present → STOP, unless the user approves an override
         ▼
-[6] Phân tích content + source authority
+[6] Analyze content + source authority
         ▼
-[7] Lập slide plan + chấm điểm visual items đã PUBLISHED trong library
-        │   (không chọn item staging / deprecated / export-incompatible)
+[7] Draft the slide plan + score the PUBLISHED visual items in the library
+        │   (do not select staging / deprecated / export-incompatible items)
         ▼
-[8] Trình 1 approval package → user duyệt
+[8] Present one approval package → user reviews
         ▼
-[9] Build HTML (chỉ sau khi approve)
+[9] Build HTML (only after approval)
         ▼
-[10] Export đúng format đã chọn ở bước 1 + QA 4 lớp:
+[10] Export to the exact format chosen in step 1 + 4-layer QA:
         │    content / object / render / parity
         ▼
-[11] Đóng gói run: checksums + reports + manifest
+[11] Package the run: checksums + reports + manifest
 ```
 
-**Luật cứng:**
-- Chỉ export format đã chốt ở intake — không sinh format thừa.
-- Asset tham chiếu tại chỗ (brand pack, `<job-id>/assets/`) — run không re-copy asset.
-- 1 file `analysis/visual-requests.json` + 1 `analysis/selection-report.json` mỗi run (không tách per-section).
-- `qa/export-renders/` là trung gian — xoá sau khi parity pass.
-- Không extract component inline — muốn tái sử dụng thì hand-off sang `/component-extractor`.
-- Brand mặc định: SUN.STUDIO.
+**Hard rules:**
+- Export only the format locked in at intake — do not generate extra formats.
+- Assets are referenced in place (brand pack, `<job-id>/assets/`) — the run does not re-copy assets.
+- One `analysis/visual-requests.json` + one `analysis/selection-report.json` per run (not split per-section).
+- `qa/export-renders/` is intermediate — delete it after parity passes.
+- Do not extract components inline — to reuse, hand off to `/component-extractor`.
+- Default brand: SUN.STUDIO.
 
 ---
 
-## 3. Quan hệ giữa 2 skill + trạng thái hiện tại
+## 3. Relationship between the two skills + current state
 
 ```
 /component-extractor ──publish──▶ slide-system/library/ ──select──▶ /slide-generator
-        (staging → approve)         (published items)        (chỉ chọn published)
+        (staging → approve)         (published items)        (only selects published)
 ```
 
-- **Extraction side: ĐÃ tối ưu xong (2026-06-11)** — flatten background, shared assets, reference 1920px. Không tối ưu lại.
-- **Export side: P1 3-layer ĐÃ triển khai (2026-06-12).** `export_pptx.py` orchestrator chain capture→build→compose→compare→validate. `--mode layered` (default) tách base + overlay + native text. Chi tiết: xem `docs/flows/3layer-export.md` và `docs/flows/slide-generator-workflow.md`.
+- **Extraction side: ALREADY optimized (2026-06-11)** — flattened background, shared assets, 1920px reference. Do not re-optimize.
+- **Export side: P1 3-layer ALREADY implemented (2026-06-12).** `export_pptx.py` orchestrates the chain capture→build→compose→compare→validate. `--mode layered` (default) splits base + overlay + native text. Details: see `docs/flows/3layer-export.md` and `docs/flows/slide-generator-workflow.md`.
