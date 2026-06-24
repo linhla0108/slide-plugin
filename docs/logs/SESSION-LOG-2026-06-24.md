@@ -728,3 +728,12 @@ still referenced the removed `compatibility` field).
 **Verify (live browser):** reloaded → 0 console errors; only "Filter by type" +
 "Filter by brand" remain; item detail shows only Preview/Info tabs; counts load
 (Components 2, Templates 5). All three desyncs (#1 disk, #2 history, #3 UI) resolved.
+
+### §16 — Housekeeping: close out plan + relocate stray log
+
+- Marked `tasks/plan.md` + `tasks/todo.md` DONE (both scopes + catalog sync), with
+  commit refs per task.
+- Moved `docs/LOG-2026-06-24-zombie-audit.md` → `docs/logs/` (AGENTS.md rule: all
+  logs live under `docs/logs/`; it was the only stray). `docs/flows/catalog-publish.md`
+  is a flow doc, not a log — left in place. References to the file are prose
+  (bare filename), so the move broke no links.

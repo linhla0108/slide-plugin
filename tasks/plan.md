@@ -1,5 +1,10 @@
 # Plan: Two independent cleanups — (1) drop `compatibility` field, (2) unify data sources
 
+> ✅ **COMPLETED 2026-06-24.** Both scopes done; see `tasks/todo.md` for the
+> commit-by-commit status and `docs/logs/SESSION-LOG-2026-06-24.md` §13–§15 for the
+> full write-up. Commits: `ec20b6ff` (Scope 1), `a64e43d5` + `db37667f` + `234e846a`
+> (Scope 2), `8f19ea23` + `113a12e8` (catalog draft-delete sync, found via browser test).
+
 **Date:** 2026-06-24 (revised — correct scope)
 **Branch:** `feat/harness-enforcement-and-component-recognition`
 
