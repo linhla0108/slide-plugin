@@ -810,6 +810,20 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
         seen_shapes.add(sc)
         deduped.append(rec)
     groups = deduped
+
+    # Coverage guard: if the deduped groups together cover less than 10% of
+    # the parent canvas, the detected shapes are sub-elements of a larger
+    # unified diagram (e.g. two diamond shapes inside a radial chart) — not
+    # standalone components. Skip materialization; the parent stays as-is.
+    canvas_area = canvas["w"] * canvas["h"]
+    if canvas_area > 0:
+        total_group_area = sum(
+            rec["group_bounds"]["w"] * rec["group_bounds"]["h"]
+            for rec in groups
+        )
+        if total_group_area / canvas_area < 0.10:
+            return []
+
     base_source = base_mapping.get("source", {})
     source_path = base_source.get("path", "")
     source_sha = base_source.get("sha256", "")

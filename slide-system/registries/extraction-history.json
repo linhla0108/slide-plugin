@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-26T11:21:42+07:00",
+  "updated_at": "2026-06-26T14:30:10+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -2151,6 +2151,36 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "893bb815e3ac3ad60db666a81ffd64439ad629538fcbe106de8a2c476a10ee26",
       "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
+    },
+    {
+      "attempted_at": "2026-06-26T14:29:59+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "team-contributor-circles-g01",
+      "stable_id": "sun.component.team-contributor-circles.g01",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9cd03205a34fc41f8993a2dc68e3dacbc82a20687e54111f6895b36580073ad",
+      "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
+    },
+    {
+      "attempted_at": "2026-06-26T14:30:02+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "work-environment-image-cards-g02",
+      "stable_id": "sun.component.work-environment-image-cards.g02",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "02122283d1ac0868c65b2e2c9824d50bcf7dd32547348d0f781684b4f3b55bc0",
+      "semantic_signature_sha256": "89407e8444dc83b84b52c25c78933fe32c1be4798ff615087e89d58f8dd3a9d5"
+    },
+    {
+      "attempted_at": "2026-06-26T14:30:10+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "goal-setting-checklist-table",
+      "stable_id": "sun.component.goal-setting-checklist-table",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
+      "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
     }
   ]
 }
