@@ -1,0 +1,53 @@
+{
+  "groups": [
+    {
+      "group_id": "team-contributor-circles-group-01",
+      "file": "components/team-contributor-circles-group-01.svg",
+      "shape_class": 1,
+      "title": "",
+      "tags": [],
+      "member_count": 3,
+      "distinct_card_count": 1,
+      "group_bounds": {
+        "x": 756.4,
+        "y": 744.5,
+        "w": 1382.5,
+        "h": 426.8
+      },
+      "member_bounds": [
+        {
+          "x": 756.4,
+          "y": 744.5,
+          "w": 426.8,
+          "h": 426.8
+        },
+        {
+          "x": 1234.3,
+          "y": 744.5,
+          "w": 426.8,
+          "h": 426.8
+        },
+        {
+          "x": 1712.1,
+          "y": 744.5,
+          "w": 426.8,
+          "h": 426.8
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "team-contributor-circles-group-01-card-01",
+          "file": "components/team-contributor-circles-group-01-card-01.svg",
+          "title": "",
+          "bounds": {
+            "x": 756.4,
+            "y": 744.5,
+            "w": 426.8,
+            "h": 426.8
+          },
+          "duplicate_count": 3
+        }
+      ]
+    }
+  ]
+}

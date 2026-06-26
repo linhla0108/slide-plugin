@@ -234,4 +234,4 @@ Append-only record, one entry per task in request order. Format per
 - Registry entries now carry `approval: {status, approved_by: "catalog-ui", approved_at}`
 - Catalog: Published 8, Draft 2
 
-**State:** Not committed
+**State:** Committed (e4094b7d)

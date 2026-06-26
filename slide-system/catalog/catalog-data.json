@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-26T14:46:03+07:00",
+  "generated_at": "2026-06-26T14:47:35+07:00",
   "counts": {
     "published": 84,
-    "staging": 2
+    "staging": 1
   },
   "items": [
     {
@@ -18832,99 +18832,6 @@
         }
       ],
       "deletable": true
-    },
-    {
-      "id": "sun.component.work-environment-image-cards.g01",
-      "version": "0.0.0",
-      "name": "Work Environment Image Cards \u2014 Leadership cards",
-      "type": "component",
-      "category": "component",
-      "status": "staging",
-      "brand": "sun-studio",
-      "intent": [
-        "work environment photo cards layout",
-        "image cards showing office and team environment",
-        "Leadership",
-        "Development"
-      ],
-      "tags": [
-        "Leadership",
-        "Development"
-      ],
-      "source": {
-        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
-        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-        "slide_or_page": 5,
-        "region": {
-          "x": 0.467567,
-          "y": 0.402225,
-          "width": 0.331935,
-          "height": 0.464854,
-          "unit": "normalized"
-        },
-        "object_ids": []
-      },
-      "paths": {
-        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact",
-        "visual": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/visual.svg",
-        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/text-slots.json",
-        "preview": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/preview",
-        "detail": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/README.md",
-        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/evidence"
-      },
-      "images": [
-        {
-          "label": "Leadership cards",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/components/work-environment-image-cards-group-01.svg"
-        },
-        {
-          "label": "Source (original region)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/evidence/source-with-text.svg"
-        }
-      ],
-      "icon_set": null,
-      "content_fields": {
-        "required": [],
-        "optional": [],
-        "text_slots": [
-          {
-            "id": "leadership",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          },
-          {
-            "id": "development",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          }
-        ]
-      },
-      "text_contract": {
-        "schema": "slide-system/schemas/text-slots.schema.json",
-        "visual": "artifact/visual.svg",
-        "slots": "artifact/text-slots.json",
-        "source_evidence": "evidence/source-with-text.svg",
-        "slot_count": 2,
-        "coordinate_space": "normalized",
-        "example_content": "source",
-        "semantic_text_in_visual": false,
-        "artwork_text_exemptions": [],
-        "overflow_policy": "unmanaged",
-        "editable": true,
-        "allow_empty": true
-      },
-      "variants": [],
-      "limitations": [
-        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ],
-      "deletable": true,
-      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01",
-      "publish_readiness": {
-        "ready": true,
-        "blockers": []
-      }
     },
     {
       "id": "sun.component.ai-adoption-radial-diagram",

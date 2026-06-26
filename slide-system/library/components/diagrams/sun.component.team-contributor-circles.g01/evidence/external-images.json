@@ -1,0 +1,24 @@
+{
+  "svg": "items/team-contributor-circles-g01/artifact/visual.svg",
+  "assets_dir": "artifact/assets",
+  "reference_count": 2,
+  "unique_file_count": 1,
+  "images": [
+    {
+      "reference_index": 1,
+      "svg": "visual.svg",
+      "path": "assets/image-01-4a6e46f998df.jpg",
+      "mime_type": "image/jpeg",
+      "byte_size": 1061894,
+      "sha256": "7310fec97d9ef139730c1e5905e92b83626342d53a4d51ee951f846931fc6a03"
+    },
+    {
+      "reference_index": 2,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-01-4a6e46f998df.jpg",
+      "mime_type": "image/jpeg",
+      "byte_size": 1061894,
+      "sha256": "7310fec97d9ef139730c1e5905e92b83626342d53a4d51ee951f846931fc6a03"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "source_visual": "artifact/visual.svg",
+  "canvas": {
+    "w": 2938.830078125,
+    "h": 1573.9000244140625
+  },
+  "instance_count": 0,
+  "shape_class_count": 0,
+  "group_count": 0,
+  "dropped_small_clusters": 0,
+  "dropped_small": [],
+  "background_candidates": [
+    {
+      "x": 434.7,
+      "y": 366.9,
+      "w": 2105.6,
+      "h": 2516.5,
+      "coverage": 1.1456
+    }
+  ],
+  "params": {
+    "min_area_frac": 0.015,
+    "shape_tol": 0.14,
+    "merge_gap": 6.0,
+    "margin": 3.0,
+    "bg_coverage": 0.7,
+    "group_gap_frac": 0.6,
+    "dedup_mae": 3.0
+  },
+  "groups": []
+}

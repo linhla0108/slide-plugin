@@ -1,0 +1,56 @@
+{
+  "svg": "items/work-environment-image-cards-g02/artifact/visual.svg",
+  "assets_dir": "artifact/assets",
+  "reference_count": 6,
+  "unique_file_count": 3,
+  "images": [
+    {
+      "reference_index": 1,
+      "svg": "visual.svg",
+      "path": "assets/image-02-4a6e46f998df.jpg",
+      "mime_type": "image/jpeg",
+      "byte_size": 1061894,
+      "sha256": "7310fec97d9ef139730c1e5905e92b83626342d53a4d51ee951f846931fc6a03"
+    },
+    {
+      "reference_index": 2,
+      "svg": "visual.svg",
+      "path": "assets/image-03-4c3d5f727fbc.png",
+      "mime_type": "image/png",
+      "byte_size": 10757,
+      "sha256": "4c3d5f727fbc8fffe4e8ab5f440452194c9a82394690a6be3f3c10e6c92a3372"
+    },
+    {
+      "reference_index": 3,
+      "svg": "visual.svg",
+      "path": "assets/image-04-05897b79da36.png",
+      "mime_type": "image/png",
+      "byte_size": 10621,
+      "sha256": "05897b79da36f636b805fe5404b132b6fe03d73276925581b10fcb0eff8dbd7e"
+    },
+    {
+      "reference_index": 4,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-02-4a6e46f998df.jpg",
+      "mime_type": "image/jpeg",
+      "byte_size": 1061894,
+      "sha256": "7310fec97d9ef139730c1e5905e92b83626342d53a4d51ee951f846931fc6a03"
+    },
+    {
+      "reference_index": 5,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-03-4c3d5f727fbc.png",
+      "mime_type": "image/png",
+      "byte_size": 10757,
+      "sha256": "4c3d5f727fbc8fffe4e8ab5f440452194c9a82394690a6be3f3c10e6c92a3372"
+    },
+    {
+      "reference_index": 6,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-04-05897b79da36.png",
+      "mime_type": "image/png",
+      "byte_size": 10621,
+      "sha256": "05897b79da36f636b805fe5404b132b6fe03d73276925581b10fcb0eff8dbd7e"
+    }
+  ]
+}
