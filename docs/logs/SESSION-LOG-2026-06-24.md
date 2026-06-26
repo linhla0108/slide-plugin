@@ -320,3 +320,20 @@ PDF→SVG path emits a whole page, so a component-level item must be cropped to 
 **Files:** slide-system/scripts/build_log_index.py, docs/logs/INDEX.jsonl, AGENTS.md, docs/logs/_TEMPLATE.md, tasks/research-log-system.md
 **Symbols:** build_log_index.parse_log, build_log_index.build_index, build_log_index.main
 **State:** Not committed.
+
+---
+
+## 2026-06-24.29 — Decompose a region into DISTINCT components + classify/dedup (preview each + source)
+
+**Request:** "loop cho tới khi nào đạt được output … browser để tự check … tìm chỗ khiến agent hiểu sai" — output spec: extract 1 page → tách từng component riêng biệt, phân loại; giống nhau → 1; cùng hình khác màu → gộp 1; preview hiển thị svg của TỪNG component riêng biệt + 1 ảnh source gốc để so sánh.
+**Root cause (where the agent misunderstood):** the pipeline only crops ONE region per request item → `visual.svg` is a single glued artwork (the 5-card strip), never broken into its components. `decompose_svg_objects.py` exists but is tuned for PPTX layer export and over-fragments a layer-organized SVG (32 confetti objects here) because it clusters in document/painter order — wrong when the SVG stores all gradients in one group, all shadows in another, all faces in a third.
+**Actions:**
+- NEW `slide-system/scripts/classify_page_components.py`. Measures every group+child bbox in real Chromium (`measure_svg_groups.js`); drops off-canvas leaves (crop residue); **spatially** (2D bbox-overlap union-find, NOT document order) clusters on-canvas leaves into component instances; classifies instances into shape-CLASSES (congruent w×h within tol) so identical / same-shape-different-color collapse to ONE representative each; emits `artifact/components/<item>-class-NN.svg` + `components-manifest.json` (records `instance_count` per class).
+- Three bugs found + fixed via browser/render self-check (the loop): (1) `wide()` bridging-guard used `h ≥ 0.55·H`, which flagged the tall 96%-height cards as "wide" and orphaned their icons → re-gated on **aspect ratio ≥ 8** (a divider is elongated; a card is not). (2) representative fragment rendered **blank** — measured bboxes are in final rendered space but the copied elements sit under the crop's `<g translate(-440 -440)>`; added `_ancestor_transform()` to capture the root→parent transform chain and re-apply it in the fragment. (3) `_SVG` name collision in the test file clobbered the crop tests' Clark-notation constant → renamed.
+- `build_component_catalog.py` `collect_images()`: when `components-manifest.json` exists, surface one SVG per distinct class (label `… (×N)`) followed by ONE `Source (original region)` image; tile = first component (no longer the glued strip).
+- Ran classifier on the staging item; rebuilt catalog; updated skill `SKILL.md` pipeline + `slide-system/workflows/extract-components.md` (step 10b) so future extractions run it.
+- +5 pure-logic tests in `test_gates.py` (off-canvas drop / tall-card-absorbs-icon / divider-no-bridge / same-shape dedup / ancestor-transform+fragment).
+**Result:** Classifier on `level-progression-cards`: **5 instances → 1 distinct class (×5), 0 dropped**; representative fragment renders a clean blue card (face+robot icon+arrow badge). Browser-verified on http://127.0.0.1:8799/slide-system/catalog/ Draft: tile shows the single deduped card (not the strip); modal carousel = [1/2] `Level Progression Cards Class 01 (×5)` + [2/2] `Source (original region)` showing all 5 colored Level cards for comparison — exactly the requested output. `test_gates.py` **30/30**.
+**Files:** slide-system/scripts/classify_page_components.py, slide-system/scripts/build_component_catalog.py, slide-system/scripts/test_gates.py, slide-system/workflows/extract-components.md
+**Symbols:** classify_page_components.process_item, classify_page_components._cluster_spatial, classify_page_components._shape_classes, classify_page_components._ancestor_transform, classify_page_components._build_fragment, build_component_catalog.collect_images
+**State:** Not committed (awaiting review).

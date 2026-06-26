@@ -1,3 +1,8 @@
+## Karpathy Guidelines (always active)
+
+Follow `/karpathy-guidelines` for all coding work: think before coding,
+simplicity first, surgical changes, goal-driven execution.
+
 ## Task Logging (required)
 
 Maintain a detailed, append-only work log. Full rule in `AGENTS.md` →

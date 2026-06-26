@@ -25,21 +25,34 @@ Append-only record, one entry per task in request order. Format per
 
 ## Entry template
 
-Number entries with a single running integer (`1`, `2`, `3`, …) — never mix
-`§`, `Task:`, or restart numbering. One heading level (`##`) for every entry.
+Number entries **per day** as `<YYYY-MM-DD>.<n>` (e.g. `2026-06-24.1`,
+`2026-06-24.2`, …) — `<n>` restarts at 1 each day's file. This avoids a global
+running counter that breaks across sessions/agents. Never mix `§`, `Task:`, or a
+single global integer. One heading level (`##`) for every entry.
+
+`Files:` and `Symbols:` are **required** machine-readable fields — they feed
+`docs/logs/INDEX.jsonl` (see `slide-system/scripts/build_log_index.py`) so an
+agent can locate relevant entries with one `rtk grep` before reading any prose.
+List real paths and, where a code symbol changed, its name (resolvable via
+`codegraph node <symbol>`). Use `none` if genuinely not applicable.
 
 ```markdown
-## <N> — <Short imperative title>
+## <YYYY-MM-DD>.<n> — <Short imperative title>
 
 **When:** <YYYY-MM-DD HH:MM>   (optional; include only if actually known)
 **Request:** <what the user asked, verbatim or faithful paraphrase>
 **Actions:**
 - <concrete steps: files created/modified/deleted, commands run, decisions + why>
 **Result:** <outcome + verification run (tests/gates/scans) and their status>
-**State:** Committed <hash> | Committed in entry <N>'s batch | Not committed
+**Files:** <comma-separated paths touched, or `none`>
+**Symbols:** <comma-separated code symbols changed, or `none`>
+**State:** Committed <hash> | Committed in entry <id>'s batch | Not committed
 
 ---
 ```
+
+After appending an entry, regenerate the index:
+`python3 slide-system/scripts/build_log_index.py --write`
 
 ## Rules
 

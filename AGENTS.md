@@ -45,30 +45,51 @@ not optional.
      and commands run, decisions made and why.
   3. **Result** — outcome, and verification run (tests, gates, scans) with their
      status.
-  4. **State** — whether changes were committed; if not, say so explicitly.
+  4. **Files** — comma-separated paths touched (or `none`).
+  5. **Symbols** — comma-separated code symbols changed (or `none`); resolvable
+     later via `codegraph node <symbol>`.
+  6. **State** — whether changes were committed; if not, say so explicitly.
 - **Faithfulness:** log only what actually happened. No invented steps, no
   guessed outcomes. If a step was skipped or failed, say so.
 - Group entries by task in request order; ground file/line/count claims in real
   `git status` / command output rather than memory.
-- **Format:** number entries with a single running integer (one `##` heading per
-  entry) and use the same four fields every time. Do **not** mix `§`, `Task:`, or
-  restart numbering, and do not create per-topic log files (`LOG-<date>-<topic>.md`,
-  `REPORT-*.md`) — an audit/report is a task entry inside that day's session log.
-  The canonical template lives at `docs/logs/_TEMPLATE.md`:
+- **Format:** number entries **per day** as `<YYYY-MM-DD>.<n>` (`<n>` restarts at
+  1 in each day's file — no global running integer, which breaks across
+  sessions/agents). One `##` heading per entry; use the same fields every time.
+  Do **not** mix `§`, `Task:`, or a single global integer, and do not create
+  per-topic log files (`LOG-<date>-<topic>.md`, `REPORT-*.md`) — an audit/report
+  is a task entry inside that day's session log. The canonical template lives at
+  `docs/logs/_TEMPLATE.md`:
 
   ```markdown
-  ## <N> — <Short imperative title>
+  ## <YYYY-MM-DD>.<n> — <Short imperative title>
 
   **When:** <YYYY-MM-DD HH:MM>   (optional; only if actually known)
   **Request:** <user ask, verbatim or faithful paraphrase>
   **Actions:**
   - <files/commands/decisions + why>
   **Result:** <outcome + verification (tests/gates/scans) and status>
+  **Files:** <paths touched, or `none`>
+  **Symbols:** <code symbols changed, or `none`>
   **State:** Committed <hash> | Not committed
   ```
 
-  If a later entry overturns an earlier one, add a `> ⚠️ SUPERSEDED by entry <N>`
+  If a later entry overturns an earlier one, add a `> ⚠️ SUPERSEDED by entry <id>`
   note to the old entry instead of rewriting it.
+
+- **Index:** after appending an entry, run
+  `python3 slide-system/scripts/build_log_index.py --write` to refresh
+  `docs/logs/INDEX.jsonl` (derived from the prose logs; never hand-edit it).
+  `--check` exits non-zero when the index is stale.
+
+- **Reading the log efficiently (for agents).** Do NOT read whole session-log
+  files top to bottom. Instead:
+  1. `rtk grep <file|symbol|keyword> docs/logs/INDEX.jsonl` (or `rtk json`) to
+     find the 1–3 relevant entry ids cheaply.
+  2. Read only those entries' prose in the referenced `SESSION-LOG-<date>.md`.
+  3. A log records the past — its code/number claims may be stale. For the
+     **current** state of any symbol it names, run `codegraph node <symbol>`
+     rather than trusting the log. Re-verify before asserting.
 
 ## Product Direction
 
