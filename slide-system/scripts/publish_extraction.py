@@ -189,6 +189,7 @@ def main() -> int:
         },
         "variants": mapping.get("variants", []),
         "limitations": mapping.get("limitations", []),
+        "approval": mapping.get("approval", {}),
     }
     if existing:
         registry["items"][registry["items"].index(existing)] = item_record

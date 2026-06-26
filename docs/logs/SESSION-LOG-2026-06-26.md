@@ -211,4 +211,27 @@ Append-only record, one entry per task in request order. Format per
 - Single-member groups: 2 images [group fragment, Source]
 - goal-setting-checklist-table (no groups): 1 image [Source with text]
 
+**State:** Committed (ae7818a7)
+
+---
+
+## 2026-06-26.10 — Coverage guard + approval audit trail in publish
+
+**Request:** (1) ai-adoption-radial-diagram incorrectly decomposed into tiny diamond-shape fragments. (2) 3 user-published items had no audit trail — `publish_extraction.py` dropped `approval` metadata from the registry entry.
+
+**Root causes:**
+1. `materialize_groups()` created group items even when groups cover <10% of parent canvas (sub-elements of a unified diagram, not standalone components)
+2. `catalog_server.py` writes `approved_by`/`approved_at` into `mapping.json`, but `publish_extraction.py` never carried `mapping.approval` into the registry entry. Then `prune_staging()` deletes the mapping — approval metadata lost forever.
+
+**Changes:**
+- `slide-system/scripts/classify_page_components.py`: added coverage guard — skip materialization when deduped groups cover <10% of canvas
+- `slide-system/scripts/publish_extraction.py`: carry `mapping.approval` into registry entry
+- Re-published 3 items user had manually published via catalog API
+- Restored LFS PDF file (`git lfs pull`)
+
+**Verification:**
+- ai-adoption-radial-diagram: 0 materialized groups (coverage ~5% < 10% threshold), stays as full diagram
+- Registry entries now carry `approval: {status, approved_by: "catalog-ui", approved_at}`
+- Catalog: Published 8, Draft 2
+
 **State:** Not committed

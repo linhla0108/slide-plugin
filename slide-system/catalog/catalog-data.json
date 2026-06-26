@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-26T14:43:26+07:00",
+  "generated_at": "2026-06-26T14:46:03+07:00",
   "counts": {
-    "published": 81,
-    "staging": 5
+    "published": 84,
+    "staging": 2
   },
   "items": [
     {
@@ -18189,46 +18189,201 @@
       "deletable": true
     },
     {
+      "id": "sun.component.team-contributor-circles.g01",
+      "version": "1.0.0",
+      "name": "Team Contributor Circles",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "team contributor profile circles layout",
+        "three-member team showcase with avatar placeholders and roles"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": []
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/evidence/source-with-text.svg",
+        "slot_count": 0,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 5,
+        "region": {
+          "x": 0.257381,
+          "y": 0.556507,
+          "width": 0.470425,
+          "height": 0.319029,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01",
+        "visual": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/evidence/external-images.json"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "approval": {
+        "status": "approved",
+        "approved_by": "catalog-ui",
+        "approved_at": "2026-06-26T14:46:02+07:00"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.team-contributor-circles.g01/visual.svg"
+        }
+      ],
+      "deletable": true
+    },
+    {
+      "id": "sun.component.work-environment-image-cards.g02",
+      "version": "1.0.0",
+      "name": "Work Environment Image Cards \u2014 Rewards & Recognition / Engagement",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "work environment photo cards layout",
+        "image cards showing office and team environment",
+        "Rewards",
+        "Recognition",
+        "Engagement"
+      ],
+      "tags": [
+        "Rewards",
+        "Recognition",
+        "Engagement"
+      ],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "rewards",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/evidence/source-with-text.svg",
+        "slot_count": 3,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 5,
+        "region": {
+          "x": 0.126241,
+          "y": 0.462287,
+          "width": 0.344899,
+          "height": 0.368771,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02",
+        "visual": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/evidence/external-images.json"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "approval": {
+        "status": "approved",
+        "approved_by": "catalog-ui",
+        "approved_at": "2026-06-26T14:46:02+07:00"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.work-environment-image-cards.g02/visual.svg"
+        }
+      ],
+      "deletable": true
+    },
+    {
       "id": "sun.component.goal-setting-checklist-table",
-      "version": "0.0.0",
+      "version": "1.0.0",
       "name": "Goal Setting Checklist Table",
       "type": "component",
       "category": "component",
-      "status": "staging",
+      "status": "published",
       "brand": "sun-studio",
       "intent": [
         "goal setting checklist comparison table",
         "manager-employee goal discussion steps board with columns"
       ],
       "tags": [],
-      "source": {
-        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
-        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-        "slide_or_page": 4,
-        "region": {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 1.0,
-          "height": 0.6,
-          "unit": "normalized"
-        },
-        "object_ids": []
-      },
-      "paths": {
-        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact",
-        "visual": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact/visual.svg",
-        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact/text-slots.json",
-        "preview": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/preview",
-        "detail": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/README.md",
-        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/evidence"
-      },
-      "images": [
-        {
-          "label": "Source with text",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/evidence/source-with-text.svg"
-        }
-      ],
-      "icon_set": null,
+      "content_structure": [],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -18621,9 +18776,9 @@
       },
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
-        "visual": "artifact/visual.svg",
-        "slots": "artifact/text-slots.json",
-        "source_evidence": "evidence/source-with-text.svg",
+        "visual": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/evidence/source-with-text.svg",
         "slot_count": 64,
         "coordinate_space": "normalized",
         "example_content": "source",
@@ -18633,16 +18788,50 @@
         "editable": true,
         "allow_empty": true
       },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 0.6,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table",
+        "visual": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/evidence/notes.md"
+      },
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ],
-      "deletable": true,
-      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table",
-      "publish_readiness": {
-        "ready": true,
-        "blockers": []
-      }
+      "approval": {
+        "status": "approved",
+        "approved_by": "catalog-ui",
+        "approved_at": "2026-06-26T14:46:03+07:00"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.goal-setting-checklist-table/visual.svg"
+        }
+      ],
+      "deletable": true
     },
     {
       "id": "sun.component.work-environment-image-cards.g01",
@@ -18914,194 +19103,6 @@
       ],
       "deletable": true,
       "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram",
-      "publish_readiness": {
-        "ready": true,
-        "blockers": []
-      }
-    },
-    {
-      "id": "sun.component.team-contributor-circles.g01",
-      "version": "0.0.0",
-      "name": "Team Contributor Circles",
-      "type": "component",
-      "category": "component",
-      "status": "staging",
-      "brand": "sun-studio",
-      "intent": [
-        "team contributor profile circles layout",
-        "three-member team showcase with avatar placeholders and roles"
-      ],
-      "tags": [],
-      "source": {
-        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
-        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-        "slide_or_page": 5,
-        "region": {
-          "x": 0.257381,
-          "y": 0.556507,
-          "width": 0.470425,
-          "height": 0.319029,
-          "unit": "normalized"
-        },
-        "object_ids": []
-      },
-      "paths": {
-        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact",
-        "visual": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/visual.svg",
-        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/text-slots.json",
-        "preview": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/preview",
-        "detail": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/README.md",
-        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/evidence"
-      },
-      "images": [
-        {
-          "label": "Team Contributor Circles Group 01 (\u00d73)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/components/team-contributor-circles-group-01.svg"
-        },
-        {
-          "label": "Team Contributor Circles Group 01 Card 01 (\u00d73)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/components/team-contributor-circles-group-01-card-01.svg"
-        },
-        {
-          "label": "Source (original region)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/evidence/source-with-text.svg"
-        }
-      ],
-      "icon_set": null,
-      "content_fields": {
-        "required": [],
-        "optional": [],
-        "text_slots": []
-      },
-      "text_contract": {
-        "schema": "slide-system/schemas/text-slots.schema.json",
-        "visual": "artifact/visual.svg",
-        "slots": "artifact/text-slots.json",
-        "source_evidence": "evidence/source-with-text.svg",
-        "slot_count": 0,
-        "coordinate_space": "normalized",
-        "example_content": "source",
-        "semantic_text_in_visual": false,
-        "artwork_text_exemptions": [],
-        "overflow_policy": "unmanaged",
-        "editable": true,
-        "allow_empty": true
-      },
-      "variants": [],
-      "limitations": [
-        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ],
-      "deletable": true,
-      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01",
-      "publish_readiness": {
-        "ready": true,
-        "blockers": []
-      }
-    },
-    {
-      "id": "sun.component.work-environment-image-cards.g02",
-      "version": "0.0.0",
-      "name": "Work Environment Image Cards \u2014 Rewards & Recognition / Engagement",
-      "type": "component",
-      "category": "component",
-      "status": "staging",
-      "brand": "sun-studio",
-      "intent": [
-        "work environment photo cards layout",
-        "image cards showing office and team environment",
-        "Rewards",
-        "Recognition",
-        "Engagement"
-      ],
-      "tags": [
-        "Rewards",
-        "Recognition",
-        "Engagement"
-      ],
-      "source": {
-        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
-        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-        "slide_or_page": 5,
-        "region": {
-          "x": 0.126241,
-          "y": 0.462287,
-          "width": 0.344899,
-          "height": 0.368771,
-          "unit": "normalized"
-        },
-        "object_ids": []
-      },
-      "paths": {
-        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact",
-        "visual": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/visual.svg",
-        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/text-slots.json",
-        "preview": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/preview",
-        "detail": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/README.md",
-        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/evidence"
-      },
-      "images": [
-        {
-          "label": "Rewards & Recognition / Engagement (\u00d72)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02.svg"
-        },
-        {
-          "label": "Rewards & Recognition",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02-card-01.svg"
-        },
-        {
-          "label": "Engagement",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02-card-02.svg"
-        },
-        {
-          "label": "Source (original region)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/evidence/source-with-text.svg"
-        }
-      ],
-      "icon_set": null,
-      "content_fields": {
-        "required": [],
-        "optional": [],
-        "text_slots": [
-          {
-            "id": "rewards",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          },
-          {
-            "id": "recognition",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          },
-          {
-            "id": "engagement",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          }
-        ]
-      },
-      "text_contract": {
-        "schema": "slide-system/schemas/text-slots.schema.json",
-        "visual": "artifact/visual.svg",
-        "slots": "artifact/text-slots.json",
-        "source_evidence": "evidence/source-with-text.svg",
-        "slot_count": 3,
-        "coordinate_space": "normalized",
-        "example_content": "source",
-        "semantic_text_in_visual": false,
-        "artwork_text_exemptions": [],
-        "overflow_policy": "unmanaged",
-        "editable": true,
-        "allow_empty": true
-      },
-      "variants": [],
-      "limitations": [
-        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ],
-      "deletable": true,
-      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02",
       "publish_readiness": {
         "ready": true,
         "blockers": []
