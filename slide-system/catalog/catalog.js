@@ -20,17 +20,28 @@ function escAttr(s) {
 
 const BRAND_FONT_DIR = "/.agents/skills/sun-studio-design-system/assets/system/fonts/";
 const BRAND_FONT_CSS = [
-  ['ProximaNova-Regular',    'Proxima-Nova-Regular.otf'],
-  ['ProximaNova-Medium',     'Proxima-Nova-Medium.otf'],
-  ['ProximaNova-Semibold',   'Proxima-Nova-SemiBold.otf'],
-  ['ProximaNova-SemiboldIt', 'Proxima-Nova-SemiBold-Italic.otf'],
-  ['ProximaNova-Bold',       'Proxima-Nova-Bold.otf'],
-  ['ProximaNova-BoldIt',     'Proxima-Bold-Italic.otf'],
-  ['ProximaNova-Extrabld',   'Proxima-Black.otf'],
-  ['ProximaNova-ExtrabldIt', 'Proxima-ExtraBold-Italic.otf'],
-].map(([family, file]) =>
-  `@font-face{font-family:"${family}";src:url("${BRAND_FONT_DIR}${file}")format("opentype")}`
-).join("\n");
+  ['ProximaNova-Regular',    'Proxima-Nova-Regular.otf',          null,  null],
+  ['ProximaNova-Medium',     'Proxima-Nova-Medium.otf',           null,  null],
+  ['ProximaNova-Semibold',   'Proxima-Nova-SemiBold.otf',         null,  null],
+  ['ProximaNova-SemiboldIt', 'Proxima-Nova-SemiBold-Italic.otf',  null,  null],
+  ['ProximaNova-Bold',       'Proxima-Nova-Bold.otf',             null,  null],
+  ['ProximaNova-BoldIt',     'Proxima-Bold-Italic.otf',           null,  null],
+  ['ProximaNova-Extrabld',   'Proxima-Black.otf',                 null,  null],
+  ['ProximaNova-ExtrabldIt', 'Proxima-ExtraBold-Italic.otf',      null,  null],
+  ['Proxima Nova', 'Proxima-Nova-Regular.otf',         '400', 'normal'],
+  ['Proxima Nova', 'Proxima-Nova-Regular-Italic.otf',  '400', 'italic'],
+  ['Proxima Nova', 'Proxima-Nova-Medium.otf',          '500', 'normal'],
+  ['Proxima Nova', 'Proxima-Nova-SemiBold.otf',        '600', 'normal'],
+  ['Proxima Nova', 'Proxima-Nova-SemiBold-Italic.otf', '600', 'italic'],
+  ['Proxima Nova', 'Proxima-Nova-Bold.otf',            '700', 'normal'],
+  ['Proxima Nova', 'Proxima-Bold-Italic.otf',          '700', 'italic'],
+  ['Proxima Nova', 'Proxima-Black.otf',                '900', 'normal'],
+].map(([family, file, weight, style]) => {
+  let decl = `@font-face{font-family:"${family}";src:url("${BRAND_FONT_DIR}${file}") format("opentype")`;
+  if (weight) decl += `;font-weight:${weight}`;
+  if (style)  decl += `;font-style:${style}`;
+  return decl + '}';
+}).join("\n");
 
 function injectFontsIntoSvgObject(obj) {
   try {
@@ -236,6 +247,8 @@ const compDom = {
 
 /* URL resolution */
 
+function isSvgPath(url) { return url && url.split("?")[0].endsWith(".svg"); }
+
 function compResolvePath(path) {
   if (!path) return null;
   if (path.startsWith("http")) return path;
@@ -322,16 +335,23 @@ function compCreateTile(item, idx) {
   tile.dataset.index = idx;
 
   const imgUrl = compResolveImageUrl(item);
+  const svgTile = isSvgPath(imgUrl);
   const statusClass = item.status === "published" ? "published" : "draft";
   const statusLabel = item.status === "published" ? "Published" : "Draft";
 
+  let previewHtml;
+  if (!imgUrl) {
+    previewHtml = `<div class="fallback">${escHtml(item.type)}</div>`;
+  } else if (svgTile) {
+    previewHtml = `<object data="${escAttr(imgUrl)}" type="image/svg+xml" class="tile-svg-obj" aria-label="${escAttr(item.name)}" tabindex="-1"></object>
+      <div class="fallback" style="display:none">${escHtml(item.type)}</div>`;
+  } else {
+    previewHtml = `<img src="${escAttr(imgUrl)}" alt="${escAttr(item.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <div class="fallback" style="display:none">${escHtml(item.type)}</div>`;
+  }
+
   tile.innerHTML = `
-    <div class="tile-preview">
-      ${imgUrl
-        ? `<img src="${imgUrl}" alt="${escAttr(item.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display=''">`
-        : ""}
-      <div class="fallback" ${imgUrl ? 'style="display:none"' : ""}>${escHtml(item.type)}</div>
-    </div>
+    <div class="tile-preview">${previewHtml}</div>
     <div class="tile-meta">
       <div class="tile-name" title="${escAttr(item.name)}">${escHtml(item.name)}</div>
       <div class="tile-info">
@@ -339,6 +359,11 @@ function compCreateTile(item, idx) {
         <span class="status-dot ${statusClass}">${statusLabel}</span>
       </div>
     </div>`;
+
+  if (svgTile) {
+    const obj = tile.querySelector(".tile-svg-obj");
+    if (obj) obj.addEventListener("load", () => injectFontsIntoSvgObject(obj));
+  }
 
   tile.addEventListener("click", () => compOpenModal(idx));
   tile.addEventListener("keydown", e => {
@@ -393,7 +418,28 @@ function compRenderModal() {
 
   let visualHtml = "";
 
-  if (hasImage) {
+  const iconSet = item.icon_set;
+  if (iconSet && iconSet.icons && iconSet.icons.length) {
+    const icons = iconSet.icons;
+    visualHtml += `
+      <div class="iconset">
+        <div class="iconset-toolbar">
+          <input type="search" id="iconset-search" class="iconset-search"
+                 placeholder="Filter ${icons.length} icons by name…" autocomplete="off">
+          <span class="iconset-count" id="iconset-count">${icons.length} icons</span>
+        </div>
+        <div class="iconset-grid" id="iconset-grid">
+          ${icons.map((ic, i) => `
+            <button class="iconset-cell" data-name="${escAttr((ic.name + " " + ic.slug).toLowerCase())}"
+                    data-path="${escAttr(compResolvePath(ic.path))}" title="${escAttr(ic.name)}"
+                    aria-label="${escAttr(ic.name)}">
+              <img src="${compResolvePath(ic.path)}" alt="${escAttr(ic.name)}" loading="lazy" draggable="false">
+              <span class="iconset-name">${escHtml(ic.name)}</span>
+            </button>`).join("")}
+        </div>
+      </div>`;
+    // wiring happens after the common innerHTML assignment below.
+  } else if (hasImage) {
     const currentImg = images[compState.slideIndex] || images[0];
     const imgSrc = compResolvePath(currentImg.path);
 
@@ -434,24 +480,30 @@ function compRenderModal() {
   }
 
   compDom.modalVisual.innerHTML = visualHtml;
-  const svgObj = compDom.modalVisual.querySelector(".carousel-svg-obj");
-  if (svgObj) svgObj.addEventListener("load", () => injectFontsIntoSvgObject(svgObj));
-  if (hasImage) compWireZoom();
 
-  if (hasMultipleImages) {
-    const prevBtn = $("#slide-prev");
-    const nextBtn = $("#slide-next");
-    if (prevBtn) prevBtn.addEventListener("click", e => { e.stopPropagation(); compChangeSlide(-1); });
-    if (nextBtn) nextBtn.addEventListener("click", e => { e.stopPropagation(); compChangeSlide(1); });
-    compDom.modalVisual.querySelectorAll(".carousel-dot").forEach(dot => {
-      dot.addEventListener("click", e => {
-        e.stopPropagation();
-        if (parseInt(dot.dataset.slide) === compState.slideIndex) return;
-        compState.slideIndex = parseInt(dot.dataset.slide);
-        compResetZoom();
-        compRenderModal();
+  const isIconSet = !!(iconSet && iconSet.icons && iconSet.icons.length);
+  if (isIconSet) {
+    compWireIconSet();
+  } else {
+    const svgObj = compDom.modalVisual.querySelector(".carousel-svg-obj");
+    if (svgObj) svgObj.addEventListener("load", () => injectFontsIntoSvgObject(svgObj));
+    if (hasImage) compWireZoom();
+
+    if (hasMultipleImages) {
+      const prevBtn = $("#slide-prev");
+      const nextBtn = $("#slide-next");
+      if (prevBtn) prevBtn.addEventListener("click", e => { e.stopPropagation(); compChangeSlide(-1); });
+      if (nextBtn) nextBtn.addEventListener("click", e => { e.stopPropagation(); compChangeSlide(1); });
+      compDom.modalVisual.querySelectorAll(".carousel-dot").forEach(dot => {
+        dot.addEventListener("click", e => {
+          e.stopPropagation();
+          if (parseInt(dot.dataset.slide) === compState.slideIndex) return;
+          compState.slideIndex = parseInt(dot.dataset.slide);
+          compResetZoom();
+          compRenderModal();
+        });
       });
-    });
+    }
   }
 
   const statusClass = item.status === "published" ? "published" : "draft";
@@ -475,6 +527,40 @@ function compSetActiveTab(id) {
   [compDom.panelPreview, compDom.panelInfo].forEach(p => p.classList.remove("is-active"));
   const panel = $(`#panel-${id}`);
   if (panel) panel.classList.add("is-active");
+}
+
+function compWireIconSet() {
+  const search = $("#iconset-search");
+  const grid = $("#iconset-grid");
+  const count = $("#iconset-count");
+  if (!grid) return;
+  const cells = Array.from(grid.querySelectorAll(".iconset-cell"));
+  if (search) {
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      let shown = 0;
+      cells.forEach(c => {
+        const hit = !q || c.dataset.name.includes(q);
+        c.style.display = hit ? "" : "none";
+        if (hit) shown++;
+      });
+      if (count) count.textContent = `${shown} / ${cells.length} icons`;
+    });
+  }
+  cells.forEach(c => {
+    c.addEventListener("click", e => {
+      e.stopPropagation();
+      const path = c.dataset.path;
+      if (navigator.clipboard && path) {
+        navigator.clipboard.writeText(path).then(() => {
+          c.classList.add("is-copied");
+          setTimeout(() => c.classList.remove("is-copied"), 900);
+        }).catch(() => window.open(path, "_blank"));
+      } else if (path) {
+        window.open(path, "_blank");
+      }
+    });
+  });
 }
 
 function compChangeSlide(dir) {
@@ -723,77 +809,16 @@ function compOnPublish(item, btn) {
 }
 
 function compOnDelete(item, btn) {
-  const isDraft = item.status !== "published";
-  compConfirmDialog({
-    title: isDraft ? "Delete draft permanently?" : "Delete published item?",
-    body: isDraft
-      ? `Draft <strong>${escHtml(item.name)}</strong> lives in gitignored <code>outputs/</code> and <strong>cannot be recovered from git</strong>. This permanently removes its extraction folder.`
-      : `This removes <strong>${escHtml(item.name)}</strong> from the library folder and registry. It is git-tracked, so you can restore it with <code>git checkout</code>.`,
-    confirmLabel: isDraft ? "Delete forever" : "Delete",
-    danger: true,
-    requireType: isDraft ? "DELETE" : null,
-  }).then(ok => {
-    if (!ok) return;
-    compBusy(btn, true);
-    compApi("/api/delete", { id: item.id, status: item.status })
-      .then(() => {
-        compCloseModal();
-        return compLoadData().then(() => toast(`Deleted <code>${escHtml(item.id)}</code>.`));
-      })
-      .catch(e => toast(escHtml(e.message), "error"))
-      .finally(() => compBusy(btn, false));
-  });
+  compBusy(btn, true);
+  compApi("/api/delete", { id: item.id, status: item.status })
+    .then(() => {
+      compCloseModal();
+      return compLoadData().then(() => toast(`Deleted <code>${escHtml(item.id)}</code>.`));
+    })
+    .catch(e => toast(escHtml(e.message), "error"))
+    .finally(() => compBusy(btn, false));
 }
 
-function compConfirmDialog(opts) {
-  return new Promise(resolve => {
-    const overlay = document.createElement("div");
-    overlay.className = "confirm-overlay";
-    const dangerCls = opts.danger ? " is-danger" : "";
-    const typeGate = opts.requireType
-      ? `<label class="confirm-type">Type <b>${escHtml(opts.requireType)}</b> to confirm
-           <input type="text" class="confirm-type-input" autocomplete="off" spellcheck="false"></label>`
-      : "";
-    overlay.innerHTML = `
-      <div class="confirm-box${dangerCls}" role="alertdialog" aria-modal="true" aria-label="${escAttr(opts.title)}">
-        <h3 class="confirm-title">${escHtml(opts.title)}</h3>
-        <p class="confirm-body">${opts.body}</p>
-        ${typeGate}
-        <div class="confirm-actions">
-          <button class="confirm-cancel" type="button">Cancel</button>
-          <button class="confirm-ok${dangerCls}" type="button">${escHtml(opts.confirmLabel || "Confirm")}</button>
-        </div>
-      </div>`;
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add("is-open"));
-
-    const okBtn = overlay.querySelector(".confirm-ok");
-    const cancelBtn = overlay.querySelector(".confirm-cancel");
-    const input = overlay.querySelector(".confirm-type-input");
-
-    function close(result) {
-      overlay.classList.remove("is-open");
-      setTimeout(() => overlay.remove(), 180);
-      document.removeEventListener("keydown", onKey, true);
-      resolve(result);
-    }
-    if (input) {
-      okBtn.disabled = true;
-      input.addEventListener("input", () => { okBtn.disabled = input.value.trim() !== opts.requireType; });
-      setTimeout(() => input.focus(), 60);
-    }
-    okBtn.addEventListener("click", () => { if (!okBtn.disabled) close(true); });
-    cancelBtn.addEventListener("click", () => close(false));
-    overlay.addEventListener("click", e => { if (e.target === overlay) close(false); });
-    function onKey(e) {
-      if (e.key === "Escape") { e.stopPropagation(); close(false); }
-      else if (e.key === "Enter" && !okBtn.disabled && document.activeElement !== cancelBtn) {
-        e.stopPropagation(); close(true);
-      }
-    }
-    document.addEventListener("keydown", onKey, true);
-  });
-}
 
 /* Copy + prompt */
 
@@ -874,7 +899,6 @@ compDom.copyPrompt.addEventListener("click", () => {
 document.addEventListener("keydown", e => {
   // Only handle keys when component modal is open
   if (compState.currentIndex === -1) return;
-  if (document.querySelector(".confirm-overlay")) return;
   switch (e.key) {
     case "Escape": compCloseModal(); break;
     case "ArrowLeft":
@@ -1073,7 +1097,15 @@ function tplBuildSetCard(deck, i) {
 
   const front = el("div", "set-cover-front");
   const src = tplThumbSrc(slides[0]);
-  if (src) {
+  if (src && isSvgPath(src)) {
+    const obj = document.createElement("object");
+    obj.data = src;
+    obj.type = "image/svg+xml";
+    obj.style.cssText = "width:100%;height:100%;display:block;pointer-events:none";
+    obj.addEventListener("load", () => injectFontsIntoSvgObject(obj));
+    obj.addEventListener("error", () => { obj.remove(); front.appendChild(tplPlaceholder(slides[0] || { name: deck.name })); });
+    front.appendChild(obj);
+  } else if (src) {
     const img = el("img");
     img.src = src;
     img.alt = "Cover slide of the " + (deck.name || "deck") + " set";
@@ -1187,7 +1219,15 @@ function tplBuildCard(card, deck, index) {
 
   const thumb = el("div", "thumb");
   const src = tplThumbSrc(card);
-  if (src) {
+  if (src && isSvgPath(src)) {
+    const obj = document.createElement("object");
+    obj.data = src;
+    obj.type = "image/svg+xml";
+    obj.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;pointer-events:none";
+    obj.addEventListener("load", () => injectFontsIntoSvgObject(obj));
+    obj.addEventListener("error", () => { obj.remove(); thumb.insertBefore(tplPlaceholder(card), thumb.firstChild); });
+    thumb.appendChild(obj);
+  } else if (src) {
     const img = el("img");
     img.src = src;
     img.alt = "Preview of the " + (card.name || card.id) + " template";
@@ -1243,7 +1283,20 @@ function tplRenderFilmstrip(deck) {
 
     const thumb = el("div", "film-thumb");
     const src = tplThumbSrc(card);
-    if (src) {
+    if (src && isSvgPath(src)) {
+      const obj = document.createElement("object");
+      obj.data = src;
+      obj.type = "image/svg+xml";
+      obj.style.cssText = "width:100%;height:100%;display:block;pointer-events:none";
+      obj.addEventListener("load", () => injectFontsIntoSvgObject(obj));
+      obj.addEventListener("error", () => {
+        obj.remove();
+        const ph = tplPlaceholder(card);
+        ph.classList.add("film-ph");
+        thumb.appendChild(ph);
+      });
+      thumb.appendChild(obj);
+    } else if (src) {
       const img = el("img");
       img.src = src;
       img.alt = "";
@@ -1299,7 +1352,20 @@ function tplRenderStageImage(card, dir) {
   tplDom.stageFrame.innerHTML = "";
   const src = tplThumbSrc(card);
   let node;
-  if (src) {
+  if (src && isSvgPath(src)) {
+    node = document.createElement("object");
+    node.data = src;
+    node.type = "image/svg+xml";
+    node.className = "stage-svg-obj";
+    node.setAttribute("aria-label", "Full preview of " + (card.name || card.id));
+    node.addEventListener("load", () => injectFontsIntoSvgObject(node));
+    node.addEventListener("error", () => {
+      tplDom.stageFrame.innerHTML = "";
+      const ph = tplPlaceholder(card);
+      ph.classList.add("frame-enter");
+      tplDom.stageFrame.appendChild(ph);
+    });
+  } else if (src) {
     node = el("img");
     node.src = src;
     node.alt = "Full preview of " + (card.name || card.id);

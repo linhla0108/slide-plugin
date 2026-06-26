@@ -506,6 +506,439 @@ def test_build_registry_live_is_clean() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# classify_page_components (pure-logic paths — no browser/Chromium needed)
+# --------------------------------------------------------------------------- #
+import classify_page_components as cpc
+import extract_editable_text_slots as eets
+
+
+def test_split_runs_breaks_on_large_forward_gap() -> None:
+    # Three column headings concatenated in one tspan, separated by large x-gaps
+    # (no space chars) must split into three runs — the bug that merged
+    # STRATEGIST/DRIVER/COACH into one slot.
+    text = "ABCDEFGHI"
+    xs = [0, 10, 20, 200, 210, 220, 400, 410, 420]   # 3 clusters, gap 180 >> advance 10
+    runs = eets.split_runs(text, xs, font_size=20)
+    assert [r[0] for r in runs] == ["ABC", "DEF", "GHI"], runs
+
+
+def test_split_runs_keeps_tight_text_together() -> None:
+    # Ordinary evenly-spaced glyphs (a single word) are NOT split.
+    text = "ABCDEF"
+    xs = [0, 10, 20, 30, 40, 50]
+    runs = eets.split_runs(text, xs, font_size=20)
+    assert [r[0] for r in runs] == ["ABCDEF"], runs
+
+
+def test_split_runs_still_breaks_on_line_wrap() -> None:
+    # A backward x-jump (x resets left) is a line wrap and still splits.
+    text = "ABCDE"
+    xs = [0, 10, 20, 2, 12]
+    runs = eets.split_runs(text, xs, font_size=20)
+    assert [r[0] for r in runs] == ["ABC", "DE"], runs
+
+_SVGNS = "http://www.w3.org/2000/svg"
+
+
+def _measured(width: float, height: float, groups: list[dict]) -> dict:
+    out = []
+    for i, g in enumerate(groups):
+        out.append({"index": i, "x": g["x"], "y": g["y"], "w": g["w"], "h": g["h"],
+                    "children": g.get("children", [])})
+    return {"width": width, "height": height, "groups": out}
+
+
+def test_classify_drops_offcanvas_leaves() -> None:
+    # A crop leaves vector junk below the viewBox; those leaves must be dropped.
+    m = _measured(1000, 400, [
+        {"x": 10, "y": 10, "w": 100, "h": 100},      # on-canvas
+        {"x": 10, "y": 900, "w": 100, "h": 100},     # off-canvas (y >> 400)
+    ])
+    leaves = cpc._leaf_boxes(m, window_pad=20)
+    assert len(leaves) == 1 and leaves[0]["y"] == 10, leaves
+
+
+def test_classify_tall_card_absorbs_icon() -> None:
+    # A portrait card filling 96% of canvas height (but narrow) must NOT be
+    # treated as a bridging "bar": it has to absorb its own icon into one
+    # cluster. This is the bug that left icons orphaned.
+    H = 500
+    m = _measured(1000, H, [
+        {"x": 8, "y": 10, "w": 380, "h": 480},        # tall narrow card
+        {"x": 300, "y": 400, "w": 80, "h": 80},       # icon inside the card
+    ])
+    leaves = cpc._leaf_boxes(m, window_pad=20)
+    clusters = cpc._cluster_spatial(leaves, merge_gap=6, canvas_w=1000, canvas_h=H)
+    assert len(clusters) == 1, [len(c) for c in clusters]
+
+
+def test_classify_divider_does_not_bridge() -> None:
+    # A thin full-width rule (extreme aspect ratio) must stay its own singleton
+    # so it does not glue two separated cards into one blob.
+    m = _measured(1000, 500, [
+        {"x": 8, "y": 10, "w": 380, "h": 480},        # card A
+        {"x": 612, "y": 10, "w": 380, "h": 480},      # card B (x-disjoint)
+        {"x": 5, "y": 240, "w": 990, "h": 8},         # full-width divider
+    ])
+    leaves = cpc._leaf_boxes(m, window_pad=20)
+    clusters = cpc._cluster_spatial(leaves, merge_gap=6, canvas_w=1000, canvas_h=500)
+    # 2 cards + 1 divider singleton == 3 clusters; cards never merge.
+    assert len(clusters) == 3, [cpc._bounds(c) for c in clusters]
+
+
+def test_classify_dedups_same_shape_different_color() -> None:
+    # Three congruent instances => one shape class (identical AND same-shape-
+    # different-color both collapse). Slightly different size => its own class.
+    inst = [{"w": 380, "h": 480}, {"w": 378, "h": 476}, {"w": 381, "h": 479},
+            {"w": 120, "h": 120}]
+    classes = cpc._shape_classes(inst, tol=0.14)
+    sizes = sorted(len(c) for c in classes)
+    assert sizes == [1, 3], sizes
+
+
+def test_classify_groups_adjacent_same_shape_run() -> None:
+    # A row of 3 same-shape instances with small gutters is ONE proximity group
+    # (the whole run, rendered with each member's variant preserved).
+    inst = [{"x": 0, "y": 0, "w": 100, "h": 200},
+            {"x": 120, "y": 0, "w": 100, "h": 200},   # gutter 20 < 0.6*100
+            {"x": 240, "y": 0, "w": 100, "h": 200}]
+    groups = cpc._proximity_groups(inst, [0, 1, 2], gap_frac=0.6)
+    assert len(groups) == 1 and sorted(groups[0]) == [0, 1, 2], groups
+
+
+def test_classify_splits_distant_same_shape() -> None:
+    # Same-shape instances sitting far apart are NOT one group — each is its own
+    # standalone item.
+    inst = [{"x": 0, "y": 0, "w": 100, "h": 100},
+            {"x": 900, "y": 0, "w": 100, "h": 100}]   # gap 800 >> 0.6*100
+    groups = cpc._proximity_groups(inst, [0, 1], gap_frac=0.6)
+    assert len(groups) == 2, groups
+
+
+def test_classify_keeps_different_shapes_separate() -> None:
+    # Two adjacent boxes of clearly different shape land in different shape-
+    # classes, so grouping (which is within-class) keeps them as 2 groups even
+    # though they sit side by side.
+    inst = [{"x": 0, "y": 0, "w": 100, "h": 200},     # tall
+            {"x": 110, "y": 0, "w": 300, "h": 80}]    # wide — different shape
+    classes = cpc._shape_classes(inst, tol=0.14)
+    groups: list = []
+    for class_idxs in classes:
+        groups += cpc._proximity_groups(inst, class_idxs, gap_frac=0.6)
+    assert len(groups) == 2, (classes, groups)
+
+
+def test_child_count_mismatch_detects() -> None:
+    # A group whose ElementTree child count differs from the measured child
+    # count is flagged (its measured indices would copy wrong nodes).
+    svg = (f'<svg xmlns="{_SVGNS}"><g><rect/><rect/></g><g><rect/></g></svg>')
+    root = _ET.fromstring(svg)
+    groups = list(root)  # two <g>
+    measured = [{"children": [{}, {}]}, {"children": [{}, {}]}]  # 2nd says 2, ET has 1
+    bad = cpc._child_count_mismatch(groups, measured)
+    assert bad == [(1, 1, 2)], bad
+
+
+def test_child_count_mismatch_clean() -> None:
+    svg = (f'<svg xmlns="{_SVGNS}"><g><rect/><rect/></g><g><rect/></g></svg>')
+    root = _ET.fromstring(svg)
+    groups = list(root)
+    measured = [{"children": [{}, {}]}, {"children": [{}]}]
+    assert cpc._child_count_mismatch(groups, measured) == []
+
+
+# Exact-equality distance for the dedup tests: 0 when equal (<= any threshold),
+# large otherwise. The real call injects perceptual-signature distance instead.
+_EQ_DIST = lambda a, b: 0.0 if a == b else 999.0
+
+
+def test_collapse_duplicates_keeps_first_and_counts() -> None:
+    # Identical items collapse into the first; counts track how many.
+    kept, counts = cpc._collapse_duplicates(["a", "b", "a", "a", "c"], _EQ_DIST, 0.0)
+    assert kept == [0, 1, 4] and counts == [3, 1, 1], (kept, counts)
+
+
+def test_collapse_duplicates_none_never_merges() -> None:
+    # A failed render (None) is always kept on its own — never silently
+    # dropped or merged with another None.
+    kept, counts = cpc._collapse_duplicates([None, "a", None, "a"], _EQ_DIST, 0.0)
+    assert kept == [0, 1, 2] and counts == [1, 2, 1], (kept, counts)
+
+
+def test_collapse_duplicates_merges_within_threshold() -> None:
+    # Distance-based: items within `threshold` collapse (near-identical →
+    # "tương tự"), items beyond it stay distinct (different color/icon).
+    dist = lambda a, b: abs(a - b)
+    # 10 and 11 are within 3 of each other; 50 is far → kept separate.
+    kept, counts = cpc._collapse_duplicates([10, 11, 50, 10], dist, 3.0)
+    assert kept == [0, 2] and counts == [3, 1], (kept, counts)
+
+
+def test_split_on_gutter_separates_bridged_components() -> None:
+    # Two big leaves with a 30px gutter, bridged by one tiny leaf sitting in the
+    # gap (the card↔photo failure). The split ignores the tiny leaf when finding
+    # the gutter and assigns it to the nearer side → two components.
+    members = [
+        {"x": 0, "y": 0, "w": 100, "h": 100},     # big left
+        {"x": 130, "y": 0, "w": 100, "h": 100},   # big right (30px gutter)
+        {"x": 110, "y": 45, "w": 12, "h": 12},    # tiny bridge in the gutter
+    ]
+    parts = cpc._split_on_gutter(members, min_gutter_px=16.0)
+    assert len(parts) == 2, parts
+    assert {len(p) for p in parts} == {1, 2}, parts  # tiny joins one side
+
+
+def test_split_on_gutter_keeps_single_component_intact() -> None:
+    # A genuine component (parts within a small gap, < threshold) is NOT split.
+    members = [
+        {"x": 0, "y": 0, "w": 100, "h": 100},
+        {"x": 108, "y": 0, "w": 100, "h": 100},   # 8px gap < 16px threshold
+    ]
+    assert cpc._split_on_gutter(members, min_gutter_px=16.0) == [members]
+
+
+def test_heading_picks_largest_font_with_subtitle() -> None:
+    # Heading = largest font tier; a short second tier (subtitle) is appended,
+    # read top-to-bottom.
+    slots = [{"text": "Level 1", "x": 0.1, "y": 0.10, "w": 0.1, "h": 0.02, "size": 53.0},
+             {"text": "Spicy", "x": 0.1, "y": 0.14, "w": 0.1, "h": 0.02, "size": 42.0},
+             {"text": "Autocomplete", "x": 0.1, "y": 0.16, "w": 0.1, "h": 0.02, "size": 42.0},
+             {"text": "a long body copy line here", "x": 0.1, "y": 0.30, "w": 0.1, "h": 0.02, "size": 18.0}]
+    assert cpc._heading(slots) == "Level 1 Spicy Autocomplete", cpc._heading(slots)
+
+
+def test_heading_drops_paragraph_tier() -> None:
+    # When the second font tier is a multi-slot paragraph (>3 slots), it is NOT
+    # appended — only the heading survives.
+    slots = [{"text": "TRANSLATOR", "x": 0.1, "y": 0.10, "w": 0.1, "h": 0.02, "size": 38.0}]
+    slots += [{"text": f"w{i}", "x": 0.1, "y": 0.2 + i * 0.01, "w": 0.05, "h": 0.01, "size": 20.0}
+              for i in range(5)]
+    assert cpc._heading(slots) == "TRANSLATOR", cpc._heading(slots)
+
+
+def test_group_title_common_prefix_and_join() -> None:
+    assert cpc._group_title(["Level 1 X", "Level 2 Y", "Level 3 Z"]) == "Level cards"
+    # No shared prefix → join the heading-like (short, capitalized) titles only.
+    assert cpc._group_title(["TRANSLATOR", "a long body copy fallback here", "DRIVER"]) \
+        == "TRANSLATOR / DRIVER"
+
+
+def test_tags_from_dedups_and_skips_stopwords() -> None:
+    tags = cpc._tags_from(["Level 1 Spicy", "Level 2 Coding", "the and Spicy"])
+    assert tags == ["Level", "1", "Spicy", "2", "Coding"], tags
+
+
+def test_slots_in_uses_center_point() -> None:
+    slots = [{"text": "in", "x": 0.10, "y": 0.10, "w": 0.05, "h": 0.05, "size": 10},
+             {"text": "out", "x": 0.80, "y": 0.80, "w": 0.05, "h": 0.05, "size": 10}]
+    got = cpc._slots_in(slots, 0, 0, 500, 500, 1000, 1000)  # px box covers left-top quadrant
+    assert [s["text"] for s in got] == ["in"], got
+
+
+def test_classify_records_dropped_small_with_bounds() -> None:
+    # A cluster below the area floor is recorded with its bounds (not just
+    # counted), so a genuine small component stays inspectable.
+    canvas_w, canvas_h = 1000.0, 1000.0
+    area = canvas_w * canvas_h
+    clusters = [
+        [{"x": 10, "y": 10, "w": 20, "h": 20, "group": 0, "child": None}],   # tiny < 1.5%
+        [{"x": 100, "y": 100, "w": 300, "h": 300, "group": 1, "child": None}],
+    ]
+    dropped = []
+    for members in clusters:
+        x0, y0, w, h = cpc._bounds(members)
+        a = w * h
+        if a < 0.015 * area:
+            dropped.append({"x": round(x0, 1), "y": round(y0, 1),
+                            "w": round(w, 1), "h": round(h, 1),
+                            "area_frac": round(a / area, 4)})
+    assert len(dropped) == 1
+    assert set(dropped[0]) == {"x", "y", "w", "h", "area_frac"}, dropped[0]
+    assert dropped[0]["w"] == 20 and dropped[0]["area_frac"] == 0.0004, dropped[0]
+
+
+def test_classify_excludes_fullbleed_background() -> None:
+    # On a full page the background cluster (≈ canvas size) must be routed to
+    # background_candidates, NOT emitted as a component class.
+    canvas_w, canvas_h = 1000.0, 800.0
+    clusters = [
+        [{"x": 2, "y": 2, "w": 996, "h": 796, "group": 0, "child": None}],   # bg
+        [{"x": 100, "y": 100, "w": 200, "h": 200, "group": 1, "child": None}],
+        [{"x": 400, "y": 100, "w": 200, "h": 200, "group": 2, "child": None}],
+    ]
+    area = canvas_w * canvas_h
+    bg, inst, dropped = [], [], 0
+    for members in clusters:
+        x0, y0, w, h = cpc._bounds(members)
+        a = w * h
+        if a < 0.015 * area:
+            dropped += 1
+        elif a >= 0.7 * area:
+            bg.append(members)
+        else:
+            inst.append(members)
+    assert len(bg) == 1 and len(inst) == 2, (len(bg), len(inst))
+
+
+def test_classify_ancestor_transform_and_fragment() -> None:
+    # The crop wrapper transform must be captured and re-applied in fragments,
+    # else geometry lands off-canvas and the fragment renders blank.
+    svg = (f'<svg xmlns="{_SVGNS}" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" '
+           'viewBox="0 0 100 100">'
+           '<g transform="translate(-440 -440)"><g>'
+           '<g inkscape:groupmode="layer">'
+           '<g><rect x="450" y="450" width="20" height="20"/></g>'
+           '</g></g></g></svg>')
+    root = _ET.fromstring(svg)
+    groups = cpc.document_groups(root)
+    parent_map = {c: p for p in root.iter() for c in p}
+    chain = cpc._ancestor_transform(root, parent_map, groups[0])
+    assert chain == "translate(-440 -440)", repr(chain)
+    members = [{"x": 10, "y": 10, "w": 20, "h": 20, "group": 0, "child": None}]
+    frag = cpc._build_fragment(members, groups, [], margin=3,
+                               source_dir=Path("."), ancestor_transform=chain)
+    blob = _ET.tostring(frag, encoding="unicode")
+    assert "translate(-440 -440)" in blob and "rect" in blob, blob
+
+
+# --------------------------------------------------------------------------- #
+# split_icon_sheet — icon-sheet decomposition helpers
+# --------------------------------------------------------------------------- #
+def test_split_cluster_1d_groups_within_tol() -> None:
+    import split_icon_sheet as sis
+    # two tight groups (~5 and ~105) separated by a wide gap -> two lines
+    lines = sis._cluster_1d([4, 5, 6, 104, 105, 106], tol=20)
+    assert len(lines) == 2, lines
+    assert abs(lines[0] - 5) < 1 and abs(lines[1] - 105) < 1, lines
+
+
+def test_split_merge_within_fuses_overlap_keeps_distant() -> None:
+    import split_icon_sheet as sis
+    # A and B overlap (gap 0); C is far away on x -> {A,B} merged, C separate.
+    clusters = [
+        {"x": 0, "y": 0, "w": 20, "h": 20, "members": [{"x": 0, "y": 0, "w": 20, "h": 20}]},
+        {"x": 18, "y": 2, "w": 20, "h": 20, "members": [{"x": 18, "y": 2, "w": 20, "h": 20}]},
+        {"x": 200, "y": 0, "w": 20, "h": 20, "members": [{"x": 200, "y": 0, "w": 20, "h": 20}]},
+    ]
+    out = sis._merge_within(clusters, gap=10)
+    assert len(out) == 2, [(o["x"], o["w"]) for o in out]
+    big = max(out, key=lambda o: o["w"])
+    assert len(big["members"]) == 2, big
+
+
+def test_split_per_row_gap_separates_neighbours_fuses_fragments() -> None:
+    """The core grid rule: cells in one row split into icons by the gap valley —
+    fragments (gap < col_tol) fuse, neighbours (gap >> col_tol) stay separate."""
+    import split_icon_sheet as sis
+    # row of cells (same y): two fragments of icon A (x=0..20, 25..45, gap 5),
+    # then icon B far right (x=120..145, gap 75). col_tol=35 sits in the valley.
+    row = [
+        {"x": 0, "y": 0, "w": 20, "h": 30},
+        {"x": 25, "y": 0, "w": 20, "h": 30},
+        {"x": 120, "y": 0, "w": 25, "h": 30},
+    ]
+    by_cell: dict = {}
+    row.sort(key=lambda c: c["x"])
+    col, right = 0, None
+    for c in row:
+        if right is not None and (c["x"] - right) >= 35:
+            col += 1
+        by_cell.setdefault(col, []).append(c)
+        right = max(right if right is not None else c["x"] + c["w"], c["x"] + c["w"])
+    assert len(by_cell) == 2, by_cell
+    assert len(by_cell[0]) == 2 and len(by_cell[1]) == 1, by_cell
+
+
+def test_build_catalog_collect_icon_set_parses_and_absent() -> None:
+    import build_component_catalog as bcc
+    import json as _json
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp)
+        # no manifest -> None
+        assert bcc.collect_icon_set(item) is None
+        icons_dir = item / "artifact" / "icons"
+        icons_dir.mkdir(parents=True)
+        (icons_dir / "icon-000.svg").write_text("<svg/>")
+        (icons_dir / "icon-001.svg").write_text("<svg/>")
+        (icons_dir / "icons-manifest.json").write_text(_json.dumps({"icons": [
+            {"index": 0, "file": "icon-000.svg", "slug": "bod", "name": "BOD",
+             "region": "frequently-used", "row": -1, "col": -1},
+            {"index": 1, "file": "icon-001.svg", "slug": "wifi", "name": "wifi",
+             "region": "grid", "row": 1, "col": 2},
+            {"index": 2, "file": "missing.svg", "slug": "x", "name": "x",
+             "region": "grid", "row": 1, "col": 3},
+        ]}))
+        iset = bcc.collect_icon_set(item)
+        assert iset and iset["count"] == 2, iset  # missing file dropped
+        slugs = [i["slug"] for i in iset["icons"]]
+        assert slugs == ["bod", "wifi"], slugs
+        assert iset["icons"][0]["path"].endswith("icon-000.svg")
+
+
+# --------------------------------------------------------------------------- #
+# materialize_groups (classify_page_components + _common hash helpers)
+# --------------------------------------------------------------------------- #
+import json as _json_stdlib
+from _common import normalized_bounds as _normalized_bounds
+from _common import region_identity_hash as _region_identity_hash
+from _common import semantic_signature_hash as _semantic_signature_hash
+
+
+def test_group_bounds_to_normalized_region() -> None:
+    canvas = {"w": 2938.83, "h": 2623.16}
+    gb = {"x": 563.1, "y": 371.4, "w": 1867.5, "h": 586.3}
+    region = _normalized_bounds({
+        "x": gb["x"] / canvas["w"],
+        "y": gb["y"] / canvas["h"],
+        "width": gb["w"] / canvas["w"],
+        "height": gb["h"] / canvas["h"],
+        "unit": "normalized",
+    })
+    assert region["unit"] == "normalized"
+    assert 0.0 < region["x"] < 1.0, region["x"]
+    assert 0.0 < region["y"] < 1.0, region["y"]
+    assert 0.0 < region["width"] < 1.0, region["width"]
+    assert 0.0 < region["height"] < 1.0, region["height"]
+    assert abs(region["x"] - 563.1 / 2938.83) < 1e-5
+    assert abs(region["width"] - 1867.5 / 2938.83) < 1e-5
+
+
+def test_materialized_mapping_fields() -> None:
+    region = _normalized_bounds({
+        "x": 0.19, "y": 0.14, "width": 0.64, "height": 0.22, "unit": "normalized",
+    })
+    rh = _region_identity_hash("sha_abc", "2", region, ["obj-1"])
+    sh = _semantic_signature_hash(["Cover", "intro"])
+    assert isinstance(rh, str) and len(rh) == 64, rh
+    assert isinstance(sh, str) and len(sh) == 64, sh
+    candidate = "sun.component.feature-step-shape-diagrams.g01"
+    assert candidate.startswith("sun.component.")
+    assert candidate.endswith(".g01")
+    rh2 = _region_identity_hash("sha_abc", 2, region, ["obj-1"])
+    assert rh == rh2, "int vs str slide_or_page must produce same hash"
+
+
+def test_carved_slots_within_unit_and_subset() -> None:
+    base_slots = [
+        {"id": f"s{i}", "bounds": {"x": i * 0.1, "y": 0.1, "width": 0.08, "height": 0.05}}
+        for i in range(10)
+    ]
+    region = {"x": 0.2, "y": 0.05, "width": 0.5, "height": 0.3}
+    carved = [
+        s for s in base_slots
+        if (region["x"] <= s["bounds"]["x"] + s["bounds"]["width"] / 2 <= region["x"] + region["width"]
+            and region["y"] <= s["bounds"]["y"] + s["bounds"]["height"] / 2 <= region["y"] + region["height"])
+    ]
+    assert len(carved) < len(base_slots), "carve should drop some slots"
+    assert len(carved) > 0, "carve should keep some slots"
+    for s in carved:
+        cx = s["bounds"]["x"] + s["bounds"]["width"] / 2
+        cy = s["bounds"]["y"] + s["bounds"]["height"] / 2
+        assert region["x"] <= cx <= region["x"] + region["width"]
+        assert region["y"] <= cy <= region["y"] + region["height"]
+
+
+# --------------------------------------------------------------------------- #
 def _run_all() -> int:
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failed = 0

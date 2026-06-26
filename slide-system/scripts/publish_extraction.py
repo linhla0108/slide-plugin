@@ -25,7 +25,7 @@ TYPE_FOLDERS = {
     "character": "characters/dio",
     "asset": "assets",
 }
-ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+$")
+ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+(\.g\d+)?$")
 
 
 def files_under(path: Path) -> list[Path]:

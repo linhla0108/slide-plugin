@@ -90,12 +90,25 @@ def slug(text: str, fallback: str) -> str:
     return (value[:48].rstrip("-") or fallback)
 
 
-def split_runs(text: str, xs: list[float]) -> list[tuple[str, list[float], int, int]]:
+def split_runs(
+    text: str, xs: list[float], font_size: float = 0.0
+) -> list[tuple[str, list[float], int, int]]:
     if len(xs) != len(text) or len(xs) < 2:
         return [(text, xs, 0, len(text))]
+    # A single <tspan> can carry glyphs for several spatially-separated words on
+    # the same baseline (e.g. three column headings "STRATEGIST", "DRIVER",
+    # "COACH" concatenated into one tspan). Split on two signals:
+    #   - a BACKWARD jump (x resets left)        -> a line wrap;
+    #   - a large FORWARD gap between glyphs      -> a new word/column.
+    # The forward-gap threshold is well above a normal glyph advance (and any
+    # word space) so ordinary phrases stay intact.
+    advances = sorted(xs[i] - xs[i - 1] for i in range(1, len(xs)) if xs[i] > xs[i - 1])
+    median_adv = advances[len(advances) // 2] if advances else 0.0
+    fwd_gap = max(median_adv * 3.0, font_size) if median_adv else float("inf")
     breaks = [0]
     for index in range(1, len(xs)):
-        if xs[index] < xs[index - 1] - 10:
+        delta = xs[index] - xs[index - 1]
+        if delta < -10 or delta > fwd_gap:
             breaks.append(index)
     breaks.append(len(text))
     result = []
@@ -168,7 +181,7 @@ def extract_item(item_dir: Path, input_name: str) -> dict:
             base_y = ys[0] if ys else 0.0
 
             for run_index, (run_text, run_xs, char_start, char_end) in enumerate(
-                split_runs(value, xs)
+                split_runs(value, xs, font_size)
             ):
                 x_values = run_xs or [base_x]
                 source_x = min(x_values)

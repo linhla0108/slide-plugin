@@ -40,6 +40,15 @@ This workflow runs only through the manual component-extractor skill.
    `_*.py`).
 10. Validate content, text-slot coverage, scaling, export support, and source
    comparison with `scripts/validate_text_slots.py`.
+10b. Decompose the cropped region into its DISTINCT components with
+   `scripts/classify_page_components.py --item-dir <item>`: it measures every
+   on-canvas object in real Chromium layout, spatially clusters them into
+   component instances, then merges identical / same-shape-different-color
+   instances into ONE representative class each (e.g. 5 colored Level cards →
+   one class ×5). Writes `artifact/components/<item>-class-NN.svg` +
+   `components-manifest.json`. `build_component_catalog.py` then previews one
+   SVG per distinct class followed by the source region for comparison, rather
+   than the glued strip. Needs Chromium; skip only if it is unavailable.
 11. Update extraction history.
 12. Rebuild the catalog staging tab and one batch-level `gallery.html`. Compose
     SVG previews from `visual.svg` plus editable HTML text slots. Then serve the

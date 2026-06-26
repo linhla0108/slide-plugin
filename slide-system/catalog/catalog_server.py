@@ -35,7 +35,11 @@ REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
 EXTRACTIONS = REPO_ROOT / "outputs" / "component-extractions"
-ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+$")
+# sun.<type>.<slug> plus an optional .gNN group suffix. Decomposed page
+# components are surfaced as <base>.g01/.g02/... by build_component_catalog;
+# without the optional group segment the publish/delete endpoints rejected
+# every group item with "Invalid item id".
+ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+(\.g\d+)?$")
 HOST = "127.0.0.1"
 PORT = 8799
 

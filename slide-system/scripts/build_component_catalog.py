@@ -24,6 +24,39 @@ def collect_images(item_dir: Path) -> list[dict]:
     images: list[dict] = []
 
     artifact_dir = item_dir / "artifact"
+
+    # When the region was decomposed into distinct components
+    # (classify_page_components.py), the review surface is one preview per
+    # GROUP (a proximity-run of same-shape instances, rendered whole with every
+    # member's real color/icon preserved) followed by ONE source image of the
+    # whole region for comparison. NOTE: main() expands a grouped extraction
+    # into one catalog ITEM per group; this branch is the within-item fallback
+    # (carousel of all groups + source) when that expansion is not applied.
+    components_manifest = artifact_dir / "components" / "components-manifest.json"
+    if components_manifest.exists():
+        try:
+            manifest = load_json(components_manifest)
+        except Exception:
+            manifest = {}
+        groups = manifest.get("groups") or []
+        for rec in groups:
+            frag = artifact_dir / rec.get("file", "")
+            if frag.exists():
+                count = rec.get("member_count", 1)
+                suffix = f" (×{count})" if count and count > 1 else ""
+                label = rec.get("group_id", frag.stem).replace("-", " ").title()
+                images.append({"label": f"{label}{suffix}", "path": rel(frag)})
+        if images:
+            # One source image of the whole region, for side-by-side comparison.
+            src = item_dir / "evidence" / "source-with-text.svg"
+            if src.exists():
+                images.append({"label": "Source (original region)", "path": rel(src)})
+            else:
+                bg = artifact_dir / "background.png"
+                if bg.exists():
+                    images.append({"label": "Source (original region)", "path": rel(bg)})
+            return images
+
     bg = artifact_dir / "background.png"
     if bg.exists():
         images.append({"label": "Preview", "path": rel(bg)})
@@ -61,6 +94,38 @@ def collect_images(item_dir: Path) -> list[dict]:
             images.append({"label": f.stem.replace("-", " ").replace("_", " ").title(), "path": rel(f)})
 
     return images
+
+
+def collect_icon_set(item_dir: Path) -> dict | None:
+    """When a sheet was split into individual icons (split_icon_sheet.py), attach
+    the icon set so the front-end can show ONE catalog tile with a searchable
+    grid of every icon inside it (instead of hundreds of separate tiles, or a
+    carousel with hundreds of dots). Each entry carries the icon's reusable SVG
+    path plus its inferred name and grid position."""
+    manifest_path = item_dir / "artifact" / "icons" / "icons-manifest.json"
+    if not manifest_path.exists():
+        return None
+    try:
+        manifest = load_json(manifest_path)
+    except Exception:
+        return None
+    icons_dir = item_dir / "artifact" / "icons"
+    icons: list[dict] = []
+    for ic in manifest.get("icons", []):
+        f = icons_dir / ic.get("file", "")
+        if not f.exists():
+            continue
+        icons.append({
+            "slug": ic.get("slug") or f.stem,
+            "name": ic.get("name") or ic.get("slug") or f.stem,
+            "region": ic.get("region", "grid"),
+            "row": ic.get("row", -1),
+            "col": ic.get("col", -1),
+            "path": rel(f),
+        })
+    if not icons:
+        return None
+    return {"count": len(icons), "icons": icons}
 
 
 def publish_readiness(item_dir: Path, mapping: dict) -> dict:
@@ -124,10 +189,10 @@ def main() -> int:
         # the catalog tile/modal still renders a visual.
         if not item_images and art_path and art_path.is_dir():
             preview_candidates = [
+                ("Source with text", art_path / "evidence" / "source-with-text.svg"),
                 ("Preview", art_path / "preview" / "thumbnail.png"),
                 ("Reference", art_path / "evidence" / "reference.png"),
                 ("Visual", art_path / "visual.svg"),
-                ("Source with text", art_path / "evidence" / "source-with-text.svg"),
             ]
             for label, candidate in preview_candidates:
                 if candidate.exists() and candidate.suffix.lower() in IMAGE_EXTS:
@@ -169,7 +234,7 @@ def main() -> int:
                 source_str = mapping.get("source", "")
                 batch_name = mapping_path.parent.parent.parent.name
 
-                items.append({
+                base = {
                     "id": mapping.get("id", mapping_path.parent.name),
                     "version": "0.0.0",
                     "name": mapping_path.parent.name.replace("-", " ").title(),
@@ -189,6 +254,7 @@ def main() -> int:
                         "evidence": rel(item_dir / "evidence"),
                     },
                     "images": collect_images(item_dir),
+                    "icon_set": collect_icon_set(item_dir),
                     "content_fields": {},
                     "text_contract": text_contract,
                     "variants": [],
@@ -196,11 +262,12 @@ def main() -> int:
                     "deletable": True,
                     "staging_dir": rel(item_dir),
                     "publish_readiness": publish_readiness(item_dir, mapping),
-                })
+                }
+                items.append(base)
             else:
                 variants = mapping.get("variants", [])
                 tc = mapping.get("text_contract")
-                items.append({
+                base = {
                     "id": mapping.get("candidate_stable_id", mapping.get("item_id", mapping_path.parent.name)),
                     "version": mapping.get("version", "0.0.0"),
                     "name": mapping.get("name", mapping.get("item_id", mapping_path.parent.name)),
@@ -220,6 +287,7 @@ def main() -> int:
                         "evidence": rel(item_dir / "evidence"),
                     },
                     "images": collect_images(item_dir),
+                    "icon_set": collect_icon_set(item_dir),
                     "content_fields": mapping.get("content_fields", {}),
                     "text_contract": tc,
                     "variants": variants,
@@ -227,7 +295,8 @@ def main() -> int:
                     "deletable": True,
                     "staging_dir": rel(item_dir),
                     "publish_readiness": publish_readiness(item_dir, mapping),
-                })
+                }
+                items.append(base)
 
     data = {
         "generated_at": now_iso(),

@@ -121,6 +121,25 @@ def prune_empty_dirs(root: str | Path) -> list[Path]:
     return removed
 
 
+def region_identity_hash(
+    source_sha256: str,
+    slide_or_page: str | int,
+    region: dict[str, Any],
+    object_ids: list[str] | None = None,
+) -> str:
+    identity = {
+        "source_sha256": source_sha256,
+        "slide_or_page": str(slide_or_page),
+        "region": normalized_bounds(region),
+        "object_ids": sorted(object_ids or []),
+    }
+    return sha256_text(json.dumps(identity, sort_keys=True))
+
+
+def semantic_signature_hash(intents: list[str]) -> str:
+    return sha256_text("|".join(sorted(v.lower() for v in intents)))
+
+
 def average_image_hash(path: str | Path) -> str | None:
     try:
         from PIL import Image

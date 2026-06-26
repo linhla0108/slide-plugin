@@ -152,6 +152,14 @@ not read it separately.
    python3 slide-system/scripts/optimize_svg.py --batch <dir>
    python3 slide-system/scripts/apply_text_contract.py --batch <dir>
    python3 slide-system/scripts/validate_text_slots.py --item-dir <item> [--item-dir ...]
+   # decompose the cropped region into its DISTINCT components and classify
+   # them: spatially cluster on-canvas objects, then merge identical /
+   # same-shape-different-color instances into ONE representative each (e.g.
+   # 5 colored Level cards -> 1 class x5). Writes artifact/components/*.svg +
+   # components-manifest.json. The catalog Draft then previews one SVG per
+   # distinct component + the source region for comparison, instead of the
+   # glued strip. Needs Chromium (measure_svg_groups.js); skip only if absent.
+   python3 slide-system/scripts/classify_page_components.py --item-dir <item> [--item-dir ...]
    ```
 
 4. For each item write `mapping.json` (the canonical record: fingerprints,

@@ -36,6 +36,14 @@ function arg(name) {
         deviceScaleFactor: 1,
       });
       await page.goto('file://' + path.resolve(job.svg), { waitUntil: 'load' });
+      // SVGs with explicit width/height render at intrinsic size, which may
+      // exceed the viewport — the screenshot clip then captures only the
+      // top-left portion. Force the SVG root to fill the viewport so the
+      // viewBox scales the content to fit.
+      await page.evaluate(() => {
+        const svg = document.querySelector('svg');
+        if (svg) { svg.setAttribute('width', '100%'); svg.setAttribute('height', '100%'); }
+      });
       // file:// subresources do not show up as network activity; give the
       // raster decode a couple of frames before capturing.
       await page.evaluate(

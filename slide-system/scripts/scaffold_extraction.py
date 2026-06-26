@@ -12,9 +12,10 @@ from _common import (
     load_json,
     normalized_bounds,
     now_iso,
+    region_identity_hash,
     resolve_repo_path,
+    semantic_signature_hash,
     sha256_file,
-    sha256_text,
     write_json,
 )
 
@@ -39,6 +40,27 @@ def main() -> int:
         default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
     )
     args = parser.parse_args()
+
+    # The extraction-request JSON is a TEMPORARY input artifact. `input/` is a
+    # tracked directory (only source decks belong there), so a request file
+    # dropped in it pollutes the repo. Every extraction passes through here, so
+    # this is the one place that can guarantee it never happens again. The
+    # scaffold persists its own copy at <output>/request.json regardless, so the
+    # request is never lost. Keep loose requests under the gitignored
+    # outputs/extraction-requests/ (or a scratchpad) instead.
+    repo_root = Path(__file__).resolve().parents[2]
+    request_path = Path(args.request).resolve()
+    try:
+        rel = request_path.relative_to(repo_root / "input")
+    except ValueError:
+        rel = None
+    if rel is not None:
+        raise SystemExit(
+            "Request file must not live in the tracked input/ directory "
+            f"(got {request_path}). input/ is for source decks only. "
+            "Write extraction-request JSON to outputs/extraction-requests/ "
+            "(gitignored) and re-run."
+        )
 
     request = load_json(args.request)
     for key in ("extraction_id", "source_path", "items"):
@@ -89,16 +111,11 @@ def main() -> int:
                 f"(e.g., 'cover', 'salary-table', 'org-chart')."
             )
         region = normalized_bounds(item["region"])
-        identity = {
-            "source_sha256": source_hash,
-            "slide_or_page": str(item["slide_or_page"]),
-            "region": region,
-            "object_ids": sorted(item.get("object_ids", [])),
-        }
-        region_hash = sha256_text(json.dumps(identity, sort_keys=True))
-        semantic_hash = sha256_text(
-            "|".join(sorted(value.lower() for value in item["semantic_intent"]))
+        region_hash = region_identity_hash(
+            source_hash, item["slide_or_page"], region,
+            item.get("object_ids", []),
         )
+        semantic_hash = semantic_signature_hash(item["semantic_intent"])
         exact = next(
             (
                 attempt
