@@ -191,4 +191,24 @@ Append-only record, one entry per task in request order. Format per
 4. Work Environment Image Cards — Rewards & Recognition / Engagement
 5. Team Contributor Circles
 
+**State:** Committed (b2c7e69d)
+
+---
+
+## 2026-06-26.9 — Restore per-card variant carousel in materialized group drafts
+
+**Request:** User noticed draft items only show 1 preview image. The per-card variant carousel (whole row → per-card variants → source) was lost when `expand_group_items` was replaced by `materialize_groups` in session 2026-06-25.5.
+
+**Root cause:** `materialize_groups()` copied `visual.svg` + `text-slots.json` but NOT the component fragment SVGs and per-card variant SVGs from the parent's `artifact/components/`. Without a `components-manifest.json` in the materialized item, `collect_images()` fell through to the generic path and only found `source-with-text.svg`.
+
+**Changes:**
+- `slide-system/scripts/classify_page_components.py` — `materialize_groups()`: copies group fragment SVG + per-card variant SVGs into materialized item's `artifact/components/`, writes scoped `components-manifest.json`
+- `slide-system/scripts/build_component_catalog.py` — `collect_images()`: added per-card variant loop from manifest `cards[]`, uses `title` field for labels
+
+**Verification:**
+- work-environment-image-cards-g02: 4 images [Rewards & Recognition / Engagement (×2), Rewards & Recognition, Engagement, Source]
+- team-contributor-circles-g01: 3 images [Group 01 (×3), Card 01 (×3), Source]
+- Single-member groups: 2 images [group fragment, Source]
+- goal-setting-checklist-table (no groups): 1 image [Source with text]
+
 **State:** Not committed

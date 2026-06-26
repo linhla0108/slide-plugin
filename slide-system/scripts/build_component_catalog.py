@@ -44,8 +44,15 @@ def collect_images(item_dir: Path) -> list[dict]:
             if frag.exists():
                 count = rec.get("member_count", 1)
                 suffix = f" (×{count})" if count and count > 1 else ""
-                label = rec.get("group_id", frag.stem).replace("-", " ").title()
+                label = rec.get("title") or rec.get("group_id", frag.stem).replace("-", " ").title()
                 images.append({"label": f"{label}{suffix}", "path": rel(frag)})
+            for card in rec.get("cards", []):
+                card_file = artifact_dir / card.get("file", "")
+                if card_file.exists() and card_file != frag:
+                    card_label = card.get("title") or card.get("card_id", card_file.stem).replace("-", " ").title()
+                    dup = card.get("duplicate_count", 1)
+                    dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
+                    images.append({"label": f"{card_label}{dup_suffix}", "path": rel(card_file)})
         if images:
             # One source image of the whole region, for side-by-side comparison.
             src = item_dir / "evidence" / "source-with-text.svg"

@@ -872,6 +872,35 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
         if base_assets.is_dir():
             shutil.copytree(base_assets, artifact_dir / "assets", dirs_exist_ok=True)
 
+        # Copy this group's fragment SVG + per-card variant SVGs into the
+        # materialized item so collect_images() builds the full carousel
+        # (whole row → per-card variants → source).
+        base_comps = item_dir / "artifact" / "components"
+        group_id = rec.get("group_id", f"{base_slug}-group-{nn}")
+        if base_comps.is_dir():
+            comp_dir = artifact_dir / "components"
+            comp_dir.mkdir(exist_ok=True)
+            group_file = f"{group_id}.svg"
+            src_frag = base_comps / group_file
+            if src_frag.exists():
+                shutil.copy2(src_frag, comp_dir / group_file)
+            for card in rec.get("cards", []):
+                card_file = card.get("file", "")
+                if card_file:
+                    src_card = item_dir / "artifact" / card_file
+                    if src_card.exists():
+                        shutil.copy2(src_card, comp_dir / src_card.name)
+            scoped_manifest = {
+                "groups": [{
+                    **rec,
+                    "file": f"components/{group_file}",
+                    "cards": [{**c, "file": f"components/{Path(c['file']).name}"}
+                              for c in rec.get("cards", [])
+                              if c.get("file")],
+                }],
+            }
+            write_json(comp_dir / "components-manifest.json", scoped_manifest)
+
         base_evidence_svg = item_dir / "evidence" / "source-with-text.svg"
         if base_evidence_svg.exists():
             shutil.copy2(base_evidence_svg, evidence_dir / "source-with-text.svg")

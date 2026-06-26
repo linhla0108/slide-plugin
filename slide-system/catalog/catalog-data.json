@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T13:56:10+07:00",
+  "generated_at": "2026-06-26T14:18:11+07:00",
   "counts": {
     "published": 81,
     "staging": 5
@@ -18685,7 +18685,11 @@
       },
       "images": [
         {
-          "label": "Source with text",
+          "label": "Leadership cards",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/components/work-environment-image-cards-group-01.svg"
+        },
+        {
+          "label": "Source (original region)",
           "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/evidence/source-with-text.svg"
         }
       ],
@@ -18778,7 +18782,11 @@
       },
       "images": [
         {
-          "label": "Source with text",
+          "label": "X\u00c2Y cards",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/artifact/components/ai-adoption-radial-diagram-group-01.svg"
+        },
+        {
+          "label": "Source (original region)",
           "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/evidence/source-with-text.svg"
         }
       ],
@@ -18856,7 +18864,15 @@
       },
       "images": [
         {
-          "label": "Source with text",
+          "label": "Team Contributor Circles Group 01 (\u00d73)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/components/team-contributor-circles-group-01.svg"
+        },
+        {
+          "label": "Team Contributor Circles Group 01 Card 01 (\u00d73)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/components/team-contributor-circles-group-01-card-01.svg"
+        },
+        {
+          "label": "Source (original region)",
           "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/evidence/source-with-text.svg"
         }
       ],
@@ -18934,7 +18950,19 @@
       },
       "images": [
         {
-          "label": "Source with text",
+          "label": "Rewards & Recognition / Engagement (\u00d72)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02.svg"
+        },
+        {
+          "label": "Rewards & Recognition",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02-card-01.svg"
+        },
+        {
+          "label": "Engagement",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/components/work-environment-image-cards-group-02-card-02.svg"
+        },
+        {
+          "label": "Source (original region)",
           "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/evidence/source-with-text.svg"
         }
       ],
