@@ -92,7 +92,7 @@
     {
       "id": "sun.interview-workshop-sunriser.01-cover",
       "version": "1.0.0",
-      "name": "01 \u2014 Cover: Interview Workshop",
+      "name": "01 — Cover: Interview Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -220,7 +220,7 @@
     {
       "id": "sun.interview-workshop-sunriser.02-timeline",
       "version": "1.0.0",
-      "name": "02 \u2014 Timeline SUN.RISER 2026",
+      "name": "02 — Timeline SUN.RISER 2026",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -447,7 +447,7 @@
     {
       "id": "sun.interview-workshop-sunriser.03-objectives",
       "version": "1.0.0",
-      "name": "03 \u2014 M\u1ee5c ti\u00eau Workshop",
+      "name": "03 — Mục tiêu Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -628,7 +628,7 @@
     {
       "id": "sun.interview-workshop-sunriser.04-mindset",
       "version": "1.0.0",
-      "name": "04 \u2014 T\u00e2m th\u1ebf tuy\u1ec3n d\u1ee5ng",
+      "name": "04 — Tâm thế tuyển dụng",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -834,7 +834,7 @@
     {
       "id": "sun.interview-workshop-sunriser.05-prep",
       "version": "1.0.0",
-      "name": "05 \u2014 Chu\u1ea9n b\u1ecb tr\u01b0\u1edbc ph\u1ecfng v\u1ea5n",
+      "name": "05 — Chuẩn bị trước phỏng vấn",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1065,7 +1065,7 @@
     {
       "id": "sun.interview-workshop-sunriser.06-tough-candidates",
       "version": "1.0.0",
-      "name": "06 \u2014 \u1ee8ng vi\u00ean kh\u00f3 \u0111\u1ee1",
+      "name": "06 — Ứng viên khó đỡ",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1257,7 +1257,7 @@
     {
       "id": "sun.interview-workshop-sunriser.07-star-method",
       "version": "1.0.0",
-      "name": "07 \u2014 Ph\u01b0\u01a1ng ph\u00e1p STAR",
+      "name": "07 — Phương pháp STAR",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1573,7 +1573,7 @@
     {
       "id": "sun.interview-workshop-sunriser.08-structure-warmup",
       "version": "1.0.0",
-      "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
+      "name": "08 — Cấu trúc phỏng vấn (Warm-up)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1796,7 +1796,7 @@
     {
       "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
       "version": "1.0.0",
-      "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
+      "name": "09 — Cấu trúc phỏng vấn (Deep-dive)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2019,7 +2019,7 @@
     {
       "id": "sun.interview-workshop-sunriser.10-do-dont",
       "version": "1.0.0",
-      "name": "10 \u2014 N\u00ean & Tr\u00e1nh (DO/DON'T)",
+      "name": "10 — Nên & Tránh (DO/DON'T)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2334,7 +2334,7 @@
     {
       "id": "sun.interview-workshop-sunriser.11-scoring",
       "version": "1.0.0",
-      "name": "11 \u2014 Sau ph\u1ecfng v\u1ea5n: Ch\u1ea5m \u0111i\u1ec3m",
+      "name": "11 — Sau phỏng vấn: Chấm điểm",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2625,7 +2625,7 @@
     {
       "id": "sun.interview-workshop-sunriser.12-action-items",
       "version": "1.0.0",
-      "name": "12 \u2014 L\u00e0m ngay cho bu\u1ed5i ti\u1ebfp theo",
+      "name": "12 — Làm ngay cho buổi tiếp theo",
       "type": "template",
       "category": "template",
       "status": "published",
