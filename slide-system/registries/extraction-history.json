@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-24T16:07:25+07:00",
+  "updated_at": "2026-06-26T11:02:11+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -1141,6 +1141,956 @@
       "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
       "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
       "semantic_signature_sha256": "cd24ea5dbc4cf26db74d23e6a9999bc28cac9fd9d2d657ec4e524662e92f8bde"
+    },
+    {
+      "attempted_at": "2026-06-24T16:50:00+07:00",
+      "extraction_id": "guideline-level-progression-cards",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b0dbcada4a6e43c1a71c5cf4a9431bafbf14d176b4e7ba84e9cf0bbcaa671572",
+      "semantic_signature_sha256": "c159ac9ea0205ccd9c566987ed87ab6b52f67b0ac14180355cc1ff5e9c694476"
+    },
+    {
+      "attempted_at": "2026-06-24T16:56:56+07:00",
+      "extraction_id": "guideline-level-progression-cards",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b0dbcada4a6e43c1a71c5cf4a9431bafbf14d176b4e7ba84e9cf0bbcaa671572",
+      "semantic_signature_sha256": "c159ac9ea0205ccd9c566987ed87ab6b52f67b0ac14180355cc1ff5e9c694476"
+    },
+    {
+      "attempted_at": "2026-06-24T17:07:46+07:00",
+      "extraction_id": "guideline-level-progression-cards",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b0dbcada4a6e43c1a71c5cf4a9431bafbf14d176b4e7ba84e9cf0bbcaa671572",
+      "semantic_signature_sha256": "c159ac9ea0205ccd9c566987ed87ab6b52f67b0ac14180355cc1ff5e9c694476"
+    },
+    {
+      "attempted_at": "2026-06-24T17:17:14+07:00",
+      "extraction_id": "guideline-level-progression-cards",
+      "item_id": "level-progression-cards",
+      "stable_id": "sun.component.level-progression-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b0dbcada4a6e43c1a71c5cf4a9431bafbf14d176b4e7ba84e9cf0bbcaa671572",
+      "semantic_signature_sha256": "c159ac9ea0205ccd9c566987ed87ab6b52f67b0ac14180355cc1ff5e9c694476"
+    },
+    {
+      "attempted_at": "2026-06-25T10:20:52+07:00",
+      "extraction_id": "guideline-ai-maturity-levels",
+      "item_id": "ai-maturity-levels-board",
+      "stable_id": "sun.component.ai-maturity-levels-board",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
+      "semantic_signature_sha256": "577d0f7aa0e0447d7cb7c2f0dfeadb238a4372a71580e6f7875e8b5da11553c2"
+    },
+    {
+      "attempted_at": "2026-06-25T12:01:38+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "brand-icon-reference-sheet",
+      "stable_id": "sun.component.brand-icon-reference-sheet",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b1803277ec206f6e0c500370f1f2dfa9b198b8edc72c29406541b25079b925ae",
+      "semantic_signature_sha256": "b686aeaa2db19ca75ec77aae37b1f59605b7c59b8d513926c5eb2460f7a2512b"
+    },
+    {
+      "attempted_at": "2026-06-25T12:01:38+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "style-card-sampler-board",
+      "stable_id": "sun.component.ai-maturity-levels-board",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
+      "semantic_signature_sha256": "f69ae6d4df97eb09748d2cde0741cfdc5d37d738a52646339eb38df015f1be64"
+    },
+    {
+      "attempted_at": "2026-06-25T12:01:38+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "feature-step-shape-diagrams",
+      "stable_id": "sun.component.feature-step-shape-diagrams",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "72dba354f8672f611363f89f5a732a138dfc6ea67faa981438e67df86cee9f18",
+      "semantic_signature_sha256": "7c06001f45afa1e02e0509c66e600217ef1534550a0c8384d5d23ce207d8ab7a"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "performance-review-cover",
+      "stable_id": "sun.sun-studio-performance-review-2025.01-cover",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "caa81e003ee63550addada5765e0578ba8f732f693e59b7f8619722d5002822b",
+      "semantic_signature_sha256": "64b48e11756f42aa0d233f9b388a9ffe09205270b44de37e97e0b482df2c1a4a"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-agenda-overview",
+      "stable_id": "sun.sun-studio-performance-review-2025.02-agenda-section",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3036b55c87699be4cc1a7e9e9acfd7fd3dacb3d4838a426a03a99aabb7d2e7be",
+      "semantic_signature_sha256": "8b28e97435807469e99fbf1a51d4122dbbdef6326a967c4c2a8506167c14d8db"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "why-review-matters-section-divider",
+      "stable_id": "sun.sun-studio-performance-review-2025.03-section-divider-01",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "6cedca5b4fec852b4638b7d4634a1ef097fc7d0b7681e697293bd0555c8ac4d2",
+      "semantic_signature_sha256": "a650d424da68c7c0e7be31f63d75d46f066f0293e21966900db09593af2302c6"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-importance-explanation",
+      "stable_id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "4dc8bf73b96cb36bb5947a875eed12dad88f9662f52b219a06f50940d16fd06d",
+      "semantic_signature_sha256": "73df951262939f11ad0a4668a52e3efa37b0eb33aaefb27939250e99b175b416"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-components-section-divider",
+      "stable_id": "sun.sun-studio-performance-review-2025.05-section-divider-02",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "c4479f06770ec2d9ca4cc6b24af90a26a82725de8dc9be5bd7ef1e6228174d5d",
+      "semantic_signature_sha256": "ac3f424fe97dce6c295a66a6ef1cb84af77aa9f24da2284367d48dc2ad2ba5f7"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "what-how-rating-formula",
+      "stable_id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "23851fc59397d0363587592275b4a338f8e678aa30f99960b1b6e0a1b6a136f1",
+      "semantic_signature_sha256": "9bca504ec65e899ab142e117adfb50e82c675e38e6b12050fcc2506fbb90fa21"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "what-criteria-smart-goals",
+      "stable_id": "sun.sun-studio-performance-review-2025.07-what-definition-card",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "27760bc67ea1222e455f22abe96a7995c85e611865a805cb885f052886200f78",
+      "semantic_signature_sha256": "ad3811d33420fafedf9a4cc96ee729f665db9c749a91d274b4131da694ff30a4"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "how-level-expectation-explainer",
+      "stable_id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "12c96b1cabe3cb9dffca4c7d8e181c214bfb53c82cbbf85a0701a33b7b471b77",
+      "semantic_signature_sha256": "91223004b11e2c7dcd6dfa1048ba466a753ac61e5b0d71f5f8a500d7b3b846c7"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "what-and-how-combined-rationale",
+      "stable_id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e54af544587b570d61842cde4bcae311bcea66c58950806cde76ad69ec7fa6fd",
+      "semantic_signature_sha256": "15e74631acee2d85fc6e49e8fcf92d34ca71e57fe393e44cfdf5cbe204c90c08"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "performance-rating-scale-cards",
+      "stable_id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "e5c4b27c0a2dbe14db0dbf9652e467d62ae45e84e3e844247b56bb504201bd9a",
+      "semantic_signature_sha256": "16fa059993834c5b4fd68266a6515621e7310817eb57aebffda26e115b3cc3c1"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-timeline-section-divider",
+      "stable_id": "sun.sun-studio-performance-review-2025.11-section-divider-03",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "3b298b2ddb840cdefd23ca1ff018b7119a9bd380a792d980405bd96548620fe7",
+      "semantic_signature_sha256": "0b86fc1385850abf3a9b2bc1d4f0abc113446c0c342f80ef17114b867905a055"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-timeline-steps",
+      "stable_id": "sun.sun-studio-performance-review-2025.12-review-timeline",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "9e3027dc12f82557387dd2501bd38f2131fdf5d12613a8582c700ac4bb11f31c",
+      "semantic_signature_sha256": "4a68a9d7ce663add9729d700263e4840c439415b490e5fecee5a783b3b00c696"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "suner-process-section-divider",
+      "stable_id": "sun.sun-studio-performance-review-2025.13-section-divider-04",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "402d2731fdb006bc1478c2d57a3294ecada9847869ff4a1afe1717db42222eea",
+      "semantic_signature_sha256": "e3b2950a20332cd4b42f6bc62813396b79acf87cd0529ba6c5a4a5e1f4b56b58"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "one-on-one-meeting-prep",
+      "stable_id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "8e1d23e8233a881b521912b36326bba425004d40163ef1d9108d32e298e645d6",
+      "semantic_signature_sha256": "2b80fa0d66834cbf9137efdae791c4e036121f7e7a36c6989b39cb2079fdf73e"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "goals-entry-system-steps",
+      "stable_id": "sun.sun-studio-performance-review-2025.15-factorial-goals-steps",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ef6ffec8501c74a5ddf6d4826d7a82c076beba245385c19a0fbcdb74f57b72b9",
+      "semantic_signature_sha256": "327a077b2ddc52703d5cd6b15f89d2f0b2215e6fde099d70217bfa8c42e629c8"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "review-submission-system-steps",
+      "stable_id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ce91e07174095ca91b3c03ded03f3bd9ad63da1ad05201fc07407cb9738ed98d",
+      "semantic_signature_sha256": "a8bb004f43994fcd1bceb6063826206d1c8b4bf316f0d5c7a8169b8646aae5c4"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "faq-section-divider",
+      "stable_id": "sun.sun-studio-performance-review-2025.17-faq-header",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "a03986b98621f1ca1daf4127c635829f5c40b9a1bdc03a02e56401d999addb87",
+      "semantic_signature_sha256": "e1b04968c5e03c79a7d73c3f366225aee28cf2ddf8d7be2283165937963188c0"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "faq-promotion-assessment-factors",
+      "stable_id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "86d52894ed751b0ecf33baf4b05c2e7c5a30e54ea04f27e00083c8e6c5c494e8",
+      "semantic_signature_sha256": "0acdd9a0f3d16754b221af4bfb0e4310bc6d62fccfa29c003d076bd2a82867c1"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "faq-confidentiality-support",
+      "stable_id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "ca258a778283851b1a928fff5b8de8e2da43cda937e34ce049eaa14c8a87330b",
+      "semantic_signature_sha256": "7808ca19fd80effd63d06f2e847b59b0778d37c740b7e09ea920c9eabf0df7ed"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:05+07:00",
+      "extraction_id": "performance-review-2025-full-pages",
+      "item_id": "performance-review-closing",
+      "stable_id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
+      "status": "duplicate",
+      "source_sha256": "9e18f2a0f48f979cc8043260ba69b210bb00f6b186f28ac097b366a81fa606c6",
+      "region_identity_sha256": "5cf1f85dbc19a26f1ed1fe91a3bf6bd430478d3c132582f7fbda335b07e3d72e",
+      "semantic_signature_sha256": "7371f880b47aab8b4428fa429a3ed134dcb32bc5f432837479b2ebd017e55245"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "sun-connect-cover-branded",
+      "stable_id": "sun.full-slide-template.cover-title-connect",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "64c669ae002f2911858deab7ab04ea3d045a86a1b0a3bba6ef687fcde9b20b23",
+      "semantic_signature_sha256": "501aee62526389c61629ba1906abdfb0d338b6beed02ad5e45ba7b1b7ca913da"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "why-sun-connect-intro",
+      "stable_id": "sun.full-slide-template.section-header-question",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "df78847f287c4ea78225caa0326d6a2499ec8087e4b83681b0b32efca057ea39",
+      "semantic_signature_sha256": "87da07c6174bd23bd2827d51e031c8e67a5e01e0c84027d89f4b9186809bc0f8"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "sun-connect-purpose-statement",
+      "stable_id": "sun.full-slide-template.three-column-cards",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "21c8602cfaef9efb5a6768992f53a061b439e423d9f866aeb60c2d9286d8f85b",
+      "semantic_signature_sha256": "a116d27212474b21f2e355e5724c7586c055a32856eb2cd4f5c345c4bd8252a3"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "agenda-four-sections",
+      "stable_id": "sun.full-slide-template.table-of-contents",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d4df310020d78dcc1c93394c14211e96e915a5ba662f2a6adce1ff700c04cb44",
+      "semantic_signature_sha256": "ec313e0a728254cb0fd1c354f72dee1810c01d3be6f7e5d87f48fc7337313b21"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "planned-section-divider",
+      "stable_id": "sun.component.planned-section-divider",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71c86bb149081edb69b0bbffb8959a18688ad36a97e172748a09d48b70a20e44",
+      "semantic_signature_sha256": "7c4c799d4e14833e4e8fb4c5c696990478c887701d2929db6e3f00bb97529aae"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "planned-three-pillars-overview",
+      "stable_id": "sun.component.planned-three-pillars-overview",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "399edba413898bcabc2fe5efa5fa29463918f2da2d1cba4b9e2ed5f75eedece9",
+      "semantic_signature_sha256": "55ef4117971c7eda77be951f83ce00a14c8663b9a195b4b5ccf5b49fefc8cb45"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "planned-company-growth-goals",
+      "stable_id": "sun.component.planned-company-growth-goals",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b6bb91e67bd6c459896588bc00e670962e66916ef6a02f1c3524d6a2a12610be",
+      "semantic_signature_sha256": "0c4054a115de55730349719296609b5f7fb86240ddec14e447b7aeb85abe0c87"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "planned-market-expansion-goals",
+      "stable_id": "sun.component.planned-market-expansion-goals",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "2413b31aa5c7ffeeb7d4c0a2f1eb4f20f15966fb4029f8f4dab9ca406ab85e5c",
+      "semantic_signature_sha256": "0811c48bd8d9d094bc34c16bb2b0cb2a47bec696bb3d88f77fdfac4287ed9575"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "planned-work-environment-goals",
+      "stable_id": "sun.component.planned-work-environment-goals",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "53dd03e1024360cec21e4a8dd6a480f15209ec864ab8c82184c51551abd4dea0",
+      "semantic_signature_sha256": "d511a8b8070dfb517832f37af37ef566f9f42076babb14819bd0e34a4efca21a"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-section-divider",
+      "stable_id": "sun.component.achieved-section-divider",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "c17b4bd3b85056eda9478c3e13ea53e6b88f54b175bb141b64dc38e2c7ef2280",
+      "semantic_signature_sha256": "635c64e59466097d295a8a6f79673ca2d9787d89c513c50a4be4df2b92dcad30"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-revenue-platform-metrics",
+      "stable_id": "sun.component.achieved-revenue-platform-metrics",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "320175f86160ad68b22c49963d027ee79db9cd865c080cdf35fc6d2c6f870a60",
+      "semantic_signature_sha256": "eab61f948e4427fd2cdbf6926144dba37945e7ee714f6d12a984b71f5ecb6475"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-headcount-growth",
+      "stable_id": "sun.component.achieved-headcount-growth",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "155de18222c928644140fd3991eca3f8f739a189b8ff3f01acc32d19a85125b8",
+      "semantic_signature_sha256": "5b2f689f551a3ab17f3909ec1637f63e8905f58413ff099f19676247c018a3ab"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-market-expansion-app-games",
+      "stable_id": "sun.component.achieved-market-expansion-app-games",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "3c080b2f08b61f5bec6e90daed572defaec66705b15de6f9ff726206af1b35d0",
+      "semantic_signature_sha256": "10cabda54da12237af8be8e2fcb57da986d8e240041784d30e361b312f028059"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-facebook-instant-games-top1",
+      "stable_id": "sun.component.achieved-facebook-instant-games-top1",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "fe29710270bfa7726eb1b8d689f9552a2d2ad5f2f22047a23cdbe0d6ad519017",
+      "semantic_signature_sha256": "68e1dca6a3cf77fa2d9186f201e7dfc4b71c22a35a7ed74bccfcd0a6a94b5b1c"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-facebook-new-titles",
+      "stable_id": "sun.component.achieved-facebook-new-titles",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "2937a589b94c684dbcf44cff323cb7ed80cf10b7521f2ac3bee186bd5f6e14cd",
+      "semantic_signature_sha256": "d813d12273f6ec38cd8250a2bd03692ce52fc825a1d88d337c08718cb5eccdb4"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-web-other-platforms",
+      "stable_id": "sun.component.achieved-web-other-platforms",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "9ec5320dc00a4d1b66bc73f51639cb393456aee13802ed283b8c46606ca3de2d",
+      "semantic_signature_sha256": "4cdde76053698438e07dc6885673f04cc3d538e9352b9e454807d6c8deee0dfa"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-performance-management-rollout",
+      "stable_id": "sun.component.achieved-performance-management-rollout",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "71b60cbef012044fa81dc53b451868097a2535cc55d2e5f832295f92db5dd1ac",
+      "semantic_signature_sha256": "621ad9e102a280aa92f333e5b48428b4e59d5039ed7cc22eea8bf8ce58a37de5"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-employee-engagement-activities",
+      "stable_id": "sun.component.achieved-employee-engagement-activities",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "25466153a1aee6fefc2c52c39f1e0a0666cf047b815e6d33bdf4e023a30bc6a5",
+      "semantic_signature_sha256": "31b88f23cd298273fa24fa2680df4f970d21c6bfb4ebab8636f840bf04240b6d"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "achieved-internal-tools-processes",
+      "stable_id": "sun.component.achieved-internal-tools-processes",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "fc6408d3d47207e853122c7130b646e1b8c09b2e5bc1dc79783703b4f18a51d1",
+      "semantic_signature_sha256": "aeeb95aa323263b2ea17af131610498c937486bd32e8c3235abfdcf9790c9ca0"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "sun-stars-h1-recognition",
+      "stable_id": "sun.component.sun-stars-h1-recognition",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "45e68f571414d2db2115938d2de5593d85acd86651188badca1dc01f8bdad590",
+      "semantic_signature_sha256": "b4e3b1c641003159b45463bf418dee128ba143371b281f4ce76735eda73911b6"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "promotion-announcement",
+      "stable_id": "sun.component.promotion-announcement",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d0336be2c6d34eaf82e4f36511f101459842a0ea8e79562b10e865ea2acc9eec",
+      "semantic_signature_sha256": "ca223c262bd8991df08f843d67d3e9c9544954e85f55c37c69322f4817f08e41"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "quiz-time-interlude",
+      "stable_id": "sun.component.quiz-time-interlude",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "7589c6e500bdc9d7933465e7701e85f54e4fe7d049b0a7be3e9fdd0093e480ba",
+      "semantic_signature_sha256": "a1cfbbfd16e9e4f8ab5cc1ed1ea2515a5a4a150d4dc3d451265d3cd3244b2c8f"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-section-divider",
+      "stable_id": "sun.component.goals-section-divider",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "20dea792aff0988ca3bff917403728340d7ca0123466054be6a13143ed9362ba",
+      "semantic_signature_sha256": "42ce784a7b86b0be26563ae97c2f246f09e572c1136b0d0d9a9d506193929088"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-revenue-growth-target",
+      "stable_id": "sun.component.goals-revenue-growth-target",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "13c5e4f1e2324c57b77c732dc53ceef07e94182cff09f667270716befcaf2832",
+      "semantic_signature_sha256": "2149783eae8cdb1fc9c592e3bc15350dcbf0ccd5a7aa76e839ef6e833f56da95"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-headcount-expansion-target",
+      "stable_id": "sun.component.goals-headcount-expansion-target",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "403e903671afa7bbf2f4b2a89d3cba45ba1dd59f1fe29417921d58d2eca6a407",
+      "semantic_signature_sha256": "b915908229144a02a67079b6ca7b771150288c5931cb864d7716514e70e00485"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-app-games-scale-target",
+      "stable_id": "sun.component.goals-app-games-scale-target",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b22ee14fa64ddc64ec31448d1c22f940bd9d4b7d266d633ecfc2c2777d5b7974",
+      "semantic_signature_sha256": "c8fe16dcdda454f1b711e2b90fe5f45dbc06d1a03eb8fa8d4ed5b84c10bed48f"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-facebook-instant-games-target",
+      "stable_id": "sun.component.goals-facebook-instant-games-target",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "b6e358527b1ea429486f9df721a2ccb647a5f293ccc3b798868f7dbe7d941ba3",
+      "semantic_signature_sha256": "a65f4dead73868f0ec092f144ac3c2d74a9ea47f11e09c3a07e7461f4522fef6"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-web-other-platforms-target",
+      "stable_id": "sun.component.goals-web-other-platforms-target",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "459a324fc62ac0c055bad1f3df0f6274ff4abab6f479b25489a73ea520aa240e",
+      "semantic_signature_sha256": "f73f7c82754395963d6c142a31a98f454e4ae6a7853918a4141f677b593b36ab"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-performance-management-system",
+      "stable_id": "sun.component.goals-performance-management-system",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "18a52fcfdfaad3cb9dda133f2208a3bfacb851fb852e901a2425d7bd411279c8",
+      "semantic_signature_sha256": "737505c956e9e7847a1cd277a701bde34207465b132d173f28a74773e0c59014"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-engagement-activities-plan",
+      "stable_id": "sun.component.goals-engagement-activities-plan",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "f9ea2afedd6b431c7555cafd636db7f32bf99ef9d8b6798492feefb416ddec4f",
+      "semantic_signature_sha256": "f15eb566e0c8cc724aa4bbeb0674b1b2a3268dd0b6e34f767cde67b2f2670f13"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-year-end-party-preview",
+      "stable_id": "sun.component.goals-year-end-party-preview",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "99583126880fb87636d4f1c4e46f3d4fdcac578a9fc3ba397064969c8d35c10d",
+      "semantic_signature_sha256": "800bf58bd26b4a7b1dbdb833148ea098a8af4c7000bf5ed6ab1a7a2800abb84c"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-office-expansion-plan",
+      "stable_id": "sun.component.goals-office-expansion-plan",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "759bf0103cf3a057f08c1715b37f64bdedf8b26a9c6eec8f0e3e5666ea43185a",
+      "semantic_signature_sha256": "0a1fc12aefa69c28d118ce63ecdd895349513d76b4ba90abae8645fa7fb83ead"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-ld-programs-plan",
+      "stable_id": "sun.component.goals-ld-programs-plan",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "d2d7d92b44b1a8c57b0ccf4b40b078ae6a66681bb32c7c7136e3228305451aeb",
+      "semantic_signature_sha256": "21b4d00062d1e18cd4ee8817c18e394164bddebc6e310964d628c234bf8816a2"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-policies-budget-plan",
+      "stable_id": "sun.component.goals-policies-budget-plan",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "8a8d85899887a31cf7a0d5b517f246a25027855770005f419142074fcf3496e5",
+      "semantic_signature_sha256": "2f589c037091bda7a9bf1ce485cdc77bdcebc609d8bb922a11a66acb71b48ffc"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-internal-comms-recruitment",
+      "stable_id": "sun.component.goals-internal-comms-recruitment",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "349effbdee40f150dda5b6c0c01b864a87212be682181aa789774e13394c57a6",
+      "semantic_signature_sha256": "bc32052d1c8e8e7c622967eeedab7cf250ac6ecb8341b89d7cecca525d1d5f20"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "goals-factorial-hr-completion",
+      "stable_id": "sun.component.goals-factorial-hr-completion",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "0144401f5af086b0632dd27021c568ae639f6498ad2a7065ac44039a8f9493f5",
+      "semantic_signature_sha256": "8af7ffb260dbb1ff69f9a6c8a2e018ed62a87b957eb9eff5762a3a73dc482cbd"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "panel-discussion-section-divider",
+      "stable_id": "sun.component.panel-discussion-section-divider",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "c27ef03f5bc352185f2be24e511ee0963691155cd972ea212203b6bb8cf6836c",
+      "semantic_signature_sha256": "e6e0614e50d1be691bd01ab925a979d5563ea21b710001b0197b55948166b962"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "birthday-party-celebration",
+      "stable_id": "sun.component.birthday-party-celebration",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "bed5da40c8e56ee4fe8c41a636c57b3709683951a7fbca33c37c120e7b317a2f",
+      "semantic_signature_sha256": "d0b25d7b3502c2322ecb3744058512253505d12a42f7c28c9a27638c47da9bb9"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "birthday-members-list",
+      "stable_id": "sun.component.birthday-members-list",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "033d5147e7e9dfba15dfcfbc4387eeea7be2c0229bd7d237dfc1cce040a831a5",
+      "semantic_signature_sha256": "94939d0b9a16f2922965cfd4e8bb49fc47b138110e193fcc6cd1222b0a158982"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:33+07:00",
+      "extraction_id": "sun-slide-full-pages",
+      "item_id": "sun-connect-closing-branded",
+      "stable_id": "sun.component.sun-connect-closing-branded",
+      "status": "staging",
+      "source_sha256": "2c5287c583a7240d55eede7706608ed40f976849adf15a8ce82bce8e06466fc2",
+      "region_identity_sha256": "e9fcbdd982720d970b243d54904f901050546804a8068ccedd92a3b88420adbb",
+      "semantic_signature_sha256": "aa184aa6fc635f23042905d07e3acc94516ee10104a3749bb9d73cba073e51c2"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "branded-cover-title-subtitle",
+      "stable_id": "sun.sun-presentation.01-cover",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "f2988e69b22e40d756dc0a8e1e720328423058c723fc2bc50f75bf1d91dae9ff",
+      "semantic_signature_sha256": "9294943b9fd34a46f2f6c97a8f1ed7602a674a8b2cdbe1a8588751a841a96465"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "agenda-numbered-grid",
+      "stable_id": "sun.sun-presentation.02-agenda-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a076eb7dc41386b26cd078716b6a76707c9c11b7b281e8b7fe05aa7a200b0415",
+      "semantic_signature_sha256": "2c4705f194102b687a5eb992ca3c1fc763277b9998aeda2839aa6fd08d2c9cc2"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "section-divider-numbered",
+      "stable_id": "sun.sun-presentation.03-section-intro",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "7a9fbbd213bf5b98c1a0997fd3ca79f25828c0e197b28b2c25e8f3724f2d9e45",
+      "semantic_signature_sha256": "01e0b7174a54655aa68bd4db44a694703d83459593296979efd1a7844c67883f"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "contributors-team-intro",
+      "stable_id": "sun.sun-presentation.04-contributors-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "a0da407638cc9c975be0d15820735c8967ca9831a281c0d1582168526b72f43d",
+      "semantic_signature_sha256": "08f93526d394e828e2ceeccf74e12c2cbc9829227192118d4ad5434d4d19bd79"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "scan-me-qr-callout",
+      "stable_id": "sun.sun-presentation.05-scan-me-callout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "174e6ccd08231c665fae8cf0d2cf83c251d33a574152f82aa94da6553f19d211",
+      "semantic_signature_sha256": "37e955c2e6195a340aa5877d93a2e13a11df78a126780d0a228ec7bc3d4f6b6d"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "two-column-text-layout",
+      "stable_id": "sun.sun-presentation.06-two-column-content",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "67e79a1461cdeca4517dddc399856d3f336b0b1f7608ca25259a73493db488b0",
+      "semantic_signature_sha256": "f86264b98b0607c536be728a288eeb80620b48ba73de84f1d67dda60fc55071e"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "team-profile-cards",
+      "stable_id": "sun.sun-presentation.07-contributors-variant",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "3c673f61f060d7ecbc622c40273ee2592a4c2e9797c7840d9d1bbad86c6d67d7",
+      "semantic_signature_sha256": "feee209d07e8d38750231f1673a5de957311e448499df5c459720d3ce4bb4dab"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "next-steps-call-to-action",
+      "stable_id": "sun.sun-presentation.08-next-steps-cta",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "fb859f0a6b40f5d4d5e65c15fc65461728b229c813da29cbf6640ddd2c76c3e4",
+      "semantic_signature_sha256": "092ea6aad0968105d6ec2cd3d83163a994a585a02fc4047f0ba5db3db6d9276f"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "summary-key-takeaways-numbered",
+      "stable_id": "sun.sun-presentation.09-summary-grid",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "ffe8d808c798f5b1e4718650847e712ecb558fdf929322d6a65e1b99b825c9ca",
+      "semantic_signature_sha256": "db6e8dc7de407d8590b5aa79be4b8d128a7847ec3c076807a86b286c9cde451a"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "content-body-text-slide",
+      "stable_id": "sun.sun-presentation.10-text-heavy-content",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "4887ada847fe82889c4cc089b00f9586e02c1dce65aa616bbd8d180479543c00",
+      "semantic_signature_sha256": "9987490775423f912d86b1099c195e4738af7c832461de8abd898fc71fa825fc"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "mix-chart-bar-visualization",
+      "stable_id": "sun.sun-presentation.11-mix-chart-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "0f73d49d57d4e23208a5a82db0373855d1c8af5ccf28c42933dfa838b6d9f3c8",
+      "semantic_signature_sha256": "109b19550b9936302de84e959102317b961b3a08e5d917dfc94b04b769fb2533"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "data-stats-metric-cards",
+      "stable_id": "sun.sun-presentation.12-statistics-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "e57164becbafd2ddf3289227a1f007728f0d2a59269ab376cf66174029575b68",
+      "semantic_signature_sha256": "df0caa5d7db7270d8abc999b866af0aebedb83b6520dbf5b7d1c1e1dfde16343"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "information-structure-grid",
+      "stable_id": "sun.sun-presentation.13-information-structure-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "c5b9427aaa0c0b2aaf3b948571bef421f1cceeec9906eec5310cce8309527b63",
+      "semantic_signature_sha256": "fe76fa85740aaa488b9271581a16b13bbc70da7dd7e6ecc765c05076ebaf7923"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "image-right-text-layout",
+      "stable_id": "sun.sun-presentation.14-image-and-text-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "d9eedb8ea93c0d261e8f837101bbcd1853b8717142192b48e61e5adf8aa0b2f2",
+      "semantic_signature_sha256": "b5cfdaebfbb2e30a7083e5427e9684a40648998232cc742a6b8f0c7120f5e531"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "image-left-text-layout",
+      "stable_id": "sun.sun-presentation.15-image-and-text-variant",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "305ef39ab1c74f2051848c5add3640e263b8af8629a26cead480f32e5cabfadd",
+      "semantic_signature_sha256": "a8b0a4557e19064e58c988079f2c29f558a5a28728f9ddbb0535bcb3f5e4e702"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "multi-image-card-grid",
+      "stable_id": "sun.sun-presentation.16-quote-or-highlight-layout",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "697053aca1115926aebc969b32e2cf0198c34d0566fbd4ff186baf514d9b413c",
+      "semantic_signature_sha256": "c91592a9b415797fda0a590e1c2a102cf72904a5ded0e0d9fd581d960e06c636"
+    },
+    {
+      "attempted_at": "2026-06-25T15:29:17+07:00",
+      "extraction_id": "sun-presentation-full-pages",
+      "item_id": "closing-thank-you-branded",
+      "stable_id": "sun.sun-presentation.17-closing-thank-you",
+      "status": "duplicate",
+      "source_sha256": "5776b96b1a266c35e44ef3dcce4e80ba368557fc657fd6f6eb95b506ca4418b1",
+      "region_identity_sha256": "47c24435c1f57e06c5599a3edd1e12ac837cc4c005bbc264563200e3f68042a8",
+      "semantic_signature_sha256": "369eba07bb0dc92ae5fc3938197cfa0be6091e5302b13385440e1de3e4258053"
+    },
+    {
+      "attempted_at": "2026-06-25T18:21:31+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "brand-icon-reference-sheet",
+      "stable_id": "sun.component.brand-icon-reference-sheet",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b1803277ec206f6e0c500370f1f2dfa9b198b8edc72c29406541b25079b925ae",
+      "semantic_signature_sha256": "b686aeaa2db19ca75ec77aae37b1f59605b7c59b8d513926c5eb2460f7a2512b"
+    },
+    {
+      "attempted_at": "2026-06-25T18:21:36+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "feature-step-shape-diagrams",
+      "stable_id": "sun.component.feature-step-shape-diagrams",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "72dba354f8672f611363f89f5a732a138dfc6ea67faa981438e67df86cee9f18",
+      "semantic_signature_sha256": "7c06001f45afa1e02e0509c66e600217ef1534550a0c8384d5d23ce207d8ab7a"
+    },
+    {
+      "attempted_at": "2026-06-25T18:21:52+07:00",
+      "extraction_id": "guideline-fulldeck",
+      "item_id": "style-card-sampler-board",
+      "stable_id": "sun.component.style-card-sampler-board",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
+      "semantic_signature_sha256": "f69ae6d4df97eb09748d2cde0741cfdc5d37d738a52646339eb38df015f1be64"
+    },
+    {
+      "attempted_at": "2026-06-25T18:27:07+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "goal-setting-checklist-table",
+      "stable_id": "sun.component.goal-setting-checklist-table",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
+      "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-06-25T18:27:07+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "ai-adoption-radial-diagram",
+      "stable_id": "sun.component.ai-adoption-radial-diagram",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "66bf2027751b523bba047d3bcc653938be93156bcd157f918433558efc470517",
+      "semantic_signature_sha256": "e57d3c4f0d72c7092ab1083ef759ce2d7ba0709019d1b7cc6867227050e8b285"
+    },
+    {
+      "attempted_at": "2026-06-25T18:27:07+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "work-environment-image-cards",
+      "stable_id": "sun.component.work-environment-image-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "6af15cb218a03194fbe44b226ddbb7a33d6d85eb8fd148c67ac426ac508ab0a1",
+      "semantic_signature_sha256": "edad7aef766c7e925b3e5028f4123ff24a1e809dbf7234e3fe2c80245538fad4"
+    },
+    {
+      "attempted_at": "2026-06-26T11:02:11+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "goal-setting-checklist-table",
+      "stable_id": "sun.component.goal-setting-checklist-table",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
+      "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-06-26T11:02:11+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "ai-adoption-radial-diagram",
+      "stable_id": "sun.component.ai-adoption-radial-diagram",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "66bf2027751b523bba047d3bcc653938be93156bcd157f918433558efc470517",
+      "semantic_signature_sha256": "d5d57f5fae45d4c6b53747f0a0d3bcf585765e688f1923f32fb31e89efb3075e"
+    },
+    {
+      "attempted_at": "2026-06-26T11:02:11+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "work-environment-image-cards",
+      "stable_id": "sun.component.work-environment-image-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "6af15cb218a03194fbe44b226ddbb7a33d6d85eb8fd148c67ac426ac508ab0a1",
+      "semantic_signature_sha256": "c726f680fd1b94b693b5bf2c1035414d1b63d6e10b929b003cf5ffe4813ed2e6"
+    },
+    {
+      "attempted_at": "2026-06-26T11:02:11+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "team-contributor-circles",
+      "stable_id": "sun.component.team-contributor-circles",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9cd03205a34fc41f8993a2dc68e3dacbc82a20687e54111f6895b36580073ad",
+      "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
     }
   ]
 }

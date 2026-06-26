@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 50" width="40" height="50"><defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+<clipPath id="clip_2">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+<clipPath id="clip_3">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+</defs>
+<g transform="translate(-743 -897)"><g clip-path="url(#clip_1)"><path transform="matrix(1,0,0,-1,773.87,907.76)" d="M0 0H-8V2H-2V6H-18V2H-12V0H-20C-23.31 0-26-2.69-26-6V-26C-26-28.93-23.88-31.37-21.09-31.89L-23.46-36H-18.84L-16.54-32H-3.46L-1.16-36H3.46L1.09-31.89C3.88-31.37 6-28.94 6-26V-6C6-2.69 3.31 0 0 0M2-26C2-27.1 1.1-28 0-28H-20C-21.1-28-22-27.1-22-26V-20H2ZM2-16H-22V-10H2ZM-22-6C-22-4.9-21.1-4-20-4H0C1.1-4 2-4.9 2-6Z" />
+<path transform="matrix(1,0,0,-1,759.87,933.76)" d="M0 0H8C9.1 0 10 .896 10 2 10 3.1 9.1 4 8 4H0C-1.1 4-2 3.1-2 2-2 .896-1.1 0 0 0" />
+</g></g></svg>

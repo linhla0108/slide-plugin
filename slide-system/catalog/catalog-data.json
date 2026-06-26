@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T16:07:25+07:00",
+  "generated_at": "2026-06-26T11:06:07+07:00",
   "counts": {
-    "published": 78,
-    "staging": 0
+    "published": 81,
+    "staging": 11
   },
   "items": [
     {
@@ -263,16 +263,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/01-cover/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/01-cover/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/01-cover/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/01-cover/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -505,16 +505,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/02-timeline/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -701,16 +701,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/03-objectives/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -922,16 +922,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/04-mindset/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -1168,16 +1168,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/05-prep/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/05-prep/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/05-prep/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/05-prep/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -1375,16 +1375,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/06-tough-candidates/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -1706,16 +1706,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/07-star-method/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -1944,16 +1944,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/08-structure-warmup/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -2182,16 +2182,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/09-structure-deepdive/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -2512,16 +2512,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/10-do-dont/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -2818,16 +2818,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/11-scoring/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3051,16 +3051,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/interview-workshop-sunriser/12-action-items/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3165,16 +3165,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/01-cover/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/01-cover/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/01-cover/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/01-cover/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3315,16 +3315,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/01-cover/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/01-cover/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/01-cover/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/01-cover/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3457,16 +3457,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/01-cover/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/01-cover/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/01-cover/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/01-cover/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3609,16 +3609,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/01-cover/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/01-cover/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/01-cover/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/01-cover/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -3832,16 +3832,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/04-intro/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/04-intro/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/04-intro/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/04-intro/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -4126,16 +4126,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/02-overview/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/02-overview/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/02-overview/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/02-overview/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -4392,16 +4392,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/05-process/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/05-process/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/05-process/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/05-process/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -4525,16 +4525,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/09-thanks/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/09-thanks/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/09-thanks/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/09-thanks/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -4774,16 +4774,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/06-structure-breakdown/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/06-structure-breakdown/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/06-structure-breakdown/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/06-structure-breakdown/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -4977,16 +4977,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/03-timeline/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/03-timeline/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/03-timeline/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/03-timeline/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -5216,16 +5216,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/07-quarterly-check-in/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/07-quarterly-check-in/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/07-quarterly-check-in/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/07-quarterly-check-in/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -5446,16 +5446,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/goal-setting-2026/08-year-end-review/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/goal-setting-2026/08-year-end-review/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/goal-setting-2026/08-year-end-review/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/goal-setting-2026/08-year-end-review/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -5631,16 +5631,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/14-company-culture/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/14-company-culture/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/14-company-culture/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/14-company-culture/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -5762,16 +5762,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/04-compensation-divider/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/04-compensation-divider/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/04-compensation-divider/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/04-compensation-divider/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -5898,16 +5898,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/06-direct-benefits-divider/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/06-direct-benefits-divider/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/06-direct-benefits-divider/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/06-direct-benefits-divider/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -6091,16 +6091,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/09-direct-benefits-summary/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/09-direct-benefits-summary/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/09-direct-benefits-summary/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/09-direct-benefits-summary/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -6304,16 +6304,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/17-employee-notes/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/17-employee-notes/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/17-employee-notes/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/17-employee-notes/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -6581,16 +6581,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/05-gross-to-net-explainer/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/05-gross-to-net-explainer/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/05-gross-to-net-explainer/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/05-gross-to-net-explainer/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -6716,16 +6716,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/12-indirect-benefits-divider/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/12-indirect-benefits-divider/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/12-indirect-benefits-divider/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/12-indirect-benefits-divider/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -6879,16 +6879,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/13-learning-development/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/13-learning-development/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/13-learning-development/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/13-learning-development/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -7168,16 +7168,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/08-long-term-benefits/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/08-long-term-benefits/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/08-long-term-benefits/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/08-long-term-benefits/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -7364,16 +7364,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/07-monthly-support-benefits/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/07-monthly-support-benefits/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/07-monthly-support-benefits/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/07-monthly-support-benefits/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -7515,16 +7515,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/18-thanks/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/18-thanks/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/18-thanks/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/18-thanks/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -7771,16 +7771,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/02-why-upgrade/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/02-why-upgrade/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/02-why-upgrade/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/02-why-upgrade/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -7971,16 +7971,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/10-team-building-benefits/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/10-team-building-benefits/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/10-team-building-benefits/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/10-team-building-benefits/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -8175,16 +8175,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/11-team-trip-flexibility/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/11-team-trip-flexibility/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/11-team-trip-flexibility/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/11-team-trip-flexibility/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -8366,16 +8366,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/03-total-package-overview/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/03-total-package-overview/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/03-total-package-overview/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/03-total-package-overview/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -8532,16 +8532,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/16-update-summary/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/16-update-summary/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/16-update-summary/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/16-update-summary/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -8986,16 +8986,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/salary-benefits-2026/15-working-environment/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/salary-benefits-2026/15-working-environment/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/salary-benefits-2026/15-working-environment/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/salary-benefits-2026/15-working-environment/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -9197,16 +9197,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/02-agenda-section/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/02-agenda-section/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/02-agenda-section/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/02-agenda-section/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -9317,16 +9317,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/20-closing-thank-you/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/20-closing-thank-you/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/20-closing-thank-you/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/20-closing-thank-you/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -9504,16 +9504,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/15-factorial-goals-steps/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -9690,16 +9690,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/16-factorial-review-steps/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -9994,16 +9994,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/18-faq-answers-part-1/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -10286,16 +10286,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/19-faq-answers-part-2/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -10415,16 +10415,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/17-faq-header/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/17-faq-header/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/17-faq-header/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/17-faq-header/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -10771,16 +10771,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/08-how-level-expectation-card/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -11143,16 +11143,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/04-intro-explanation-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -11502,16 +11502,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/14-preparation-checklist/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/14-preparation-checklist/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/14-preparation-checklist/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/14-preparation-checklist/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -12187,16 +12187,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/10-rating-scale-chart/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -12483,16 +12483,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/12-review-timeline/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/12-review-timeline/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/12-review-timeline/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/12-review-timeline/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -12614,16 +12614,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/03-section-divider-01/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/03-section-divider-01/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/03-section-divider-01/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/03-section-divider-01/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -12745,16 +12745,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/05-section-divider-02/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/05-section-divider-02/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/05-section-divider-02/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/05-section-divider-02/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -12876,16 +12876,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/11-section-divider-03/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/11-section-divider-03/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/11-section-divider-03/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/11-section-divider-03/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -13007,16 +13007,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/13-section-divider-04/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/13-section-divider-04/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/13-section-divider-04/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/13-section-divider-04/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -13235,16 +13235,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/07-what-definition-card/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/07-what-definition-card/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/07-what-definition-card/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/07-what-definition-card/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -13658,16 +13658,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/09-what-how-comparison/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/09-what-how-comparison/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/09-what-how-comparison/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/09-what-how-comparison/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -13919,16 +13919,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-studio-performance-review-2025/06-what-how-rating-framework/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -14155,16 +14155,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/02-agenda-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/02-agenda-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/02-agenda-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/02-agenda-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -14281,16 +14281,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/17-closing-thank-you/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/17-closing-thank-you/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/17-closing-thank-you/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/17-closing-thank-you/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -14553,16 +14553,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/04-contributors-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/04-contributors-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/04-contributors-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/04-contributors-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -14731,16 +14731,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/07-contributors-variant/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/07-contributors-variant/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/07-contributors-variant/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/07-contributors-variant/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -14941,16 +14941,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/14-image-and-text-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/14-image-and-text-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/14-image-and-text-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/14-image-and-text-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -15145,16 +15145,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/15-image-and-text-variant/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/15-image-and-text-variant/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/15-image-and-text-variant/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/15-image-and-text-variant/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -15358,16 +15358,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/13-information-structure-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/13-information-structure-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/13-information-structure-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/13-information-structure-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -15569,16 +15569,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/11-mix-chart-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/11-mix-chart-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/11-mix-chart-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/11-mix-chart-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -15711,16 +15711,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/08-next-steps-cta/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/08-next-steps-cta/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/08-next-steps-cta/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/08-next-steps-cta/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -15889,16 +15889,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/16-quote-or-highlight-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/16-quote-or-highlight-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/16-quote-or-highlight-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/16-quote-or-highlight-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -16025,16 +16025,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/05-scan-me-callout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/05-scan-me-callout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/05-scan-me-callout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/05-scan-me-callout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -16188,16 +16188,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/03-section-intro/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/03-section-intro/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/03-section-intro/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/03-section-intro/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -16443,16 +16443,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/12-statistics-layout/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/12-statistics-layout/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/12-statistics-layout/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/12-statistics-layout/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -16644,16 +16644,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/09-summary-grid/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/09-summary-grid/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/09-summary-grid/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/09-summary-grid/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -17024,16 +17024,16 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/10-text-heavy-content/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/10-text-heavy-content/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/10-text-heavy-content/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/10-text-heavy-content/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
@@ -17292,19 +17292,2367 @@
       ],
       "images": [
         {
+          "label": "Source with text",
+          "path": "slide-system/library/templates/sun-presentation/06-two-column-content/evidence/source-with-text.svg"
+        },
+        {
           "label": "Preview",
           "path": "slide-system/library/templates/sun-presentation/06-two-column-content/preview/thumbnail.png"
         },
         {
           "label": "Visual",
           "path": "slide-system/library/templates/sun-presentation/06-two-column-content/visual.svg"
-        },
-        {
-          "label": "Source with text",
-          "path": "slide-system/library/templates/sun-presentation/06-two-column-content/evidence/source-with-text.svg"
         }
       ],
       "deletable": true
+    },
+    {
+      "id": "sun.component.brand-icon-reference-sheet",
+      "version": "1.0.0",
+      "name": "Brand Icon Reference Sheet",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "brand icon library reference sheet",
+        "frequently used icon set"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "icon",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "rewards",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "leadership",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "bod",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "level-expectation",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "company",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "learning-sharing",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-nh-ng-icon-hay-xu-t-hi-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/evidence/source-with-text.svg",
+        "slot_count": 13,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet",
+        "visual": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/evidence/notes.md"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/visual.svg"
+        }
+      ],
+      "deletable": true
+    },
+    {
+      "id": "sun.component.feature-step-shape-diagrams",
+      "version": "1.0.0",
+      "name": "Feature Step Shape Diagrams",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "feature and step shape diagrams",
+        "circular badges and OKR hexagon formula"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "lorem-ipsum",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "01-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "03",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-cho-c-c-t-nh-n-ng-c-c-b-c-h",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "foundation",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "01-3",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "game-app",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "built",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "top1",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "02",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "fb-instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "microsoft",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "text-13",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "xiaomi",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "03-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "web-platforms",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-mu-n-t-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-ch-n-nh-h-ng-con-ng-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-m-chu-i-vi-c-theo-ti-n-tr-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-ngh-a-t-c-ng-n-c-ng-ty",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-ch-o-l-ng-goal-ho-n-th-nh-m-c-n-o",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-th-i-h-n-nh-t-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "o-c-b-ng-s-li-u-m-c-ch-t-l-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "vi-c-t-i-s-l-m",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "danh-s-ch-ho-t-ng-h-nh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-l-m-g-h-m-nay-tu-n-n-y",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "kh-ng-o-c-b-ng-ch-s-kh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-i-l-k-t-qu",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "goal",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "key",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "result",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "task",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/evidence/source-with-text.svg",
+        "slot_count": 36,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams",
+        "visual": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/evidence/external-images.json"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/visual.svg"
+        }
+      ],
+      "deletable": true
+    },
+    {
+      "id": "sun.component.style-card-sampler-board",
+      "version": "1.0.0",
+      "name": "Style Card Sampler Board",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "card style sampler board",
+        "maturity level cards and metric bars"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "chuy-n-h-a-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-d-hi-u-ch-r",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "team-ng-g-p-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-n-o",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-blockers",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-s-t-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "feedback-li-n-t-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-b-o-team-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-outcome",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "trao-i-d-n-d-t-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-thu-n-c-ng-nh-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "vi-n-v-c-ch-t-o-ra-k-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "qu-t-c-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategist",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "driver",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "coach",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "chuy-n-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "h-ng-i-r-r-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "cho-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-tr-ng-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-d-i-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "li-n-t-c-feedback",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "d-n-d-t-v-ng-h-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-nh-n-vi-n-t-o-ra",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategist-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "driver-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "coach-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "card",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "1-th-ng-d-ng-cho-c-c-m-c-c-c-ng-c-p-nh-ng-v-n-kh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "spicy",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autocomplete",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-1",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autonomous",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agenta",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "collaborative",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agent-networks",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-4",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "software",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "factory",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-5",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ai-coding",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "assistants",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "30",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "revenue",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "30-2",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "team-size",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "110-members",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/evidence/source-with-text.svg",
+        "slot_count": 61,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board",
+        "visual": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/evidence/external-images.json"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/evidence/source-with-text.svg"
+        },
+        {
+          "label": "Preview",
+          "path": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/preview/thumbnail.png"
+        },
+        {
+          "label": "Visual",
+          "path": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/visual.svg"
+        }
+      ],
+      "deletable": true
+    },
+    {
+      "id": "sun.component.team-contributor-circles.g03",
+      "version": "0.0.0",
+      "name": "team-contributor-circles-g03",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "team contributor profile circles layout",
+        "three-member team showcase with avatar placeholders and roles",
+        "Engagement"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": -0.27877,
+          "y": 0.564249,
+          "width": 0.733165,
+          "height": 0.5664,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 1,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g03",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.goal-setting-checklist-table",
+      "version": "0.0.0",
+      "name": "goal-setting-checklist-table",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "goal setting checklist comparison table",
+        "manager-employee goal discussion steps board with columns"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 0.6,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "checklist-cho-qu-n-l",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "manager-n-n-h-i-trao-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-c-b-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-context-gi-i-th-ch-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-a-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "nh-n-vi-n-hi-u-b-c-tranh-chung",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "theo-em-ph-n-n-o-trong-c-ng-vi-c-c-a-m-nh-nh-h-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "nhi-u-nh-t-n-goal-team",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "em-ngh-k-t-qu-n-o-ch-ng-minh-m-nh-l-m-t-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "2-contribution-x-c-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "ng-g-p-c-a-nh-n-vi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-m-ra-vai-tr-c-a-nh-n-vi-n-trong",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "3-de-ne-vi-t-goal-key",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "results-project-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "chuy-n-t-ng-th-nh-goal-o-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "4-de-ne-vi-t-goal-key",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "results-functional-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "5-de-ne-development-goal",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "6-feasibility-ki-m-tra-t-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "kh-thi",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-b-o-goal-th-c-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "7-weight-c-n-i-t-tr-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-b-o-t-tr-ng-c-c-goal-c-n-i",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "v-ph-h-p-v-i-kh-n-ng-t-c-ng",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "8-commitment",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-thu-n-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "hai-b-n-th-ng-nh-t-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "cam-k-t-th-c-hi-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "gi-i-th-ch-goal-c-a-team-gi-p-nh-n-vi-n-hi-u-v-s",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-p-nh-n-vi-n-hi-u-team-ang-c-1-2-u-ti-n-ch-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "l-ng-nghe-nguy-n-v-ng-trong-c-ng-vi-c-c-a-nh-n-v",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "l-ng-nghe-goal-do-nh-n-vi-n-xu-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "x-c-nh-goal-c-a-nh-n-vi-n-l-outcome-kh-ng-ph-i-t",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "u-ti-n-3-5-goal-ch-nh-c-t-c-ng-ch-nh-n-goal-chun",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "m-i-goal-c-2-3-key-results",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "c-ch-s-o-v-th-i-gian",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "em-c-n-t-p-trung-v-o-d-n-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "d-n-m-i-em-c-n-theo-s-t-n-m-nay",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-s-u-ti-n-goal-n-o-h-n-m-b-o-ho-n-th-nh",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-n-o-ch-ng-minh-goal-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-ng-ta-s-o-k-t-qu-b-ng-ch-s-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "khi-n-o-goal-c-coi-l-ho-n-th-nh",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "c-kh-kh-n-n-o-nh-h-ng-n-goal-kh-ng",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "em-c-n-h-tr-g-t-qu-n-l",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-y-c-kh-thi-v-i-kh-i-l-ng-c-ng-vi-c-hi-n-t",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-o-l-u-ti-n-ch-nh-trong-c-ng-vi-c-hi-n-t-i",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "goal-n-o-n-n-chi-m-nhi-u-th-i-gian-v-c-ng-s-c-h",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "k-ho-ch-em-th-c-hi-n-m-c-ti-u-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "ch-ng-ta-s-theo-d-i-ti-n-nh-th-n-o",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "n-ng-l-c-k-n-ng-c-n-n-o-c-n-t-m-c-ti-u-c-i-thi-n",
+            "role": "list-item",
+            "html_tag": "li",
+            "required": false
+          },
+          {
+            "id": "tri-n-trong-n-m-nay-ph-c-v-ho-n-th-nh-m-c-ti-u-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "vi-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "goal-n-y-c-li-n-quan-n-c-ng-vi-c-hi-n-t-i-c-a-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-kh-thi-v-i-th-i-gian-v-ngu-n-l-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "r-i-ro-ch-nh-c-x-c-nh",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "qu-n-l-hi-u-v-cam-k-t-h-tr-nh-n-vi-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "hai-b-n-ng-thu-n-goal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-ng-nh-t-k-ho-ch-tri-n-khai-l-ch-check-in-ti-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "goal-ng-v-i-vai-tr-c-a-nh-n-vi-n-c-n-c-t-tr-ng-c",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "gi-m-t-tr-ng-c-c-goal-c-ph-thu-c-v-o-y-u-t-b-n-n",
+            "role": "body",
+            "html_tag": "p",
+            "required": false
+          },
+          {
+            "id": "board",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "1-th-ng-d-ng-bi-u-th-c-c-d-ng-content-b-ng",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 64,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/goal-setting-checklist-table",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.team-contributor-circles.g02",
+      "version": "0.0.0",
+      "name": "team-contributor-circles-g02",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "team contributor profile circles layout",
+        "three-member team showcase with avatar placeholders and roles",
+        "Leadership",
+        "Development"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.451212,
+          "y": 0.472,
+          "width": 0.701193,
+          "height": 0.713975,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "leadership",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 2,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g02",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.work-environment-image-cards.g01",
+      "version": "0.0.0",
+      "name": "work-environment-image-cards-g01",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "work environment photo cards layout",
+        "image cards showing office and team environment",
+        "Leadership",
+        "Development"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.467567,
+          "y": 0.402225,
+          "width": 0.331935,
+          "height": 0.464854,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "leadership",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 2,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g01",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.ai-adoption-radial-diagram.g01",
+      "version": "0.0.0",
+      "name": "ai-adoption-radial-diagram-g01",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "AI adoption level radial progress diagram",
+        "concentric rings showing adoption maturity levels",
+        "X\u00c2Y",
+        "D\u1ef0NG",
+        "\u0110\u1ed8I",
+        "NG\u0168"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.381682,
+          "y": 0.319463,
+          "width": 0.202768,
+          "height": 0.122563,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "x-y-d-ng-i-ng-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 1,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g01",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.ai-adoption-radial-diagram",
+      "version": "0.0.0",
+      "name": "ai-adoption-radial-diagram",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "AI adoption level radial progress diagram",
+        "concentric rings showing adoption maturity levels"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.0,
+          "y": 0.6,
+          "width": 1.0,
+          "height": 0.4,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/evidence"
+      },
+      "images": [
+        {
+          "label": "Ai Adoption Radial Diagram Group 01",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/components/ai-adoption-radial-diagram-group-01.svg"
+        },
+        {
+          "label": "Ai Adoption Radial Diagram Group 02",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/components/ai-adoption-radial-diagram-group-02.svg"
+        },
+        {
+          "label": "Source (original region)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "26",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-i-ng-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-h-th-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-ng-ho",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-ng-c-p-c-c-c-ng-c-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-c-v-c-ng-vi-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "chia-s-best-practices-v",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "use-cases-trong-c-c-team",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "n-ng-cao-ti-ng-anh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ti-p-c-n-v-i-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "x-y-d-ng-th-vi-n-prompts",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ai-work-ows-d-ng-chung",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-ch-c-workshop",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "training-v-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "khuy-n-kh-ch",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "th-nghi-m-ai",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-xoay-quanh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 17,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.work-environment-image-cards",
+      "version": "0.0.0",
+      "name": "work-environment-image-cards",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "work environment photo cards layout",
+        "image cards showing office and team environment"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.0,
+          "y": 0.51,
+          "width": 1.0,
+          "height": 0.49,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/evidence"
+      },
+      "images": [
+        {
+          "label": "Work Environment Image Cards Group 01",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/artifact/components/work-environment-image-cards-group-01.svg"
+        },
+        {
+          "label": "Work Environment Image Cards Group 02 (\u00d72)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/artifact/components/work-environment-image-cards-group-02.svg"
+        },
+        {
+          "label": "Source (original region)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-h-nh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "leadership",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "rewards",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "work",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "environment",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "improvement",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "employee-experience",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 10,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.team-contributor-circles.g01",
+      "version": "0.0.0",
+      "name": "team-contributor-circles-g01",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "team contributor profile circles layout",
+        "three-member team showcase with avatar placeholders and roles"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.206582,
+          "y": 0.189039,
+          "width": 0.201085,
+          "height": 0.233013,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": []
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 0,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles-g01",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.ai-adoption-radial-diagram.g02",
+      "version": "0.0.0",
+      "name": "ai-adoption-radial-diagram-g02",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "AI adoption level radial progress diagram",
+        "concentric rings showing adoption maturity levels",
+        "X\u00c2Y",
+        "D\u1ef0NG",
+        "TH\u1ed0NG",
+        "\u0110\u1ed8NG",
+        "HO\u00c1"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 4,
+        "region": {
+          "x": 0.381682,
+          "y": 0.553342,
+          "width": 0.202768,
+          "height": 0.122563,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "x-y-d-ng-h-th-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "t-ng-ho",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 2,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram-g02",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.work-environment-image-cards.g02",
+      "version": "0.0.0",
+      "name": "work-environment-image-cards-g02",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "work environment photo cards layout",
+        "image cards showing office and team environment",
+        "Rewards",
+        "Recognition",
+        "Engagement"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.126241,
+          "y": 0.462287,
+          "width": 0.344899,
+          "height": 0.368771,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/evidence"
+      },
+      "images": [
+        {
+          "label": "Source with text",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "rewards",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 3,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/work-environment-image-cards-g02",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
+    },
+    {
+      "id": "sun.component.team-contributor-circles",
+      "version": "0.0.0",
+      "name": "team-contributor-circles",
+      "type": "component",
+      "category": "component",
+      "status": "staging",
+      "brand": "sun-studio",
+      "intent": [
+        "team contributor profile circles layout",
+        "three-member team showcase with avatar placeholders and roles"
+      ],
+      "tags": [],
+      "source": {
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+        "slide_or_page": 5,
+        "region": {
+          "x": 0.257381,
+          "y": 0.556507,
+          "width": 0.470425,
+          "height": 0.319029,
+          "unit": "normalized"
+        },
+        "object_ids": []
+      },
+      "paths": {
+        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact",
+        "visual": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/preview",
+        "detail": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/README.md",
+        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/evidence"
+      },
+      "images": [
+        {
+          "label": "Team Contributor Circles Group 01",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact/components/team-contributor-circles-group-01.svg"
+        },
+        {
+          "label": "Team Contributor Circles Group 02",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact/components/team-contributor-circles-group-02.svg"
+        },
+        {
+          "label": "Team Contributor Circles Group 03 (\u00d72)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/artifact/components/team-contributor-circles-group-03.svg"
+        },
+        {
+          "label": "Source (original region)",
+          "path": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles/evidence/source-with-text.svg"
+        }
+      ],
+      "icon_set": null,
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "leadership",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "artifact/visual.svg",
+        "slots": "artifact/text-slots.json",
+        "source_evidence": "evidence/source-with-text.svg",
+        "slot_count": 3,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ],
+      "deletable": true,
+      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/team-contributor-circles",
+      "publish_readiness": {
+        "ready": true,
+        "blockers": []
+      }
     }
   ]
 }

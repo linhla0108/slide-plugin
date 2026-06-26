@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 32" width="52" height="32"><defs>
+<clipPath id="clip_1">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+<clipPath id="clip_2">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+<clipPath id="clip_3">
+<path transform="matrix(1,0,0,-1,0,2623.16)" d="M0 2623.16H2938.83V0H0Z" />
+</clipPath>
+</defs>
+<g transform="translate(-1257 -2259)"><g clip-path="url(#clip_1)"><path transform="matrix(1,0,0,-1,1283.87,2273.77)" d="M0 0H4L-2-12V-4H-6L0 8ZM-10-14H8V10H-10ZM-1 6H-10V4H-16V-8H-10V-10H-2V-4H-6ZM8 4V6H0V0H4L-1-10H8V-8H14V4ZM8-10V-8H14V4H8V6H14C15.11 6 16 5.11 16 4V-8C16-9.1 15.11-10 14-10ZM-2-12V-4H-6L0 8V0H4ZM-16-10C-17.1-10-18-9.1-18-8V4C-18 5.11-17.1 6-16 6H-10V4H-16V-8H-10V-10ZM20 6H19.63C18.81 8.33 16.61 10 14 10H-16C-19.31 10-22 7.31-22 4V-8C-22-8.7-21.88-9.38-21.65-10-20.83-12.33-18.61-14-16-14H14C16.61-14 18.81-12.32 19.63-10H20C21.11-10 22-9.1 22-8V4C22 5.11 21.11 6 20 6M-16 4V-8H-2V-4H-6L-2 4ZM0 4V0H4L0-8H14V4Z" />
+</g></g></svg>

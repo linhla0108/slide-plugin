@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-24T11:16:58+07:00",
+  "updated_at": "2026-06-25T18:21:52+07:00",
   "items": [
     {
       "id": "sun.asset.logo",
@@ -16115,6 +16115,843 @@
         "text_slots": "slide-system/library/templates/sun-presentation/06-two-column-content/text-slots.json",
         "preview": "slide-system/library/templates/sun-presentation/06-two-column-content/preview/preview.html",
         "evidence": "slide-system/library/templates/sun-presentation/06-two-column-content/evidence/notes.md"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.brand-icon-reference-sheet",
+      "version": "1.0.0",
+      "name": "Brand Icon Reference Sheet",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "brand icon library reference sheet",
+        "frequently used icon set"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "icon",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "engagement",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "rewards",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "recognition",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "leadership",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "bod",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "level-expectation",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "personal-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "company",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "learning-sharing",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "1-nh-ng-icon-hay-xu-t-hi-n",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/evidence/source-with-text.svg",
+        "slot_count": 13,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 1,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet",
+        "visual": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.brand-icon-reference-sheet/evidence/notes.md"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.feature-step-shape-diagrams",
+      "version": "1.0.0",
+      "name": "Feature Step Shape Diagrams",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "feature and step shape diagrams",
+        "circular badges and OKR hexagon formula"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "lorem-ipsum",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "01",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "01-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "03",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "lorem-ipsum-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "2-th-ng-d-ng-bi-u-th-cho-c-c-t-nh-n-ng-c-c-b-c-h",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "foundation",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "01-3",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "game-app",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "built",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "top1",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "02",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "fb-instant-games",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "microsoft",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "text-13",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "xiaomi",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "03-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "web-platforms",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-mu-n-t-c",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-ch-n-nh-h-ng-con-ng-i",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-m-chu-i-vi-c-theo-ti-n-tr-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "k-t-qu-ngh-a-t-c-ng-n-c-ng-ty",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-ch-o-l-ng-goal-ho-n-th-nh-m-c-n-o",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "c-th-i-h-n-nh-t-nh",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "o-c-b-ng-s-li-u-m-c-ch-t-l-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "vi-c-t-i-s-l-m",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "danh-s-ch-ho-t-ng-h-nh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "l-l-m-g-h-m-nay-tu-n-n-y",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "kh-ng-o-c-b-ng-ch-s-kh-ng",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "ph-i-l-k-t-qu",
+            "role": "subheading",
+            "html_tag": "h3",
+            "required": false
+          },
+          {
+            "id": "goal",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "key",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "result",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "task",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/evidence/source-with-text.svg",
+        "slot_count": 36,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 3,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams",
+        "visual": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.feature-step-shape-diagrams/evidence/external-images.json"
+      },
+      "variants": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.style-card-sampler-board",
+      "version": "1.0.0",
+      "name": "Style Card Sampler Board",
+      "type": "component",
+      "category": "component",
+      "status": "published",
+      "brand": "sun-studio",
+      "intent": [
+        "card style sampler board",
+        "maturity level cards and metric bars"
+      ],
+      "tags": [],
+      "content_structure": [],
+      "content_fields": {
+        "required": [],
+        "optional": [],
+        "text_slots": [
+          {
+            "id": "chuy-n-h-a-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-d-hi-u-ch-r",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "team-ng-g-p-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-n-o",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-blockers",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-s-t-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "feedback-li-n-t-c",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "m-b-o-team-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-outcome",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "trao-i-d-n-d-t-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ng-thu-n-c-ng-nh-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "vi-n-v-c-ch-t-o-ra-k-t",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "qu-t-c-ng-n",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategist",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "driver",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "coach",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "chuy-n-m-c-ti-u",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-ty-th-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "h-ng-i-r-r-ng",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "cho-team",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ch-n-tr-ng-t-m-v-u-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "ti-n-cho-ph-ng-ban-2",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "th-o-g-tr-ng-i",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "theo-d-i-ti-n-v",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "li-n-t-c-feedback",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "t-k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "d-n-d-t-v-ng-h-nh",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "c-ng-nh-n-vi-n-t-o-ra",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "k-t-qu",
+            "role": "label",
+            "html_tag": "span",
+            "required": false
+          },
+          {
+            "id": "translator-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "strategist-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "driver-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "coach-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "card",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "1-th-ng-d-ng-cho-c-c-m-c-c-c-ng-c-p-nh-ng-v-n-kh",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "spicy",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autocomplete",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-1",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "autonomous",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "development",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agenta",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-3",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "collaborative",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "agent-networks",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-4",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "software",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "factory",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-5",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "ai-coding",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "assistants",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "level-2",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          },
+          {
+            "id": "30",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "revenue",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "30-2",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "team-size",
+            "role": "title",
+            "html_tag": "h1",
+            "required": false
+          },
+          {
+            "id": "110-members",
+            "role": "heading",
+            "html_tag": "h2",
+            "required": false
+          }
+        ]
+      },
+      "text_contract": {
+        "schema": "slide-system/schemas/text-slots.schema.json",
+        "visual": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/visual.svg",
+        "slots": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/text-slots.json",
+        "source_evidence": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/evidence/source-with-text.svg",
+        "slot_count": 61,
+        "coordinate_space": "normalized",
+        "example_content": "source",
+        "semantic_text_in_visual": false,
+        "artwork_text_exemptions": [],
+        "overflow_policy": "unmanaged",
+        "editable": true,
+        "allow_empty": true
+      },
+      "density": "any",
+      "source": {
+        "kind": "extraction",
+        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
+        "slide": 2,
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0,
+          "unit": "normalized"
+        }
+      },
+      "paths": {
+        "artifact": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board",
+        "visual": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/visual.svg",
+        "text_slots": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/text-slots.json",
+        "preview": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/preview/preview.html",
+        "evidence": "slide-system/library/components/diagrams/sun.component.style-card-sampler-board/evidence/external-images.json"
       },
       "variants": [],
       "limitations": [

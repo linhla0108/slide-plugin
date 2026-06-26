@@ -3169,6 +3169,54 @@
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
+    },
+    {
+      "id": "sun.component.brand-icon-reference-sheet",
+      "type": "component",
+      "brand": "sun-studio",
+      "intent": [
+        "brand icon library reference sheet",
+        "frequently used icon set"
+      ],
+      "tags": [],
+      "status": "published",
+      "density": "any",
+      "content_structure": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.feature-step-shape-diagrams",
+      "type": "component",
+      "brand": "sun-studio",
+      "intent": [
+        "feature and step shape diagrams",
+        "circular badges and OKR hexagon formula"
+      ],
+      "tags": [],
+      "status": "published",
+      "density": "any",
+      "content_structure": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
+    },
+    {
+      "id": "sun.component.style-card-sampler-board",
+      "type": "component",
+      "brand": "sun-studio",
+      "intent": [
+        "card style sampler board",
+        "maturity level cards and metric bars"
+      ],
+      "tags": [],
+      "status": "published",
+      "density": "any",
+      "content_structure": [],
+      "limitations": [
+        "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
+      ]
     }
   ]
 }
