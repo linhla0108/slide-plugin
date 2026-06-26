@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-26T11:02:11+07:00",
+  "updated_at": "2026-06-26T11:21:42+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -2043,16 +2043,6 @@
       "semantic_signature_sha256": "e57d3c4f0d72c7092ab1083ef759ce2d7ba0709019d1b7cc6867227050e8b285"
     },
     {
-      "attempted_at": "2026-06-25T18:27:07+07:00",
-      "extraction_id": "guideline-resplit-staging",
-      "item_id": "work-environment-image-cards",
-      "stable_id": "sun.component.work-environment-image-cards",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "6af15cb218a03194fbe44b226ddbb7a33d6d85eb8fd148c67ac426ac508ab0a1",
-      "semantic_signature_sha256": "edad7aef766c7e925b3e5028f4123ff24a1e809dbf7234e3fe2c80245538fad4"
-    },
-    {
       "attempted_at": "2026-06-26T11:02:11+07:00",
       "extraction_id": "guideline-resplit-staging",
       "item_id": "goal-setting-checklist-table",
@@ -2075,6 +2065,36 @@
     {
       "attempted_at": "2026-06-26T11:02:11+07:00",
       "extraction_id": "guideline-resplit-staging",
+      "item_id": "team-contributor-circles",
+      "stable_id": "sun.component.team-contributor-circles",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9cd03205a34fc41f8993a2dc68e3dacbc82a20687e54111f6895b36580073ad",
+      "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
+    },
+    {
+      "attempted_at": "2026-06-26T11:13:46+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "goal-setting-checklist-table",
+      "stable_id": "sun.component.goal-setting-checklist-table",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
+      "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-06-26T11:13:46+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "ai-adoption-radial-diagram",
+      "stable_id": "sun.component.ai-adoption-radial-diagram",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "66bf2027751b523bba047d3bcc653938be93156bcd157f918433558efc470517",
+      "semantic_signature_sha256": "d5d57f5fae45d4c6b53747f0a0d3bcf585765e688f1923f32fb31e89efb3075e"
+    },
+    {
+      "attempted_at": "2026-06-26T11:13:46+07:00",
+      "extraction_id": "guideline-resplit-staging",
       "item_id": "work-environment-image-cards",
       "stable_id": "sun.component.work-environment-image-cards",
       "status": "staging",
@@ -2083,13 +2103,53 @@
       "semantic_signature_sha256": "c726f680fd1b94b693b5bf2c1035414d1b63d6e10b929b003cf5ffe4813ed2e6"
     },
     {
-      "attempted_at": "2026-06-26T11:02:11+07:00",
+      "attempted_at": "2026-06-26T11:13:46+07:00",
       "extraction_id": "guideline-resplit-staging",
       "item_id": "team-contributor-circles",
       "stable_id": "sun.component.team-contributor-circles",
       "status": "staging",
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "a9cd03205a34fc41f8993a2dc68e3dacbc82a20687e54111f6895b36580073ad",
+      "region_identity_sha256": "893bb815e3ac3ad60db666a81ffd64439ad629538fcbe106de8a2c476a10ee26",
+      "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
+    },
+    {
+      "attempted_at": "2026-06-26T11:21:42+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "goal-setting-checklist-table",
+      "stable_id": "sun.component.goal-setting-checklist-table",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
+      "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-06-26T11:21:42+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "ai-adoption-radial-diagram",
+      "stable_id": "sun.component.ai-adoption-radial-diagram",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "66bf2027751b523bba047d3bcc653938be93156bcd157f918433558efc470517",
+      "semantic_signature_sha256": "d5d57f5fae45d4c6b53747f0a0d3bcf585765e688f1923f32fb31e89efb3075e"
+    },
+    {
+      "attempted_at": "2026-06-26T11:21:42+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "work-environment-image-cards",
+      "stable_id": "sun.component.work-environment-image-cards",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "6af15cb218a03194fbe44b226ddbb7a33d6d85eb8fd148c67ac426ac508ab0a1",
+      "semantic_signature_sha256": "c726f680fd1b94b693b5bf2c1035414d1b63d6e10b929b003cf5ffe4813ed2e6"
+    },
+    {
+      "attempted_at": "2026-06-26T11:21:42+07:00",
+      "extraction_id": "guideline-resplit-staging",
+      "item_id": "team-contributor-circles",
+      "stable_id": "sun.component.team-contributor-circles",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "893bb815e3ac3ad60db666a81ffd64439ad629538fcbe106de8a2c476a10ee26",
       "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
     }
   ]

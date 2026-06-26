@@ -164,6 +164,7 @@ def main() -> int:
             "extraction_id": request["extraction_id"],
             "item_id": item["item_id"],
             "candidate_stable_id": candidate_id,
+            "name": item_slug.replace("-", " ").title(),
             "status": status,
             "type": item["requested_type"],
             "category": item.get("category", item["requested_type"]),

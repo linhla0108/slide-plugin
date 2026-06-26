@@ -214,6 +214,9 @@ def main() -> int:
             item_dir = mapping_path.parent
             artifact_dir = item_dir / "artifact"
 
+            if mapping.get("decomposed_into"):
+                continue
+
             # Handle two mapping schemas:
             # v1: has item_id, candidate_stable_id, type, category, semantic_intent, text_contract, etc.
             # v2: has id, source, page, region, artifact{visual, text_slots}, evidence{reference}

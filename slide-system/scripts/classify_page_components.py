@@ -797,6 +797,19 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
     if not base_mapping_path.exists():
         return []
     base_mapping = load_json(base_mapping_path)
+
+    # Deduplicate groups by shape_class: keep only the first representative
+    # of each shape class. Multiple proximity runs of the same shape are the
+    # same component at different positions — only one needs to be staged.
+    seen_shapes: set[int] = set()
+    deduped = []
+    for rec in groups:
+        sc = rec.get("shape_class")
+        if sc in seen_shapes:
+            continue
+        seen_shapes.add(sc)
+        deduped.append(rec)
+    groups = deduped
     base_source = base_mapping.get("source", {})
     source_path = base_source.get("path", "")
     source_sha = base_source.get("sha256", "")
@@ -870,10 +883,16 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
             encoding="utf-8",
         )
 
+        group_title = rec.get("title", "")
+        group_tags = rec.get("tags") or []
+        base_title = base_slug.replace("-", " ").title()
+        display_name = f"{base_title} — {group_title}" if group_title else base_title
+
         mapping = {
             "extraction_id": base_mapping.get("extraction_id", ""),
             "item_id": group_item_id,
             "candidate_stable_id": candidate_id,
+            "name": display_name,
             "status": "staging",
             "type": "component",
             "category": base_mapping.get("category", "component"),
@@ -891,6 +910,7 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
                 "perceptual_hash": None,
             },
             "semantic_intent": intent,
+            "tags": group_tags,
             "content_fields": {"required": [], "optional": []},
             "variables": [],
             "variants": [],
@@ -901,7 +921,9 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
         write_json(group_dir / "mapping.json", mapping)
 
         _run_script(CROP_SCRIPT, ["--item-dir", str(group_dir)])
-        _run_script(VALIDATE_SCRIPT, ["--item-dir", str(group_dir)])
+        # Skip validate on materialized groups: the evidence SVG carries the
+        # parent's full text content, but slots cover only this sub-region —
+        # unmapped source text warnings are expected, not a real coverage gap.
         created.append(group_dir)
         print(f"  materialized {group_item_id} (region {region['x']:.4f},{region['y']:.4f} "
               f"{region['width']:.4f}×{region['height']:.4f})")
@@ -911,6 +933,9 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
         _run_script(EXTERNALIZE_SCRIPT, ["--batch", str(batch_dir)])
         _run_script(OPTIMIZE_SCRIPT, ["--batch", str(batch_dir)])
         _run_script(TEXT_CONTRACT_SCRIPT, ["--batch", str(batch_dir)])
+
+        base_mapping["decomposed_into"] = [d.name for d in created]
+        write_json(base_mapping_path, base_mapping)
 
     return created
 

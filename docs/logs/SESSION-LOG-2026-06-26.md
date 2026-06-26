@@ -128,3 +128,67 @@ Append-only record, one entry per task in request order. Format per
 - No impact on existing fragment/icon rendering (intrinsic size ≤ viewport → scale unchanged)
 
 **Result:** Not committed. Thumbnails correctly capture full SVG content. The "Preview" carousel image now matches the "Source with text" SVG.
+
+---
+
+## 2026-06-26.7 — Re-extract guideline-resplit-staging batch (4 items) with pipeline fixes
+
+**Request:** User asked to re-extract the 4 staging draft items from `guideline-resplit-staging`. Multiple bugs had been found in prior sessions: region_crop marker causing skipped crops on materialized groups, validate_text_slots failing on materialized groups, naming not flowing from manifest to catalog.
+
+**Bugs fixed (code changes from earlier in this session):**
+1. `classify_page_components.py`: clear `region_crop` marker from copied text-slots.json before running crop on materialized groups
+2. `classify_page_components.py`: removed `validate_text_slots` call for materialized groups (evidence SVG has parent's full text, slots cover only sub-region → false unmapped-text errors)
+3. `classify_page_components.py`: added name/tags from components-manifest.json to materialized group mapping.json, using Title Case format (`base_slug.replace("-", " ").title()`)
+4. `scaffold_extraction.py`: added `"name": item_slug.replace("-", " ").title()` to mapping dict so parent items also get Title Case names
+
+**Actions:**
+- Deleted old `outputs/component-extractions/guideline-resplit-staging/`
+- Re-scaffolded from `outputs/extraction-requests/guideline-resplit-staging.json` (4 items, correct regions from session 2026-06-25.5)
+- Ran full pipeline: convert_pdf_source → extract_editable_text_slots → crop_svg_region → externalize_svg_images → flatten_svg_background → externalize (refresh) → optimize_svg → apply_text_contract → validate_text_slots → classify_page_components
+- All 4 items validated successfully
+- Classify produced: goal-setting-checklist-table (0 groups), ai-adoption-radial-diagram (2 groups), work-environment-image-cards (2 groups), team-contributor-circles (1 group)
+- Rebuilt catalog: 90 items total
+- All staging items show Title Case names matching published convention
+
+**Catalog items (staging):**
+- Goal Setting Checklist Table
+- Ai Adoption Radial Diagram + 2 groups (XÂY cards)
+- Work Environment Image Cards + 2 groups (Leadership cards, Rewards & Recognition / Engagement)
+- Team Contributor Circles + 1 group
+
+**Files:** scaffold_extraction.py, classify_page_components.py (changes from earlier), outputs/component-extractions/guideline-resplit-staging/ (regenerated)
+**State:** Not committed
+
+---
+
+## 2026-06-26.8 — Fix component fragmentation: dedup same shape-class + hide decomposed parents
+
+**Request:** User noticed materialized group items fragmented across catalog — same component appearing multiple times (e.g. `ai-adoption-radial-diagram-g01` AND `g02` both shape-class 1), plus parent items showing alongside their groups.
+
+**Root causes:**
+1. `materialize_groups()` created one item per proximity run, even when multiple runs had the same shape_class (same component at different positions)
+2. Parent items with groups still appeared in catalog as separate entries (parent is a section, not a standalone component)
+
+**Changes:**
+- `slide-system/scripts/classify_page_components.py`:
+  - Added shape_class dedup in `materialize_groups()`: only first representative per shape_class gets materialized
+  - After materializing, writes `"decomposed_into"` marker to parent mapping.json
+- `slide-system/scripts/build_component_catalog.py`:
+  - Skips staging items with `"decomposed_into"` in their mapping
+
+**Result:** ai-adoption-radial-diagram went from 3 catalog entries (parent + g01 + g02) to 1 (g01 only). Total staging items: 9 → 5. Published items: 81 (unchanged).
+
+**Verification:**
+- Catalog rebuilt: 86 items (81 published + 5 staging)
+- No parent+group duplicates
+- No same-shape-class duplicates
+- All staging items have Title Case names
+
+**Catalog staging items (final):**
+1. Goal Setting Checklist Table
+2. Ai Adoption Radial Diagram — XÂY cards
+3. Work Environment Image Cards — Leadership cards
+4. Work Environment Image Cards — Rewards & Recognition / Engagement
+5. Team Contributor Circles
+
+**State:** Not committed
