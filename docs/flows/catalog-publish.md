@@ -46,7 +46,16 @@ is created *at publish time*. That is why publish must handle the preview itself
 ```
 
 Removed old side branches (dropped to keep it lean for non-tech): the separate **Generate preview**
-button, the "missing preview" note line, and the **confirmation dialog on Publish**. Publish is now a single direct click.
+button, the "missing preview" note line, the **confirmation dialog on Publish**, and the
+**type-DELETE confirm on draft delete**. Publish and Delete are now single direct clicks.
+
+**Tile preview image order (2026-06-26):** both Draft and Published catalog tiles show
+`evidence/source-with-text.svg` first (same order as the modal preview). Previously published tiles
+showed a different image first; this was fixed so draft ↔ published rendering is consistent.
+
+**Brand font injection (2026-06-26):** catalog tiles that contain SVG are served via `<object>` elements
+so the browser resolves the document's `@font-face` rules and Proxima Nova renders correctly inside the
+tile — previously the font fell back to a system sans-serif inside inline SVGs.
 
 ---
 
@@ -56,6 +65,7 @@ button, the "missing preview" note line, and the **confirmation dialog on Publis
 receive { id }
         │
         ├─ ID doesn't match stable-id regex ───────────────► 400 "Invalid item id"   [NEW] guard
+        │   valid forms: sun.component.base.name  OR  .gNN suffix (e.g. sun.component.base.g01)
         │
         ▼
 [P1] find_staging(id): scan outputs/.../items/*/mapping.json    [NEW]
@@ -80,6 +90,7 @@ receive { id }
         │     ├─ copy preview/ + evidence/ into it
         │     ├─ fix evidence SVG: "../artifact/assets/" → "../assets/"
         │     ├─ upsert entry into registries/visual-library.json
+        │     │     (approval.approved_by + approved_at carried from mapping.json → registry entry)
         │     ├─ mapping.status = published (+ published_at, published_path)
         │     └─ append registries/extraction-history.json
         │   script FAIL (untested compat gate / missing evidence) ─► 500 "Publish failed" + log
@@ -120,11 +131,10 @@ receive { id, status }
               └─ regen_catalog()
               → WARNING: outputs/ is gitignored → LOST FOREVER, cannot be reverted
 
-[UI] confirm dialog                                             [NEW] differs by status:
-        ├─ published, deletable=False → do NOT show Delete button (canonical: logo, dio)
-        ├─ published, deletable=True  → normal confirm, "Delete" button
-        └─ draft     → DANGER confirm: must type exactly "DELETE" to enable the
-                       "Delete forever" button (because deletion is permanent)
+[UI] delete fires IMMEDIATELY — NO confirmation dialog           [FIX 2026-06-26]
+        ├─ published, deletable=False → Delete button hidden (canonical: logo, dio)
+        └─ published / draft, deletable=True → single click, fires at once (no typing, no confirm)
+              → WARNING for draft: outputs/ is gitignored → LOST FOREVER, no undo
 ```
 
 ---
@@ -168,7 +178,7 @@ compat tested) → just 1 click needed.
 - **Reuse tested scripts**, do not reimplement in JS: promote = `publish_extraction.py`,
   preview = `generate_item_preview.py` (→ `generate_template_preview.py` | `render_svg.js`),
   catalog = `build_component_catalog.py`. JS only calls `fetch()`.
-- **Deleting published = git-recoverable; deleting draft = permanent** → draft-delete requires typing `DELETE`.
+- **Deleting published = git-recoverable; deleting draft = permanent** → delete fires immediately (no confirmation dialog, no typing required); there is no undo for draft deletion.
 - **Only delete items belonging to `slide-system/library/`.** Canonical items (logo, Dio in `.agents/…`)
   have `deletable=False` → the UI hides the Delete button and the server returns 403 (protection per AGENTS.md).
 - **Every mutate → regen catalog** then the UI runs `loadData()` (cache-bust `?t=`); do NOT edit
@@ -196,7 +206,7 @@ slide-system/scripts/generate_item_preview.py [NEW] preview by type (template | 
 slide-system/scripts/build_component_catalog.py [FIX] publish_readiness + deletable + staging_dir + preview fallback published
 slide-system/catalog/index.html               [FIX] add <div id="modal-manage">
 slide-system/catalog/catalog.js               [FIX] renderManageBar + onPublish(1-click) + onDelete(confirm) + api() + loadData()
-slide-system/catalog/catalog.css              [FIX] .manage-btn / -primary / -danger / .manage-note / .confirm-*
+slide-system/catalog/catalog.css              [FIX] .manage-btn / -primary / -danger / .manage-note
 
 # Existing scripts reused (DO NOT modify)
 slide-system/scripts/publish_extraction.py    [KEEP] promote staging → library + registry + history

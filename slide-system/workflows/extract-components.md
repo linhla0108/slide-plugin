@@ -49,6 +49,68 @@ This workflow runs only through the manual component-extractor skill.
    `components-manifest.json`. `build_component_catalog.py` then previews one
    SVG per distinct class followed by the source region for comparison, rather
    than the glued strip. Needs Chromium; skip only if it is unavailable.
+
+   **Gutter split**: Before clustering, `_split_on_gutter` un-glues distinct
+   components that share a small overlapping leaf. When a clean empty horizontal
+   or vertical band wider than 16 px divides the large leaves, the group is
+   split at that band rather than treated as a single component.
+
+   **Pipeline hardening guards**: `_child_count_mismatch` raises `SystemExit`
+   if child-index alignment is lost (prevents silent misattribution of shapes to
+   the wrong group). Clusters dropped for being too small are surfaced with
+   their bounding boxes as stdout `WARNING` lines so they are visible in CI logs.
+
+   **`materialize_groups()` (default ON, `--materialize-groups` flag)**:
+   After detect/classify, the script materializes each group as a real staging
+   item rather than a bare SVG fragment:
+
+   - **Shape-class dedup**: Before creating directories, groups are
+     deduplicated by `shape_class`. Only the first representative per class is
+     materialized — if the same component appears at five different positions on
+     the canvas (five proximity clusters, same shape class), exactly one staging
+     item is created. This prevents the library from filling with positional
+     duplicates.
+
+   - **Coverage guard (<10%)**: If the bounding area of all deduplicated groups
+     combined covers less than 10 % of the parent canvas area, materialization
+     is skipped entirely and the parent item is kept as-is. This handles unified
+     diagrams where detected shapes are sub-elements (e.g. node circles inside a
+     flowchart), not standalone reusable components.
+
+   - **Staging item layout**: Each materialized group gets a
+     `<base>-gNN/` subdirectory under `outputs/component-extractions/` with its
+     own `mapping.json`, a viewBox-cropped `artifact/visual.svg`,
+     `artifact/text-slots.json`, and the component fragment SVG. Each item is
+     independently publishable through the normal approve → publish flow.
+
+   - **`decomposed_into` marker**: After all group items are created, the
+     parent's `mapping.json` receives a `"decomposed_into"` field listing the
+     created item names (e.g. `["hero-slide-p3-g00", "hero-slide-p3-g01"]`).
+     `build_component_catalog.py` skips any item that carries this marker — the
+     parent is treated as a section container, not a standalone component, so it
+     does not appear as a duplicate entry in the catalog.
+
+   - **Per-card variant carousel**: Each materialized group item gets its own
+     `artifact/components/` directory containing the group fragment SVG,
+     per-card variant SVGs (one per unique instance inside that group), and a
+     scoped `components-manifest.json`. `collect_images()` in
+     `build_component_catalog.py` reads this manifest to drive the catalog card
+     carousel: whole-row thumbnail → per-card variants → source region, in that
+     order.
+
+   - **Perceptual dedup (MAE)**: Within each group, per-card variant SVGs are
+     compared using perceptual signatures derived from rendered PNGs. Cards
+     whose mean-absolute-error (MAE) against the representative is ≤ 3.0 are
+     collapsed into one entry; the entry records a `duplicate_count` rather than
+     emitting N near-identical variants.
+
+10c. For items classified as **icon sheets** (many small, identically-shaped
+   elements arranged in a grid), run
+   `scripts/split_icon_sheet.py --item-dir <item>`: it slices the sheet into
+   individual icon SVGs (one file per cell) and writes an `icons-manifest.json`
+   alongside them. `build_component_catalog.py` renders icon-sheet items as a
+   searchable icon grid (single tile per icon) rather than as a long list of
+   separate component items. Run after step 10b; skip for non-icon-sheet items.
 11. Update extraction history.
 12. Rebuild the catalog staging tab and one batch-level `gallery.html`. Compose
     SVG previews from `visual.svg` plus editable HTML text slots. Then serve the

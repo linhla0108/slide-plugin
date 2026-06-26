@@ -1,6 +1,6 @@
 # Skill flow simulation: /component-extractor & /slide-generator
 
-> A simple summary, modeled after `.agents/skills/*/SKILL.md` (updated 2026-06-23).
+> A simple summary, modeled after `.agents/skills/*/SKILL.md` (updated 2026-06-26).
 
 ---
 
@@ -34,6 +34,30 @@ Input (PDF/PPTX/SVG + page + region)
         │   f. optimize_svg.py
         │   g. apply_text_contract.py
         │   h. validate_text_slots.py       ← final gate, fail means stop
+        │
+        │   [conditional decomposition — runs after h when the region contains sub-components]
+        │   i. classify_page_components.py  ← decompose cropped region into distinct component groups
+        │      measures every group in real Chromium layout (matrix/clipPath resolved),
+        │      drops off-canvas leaves (crop leaves vector junk behind), then:
+        │        • spatial clustering (2D bbox-overlap union-find, NOT document order)
+        │        • shape-class classification (congruent w×h within tolerance)
+        │        • proximity-run splitting (same-shape instances nearby → one group)
+        │      emits one fragment SVG per group (whole run, each member's real color preserved)
+        │      + artifact/components/components-manifest.json
+        │      materialize_groups() → create a real .gNN staging item per detected group
+        │        • shape-class dedup: keep one representative per class (skip duplicate runs)
+        │        • 10% coverage guard: if all groups together cover < 10% of canvas area,
+        │          they are sub-elements of a larger diagram — skip materialization
+        │        • each .gNN item runs crop→externalize→optimize→apply_text_contract
+        │        • each .gNN item includes fragment SVGs → per-card variant carousel in Draft
+        │      parent item → decomposed_into: [list of .gNN names] written to mapping.json
+        │                     hidden from catalog staging (build_component_catalog skips it)
+        │
+        │   j. split_icon_sheet.py  ← icon_sheet type ONLY (dedicated splitter, not classify_page_components
+        │      which drops small icons as below area-floor and cannot handle dense regular grids)
+        │      snaps each icon cluster to its grid cell, produces one SVG per icon
+        │      → artifact/icons/ + icons-manifest.json
+        │      → catalog shows ONE tile with a searchable icon grid (not hundreds of separate tiles)
         ▼
 [4] Write mapping.json (the main record) + evidence/notes.md
         │   artifact/ = visual.svg + text-slots.json (do not copy source images, no per-item README)
@@ -42,7 +66,10 @@ Input (PDF/PPTX/SVG + page + region)
         ▼
 [6] User reviews each item → publish only approved items
             (publish_extraction.py: create preview/, confirm evidence/
-             + gate: a component-level item without source.region_crop → block publish)
+             + gate: approval.status must equal "approved" in mapping.json before publish
+             + gate: a component-level item without source.region_crop → block publish
+             + audit trail: approved_by / approved_at from mapping.json approval block
+               persisted into visual-library registry on publish)
 ```
 
 **Hard rules:**

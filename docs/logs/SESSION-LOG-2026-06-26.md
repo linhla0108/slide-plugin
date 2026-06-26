@@ -235,3 +235,20 @@ Append-only record, one entry per task in request order. Format per
 - Catalog: Published 8, Draft 2
 
 **State:** Committed (e4094b7d)
+
+---
+
+## 2026-06-26.11 — Update docs and flow diagrams for new features
+
+**Request:** User noted docs and flow simulations were not updated after adding new features. Audited all doc files against session logs 2026-06-25 and 2026-06-26.
+
+**Audit findings:** 1 critical stale doc (catalog-publish still described deleted confirm dialog), 4 high-impact gaps (extract-components, naming-versioning, publish-components, skill-flows missing materialize/dedup/coverage/approval features).
+
+**Changes (5 files):**
+- `docs/flows/catalog-publish.md`: removed confirm dialog references, added `.gNN` ID support, approval audit trail note, tile preview order fix, brand font injection
+- `docs/flows/skill-flows.md`: added steps i (classify_page_components + materialize_groups) and j (split_icon_sheet), approval audit trail in publish gate
+- `slide-system/workflows/extract-components.md`: added gutter split, pipeline hardening guards, full materialize_groups block (shape-class dedup, coverage guard, staging layout, decomposed_into, per-card carousel, perceptual dedup), step 10c for split_icon_sheet
+- `slide-system/rules/naming-versioning.md`: added `.gNN` group suffix pattern, Title Case display names section
+- `slide-system/workflows/publish-components.md`: added approval metadata write, `.gNN` support, prune_staging step with audit trail note
+
+**State:** Not committed
