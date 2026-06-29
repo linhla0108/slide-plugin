@@ -1431,6 +1431,119 @@ def test_candidate_rename_removes_old_approved_artifact() -> None:
         assert new.is_file() and not old.exists()
 
 
+def test_auto_stage_candidates_creates_reviewable_draft() -> None:
+    import importlib
+    import build_component_catalog as bcc
+
+    asc = importlib.import_module("auto_stage_candidates")
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Kickoff 2026.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=300, height=180)
+        page.draw_rect(fitz.Rect(45, 35, 245, 135), color=(1, 0.2, 0.05),
+                       fill=(1, 0.85, 0.76))
+        page.insert_text((70, 90), "Kickoff Hero", fontsize=20, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        output_root = tmpp / "component-extractions"
+        eid = "docling-auto-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["kickoff hero detected by Docling"],
+                "notes": "Auto-stage this detected hero visual into Draft.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+        )
+
+        assert summary["staged"] == 1, summary
+        staged = summary["items"][0]
+        item_id = staged["item_id"]
+        assert item_id != "picture-p1-1"
+        assert not scaffold_ex._DOCLING_DRAFT_ID.match(item_id)
+        item_dir = output_root / staged["extraction_id"] / "items" / item_id
+        mapping = read_text_slots.load_json(item_dir / "mapping.json")
+        assert mapping["status"] == "staging"
+        assert mapping["candidate_stable_id"].startswith("sun.component.")
+        assert mapping["source"]["candidate_id"] == "picture-p1-1"
+        assert mapping["review"]["mode"] == "auto-staged"
+        assert (item_dir / "artifact" / "visual.svg").is_file()
+        assert (item_dir / "artifact" / "text-slots.json").is_file()
+        assert (item_dir / "evidence" / "source-with-text.svg").is_file()
+        assert (item_dir / "preview" / "thumbnail.png").is_file()
+
+        catalog_path = tmpp / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(reg),
+            "--extractions", str(output_root),
+            "--output", str(catalog_path),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+        catalog = read_text_slots.load_json(catalog_path)
+        draft = next(item for item in catalog["items"]
+                     if item["id"] == mapping["candidate_stable_id"])
+        assert draft["status"] == "staging"
+        assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
+        assert draft["images"], "Draft must have a visual preview for final review"
+        assert draft["component_type"] == "visual"
+        assert draft["layout_role"]
+        assert draft["keywords"]
+        assert draft["use_cases"]
+
+        second = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+        assert second["staged"] == 0, second
+        assert second["skipped"] == 1, second
+        assert second["items"][0]["status"] == "already_staged"
+
+
+def test_catalog_has_no_candidate_review_top_tab() -> None:
+    html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
+    assert 'data-section="review"' not in html
+    assert 'id="section-review"' not in html
+
+
 # --------------------------------------------------------------------------- #
 def _run_all() -> int:
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T17:46:32+07:00",
+  "generated_at": "2026-06-29T12:32:43+07:00",
   "counts": {
     "published": 84,
     "staging": 1
@@ -18845,6 +18845,16 @@
         "kickoff 2026 hero visual crop"
       ],
       "tags": [],
+      "component_type": null,
+      "layout_role": null,
+      "visual_summary": null,
+      "content_structure": [],
+      "keywords": [],
+      "use_cases": [],
+      "anti_use_cases": [],
+      "quality_notes": null,
+      "retrieval_notes": null,
+      "review": null,
       "source": {
         "path": "E:\\slide-plugin\\input\\Kick_off_GOAL_SETTING_2026-2.pdf",
         "sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",

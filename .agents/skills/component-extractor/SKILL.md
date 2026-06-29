@@ -94,47 +94,41 @@ python3 slide-system/scripts/analyze_with_docling.py \
 It writes analysis under `outputs/component-extractions/<id>/analysis/`. When
 at least one candidate is detected, it also writes
 `candidate-extraction-request.json`; when none are found, it writes only
-`page-analysis.json` and `docling-report.json`. It never publishes, never
-touches the registry, and never writes a library artifact. Review the draft
-with the user, rename each `item_id` to a semantic descriptor, then feed the
-cleaned request to `scaffold_extraction.py`. If Docling is not installed it
-exits cleanly with a message; just proceed with the normal manual flow. See
+`page-analysis.json` and `docling-report.json`. It never publishes and never
+touches the registry. To keep the user-facing approval surface unified, auto
+stage detected candidates into catalog Drafts:
+
+```bash
+python3 slide-system/scripts/auto_stage_candidates.py <id>
+```
+
+`auto_stage_candidates.py` deterministically renames Docling placeholders,
+attaches retrieval metadata, writes reviewed request artifacts under
+`analysis/approved/`, scaffolds one Draft per candidate, runs the core PDF
+artifact chain when possible (`visual.svg`, `text-slots.json`, cropped
+`source-with-text.svg`, `preview/thumbnail.png`), and rebuilds the catalog.
+The user reviews the resulting items only in **Components → Draft** and decides
+whether to Publish/Delete there. If Docling is not installed it exits cleanly
+with a message; just proceed with the normal manual flow. See
 `slide-system/rules/extraction-methods.md` → "Optional: Docling candidate
 auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
 only for scanned PDFs. Tiny decorative candidates are filtered by default
 (`--min-area 0.015`) and can be relaxed for icon-heavy pages.
 
-### Optional: candidate review / rename / metadata (before scaffold)
+### Automated candidate staging (before Draft review)
 
-Between Docling auto-detect and `scaffold_extraction.py` there is an
-**analysis-only review layer** (`slide-system/scripts/candidate_review.py`,
-served through the catalog's **Review** tab) so a non-technical user can rename
-each placeholder and attach retrieval-ready metadata before anything is
-scaffolded:
+`auto_stage_candidates.py` is the default bridge from Docling analysis to Draft
+review. It is still conservative:
 
-- It reads the run's `candidate-extraction-request.json` and writes only under
-  the same `analysis/` directory: `candidate-reviews.json` (the reviewer
-  metadata, keyed by the original placeholder id) and, on approval,
-  `approved/<item_id>.extraction-request.json` (a schema-compatible request).
-- For PDF sources, the Review tab also creates best-effort crop previews at
-  `analysis/previews/<candidate-id>.png` so a reviewer can identify the region
-  visually before renaming. Missing PyMuPDF, unsupported source types, or bad
-  regions show a fallback message and do not block metadata review.
-- It NEVER publishes, never mutates the registry/`visual-library.json`, and
-  never scaffolds. Approval only writes the reviewed request artifact; a human
-  still runs `scaffold_extraction.py` and the publish gate afterward.
-- The approve gate reuses the scaffold id/intent rules, so a Docling
-  placeholder, a positional/generic id, or missing required metadata can never
-  be approved. The metadata contract is
-  `slide-system/schemas/candidate-review.schema.json`.
-- UI: serve `catalog_server.py` and open the **Review** tab
-  (`http://127.0.0.1:8799/slide-system/catalog/`). API/CLI:
-  `python3 slide-system/scripts/candidate_review.py list|show|approve|reject`.
-- After a candidate is `approved_for_extraction`, feed its
-  `analysis/approved/<item_id>.extraction-request.json` to
-  `scaffold_extraction.py --request ...` as usual. Each approved request carries
-  a per-candidate extraction id (`<run-id>-<item-id>`), so approving several
-  candidates from one run scaffolds into separate output dirs without colliding.
+- It never publishes and never mutates `visual-library.json`.
+- It rejects placeholder/generic ids through the same scaffold gate, then writes
+  semantic item ids automatically from the source name, Docling label, and
+  detected text.
+- It records auto-generated retrieval metadata in `mapping.json` so the Draft
+  Info panel and later publish record have useful intent/tags/keywords.
+- It skips candidates already marked `rejected` in `candidate-reviews.json`.
+- If the PDF artifact chain fails, the Draft remains in staging with catalog
+  blockers; the user cannot accidentally publish a broken item.
 
 ## Preflight (marker-first — do not run the script by default)
 

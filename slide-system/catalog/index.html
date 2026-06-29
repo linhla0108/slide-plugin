@@ -19,9 +19,6 @@
       <button class="top-tab" data-section="templates" role="tab" aria-selected="false" aria-controls="section-templates">
         Templates <span class="top-tab-count" id="count-templates">0</span>
       </button>
-      <button class="top-tab" data-section="review" role="tab" aria-selected="false" aria-controls="section-review">
-        Review <span class="top-tab-count" id="count-review">0</span>
-      </button>
     </nav>
   </header>
 
@@ -74,33 +71,6 @@
       </div>
       <main id="tpl-gallery" class="tpl-gallery" tabindex="-1">
         <div class="state-message" id="tpl-state-message" hidden></div>
-      </main>
-    </div>
-  </div>
-
-  <!-- ==================== REVIEW (CANDIDATES) SECTION ==================== -->
-  <div id="section-review" class="section-pane" role="tabpanel" hidden>
-    <div class="page-wrap review-wrap">
-      <aside class="review-runs">
-        <div class="review-runs-head">
-          <h2>Analysis runs</h2>
-          <button id="review-refresh" class="review-refresh" type="button" title="Reload runs">Refresh</button>
-        </div>
-        <p class="review-hint">Docling auto-detect candidates. Review-only — nothing here is published or added to the registry. Approving writes a reviewed extraction request under the run's <code>analysis/</code> folder.</p>
-        <ul id="review-run-list" class="run-list" aria-label="Analysis runs"></ul>
-      </aside>
-      <main class="review-main">
-        <div id="review-empty" class="review-empty">Select an analysis run on the left to review its candidates.</div>
-        <div id="review-content" hidden>
-          <header class="review-head">
-            <h2 id="review-run-title"></h2>
-            <p id="review-run-meta" class="review-meta"></p>
-          </header>
-          <div class="review-cols">
-            <ul id="candidate-list" class="candidate-list" aria-label="Candidates"></ul>
-            <section id="candidate-form" class="candidate-form" hidden aria-label="Candidate metadata"></section>
-          </div>
-        </div>
       </main>
     </div>
   </div>

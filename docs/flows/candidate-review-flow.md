@@ -1,137 +1,96 @@
-# Flow walkthrough: Candidate Review (Docling → rename/metadata → approve)
+# Flow walkthrough: Docling Candidates -> Auto-Staged Drafts
 
-> The analysis-only review stage that sits between Docling auto-detect and
-> `scaffold_extraction.py`. Lets a non-technical reviewer rename each placeholder
-> candidate, attach retrieval-ready metadata, and approve it for extraction —
-> without publishing, scaffolding, or touching the shared registry/library.
->
-> Based on `slide-system/scripts/candidate_review.py`,
-> `slide-system/scripts/analyze_with_docling.py`,
-> `slide-system/catalog/catalog_server.py` (Review tab), and
-> `slide-system/schemas/candidate-review.schema.json` (added 2026-06-29).
+> Candidate review is no longer the user-facing approval surface. Docling
+> candidates are backend staging material. The user reviews final reusable items
+> only in **Components -> Draft**, then chooses Publish or Delete.
 
 ---
 
 ## Overview
 
 ```
-analyze_with_docling.py            candidate_review.py                scaffold_extraction.py
-(detect placeholders)        (rename + metadata + approve)            (build staging items)
-        │                                │                                    │
-        ▼                                ▼                                    ▼
-┌───────────────────┐   review   ┌───────────────────────┐  approved   ┌──────────────────┐
-│ candidate-        │──────────▶ │ candidate-reviews.json │──────────▶ │ approved/<id>.   │
-│ extraction-       │            │ (per-candidate meta)   │            │ extraction-      │
-│ request.json      │            │ pending/approved/reject│            │ request.json     │
-└───────────────────┘            └───────────────────────┘            └──────────────────┘
-        all under outputs/component-extractions/<id>/analysis/            (feed to scaffold)
+analyze_with_docling.py          auto_stage_candidates.py             Catalog Draft tab
+(detect candidates)        (rename + metadata + scaffold)          (human final review)
+        |                               |                                   |
+        v                               v                                   v
+analysis/
+  candidate-                 analysis/approved/<id>.json        outputs/.../items/<id>/
+  extraction-request.json -> candidate-reviews.json       ->    artifact/visual.svg
+                                                             evidence/source-with-text.svg
+                                                             preview/thumbnail.png
 ```
 
-Every write lands under the run's `analysis/` directory. PDF candidates may get
-best-effort crop images under `analysis/previews/`, but the registry,
-`visual-library.json`, the catalog Draft tab, and publish are never touched by
-this stage.
+The registry and shared library are not touched by detection or auto-staging.
+Generation continues to read only `published` registry items.
 
 ---
 
-## Lifecycle
-
-```
-            ┌─────────┐   save/edit (PATCH)   ┌─────────┐
-   detect → │ pending │ ◀───────────────────▶ │ pending │
-            └────┬────┘                       └────┬────┘
-                 │ approve (valid)                 │ reject (with reason)
-                 ▼                                 ▼
-     ┌────────────────────────┐            ┌──────────────┐
-     │ approved_for_extraction│            │   rejected    │
-     │ writes approved/<id>.  │            │ no approved   │
-     │ extraction-request.json│            │ artifact      │
-     └────────────────────────┘            └──────────────┘
-```
-
-- **Editing an approved candidate reverts it to `pending`** and removes the
-  stale `approved/<id>.extraction-request.json`, so an approval can never
-  outlive the metadata it was built on (a rename removes the old-name file too).
-- **Rejecting removes any approved artifact** and requires a reason.
-
----
-
-## Validation (the approve gate)
-
-The approve gate reuses the exact `scaffold_extraction.py` id/intent rules as
-the single source of truth, plus the metadata contract. A candidate cannot be
-approved when:
-
-| Blocker | Message (plain language) |
-|---|---|
-| `item_id` still a Docling placeholder (`picture-p1-1`) | "still the Docling placeholder. Rename it…" |
-| `item_id` positional/generic (`top-left`, `center`, `page-01`) | "positional/generic. Describe the visual content…" |
-| `item_id` malformed | "may only contain lowercase letters, numbers, dot, dash, underscore…" |
-| Required metadata empty (`display_name`, `requested_type`, `component_type`, `layout_role`, `visual_summary`, `semantic_intent`, `content_structure`, `tags`, `keywords`, `use_cases`) | "<Field> is required." / "At least one <field> value is required." |
-| `semantic_intent` only generic | "Semantic intent is only generic. Add descriptive values…" |
-| Region malformed | "Region is malformed (need x, y, width, height, unit)." |
-
-Invalid extraction ids and path traversal (`..`, `a/b`) are rejected before any
-file is touched.
-
----
-
-## Surfaces
-
-### UI — catalog Review tab
+## Default Flow
 
 ```bash
+python3 slide-system/scripts/analyze_with_docling.py \
+  --source <file.pdf|file.pptx> \
+  --extraction-id <run-id> \
+  --pages 1-3
+
+python3 slide-system/scripts/auto_stage_candidates.py <run-id>
+
 python3 slide-system/catalog/catalog_server.py
-# open http://127.0.0.1:8799/slide-system/catalog/  → "Review" tab
+# open http://127.0.0.1:8799/slide-system/catalog/ -> Components -> Draft
 ```
 
-Left: analysis runs with pending/approved/rejected counts. Middle: candidates
-for the selected run. Right: a PDF crop preview when available, source context,
-and a form to rename + fill metadata, with **Save draft**, **Approve for
-extraction**, and **Reject** (with reason). Validation errors are shown in plain
-language under the form. If a crop cannot be rendered, the UI shows the reason
-and the metadata review can still continue.
+`auto_stage_candidates.py` does the backend work that a non-technical user
+should not have to do:
 
-### CLI / API
+- Generates semantic item ids from source name, Docling label, and detected text.
+- Saves retrieval metadata through the same candidate-review contract.
+- Writes schema-compatible approved extraction requests under
+  `analysis/approved/`.
+- Scaffolds each candidate into a separate Draft namespace:
+  `<run-id>-<item-id>`.
+- For PDF sources, runs the core artifact chain:
+  `convert_pdf_source.py`, `extract_editable_text_slots.py`,
+  `crop_svg_region.py`, `externalize_svg_images.py`, `optimize_svg.py`,
+  `apply_text_contract.py`, `validate_text_slots.py`, and
+  `generate_item_preview.py`.
+- Rebuilds `slide-system/catalog/catalog-data.json`.
 
-```bash
-python3 slide-system/scripts/candidate_review.py list
-python3 slide-system/scripts/candidate_review.py show <extraction-id>
-python3 slide-system/scripts/candidate_review.py approve <extraction-id> <candidate-id>
-python3 slide-system/scripts/candidate_review.py reject  <extraction-id> <candidate-id> --reason "…"
-```
+---
 
-HTTP (served by `catalog_server.py`):
+## Review Boundary
+
+The only user-facing review boundary is the Draft tab:
+
+| Stage | User sees it? | Can publish? | Purpose |
+|---|---:|---:|---|
+| Docling candidate (`picture-p1-1`) | No | No | Raw detection |
+| Auto-staged Draft (`sun.component.<semantic-id>`) | Yes | Yes, if gates pass | Final human review |
+| Published registry item | Yes | Already published | Reusable generation input |
+
+If artifact generation fails, the Draft can still exist but the catalog publish
+readiness blocker remains visible. That prevents a broken candidate from being
+published silently.
+
+---
+
+## Backend / Debug Surfaces
+
+`candidate_review.py` remains as an internal compatibility layer for tests,
+debugging, and explicit reject records:
+
+- `candidate-reviews.json`
+- `analysis/previews/<candidate-id>.png`
+- `analysis/approved/<item-id>.extraction-request.json`
+
+The catalog server also exposes:
 
 | Method | Path | Action |
 |---|---|---|
-| GET | `/api/candidates` | list analysis runs with counts |
-| GET | `/api/candidates/<extraction_id>` | candidates + saved metadata for one run |
-| PATCH | `/api/candidates/<extraction_id>/<candidate_id>` | save draft metadata (resets to pending) |
-| POST | `/api/candidates/<extraction_id>/<candidate_id>/approve` | validate + write approved request |
-| POST | `/api/candidates/<extraction_id>/<candidate_id>/reject` | mark rejected (reason required) |
+| POST | `/api/stage-candidates` | Auto-stage one analysis run into Drafts |
+| POST | `/api/publish` | Publish a reviewed Draft |
+| POST | `/api/delete` | Delete a Draft or published item |
 
-`GET /api/candidates/<extraction_id>` includes a `preview` object per candidate.
-For PDF sources, a ready preview points at
-`outputs/component-extractions/<id>/analysis/previews/<candidate-id>.png`.
-
----
-
-## After approval
-
-Approval only writes `analysis/approved/<item_id>.extraction-request.json`. Each
-approved request carries its own scaffold extraction id (`<run-id>-<item-id>`)
-so approving several candidates from one run scaffolds them into separate output
-directories instead of colliding on the shared run id. To actually create
-staging items, feed it to the scaffold as usual:
-
-```bash
-python3 slide-system/scripts/scaffold_extraction.py \
-    --request outputs/component-extractions/<id>/analysis/approved/<item_id>.extraction-request.json
-```
-
-The item then goes through the normal staging → catalog Draft → publish gate.
-Generation still reads only `published` registry items.
+The old top-level Review tab is intentionally removed from the UI.
 
 ---
 
@@ -139,10 +98,9 @@ Generation still reads only `published` registry items.
 
 | File | Role |
 |---|---|
-| `slide-system/scripts/candidate_review.py` | Review/rename/approve logic + CLI |
-| `slide-system/schemas/candidate-review.schema.json` | Reviewed-candidate metadata contract |
-| `slide-system/schemas/extraction-request.schema.json` | Shape of the approved request |
-| `slide-system/scripts/analyze_with_docling.py` | Emits the placeholder candidates |
-| `slide-system/scripts/scaffold_extraction.py` | Consumes the approved request; owns the id gate |
-| `slide-system/catalog/catalog_server.py` | Serves the Review tab + candidate API |
-| `slide-system/rules/extraction-methods.md` | Rule: candidate review (analysis-only) |
+| `slide-system/scripts/analyze_with_docling.py` | Emits raw Docling candidates |
+| `slide-system/scripts/auto_stage_candidates.py` | Converts candidates into Drafts |
+| `slide-system/scripts/candidate_review.py` | Internal metadata/request compatibility layer |
+| `slide-system/scripts/scaffold_extraction.py` | Owns scaffold/id gates |
+| `slide-system/catalog/catalog_server.py` | Serves Draft publish/delete and auto-stage API |
+| `slide-system/catalog/index.html` | User-facing catalog; no Review tab |

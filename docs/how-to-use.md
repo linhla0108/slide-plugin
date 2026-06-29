@@ -191,31 +191,27 @@ for example a chart, a title block, a background, or a whole slide.
 > *(then share the file)*
 
 Claude can **auto-detect the reusable parts** in a file — charts, tables,
-pictures, and the like — and show them to you as suggestions. Nothing is saved
-from a suggestion until you pick the ones you want and approve them, exactly
-like above. It's just a faster way to find candidates in a big file.
+pictures, and the like — then automatically prepare them as **Draft** items.
+You do not need to rename raw candidates or approve an intermediate queue.
 
-Each suggestion starts with a placeholder name. Before anything is saved you
-can **review and rename** it with a crop preview when the source is a PDF — give
-it a clear name (like
-"kickoff-2026-hero-visual"), add a short description and a few tags, then mark
-it **approved**. Reviewing and approving here does *not* save or publish the
-part yet; it just gets the suggestion ready. You still approve the final save
-exactly like above.
+After auto-detect finishes, open **Components → Draft**. Each detected part has
+a preview and information panel. Review the Draft, adjust the metadata if
+needed, then choose **Publish** or **Delete draft**. Nothing becomes reusable in
+new slide generation until you publish it from Draft.
 
 ### What you'll get
 
 1. Tell Claude **which file** and **which part** you want (a slide, a range of
    pages, or something specific like "the footer" or "the title").
-2. Claude extracts that part and shows you a preview.
-3. You say **"yes, save it"**, and it's saved so you (or Claude) can drop it
-   into later slides.
+2. Claude prepares matching parts as Drafts and opens the Draft review area.
+3. You review each Draft and choose **Publish** only for the parts you want to
+   reuse later.
 
 **Good to know:**
 
 - This only happens when you ask — Claude never takes any part on its own.
-- You approve each part before it's saved. Auto-detect only *suggests* parts;
-  a suggestion never becomes a saved, reusable item until you approve it.
+- Auto-detect can create Drafts, but a Draft is not published. It becomes a
+  reusable library item only after you click **Publish**.
 
 <!--
   INSERT IMAGE: Claude showing a preview of the extracted part.

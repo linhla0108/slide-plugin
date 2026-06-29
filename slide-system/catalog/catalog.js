@@ -181,10 +181,8 @@ const topTabs = $$(".top-tab");
 const SECTION_PANES = {
   components: $("#section-components"),
   templates: $("#section-templates"),
-  review: $("#section-review"),
 };
 let activeSection = "components";
-let reviewLoaded = false;
 
 topTabs.forEach(tab => {
   tab.addEventListener("click", () => {
@@ -202,7 +200,6 @@ topTabs.forEach(tab => {
       pane.hidden = !on;
       pane.classList.toggle("is-active", on);
     });
-    if (section === "review" && !reviewLoaded) { reviewLoaded = true; reviewLoadRuns(); }
   });
 });
 
@@ -678,12 +675,22 @@ function compWireZoom() {
 function compRenderInfoPanel(item) {
   let html = "";
   if (item.brand) html += compInfoRow("Brand", escHtml(item.brand));
+  if (item.component_type) html += compInfoRow("Component type", escHtml(item.component_type));
+  if (item.layout_role) html += compInfoRow("Layout role", escHtml(item.layout_role));
+  if (item.visual_summary) html += compInfoRow("Visual summary", escHtml(item.visual_summary));
   if (item.intent?.length) html += compInfoRow("Intent", '<div class="pills">' + item.intent.map(compPill).join("") + "</div>");
   if (item.tags?.length) html += compInfoRow("Tags", '<div class="pills">' + item.tags.map(compPill).join("") + "</div>");
+  if (item.keywords?.length) html += compInfoRow("Keywords", '<div class="pills">' + item.keywords.map(compPill).join("") + "</div>");
+  if (item.content_structure?.length) html += compInfoRow("Structure", '<div class="pills">' + item.content_structure.map(compPill).join("") + "</div>");
+  if (item.use_cases?.length) html += compInfoRow("Use cases", '<ul class="limitations-list">' + item.use_cases.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
+  if (item.anti_use_cases?.length) html += compInfoRow("Anti use-cases", '<ul class="limitations-list">' + item.anti_use_cases.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
   if (item.source) {
     const src = typeof item.source === "string" ? item.source : (item.source.path || JSON.stringify(item.source));
     html += compInfoRow("Source", '<span style="font-family:var(--mono);font-size:11px;word-break:break-all">' + escHtml(String(src)) + "</span>");
   }
+  if (item.quality_notes) html += compInfoRow("Quality notes", escHtml(item.quality_notes));
+  if (item.retrieval_notes) html += compInfoRow("Retrieval notes", escHtml(item.retrieval_notes));
+  if (item.review?.mode) html += compInfoRow("Review mode", escHtml(item.review.mode));
   if (item.variants?.length) html += compInfoRow("Variants", '<div class="pills">' + item.variants.map(compPill).join("") + "</div>");
   if (item.limitations?.length) html += compInfoRow("Limitations", '<ul class="limitations-list">' + item.limitations.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
   const imageCount = item.images?.length || 0;
@@ -1508,308 +1515,3 @@ tplLoad()
     tplShowState("<strong>Could not load template data.</strong> Ensure picker-data.json or picker-data.sample.json is present in template-picker/.");
     console.error(err);
   });
-
-
-/* ============================================================
-   REVIEW TAB — Docling candidate rename / metadata / approval
-   Analysis-only: never publishes or mutates the registry.
-   ============================================================ */
-
-const reviewState = {
-  runs: [],
-  extractionId: null,
-  sourcePath: null,
-  candidates: [],
-  currentId: null,
-};
-
-const reviewDom = {
-  runList: $("#review-run-list"),
-  empty: $("#review-empty"),
-  content: $("#review-content"),
-  title: $("#review-run-title"),
-  meta: $("#review-run-meta"),
-  candidateList: $("#candidate-list"),
-  form: $("#candidate-form"),
-  count: $("#count-review"),
-  refresh: $("#review-refresh"),
-};
-
-const REVIEW_TEXT = [
-  ["item_id", "Semantic item ID", "e.g. kickoff-2026-hero-visual"],
-  ["display_name", "Display name", "Human-friendly name"],
-  ["requested_type", "Requested type", "component / section / template / icon / background"],
-  ["component_type", "Component type", "card / chart / table / hero / icon-set …"],
-  ["layout_role", "Layout role", "hero / sidebar / footer / full-bleed …"],
-];
-const REVIEW_LIST = [
-  ["semantic_intent", "Semantic intent", "What it is for — one per line or comma-separated"],
-  ["content_structure", "Content structure", "title, body, metric, label …"],
-  ["tags", "Tags", "free tags for retrieval"],
-  ["keywords", "Keywords", "search keywords"],
-  ["use_cases", "Use cases", "when to reach for this"],
-  ["anti_use_cases", "Anti use-cases (optional)", "when NOT to use this"],
-];
-const REVIEW_NOTES = [
-  ["quality_notes", "Quality notes (optional)"],
-  ["retrieval_notes", "Retrieval notes (optional)"],
-];
-
-const REVIEW_STATUS_LABEL = {
-  pending: "Pending",
-  approved_for_extraction: "Approved",
-  rejected: "Rejected",
-};
-
-function reviewApi(method, path, body) {
-  return fetch(path, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined,
-  }).then(
-    async r => {
-      let data = {};
-      try { data = await r.json(); } catch (_) {}
-      if (!r.ok || !data.ok) {
-        const err = new Error(data.error || ("Request failed (" + r.status + ")"));
-        err.errors = data.errors || null;
-        err.status = r.status;
-        throw err;
-      }
-      return data;
-    },
-    () => { throw new Error("Control server not reachable. Start it with: python3 slide-system/catalog/catalog_server.py"); }
-  );
-}
-
-function reviewLoadRuns() {
-  reviewApi("GET", "/api/candidates")
-    .then(data => {
-      reviewState.runs = data.runs || [];
-      const pending = reviewState.runs.reduce((n, r) => n + (r.pending || 0), 0);
-      reviewDom.count.textContent = pending;
-      reviewRenderRuns();
-    })
-    .catch(e => {
-      reviewDom.runList.innerHTML =
-        '<li class="run-error">' + escHtml(e.message) + "</li>";
-    });
-}
-
-function reviewRenderRuns() {
-  reviewDom.runList.innerHTML = "";
-  if (!reviewState.runs.length) {
-    reviewDom.runList.innerHTML =
-      '<li class="run-error">No analysis runs with candidates yet.</li>';
-    return;
-  }
-  reviewState.runs.forEach(run => {
-    const li = el("li", "run-item");
-    if (run.extraction_id === reviewState.extractionId) li.classList.add("is-active");
-    li.innerHTML =
-      '<span class="run-name">' + escHtml(run.extraction_id) + "</span>" +
-      '<span class="run-badges">' +
-        '<span class="run-badge is-pending" title="Pending">' + run.pending + "</span>" +
-        '<span class="run-badge is-approved" title="Approved">' + run.approved + "</span>" +
-        '<span class="run-badge is-rejected" title="Rejected">' + run.rejected + "</span>" +
-      "</span>";
-    li.addEventListener("click", () => reviewOpenRun(run.extraction_id));
-    reviewDom.runList.appendChild(li);
-  });
-}
-
-function reviewOpenRun(extractionId) {
-  reviewApi("GET", "/api/candidates/" + encodeURIComponent(extractionId))
-    .then(data => {
-      reviewState.extractionId = data.extraction_id;
-      reviewState.sourcePath = data.source_path;
-      reviewState.candidates = data.candidates || [];
-      reviewState.currentId = null;
-      reviewDom.empty.hidden = true;
-      reviewDom.content.hidden = false;
-      reviewDom.title.textContent = data.extraction_id;
-      reviewDom.meta.textContent = "Source: " + (data.source_path || "—") +
-        " · " + reviewState.candidates.length + " candidate" +
-        (reviewState.candidates.length === 1 ? "" : "s");
-      reviewRenderRuns();
-      reviewRenderCandidates();
-      if (reviewState.candidates.length) reviewSelect(reviewState.candidates[0].candidate_id);
-      else reviewDom.form.hidden = true;
-    })
-    .catch(e => toast(escHtml(e.message), "error"));
-}
-
-function reviewRenderCandidates() {
-  reviewDom.candidateList.innerHTML = "";
-  reviewState.candidates.forEach(c => {
-    const status = c.review.review_status || "pending";
-    const li = el("li", "candidate-item is-" + status);
-    if (c.candidate_id === reviewState.currentId) li.classList.add("is-active");
-    li.innerHTML =
-      '<span class="cand-id">' + escHtml(c.review.item_id || c.candidate_id) + "</span>" +
-      '<span class="cand-sub">' + escHtml(c.candidate_id) + " · p" + escHtml(String(c.slide_or_page)) + "</span>" +
-      '<span class="cand-status status-' + status + '">' + (REVIEW_STATUS_LABEL[status] || status) + "</span>";
-    li.addEventListener("click", () => reviewSelect(c.candidate_id));
-    reviewDom.candidateList.appendChild(li);
-  });
-}
-
-function reviewCandidate(cid) {
-  return reviewState.candidates.find(c => c.candidate_id === cid);
-}
-
-function reviewField(label, name, value, placeholder, type) {
-  const v = value == null ? "" : value;
-  if (type === "list") {
-    return '<label class="rf"><span class="rf-label">' + escHtml(label) + "</span>" +
-      '<textarea class="rf-input rf-list" name="' + name + '" rows="2" placeholder="' +
-      escAttr(placeholder || "") + '">' + escHtml((v || []).join("\n")) + "</textarea></label>";
-  }
-  if (type === "area") {
-    return '<label class="rf"><span class="rf-label">' + escHtml(label) + "</span>" +
-      '<textarea class="rf-input" name="' + name + '" rows="3" placeholder="' +
-      escAttr(placeholder || "") + '">' + escHtml(v) + "</textarea></label>";
-  }
-  return '<label class="rf"><span class="rf-label">' + escHtml(label) + "</span>" +
-    '<input class="rf-input" name="' + name + '" type="text" value="' + escAttr(v) +
-    '" placeholder="' + escAttr(placeholder || "") + '"></label>';
-}
-
-function reviewPreviewSrc(path) {
-  if (!path) return null;
-  const value = String(path);
-  if (value.startsWith("http") || value.startsWith("/")) return value;
-  if (/^[A-Za-z]:[\\/]/.test(value)) return null;
-  return compResolvePath(value);
-}
-
-function reviewPreviewHtml(c) {
-  const preview = c.preview || {};
-  const src = preview.status === "ready" ? reviewPreviewSrc(preview.path) : null;
-  if (src) {
-    return '<div class="cf-preview">' +
-      '<img src="' + escAttr(src) + '" alt="Preview crop for ' + escAttr(c.candidate_id) + '" loading="eager" decoding="async">' +
-      '<div class="cf-preview-meta">' +
-        '<span>PDF crop preview</span>' +
-        (preview.cached ? '<span>cached</span>' : '<span>new</span>') +
-      "</div>" +
-    "</div>";
-  }
-  return '<div class="cf-preview cf-preview-empty">' +
-    '<span>No visual preview</span>' +
-    '<code>' + escHtml(preview.reason || "Source crop is unavailable.") + "</code>" +
-  "</div>";
-}
-
-function reviewSelect(cid) {
-  reviewState.currentId = cid;
-  reviewRenderCandidates();
-  const c = reviewCandidate(cid);
-  if (!c) return;
-  const r = c.review;
-  const region = c.region || {};
-  const status = r.review_status || "pending";
-
-  let html =
-    reviewPreviewHtml(c) +
-    '<div class="cf-context">' +
-      '<div class="cf-ctx-row"><span>Candidate</span><code>' + escHtml(c.candidate_id) + "</code></div>" +
-      '<div class="cf-ctx-row"><span>Detected as</span><code>' + escHtml(c.detected_type) + "</code></div>" +
-      '<div class="cf-ctx-row"><span>Slide / page</span><code>' + escHtml(String(c.slide_or_page)) + "</code></div>" +
-      '<div class="cf-ctx-row"><span>Region</span><code>x ' + reviewNum(region.x) + " · y " + reviewNum(region.y) +
-        " · w " + reviewNum(region.width) + " · h " + reviewNum(region.height) + "</code></div>" +
-      (c.detected_intent && c.detected_intent.length
-        ? '<div class="cf-ctx-row"><span>Detected text</span><code>' + escHtml(c.detected_intent.join(" / ")) + "</code></div>"
-        : "") +
-      '<div class="cf-ctx-row"><span>Status</span><span class="cand-status status-' + status + '">' +
-        (REVIEW_STATUS_LABEL[status] || status) + "</span></div>" +
-      (r.reject_reason ? '<div class="cf-ctx-row"><span>Reject reason</span><code>' + escHtml(r.reject_reason) + "</code></div>" : "") +
-    "</div>";
-
-  html += '<form class="cf-form" autocomplete="off">';
-  REVIEW_TEXT.forEach(([name, label, ph]) => html += reviewField(label, name, r[name], ph));
-  html += reviewField("Visual summary", "visual_summary", r.visual_summary, "What it looks like, in a sentence or two.", "area");
-  REVIEW_LIST.forEach(([name, label, ph]) => html += reviewField(label, name, r[name], ph, "list"));
-  REVIEW_NOTES.forEach(([name, label]) => html += reviewField(label, name, r[name], "", "area"));
-  html += "</form>";
-
-  html += '<div class="cf-errors" id="cf-errors" hidden></div>';
-  html +=
-    '<div class="cf-actions">' +
-      '<button type="button" class="manage-btn" id="cf-save">Save draft</button>' +
-      '<button type="button" class="manage-btn manage-btn-primary" id="cf-approve">Approve for extraction</button>' +
-      '<div class="cf-reject"><input type="text" id="cf-reason" class="rf-input" placeholder="Reason to reject…">' +
-        '<button type="button" class="manage-btn manage-btn-danger" id="cf-reject">Reject</button></div>' +
-    "</div>";
-
-  reviewDom.form.hidden = false;
-  reviewDom.form.innerHTML = html;
-
-  $("#cf-save").addEventListener("click", () => reviewSave(cid));
-  $("#cf-approve").addEventListener("click", () => reviewApprove(cid));
-  $("#cf-reject").addEventListener("click", () => reviewReject(cid));
-}
-
-function reviewNum(v) {
-  return v == null ? "—" : (Math.round(Number(v) * 1000) / 1000).toString();
-}
-
-function reviewCollect() {
-  const form = reviewDom.form.querySelector(".cf-form");
-  const metadata = {};
-  form.querySelectorAll("[name]").forEach(node => { metadata[node.name] = node.value; });
-  return metadata;
-}
-
-function reviewShowErrors(errors) {
-  const box = $("#cf-errors");
-  if (!box) return;
-  if (!errors || !errors.length) { box.hidden = true; box.innerHTML = ""; return; }
-  box.hidden = false;
-  box.innerHTML = "<strong>Can’t approve yet:</strong><ul>" +
-    errors.map(e => "<li>" + escHtml(e) + "</li>").join("") + "</ul>";
-}
-
-function reviewAfterMutation(cid, review, message) {
-  const c = reviewCandidate(cid);
-  if (c) { c.review = review; c.saved = true; }
-  reviewRenderCandidates();
-  reviewLoadRuns();
-  toast(message);
-}
-
-function reviewSave(cid) {
-  reviewShowErrors(null);
-  reviewApi("PATCH", "/api/candidates/" + encodeURIComponent(reviewState.extractionId) +
-    "/" + encodeURIComponent(cid), { metadata: reviewCollect() })
-    .then(data => { reviewAfterMutation(cid, data.review, "Saved draft for " + escHtml(cid) + "."); reviewSelect(cid); })
-    .catch(e => toast(escHtml(e.message), "error"));
-}
-
-function reviewApprove(cid) {
-  reviewShowErrors(null);
-  // Save the current edits first so approval validates exactly what is shown.
-  reviewApi("PATCH", "/api/candidates/" + encodeURIComponent(reviewState.extractionId) +
-    "/" + encodeURIComponent(cid), { metadata: reviewCollect() })
-    .then(() => reviewApi("POST", "/api/candidates/" + encodeURIComponent(reviewState.extractionId) +
-      "/" + encodeURIComponent(cid) + "/approve", {}))
-    .then(data => {
-      reviewAfterMutation(cid, data.review, "Approved — wrote " + escHtml(data.approved_request_path));
-      reviewSelect(cid);
-    })
-    .catch(e => {
-      if (e.errors) { reviewShowErrors(e.errors); toast("Fix the listed fields, then approve.", "error"); }
-      else toast(escHtml(e.message), "error");
-    });
-}
-
-function reviewReject(cid) {
-  const reason = ($("#cf-reason").value || "").trim();
-  if (!reason) { $("#cf-reason").focus(); toast("Add a short reason to reject.", "error"); return; }
-  reviewApi("POST", "/api/candidates/" + encodeURIComponent(reviewState.extractionId) +
-    "/" + encodeURIComponent(cid) + "/reject", { reason })
-    .then(data => { reviewAfterMutation(cid, data.review, "Rejected " + escHtml(cid) + "."); reviewSelect(cid); })
-    .catch(e => toast(escHtml(e.message), "error"));
-}
-
-if (reviewDom.refresh) reviewDom.refresh.addEventListener("click", reviewLoadRuns);

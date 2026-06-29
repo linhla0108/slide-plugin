@@ -8,6 +8,8 @@ on this machine:
     POST /api/publish  {id}          -> build preview/, approve, promote into library,
                                         then remove the redundant staging copy
     POST /api/delete   {id, status}  -> remove a published (library) or draft item
+    POST /api/stage-candidates {extraction_id}
+                                      -> auto-stage Docling candidates as Drafts
 
 After every mutation the catalog data is regenerated so the page can reload.
 
@@ -33,10 +35,11 @@ from urllib.parse import unquote
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
 
-# The candidate-review layer (analysis-only: rename/metadata/approve a Docling
-# candidate, never publish or mutate the registry) lives with the other scripts.
+# Candidate review is now a backend compatibility layer; user-facing review is
+# the normal Draft tab. auto_stage_candidates bridges Docling analysis -> Draft.
 sys.path.insert(0, str(SCRIPTS))
 import candidate_review as cr  # noqa: E402
+import auto_stage_candidates as asc  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
@@ -354,6 +357,20 @@ class Handler(SimpleHTTPRequestHandler):
         if segments is not None:
             self._serve_candidate("POST", segments)
             return
+        if self.path == "/api/stage-candidates":
+            body = self._read_body()
+            if body is None:
+                return self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            extraction_id = str(body.get("extraction_id", ""))
+            try:
+                summary = asc.stage_run(
+                    extraction_id,
+                    rebuild_catalog=bool(body.get("rebuild_catalog", True)),
+                    build_artifacts=bool(body.get("build_artifacts", True)),
+                )
+            except Exception as exc:  # surface, never crash the server
+                return self._json(500, {"ok": False, "error": str(exc)})
+            return self._json(200, {"ok": True, **summary})
         route = ROUTES.get(self.path)
         if not route:
             return self._json(404, {"ok": False, "error": "Unknown endpoint"})
@@ -373,7 +390,7 @@ class Handler(SimpleHTTPRequestHandler):
 def main() -> int:
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f"Catalog control server on http://{HOST}:{PORT}/slide-system/catalog/")
-    print("Mutating endpoints: /api/publish, /api/delete")
+    print("Mutating endpoints: /api/publish, /api/delete, /api/stage-candidates")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

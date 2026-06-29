@@ -105,3 +105,21 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
 **Symbols:** none
 **State:** Not committed
+
+## 2026-06-29.8 — Unify Docling candidate review into Draft staging
+
+**When:** 2026-06-29 12:31
+**Request:** Replace the separate candidate Review tab flow with an automatic pipeline where Docling candidates become catalog Drafts, and Draft is the only final user review/publish surface.
+**Actions:**
+- Created branch `feature/auto-stage-docling-drafts`.
+- Added `slide-system/scripts/auto_stage_candidates.py` to bridge `analysis/candidate-extraction-request.json` into Draft items: deterministic semantic item ids, candidate-review metadata/approval artifacts under `analysis/approved/`, per-candidate scaffold namespaces, optional PDF artifact chain, and catalog rebuild. It never publishes and does not mutate `visual-library.json`.
+- Added `POST /api/stage-candidates` to `slide-system/catalog/catalog_server.py` for local UI/tool automation.
+- Removed the user-facing Review top tab and deleted the dead Review-tab JS/CSS; kept candidate-review backend code as compatibility/debug plumbing.
+- Extended Draft catalog data and modal Info panel with retrieval metadata (`component_type`, `layout_role`, `visual_summary`, `keywords`, `use_cases`, `anti_use_cases`, quality/retrieval notes, review mode).
+- Added tests for auto-stage creating a reviewable Draft with preview/artifacts and for absence of the Review top tab.
+- Updated `.agents/skills/component-extractor/SKILL.md`, `slide-system/rules/extraction-methods.md`, `docs/flows/candidate-review-flow.md`, and `docs/how-to-use.md` to describe Docling -> auto-stage -> Components/Draft.
+- Ran a tester-style smoke through `catalog_server.py`: created a temporary Docling run, called `/api/stage-candidates`, opened the catalog with Playwright, verified no Review tab, opened the staged Draft, verified preview dimensions, Info metadata (`Review mode: auto-staged`), and Publish enabled, then removed the temporary output dirs and rebuilt the catalog. Removed temporary `extraction-history.json` smoke entries from the working tree.
+**Result:** Verification passed. `python -m py_compile` on changed Python scripts OK. `node --check slide-system/catalog/catalog.js` OK. `test_gates.py` 79/79. `validate_registry.py` 84 valid items. `build_registry.py --check` clean. `build_component_catalog.py` rebuilt `catalog-data.json` to 85 items after smoke cleanup. `git diff --check` reported no whitespace errors. Playwright smoke passed with Draft `sun.component.final-smoke-source-hero-visual-auto-stage-picture`, preview `OBJECT` 864x465, `artifact_status=ready`, and no Review tab.
+**Files:** `.agents/skills/component-extractor/SKILL.md`, `docs/flows/candidate-review-flow.md`, `docs/how-to-use.md`, `docs/logs/SESSION-LOG-2026-06-29.md`, `slide-system/catalog/catalog-data.json`, `slide-system/catalog/catalog.css`, `slide-system/catalog/catalog.js`, `slide-system/catalog/catalog_server.py`, `slide-system/catalog/index.html`, `slide-system/rules/extraction-methods.md`, `slide-system/scripts/auto_stage_candidates.py`, `slide-system/scripts/build_component_catalog.py`, `slide-system/scripts/test_gates.py`
+**Symbols:** `auto_stage_candidates.stage_run`, `auto_stage_candidates.semantic_item_id`, `auto_stage_candidates.metadata_for`, `auto_stage_candidates._scaffold_request`, `auto_stage_candidates._augment_mapping`, `auto_stage_candidates._build_pdf_artifacts`, `auto_stage_candidates.main`, `Handler.do_POST`, `compRenderInfoPanel`, `build_component_catalog.main`, `test_auto_stage_candidates_creates_reviewable_draft`, `test_catalog_has_no_candidate_review_top_tab`
+**State:** Not committed at time of logging
