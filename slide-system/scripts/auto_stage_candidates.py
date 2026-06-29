@@ -18,6 +18,8 @@ human click from the Draft card.
 from __future__ import annotations
 
 import argparse
+import contextlib
+import io
 import json
 import re
 import subprocess
@@ -32,9 +34,11 @@ import scaffold_extraction as scaffold
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 STOPWORDS = {
+    "add", "approval", "approve", "auto",
     "a", "an", "and", "by", "candidate", "detected", "docling", "draft",
-    "for", "from", "in", "of", "on", "or", "region", "the", "this", "to",
-    "with",
+    "detect", "descriptor", "for", "from", "in", "item", "of", "on", "or",
+    "publish", "region", "rename", "required", "semantic", "the", "this",
+    "to", "with",
 }
 LABEL_COMPONENT_TYPE = {
     "picture": "visual",
@@ -67,14 +71,28 @@ def _tokens(*values: object, limit: int = 7) -> list[str]:
 
 
 def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
-    label = str(item.get("item_id", "")).split("-", 1)[0] or "visual"
+    original_id = str(item.get("item_id", ""))
+    label = original_id.split("-", 1)[0] or "visual"
     source_stem = Path(source_path).stem
-    intent = " ".join(str(v) for v in item.get("semantic_intent", []))
-    notes = item.get("notes", "")
-    parts = _tokens(source_stem, intent, notes, label)
-    if label not in parts:
-        parts.append(label)
-    base = slug("-".join(parts)) or "detected-visual"
+    source_slug = slug(source_stem) or "source"
+    docling_match = re.match(
+        r"^(?P<label>picture|figure|table|chart|form)-p(?P<page>[a-z0-9]+)-(?P<n>\d+)$",
+        original_id,
+    )
+    if docling_match:
+        page = slug(str(item.get("slide_or_page") or docling_match.group("page")))
+        ordinal = docling_match.group("n")
+        base = f"{source_slug}-p{page}-{label}-{ordinal}"
+    else:
+        intent = " ".join(str(v) for v in item.get("semantic_intent", []))
+        notes = item.get("notes", "")
+        parts = _tokens(source_stem, intent, notes, label)
+        if label not in parts:
+            parts.append(label)
+        page = slug(str(item.get("slide_or_page") or ""))
+        if page and f"p{page}" not in parts:
+            parts.append(f"p{page}")
+        base = slug("-".join(parts)) or "detected-visual"
     # Make sure the generated id passes the same scaffold gate as human names.
     if scaffold._BANNED_ID.match(base) or scaffold._DOCLING_DRAFT_ID.match(base):
         base = f"{slug(source_stem) or 'source'}-{label}-visual"
@@ -142,9 +160,46 @@ def _scaffold_request(request_path: Path, output_root: Path, history: Path,
         "--registry", str(registry),
     ]
     try:
-        scaffold.main()
+        with contextlib.redirect_stdout(io.StringIO()):
+            scaffold.main()
     finally:
         sys.argv = old_argv
+
+
+def _existing_stable_ids(output_root: Path) -> set[str]:
+    stable_ids: set[str] = set()
+    for mapping_path in output_root.glob("*/items/*/mapping.json"):
+        try:
+            mapping = load_json(mapping_path)
+        except Exception:
+            continue
+        stable_id = mapping.get("candidate_stable_id")
+        if stable_id:
+            stable_ids.add(str(stable_id))
+    return stable_ids
+
+
+def _history_stable_id_for_item(history_data: dict, source_hash: str | None,
+                                item: dict) -> str | None:
+    if not source_hash:
+        return None
+    try:
+        region = scaffold.normalized_bounds(item["region"])
+        region_hash = scaffold.region_identity_hash(
+            source_hash,
+            item["slide_or_page"],
+            region,
+            item.get("object_ids", []),
+        )
+    except Exception:
+        return None
+    for attempt in history_data.get("attempts", []):
+        if (
+            attempt.get("region_identity_sha256") == region_hash
+            and attempt.get("stable_id")
+        ):
+            return str(attempt["stable_id"])
+    return None
 
 
 def _augment_mapping(item_dir: Path, review: dict, run_id: str,
@@ -225,6 +280,12 @@ def stage_run(
         "skipped": 0,
         "items": [],
     }
+    existing_stable_ids = _existing_stable_ids(output_root)
+    history_data = load_json(history) if history.exists() else {"attempts": []}
+    try:
+        source_hash = scaffold.sha256_file(resolve_repo_path(source_path))
+    except Exception:
+        source_hash = None
     items_by_id = {item.get("item_id"): item for item in request.get("items", [])}
     for original_id, item in items_by_id.items():
         if not original_id:
@@ -236,6 +297,17 @@ def stage_run(
                 "candidate_id": original_id,
                 "status": "skipped",
                 "reason": "candidate rejected",
+            })
+            continue
+        history_stable_id = _history_stable_id_for_item(
+            history_data, source_hash, item)
+        if history_stable_id and history_stable_id in existing_stable_ids:
+            summary["skipped"] += 1
+            summary["items"].append({
+                "candidate_id": original_id,
+                "stable_id": history_stable_id,
+                "status": "already_staged_region",
+                "reason": "matching source/page/region already has a Draft",
             })
             continue
         item_id = semantic_item_id(source_path, item, used_ids)
@@ -261,6 +333,9 @@ def stage_run(
             continue
         _scaffold_request(request_path, output_root, history, registry)
         _augment_mapping(item_dir, review, extraction_id, item)
+        history_data = load_json(history) if history.exists() else {"attempts": []}
+        stable_id = load_json(item_dir / "mapping.json")["candidate_stable_id"]
+        existing_stable_ids.add(stable_id)
         artifact_status = "skipped"
         artifact_log = ""
         if build_artifacts:
@@ -270,7 +345,7 @@ def stage_run(
         summary["items"].append({
             "candidate_id": original_id,
             "item_id": review["item_id"],
-            "stable_id": load_json(item_dir / "mapping.json")["candidate_stable_id"],
+            "stable_id": stable_id,
             "extraction_id": staged_extraction_id,
             "item_dir": str(item_dir),
             "artifact_status": artifact_status,

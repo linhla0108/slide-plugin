@@ -1524,6 +1524,38 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert draft["keywords"]
         assert draft["use_cases"]
 
+        dup_eid = "docling-auto-demo-duplicate"
+        dup_adir = output_root / dup_eid / "analysis"
+        dup_adir.mkdir(parents=True)
+        (dup_adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": dup_eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["same hero detected by a later Docling run"],
+                "notes": "This region is already staged and must not duplicate.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+        duplicate = asc.stage_run(
+            dup_eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+        assert duplicate["staged"] == 0, duplicate
+        assert duplicate["skipped"] == 1, duplicate
+        assert duplicate["items"][0]["status"] == "already_staged_region"
+        assert duplicate["items"][0]["stable_id"] == mapping["candidate_stable_id"]
+
         second = asc.stage_run(
             eid,
             root=output_root,
@@ -1536,6 +1568,34 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert second["staged"] == 0, second
         assert second["skipped"] == 1, second
         assert second["items"][0]["status"] == "already_staged"
+
+
+def test_auto_stage_semantic_ids_include_docling_position() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    source = "input/SUN.SLIDE.pdf"
+    item_a = {
+        "item_id": "picture-p20-1",
+        "slide_or_page": 20,
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+    item_b = {
+        "item_id": "picture-p21-1",
+        "slide_or_page": 21,
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+
+    id_a = asc.semantic_item_id(source, item_a, set())
+    id_b = asc.semantic_item_id(source, item_b, set())
+
+    assert id_a == "sun-slide-p20-picture-1"
+    assert id_b == "sun-slide-p21-picture-1"
+    assert id_a != id_b
+    assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_a)
+    assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_b)
 
 
 def test_catalog_has_no_candidate_review_top_tab() -> None:

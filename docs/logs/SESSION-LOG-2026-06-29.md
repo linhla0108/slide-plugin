@@ -152,3 +152,19 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
 **Symbols:** none
 **State:** Not committed
+
+## 2026-06-29.11 — Auto-stage page-pass Docling candidates into Drafts
+
+**When:** 2026-06-29 15:06
+**Request:** The user opened the catalog but saw only one existing Draft and asked whether they must run Claude/component extraction manually.
+**Actions:**
+- Verified the catalog baseline had one staging Draft and found 61 per-page Docling analysis runs with 115 candidates under `outputs/component-extractions/*/analysis/candidate-extraction-request.json`.
+- Ran the full per-page auto-stage batch, found duplicate stable IDs caused by generic auto-generated item IDs, then cleaned the generated batch Draft dirs after verifying every delete target resolved under `outputs/component-extractions`.
+- Updated `slide-system/scripts/auto_stage_candidates.py` so Docling placeholder IDs produce page/label/ordinal-aware semantic IDs, existing source/page/region Drafts are skipped as `already_staged_region`, and scaffold stdout no longer pollutes the auto-stage CLI JSON summary.
+- Added regression coverage in `slide-system/scripts/test_gates.py` for duplicate-region skip behavior and Docling-position-aware semantic IDs.
+- Re-ran the 61-run per-page batch and rebuilt the catalog; the existing kickoff region was skipped instead of duplicated.
+- Confirmed the catalog server at `http://127.0.0.1:8799/slide-system/catalog/` returned HTTP 200.
+**Result:** Verification passed. `python -m py_compile slide-system\scripts\auto_stage_candidates.py slide-system\scripts\test_gates.py` OK; `python slide-system\scripts\test_gates.py` -> 80/80 passed; `python slide-system\scripts\auto_stage_candidates.py docling-page-pass-20260626-kick-off-goal-setting-2026-2-p01 --no-catalog --no-artifacts` returned clean JSON with `staged: 0`, `skipped: 1`, and `status: already_staged_region`; `python slide-system\scripts\validate_registry.py` -> 84 valid items; `python slide-system\scripts\build_registry.py --check` -> clean; `git diff --check` had no whitespace errors. Local catalog now has 199 items: 84 published and 115 staging Drafts, with 115 unique staging IDs and zero staging duplicates. `python slide-system\scripts\check_requirements.py` without arguments failed as expected because the CLI requires a concrete `--requirements` job file and `--output`; no current slide-job requirements package exists for this component batch.
+**Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `slide-system/catalog/catalog-data.json`, `slide-system/registries/extraction-history.json`, `slide-system/scripts/auto_stage_candidates.py`, `slide-system/scripts/test_gates.py`
+**Symbols:** `auto_stage_candidates.semantic_item_id`, `auto_stage_candidates._scaffold_request`, `auto_stage_candidates._existing_stable_ids`, `auto_stage_candidates._history_stable_id_for_item`, `auto_stage_candidates.stage_run`, `test_auto_stage_candidates_creates_reviewable_draft`, `test_auto_stage_semantic_ids_include_docling_position`
+**State:** Not committed at time of logging
