@@ -76,7 +76,7 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Symbols:** `_candidate_preview`, `_region_to_page_box`, `_preview_filename`, `_repo_rel_or_abs`, `get_candidates`, `reviewPreviewSrc`, `reviewPreviewHtml`, `reviewSelect`, `test_candidate_pdf_preview_is_generated_and_reused`, `test_candidate_preview_unavailable_for_non_pdf_source`, `test_candidate_preview_unavailable_for_malformed_region`
 **State:** Not committed
 
-## 2026-06-29.5 — Package repo skills as an installable Claude Code plugin
+## 2026-06-29.6 — Package repo skills as an installable Claude Code plugin
 
 **When:** 2026-06-29 11:52
 **Request:** Add the skills in this folder to Claude as a plugin, via a local plugin marketplace.
@@ -89,3 +89,19 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Result:** `claude plugin validate .` → "Validation passed with warnings" with only the intentional no-`version` warning remaining (marketplace description warning cleared). JSON parses OK for both manifests. The 12 skills enumerated under `.agents/skills` are the set that will load. Install path for the user: `/plugin marketplace add E:\slide-plugin` then `/plugin install slide-system@slide-plugin`. Not yet installed or committed.
 **Files:** `.agents/.claude-plugin/plugin.json` (new), `.claude-plugin/marketplace.json` (new), `docs/logs/SESSION-LOG-2026-06-29.md`
 **State:** Not committed at time of logging
+
+## 2026-06-29.7 — Run visible tester smoke for candidate Review tab
+
+**When:** 2026-06-29 11:59
+**Request:** "Dùng skill tester để test lại chưa, bật cho tôi cửa sổ luôn để xem nó test như thế nào"
+**Actions:**
+- Used the `tester` skill in Smoke/Bug-bash style for the candidate Review tab.
+- Created a temporary gitignored analysis run at `outputs/component-extractions/tester-visible-preview-smoke/analysis/` with a one-page PDF source and one Docling placeholder candidate.
+- Started `slide-system/catalog/catalog_server.py` on `127.0.0.1:8799` and verified the candidate API listed the run and generated `analysis/previews/picture-p1-1.png`.
+- Opened a visible Chrome window through Playwright headed mode at `http://127.0.0.1:8799/slide-system/catalog/`, navigated to the Review tab, selected `tester-visible-preview-smoke`, and confirmed the preview image loaded.
+- Ran a visible negative test by clicking **Approve for extraction** while the item still used placeholder id `picture-p1-1`; validation errors appeared for the placeholder id and missing metadata.
+- Filled reviewer metadata in the visible UI, renamed the item to `visible-tester-candidate-preview`, approved it, and verified the approved artifact on disk.
+**Result:** Visible tester smoke passed. API evidence: `preview_status=ready`, PNG existed. Browser evidence: preview image loaded with natural size `641x323`, candidate form had no horizontal overflow, initial validation blocked the Docling placeholder, final status became `Approved`, and `outputs/component-extractions/tester-visible-preview-smoke/analysis/approved/visible-tester-candidate-preview.extraction-request.json` existed with extraction id `tester-visible-preview-smoke-visible-tester-candidate-preview`. No tracked registry/library changes were produced; the run is under gitignored `outputs/`. The visible Chrome window and local server were intentionally left open for inspection.
+**Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
+**Symbols:** none
+**State:** Not committed
