@@ -27,7 +27,8 @@ analyze_with_docling.py            candidate_review.py                scaffold_e
         all under outputs/component-extractions/<id>/analysis/            (feed to scaffold)
 ```
 
-Every write lands under the run's `analysis/` directory. The registry,
+Every write lands under the run's `analysis/` directory. PDF candidates may get
+best-effort crop images under `analysis/previews/`, but the registry,
 `visual-library.json`, the catalog Draft tab, and publish are never touched by
 this stage.
 
@@ -85,9 +86,11 @@ python3 slide-system/catalog/catalog_server.py
 ```
 
 Left: analysis runs with pending/approved/rejected counts. Middle: candidates
-for the selected run. Right: a form to rename + fill metadata, with **Save
-draft**, **Approve for extraction**, and **Reject** (with reason). Validation
-errors are shown in plain language under the form.
+for the selected run. Right: a PDF crop preview when available, source context,
+and a form to rename + fill metadata, with **Save draft**, **Approve for
+extraction**, and **Reject** (with reason). Validation errors are shown in plain
+language under the form. If a crop cannot be rendered, the UI shows the reason
+and the metadata review can still continue.
 
 ### CLI / API
 
@@ -107,6 +110,10 @@ HTTP (served by `catalog_server.py`):
 | PATCH | `/api/candidates/<extraction_id>/<candidate_id>` | save draft metadata (resets to pending) |
 | POST | `/api/candidates/<extraction_id>/<candidate_id>/approve` | validate + write approved request |
 | POST | `/api/candidates/<extraction_id>/<candidate_id>/reject` | mark rejected (reason required) |
+
+`GET /api/candidates/<extraction_id>` includes a `preview` object per candidate.
+For PDF sources, a ready preview points at
+`outputs/component-extractions/<id>/analysis/previews/<candidate-id>.png`.
 
 ---
 

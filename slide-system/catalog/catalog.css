@@ -2720,6 +2720,42 @@ h1, h2, h3 {
   box-shadow: var(--shadow-sm);
   min-width: 0;
 }
+.cf-preview {
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: var(--paper);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.cf-preview img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: var(--paper-sink);
+}
+.cf-preview-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+.cf-preview-empty {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+.cf-preview-empty code {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  word-break: break-word;
+}
 .cf-context {
   background: var(--paper-sink);
   border-radius: 10px;

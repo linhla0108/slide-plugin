@@ -33,7 +33,14 @@ import re
 import sys
 from pathlib import Path
 
-from _common import REPO_ROOT, load_json, normalized_bounds, now_iso, write_json
+from _common import (
+    REPO_ROOT,
+    load_json,
+    normalized_bounds,
+    now_iso,
+    resolve_repo_path,
+    write_json,
+)
 
 # Single source of truth for the id/intent gates: the scaffold script. A
 # candidate that fails these can never become a stable identity, so approval
@@ -117,6 +124,10 @@ def _approved_request_path(adir: Path, item_id: str) -> Path:
     return _approved_dir(adir) / f"{item_id}.extraction-request.json"
 
 
+def _preview_dir(adir: Path) -> Path:
+    return adir / "previews"
+
+
 # --------------------------------------------------------------------------- #
 # load helpers
 # --------------------------------------------------------------------------- #
@@ -170,6 +181,112 @@ def _default_review(extraction_id: str, source_path: str, item: dict) -> dict:
         "quality_notes": "",
         "retrieval_notes": "",
     }
+
+
+# --------------------------------------------------------------------------- #
+# preview helpers
+# --------------------------------------------------------------------------- #
+
+def _repo_rel_or_abs(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _preview_filename(candidate_id: str) -> str:
+    safe = re.sub(r"[^A-Za-z0-9._-]+", "_", candidate_id or "").strip("._")
+    return f"{safe or 'candidate'}.png"
+
+
+def _region_to_page_box(region: dict, page_width: float, page_height: float) -> tuple[float, float, float, float]:
+    bounds = normalized_bounds(region)
+    unit = str(bounds.get("unit", "")).lower()
+    x = float(bounds["x"])
+    y = float(bounds["y"])
+    width = float(bounds["width"])
+    height = float(bounds["height"])
+    if unit == "normalized":
+        x0 = x * page_width
+        y0 = y * page_height
+        x1 = x0 + width * page_width
+        y1 = y0 + height * page_height
+    elif unit in {"pt", "px"}:
+        x0, y0, x1, y1 = x, y, x + width, y + height
+    elif unit in {"in", "inch", "inches"}:
+        x0, y0, x1, y1 = x * 72, y * 72, (x + width) * 72, (y + height) * 72
+    else:
+        raise ValueError(f"Unsupported region unit for preview: {bounds.get('unit')!r}")
+
+    x0 = max(0.0, min(page_width, x0))
+    x1 = max(0.0, min(page_width, x1))
+    y0 = max(0.0, min(page_height, y0))
+    y1 = max(0.0, min(page_height, y1))
+    if x1 <= x0 or y1 <= y0:
+        raise ValueError("Region falls outside the source page.")
+    return x0, y0, x1, y1
+
+
+def _candidate_preview(adir: Path, source_path: str, item: dict) -> dict:
+    """Generate (or reuse) a small crop preview for the review UI.
+
+    This is intentionally best-effort: missing render dependencies, unsupported
+    source types, or malformed regions should not block metadata review.
+    """
+    cid = str(item.get("item_id") or "")
+    target = _preview_dir(adir) / _preview_filename(cid)
+    rel_path = _repo_rel_or_abs(target)
+    if target.is_file():
+        return {"status": "ready", "kind": "pdf-crop", "path": rel_path, "cached": True}
+
+    if not source_path:
+        return {"status": "unavailable", "reason": "No source path recorded."}
+    source = resolve_repo_path(source_path)
+    if source.suffix.lower() != ".pdf":
+        return {
+            "status": "unavailable",
+            "reason": "Preview crop is currently available for PDF sources only.",
+        }
+    if not source.is_file():
+        return {"status": "unavailable", "reason": f"Source file not found: {source}"}
+
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return {"status": "unavailable", "reason": "PyMuPDF is not installed."}
+
+    doc = None
+    try:
+        slide_or_page = int(item.get("slide_or_page") or 1)
+        doc = fitz.open(str(source))
+        if slide_or_page < 1 or slide_or_page > len(doc):
+            return {
+                "status": "unavailable",
+                "reason": f"Page {slide_or_page} is outside the source document.",
+            }
+        page = doc[slide_or_page - 1]
+        box = _region_to_page_box(item.get("region") or {}, page.rect.width, page.rect.height)
+        clip = fitz.Rect(*box)
+        longest = max(float(clip.width), float(clip.height), 1.0)
+        scale = max(1.0, min(3.0, 640.0 / longest))
+        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), clip=clip, alpha=False)
+        if pix.width <= 0 or pix.height <= 0:
+            return {"status": "unavailable", "reason": "Rendered preview was empty."}
+        target.parent.mkdir(parents=True, exist_ok=True)
+        pix.save(str(target))
+        return {
+            "status": "ready",
+            "kind": "pdf-crop",
+            "path": rel_path,
+            "width": pix.width,
+            "height": pix.height,
+            "cached": False,
+        }
+    except (OSError, KeyError, TypeError, ValueError, RuntimeError) as exc:
+        return {"status": "unavailable", "reason": f"Preview render failed: {exc}"}
+    finally:
+        if doc is not None:
+            doc.close()
 
 
 # --------------------------------------------------------------------------- #
@@ -229,6 +346,7 @@ def get_candidates(extraction_id: str, root: Path | None = None) -> dict:
             "slide_or_page": item.get("slide_or_page"),
             "region": item.get("region"),
             "notes": item.get("notes", ""),
+            "preview": _candidate_preview(adir, source_path, item),
             "saved": saved,
             "review": review,
         })

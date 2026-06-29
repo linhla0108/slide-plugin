@@ -57,3 +57,35 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Files:** `slide-system/catalog/catalog.js`, `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
 **Symbols:** `reviewField`
 **State:** Not committed at time of logging
+
+## 2026-06-29.5 — Add candidate crop previews to Review tab
+
+**When:** 2026-06-29 11:49
+**Request:** Continue improving the candidate-review flow after the final residual risk that reviewers only saw coordinates/text, not a real visual crop.
+**Actions:**
+- Created stacked branch `feature/candidate-review-previews`.
+- Added candidate preview generation in `slide-system/scripts/candidate_review.py`: PDF candidates now create or reuse `analysis/previews/<candidate-id>.png`; unsupported sources, missing PyMuPDF, missing files, or malformed regions return a non-blocking `preview.status = unavailable`.
+- Added Review tab rendering in `slide-system/catalog/catalog.js` and `catalog.css`: selected candidates show a crop preview when available, otherwise a plain fallback reason.
+- Fixed a browser-smoke defect where the selected preview image used lazy loading and could remain height-zero/offscreen; changed the selected preview to eager loading.
+- Added tests in `slide-system/scripts/test_gates.py` for PNG preview generation/reuse, non-PDF fallback, and malformed-region fallback.
+- Updated `.agents/skills/component-extractor/SKILL.md`, `slide-system/rules/extraction-methods.md`, `docs/flows/candidate-review-flow.md`, and `docs/how-to-use.md` to document `analysis/previews/` and the non-blocking fallback behavior.
+- Created a temporary smoke run under `outputs/component-extractions/smoke-candidate-preview/analysis/`, started `catalog_server.py`, verified API/UI preview behavior with Playwright using system Chrome, then stopped the temporary server and removed the smoke run.
+- Ran `npx playwright install chromium` after the tester smoke found the Playwright package browser cache missing; the subsequent Playwright smoke used the existing system Chrome because the node_repl Playwright package expected a different cached browser revision.
+**Result:** Red test initially failed on missing `preview`; after implementation `test_gates.py` passed `77/77`. API smoke showed `preview_status=ready` and PNG existed. Browser smoke passed at `1440x900` and `390x844`: the preview image loaded with natural size `505x243`, status stayed `Pending`, and the candidate form did not horizontally overflow. `py_compile`, `node --check`, `validate_registry.py`, `build_registry.py --check`, and `git diff --check` passed.
+**Files:** `slide-system/scripts/candidate_review.py`, `slide-system/scripts/test_gates.py`, `slide-system/catalog/catalog.js`, `slide-system/catalog/catalog.css`, `.agents/skills/component-extractor/SKILL.md`, `slide-system/rules/extraction-methods.md`, `docs/flows/candidate-review-flow.md`, `docs/how-to-use.md`, `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
+**Symbols:** `_candidate_preview`, `_region_to_page_box`, `_preview_filename`, `_repo_rel_or_abs`, `get_candidates`, `reviewPreviewSrc`, `reviewPreviewHtml`, `reviewSelect`, `test_candidate_pdf_preview_is_generated_and_reused`, `test_candidate_preview_unavailable_for_non_pdf_source`, `test_candidate_preview_unavailable_for_malformed_region`
+**State:** Not committed
+
+## 2026-06-29.5 — Package repo skills as an installable Claude Code plugin
+
+**When:** 2026-06-29 11:52
+**Request:** Add the skills in this folder to Claude as a plugin, via a local plugin marketplace.
+**Actions:**
+- Inspected the repo: 12 skills under `.agents/skills/`, no existing Claude Code plugin manifest (`.claude-plugin/plugin.json` / `marketplace.json` absent).
+- Verified plugin/marketplace schema against the official docs (code.claude.com plugins-reference + plugin-marketplaces): `skills` manifest field, default `skills/` auto-discovery, and marketplace `plugins[].source` semantics.
+- Measured heavy sibling dirs before choosing a plugin source, since a local marketplace install copies the plugin source dir into `~/.claude/plugins/cache`: `.venv` 1398 MB, `.git` 884 MB, `input` 216 MB, `node_modules` 18 MB, `.agents` 11 MB. Chose `source: "./.agents"` so only the 11 MB skills tree is copied and Codex/OpenCode discovery of `.agents/skills` is unaffected.
+- Created `.agents/.claude-plugin/plugin.json` (plugin `slide-system`, no `version` so the git SHA drives updates during iteration) — default `skills/` scan auto-discovers all 12 skills.
+- Created `.claude-plugin/marketplace.json` (marketplace `slide-plugin`, one entry `slide-system` → `./.agents`) with top-level `description`.
+**Result:** `claude plugin validate .` → "Validation passed with warnings" with only the intentional no-`version` warning remaining (marketplace description warning cleared). JSON parses OK for both manifests. The 12 skills enumerated under `.agents/skills` are the set that will load. Install path for the user: `/plugin marketplace add E:\slide-plugin` then `/plugin install slide-system@slide-plugin`. Not yet installed or committed.
+**Files:** `.agents/.claude-plugin/plugin.json` (new), `.claude-plugin/marketplace.json` (new), `docs/logs/SESSION-LOG-2026-06-29.md`
+**State:** Not committed at time of logging

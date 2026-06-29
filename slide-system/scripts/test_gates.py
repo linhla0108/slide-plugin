@@ -1200,6 +1200,121 @@ def test_candidate_review_preserves_analysis_files() -> None:
         assert (adir / "docling-report.json").exists()
 
 
+def test_candidate_pdf_preview_is_generated_and_reused() -> None:
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "source.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=200, height=100)
+        page.draw_rect(fitz.Rect(50, 20, 150, 80), color=(1, 0, 0), fill=(1, 0.8, 0.7))
+        page.insert_text((58, 55), "Preview", fontsize=16, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        root = tmpp / "ext"
+        eid = "docling-preview-demo"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "y": 0.2, "width": 0.5, "height": 0.6,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "preview smoke",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        result = crv.get_candidates(eid, root=root)
+        preview = result["candidates"][0]["preview"]
+        assert preview["status"] == "ready", preview
+        png = adir / "previews" / "picture-p1-1.png"
+        assert png.is_file(), preview
+        assert png.read_bytes().startswith(b"\x89PNG"), "preview must be a PNG"
+        first_mtime = png.stat().st_mtime_ns
+
+        second = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert second["path"] == preview["path"]
+        assert png.stat().st_mtime_ns == first_mtime, "existing preview should be reused"
+
+
+def test_candidate_preview_unavailable_for_non_pdf_source() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        root = tmpp / "ext"
+        eid = "docling-preview-fallback"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": "source.pptx",
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "y": 0.2, "width": 0.5, "height": 0.6,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "preview fallback",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        preview = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert preview["status"] == "unavailable", preview
+        assert "PDF sources only" in preview["reason"]
+        assert not (adir / "previews").exists()
+
+
+def test_candidate_preview_unavailable_for_malformed_region() -> None:
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "source.pdf"
+        doc = fitz.open()
+        doc.new_page(width=200, height=100)
+        doc.save(source)
+        doc.close()
+
+        root = tmpp / "ext"
+        eid = "docling-preview-bad-region"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "bad region",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        preview = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert preview["status"] == "unavailable", preview
+        assert "Preview render failed" in preview["reason"]
+        assert not (adir / "previews").exists()
+
+
 def test_candidate_review_does_not_touch_registry_or_library() -> None:
     # candidate_review must only write under the analysis dir; the real registry,
     # compact registry, history, and library must be byte-identical afterwards.

@@ -1675,6 +1675,32 @@ function reviewField(label, name, value, placeholder, type) {
     '" placeholder="' + escAttr(placeholder || "") + '"></label>';
 }
 
+function reviewPreviewSrc(path) {
+  if (!path) return null;
+  const value = String(path);
+  if (value.startsWith("http") || value.startsWith("/")) return value;
+  if (/^[A-Za-z]:[\\/]/.test(value)) return null;
+  return compResolvePath(value);
+}
+
+function reviewPreviewHtml(c) {
+  const preview = c.preview || {};
+  const src = preview.status === "ready" ? reviewPreviewSrc(preview.path) : null;
+  if (src) {
+    return '<div class="cf-preview">' +
+      '<img src="' + escAttr(src) + '" alt="Preview crop for ' + escAttr(c.candidate_id) + '" loading="eager" decoding="async">' +
+      '<div class="cf-preview-meta">' +
+        '<span>PDF crop preview</span>' +
+        (preview.cached ? '<span>cached</span>' : '<span>new</span>') +
+      "</div>" +
+    "</div>";
+  }
+  return '<div class="cf-preview cf-preview-empty">' +
+    '<span>No visual preview</span>' +
+    '<code>' + escHtml(preview.reason || "Source crop is unavailable.") + "</code>" +
+  "</div>";
+}
+
 function reviewSelect(cid) {
   reviewState.currentId = cid;
   reviewRenderCandidates();
@@ -1685,6 +1711,7 @@ function reviewSelect(cid) {
   const status = r.review_status || "pending";
 
   let html =
+    reviewPreviewHtml(c) +
     '<div class="cf-context">' +
       '<div class="cf-ctx-row"><span>Candidate</span><code>' + escHtml(c.candidate_id) + "</code></div>" +
       '<div class="cf-ctx-row"><span>Detected as</span><code>' + escHtml(c.detected_type) + "</code></div>" +

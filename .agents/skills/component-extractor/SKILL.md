@@ -116,6 +116,10 @@ scaffolded:
   the same `analysis/` directory: `candidate-reviews.json` (the reviewer
   metadata, keyed by the original placeholder id) and, on approval,
   `approved/<item_id>.extraction-request.json` (a schema-compatible request).
+- For PDF sources, the Review tab also creates best-effort crop previews at
+  `analysis/previews/<candidate-id>.png` so a reviewer can identify the region
+  visually before renaming. Missing PyMuPDF, unsupported source types, or bad
+  regions show a fallback message and do not block metadata review.
 - It NEVER publishes, never mutates the registry/`visual-library.json`, and
   never scaffolds. Approval only writes the reviewed request artifact; a human
   still runs `scaffold_extraction.py` and the publish gate afterward.

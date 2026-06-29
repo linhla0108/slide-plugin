@@ -95,6 +95,10 @@ and keeps the same analysis-only guarantees as the Docling pre-step:
     `reviewed_at`, `quality_notes`, `retrieval_notes`, …). This metadata is
     deterministic and retrieval-ready (for future hybrid retrieval/RAG); this
     task adds **no** vector search or embedding dependency.
+  - `previews/<candidate-id>.png` — best-effort PDF crop previews for the
+    catalog Review tab. Preview generation is non-blocking: missing PyMuPDF,
+    unsupported source types, missing files, or malformed regions are reported
+    as unavailable and do not create approved requests.
   - `approved/<item_id>.extraction-request.json` — written on approval; a
     single-item, schema-compatible extraction request
     (`extraction-request.schema.json`). It carries a per-candidate extraction id
