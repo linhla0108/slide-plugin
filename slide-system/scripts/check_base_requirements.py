@@ -46,7 +46,7 @@ SCHEMA_VERSION = 2
 REQUIREMENTS = [
     ("python3", "required", ["python3"], ["--version"],
      "Run every slide-system/scripts/ step."),
-    ("xmllint", "required", ["xmllint"], ["--version"],
+    ("xmllint", "required", ["xmllint", r"C:\msys64\usr\bin\xmllint.exe"], ["--version"],
      "Validate that visual.svg / source-with-text.svg stay well-formed XML."),
     ("raster-optimizer", "recommended", ["sips", "magick", "convert"], ["--version"],
      "Downsample / recompress embedded rasters (optimize_svg.py). Without it the "

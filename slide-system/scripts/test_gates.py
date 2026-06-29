@@ -1598,6 +1598,58 @@ def test_auto_stage_semantic_ids_include_docling_position() -> None:
     assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_b)
 
 
+def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    source = "input/GUIDLINE_PRESENTATION_SUN.pdf"
+    role_card = {
+        "item_id": "picture-p2-2",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.41, "width": 0.15, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": "Chuyen muc tieu cong ty thanh huong di ro rang\nTRANSLATOR",
+    }
+    level_strip = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.16, "width": 0.66, "height": 0.18,
+                   "unit": "normalized"},
+        "region_text": "AI Coding Assistants\nLevel 1\nAgent Networks\nLevel 4",
+    }
+
+    role_id = asc.semantic_item_id(source, role_card, set())
+    strip_id = asc.semantic_item_id(source, level_strip, set())
+    metadata = asc.metadata_for(source, role_card, role_id)
+
+    assert role_id == "translator-card"
+    assert strip_id == "ai-coding-maturity-levels-strip"
+    assert "guidline" not in role_id
+    assert metadata["component_type"] == "card"
+    assert metadata["keywords"][:2] == ["translator", "card"]
+
+
+def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p2-2",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.41, "width": 0.15, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": "TRANSLATOR",
+    }
+
+    item_id = asc.semantic_item_id(
+        "input/GUIDLINE_PRESENTATION_SUN.pdf",
+        item,
+        {"translator-card"},
+    )
+
+    assert item_id == "translator-card-2"
+
+
 def test_catalog_has_no_candidate_review_top_tab() -> None:
     html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
     assert 'data-section="review"' not in html

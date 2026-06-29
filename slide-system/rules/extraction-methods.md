@@ -108,7 +108,9 @@ into real catalog Draft items:
   `convert_pdf_source.py`, `extract_editable_text_slots.py`,
   `crop_svg_region.py`, `externalize_svg_images.py`, `optimize_svg.py`,
   `apply_text_contract.py`, `validate_text_slots.py`, and
-  `generate_item_preview.py`.
+  `generate_item_preview.py`. The chain must run through a Python interpreter
+  with PyMuPDF available (normally the repo `.venv`) so catalog Drafts have real
+  previews and editable text slots.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
 - **Validation** reuses the scaffold id/intent gates as the single source of

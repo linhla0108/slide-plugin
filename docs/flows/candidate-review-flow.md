@@ -42,7 +42,8 @@ python3 slide-system/catalog/catalog_server.py
 `auto_stage_candidates.py` does the backend work that a non-technical user
 should not have to do:
 
-- Generates semantic item ids from source name, Docling label, and detected text.
+- Generates semantic item ids from extracted PDF region text and layout role;
+  source name/page/Docling label are fallback context only.
 - Saves retrieval metadata through the same candidate-review contract.
 - Writes schema-compatible approved extraction requests under
   `analysis/approved/`.
@@ -52,7 +53,8 @@ should not have to do:
   `convert_pdf_source.py`, `extract_editable_text_slots.py`,
   `crop_svg_region.py`, `externalize_svg_images.py`, `optimize_svg.py`,
   `apply_text_contract.py`, `validate_text_slots.py`, and
-  `generate_item_preview.py`.
+  `generate_item_preview.py` through the Python interpreter that can import
+  PyMuPDF (usually the repo `.venv`).
 - Rebuilds `slide-system/catalog/catalog-data.json`.
 
 ---

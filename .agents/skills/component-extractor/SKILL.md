@@ -122,10 +122,13 @@ review. It is still conservative:
 
 - It never publishes and never mutates `visual-library.json`.
 - It rejects placeholder/generic ids through the same scaffold gate, then writes
-  semantic item ids automatically from the source name, Docling label, and
-  detected text.
+  semantic item ids automatically from extracted PDF region text and layout
+  role; source name/page/Docling label are fallback context only.
 - It records auto-generated retrieval metadata in `mapping.json` so the Draft
   Info panel and later publish record have useful intent/tags/keywords.
+- For PDF sources, artifact scripts are run with the Python interpreter that can
+  import PyMuPDF (usually the repo `.venv`) so Drafts get real previews instead
+  of placeholder-only mapping folders.
 - It skips candidates already marked `rejected` in `candidate-reviews.json`.
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.
