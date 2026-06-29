@@ -123,3 +123,32 @@ Append-only record, one entry per task in request order. Format per `docs/logs/_
 **Files:** `.agents/skills/component-extractor/SKILL.md`, `docs/flows/candidate-review-flow.md`, `docs/how-to-use.md`, `docs/logs/SESSION-LOG-2026-06-29.md`, `slide-system/catalog/catalog-data.json`, `slide-system/catalog/catalog.css`, `slide-system/catalog/catalog.js`, `slide-system/catalog/catalog_server.py`, `slide-system/catalog/index.html`, `slide-system/rules/extraction-methods.md`, `slide-system/scripts/auto_stage_candidates.py`, `slide-system/scripts/build_component_catalog.py`, `slide-system/scripts/test_gates.py`
 **Symbols:** `auto_stage_candidates.stage_run`, `auto_stage_candidates.semantic_item_id`, `auto_stage_candidates.metadata_for`, `auto_stage_candidates._scaffold_request`, `auto_stage_candidates._augment_mapping`, `auto_stage_candidates._build_pdf_artifacts`, `auto_stage_candidates.main`, `Handler.do_POST`, `compRenderInfoPanel`, `build_component_catalog.main`, `test_auto_stage_candidates_creates_reviewable_draft`, `test_catalog_has_no_candidate_review_top_tab`
 **State:** Not committed at time of logging
+
+## 2026-06-29.9 — Audit current state of recent extraction branches
+
+**When:** 2026-06-29 14:26
+**Request:** Evaluate the current status of the two recently worked branches before deciding next steps.
+**Actions:**
+- Fetched `origin --prune`, checked current branch/status, branch tracking, branch graph, unique commits, and GitHub PR presence for `feature/candidate-review-previews` and `feature/auto-stage-docling-drafts`.
+- Confirmed `feature/candidate-review-previews` is up to date with `origin/feature/candidate-review-previews` at `2f5a4f75`, with three commits over `feature/docling-analysis-pipeline`: candidate review workflow, preview support, and visible smoke log.
+- Confirmed `origin/feature/auto-stage-docling-drafts` is at `6a1162d3` and stacked on `feature/candidate-review-previews` with one pushed auto-stage commit; the local branch is ahead by one unpushed plugin-manifest commit `4c3a67e7`.
+- Checked `gh pr list --head` for both branches; no open PRs were found.
+**Result:** No code changes were made. Current recommendation: treat `feature/auto-stage-docling-drafts` as the product-aligned branch for the Draft-only pipeline, and treat `feature/candidate-review-previews` as a superseded intermediate unless its preview/backend pieces are needed for history. The local plugin commit should be pushed separately only if desired; otherwise move/drop it before using the auto-stage branch as the clean PR branch.
+**Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
+**Symbols:** none
+**State:** Not committed
+
+## 2026-06-29.10 — Open ready PR for auto-staged Draft pipeline
+
+**When:** 2026-06-29 14:32
+**Request:** Create a ready-for-review PR for the selected branch, not a draft PR.
+**Actions:**
+- Checked `gh --version`, `gh auth status`, repository default branch metadata, and existing PRs for `feature/auto-stage-docling-drafts`.
+- Compared the branch against `origin/master`, `origin/feature/candidate-review-previews`, and the GitHub default branch to choose the clean PR base. `origin/master` is the merge-base for the branch, so the PR was opened against `master`.
+- Created ready PR `#1` with `gh pr create --base master --head feature/auto-stage-docling-drafts --title "feat(extraction): auto-stage Docling candidates as Drafts" --body-file <temp>`.
+- Verified PR `#1` is open, `isDraft=false`, `mergeable=MERGEABLE`, and contains the five intended commits from Docling analysis through auto-stage Drafts.
+- Moved the local-only plugin manifest commit `4c3a67e7` onto local branch `chore/claude-plugin-manifest`, then reset local `feature/auto-stage-docling-drafts` to track `origin/feature/auto-stage-docling-drafts` cleanly.
+**Result:** PR created: `https://github.com/linhla0108/slide-plugin/pull/1`. Local `feature/auto-stage-docling-drafts` is back in sync with `origin/feature/auto-stage-docling-drafts`; plugin manifest work is preserved on local branch `chore/claude-plugin-manifest`.
+**Files:** `docs/logs/SESSION-LOG-2026-06-29.md`, `docs/logs/INDEX.jsonl`
+**Symbols:** none
+**State:** Not committed
