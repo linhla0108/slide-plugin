@@ -115,6 +115,12 @@ into real catalog Draft items:
   as one parent Draft. Its carousel starts with the full grouped component, then
   shows each smaller child variant; child mappings remain on disk for evidence
   but are hidden from the main catalog list.
+- **Strip Draft decomposition:** a strip-like Draft may still contain reusable
+  sub-components. Auto-stage runs `classify_page_components.py --manifest-only`
+  for these items so the same Draft carousel includes the full strip, the
+  text-free strip, each detected card with text, and each card's text-free
+  version. This gives non-technical reviewers one final Draft to approve/delete
+  without scattering the sub-cards into separate Draft rows.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
 - **Validation** reuses the scaffold id/intent gates as the single source of

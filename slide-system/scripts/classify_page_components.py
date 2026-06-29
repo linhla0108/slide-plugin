@@ -34,10 +34,12 @@ same renderer the decomposer already uses):
 Usage:
     classify_page_components.py --item-dir <staging-item> [--item-dir ...]
         [--min-area-frac 0.015] [--shape-tol 0.14] [--merge-gap 6]
-        [--group-gap-frac 0.6]
+        [--group-gap-frac 0.6] [--manifest-only]
 
 Writes per item:
     artifact/components/<prefix>-group-NN.svg   (one per proximity run)
+    artifact/components/<prefix>-group-NN-card-MM.svg
+    artifact/components/<prefix>-group-NN-card-MM-source.svg
     artifact/components/components-manifest.json
 Idempotent: regenerates the components/ dir from scratch each run.
 """
@@ -81,6 +83,56 @@ TEXT_CONTRACT_SCRIPT = SCRIPT_DIR / "apply_text_contract.py"
 
 
 _PERCEPT_GRID = 32   # signature resolution for the perceptual dedup
+XLINK_NS = "http://www.w3.org/1999/xlink"
+
+ET.register_namespace("", SVG_NS)
+ET.register_namespace("xlink", XLINK_NS)
+
+
+def _local_name(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _rewrite_component_asset_refs(root: ET.Element) -> None:
+    for el in root.iter():
+        for attr in ("href", f"{{{XLINK_NS}}}href"):
+            value = el.get(attr)
+            if value and value.startswith("../artifact/assets/"):
+                el.set(attr, "../assets/" + value.split("../artifact/assets/", 1)[1])
+
+
+def _build_source_crop(source_svg: Path, bounds: dict, margin: float, output: Path) -> bool:
+    """Crop the text-preserving evidence SVG to the same card bounds.
+
+    Component fragments are intentionally text-free. This companion crop gives
+    the catalog carousel a human-readable card preview without making the
+    reusable artifact carry semantic text.
+    """
+    if not source_svg.exists():
+        return False
+    try:
+        root = ET.parse(source_svg).getroot()
+    except ET.ParseError:
+        return False
+    x0 = math.floor(float(bounds["x"]) - margin)
+    y0 = math.floor(float(bounds["y"]) - margin)
+    w = math.ceil(float(bounds["w"]) + 2 * margin)
+    h = math.ceil(float(bounds["h"]) + 2 * margin)
+    frag = ET.Element(
+        f"{{{SVG_NS}}}svg",
+        {"viewBox": f"0 0 {w} {h}", "width": str(w), "height": str(h)},
+    )
+    for child in list(root):
+        if _local_name(child.tag) == "defs":
+            frag.append(copy.deepcopy(child))
+    content = ET.SubElement(frag, f"{{{SVG_NS}}}g",
+                            {"transform": f"translate({-x0} {-y0})"})
+    for child in list(root):
+        if _local_name(child.tag) != "defs":
+            content.append(copy.deepcopy(child))
+    _rewrite_component_asset_refs(frag)
+    output.write_bytes(ET.tostring(frag, encoding="utf-8"))
+    return True
 
 
 def _percept_signature(png_path: Path, grid: int = _PERCEPT_GRID):
@@ -654,6 +706,7 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
     out_dir.mkdir(parents=True, exist_ok=True)
     prefix = item_dir.name
     text_slots = _load_text_slots(item_dir)
+    source_with_text = item_dir / "evidence" / "source-with-text.svg"
 
     # Pass 1: build the whole-run fragment for each group, and a per-card
     # fragment for every member instance (written to a temp dir for the dedup
@@ -721,11 +774,19 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
                     cfile = f"{prefix}-group-{n:02d}-card-{m:02d}.svg"
                     card_id = f"{prefix}-group-{n:02d}-card-{m:02d}"
                     (out_dir / cfile).write_bytes(ET.tostring(card["frag"]))
+                source_file = f"{card_id}-source.svg"
+                source_written = _build_source_crop(
+                    source_with_text,
+                    {"x": inst["x"], "y": inst["y"], "w": inst["w"], "h": inst["h"]},
+                    margin,
+                    out_dir / source_file,
+                )
                 title = _heading(_slots_in(text_slots, inst["x"], inst["y"],
                                            inst["w"], inst["h"], canvas_w, canvas_h))
                 card_records.append({
                     "card_id": card_id,
                     "file": f"components/{cfile}",
+                    "source_file": f"components/{source_file}" if source_written else None,
                     "title": title,
                     "bounds": {"x": round(inst["x"], 1), "y": round(inst["y"], 1),
                                "w": round(inst["w"], 1), "h": round(inst["h"], 1)},
@@ -899,18 +960,24 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
             if src_frag.exists():
                 shutil.copy2(src_frag, comp_dir / group_file)
             for card in rec.get("cards", []):
-                card_file = card.get("file", "")
-                if card_file:
-                    src_card = item_dir / "artifact" / card_file
-                    if src_card.exists():
-                        shutil.copy2(src_card, comp_dir / src_card.name)
+                for key in ("file", "source_file"):
+                    card_file = card.get(key, "")
+                    if card_file:
+                        src_card = item_dir / "artifact" / card_file
+                        if src_card.exists():
+                            shutil.copy2(src_card, comp_dir / src_card.name)
+            scoped_cards = []
+            for c in rec.get("cards", []):
+                scoped = dict(c)
+                for key in ("file", "source_file"):
+                    if scoped.get(key):
+                        scoped[key] = f"components/{Path(scoped[key]).name}"
+                scoped_cards.append(scoped)
             scoped_manifest = {
                 "groups": [{
                     **rec,
                     "file": f"components/{group_file}",
-                    "cards": [{**c, "file": f"components/{Path(c['file']).name}"}
-                              for c in rec.get("cards", [])
-                              if c.get("file")],
+                    "cards": scoped_cards,
                 }],
             }
             write_json(comp_dir / "components-manifest.json", scoped_manifest)
@@ -1012,6 +1079,9 @@ def main() -> int:
                         default=True,
                         help="Create real staging items for each detected group "
                              "(default: on)")
+    parser.add_argument("--manifest-only", action="store_true",
+                        help="Only write artifact/components output in the parent item; "
+                             "do not create sibling staging items.")
     args = parser.parse_args()
 
     for item_dir in args.item_dir:
@@ -1029,7 +1099,9 @@ def main() -> int:
             print(f"  WARNING: dropped {len(m['dropped_small'])} small cluster(s) "
                   f"below min-area-frac (may be real small components): "
                   f"{m['dropped_small']}")
-        if args.materialize_groups and m.get("groups"):
+        if args.manifest_only:
+            print("  -> manifest-only; skipped materialized group item(s)")
+        elif args.materialize_groups and m.get("groups"):
             created = materialize_groups(resolved, m)
             print(f"  -> materialized {len(created)} group item(s)")
     return 0

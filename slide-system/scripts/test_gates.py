@@ -498,6 +498,63 @@ def test_catalog_surfaces_text_free_variant_for_cropped_draft() -> None:
         assert labels[:2] == ["Source with text", "Text-free visual"], labels
 
 
+def test_catalog_pairs_classifier_cards_with_text_free_variants() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "ai-coding-maturity-levels-strip"
+        components = item / "artifact" / "components"
+        evidence = item / "evidence"
+        components.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text("<svg id='full-text-free'/>", encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text("<svg id='full-source'/>", encoding="utf-8")
+        for name in [
+            "ai-coding-maturity-levels-strip-group-01.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-01-source.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-01.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-02-source.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-02.svg",
+        ]:
+            (components / name).write_text(f"<svg id='{name}'/>", encoding="utf-8")
+        (components / "components-manifest.json").write_text(_json.dumps({
+            "groups": [{
+                "group_id": "ai-coding-maturity-levels-strip-group-01",
+                "file": "components/ai-coding-maturity-levels-strip-group-01.svg",
+                "shape_class": 1,
+                "title": "Level Cards",
+                "member_count": 5,
+                "distinct_card_count": 5,
+                "cards": [
+                    {
+                        "card_id": "ai-coding-maturity-levels-strip-group-01-card-01",
+                        "title": "Level 1 Spicy Autocomplete",
+                        "source_file": "components/ai-coding-maturity-levels-strip-group-01-card-01-source.svg",
+                        "file": "components/ai-coding-maturity-levels-strip-group-01-card-01.svg",
+                        "duplicate_count": 1,
+                    },
+                    {
+                        "card_id": "ai-coding-maturity-levels-strip-group-01-card-02",
+                        "title": "Level 2 AI Coding Assistants",
+                        "source_file": "components/ai-coding-maturity-levels-strip-group-01-card-02-source.svg",
+                        "file": "components/ai-coding-maturity-levels-strip-group-01-card-02.svg",
+                        "duplicate_count": 1,
+                    },
+                ],
+            }],
+        }), encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels == [
+            "Full component",
+            "Full component (Text-free)",
+            "Level 1 Spicy Autocomplete",
+            "Level 1 Spicy Autocomplete (Text-free)",
+            "Level 2 AI Coding Assistants",
+            "Level 2 AI Coding Assistants (Text-free)",
+        ], labels
+
+
 def test_catalog_rel_uses_web_safe_posix_paths() -> None:
     import build_component_catalog as bcc
     path = bcc.PROJECT_ROOT / "slide-system" / "library" / "x" / "visual.svg"

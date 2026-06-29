@@ -51,18 +51,30 @@ def collect_images(item_dir: Path) -> list[dict]:
         groups = manifest.get("groups") or []
         for rec in groups:
             frag = artifact_dir / rec.get("file", "")
-            if frag.exists():
+            classifier_group = "shape_class" in rec or "distinct_card_count" in rec
+            if frag.exists() and not (classifier_group and rec.get("cards")):
                 count = rec.get("member_count", 1)
                 suffix = f" (×{count})" if count and count > 1 else ""
                 label = rec.get("title") or rec.get("group_id", frag.stem).replace("-", " ").title()
                 images.append({"label": f"{label}{suffix}", "path": rel(frag)})
             for card in rec.get("cards", []):
-                card_file = artifact_dir / card.get("file", "")
-                if card_file.exists() and card_file != frag:
-                    card_label = card.get("title") or card.get("card_id", card_file.stem).replace("-", " ").title()
+                card_file_value = card.get("file", "")
+                source_file_value = card.get("source_file", "")
+                card_file = artifact_dir / card_file_value if card_file_value else None
+                source_file = artifact_dir / source_file_value if source_file_value else None
+                fallback_stem = card_file.stem if card_file else "card"
+                card_label = card.get("title") or card.get("card_id", fallback_stem).replace("-", " ").title()
+                dup = card.get("duplicate_count", 1)
+                dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
+                if source_file and source_file.exists():
+                    images.append({"label": f"{card_label}{dup_suffix}", "path": rel(source_file)})
+                if card_file and card_file.exists() and card_file != frag:
                     dup = card.get("duplicate_count", 1)
                     dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
-                    images.append({"label": f"{card_label}{dup_suffix}", "path": rel(card_file)})
+                    text_free_label = card_label
+                    if source_file and source_file.exists() and not text_free_label.endswith("(Text-free)"):
+                        text_free_label = f"{text_free_label} (Text-free)"
+                    images.append({"label": f"{text_free_label}{dup_suffix}", "path": rel(card_file)})
         if images:
             return images
 

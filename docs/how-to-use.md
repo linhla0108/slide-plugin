@@ -202,6 +202,8 @@ new slide generation until you publish it from Draft.
 If several detected parts belong together, they may appear as one grouped Draft.
 Use the carousel to review the full component first, then each smaller variant
 inside it.
+For a strip of repeated cards, the same Draft can also show each individual card
+and each card's text-free version in the carousel.
 
 ### What you'll get
 

@@ -815,6 +815,7 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
     source = resolve_repo_path(source_path)
     if source.suffix.lower() != ".pdf":
         return "skipped", "Core artifact build currently supports PDF sources."
+    decompose = _should_decompose_item(item_dir)
     commands = [
         ["slide-system/scripts/convert_pdf_source.py", "--pdf", str(source), "--page", str(page), "--item-dir", str(item_dir)],
         ["slide-system/scripts/extract_editable_text_slots.py", "--item-dir", str(item_dir)],
@@ -823,8 +824,14 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         ["slide-system/scripts/optimize_svg.py", "--batch", str(item_dir.parents[1])],
         ["slide-system/scripts/apply_text_contract.py", "--batch", str(item_dir.parents[1])],
         ["slide-system/scripts/validate_text_slots.py", "--item-dir", str(item_dir)],
-        ["slide-system/scripts/generate_item_preview.py", "--item-dir", str(item_dir)],
     ]
+    if decompose:
+        commands.append([
+            "slide-system/scripts/classify_page_components.py",
+            "--item-dir", str(item_dir),
+            "--manifest-only",
+        ])
+    commands.append(["slide-system/scripts/generate_item_preview.py", "--item-dir", str(item_dir)])
     logs: list[str] = []
     for cmd in commands:
         ok, log = _run_script(cmd)
@@ -834,6 +841,17 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         if not ok:
             return "failed", "\n".join(logs)
     return "ready", "\n".join(logs)
+
+
+def _should_decompose_item(item_dir: Path) -> bool:
+    mapping_path = item_dir / "mapping.json"
+    if not mapping_path.exists():
+        return False
+    try:
+        mapping = load_json(mapping_path)
+    except Exception:
+        return False
+    return mapping.get("component_type") == "strip"
 
 
 def stage_run(

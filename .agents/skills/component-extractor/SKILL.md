@@ -132,6 +132,11 @@ review. It is still conservative:
 - Related candidates from the same source page are grouped into one Draft when
   appropriate. The carousel starts with the full grouped component, followed by
   the smaller child variants for review.
+- Strip-like Drafts are decomposed in-place: the Draft keeps the full component
+  preview, then the carousel adds each detected sub-card with text and its
+  matching text-free variant. This uses
+  `classify_page_components.py --manifest-only` so auto-stage does not create
+  extra Drafts for the sub-cards.
 - It skips candidates already marked `rejected` in `candidate-reviews.json`.
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.
@@ -219,6 +224,8 @@ not read it separately.
    # distinct component + the source region for comparison, instead of the
    # glued strip. Needs Chromium (measure_svg_groups.js); skip only if absent.
    python3 slide-system/scripts/classify_page_components.py --item-dir <item> [--item-dir ...]
+   # Auto-staged Drafts use --manifest-only to keep sub-components in the
+   # parent Draft carousel instead of creating separate .gNN Drafts.
    ```
 
 4. For each item write `mapping.json` (the canonical record: fingerprints,

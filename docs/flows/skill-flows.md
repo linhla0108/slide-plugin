@@ -43,15 +43,20 @@ Input (PDF/PPTX/SVG + page + region)
         │        • shape-class classification (congruent w×h within tolerance)
         │        • proximity-run splitting (same-shape instances nearby → one group)
         │      emits one fragment SVG per group (whole run, each member's real color preserved)
+        │      and per-card source/text-free variants when a strip contains repeat cards
         │      + artifact/components/components-manifest.json
-        │      materialize_groups() → create a real .gNN staging item per detected group
+        │      auto-stage strip Drafts use --manifest-only:
+        │        • parent Draft remains visible in Components → Draft
+        │        • carousel = full component, text-free full component,
+        │          each card with text, each card text-free
+        │      manual materialize_groups() → create a real .gNN staging item per detected group
         │        • shape-class dedup: keep one representative per class (skip duplicate runs)
         │        • 10% coverage guard: if all groups together cover < 10% of canvas area,
         │          they are sub-elements of a larger diagram — skip materialization
         │        • each .gNN item runs crop→externalize→optimize→apply_text_contract
         │        • each .gNN item includes fragment SVGs → per-card variant carousel in Draft
-        │      parent item → decomposed_into: [list of .gNN names] written to mapping.json
-        │                     hidden from catalog staging (build_component_catalog skips it)
+        │      manual parent item → decomposed_into: [list of .gNN names] written to mapping.json
+        │                            hidden from catalog staging (build_component_catalog skips it)
         │
         │   j. split_icon_sheet.py  ← icon_sheet type ONLY (dedicated splitter, not classify_page_components
         │      which drops small icons as below area-floor and cannot handle dense regular grids)

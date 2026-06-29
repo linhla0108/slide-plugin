@@ -54,10 +54,18 @@ This workflow runs only through the manual component-extractor skill.
    on-canvas object in real Chromium layout, spatially clusters them into
    component instances, then merges identical / same-shape-different-color
    instances into ONE representative class each (e.g. 5 colored Level cards →
-   one class ×5). Writes `artifact/components/<item>-class-NN.svg` +
-   `components-manifest.json`. `build_component_catalog.py` then previews one
-   SVG per distinct class followed by the source region for comparison, rather
-   than the glued strip. Needs Chromium; skip only if it is unavailable.
+   one class ×5). Writes `artifact/components/*.svg` +
+   `components-manifest.json`. `build_component_catalog.py` then previews the
+   source region, the text-free region, and detected sub-components for
+   comparison, rather than only the glued strip. Needs Chromium; skip only if it
+   is unavailable.
+
+   **Auto-stage mode**: `auto_stage_candidates.py` calls
+   `classify_page_components.py --manifest-only` for strip-like Drafts. This
+   keeps one parent Draft in Components → Draft, then adds each detected
+   sub-card to that Draft's carousel as a source-with-text preview plus a
+   matching text-free variant. It does not create separate `.gNN` Draft items
+   for those sub-cards.
 
    **Gutter split**: Before clustering, `_split_on_gutter` un-glues distinct
    components that share a small overlapping leaf. When a clean empty horizontal
@@ -101,11 +109,12 @@ This workflow runs only through the manual component-extractor skill.
 
    - **Per-card variant carousel**: Each materialized group item gets its own
      `artifact/components/` directory containing the group fragment SVG,
-     per-card variant SVGs (one per unique instance inside that group), and a
-     scoped `components-manifest.json`. `collect_images()` in
+     per-card variant SVGs (one per unique instance inside that group),
+     optional source-with-text card crops, and a scoped
+     `components-manifest.json`. `collect_images()` in
      `build_component_catalog.py` reads this manifest to drive the catalog card
-     carousel: whole-row thumbnail → per-card variants → source region, in that
-     order.
+     carousel: full component → text-free full component → card source previews
+     → card text-free variants.
 
    - **Perceptual dedup (MAE)**: Within each group, per-card variant SVGs are
      compared using perceptual signatures derived from rendered PNGs. Cards
