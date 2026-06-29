@@ -36,6 +36,26 @@ def main() -> int:
     warnings: list[str] = []
     inputs: list[dict] = []
 
+    # Host-aware staleness check. capabilities.json is checked in and may have
+    # been probed on a different machine (its tool `path`s are absolute and
+    # host-specific). If an "available" tool's recorded path does not exist on
+    # THIS host, the cache cannot be trusted — surface a warning that points to
+    # the refresh command rather than silently trusting a foreign fingerprint.
+    stale_tools = {
+        tool["tool_id"]
+        for tool in capabilities.get("tools", [])
+        if tool.get("status") == "available"
+        and tool.get("path")
+        and not Path(tool["path"]).exists()
+    }
+    if stale_tools:
+        warnings.append(
+            "Stale capabilities cache: recorded path missing on this host for "
+            + ", ".join(sorted(stale_tools))
+            + ". Refresh with `python3 slide-system/scripts/update_capabilities.py "
+            "--force` before trusting tool availability."
+        )
+
     missing_keys = sorted(REQUIRED_KEYS - set(requirements))
     if missing_keys:
         blockers.append(f"Missing required keys: {', '.join(missing_keys)}")
@@ -66,6 +86,14 @@ def main() -> int:
         tools.append(tool)
         if tool["status"] != "available":
             blockers.append(f"Required tool is {tool['status']}: {tool_id}")
+        elif tool_id in stale_tools:
+            # An "available" tool whose cached path is missing on this host is
+            # not actually usable here — block readiness, do not just warn.
+            blockers.append(
+                f"Required tool path is stale on this host: {tool_id} "
+                f"({tool.get('path')}). Refresh capabilities "
+                "(update_capabilities.py --force) before this job is ready."
+            )
 
     if not requirements.get("exports"):
         blockers.append("At least one export format is required.")

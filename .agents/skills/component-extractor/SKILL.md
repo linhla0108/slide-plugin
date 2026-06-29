@@ -65,6 +65,9 @@ Prohibited patterns (`scaffold_extraction.py`'s `_BANNED_ID` gate rejects these)
 - A positional-only id built from direction words — `top`/`bottom`/`left`/
   `right`/`center`/`centre`/`middle`/`upper`/`lower`, alone or joined
   (e.g. `top-left`, `center`, `bottom-right`).
+- A Docling draft placeholder `<label>-p<page>-<n>` (e.g. `picture-p1-1`,
+  `table-p10-1`) minted by `analyze_with_docling.py` — rename it to a semantic
+  id before scaffolding.
 
 A semantic name that merely starts with a direction word is fine
 (`left-rail`, `top-banner`). The gate also rejects items whose
@@ -76,6 +79,30 @@ Good examples: `metric-card`, `timeline-horizontal`, `org-chart-radial`,
 
 If any value is missing or ambiguous, ask one focused clarification.
 Do not infer and proceed silently.
+
+### Optional: auto-detect candidate regions (Docling)
+
+When the user wants help finding the reusable parts ("suggest the reusable
+parts", "look through this file"), an optional analysis-only pre-step can
+detect candidate regions instead of naming each by hand:
+
+```bash
+python3 slide-system/scripts/analyze_with_docling.py \
+    --source <file.pdf|file.pptx> --extraction-id <id> [--pages 1|2-4]
+```
+
+It writes analysis under `outputs/component-extractions/<id>/analysis/`. When
+at least one candidate is detected, it also writes
+`candidate-extraction-request.json`; when none are found, it writes only
+`page-analysis.json` and `docling-report.json`. It never publishes, never
+touches the registry, and never writes a library artifact. Review the draft
+with the user, rename each `item_id` to a semantic descriptor, then feed the
+cleaned request to `scaffold_extraction.py`. If Docling is not installed it
+exits cleanly with a message; just proceed with the normal manual flow. See
+`slide-system/rules/extraction-methods.md` → "Optional: Docling candidate
+auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
+only for scanned PDFs. Tiny decorative candidates are filtered by default
+(`--min-area 0.015`) and can be relaxed for icon-heavy pages.
 
 ## Preflight (marker-first — do not run the script by default)
 

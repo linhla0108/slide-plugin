@@ -15,9 +15,9 @@ IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"}
 def rel(path: Path | str) -> str:
     p = Path(path) if isinstance(path, str) else path
     try:
-        return str(p.relative_to(PROJECT_ROOT))
+        return p.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
-        return str(p)
+        return p.as_posix()
 
 
 def collect_images(item_dir: Path) -> list[dict]:

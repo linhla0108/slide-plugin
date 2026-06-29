@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-26T14:46:03+07:00",
+  "updated_at": "2026-06-26T17:46:28+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -2281,6 +2281,16 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
       "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-06-26T17:46:28+07:00",
+      "extraction_id": "docling-kickoff-page1",
+      "item_id": "kickoff-2026-hero-visual",
+      "stable_id": "sun.component.kickoff-2026-hero-visual",
+      "status": "staging",
+      "source_sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+      "region_identity_sha256": "d35c331a2a41eb8c1ac963105569d4529efd36e2732b0f37c006effa8d744100",
+      "semantic_signature_sha256": "3be584fa5e3ad5770dfbc90f4e54b1e9a32db665d6ef0137729d19b6a010d00b"
     }
   ]
 }

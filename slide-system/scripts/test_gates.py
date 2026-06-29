@@ -14,6 +14,7 @@ Run directly (`python3 test_gates.py`) or under pytest. No network, no install.
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -479,6 +480,12 @@ def test_catalog_preview_skips_fullpage_reference_when_cropped() -> None:
         assert "Reference" in labels, "full-page items still surface reference.png"
 
 
+def test_catalog_rel_uses_web_safe_posix_paths() -> None:
+    import build_component_catalog as bcc
+    path = bcc.PROJECT_ROOT / "slide-system" / "library" / "x" / "visual.svg"
+    assert bcc.rel(path) == "slide-system/library/x/visual.svg"
+
+
 # --------------------------------------------------------------------------- #
 # build_registry
 # --------------------------------------------------------------------------- #
@@ -936,6 +943,106 @@ def test_carved_slots_within_unit_and_subset() -> None:
         cy = s["bounds"]["y"] + s["bounds"]["height"] / 2
         assert region["x"] <= cx <= region["x"] + region["width"]
         assert region["y"] <= cy <= region["y"] + region["height"]
+
+
+# --------------------------------------------------------------------------- #
+# scaffold_extraction — ID gating + analysis-dir coexistence
+# --------------------------------------------------------------------------- #
+import scaffold_extraction as scaffold_ex
+
+
+def test_scaffold_rejects_docling_draft_ids() -> None:
+    # Every placeholder analyze_with_docling.py can mint must be rejected so it
+    # can never become a stable identity without a human rename.
+    for bad in ("picture-p1-1", "figure-p2-3", "table-p10-1", "chart-px-1",
+                "form-p3-2"):
+        assert scaffold_ex._DOCLING_DRAFT_ID.match(bad), bad
+    # Real semantic names (and the suggested renames) must pass.
+    for ok in ("metric-card", "salary-table", "org-chart", "picture-frame",
+               "table-of-contents"):
+        assert not scaffold_ex._DOCLING_DRAFT_ID.match(ok), ok
+
+
+def test_scaffold_still_rejects_positional_ids() -> None:
+    # The pre-existing positional gate is unchanged by the refactor.
+    for bad in ("page-01", "slide-3-full", "42", "top-left", "center"):
+        assert scaffold_ex._BANNED_ID.match(bad), bad
+    for ok in ("left-rail", "top-banner", "metric-card"):
+        assert not scaffold_ex._BANNED_ID.match(ok), ok
+
+
+def test_analyze_with_docling_emits_only_draft_ids() -> None:
+    # Guard the contract between the two scripts: every candidate id the analyzer
+    # produces must be caught by the scaffold draft gate.
+    import analyze_with_docling as awd
+    els = [{"page": p, "label": lbl, "text": "",
+            "region": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.2,
+                       "unit": "normalized"}}
+           for p, lbl in [(1, "picture"), (2, "table"), (10, "figure"),
+                          ("x", "chart"), (3, "form")]]
+    items = awd.build_candidates(els, "demo", "component", None)
+    assert items, "expected candidates from figure-like labels"
+    for it in items:
+        assert scaffold_ex._DOCLING_DRAFT_ID.match(it["item_id"]), it["item_id"]
+
+
+def test_analyze_with_docling_filters_tiny_candidates() -> None:
+    import analyze_with_docling as awd
+    els = [
+        {"page": 1, "label": "picture", "text": "",
+         "region": {"x": 0.1, "y": 0.1, "width": 0.02,
+                    "height": 0.02, "unit": "normalized"}},
+        {"page": 1, "label": "picture", "text": "",
+         "region": {"x": 0.2, "y": 0.2, "width": 0.2,
+                    "height": 0.2, "unit": "normalized"}},
+    ]
+    items = awd.build_candidates(els, "demo", "component", None)
+    assert [item["item_id"] for item in items] == ["picture-p1-1"]
+
+
+def test_scaffold_rejects_docling_draft_without_polluting_analysis_dir() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        source = root / "source.pdf"
+        source.write_text("fake", encoding="utf-8")
+        output_root = root / "outputs"
+        analysis = output_root / "docling-demo" / "analysis"
+        analysis.mkdir(parents=True)
+        request_path = root / "request.json"
+        request_path.write_text(json.dumps({
+            "extraction_id": "docling-demo",
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.1, "width": 0.2,
+                           "height": 0.2, "unit": "normalized"},
+                "requested_type": "component",
+                "semantic_intent": ["picture candidate detected by Docling"],
+            }],
+        }), encoding="utf-8")
+        history = root / "history.json"
+        registry = root / "registry.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        old_argv = sys.argv[:]
+        try:
+            sys.argv = [
+                "scaffold_extraction.py", "--request", str(request_path),
+                "--output-root", str(output_root), "--history", str(history),
+                "--registry", str(registry),
+            ]
+            try:
+                scaffold_ex.main()
+            except SystemExit as exc:
+                assert "Docling draft placeholder" in str(exc)
+            else:
+                raise AssertionError("expected Docling draft placeholder rejection")
+        finally:
+            sys.argv = old_argv
+        assert analysis.exists(), "analysis/ should be preserved"
+        assert not (output_root / "docling-demo" / "request.json").exists()
+        assert not (output_root / "docling-demo" / "items").exists()
 
 
 # --------------------------------------------------------------------------- #

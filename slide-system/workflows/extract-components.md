@@ -2,6 +2,15 @@
 
 This workflow runs only through the manual component-extractor skill.
 
+> **Optional pre-step (auto-detect candidates):** when the user wants help
+> finding the reusable parts, run the analysis-only
+> `scripts/analyze_with_docling.py --source <file> --extraction-id <id>`. It
+> writes draft candidates under
+> `outputs/component-extractions/<id>/analysis/` and changes no shared state
+> (no publish, no registry, no library writes). Review and rename the draft ids
+> before scaffolding. Degrades cleanly when Docling is absent. Details:
+> `rules/extraction-methods.md` → "Optional: Docling candidate auto-detection".
+
 1. Require exact source path, slide/page, and region/object.
 2. Validate batch requests.
 3. Fingerprint each region and check for duplicates.

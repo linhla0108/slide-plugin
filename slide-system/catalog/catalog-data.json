@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T14:47:35+07:00",
+  "generated_at": "2026-06-26T17:46:32+07:00",
   "counts": {
     "published": 84,
     "staging": 1
@@ -18834,168 +18834,56 @@
       "deletable": true
     },
     {
-      "id": "sun.component.ai-adoption-radial-diagram",
+      "id": "sun.component.kickoff-2026-hero-visual",
       "version": "0.0.0",
-      "name": "Ai Adoption Radial Diagram",
+      "name": "Kickoff 2026 Hero Visual",
       "type": "component",
       "category": "component",
       "status": "staging",
       "brand": "sun-studio",
       "intent": [
-        "AI adoption level radial progress diagram",
-        "concentric rings showing adoption maturity levels"
+        "kickoff 2026 hero visual crop"
       ],
       "tags": [],
       "source": {
-        "path": "/Users/home/Documents/work-space/sun-riser-2026/input/GUIDLINE_PRESENTATION_SUN.pdf",
-        "sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-        "slide_or_page": 4,
+        "path": "E:\\slide-plugin\\input\\Kick_off_GOAL_SETTING_2026-2.pdf",
+        "sha256": "5c17a889d8522a15b5ea6b893fdf3999e20e7a18e5b14303c16e567eeceb4041",
+        "slide_or_page": 1,
         "region": {
-          "x": 0.0,
-          "y": 0.6,
-          "width": 1.0,
-          "height": 0.4,
+          "x": 0.534932,
+          "y": 0.000818,
+          "width": 0.465068,
+          "height": 0.999182,
           "unit": "normalized"
         },
         "object_ids": []
       },
       "paths": {
-        "artifact": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact",
-        "visual": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/visual.svg",
-        "text_slots": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/text-slots.json",
-        "preview": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/preview",
-        "detail": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/README.md",
-        "evidence": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/evidence"
+        "artifact": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/artifact",
+        "visual": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/artifact/visual.svg",
+        "text_slots": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/artifact/text-slots.json",
+        "preview": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/preview",
+        "detail": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/README.md",
+        "evidence": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/evidence"
       },
       "images": [
         {
-          "label": "X\u00c2Y cards",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/components/ai-adoption-radial-diagram-group-01.svg"
-        },
-        {
-          "label": "X\u00c2Y cards",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/artifact/components/ai-adoption-radial-diagram-group-02.svg"
-        },
-        {
-          "label": "Source (original region)",
-          "path": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram/evidence/source-with-text.svg"
+          "label": "Source with text",
+          "path": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual/evidence/source-with-text.svg"
         }
       ],
       "icon_set": null,
       "content_fields": {
         "required": [],
         "optional": [],
-        "text_slots": [
-          {
-            "id": "26",
-            "role": "label",
-            "html_tag": "span",
-            "required": false
-          },
-          {
-            "id": "x-y-d-ng-i-ng-ai",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "x-y-d-ng-h-th-ng",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "t-ng-ho",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "n-ng-c-p-c-c-c-ng-c-ai",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "ph-c-v-c-ng-vi-c",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "chia-s-best-practices-v",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "use-cases-trong-c-c-team",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "n-ng-cao-ti-ng-anh",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "ti-p-c-n-v-i-ai",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "x-y-d-ng-th-vi-n-prompts",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "ai-work-ows-d-ng-chung",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "t-ch-c-workshop",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "training-v-ai",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "khuy-n-kh-ch",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "th-nghi-m-ai",
-            "role": "subheading",
-            "html_tag": "h3",
-            "required": false
-          },
-          {
-            "id": "2-th-ng-d-ng-bi-u-th-c-c-d-ng-content-xoay-quanh",
-            "role": "heading",
-            "html_tag": "h2",
-            "required": false
-          }
-        ]
+        "text_slots": []
       },
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "artifact/visual.svg",
         "slots": "artifact/text-slots.json",
         "source_evidence": "evidence/source-with-text.svg",
-        "slot_count": 17,
+        "slot_count": 0,
         "coordinate_space": "normalized",
         "example_content": "source",
         "semantic_text_in_visual": false,
@@ -19009,7 +18897,7 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ],
       "deletable": true,
-      "staging_dir": "outputs/component-extractions/guideline-resplit-staging/items/ai-adoption-radial-diagram",
+      "staging_dir": "outputs/component-extractions/docling-kickoff-page1/items/kickoff-2026-hero-visual",
       "publish_readiness": {
         "ready": true,
         "blockers": []

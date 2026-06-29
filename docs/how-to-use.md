@@ -185,6 +185,16 @@ for example a chart, a title block, a background, or a whole slide.
 > "Save every slide in this file as reusable parts."
 > *(then share the file)*
 
+**Or let Claude find the parts for you:**
+
+> "Look through this file and suggest the reusable parts."
+> *(then share the file)*
+
+Claude can **auto-detect the reusable parts** in a file — charts, tables,
+pictures, and the like — and show them to you as suggestions. Nothing is saved
+from a suggestion until you pick the ones you want and approve them, exactly
+like above. It's just a faster way to find candidates in a big file.
+
 ### What you'll get
 
 1. Tell Claude **which file** and **which part** you want (a slide, a range of
@@ -196,7 +206,8 @@ for example a chart, a title block, a background, or a whole slide.
 **Good to know:**
 
 - This only happens when you ask — Claude never takes any part on its own.
-- You approve each part before it's saved.
+- You approve each part before it's saved. Auto-detect only *suggests* parts;
+  a suggestion never becomes a saved, reusable item until you approve it.
 
 <!--
   INSERT IMAGE: Claude showing a preview of the extracted part.
