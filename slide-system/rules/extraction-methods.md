@@ -111,6 +111,10 @@ into real catalog Draft items:
   `generate_item_preview.py`. The chain must run through a Python interpreter
   with PyMuPDF available (normally the repo `.venv`) so catalog Drafts have real
   previews and editable text slots.
+- **Grouped Drafts:** related candidates from one source page may be represented
+  as one parent Draft. Its carousel starts with the full grouped component, then
+  shows each smaller child variant; child mappings remain on disk for evidence
+  but are hidden from the main catalog list.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
 - **Validation** reuses the scaffold id/intent gates as the single source of

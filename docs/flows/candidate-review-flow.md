@@ -49,6 +49,9 @@ should not have to do:
   `analysis/approved/`.
 - Scaffolds each candidate into a separate Draft namespace:
   `<run-id>-<item-id>`.
+- When several candidates on the same source page form one related visual set,
+  creates a grouped Draft with a carousel: first the full component region,
+  then the individual child variants.
 - For PDF sources, runs the core artifact chain:
   `convert_pdf_source.py`, `extract_editable_text_slots.py`,
   `crop_svg_region.py`, `externalize_svg_images.py`, `optimize_svg.py`,

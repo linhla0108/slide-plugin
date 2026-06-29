@@ -1650,6 +1650,111 @@ def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
     assert item_id == "translator-card-2"
 
 
+def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
+    import importlib
+    import build_component_catalog as bcc
+
+    asc = importlib.import_module("auto_stage_candidates")
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Role cards.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=400, height=220)
+        page.draw_rect(fitz.Rect(40, 40, 170, 180), color=(1, 0.4, 0.2),
+                       fill=(1, 0.9, 0.8))
+        page.insert_text((62, 95), "TRANSLATOR", fontsize=18, color=(0, 0, 0))
+        page.draw_rect(fitz.Rect(230, 40, 360, 180), color=(0.1, 0.2, 1),
+                       fill=(0.8, 0.9, 1))
+        page.insert_text((270, 95), "COACH", fontsize=18, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        output_root = tmpp / "component-extractions"
+        eid = "docling-auto-group-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {
+                    "item_id": "picture-p1-1",
+                    "slide_or_page": 1,
+                    "region": {"x": 0.1, "y": 0.18, "width": 0.35, "height": 0.66,
+                               "unit": "normalized"},
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "semantic_intent": ["picture candidate detected by Docling"],
+                    "notes": "Translator card",
+                    "replacement_for": None,
+                },
+                {
+                    "item_id": "picture-p1-2",
+                    "slide_or_page": 1,
+                    "region": {"x": 0.55, "y": 0.18, "width": 0.35, "height": 0.66,
+                               "unit": "normalized"},
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "semantic_intent": ["picture candidate detected by Docling"],
+                    "notes": "Coach card",
+                    "replacement_for": None,
+                },
+            ],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+        )
+        assert summary["staged"] == 2, summary
+        assert summary["grouped"] == 1, summary
+        group = summary["group_item"]
+        assert group["item_id"] == "translator-coach-card-set"
+        group_dir = output_root / group["extraction_id"] / "items" / group["item_id"]
+        group_mapping = read_text_slots.load_json(group_dir / "mapping.json")
+        assert group_mapping["component_type"] == "component-set"
+        assert len(group_mapping["collection_children"]) == 2
+        assert (group_dir / "artifact" / "components" / "components-manifest.json").is_file()
+
+        catalog_path = tmpp / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(reg),
+            "--extractions", str(output_root),
+            "--output", str(catalog_path),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+        catalog = read_text_slots.load_json(catalog_path)
+        ids = [item["id"] for item in catalog["items"]]
+        assert "sun.component.translator-card" not in ids
+        assert "sun.component.coach-card" not in ids
+        draft = next(item for item in catalog["items"]
+                     if item["id"] == "sun.component.translator-coach-card-set")
+        assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
+        assert [image["label"] for image in draft["images"]][:3] == [
+            "Full component",
+            "Translator Card",
+            "Coach Card",
+        ]
+
+
 def test_catalog_has_no_candidate_review_top_tab() -> None:
     html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
     assert 'data-section="review"' not in html

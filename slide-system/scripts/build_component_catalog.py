@@ -38,6 +38,13 @@ def collect_images(item_dir: Path) -> list[dict]:
             manifest = load_json(components_manifest)
         except Exception:
             manifest = {}
+        overview = item_dir / "evidence" / "source-with-text.svg"
+        if overview.exists():
+            images.append({"label": "Full component", "path": rel(overview)})
+        else:
+            thumb = item_dir / "preview" / "thumbnail.png"
+            if thumb.exists():
+                images.append({"label": "Full component", "path": rel(thumb)})
         groups = manifest.get("groups") or []
         for rec in groups:
             frag = artifact_dir / rec.get("file", "")
@@ -54,14 +61,6 @@ def collect_images(item_dir: Path) -> list[dict]:
                     dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
                     images.append({"label": f"{card_label}{dup_suffix}", "path": rel(card_file)})
         if images:
-            # One source image of the whole region, for side-by-side comparison.
-            src = item_dir / "evidence" / "source-with-text.svg"
-            if src.exists():
-                images.append({"label": "Source (original region)", "path": rel(src)})
-            else:
-                bg = artifact_dir / "background.png"
-                if bg.exists():
-                    images.append({"label": "Source (original region)", "path": rel(bg)})
             return images
 
     bg = artifact_dir / "background.png"
@@ -180,7 +179,12 @@ def main() -> int:
 
         item_images: list[dict] = []
         if art_path and art_path.is_dir() and variants:
+            overview = art_path / "visual.svg"
+            if overview.exists():
+                item_images.append({"label": "Full component", "path": rel(overview)})
             for f in sorted(art_path.iterdir()):
+                if f.name == "visual.svg":
+                    continue
                 if f.suffix.lower() in IMAGE_EXTS:
                     label = f.stem
                     for v in variants:
@@ -222,6 +226,8 @@ def main() -> int:
             artifact_dir = item_dir / "artifact"
 
             if mapping.get("decomposed_into"):
+                continue
+            if mapping.get("collection_parent_id"):
                 continue
 
             # Handle two mapping schemas:

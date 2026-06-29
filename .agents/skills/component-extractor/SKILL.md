@@ -129,6 +129,9 @@ review. It is still conservative:
 - For PDF sources, artifact scripts are run with the Python interpreter that can
   import PyMuPDF (usually the repo `.venv`) so Drafts get real previews instead
   of placeholder-only mapping folders.
+- Related candidates from the same source page are grouped into one Draft when
+  appropriate. The carousel starts with the full grouped component, followed by
+  the smaller child variants for review.
 - It skips candidates already marked `rejected` in `candidate-reviews.json`.
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.

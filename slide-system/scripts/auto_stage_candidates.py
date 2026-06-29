@@ -22,6 +22,7 @@ import contextlib
 import io
 import json
 import re
+import shutil
 import subprocess
 import sys
 import unicodedata
@@ -43,6 +44,18 @@ STOPWORDS = {
     "to", "with",
     "cac", "cho", "cua", "cung", "duoc", "muc", "nhung", "noi", "va",
     "van",
+}
+ENGLISH_HINTS = {
+    "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
+    "autocomplete", "benefits", "card", "check", "checklist", "coach",
+    "coding", "collaborative", "contributors", "cover", "development",
+    "driver", "engagement", "factory", "faq", "framework", "goal",
+    "highlight", "how", "improvement", "interview", "leadership", "level",
+    "maturity", "metric", "networks", "next", "overview", "performance",
+    "process", "quote", "recognition", "revenue", "review", "rewards",
+    "salary", "section", "setting", "size", "software", "statistics",
+    "strategist", "structure", "summary", "team", "thanks", "timeline",
+    "translator", "workshop",
 }
 LABEL_COMPONENT_TYPE = {
     "picture": "visual",
@@ -87,6 +100,39 @@ def _clean_lines(value: str) -> list[str]:
     return lines
 
 
+def _is_ascii(value: str) -> bool:
+    try:
+        value.encode("ascii")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
+def _english_lines(value: str) -> list[str]:
+    lines: list[str] = []
+    for line in _clean_lines(value):
+        tokens = _tokens(line, limit=12)
+        if not tokens:
+            continue
+        has_hint = any(token in ENGLISH_HINTS for token in tokens)
+        is_short_label = (
+            _is_ascii(line)
+            and line.upper() == line
+            and len(line) <= 32
+            and re.search(r"[A-Za-z]", line)
+        )
+        if (has_hint or is_short_label) and line not in lines:
+            lines.append(line)
+    return lines
+
+
+def _source_topic_tokens(source_path: str, limit: int = 4) -> list[str]:
+    tokens = _tokens(Path(source_path).stem, limit=8)
+    generic = {"guidline", "guideline", "presentation", "sun", "suner", "slide"}
+    topic = [token for token in tokens if token not in generic]
+    return (topic or ["source"])[:limit]
+
+
 def _role_suffix(item: dict, label: str) -> str:
     if label in {"table", "chart", "form"}:
         return label
@@ -108,7 +154,7 @@ def _role_suffix(item: dict, label: str) -> str:
 
 def _semantic_core(item: dict, suffix: str) -> list[str]:
     text = str(item.get("region_text") or "")
-    lines = _clean_lines(text)
+    lines = _english_lines(text)
     upper_labels = [
         line
         for line in lines
@@ -141,7 +187,11 @@ def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
         if str(item.get("region_text") or "").strip():
             suffix = _role_suffix(item, label)
             core = _semantic_core(item, suffix)
-            base = slug("-".join([*core, suffix]))
+            if core and core != [suffix]:
+                base = slug("-".join([*core, suffix]))
+            else:
+                ordinal = docling_match.group("n")
+                base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
         else:
             page = slug(str(item.get("slide_or_page") or docling_match.group("page")))
             ordinal = docling_match.group("n")
@@ -173,6 +223,7 @@ def metadata_for(source_path: str, item: dict, item_id: str) -> dict:
     role_suffix = _role_suffix(item, label)
     component_type = role_suffix if role_suffix != "visual" else LABEL_COMPONENT_TYPE.get(label, label)
     region_text = str(item.get("region_text") or "").strip()
+    english_region_text = "\n".join(_english_lines(region_text))
     intent_values = [
         str(v).strip()
         for v in item.get("semantic_intent", [])
@@ -182,10 +233,10 @@ def metadata_for(source_path: str, item: dict, item_id: str) -> dict:
         intent_values = [item_id.replace("-", " ")]
     elif not intent_values:
         intent_values = [f"{component_type} from {Path(source_path).stem}"]
-    keywords = _tokens(item_id, region_text, " ".join(intent_values), label, limit=8)
+    keywords = _tokens(item_id, english_region_text, " ".join(intent_values), label, limit=8)
     tags = [component_type, label, "docling", "auto-staged"]
     display = item_id.replace("-", " ").title()
-    text_note = f" Contains text: {_clean_lines(region_text)[:4]}." if region_text else ""
+    text_note = f" English cue: {_clean_lines(english_region_text)[:3]}." if english_region_text else ""
     return {
         "item_id": item_id,
         "display_name": display,
@@ -205,6 +256,35 @@ def metadata_for(source_path: str, item: dict, item_id: str) -> dict:
         "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft.",
         "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
     }
+
+
+def _component_tokens(item_id: str) -> list[str]:
+    role_suffixes = {"card", "strip", "icon", "table", "chart", "form", "visual", "component"}
+    return [token for token in item_id.split("-") if token and token not in role_suffixes and not token.isdigit()]
+
+
+def group_item_id(source_path: str, staged_records: list[dict], used: set[str]) -> str:
+    child_ids = [str(record["review"]["item_id"]) for record in staged_records]
+    child_tokens = [token for item_id in child_ids for token in _component_tokens(item_id)]
+    has_cards = sum(item_id.endswith("-card") for item_id in child_ids) >= 2
+    has_ai_levels = any("ai-coding-maturity-levels" in item_id for item_id in child_ids)
+    if has_cards and has_ai_levels:
+        base = "ai-coding-maturity-role-card-set"
+    elif has_cards:
+        role_tokens = [token for token in child_tokens if token in ENGLISH_HINTS][:4]
+        base = "-".join([*(role_tokens or ["role"]), "card", "set"])
+    else:
+        base_tokens = [token for token in child_tokens if token in ENGLISH_HINTS][:4]
+        if not base_tokens:
+            base_tokens = _source_topic_tokens(source_path, limit=3)
+        base = "-".join([*base_tokens, "component", "set"])
+    candidate = slug(base)
+    n = 2
+    while candidate in used:
+        candidate = f"{slug(base)}-{n}"
+        n += 1
+    used.add(candidate)
+    return candidate
 
 
 def _tool_python() -> str:
@@ -378,6 +458,228 @@ def _augment_mapping(item_dir: Path, review: dict, run_id: str,
     write_json(mapping_path, mapping)
 
 
+def _union_region(records: list[dict]) -> dict:
+    regions = [record["item"].get("region", {}) for record in records]
+    unit = regions[0].get("unit", "normalized") if regions else "normalized"
+    xs = [float(region.get("x", 0)) for region in regions]
+    ys = [float(region.get("y", 0)) for region in regions]
+    x2s = [float(region.get("x", 0)) + float(region.get("width", 0)) for region in regions]
+    y2s = [float(region.get("y", 0)) + float(region.get("height", 0)) for region in regions]
+    x = min(xs) if xs else 0.0
+    y = min(ys) if ys else 0.0
+    x2 = max(x2s) if x2s else 1.0
+    y2 = max(y2s) if y2s else 1.0
+    return {
+        "x": round(x, 6),
+        "y": round(y, 6),
+        "width": round(x2 - x, 6),
+        "height": round(y2 - y, 6),
+        "unit": unit,
+    }
+
+
+def _materialize_group_item(
+    extraction_id: str,
+    source_path: str,
+    staged_records: list[dict],
+    output_root: Path,
+    history: Path,
+    registry: Path,
+    used_ids: set[str],
+    build_artifacts: bool,
+) -> dict | None:
+    if len(staged_records) < 2:
+        return None
+    group_id = group_item_id(source_path, staged_records, used_ids)
+    group_extraction_id = f"{extraction_id}-{group_id}"
+    group_dir = output_root / group_extraction_id
+    item_dir = group_dir / "items" / group_id
+    if (item_dir / "mapping.json").is_file():
+        return {
+            "item_id": group_id,
+            "stable_id": f"sun.component.{group_id}",
+            "extraction_id": group_extraction_id,
+            "item_dir": str(item_dir),
+            "status": "already_grouped",
+        }
+
+    slide_or_page = staged_records[0]["item"].get("slide_or_page", 1)
+    union_region = _union_region(staged_records)
+    group_request = {
+        "extraction_id": group_extraction_id,
+        "source_path": source_path,
+        "items": [{
+            "item_id": group_id,
+            "slide_or_page": slide_or_page,
+            "region": union_region,
+            "object_ids": [],
+            "requested_type": "component",
+            "semantic_intent": [group_id.replace("-", " ")],
+            "notes": "Auto-grouped overview for related Docling candidates.",
+            "replacement_for": None,
+        }],
+    }
+    analysis_dir = group_dir / "analysis"
+    analysis_dir.mkdir(parents=True, exist_ok=True)
+    group_request_path = analysis_dir / "group-extraction-request.json"
+    write_json(group_request_path, group_request)
+    _scaffold_request(group_request_path, output_root, history, registry)
+    artifact_status = "skipped"
+    artifact_log = ""
+    if build_artifacts:
+        artifact_status, artifact_log = _build_pdf_artifacts(
+            item_dir, source_path, slide_or_page)
+
+    artifact_dir = item_dir / "artifact"
+    components_dir = artifact_dir / "components"
+    evidence_dir = item_dir / "evidence"
+    preview_dir = item_dir / "preview"
+    components_dir.mkdir(parents=True, exist_ok=True)
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+    preview_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest_groups: list[dict] = []
+    variants: list[str] = []
+    children: list[dict] = []
+    first_preview: Path | None = None
+    for record in staged_records:
+        child_item_dir = Path(record["item_dir"])
+        child_id = record["review"]["item_id"]
+        child_name = record["review"]["display_name"]
+        preview = child_item_dir / "preview" / "thumbnail.png"
+        if not preview.exists():
+            preview = child_item_dir / "evidence" / "source-with-text.svg"
+        if not preview.exists():
+            continue
+        suffix = preview.suffix.lower()
+        variant_file = f"{child_id}{suffix}"
+        shutil.copy2(preview, components_dir / variant_file)
+        shutil.copy2(preview, artifact_dir / variant_file)
+        if first_preview is None and suffix in {".png", ".jpg", ".jpeg", ".webp"}:
+            first_preview = preview
+        manifest_groups.append({
+            "group_id": child_id,
+            "title": child_name,
+            "file": f"components/{variant_file}",
+            "member_count": 1,
+            "cards": [],
+        })
+        variants.append(child_name)
+        children.append({
+            "item_id": child_id,
+            "stable_id": record["stable_id"],
+            "item_dir": str(child_item_dir),
+            "candidate_id": record["candidate_id"],
+        })
+
+    if len(manifest_groups) < 2:
+        return None
+    write_json(components_dir / "components-manifest.json", {"groups": manifest_groups})
+    if first_preview:
+        shutil.copy2(first_preview, preview_dir / "thumbnail.png")
+
+    source = resolve_repo_path(source_path)
+    source_hash = scaffold.sha256_file(source)
+    region_hash = scaffold.region_identity_hash(source_hash, slide_or_page, union_region, [])
+    stable_id = f"sun.component.{group_id}"
+    display_name = group_id.replace("-", " ").title()
+    keywords = _tokens(group_id, " ".join(variants), limit=10)
+    existing_mapping = load_json(item_dir / "mapping.json")
+    mapping = {
+        "extraction_id": group_extraction_id,
+        "item_id": group_id,
+        "candidate_stable_id": stable_id,
+        "name": display_name,
+        "status": "staging",
+        "type": "component",
+        "category": "component-set",
+        "brand": "sun-studio",
+        "source": {
+            "path": str(source),
+            "sha256": source_hash,
+            "slide_or_page": slide_or_page,
+            "region": union_region,
+            "object_ids": [],
+            "docling_run_id": extraction_id,
+            "candidate_ids": [record["candidate_id"] for record in staged_records],
+        },
+        "fingerprints": {
+            "region_identity_sha256": region_hash,
+            "semantic_signature_sha256": scaffold.semantic_signature_hash([group_id]),
+            "perceptual_hash": None,
+        },
+        "semantic_intent": [display_name],
+        "content_fields": {"required": [], "optional": []},
+        "text_contract": existing_mapping.get("text_contract"),
+        "variables": [],
+        "variants": variants,
+        "limitations": ["Review carousel variants before publishing this grouped component set."],
+        "approval": {"status": "pending", "approved_by": None, "approved_at": None},
+        "duplicate_of": None,
+        "component_type": "component-set",
+        "layout_role": "grouped carousel component set",
+        "visual_summary": f"Grouped {len(manifest_groups)} related detected components from one source page.",
+        "content_structure": ["component-set", "carousel variants"],
+        "tags": ["component-set", "carousel", "docling", "auto-staged"],
+        "keywords": keywords or ["component", "set"],
+        "use_cases": ["Review and publish related visual variants as one reusable component set."],
+        "anti_use_cases": ["Do not use before every carousel variant is reviewed."],
+        "quality_notes": "Auto-grouped from related candidates on one source page.",
+        "retrieval_notes": "Group metadata is generated from child component names and source page context.",
+        "review": {
+            "mode": "auto-staged-group",
+            "status": "draft_final_review_required",
+            "review_surface": "catalog Draft",
+        },
+        "collection_children": children,
+        "artifact_status": artifact_status,
+        "artifact_log": artifact_log,
+    }
+    write_json(item_dir / "mapping.json", mapping)
+    evidence = [
+        f"# Evidence - {group_id}",
+        "",
+        f"- Source: `{source}`",
+        f"- Slide or page: `{slide_or_page}`",
+        f"- Variants: {len(children)}",
+        "",
+    ]
+    evidence.extend(f"- `{child['item_id']}` from `{child['item_dir']}`" for child in children)
+    (evidence_dir / "notes.md").write_text("\n".join(evidence) + "\n", encoding="utf-8")
+
+    for child in children:
+        child_mapping_path = Path(child["item_dir"]) / "mapping.json"
+        if child_mapping_path.exists():
+            child_mapping = load_json(child_mapping_path)
+            child_mapping["collection_parent_id"] = group_id
+            child_mapping["collection_parent_stable_id"] = stable_id
+            child_mapping["collection_parent_extraction_id"] = group_extraction_id
+            write_json(child_mapping_path, child_mapping)
+
+    history_data = load_json(history) if history.exists() else {"attempts": []}
+    history_data.setdefault("attempts", []).append({
+        "attempted_at": scaffold.now_iso(),
+        "extraction_id": group_extraction_id,
+        "item_id": group_id,
+        "stable_id": stable_id,
+        "status": "staging",
+        "source_sha256": source_hash,
+        "region_identity_sha256": region_hash,
+        "semantic_signature_sha256": mapping["fingerprints"]["semantic_signature_sha256"],
+    })
+    history_data["updated_at"] = scaffold.now_iso()
+    write_json(history, history_data)
+    return {
+        "item_id": group_id,
+        "stable_id": stable_id,
+        "extraction_id": group_extraction_id,
+        "item_dir": str(item_dir),
+        "status": "grouped",
+        "variant_count": len(children),
+        "artifact_status": artifact_status,
+    }
+
+
 def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> tuple[str, str]:
     source = resolve_repo_path(source_path)
     if source.suffix.lower() != ".pdf":
@@ -429,6 +731,7 @@ def stage_run(
         "source_path": source_path,
         "staged": 0,
         "skipped": 0,
+        "grouped": 0,
         "items": [],
     }
     existing_stable_ids = _existing_stable_ids(output_root)
@@ -438,6 +741,7 @@ def stage_run(
     except Exception:
         source_hash = None
     items_by_id = {item.get("item_id"): item for item in request_items}
+    staged_records: list[dict] = []
     for original_id, item in items_by_id.items():
         if not original_id:
             continue
@@ -483,6 +787,15 @@ def stage_run(
                 "item_dir": str(item_dir),
                 "status": "already_staged",
             })
+            existing_mapping = load_json(item_dir / "mapping.json")
+            if not existing_mapping.get("collection_parent_id"):
+                staged_records.append({
+                    "candidate_id": original_id,
+                    "item": item,
+                    "review": review,
+                    "item_dir": str(item_dir),
+                    "stable_id": existing_mapping["candidate_stable_id"],
+                })
             continue
         _scaffold_request(request_path, output_root, history, registry)
         _augment_mapping(item_dir, review, extraction_id, item)
@@ -504,6 +817,26 @@ def stage_run(
             "artifact_status": artifact_status,
             "artifact_log": artifact_log,
         })
+        staged_records.append({
+            "candidate_id": original_id,
+            "item": item,
+            "review": review,
+            "item_dir": str(item_dir),
+            "stable_id": stable_id,
+        })
+    grouped = _materialize_group_item(
+        extraction_id,
+        source_path,
+        staged_records,
+        output_root,
+        history,
+        registry,
+        used_ids,
+        build_artifacts,
+    )
+    if grouped:
+        summary["grouped"] = 1
+        summary["group_item"] = grouped
     if rebuild_catalog:
         ok, log = _run_script(["slide-system/scripts/build_component_catalog.py"])
         summary["catalog_rebuilt"] = ok

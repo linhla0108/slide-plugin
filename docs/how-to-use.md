@@ -199,6 +199,10 @@ a preview and information panel. Review the Draft, adjust the metadata if
 needed, then choose **Publish** or **Delete draft**. Nothing becomes reusable in
 new slide generation until you publish it from Draft.
 
+If several detected parts belong together, they may appear as one grouped Draft.
+Use the carousel to review the full component first, then each smaller variant
+inside it.
+
 ### What you'll get
 
 1. Tell Claude **which file** and **which part** you want (a slide, a range of
