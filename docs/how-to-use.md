@@ -204,6 +204,8 @@ Use the carousel to review the full component first, then each smaller variant
 inside it.
 For a strip of repeated cards, the same Draft can also show each individual card
 and each card's text-free version in the carousel.
+For a large diagram, the carousel can show each horizontal row as its own
+reviewable component pair.
 
 ### What you'll get
 

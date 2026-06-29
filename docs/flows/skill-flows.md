@@ -49,6 +49,9 @@ Input (PDF/PPTX/SVG + page + region)
         │        • parent Draft remains visible in Components → Draft
         │        • carousel = full component, text-free full component,
         │          each card with text, each card text-free
+        │      auto-stage large diagram/card Drafts add --layout-row-groups:
+        │        • carousel = full component, text-free full component,
+        │          each horizontal row with text, each row text-free
         │      manual materialize_groups() → create a real .gNN staging item per detected group
         │        • shape-class dedup: keep one representative per class (skip duplicate runs)
         │        • 10% coverage guard: if all groups together cover < 10% of canvas area,

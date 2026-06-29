@@ -815,7 +815,7 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
     source = resolve_repo_path(source_path)
     if source.suffix.lower() != ".pdf":
         return "skipped", "Core artifact build currently supports PDF sources."
-    decompose = _should_decompose_item(item_dir)
+    decompose_mode = _decompose_mode(item_dir)
     commands = [
         ["slide-system/scripts/convert_pdf_source.py", "--pdf", str(source), "--page", str(page), "--item-dir", str(item_dir)],
         ["slide-system/scripts/extract_editable_text_slots.py", "--item-dir", str(item_dir)],
@@ -825,12 +825,15 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         ["slide-system/scripts/apply_text_contract.py", "--batch", str(item_dir.parents[1])],
         ["slide-system/scripts/validate_text_slots.py", "--item-dir", str(item_dir)],
     ]
-    if decompose:
-        commands.append([
+    if decompose_mode:
+        classify_cmd = [
             "slide-system/scripts/classify_page_components.py",
             "--item-dir", str(item_dir),
             "--manifest-only",
-        ])
+        ]
+        if decompose_mode == "layout-row-groups":
+            classify_cmd.append("--layout-row-groups")
+        commands.append(classify_cmd)
     commands.append(["slide-system/scripts/generate_item_preview.py", "--item-dir", str(item_dir)])
     logs: list[str] = []
     for cmd in commands:
@@ -843,15 +846,24 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
     return "ready", "\n".join(logs)
 
 
-def _should_decompose_item(item_dir: Path) -> bool:
+def _decompose_mode(item_dir: Path) -> str | None:
     mapping_path = item_dir / "mapping.json"
     if not mapping_path.exists():
-        return False
+        return None
     try:
         mapping = load_json(mapping_path)
     except Exception:
-        return False
-    return mapping.get("component_type") == "strip"
+        return None
+    if mapping.get("component_type") == "strip":
+        return "cards"
+    region = (mapping.get("source") or {}).get("region") or {}
+    try:
+        area = float(region.get("width") or 0) * float(region.get("height") or 0)
+    except (TypeError, ValueError):
+        area = 0.0
+    if area >= 0.35 and mapping.get("component_type") in {"card", "visual"}:
+        return "layout-row-groups"
+    return None
 
 
 def stage_run(

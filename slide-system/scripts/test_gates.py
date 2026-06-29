@@ -555,6 +555,47 @@ def test_catalog_pairs_classifier_cards_with_text_free_variants() -> None:
         ], labels
 
 
+def test_catalog_pairs_single_layout_row_with_text_free_variant() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "goal-card"
+        components = item / "artifact" / "components"
+        evidence = item / "evidence"
+        components.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text("<svg id='full-text-free'/>", encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text("<svg id='full-source'/>", encoding="utf-8")
+        (components / "goal-card-row-01.svg").write_text("<svg id='row-free'/>", encoding="utf-8")
+        (components / "goal-card-row-01-source.svg").write_text("<svg id='row-source'/>", encoding="utf-8")
+        (components / "components-manifest.json").write_text(_json.dumps({
+            "groups": [{
+                "group_id": "goal-card-row-01",
+                "file": "components/goal-card-row-01.svg",
+                "shape_class": 1001,
+                "layout_group": "row",
+                "title": "Goal Key Result Task",
+                "member_count": 5,
+                "distinct_card_count": 1,
+                "cards": [{
+                    "card_id": "goal-card-row-01",
+                    "title": "Goal Key Result Task",
+                    "source_file": "components/goal-card-row-01-source.svg",
+                    "file": "components/goal-card-row-01.svg",
+                    "duplicate_count": 1,
+                }],
+            }],
+        }), encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels == [
+            "Full component",
+            "Full component (Text-free)",
+            "Goal Key Result Task",
+            "Goal Key Result Task (Text-free)",
+        ], labels
+
+
 def test_catalog_rel_uses_web_safe_posix_paths() -> None:
     import build_component_catalog as bcc
     path = bcc.PROJECT_ROOT / "slide-system" / "library" / "x" / "visual.svg"
@@ -592,6 +633,22 @@ def test_build_registry_live_is_clean() -> None:
 # --------------------------------------------------------------------------- #
 import classify_page_components as cpc
 import extract_editable_text_slots as eets
+
+
+def test_row_title_reads_heading_columns_left_to_right() -> None:
+    slots = [
+        {"text": "Kết quả muốn đạt được", "role": "subheading", "x": 0.10, "y": 0.60,
+         "w": 0.20, "h": 0.03, "size": 30},
+        {"text": "GOAL", "role": "heading", "x": 0.10, "y": 0.45,
+         "w": 0.08, "h": 0.04, "size": 53},
+        {"text": "KEY", "role": "heading", "x": 0.48, "y": 0.44,
+         "w": 0.05, "h": 0.03, "size": 53},
+        {"text": "RESULT", "role": "heading", "x": 0.45, "y": 0.47,
+         "w": 0.10, "h": 0.03, "size": 53},
+        {"text": "TASK", "role": "heading", "x": 0.82, "y": 0.45,
+         "w": 0.07, "h": 0.04, "size": 53},
+    ]
+    assert cpc._row_title(slots, "Row") == "GOAL KEY RESULT TASK"
 
 
 def test_split_runs_breaks_on_large_forward_gap() -> None:
@@ -1643,6 +1700,32 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert second["staged"] == 0, second
         assert second["skipped"] == 1, second
         assert second["items"][0]["status"] == "already_staged"
+
+
+def test_auto_stage_decomposes_large_cards_as_layout_rows() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "goal-card"
+        item.mkdir(parents=True)
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "card",
+            "source": {"region": {"width": 0.64, "height": 0.80}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) == "layout-row-groups"
+
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "card",
+            "source": {"region": {"width": 0.20, "height": 0.20}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) is None
+
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "strip",
+            "source": {"region": {"width": 0.20, "height": 0.20}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) == "cards"
 
 
 def test_auto_stage_semantic_ids_fallback_avoids_full_source_slug() -> None:

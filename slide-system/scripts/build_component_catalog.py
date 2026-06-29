@@ -68,7 +68,9 @@ def collect_images(item_dir: Path) -> list[dict]:
                 dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
                 if source_file and source_file.exists():
                     images.append({"label": f"{card_label}{dup_suffix}", "path": rel(source_file)})
-                if card_file and card_file.exists() and card_file != frag:
+                if card_file and card_file.exists() and (
+                    card_file != frag or (classifier_group and source_file and source_file.exists())
+                ):
                     dup = card.get("duplicate_count", 1)
                     dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
                     text_free_label = card_label

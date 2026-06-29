@@ -121,6 +121,11 @@ into real catalog Draft items:
   text-free strip, each detected card with text, and each card's text-free
   version. This gives non-technical reviewers one final Draft to approve/delete
   without scattering the sub-cards into separate Draft rows.
+- **Large diagram row decomposition:** broad card/diagram Drafts can contain
+  several reusable horizontal bands rather than repeated cards. Auto-stage runs
+  `classify_page_components.py --manifest-only --layout-row-groups` for these
+  large regions so the carousel shows the full diagram plus row-level
+  source/text-free pairs.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
 - **Validation** reuses the scaffold id/intent gates as the single source of

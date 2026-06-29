@@ -67,6 +67,11 @@ This workflow runs only through the manual component-extractor skill.
    matching text-free variant. It does not create separate `.gNN` Draft items
    for those sub-cards.
 
+   For large card/diagram regions, auto-stage adds `--layout-row-groups`.
+   This keeps the full Draft intact but prefers horizontal row components in
+   the carousel (for example: top metric circles, middle goal/key-result/task
+   row, bottom platform circles), each paired with its text-free variant.
+
    **Gutter split**: Before clustering, `_split_on_gutter` un-glues distinct
    components that share a small overlapping leaf. When a clean empty horizontal
    or vertical band wider than 16 px divides the large leaves, the group is
