@@ -1046,6 +1046,277 @@ def test_scaffold_rejects_docling_draft_without_polluting_analysis_dir() -> None
 
 
 # --------------------------------------------------------------------------- #
+# candidate_review — rename / metadata / approval (analysis-only)
+# --------------------------------------------------------------------------- #
+import candidate_review as crv
+
+_EXTRACTION_SCHEMA = SCRIPTS.parent / "schemas" / "extraction-request.schema.json"
+
+
+def _review_fixture(tmp: Path, candidate_id: str = "picture-p1-1") -> tuple[Path, str]:
+    """Create an extractions root with one analysis run carrying a placeholder
+    candidate. Returns (root, extraction_id)."""
+    extraction_id = "docling-demo"
+    adir = tmp / extraction_id / "analysis"
+    adir.mkdir(parents=True)
+    (adir / "candidate-extraction-request.json").write_text(json.dumps({
+        "extraction_id": extraction_id,
+        "source_path": "input/Demo.pdf",
+        "items": [{
+            "item_id": candidate_id,
+            "slide_or_page": 1,
+            "region": {"x": 0.5, "y": 0.0, "width": 0.4, "height": 0.9,
+                       "unit": "normalized"},
+            "object_ids": [],
+            "requested_type": "component",
+            "semantic_intent": ["picture candidate detected by Docling"],
+            "notes": "DRAFT candidate from Docling auto-detect.",
+            "replacement_for": None,
+        }],
+    }), encoding="utf-8")
+    (adir / "page-analysis.json").write_text('{"elements": []}', encoding="utf-8")
+    (adir / "docling-report.json").write_text('{"candidate_count": 1}', encoding="utf-8")
+    return tmp, extraction_id
+
+
+def _valid_metadata(item_id: str = "kickoff-2026-hero-visual") -> dict:
+    return {
+        "item_id": item_id,
+        "display_name": "Kick-off 2026 hero visual",
+        "requested_type": "component",
+        "component_type": "hero",
+        "layout_role": "full-bleed",
+        "visual_summary": "A tall orange hero illustration on the right column.",
+        "semantic_intent": ["kickoff hero", "goal setting cover"],
+        "content_structure": ["illustration"],
+        "tags": ["hero", "orange"],
+        "keywords": ["kickoff", "2026"],
+        "use_cases": ["cover slide"],
+        "anti_use_cases": ["dense data slide"],
+        "quality_notes": "",
+        "retrieval_notes": "",
+    }
+
+
+def test_candidate_placeholder_id_cannot_be_approved() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        # Save valid metadata but keep the Docling placeholder as item_id.
+        meta = _valid_metadata(item_id="picture-p1-1")
+        crv.save_review(eid, "picture-p1-1", meta, reviewer="t", root=root)
+        try:
+            crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        except crv.CandidateValidationError as exc:
+            assert any("placeholder" in e.lower() for e in exc.errors), exc.errors
+        else:
+            raise AssertionError("placeholder item_id must not be approvable")
+        # No approved artifact written.
+        assert not (root / eid / "analysis" / "approved").exists()
+
+
+def test_candidate_positional_id_rejected() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata("top-left"),
+                        reviewer="t", root=root)
+        errors = crv.validate_review(crv.get_candidates(eid, root=root)
+                                     ["candidates"][0]["review"])
+        assert any("positional" in e.lower() or "generic" in e.lower() for e in errors), errors
+
+
+def test_candidate_required_metadata_enforced() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        # rename only, leave all metadata empty
+        crv.save_review(eid, "picture-p1-1", {"item_id": "kickoff-hero"},
+                        reviewer="t", root=root)
+        try:
+            crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        except crv.CandidateValidationError as exc:
+            joined = " ".join(exc.errors).lower()
+            assert "display name" in joined and "visual summary" in joined, exc.errors
+        else:
+            raise AssertionError("missing required metadata must block approval")
+
+
+def test_candidate_approve_writes_schema_compatible_request() -> None:
+    schema = read_text_slots.load_json(_EXTRACTION_SCHEMA)
+    item_schema = schema["properties"]["items"]["items"]
+    allowed = set(item_schema["properties"])
+    required = set(item_schema["required"])
+    top_required = set(schema["required"])
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        result = crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file(), result
+        req = read_text_slots.load_json(approved_path)
+        assert top_required <= set(req), req
+        item = req["items"][0]
+        assert required <= set(item), item
+        assert set(item) <= allowed, f"extra keys not in schema: {set(item) - allowed}"
+        assert item["item_id"] == "kickoff-2026-hero-visual"
+        # The approved request must also pass the live scaffold gate.
+        scaffold_ex.validate_request_item(item)
+        # review status updated, reviewer recorded.
+        cand = crv.get_candidates(eid, root=root)["candidates"][0]
+        assert cand["review"]["review_status"] == "approved_for_extraction"
+        assert cand["review"]["reviewer"] == "t"
+
+
+def test_candidate_reject_produces_no_approved_request() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file()
+        # Rejecting must drop the stale approved artifact and flip status.
+        review = crv.reject(eid, "picture-p1-1", "wrong crop", reviewer="t", root=root)
+        assert review["review_status"] == "rejected"
+        assert not approved_path.exists(), "reject must remove the approved request"
+        # A reject with no reason is refused.
+        try:
+            crv.reject(eid, "picture-p1-1", "", root=root)
+        except crv.CandidateError:
+            pass
+        else:
+            raise AssertionError("reject without a reason must fail")
+
+
+def test_candidate_review_preserves_analysis_files() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        adir = root / eid / "analysis"
+        before = (adir / "candidate-extraction-request.json").read_text(encoding="utf-8")
+        page_before = (adir / "page-analysis.json").read_text(encoding="utf-8")
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        assert (adir / "candidate-extraction-request.json").read_text(encoding="utf-8") == before
+        assert (adir / "page-analysis.json").read_text(encoding="utf-8") == page_before
+        assert (adir / "docling-report.json").exists()
+
+
+def test_candidate_review_does_not_touch_registry_or_library() -> None:
+    # candidate_review must only write under the analysis dir; the real registry,
+    # compact registry, history, and library must be byte-identical afterwards.
+    repo = SCRIPTS.parents[1]
+    watched = [
+        repo / "slide-system" / "registries" / "visual-library.json",
+        repo / "slide-system" / "registries" / "visual-library-compact.json",
+        repo / "slide-system" / "registries" / "extraction-history.json",
+    ]
+    before = {p: p.read_bytes() for p in watched if p.exists()}
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        crv.reject(eid, "picture-p1-1", "redo", reviewer="t", root=root)
+    after = {p: p.read_bytes() for p in watched if p.exists()}
+    assert before == after, "candidate review must not mutate registry/history/library"
+
+
+def test_candidate_invalid_extraction_id_rejected() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        for bad in ("../escape", "..", "a/b", "/etc", "bad id"):
+            try:
+                crv.get_candidates(bad, root=root)
+            except crv.CandidateError:
+                pass
+            else:
+                raise AssertionError(f"invalid extraction id must be rejected: {bad!r}")
+
+
+def test_candidate_editing_resets_approval() -> None:
+    # Editing an approved candidate must revert it to pending and drop the stale
+    # approved request, so an approval never outlives the metadata it was built on.
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file()
+        crv.save_review(eid, "picture-p1-1", {"visual_summary": "edited"},
+                        reviewer="t", root=root)
+        assert not approved_path.exists(), "editing must drop the stale approved request"
+        cand = crv.get_candidates(eid, root=root)["candidates"][0]
+        assert cand["review"]["review_status"] == "pending"
+
+
+def test_candidate_multiple_approvals_scaffold_without_collision() -> None:
+    # Regression: every approved request from one run must get its own scaffold
+    # extraction id, else the second candidate fails with "already exists".
+    import scaffold_extraction as sx
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Demo.pdf"
+        source.write_bytes(b"%PDF-1.4 fake source")
+        eid = "docling-demo"
+        root = tmpp / "ext"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {"item_id": f"picture-p1-{i}", "slide_or_page": 1,
+                 "region": {"x": 0.1 * i, "y": 0.1, "width": 0.3, "height": 0.3,
+                            "unit": "normalized"},
+                 "object_ids": [], "requested_type": "component",
+                 "semantic_intent": ["pic"], "replacement_for": None}
+                for i in (1, 2)
+            ],
+        }), encoding="utf-8")
+
+        for i in (1, 2):
+            crv.save_review(eid, f"picture-p1-{i}", _valid_metadata(f"hero-{i}"),
+                            reviewer="t", root=root)
+            crv.approve(eid, f"picture-p1-{i}", reviewer="t", root=root)
+
+        req1 = read_text_slots.load_json(adir / "approved" / "hero-1.extraction-request.json")
+        req2 = read_text_slots.load_json(adir / "approved" / "hero-2.extraction-request.json")
+        assert req1["extraction_id"] == "docling-demo-hero-1", req1["extraction_id"]
+        assert req1["extraction_id"] != req2["extraction_id"]
+
+        out_root = tmpp / "out"
+        hist = tmpp / "history.json"; hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"; reg.write_text('{"items":[]}', encoding="utf-8")
+        for name in ("hero-1", "hero-2"):
+            req = adir / "approved" / f"{name}.extraction-request.json"
+            old_argv = sys.argv[:]
+            sys.argv = ["scaffold_extraction.py", "--request", str(req),
+                        "--output-root", str(out_root), "--history", str(hist),
+                        "--registry", str(reg)]
+            try:
+                assert sx.main() == 0, name
+            finally:
+                sys.argv = old_argv
+        # Both scaffolded into separate, non-colliding output dirs.
+        assert (out_root / "docling-demo-hero-1" / "items" / "hero-1").is_dir()
+        assert (out_root / "docling-demo-hero-2" / "items" / "hero-2").is_dir()
+
+
+def test_candidate_rename_removes_old_approved_artifact() -> None:
+    # Renaming an approved candidate must not orphan the old item_id's request.
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata("hero-a"), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        old = root / eid / "analysis" / "approved" / "hero-a.extraction-request.json"
+        assert old.is_file()
+        meta = _valid_metadata("hero-b")
+        crv.save_review(eid, "picture-p1-1", meta, reviewer="t", root=root)
+        assert not old.exists(), "old-name approved request must be removed on rename"
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        new = root / eid / "analysis" / "approved" / "hero-b.extraction-request.json"
+        assert new.is_file() and not old.exists()
+
+
+# --------------------------------------------------------------------------- #
 def _run_all() -> int:
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failed = 0

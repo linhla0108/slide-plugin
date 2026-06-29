@@ -195,6 +195,13 @@ pictures, and the like — and show them to you as suggestions. Nothing is saved
 from a suggestion until you pick the ones you want and approve them, exactly
 like above. It's just a faster way to find candidates in a big file.
 
+Each suggestion starts with a placeholder name. Before anything is saved you
+can **review and rename** it — give it a clear name (like
+"kickoff-2026-hero-visual"), add a short description and a few tags, then mark
+it **approved**. Reviewing and approving here does *not* save or publish the
+part yet; it just gets the suggestion ready. You still approve the final save
+exactly like above.
+
 ### What you'll get
 
 1. Tell Claude **which file** and **which part** you want (a slide, a range of

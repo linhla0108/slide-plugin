@@ -73,3 +73,51 @@ Run example:
 python3 slide-system/scripts/analyze_with_docling.py \
     --source <file.pdf|file.pptx> --extraction-id <id> --pages 1-3
 ```
+
+## Optional: candidate review / rename / metadata (analysis-only)
+
+Docling emits placeholder candidates (`<label>-p<page>-<n>`). Before they can be
+scaffolded a human must rename each to a semantic id and confirm it. The
+**candidate review layer** (`slide-system/scripts/candidate_review.py`, surfaced
+in the catalog's **Review** tab) makes this reviewable for a non-technical user
+and keeps the same analysis-only guarantees as the Docling pre-step:
+
+- **Lifecycle:** `pending` → (`approved_for_extraction` | `rejected`). Editing an
+  approved candidate reverts it to `pending` and drops the stale approved
+  artifact, so an approval can never outlive the metadata it was based on.
+- **Writes only under** `outputs/component-extractions/<id>/analysis/`:
+  - `candidate-reviews.json` — reviewer metadata keyed by the original
+    placeholder id (the contract is
+    `slide-system/schemas/candidate-review.schema.json`: `item_id`,
+    `display_name`, `requested_type`, `semantic_intent`, `component_type`,
+    `layout_role`, `visual_summary`, `content_structure`, `tags`, `keywords`,
+    `use_cases`, `anti_use_cases`, `region`, `review_status`, `reviewer`,
+    `reviewed_at`, `quality_notes`, `retrieval_notes`, …). This metadata is
+    deterministic and retrieval-ready (for future hybrid retrieval/RAG); this
+    task adds **no** vector search or embedding dependency.
+  - `approved/<item_id>.extraction-request.json` — written on approval; a
+    single-item, schema-compatible extraction request
+    (`extraction-request.schema.json`). It carries a per-candidate extraction id
+    (`<run-id>-<item-id>`) so approving several candidates from one run
+    scaffolds into separate output dirs instead of colliding on the run id. Feed
+    it to `scaffold_extraction.py`.
+- **Never** publishes, mutates the registry/`visual-library.json`, or scaffolds.
+  Approval is review-only; the scaffold and publish gates still run afterward.
+- **Validation** reuses the scaffold id/intent gates as the single source of
+  truth, so a Docling placeholder, a positional/generic id, or missing required
+  metadata is rejected with plain-language messages and produces no approved
+  request. Invalid extraction ids and path traversal are rejected.
+
+UI: serve `catalog_server.py`, open the **Review** tab. Scriptable equivalent:
+
+```bash
+python3 slide-system/scripts/candidate_review.py list
+python3 slide-system/scripts/candidate_review.py show <extraction-id>
+python3 slide-system/scripts/candidate_review.py approve <extraction-id> <candidate-id>
+python3 slide-system/scripts/candidate_review.py reject  <extraction-id> <candidate-id> --reason "…"
+```
+
+The catalog server exposes the same actions over HTTP:
+`GET /api/candidates`, `GET /api/candidates/<extraction_id>`,
+`PATCH /api/candidates/<extraction_id>/<candidate_id>`, and
+`POST /api/candidates/<extraction_id>/<candidate_id>/{approve,reject}`.

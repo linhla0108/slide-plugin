@@ -28,9 +28,15 @@ import sys
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import unquote
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
+
+# The candidate-review layer (analysis-only: rename/metadata/approve a Docling
+# candidate, never publish or mutate the registry) lives with the other scripts.
+sys.path.insert(0, str(SCRIPTS))
+import candidate_review as cr  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
@@ -270,14 +276,89 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def _read_body(self) -> dict | None:
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            return json.loads(self.rfile.read(length) or b"{}")
+        except (ValueError, json.JSONDecodeError):
+            return None
+
+    # ---- candidate-review routing (analysis-only; no publish/registry) ----
+
+    def _candidate_segments(self) -> list[str] | None:
+        """Path parts after /api/candidates, URL-decoded. None if not a match."""
+        path = self.path.split("?", 1)[0].rstrip("/")
+        if path == "/api/candidates":
+            return []
+        prefix = "/api/candidates/"
+        if path.startswith(prefix):
+            return [unquote(p) for p in path[len(prefix):].split("/") if p]
+        return None
+
+    def _serve_candidate(self, method: str, segments: list[str]) -> bool:
+        """Dispatch a candidate-review request. Returns True if it owned the
+        route (response already sent), False to fall through to other handling."""
+        try:
+            if method == "GET" and segments == []:
+                return self._sent(200, {"ok": True, "runs": cr.list_runs()})
+            if method == "GET" and len(segments) == 1:
+                return self._sent(200, {"ok": True, **cr.get_candidates(segments[0])})
+            if method == "PATCH" and len(segments) == 2:
+                body = self._read_body()
+                if body is None:
+                    return self._sent(400, {"ok": False, "error": "Invalid JSON body"})
+                review = cr.save_review(segments[0], segments[1],
+                                        body.get("metadata", body),
+                                        reviewer=body.get("reviewer"))
+                return self._sent(200, {"ok": True, "review": review})
+            if method == "POST" and len(segments) == 3 and segments[2] == "approve":
+                body = self._read_body() or {}
+                result = cr.approve(segments[0], segments[1],
+                                    reviewer=body.get("reviewer"))
+                return self._sent(200, {"ok": True, **result})
+            if method == "POST" and len(segments) == 3 and segments[2] == "reject":
+                body = self._read_body() or {}
+                review = cr.reject(segments[0], segments[1],
+                                   body.get("reason", ""),
+                                   reviewer=body.get("reviewer"))
+                return self._sent(200, {"ok": True, "review": review})
+        except cr.CandidateValidationError as exc:
+            return self._sent(422, {"ok": False, "error": "Validation failed",
+                                    "errors": exc.errors})
+        except cr.CandidateError as exc:
+            return self._sent(400, {"ok": False, "error": str(exc)})
+        except Exception as exc:  # never crash the server
+            return self._sent(500, {"ok": False, "error": str(exc)})
+        return self._sent(404, {"ok": False, "error": "Unknown candidate endpoint"})
+
+    def _sent(self, code: int, payload: dict) -> bool:
+        self._json(code, payload)
+        return True
+
+    def do_GET(self):
+        segments = self._candidate_segments()
+        if segments is not None:
+            self._serve_candidate("GET", segments)
+            return
+        super().do_GET()
+
+    def do_PATCH(self):
+        segments = self._candidate_segments()
+        if segments is not None:
+            self._serve_candidate("PATCH", segments)
+            return
+        self._json(404, {"ok": False, "error": "Unknown endpoint"})
+
     def do_POST(self):
+        segments = self._candidate_segments()
+        if segments is not None:
+            self._serve_candidate("POST", segments)
+            return
         route = ROUTES.get(self.path)
         if not route:
             return self._json(404, {"ok": False, "error": "Unknown endpoint"})
-        try:
-            length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length) or b"{}")
-        except (ValueError, json.JSONDecodeError):
+        body = self._read_body()
+        if body is None:
             return self._json(400, {"ok": False, "error": "Invalid JSON body"})
         item_id = str(body.get("id", ""))
         if not ID_PATTERN.match(item_id):
