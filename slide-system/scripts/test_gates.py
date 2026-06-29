@@ -480,6 +480,24 @@ def test_catalog_preview_skips_fullpage_reference_when_cropped() -> None:
         assert "Reference" in labels, "full-page items still surface reference.png"
 
 
+def test_catalog_surfaces_text_free_variant_for_cropped_draft() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "c"
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        (item / "artifact" / "text-slots.json").write_text(
+            _json.dumps({"slots": [], "source": {"region_crop": {"crop_window": [0, 0, 100, 50]}}}),
+            encoding="utf-8",
+        )
+        (item / "artifact" / "visual.svg").write_text("<svg id='text-free'/>", encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text("<svg id='with-text'/>", encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels[:2] == ["Source with text", "Text-free visual"], labels
+
+
 def test_catalog_rel_uses_web_safe_posix_paths() -> None:
     import build_component_catalog as bcc
     path = bcc.PROJECT_ROOT / "slide-system" / "library" / "x" / "visual.svg"
@@ -1570,7 +1588,7 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert second["items"][0]["status"] == "already_staged"
 
 
-def test_auto_stage_semantic_ids_include_docling_position() -> None:
+def test_auto_stage_semantic_ids_fallback_avoids_full_source_slug() -> None:
     import importlib
 
     asc = importlib.import_module("auto_stage_candidates")
@@ -1587,15 +1605,27 @@ def test_auto_stage_semantic_ids_include_docling_position() -> None:
         "semantic_intent": ["picture candidate detected by Docling"],
         "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
     }
+    goal_card = {
+        "item_id": "picture-p9-1",
+        "slide_or_page": 9,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.25, "height": 0.35,
+                   "unit": "normalized"},
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
 
-    id_a = asc.semantic_item_id(source, item_a, set())
-    id_b = asc.semantic_item_id(source, item_b, set())
+    used: set[str] = set()
+    id_a = asc.semantic_item_id(source, item_a, used)
+    id_b = asc.semantic_item_id(source, item_b, used)
+    goal_id = asc.semantic_item_id("input/Kick_off_GOAL_SETTING_2026-2.pdf", goal_card, set())
 
-    assert id_a == "sun-slide-p20-picture-1"
-    assert id_b == "sun-slide-p21-picture-1"
+    assert id_a == "source-icon-1"
+    assert id_b == "source-icon-1-2"
+    assert goal_id == "goal-setting-card-1"
     assert id_a != id_b
     assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_a)
     assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_b)
+    assert "kick-off" not in goal_id and "2026" not in goal_id
 
 
 def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
@@ -1629,6 +1659,35 @@ def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
     assert metadata["keywords"][:2] == ["translator", "card"]
 
 
+def test_auto_stage_semantic_ids_translate_vietnamese_hints_to_english() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    recruitment_item = {
+        "item_id": "picture-p5-1",
+        "slide_or_page": 5,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.3,
+                   "unit": "normalized"},
+        "region_text": "HIEU MUC TIEU TUYEN DUNG",
+    }
+    team_item = {
+        "item_id": "picture-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.5, "height": 0.3,
+                   "unit": "normalized"},
+        "region_text": "XAY DUNG DOI NGU",
+    }
+
+    item_id = asc.semantic_item_id("input/interview-workshop.pdf", recruitment_item, set())
+    team_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", team_item, set())
+
+    assert item_id == "recruitment-goal-card"
+    assert "tuyen" not in item_id and "dung" not in item_id
+    assert item_id.isascii()
+    assert team_id == "team-visual"
+    assert "xay" not in team_id and "ngu" not in team_id
+
+
 def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
     import importlib
 
@@ -1648,6 +1707,72 @@ def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
     )
 
     assert item_id == "translator-card-2"
+
+
+def test_auto_stage_clusters_same_page_by_role_and_layout_row() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+
+    def _record(item_id: str, x: float, y: float, width: float, height: float) -> dict:
+        return {
+            "candidate_id": item_id,
+            "item": {
+                "item_id": item_id,
+                "slide_or_page": 2,
+                "region": {"x": x, "y": y, "width": width, "height": height,
+                           "unit": "normalized"},
+            },
+            "review": {"item_id": item_id, "display_name": item_id.replace("-", " ").title()},
+            "item_dir": "unused",
+            "stable_id": f"sun.component.{item_id}",
+        }
+
+    records = [
+        _record("ai-coding-maturity-levels-strip", 0.05, 0.12, 0.8, 0.2),
+        _record("translator-card", 0.05, 0.5, 0.18, 0.25),
+        _record("coach-card", 0.28, 0.5, 0.18, 0.25),
+    ]
+
+    clusters = asc._cluster_staged_records(records)
+
+    assert len(clusters) == 1, clusters
+    assert [record["review"]["item_id"] for record in clusters[0]] == [
+        "translator-card",
+        "coach-card",
+    ]
+
+
+def test_auto_stage_group_records_keep_docling_candidate_order() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    records = []
+    for candidate_id, item_id in [
+        ("picture-p2-5", "coach-card"),
+        ("picture-p2-2", "translator-card"),
+        ("picture-p2-4", "driver-card"),
+        ("picture-p2-3", "strategist-card"),
+    ]:
+        records.append({
+            "candidate_id": candidate_id,
+            "item": {
+                "item_id": candidate_id,
+                "slide_or_page": 2,
+                "region": {"x": 0.5, "y": 0.5, "width": 0.15, "height": 0.2,
+                           "unit": "normalized"},
+            },
+            "review": {"item_id": item_id, "display_name": item_id.replace("-", " ").title()},
+            "item_dir": "unused",
+            "stable_id": f"sun.component.{item_id}",
+        })
+
+    assert [r["review"]["item_id"] for r in asc._sort_group_records(records)] == [
+        "translator-card",
+        "strategist-card",
+        "driver-card",
+        "coach-card",
+    ]
 
 
 def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
@@ -1748,10 +1873,13 @@ def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
         draft = next(item for item in catalog["items"]
                      if item["id"] == "sun.component.translator-coach-card-set")
         assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
-        assert [image["label"] for image in draft["images"]][:3] == [
+        assert [image["label"] for image in draft["images"]][:6] == [
             "Full component",
+            "Full component (Text-free)",
             "Translator Card",
+            "Translator Card (Text-free)",
             "Coach Card",
+            "Coach Card (Text-free)",
         ]
 
 

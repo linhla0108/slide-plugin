@@ -49,14 +49,28 @@ ENGLISH_HINTS = {
     "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
     "autocomplete", "benefits", "card", "check", "checklist", "coach",
     "coding", "collaborative", "contributors", "cover", "development",
-    "driver", "engagement", "factory", "faq", "framework", "goal",
+    "do", "dont", "driver", "engagement", "factory", "faq", "framework", "goal",
     "highlight", "how", "improvement", "interview", "leadership", "level",
     "maturity", "metric", "networks", "next", "overview", "performance",
-    "process", "quote", "recognition", "revenue", "review", "rewards",
-    "salary", "section", "setting", "size", "software", "statistics",
-    "strategist", "structure", "summary", "team", "thanks", "timeline",
-    "translator", "workshop",
+    "preparation", "process", "quote", "recognition", "recruitment", "revenue",
+    "review", "rewards", "role", "salary", "section", "setting", "size",
+    "software", "statistics", "strategist", "structure", "summary", "team",
+    "thanks", "timeline", "translator", "workshop",
 }
+LOCALIZED_HINTS = [
+    ("tuyen dung", ["recruitment"]),
+    ("phong van", ["interview"]),
+    ("muc tieu", ["goal"]),
+    ("chuan bi", ["preparation"]),
+    ("cau truc", ["structure"]),
+    ("dao sau", ["deep-dive"]),
+    ("doi ngu", ["team"]),
+    ("do va don", ["do", "dont"]),
+    ("do va dont", ["do", "dont"]),
+    ("quan ly", ["management"]),
+    ("xay dung", ["team"]),
+    ("chuyen muc tieu", ["translator"]),
+]
 LABEL_COMPONENT_TYPE = {
     "picture": "visual",
     "figure": "visual",
@@ -108,6 +122,23 @@ def _is_ascii(value: str) -> bool:
     return True
 
 
+def _ascii_words(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", str(value or ""))
+    ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"[^a-z0-9]+", " ", ascii_value.lower()).strip()
+
+
+def _localized_hint_tokens(value: str) -> list[str]:
+    text = _ascii_words(value)
+    out: list[str] = []
+    for phrase, tokens in LOCALIZED_HINTS:
+        if phrase in text:
+            for token in tokens:
+                if token not in out:
+                    out.append(token)
+    return out
+
+
 def _english_lines(value: str) -> list[str]:
     lines: list[str] = []
     for line in _clean_lines(value):
@@ -128,8 +159,12 @@ def _english_lines(value: str) -> list[str]:
 
 def _source_topic_tokens(source_path: str, limit: int = 4) -> list[str]:
     tokens = _tokens(Path(source_path).stem, limit=8)
-    generic = {"guidline", "guideline", "presentation", "sun", "suner", "slide"}
+    generic = {
+        "guidline", "guideline", "presentation", "sun", "suner", "sunriser",
+        "studio", "slide", "kick", "off", "pdf",
+    }
     topic = [token for token in tokens if token not in generic]
+    topic = [token for token in topic if not token.isdigit()]
     return (topic or ["source"])[:limit]
 
 
@@ -155,23 +190,28 @@ def _role_suffix(item: dict, label: str) -> str:
 def _semantic_core(item: dict, suffix: str) -> list[str]:
     text = str(item.get("region_text") or "")
     lines = _english_lines(text)
-    upper_labels = [
-        line
-        for line in lines
-        if len(line) <= 28
-        and re.search(r"[A-Za-z]", line)
-        and line.upper() == line
-        and line.lower() not in STOPWORDS
-    ]
-    if upper_labels:
-        return _tokens(upper_labels[-1], limit=4)
+    for line in reversed(lines):
+        label_tokens = _tokens(line, limit=4)
+        if (
+            label_tokens
+            and any(token in ENGLISH_HINTS for token in label_tokens)
+            and len(line) <= 28
+            and re.search(r"[A-Za-z]", line)
+            and line.upper() == line
+            and line.lower() not in STOPWORDS
+        ):
+            return label_tokens
+    localized = _localized_hint_tokens(text)
+    if localized:
+        return localized[:4]
     if re.search(r"\bAI\s+Coding\b", text, re.I) and len(re.findall(r"\bLevel\s+\d", text, re.I)) >= 2:
         return ["ai", "coding", "maturity", "levels"]
     if re.search(r"\bRevenue\b", text, re.I):
         return ["revenue", "metric"]
     if re.search(r"\bTeam\s+Size\b", text, re.I):
         return ["team", "size", "metric"]
-    return _tokens(" ".join(lines[:4]), limit=5) or [suffix]
+    english_tokens = [token for token in _tokens(" ".join(lines[:4]), limit=8) if token in ENGLISH_HINTS]
+    return english_tokens[:5] or [suffix]
 
 
 def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
@@ -193,9 +233,9 @@ def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
                 ordinal = docling_match.group("n")
                 base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
         else:
-            page = slug(str(item.get("slide_or_page") or docling_match.group("page")))
+            suffix = _role_suffix(item, label)
             ordinal = docling_match.group("n")
-            base = f"{source_slug}-p{page}-{label}-{ordinal}"
+            base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
     else:
         intent = " ".join(str(v) for v in item.get("semantic_intent", []))
         notes = item.get("notes", "")
@@ -269,9 +309,13 @@ def group_item_id(source_path: str, staged_records: list[dict], used: set[str]) 
     has_cards = sum(item_id.endswith("-card") for item_id in child_ids) >= 2
     has_ai_levels = any("ai-coding-maturity-levels" in item_id for item_id in child_ids)
     if has_cards and has_ai_levels:
-        base = "ai-coding-maturity-role-card-set"
+        base = "ai-coding-maturity-level-card-set"
+    elif has_cards and "interview" in child_tokens:
+        base = "interview-card-set"
     elif has_cards:
-        role_tokens = [token for token in child_tokens if token in ENGLISH_HINTS][:4]
+        known_role_order = ["translator", "strategist", "driver", "coach"]
+        ordered_known_roles = [token for token in known_role_order if token in child_tokens]
+        role_tokens = ordered_known_roles or [token for token in child_tokens if token in ENGLISH_HINTS][:4]
         base = "-".join([*(role_tokens or ["role"]), "card", "set"])
     else:
         base_tokens = [token for token in child_tokens if token in ENGLISH_HINTS][:4]
@@ -478,6 +522,81 @@ def _union_region(records: list[dict]) -> dict:
     }
 
 
+def _record_role(record: dict) -> str:
+    item_id = str((record.get("review") or {}).get("item_id") or "")
+    for suffix in ("card", "strip", "icon", "table", "chart", "form", "visual"):
+        if item_id == suffix or item_id.endswith(f"-{suffix}"):
+            return suffix
+    original = str((record.get("item") or {}).get("item_id") or "")
+    label = original.split("-", 1)[0] or "visual"
+    return _role_suffix(record.get("item") or {}, label)
+
+
+def _region_metric(record: dict, key: str, default: float = 0.0) -> float:
+    try:
+        return float(((record.get("item") or {}).get("region") or {}).get(key, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def _record_center_y(record: dict) -> float:
+    return _region_metric(record, "y") + (_region_metric(record, "height") / 2)
+
+
+def _candidate_ordinal(record: dict) -> int:
+    candidate_id = str(record.get("candidate_id") or (record.get("item") or {}).get("item_id") or "")
+    match = re.match(r"^(?:picture|figure|table|chart|form)-p[a-z0-9]+-(\d+)$", candidate_id)
+    if match:
+        return int(match.group(1))
+    return 1_000_000
+
+
+def _sort_group_records(records: list[dict]) -> list[dict]:
+    return sorted(records, key=lambda r: (
+        _candidate_ordinal(r),
+        _record_center_y(r),
+        _region_metric(r, "x"),
+    ))
+
+
+def _split_layout_rows(records: list[dict]) -> list[list[dict]]:
+    if len(records) < 2:
+        return [records]
+    rows: list[list[dict]] = []
+    for record in sorted(records, key=lambda r: (_record_center_y(r), _region_metric(r, "x"))):
+        center_y = _record_center_y(record)
+        height = max(_region_metric(record, "height"), 0.001)
+        if not rows:
+            rows.append([record])
+            continue
+        current = rows[-1]
+        current_centers = [_record_center_y(r) for r in current]
+        current_heights = [max(_region_metric(r, "height"), 0.001) for r in current]
+        row_center = sum(current_centers) / len(current_centers)
+        threshold = max(0.12, min(0.22, max([height, *current_heights]) * 0.75))
+        if abs(center_y - row_center) > threshold:
+            rows.append([record])
+        else:
+            current.append(record)
+    return rows
+
+
+def _cluster_staged_records(staged_records: list[dict]) -> list[list[dict]]:
+    """Return only related clusters that should become carousel Draft parents."""
+    buckets: dict[tuple[str, str], list[dict]] = {}
+    for record in staged_records:
+        page = str((record.get("item") or {}).get("slide_or_page") or "")
+        role = _record_role(record)
+        buckets.setdefault((page, role), []).append(record)
+
+    clusters: list[list[dict]] = []
+    for (_page, _role), records in buckets.items():
+        for row in _split_layout_rows(records):
+            if len(row) >= 2:
+                clusters.append(row)
+    return clusters
+
+
 def _materialize_group_item(
     extraction_id: str,
     source_path: str,
@@ -490,6 +609,7 @@ def _materialize_group_item(
 ) -> dict | None:
     if len(staged_records) < 2:
         return None
+    staged_records = _sort_group_records(staged_records)
     group_id = group_item_id(source_path, staged_records, used_ids)
     group_extraction_id = f"{extraction_id}-{group_id}"
     group_dir = output_root / group_extraction_id
@@ -557,12 +677,23 @@ def _materialize_group_item(
         shutil.copy2(preview, artifact_dir / variant_file)
         if first_preview is None and suffix in {".png", ".jpg", ".jpeg", ".webp"}:
             first_preview = preview
+        cards: list[dict] = []
+        text_free = child_item_dir / "artifact" / "visual.svg"
+        if text_free.exists():
+            text_free_file = f"{child_id}-text-free.svg"
+            shutil.copy2(text_free, components_dir / text_free_file)
+            shutil.copy2(text_free, artifact_dir / text_free_file)
+            cards.append({
+                "title": f"{child_name} (Text-free)",
+                "file": f"components/{text_free_file}",
+                "member_count": 1,
+            })
         manifest_groups.append({
             "group_id": child_id,
             "title": child_name,
             "file": f"components/{variant_file}",
             "member_count": 1,
-            "cards": [],
+            "cards": cards,
         })
         variants.append(child_name)
         children.append({
@@ -824,19 +955,24 @@ def stage_run(
             "item_dir": str(item_dir),
             "stable_id": stable_id,
         })
-    grouped = _materialize_group_item(
-        extraction_id,
-        source_path,
-        staged_records,
-        output_root,
-        history,
-        registry,
-        used_ids,
-        build_artifacts,
-    )
-    if grouped:
-        summary["grouped"] = 1
-        summary["group_item"] = grouped
+    group_items: list[dict] = []
+    for cluster in _cluster_staged_records(staged_records):
+        grouped = _materialize_group_item(
+            extraction_id,
+            source_path,
+            cluster,
+            output_root,
+            history,
+            registry,
+            used_ids,
+            build_artifacts,
+        )
+        if grouped:
+            group_items.append(grouped)
+    if group_items:
+        summary["grouped"] = len(group_items)
+        summary["group_items"] = group_items
+        summary["group_item"] = group_items[0]
     if rebuild_catalog:
         ok, log = _run_script(["slide-system/scripts/build_component_catalog.py"])
         summary["catalog_rebuilt"] = ok

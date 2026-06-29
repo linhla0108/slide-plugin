@@ -45,6 +45,9 @@ def collect_images(item_dir: Path) -> list[dict]:
             thumb = item_dir / "preview" / "thumbnail.png"
             if thumb.exists():
                 images.append({"label": "Full component", "path": rel(thumb)})
+        visual = artifact_dir / "visual.svg"
+        if visual.exists():
+            images.append({"label": "Full component (Text-free)", "path": rel(visual)})
         groups = manifest.get("groups") or []
         for rec in groups:
             frag = artifact_dir / rec.get("file", "")
@@ -84,6 +87,10 @@ def collect_images(item_dir: Path) -> list[dict]:
     src_text = evidence_dir / "source-with-text.svg"
     if src_text.exists():
         images.append({"label": "Source with text", "path": rel(src_text)})
+
+    visual = artifact_dir / "visual.svg"
+    if visual.exists():
+        images.append({"label": "Text-free visual", "path": rel(visual)})
 
     ref = evidence_dir / "reference.png"
     if ref.exists() and not is_cropped:
