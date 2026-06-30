@@ -114,6 +114,12 @@ with a message; just proceed with the normal manual flow. See
 auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
 only for scanned PDFs. Tiny decorative candidates are filtered by default
 (`--min-area 0.015`) and can be relaxed for icon-heavy pages.
+For PDFs, analysis runs Docling in page-scoped workers with a timeout so a
+single bad page cannot crash the whole run; pages with no usable Docling
+candidate can still receive conservative PyMuPDF text/vector row candidates for
+Draft review. If a PyMuPDF row only wraps an existing Docling visual with
+title/context text, it is not staged as a duplicate Draft; that text is attached
+to the existing candidate's retrieval intent instead.
 
 ### Automated candidate staging (before Draft review)
 
@@ -123,7 +129,12 @@ review. It is still conservative:
 - It never publishes and never mutates `visual-library.json`.
 - It rejects placeholder/generic ids through the same scaffold gate, then writes
   semantic item ids automatically from extracted PDF region text and layout
-  role; source name/page/Docling label are fallback context only.
+  role; source name/page/Docling label are fallback context only. IDs must stay
+  English and are inferred from visible region cues such as headings, uppercase
+  labels, repeated `Level N` structures, and generic localized concepts — not
+  from slide filename slugs. If the crop text is weak but the analyzer attached
+  title/context intent, auto-stage uses that intent before falling back to the
+  source filename.
 - It records auto-generated retrieval metadata in `mapping.json` so the Draft
   Info panel and later publish record have useful intent/tags/keywords.
 - For PDF sources, artifact scripts are run with the Python interpreter that can
@@ -141,6 +152,10 @@ review. It is still conservative:
   detected region is broad enough to contain multiple component bands. The
   carousel shows the full diagram first, then each row with text and each row's
   text-free variant.
+- Icon reference sheets stay as one Draft for final review, then
+  `split_icon_sheet.py` writes `artifact/icons/icons-manifest.json` so the
+  catalog shows a searchable icon grid inside that Draft instead of only the
+  frequently-used icon subset.
 - It skips candidates already marked `rejected` in `candidate-reviews.json`.
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.

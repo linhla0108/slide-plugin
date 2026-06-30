@@ -193,6 +193,10 @@ for example a chart, a title block, a background, or a whole slide.
 Claude can **auto-detect the reusable parts** in a file — charts, tables,
 pictures, and the like — then automatically prepare them as **Draft** items.
 You do not need to rename raw candidates or approve an intermediate queue.
+For PDFs, the detection runs page by page so one difficult page does not stop
+the whole file.
+When a slide title or heading only explains a visual, Claude can keep that text
+as search metadata without making a second duplicate Draft.
 
 After auto-detect finishes, open **Components → Draft**. Each detected part has
 a preview and information panel. Review the Draft, adjust the metadata if

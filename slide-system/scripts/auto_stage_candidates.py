@@ -38,24 +38,25 @@ import scaffold_extraction as scaffold
 SCRIPT_DIR = Path(__file__).resolve().parent
 STOPWORDS = {
     "add", "approval", "approve", "auto",
-    "a", "an", "and", "by", "candidate", "detected", "docling", "draft",
+    "a", "adipiscing", "amet", "an", "and", "by", "candidate", "consectetur",
+    "detected", "docling", "dolor", "draft", "elit", "ipsum", "lorem",
     "detect", "descriptor", "for", "from", "in", "item", "of", "on", "or",
-    "publish", "region", "rename", "required", "semantic", "the", "this",
-    "to", "with",
+    "publish", "region", "rename", "required", "sed", "semantic", "slide",
+    "the", "this", "to", "with",
     "cac", "cho", "cua", "cung", "duoc", "muc", "nhung", "noi", "va",
     "van",
 }
 ENGLISH_HINTS = {
     "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
     "autocomplete", "benefits", "card", "check", "checklist", "coach",
-    "coding", "collaborative", "contributors", "cover", "development",
+    "coding", "collaborative", "content", "contributors", "cover", "development",
     "do", "dont", "driver", "engagement", "factory", "faq", "framework", "goal",
     "highlight", "how", "improvement", "interview", "leadership", "level",
-    "maturity", "metric", "networks", "next", "overview", "performance",
+    "management", "maturity", "metric", "networks", "next", "overview", "performance",
     "preparation", "process", "quote", "recognition", "recruitment", "revenue",
-    "review", "rewards", "role", "salary", "section", "setting", "size",
-    "software", "statistics", "strategist", "structure", "summary", "team",
-    "thanks", "timeline", "translator", "workshop",
+    "review", "rewards", "role", "salary", "section", "setting",
+    "size", "software", "statistics", "strategist", "structure", "summary",
+    "team", "thanks", "timeline", "translator", "workshop",
 }
 LOCALIZED_HINTS = [
     ("tuyen dung", ["recruitment"]),
@@ -68,8 +69,6 @@ LOCALIZED_HINTS = [
     ("do va don", ["do", "dont"]),
     ("do va dont", ["do", "dont"]),
     ("quan ly", ["management"]),
-    ("xay dung", ["team"]),
-    ("chuyen muc tieu", ["translator"]),
 ]
 LABEL_COMPONENT_TYPE = {
     "picture": "visual",
@@ -157,6 +156,77 @@ def _english_lines(value: str) -> list[str]:
     return lines
 
 
+def _id_tokens_from_line(line: str, limit: int = 4) -> list[str]:
+    tokens = _tokens(line, limit=limit)
+    if _is_ascii(line):
+        return tokens
+    # Mixed Vietnamese/English source lines often contain one useful English
+    # domain word ("goal", "team") surrounded by Vietnamese prose. Keep only
+    # known English vocabulary for ids so accent-stripped Vietnamese fragments
+    # never become stable component names.
+    return [token for token in tokens if token in ENGLISH_HINTS]
+
+
+def _level_series_tokens(lines: list[str]) -> list[str]:
+    level_count = sum(1 for line in lines if re.search(r"\blevel\s+\d+\b", line, re.I))
+    if level_count < 2:
+        return []
+    tokens: list[str] = []
+    for line in lines:
+        if re.search(r"\blevel\s+\d+\b", line, re.I):
+            continue
+        for token in _id_tokens_from_line(line, limit=5):
+            if token in {"level", "levels"}:
+                continue
+            if token not in tokens:
+                tokens.append(token)
+        if len(tokens) >= 3:
+            break
+    if tokens:
+        tokens.append("levels")
+    return tokens
+
+
+def _has_metric_signal(text: str) -> bool:
+    return bool(re.search(r"[%$€£¥]|[+-]?\d+(?:[.,]\d+)?\s*(?:%|x)?", text, re.I))
+
+
+def _metric_series_tokens(lines: list[str]) -> list[str]:
+    text = " ".join(lines)
+    if not _has_metric_signal(text):
+        return []
+    tokens: list[str] = []
+    for line in lines:
+        for token in _id_tokens_from_line(line, limit=5):
+            if token.isdigit():
+                continue
+            if token not in tokens:
+                tokens.append(token)
+        if len(tokens) >= 3:
+            break
+    if not tokens:
+        return []
+    if "metric" not in tokens:
+        tokens.append("metric")
+    return tokens[:4]
+
+
+def _icon_reference_signal(item: dict) -> bool:
+    text = "\n".join([
+        str(item.get("region_text") or ""),
+        " ".join(str(v) for v in item.get("semantic_intent", [])),
+        str(item.get("page_text") or ""),
+    ])
+    if not re.search(r"\bicons?\b", text, re.I):
+        return False
+    region = item.get("region", {})
+    try:
+        area = float(region.get("width", 0)) * float(region.get("height", 0))
+    except (TypeError, ValueError):
+        area = 0.0
+    return area >= 0.02
+
+
 def _source_topic_tokens(source_path: str, limit: int = 4) -> list[str]:
     tokens = _tokens(Path(source_path).stem, limit=8)
     generic = {
@@ -180,6 +250,9 @@ def _role_suffix(item: dict, label: str) -> str:
         area = 0.0
     if area < 0.008:
         return "icon"
+    if ratio >= 1.8 and area >= 0.04 and _has_metric_signal(
+        str(item.get("region_text") or "")):
+        return "strip"
     if ratio >= 2.4:
         return "strip"
     if ratio <= 1.35:
@@ -189,29 +262,70 @@ def _role_suffix(item: dict, label: str) -> str:
 
 def _semantic_core(item: dict, suffix: str) -> list[str]:
     text = str(item.get("region_text") or "")
+    raw_lines = _clean_lines(text)
     lines = _english_lines(text)
+    localized = _localized_hint_tokens(text)
+    has_english_signal = any(
+        _is_ascii(line)
+        and any(token in ENGLISH_HINTS and token != "level"
+                for token in _tokens(line, limit=8))
+        for line in lines
+    )
+    if localized and not has_english_signal:
+        return localized[:4]
+    level_series = _level_series_tokens(raw_lines)
+    if level_series:
+        return level_series[:4]
+    metric_series = _metric_series_tokens(raw_lines)
+    if metric_series:
+        return metric_series[:4]
+    uppercase_labels = [
+        line for line in lines
+        if _is_ascii(line)
+        and line.upper() == line
+        and len(line) <= 36
+        and re.search(r"[A-Za-z]", line)
+    ]
+    for line in reversed(uppercase_labels):
+        label_tokens = _id_tokens_from_line(line, limit=4)
+        if label_tokens and not all(token == "level" for token in label_tokens):
+            return label_tokens
     for line in reversed(lines):
-        label_tokens = _tokens(line, limit=4)
+        label_tokens = _id_tokens_from_line(line, limit=4)
+        if label_tokens and all(token == "level" for token in label_tokens):
+            continue
         if (
             label_tokens
-            and any(token in ENGLISH_HINTS for token in label_tokens)
-            and len(line) <= 28
+            and len(line) <= 36
             and re.search(r"[A-Za-z]", line)
-            and line.upper() == line
+            and _is_ascii(line)
+            and (line.upper() == line or any(token in ENGLISH_HINTS for token in label_tokens))
             and line.lower() not in STOPWORDS
         ):
             return label_tokens
-    localized = _localized_hint_tokens(text)
-    if localized:
-        return localized[:4]
-    if re.search(r"\bAI\s+Coding\b", text, re.I) and len(re.findall(r"\bLevel\s+\d", text, re.I)) >= 2:
-        return ["ai", "coding", "maturity", "levels"]
-    if re.search(r"\bRevenue\b", text, re.I):
-        return ["revenue", "metric"]
-    if re.search(r"\bTeam\s+Size\b", text, re.I):
-        return ["team", "size", "metric"]
-    english_tokens = [token for token in _tokens(" ".join(lines[:4]), limit=8) if token in ENGLISH_HINTS]
+    english_tokens: list[str] = []
+    for line in lines[:4]:
+        for token in _id_tokens_from_line(line, limit=5):
+            if token not in english_tokens:
+                english_tokens.append(token)
+        if len(english_tokens) >= 5:
+            break
     return english_tokens[:5] or [suffix]
+
+
+def _semantic_intent_core(item: dict, suffix: str) -> list[str]:
+    intent = " ".join(str(value) for value in item.get("semantic_intent", []))
+    tokens: list[str] = []
+    for token in _tokens(intent, limit=20):
+        if token not in ENGLISH_HINTS:
+            continue
+        if token in {suffix, "visual", "card", "strip", "table", "chart", "icon"}:
+            continue
+        if token not in tokens:
+            tokens.append(token)
+        if len(tokens) >= 4:
+            break
+    return tokens
 
 
 def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
@@ -224,18 +338,35 @@ def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
         original_id,
     )
     if docling_match:
+        if _icon_reference_signal(item):
+            base = "icon-reference-sheet"
+            candidate = base
+            n = 2
+            while candidate in used:
+                candidate = f"{base}-{n}"
+                n += 1
+            used.add(candidate)
+            return candidate
         if str(item.get("region_text") or "").strip():
             suffix = _role_suffix(item, label)
             core = _semantic_core(item, suffix)
             if core and core != [suffix]:
                 base = slug("-".join([*core, suffix]))
             else:
-                ordinal = docling_match.group("n")
-                base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
+                intent_core = _semantic_intent_core(item, suffix)
+                if intent_core:
+                    base = slug("-".join([*intent_core, suffix]))
+                else:
+                    ordinal = docling_match.group("n")
+                    base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
         else:
             suffix = _role_suffix(item, label)
-            ordinal = docling_match.group("n")
-            base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
+            core = _semantic_intent_core(item, suffix)
+            if core:
+                base = slug("-".join([*core, suffix]))
+            else:
+                ordinal = docling_match.group("n")
+                base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
     else:
         intent = " ".join(str(v) for v in item.get("semantic_intent", []))
         notes = item.get("notes", "")
@@ -262,6 +393,9 @@ def metadata_for(source_path: str, item: dict, item_id: str) -> dict:
     label = str(item.get("item_id", "")).split("-", 1)[0] or "visual"
     role_suffix = _role_suffix(item, label)
     component_type = role_suffix if role_suffix != "visual" else LABEL_COMPONENT_TYPE.get(label, label)
+    if _icon_reference_signal(item):
+        component_type = "icon"
+        role_suffix = "icon"
     region_text = str(item.get("region_text") or "").strip()
     english_region_text = "\n".join(_english_lines(region_text))
     intent_values = [
@@ -270,19 +404,33 @@ def metadata_for(source_path: str, item: dict, item_id: str) -> dict:
         if str(v).strip()
     ]
     if region_text:
-        intent_values = [item_id.replace("-", " ")]
+        intent_values = [item_id.replace("-", " "), *intent_values]
     elif not intent_values:
         intent_values = [f"{component_type} from {Path(source_path).stem}"]
-    keywords = _tokens(item_id, english_region_text, " ".join(intent_values), label, limit=8)
+    intent_values = list(dict.fromkeys(intent_values))[:4]
+    id_keywords = _tokens(item_id, label, limit=8)
+    keywords = list(id_keywords)
+    for token in _tokens(region_text, " ".join(intent_values), label, limit=16):
+        if token in keywords:
+            continue
+        if token in ENGLISH_HINTS or token in id_keywords:
+            keywords.append(token)
+        if len(keywords) >= 8:
+            break
     tags = [component_type, label, "docling", "auto-staged"]
+    if component_type == "icon":
+        tags.append("icon-set")
     display = item_id.replace("-", " ").title()
-    text_note = f" English cue: {_clean_lines(english_region_text)[:3]}." if english_region_text else ""
+    text_note = f" Region cue: {_clean_lines(region_text)[:3]}." if region_text else ""
     return {
         "item_id": item_id,
         "display_name": display,
         "requested_type": item.get("requested_type", "component"),
         "component_type": component_type,
-        "layout_role": f"{component_type} extracted from source region",
+        "layout_role": (
+            "icon reference sheet" if component_type == "icon"
+            else f"{component_type} extracted from source region"
+        ),
         "visual_summary": (
             f"Auto-staged {component_type} from page {item.get('slide_or_page')} "
             f"of {Path(source_path).name}.{text_note}"
@@ -307,18 +455,21 @@ def group_item_id(source_path: str, staged_records: list[dict], used: set[str]) 
     child_ids = [str(record["review"]["item_id"]) for record in staged_records]
     child_tokens = [token for item_id in child_ids for token in _component_tokens(item_id)]
     has_cards = sum(item_id.endswith("-card") for item_id in child_ids) >= 2
-    has_ai_levels = any("ai-coding-maturity-levels" in item_id for item_id in child_ids)
-    if has_cards and has_ai_levels:
-        base = "ai-coding-maturity-level-card-set"
-    elif has_cards and "interview" in child_tokens:
-        base = "interview-card-set"
-    elif has_cards:
-        known_role_order = ["translator", "strategist", "driver", "coach"]
-        ordered_known_roles = [token for token in known_role_order if token in child_tokens]
-        role_tokens = ordered_known_roles or [token for token in child_tokens if token in ENGLISH_HINTS][:4]
+    if has_cards:
+        role_tokens = []
+        for token in child_tokens:
+            if token in ENGLISH_HINTS and token not in role_tokens:
+                role_tokens.append(token)
+            if len(role_tokens) >= 4:
+                break
         base = "-".join([*(role_tokens or ["role"]), "card", "set"])
     else:
-        base_tokens = [token for token in child_tokens if token in ENGLISH_HINTS][:4]
+        base_tokens = []
+        for token in child_tokens:
+            if token in ENGLISH_HINTS and token not in base_tokens:
+                base_tokens.append(token)
+            if len(base_tokens) >= 4:
+                break
         if not base_tokens:
             base_tokens = _source_topic_tokens(source_path, limit=3)
         base = "-".join([*base_tokens, "component", "set"])
@@ -385,6 +536,49 @@ for item in payload.get("items", []):
         out[str(item.get("item_id"))] = "\n".join(lines)
     except Exception:
         out[str(item.get("item_id"))] = ""
+print(json.dumps(out, ensure_ascii=True))
+"""
+    try:
+        proc = subprocess.run(
+            [_tool_python(), "-c", code],
+            cwd=str(REPO_ROOT),
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return {}
+    if proc.returncode != 0:
+        return {}
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return {}
+
+
+def _extract_page_texts(source_path: str, items: list[dict]) -> dict[str, str]:
+    source = resolve_repo_path(source_path)
+    if source.suffix.lower() != ".pdf":
+        return {}
+    pages = sorted({str(item.get("slide_or_page", 1)) for item in items})
+    payload = {"source": str(source), "pages": pages}
+    code = r"""
+import json
+import sys
+import fitz
+
+payload = json.loads(sys.stdin.read())
+doc = fitz.open(payload["source"])
+out = {}
+for page_value in payload.get("pages", []):
+    try:
+        page_no = int(page_value) - 1
+        text = doc[page_no].get_text("text")
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        out[str(page_value)] = "\n".join(lines[:12])
+    except Exception:
+        out[str(page_value)] = ""
 print(json.dumps(out, ensure_ascii=True))
 """
     try:
@@ -479,6 +673,8 @@ def _augment_mapping(item_dir: Path, review: dict, run_id: str,
                      original_item: dict) -> None:
     mapping_path = item_dir / "mapping.json"
     mapping = load_json(mapping_path)
+    if mapping.get("status") != "duplicate":
+        mapping["candidate_stable_id"] = f"sun.component.{review['item_id']}"
     mapping["name"] = review["display_name"]
     mapping["component_type"] = review["component_type"]
     mapping["layout_role"] = review["layout_role"]
@@ -500,6 +696,23 @@ def _augment_mapping(item_dir: Path, review: dict, run_id: str,
         "review_surface": "catalog Draft",
     }
     write_json(mapping_path, mapping)
+
+
+def _sync_history_stable_id(history: Path, extraction_id: str, item_id: str,
+                            stable_id: str) -> None:
+    if not history.exists():
+        return
+    history_data = load_json(history)
+    updated = False
+    for attempt in reversed(history_data.get("attempts", [])):
+        if attempt.get("extraction_id") == extraction_id and attempt.get("item_id") == item_id:
+            if attempt.get("stable_id") != stable_id:
+                attempt["stable_id"] = stable_id
+                history_data["updated_at"] = scaffold.now_iso()
+                updated = True
+            break
+    if updated:
+        write_json(history, history_data)
 
 
 def _union_region(records: list[dict]) -> dict:
@@ -706,7 +919,9 @@ def _materialize_group_item(
     if len(manifest_groups) < 2:
         return None
     write_json(components_dir / "components-manifest.json", {"groups": manifest_groups})
-    if first_preview:
+    # _build_pdf_artifacts already rendered the grouped overview thumbnail.
+    # Use a child preview only as a fallback for no-artifact runs.
+    if first_preview and not (preview_dir / "thumbnail.png").exists():
         shutil.copy2(first_preview, preview_dir / "thumbnail.png")
 
     source = resolve_repo_path(source_path)
@@ -834,6 +1049,8 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         if decompose_mode == "layout-row-groups":
             classify_cmd.append("--layout-row-groups")
         commands.append(classify_cmd)
+    if _is_icon_sheet_item(item_dir):
+        commands.append(["slide-system/scripts/split_icon_sheet.py", "--item-dir", str(item_dir)])
     commands.append(["slide-system/scripts/generate_item_preview.py", "--item-dir", str(item_dir)])
     logs: list[str] = []
     for cmd in commands:
@@ -844,6 +1061,17 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         if not ok:
             return "failed", "\n".join(logs)
     return "ready", "\n".join(logs)
+
+
+def _is_icon_sheet_item(item_dir: Path) -> bool:
+    mapping_path = item_dir / "mapping.json"
+    if not mapping_path.exists():
+        return False
+    try:
+        mapping = load_json(mapping_path)
+    except Exception:
+        return False
+    return mapping.get("component_type") == "icon"
 
 
 def _decompose_mode(item_dir: Path) -> str | None:
@@ -861,7 +1089,17 @@ def _decompose_mode(item_dir: Path) -> str | None:
         area = float(region.get("width") or 0) * float(region.get("height") or 0)
     except (TypeError, ValueError):
         area = 0.0
-    if area >= 0.35 and mapping.get("component_type") in {"card", "visual"}:
+    component_type = mapping.get("component_type")
+    try:
+        width = float(region.get("width") or 0)
+        height = float(region.get("height") or 0)
+    except (TypeError, ValueError):
+        width = height = 0.0
+    if component_type == "table" and area >= 0.10:
+        return "layout-row-groups"
+    if component_type in {"card", "visual"} and (
+        area >= 0.35 or (width >= 0.45 and height >= 0.18)
+    ):
         return "layout-row-groups"
     return None
 
@@ -886,6 +1124,7 @@ def stage_run(
     source_path = request.get("source_path", "")
     request_items = request.get("items", [])
     region_texts = _extract_region_texts(source_path, request_items) if build_artifacts else {}
+    page_texts = _extract_page_texts(source_path, request_items) if build_artifacts else {}
     used_ids = _used_item_ids(output_root, registry)
     summary = {
         "extraction_id": extraction_id,
@@ -908,6 +1147,7 @@ def stage_run(
             continue
         item = dict(item)
         item["region_text"] = region_texts.get(str(original_id), "")
+        item["page_text"] = page_texts.get(str(item.get("slide_or_page", "")), "")
         existing = (cr._load_reviews(adir).get(original_id) or {})
         if existing.get("review_status") == "rejected":
             summary["skipped"] += 1
@@ -968,6 +1208,7 @@ def stage_run(
         if build_artifacts:
             artifact_status, artifact_log = _build_pdf_artifacts(
                 item_dir, source_path, item.get("slide_or_page", 1))
+        _sync_history_stable_id(history, staged_extraction_id, review["item_id"], stable_id)
         summary["staged"] += 1
         summary["items"].append({
             "candidate_id": original_id,
@@ -1015,6 +1256,25 @@ def list_runs() -> list[dict]:
     return cr.list_runs()
 
 
+def compact_summary(summary: dict) -> dict:
+    """Return a CLI-friendly summary without multi-line per-script logs."""
+    out = dict(summary)
+    compact_items: list[dict] = []
+    for item in summary.get("items", []):
+        compact = {k: v for k, v in item.items() if k != "artifact_log"}
+        log = str(item.get("artifact_log") or "")
+        if log:
+            compact["artifact_log_lines"] = len(log.splitlines())
+            compact["artifact_log_status"] = "see mapping.json artifact_log"
+        compact_items.append(compact)
+    out["items"] = compact_items
+    if "catalog_log" in out:
+        log = str(out["catalog_log"] or "")
+        out["catalog_log_lines"] = len(log.splitlines())
+        out.pop("catalog_log", None)
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("extraction_id", help="Docling analysis run to auto-stage.")
@@ -1025,6 +1285,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Only scaffold Draft folders; do not run the PDF artifact chain.")
     parser.add_argument("--no-catalog", action="store_true",
                         help="Do not rebuild catalog-data.json after staging.")
+    parser.add_argument("--verbose", action="store_true",
+                        help="Print full artifact logs in the JSON summary.")
     args = parser.parse_args(argv)
     try:
         summary = stage_run(
@@ -1038,7 +1300,7 @@ def main(argv: list[str] | None = None) -> int:
     except (cr.CandidateError, cr.CandidateValidationError, AutoStageError, SystemExit) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
-    print(json.dumps(summary, indent=2))
+    print(json.dumps(summary if args.verbose else compact_summary(summary), indent=2))
     return 0
 
 

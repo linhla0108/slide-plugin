@@ -1132,6 +1132,265 @@ def test_analyze_with_docling_filters_tiny_candidates() -> None:
     assert [item["item_id"] for item in items] == ["picture-p1-1"]
 
 
+def test_analyze_with_docling_pdf_fallback_groups_rows() -> None:
+    import analyze_with_docling as awd
+
+    atoms = [
+        {"kind": "text", "text": "2. header",
+         "region": {"x": 0.1, "y": 0.08, "width": 0.4, "height": 0.02, "unit": "normalized"}},
+        {"kind": "drawing", "text": "",
+         "region": {"x": 0.19, "y": 0.14, "width": 0.20, "height": 0.22, "unit": "normalized"}},
+        {"kind": "drawing", "text": "",
+         "region": {"x": 0.41, "y": 0.14, "width": 0.20, "height": 0.22, "unit": "normalized"}},
+        {"kind": "text", "text": "01 LOREM IPSUM",
+         "region": {"x": 0.24, "y": 0.23, "width": 0.12, "height": 0.04, "unit": "normalized"}},
+        {"kind": "text", "text": "GOAL KEY RESULT TASK",
+         "region": {"x": 0.26, "y": 0.48, "width": 0.50, "height": 0.05, "unit": "normalized"}},
+        {"kind": "text", "text": "Kết quả muốn đạt được",
+         "region": {"x": 0.19, "y": 0.59, "width": 0.18, "height": 0.06, "unit": "normalized"}},
+        {"kind": "text", "text": "FOUNDATION TOP1 MICROSOFT XIAOMI",
+         "region": {"x": 0.27, "y": 0.78, "width": 0.45, "height": 0.09, "unit": "normalized"}},
+    ]
+
+    elements = awd.fallback_elements_from_atoms(3, atoms)
+    assert [el["source"] for el in elements] == ["pymupdf-fallback"] * 3
+    assert [round(el["region"]["y"], 2) for el in elements] == [0.13, 0.47, 0.77]
+    items = awd.build_candidates(elements, "demo", "component", None)
+    assert [item["item_id"] for item in items] == [
+        "figure-p3-1",
+        "figure-p3-2",
+        "figure-p3-3",
+    ]
+    assert "PyMuPDF fallback" in items[0]["notes"]
+
+
+def test_analyze_with_docling_fallback_keeps_uncovered_metric_row() -> None:
+    import analyze_with_docling as awd
+
+    fallback_rows = [
+        {
+            "page": 2,
+            "label": "figure",
+            "region": {
+                "x": 0.14, "y": 0.39, "width": 0.68, "height": 0.24,
+                "unit": "normalized",
+            },
+        },
+        {
+            "page": 2,
+            "label": "figure",
+            "region": {
+                "x": 0.17, "y": 0.70, "width": 0.64, "height": 0.20,
+                "unit": "normalized",
+            },
+        },
+    ]
+    existing_docling = [
+        {"x": 0.151, "y": 0.413, "width": 0.151, "height": 0.208, "unit": "normalized"},
+        {"x": 0.316, "y": 0.413, "width": 0.153, "height": 0.207, "unit": "normalized"},
+        {"x": 0.485, "y": 0.413, "width": 0.150, "height": 0.208, "unit": "normalized"},
+        {"x": 0.650, "y": 0.413, "width": 0.151, "height": 0.208, "unit": "normalized"},
+        # Small arrow icons in the metric row must not suppress the broad row.
+        {"x": 0.468, "y": 0.713, "width": 0.055, "height": 0.058, "unit": "normalized"},
+        {"x": 0.470, "y": 0.833, "width": 0.053, "height": 0.059, "unit": "normalized"},
+    ]
+
+    kept = [
+        row for row in fallback_rows
+        if not awd._covered_by_existing_candidates(row["region"], existing_docling)
+    ]
+
+    assert kept == [fallback_rows[1]]
+
+
+def test_analyze_with_docling_fallback_container_becomes_context() -> None:
+    import analyze_with_docling as awd
+
+    ai_visual = {
+        "page": 4,
+        "label": "picture",
+        "text": "",
+        "region": {
+            "x": 0.211145, "y": 0.659546, "width": 0.551944,
+            "height": 0.231766, "unit": "normalized",
+        },
+        "source": "docling",
+    }
+    broad_fallback = {
+        "x": 0.100247, "y": 0.494247, "width": 0.674524,
+        "height": 0.505753, "unit": "normalized",
+    }
+    metric_strip = {
+        "x": 0.170, "y": 0.700, "width": 0.640,
+        "height": 0.200, "unit": "normalized",
+    }
+    small_arrow = {
+        "region": {
+            "x": 0.470, "y": 0.833, "width": 0.053,
+            "height": 0.059, "unit": "normalized",
+        },
+    }
+
+    assert awd._contained_existing_candidate(broad_fallback, [ai_visual]) is ai_visual
+    assert awd._covered_by_existing_candidates(broad_fallback, [ai_visual])
+    assert awd._contained_existing_candidate(metric_strip, [small_arrow]) is None
+    assert not awd._covered_by_existing_candidates(metric_strip, [small_arrow])
+
+    awd._append_context_text(
+        ai_visual,
+        "2. CONTENT XOAY QUANH - build AI team and automation system",
+    )
+    items = awd.build_candidates([ai_visual], "demo", "component", None)
+
+    assert [item["item_id"] for item in items] == ["picture-p4-1"]
+    assert "CONTENT XOAY QUANH" in items[0]["semantic_intent"][0]
+
+
+def test_analyze_with_docling_fallback_text_uses_reading_order() -> None:
+    import analyze_with_docling as awd
+
+    row = [
+        {"kind": "text", "text": "+30%",
+         "region": {"x": 0.55, "y": 0.72, "width": 0.14, "height": 0.06,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "Revenue",
+         "region": {"x": 0.20, "y": 0.735, "width": 0.13, "height": 0.03,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "+30%",
+         "region": {"x": 0.55, "y": 0.84, "width": 0.14, "height": 0.06,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "Team Size",
+         "region": {"x": 0.20, "y": 0.835, "width": 0.13, "height": 0.03,
+                    "unit": "normalized"}},
+    ]
+
+    assert awd._text_lines_for_row(row) == ["Revenue +30%", "Team Size +30%"]
+
+
+def test_analyze_with_docling_merges_header_and_visual_rows() -> None:
+    import analyze_with_docling as awd
+
+    rows = [
+        {
+            "page": 5,
+            "label": "figure",
+            "text": "This is a contributors slide. Insert your team here.",
+            "region": {"x": 0.28, "y": 0.12, "width": 0.42, "height": 0.13,
+                       "unit": "normalized"},
+            "source": "pymupdf-fallback",
+        },
+        {
+            "page": 5,
+            "label": "figure",
+            "text": "Patrick E. Shorey Mary T. Middleton William R. Hudson",
+            "region": {"x": 0.24, "y": 0.265, "width": 0.50, "height": 0.23,
+                       "unit": "normalized"},
+            "source": "pymupdf-fallback",
+        },
+    ]
+
+    merged = awd._merge_header_visual_rows(rows)
+
+    assert len(merged) == 1
+    assert merged[0]["region"]["y"] < rows[0]["region"]["y"]
+    assert merged[0]["region"]["height"] > 0.35
+    assert "contributors slide" in merged[0]["text"]
+    assert "Patrick" in merged[0]["text"]
+
+
+def test_analyze_with_docling_icon_sheet_candidate_covers_full_glyph_grid() -> None:
+    import analyze_with_docling as awd
+
+    atoms = []
+    for row in range(8):
+        for col in range(8):
+            atoms.append({
+                "kind": "drawing",
+                "text": "",
+                "region": {
+                    "x": 0.10 + col * 0.05,
+                    "y": 0.13 + row * 0.07,
+                    "width": 0.012,
+                    "height": 0.018,
+                    "unit": "normalized",
+                },
+            })
+
+    element = awd._icon_sheet_element_from_atoms(
+        1, atoms, "ICON\n1. NHUNG ICON HAY XUAT HIEN")
+
+    assert element is not None
+    assert element["region"]["x"] < 0.09
+    assert element["region"]["y"] < 0.08
+    assert element["region"]["width"] > 0.36
+    assert element["region"]["height"] > 0.55
+
+
+def test_analyze_with_docling_pdf_page_mode_survives_one_page_failure() -> None:
+    import analyze_with_docling as awd
+
+    class _Size:
+        width = 100
+        height = 100
+
+    class _Page:
+        size = _Size()
+
+    class _Label:
+        value = "picture"
+
+    class _BBox:
+        l = 10
+        t = 10
+        r = 50
+        b = 50
+
+    class _Prov:
+        page_no = 1
+        bbox = _BBox()
+
+    class _Item:
+        label = _Label()
+        text = "Reusable visual"
+        prov = [_Prov()]
+
+    class _Doc:
+        pages = {1: _Page()}
+
+        def iterate_items(self):
+            return [(_Item(), 0)]
+
+    class _Result:
+        document = _Doc()
+
+    class _Converter:
+        def __init__(self) -> None:
+            self.page_ranges: list[tuple[int, int]] = []
+
+        def convert(self, source, **kwargs):
+            page_range = kwargs["page_range"]
+            self.page_ranges.append(page_range)
+            if page_range == (2, 2):
+                raise RuntimeError("page failed")
+            return _Result()
+
+    converter = _Converter()
+    old = awd._page_numbers_for_source
+    awd._page_numbers_for_source = lambda source, pages: ([1, 2, 3], [])
+    try:
+        elements, warnings, stats = awd.analyze_source(
+            converter, Path("demo.pdf"), (1, 3))
+    finally:
+        awd._page_numbers_for_source = old
+
+    assert converter.page_ranges == [(1, 1), (2, 2), (3, 3)]
+    assert [el["page"] for el in elements] == [1, 3]
+    assert any("page 2" in warning for warning in warnings)
+    assert stats["docling_mode"] == "page-by-page"
+    assert stats["docling_pages_attempted"] == 3
+    assert stats["docling_pages_failed"] == 1
+
+
 def test_scaffold_rejects_docling_draft_without_polluting_analysis_dir() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -1651,7 +1910,7 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert draft["status"] == "staging"
         assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
         assert draft["images"], "Draft must have a visual preview for final review"
-        assert draft["component_type"] == "visual"
+        assert draft["component_type"] == "card"
         assert draft["layout_role"]
         assert draft["keywords"]
         assert draft["use_cases"]
@@ -1699,7 +1958,7 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         )
         assert second["staged"] == 0, second
         assert second["skipped"] == 1, second
-        assert second["items"][0]["status"] == "already_staged"
+        assert second["items"][0]["status"] in {"already_staged", "already_staged_region"}
 
 
 def test_auto_stage_decomposes_large_cards_as_layout_rows() -> None:
@@ -1726,6 +1985,28 @@ def test_auto_stage_decomposes_large_cards_as_layout_rows() -> None:
             "source": {"region": {"width": 0.20, "height": 0.20}},
         }), encoding="utf-8")
         assert asc._decompose_mode(item) == "cards"
+
+
+def test_auto_stage_decomposes_tables_and_broad_visuals_as_layout_rows() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "compound-region"
+        item.mkdir(parents=True)
+
+        def write_mapping(component_type: str, width: float, height: float) -> None:
+            (item / "mapping.json").write_text(_json.dumps({
+                "component_type": component_type,
+                "source": {"region": {"width": width, "height": height}},
+            }), encoding="utf-8")
+
+        write_mapping("table", 0.72, 0.38)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("visual", 0.55, 0.23)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("visual", 0.30, 0.20)
+        assert asc._decompose_mode(item) is None
 
 
 def test_auto_stage_semantic_ids_fallback_avoids_full_source_slug() -> None:
@@ -1778,7 +2059,11 @@ def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
         "slide_or_page": 2,
         "region": {"x": 0.15, "y": 0.41, "width": 0.15, "height": 0.2,
                    "unit": "normalized"},
-        "region_text": "Chuyen muc tieu cong ty thanh huong di ro rang\nTRANSLATOR",
+        "region_text": (
+            "Chuyen muc tieu cong ty thanh huong di ro rang\n"
+            "TRANSLATOR\n"
+            "cho team"
+        ),
     }
     level_strip = {
         "item_id": "picture-p2-1",
@@ -1793,7 +2078,7 @@ def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
     metadata = asc.metadata_for(source, role_card, role_id)
 
     assert role_id == "translator-card"
-    assert strip_id == "ai-coding-maturity-levels-strip"
+    assert strip_id == "ai-coding-assistants-levels-strip"
     assert "guidline" not in role_id
     assert metadata["component_type"] == "card"
     assert metadata["keywords"][:2] == ["translator", "card"]
@@ -1820,12 +2105,192 @@ def test_auto_stage_semantic_ids_translate_vietnamese_hints_to_english() -> None
 
     item_id = asc.semantic_item_id("input/interview-workshop.pdf", recruitment_item, set())
     team_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", team_item, set())
+    team_meta = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", team_item, team_id)
 
     assert item_id == "recruitment-goal-card"
     assert "tuyen" not in item_id and "dung" not in item_id
     assert item_id.isascii()
     assert team_id == "team-visual"
     assert "xay" not in team_id and "ngu" not in team_id
+    assert "xay" not in team_meta["keywords"]
+    assert "dung" not in team_meta["keywords"]
+
+
+def test_auto_stage_metadata_keeps_context_intent_with_region_text() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.21, "y": 0.66, "width": 0.55, "height": 0.23,
+                   "unit": "normalized"},
+        "region_text": "XAY DUNG DOI NGU AI\nXAY DUNG HE THONG TU DONG HOA",
+        "semantic_intent": [
+            "2. CONTENT XOAY QUANH - build AI team and automation system",
+        ],
+    }
+
+    metadata = asc.metadata_for(
+        "input/GUIDLINE_PRESENTATION_SUN.pdf", item, "team-visual")
+
+    assert metadata["semantic_intent"][0] == "team visual"
+    assert any("CONTENT XOAY QUANH" in value
+               for value in metadata["semantic_intent"])
+    assert "content" in metadata["keywords"]
+
+
+def test_auto_stage_semantic_ids_use_intent_when_region_text_missing() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p5-1",
+        "slide_or_page": 5,
+        "region": {"x": 0.25, "y": 0.28, "width": 0.47, "height": 0.21,
+                   "unit": "normalized"},
+        "region_text": (
+            "Patrick E. Shorey\nRecreational therapist\n"
+            "Mary T. Middleton\nPhysical meteorologist"
+        ),
+        "semantic_intent": [
+            "This is a contributors slide. Insert your team here. Lorem ipsum dolor sit amet.",
+        ],
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "contributors-team-visual"
+    assert not item_id.startswith("source-")
+    assert metadata["keywords"][:3] == ["contributors", "team", "visual"]
+
+
+def test_auto_stage_semantic_ids_filter_mixed_vietnamese_prose() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.4, "width": 0.5, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": "Đảm bảo goal thực tế",
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+
+    assert item_id == "goal-strip"
+    assert "dam" not in item_id and "bao" not in item_id
+    assert "thuc" not in item_id and "te" not in item_id
+
+
+def test_auto_stage_semantic_ids_level_series_without_content_rule() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.1, "y": 0.2, "width": 0.7, "height": 0.18,
+                   "unit": "normalized"},
+        "region_text": "Design Operations\nLevel 1\nReview System\nLevel 2",
+    }
+
+    item_id = asc.semantic_item_id("input/source.pdf", item, set())
+
+    assert item_id == "design-operations-review-system-strip"
+    assert "source" not in item_id
+
+
+def test_auto_stage_semantic_ids_metric_series_uses_labels_and_strip() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p2-6",
+        "slide_or_page": 2,
+        "region": {"x": 0.19, "y": 0.68, "width": 0.52, "height": 0.24,
+                   "unit": "normalized"},
+        "region_text": "+30%\nRevenue\nTeam Size\n(110 Members)\n+30%",
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "revenue-team-size-metric-strip"
+    assert metadata["component_type"] == "strip"
+    assert metadata["keywords"][:4] == ["revenue", "team", "size", "metric"]
+
+
+def test_auto_stage_icon_reference_uses_page_context() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p1-1",
+        "slide_or_page": 1,
+        "region": {"x": 0.54, "y": 0.17, "width": 0.38, "height": 0.15,
+                   "unit": "normalized"},
+        "region_text": "BOD\nPersonal\nCompany\nLearning & Sharing",
+        "page_text": "ICON\n1. NHUNG ICON HAY XUAT HIEN",
+        "semantic_intent": ["BOD Personal Company Learning Sharing"],
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "icon-reference-sheet"
+    assert metadata["component_type"] == "icon"
+    assert metadata["layout_role"] == "icon reference sheet"
+    assert "icon-set" in metadata["tags"]
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item_dir = Path(tmp)
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "component_type": "icon",
+        }), encoding="utf-8")
+        assert asc._is_icon_sheet_item(item_dir)
+
+
+def test_auto_stage_overrides_stale_history_stable_id_for_auto_drafts() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        item_dir = tmp_path / "items" / "team-visual"
+        item_dir.mkdir(parents=True)
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "candidate_stable_id": "sun.component.xay-dung-oi-ngu-visual",
+            "status": "staging",
+            "source": {},
+        }), encoding="utf-8")
+        review = asc.metadata_for(
+            "input/GUIDLINE_PRESENTATION_SUN.pdf",
+            {"item_id": "picture-p4-2", "slide_or_page": 4,
+             "region": {"x": 0.1, "y": 0.1, "width": 0.5, "height": 0.3,
+                        "unit": "normalized"},
+             "region_text": "XAY DUNG DOI NGU"},
+            "team-visual",
+        )
+        review["candidate_id"] = "picture-p4-2"
+        asc._augment_mapping(item_dir, review, "docling-run", {"item_id": "picture-p4-2"})
+        mapping = read_text_slots.load_json(item_dir / "mapping.json")
+        assert mapping["candidate_stable_id"] == "sun.component.team-visual"
+
+        history = tmp_path / "history.json"
+        history.write_text(json.dumps({"attempts": [{
+            "extraction_id": "docling-run-team-visual",
+            "item_id": "team-visual",
+            "stable_id": "sun.component.xay-dung-oi-ngu-visual",
+        }]}), encoding="utf-8")
+        asc._sync_history_stable_id(
+            history, "docling-run-team-visual", "team-visual",
+            mapping["candidate_stable_id"],
+        )
+        synced = read_text_slots.load_json(history)
+        assert synced["attempts"][0]["stable_id"] == "sun.component.team-visual"
 
 
 def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
@@ -1993,6 +2458,16 @@ def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
         assert group_mapping["component_type"] == "component-set"
         assert len(group_mapping["collection_children"]) == 2
         assert (group_dir / "artifact" / "components" / "components-manifest.json").is_file()
+        group_thumb = group_dir / "preview" / "thumbnail.png"
+        assert group_thumb.is_file()
+        png = group_thumb.read_bytes()
+        assert png[:8] == b"\x89PNG\r\n\x1a\n"
+        thumb_width = int.from_bytes(png[16:20], "big")
+        thumb_height = int.from_bytes(png[20:24], "big")
+        assert thumb_width > thumb_height, (thumb_width, thumb_height)
+        compact = asc.compact_summary(summary)
+        assert "artifact_log" not in compact["items"][0]
+        assert compact["items"][0]["artifact_log_lines"] > 0
 
         catalog_path = tmpp / "catalog-data.json"
         old_argv = sys.argv[:]

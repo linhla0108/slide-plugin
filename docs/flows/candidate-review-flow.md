@@ -43,7 +43,9 @@ python3 slide-system/catalog/catalog_server.py
 should not have to do:
 
 - Generates semantic item ids from extracted PDF region text and layout role;
-  source name/page/Docling label are fallback context only.
+  source name/page/Docling label are fallback context only. IDs are English and
+  come from visible cues such as headings, uppercase labels, repeated `Level N`
+  structures, and generic localized concepts.
 - Saves retrieval metadata through the same candidate-review contract.
 - Writes schema-compatible approved extraction requests under
   `analysis/approved/`.
@@ -59,6 +61,11 @@ should not have to do:
   `generate_item_preview.py` through the Python interpreter that can import
   PyMuPDF (usually the repo `.venv`).
 - Rebuilds `slide-system/catalog/catalog-data.json`.
+
+For PDF sources, `analyze_with_docling.py` runs Docling in page-scoped worker
+processes. A bad page times out or fails independently, and the run can still
+use conservative PyMuPDF text/vector row candidates for pages where Docling
+does not produce reusable regions.
 
 ---
 

@@ -51,6 +51,12 @@ have to name every region by hand. It changes no shared registry state:
 - It never publishes, never mutates the registry, and never writes a reusable
   library artifact. **PyMuPDF remains the canonical PDF->SVG provider**; Docling
   does not replace the extraction pipeline.
+- For PDF input, Docling conversion runs in page-scoped worker processes with a
+  timeout. A failed or memory-heavy page records a warning instead of aborting
+  the whole run; pages without a usable Docling candidate can still receive
+  conservative PyMuPDF text/vector row candidates. When a broad PyMuPDF row only
+  surrounds an existing Docling candidate, the row is treated as retrieval
+  context for that candidate instead of becoming a duplicate Draft.
 - The emitted `candidate-extraction-request.json` is schema-compatible with
   `extraction-request.schema.json`, but its `item_id`s are placeholders
   (`<label>-p<page>-<n>`). Do not ask the user to review these placeholders.
@@ -65,7 +71,8 @@ have to name every region by hand. It changes no shared registry state:
 - OCR is off by default for text-first slide PDFs. Use `--ocr` only for scanned
   PDFs. Use `--pages <n|start-end>` for focused review, and adjust
   `--min-area`/`--max-area` when the default candidate filter is too strict or
-  too loose for icon-heavy or full-bleed pages.
+  too loose for icon-heavy or full-bleed pages. Use `--page-timeout <seconds>`
+  only when a source page is known to need more conversion time.
 
 Run example:
 
@@ -126,8 +133,17 @@ into real catalog Draft items:
   `classify_page_components.py --manifest-only --layout-row-groups` for these
   large regions so the carousel shows the full diagram plus row-level
   source/text-free pairs.
+- **Icon sheet decomposition:** icon reference sheets remain one catalog Draft
+  for approval, but auto-stage runs `split_icon_sheet.py` after the standard PDF
+  artifact chain so `artifact/icons/icons-manifest.json` powers the Draft's
+  searchable icon grid.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
+- **Naming:** auto-stage derives English ids from visible region cues (headings,
+  uppercase labels, repeated `Level N` structures, and generic localized
+  concepts). If region text is weak, analyzer-attached title/context intent is
+  tried next. It does not use slide filename slugs, page numbers, or Docling
+  labels as primary names unless no useful region text or context exists.
 - **Validation** reuses the scaffold id/intent gates as the single source of
   truth, so a Docling placeholder or positional/generic id can never enter the
   Draft queue. Invalid extraction ids and path traversal are rejected.
