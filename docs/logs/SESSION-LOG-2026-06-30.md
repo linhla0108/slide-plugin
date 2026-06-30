@@ -102,3 +102,14 @@ Branch: `feature/auto-stage-docling-drafts`.
 **Files:** docs/logs/SESSION-LOG-2026-06-30.md, docs/logs/INDEX.jsonl, slide-system/scripts/classify_page_components.py
 **Symbols:** _heading
 **State:** Not committed
+
+## 2026-06-30.10 — Drop generated catalog state from PR
+
+**When:** 2026-06-30 18:00
+**Request:** Keep the PR clean after the final review.
+**Actions:**
+- Removed committed diffs for generated `catalog-data.json` and `extraction-history.json` from the PR by staging the `origin/master` blobs, while preserving the local dirty generated review state in the working tree.
+**Result:** PR no longer versions local Draft catalog/history references; local review files remain available but uncommitted. Verification passed with log index rebuild, cached diff review, and PR hardcode search.
+**Files:** docs/logs/SESSION-LOG-2026-06-30.md, docs/logs/INDEX.jsonl, slide-system/catalog/catalog-data.json, slide-system/registries/extraction-history.json
+**Symbols:** none
+**State:** Not committed
