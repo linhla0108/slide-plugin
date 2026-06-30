@@ -80,3 +80,14 @@ Branch: `feature/auto-stage-docling-drafts`.
 **Files:** .agents/skills/component-extractor/SKILL.md, docs/how-to-use.md, docs/logs/SESSION-LOG-2026-06-30.md, slide-system/catalog/catalog-data.json, slide-system/registries/extraction-history.json, slide-system/rules/extraction-methods.md, slide-system/scripts/analyze_with_docling.py, slide-system/scripts/auto_stage_candidates.py, slide-system/scripts/test_gates.py, outputs/component-extractions/docling-single-guideline-20260630*
 **Symbols:** _contained_existing_candidate, _append_context_text, _covered_by_existing_candidates, build_candidates, metadata_for, _semantic_intent_core, semantic_item_id, test_analyze_with_docling_fallback_container_becomes_context, test_auto_stage_metadata_keeps_context_intent_with_region_text, test_auto_stage_semantic_ids_use_intent_when_region_text_missing
 **State:** Not committed
+
+## 2026-06-30.8 — Commit and review PR
+
+**When:** 2026-06-30 17:39
+**Request:** Commit, push, review the PR, reduce verbose logs, and check for hardcoded extraction logic.
+**Actions:**
+- Compacted the 2026-06-30 session log, rebuilt the log index, committed source/docs/log changes, pushed `feature/auto-stage-docling-drafts`, and inspected PR #1 plus hardcode search results.
+**Result:** Commit `fec613d7` was pushed; PR #1 is ready and mergeable with no GitHub checks configured. Post-commit verification passed with `py_compile`, `test_gates.py` 106/106, registry validation, build registry check, log index check, and targeted hardcode search found no source-specific production rule beyond heuristic vocab/threshold constants.
+**Files:** docs/logs/SESSION-LOG-2026-06-30.md, docs/logs/INDEX.jsonl
+**Symbols:** none
+**State:** Committed fec613d7
