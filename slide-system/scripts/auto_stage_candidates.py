@@ -38,25 +38,26 @@ import scaffold_extraction as scaffold
 SCRIPT_DIR = Path(__file__).resolve().parent
 STOPWORDS = {
     "add", "approval", "approve", "auto",
-    "a", "adipiscing", "amet", "an", "and", "by", "candidate", "consectetur",
+    "a", "adipiscing", "amet", "an", "and", "are", "about", "by", "candidate", "consectetur",
     "detected", "docling", "dolor", "draft", "elit", "ipsum", "lorem",
     "detect", "descriptor", "for", "from", "in", "item", "of", "on", "or",
-    "publish", "region", "rename", "required", "sed", "semantic", "slide",
-    "the", "this", "to", "with",
+    "our", "publish", "region", "rename", "required", "sed", "semantic", "slide",
+    "so", "talk", "the", "then", "this", "to", "was", "we", "were", "will", "with",
+    "your", "here", "have", "has", "first", "next", "far",
     "cac", "cho", "cua", "cung", "duoc", "muc", "nhung", "noi", "va",
     "van",
 }
 ENGLISH_HINTS = {
-    "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
+    "achieved", "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
     "autocomplete", "benefits", "card", "check", "checklist", "coach",
-    "coding", "collaborative", "content", "contributors", "cover", "development",
+    "circle", "circles", "coding", "collaborative", "connect", "content", "contributors", "cover", "development",
     "do", "dont", "driver", "engagement", "factory", "faq", "framework", "goal",
     "highlight", "how", "improvement", "interview", "leadership", "level",
-    "management", "maturity", "metric", "networks", "next", "overview", "performance",
-    "preparation", "process", "quote", "recognition", "recruitment", "revenue",
-    "review", "rewards", "role", "salary", "section", "setting",
+    "management", "manager", "maturity", "member", "members", "metric", "networks", "next", "numbered", "overview", "performance",
+    "people", "preparation", "process", "profile", "profiles", "quote", "recognition", "recruitment", "results", "revenue",
+    "review", "rewards", "role", "salary", "section", "setting", "share",
     "size", "software", "statistics", "strategist", "structure", "summary",
-    "team", "thanks", "timeline", "translator", "workshop",
+    "stars", "team", "thanks", "timeline", "translator", "takeaway", "takeaways", "workshop", "grow",
 }
 LOCALIZED_HINTS = [
     ("tuyen dung", ["recruitment"]),
@@ -328,6 +329,57 @@ def _semantic_intent_core(item: dict, suffix: str) -> list[str]:
     return tokens
 
 
+def _context_core(item: dict, suffix: str) -> list[str]:
+    """Best-effort semantic fallback before using the source filename.
+
+    Prefer page-level headings and region text cues that are useful for
+    retrieval, but keep lorem/filler and detector boilerplate out of stable ids.
+    """
+    parts = [
+        str(item.get("page_text") or ""),
+        str(item.get("region_text") or ""),
+        " ".join(str(value) for value in item.get("semantic_intent", [])),
+    ]
+    text = "\n".join(parts)
+    localized = _localized_hint_tokens(text)
+    if localized:
+        return localized[:4]
+    role_tokens = {suffix, "visual", "card", "strip", "table", "chart", "icon", "form", "component", "source"}
+    hinted: list[str] = []
+    for token in _tokens(text, limit=40):
+        if token in role_tokens or token.isdigit():
+            continue
+        if token in ENGLISH_HINTS and token not in hinted:
+            hinted.append(token)
+        if len(hinted) >= 4:
+            return hinted
+    if hinted:
+        return hinted
+    for line in _clean_lines(text):
+        if re.search(r"\b(?:lorem|ipsum|candidate detected|docling|pymupdf)\b", line, re.I):
+            continue
+        tokens = [
+            token for token in _tokens(line, limit=8)
+            if token not in role_tokens and not token.isdigit()
+        ]
+        if tokens and (len(line) <= 64 or _is_ascii(line)):
+            return tokens[:4]
+    if _has_metric_signal(text):
+        return ["metric"]
+    return []
+
+
+def _fallback_source_tokens(source_path: str, suffix: str, ordinal: str | None) -> list[str]:
+    tokens = _source_topic_tokens(source_path)
+    if tokens == ["source"]:
+        tokens = ["detected", suffix]
+    else:
+        tokens = [*tokens, suffix]
+    if ordinal:
+        tokens.append(str(ordinal))
+    return tokens
+
+
 def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
     original_id = str(item.get("item_id", ""))
     label = original_id.split("-", 1)[0] or "visual"
@@ -357,16 +409,24 @@ def semantic_item_id(source_path: str, item: dict, used: set[str]) -> str:
                 if intent_core:
                     base = slug("-".join([*intent_core, suffix]))
                 else:
+                    context_core = _context_core(item, suffix)
                     ordinal = docling_match.group("n")
-                    base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
+                    if context_core:
+                        base = slug("-".join([*context_core, suffix]))
+                    else:
+                        base = slug("-".join(_fallback_source_tokens(source_path, suffix, ordinal)))
         else:
             suffix = _role_suffix(item, label)
             core = _semantic_intent_core(item, suffix)
             if core:
                 base = slug("-".join([*core, suffix]))
             else:
+                context_core = _context_core(item, suffix)
                 ordinal = docling_match.group("n")
-                base = slug("-".join([*_source_topic_tokens(source_path), suffix, ordinal]))
+                if context_core:
+                    base = slug("-".join([*context_core, suffix]))
+                else:
+                    base = slug("-".join(_fallback_source_tokens(source_path, suffix, ordinal)))
     else:
         intent = " ".join(str(v) for v in item.get("semantic_intent", []))
         notes = item.get("notes", "")
@@ -471,7 +531,15 @@ def group_item_id(source_path: str, staged_records: list[dict], used: set[str]) 
             if len(base_tokens) >= 4:
                 break
         if not base_tokens:
-            base_tokens = _source_topic_tokens(source_path, limit=3)
+            for token in child_tokens:
+                if token in {"source", "detected"}:
+                    continue
+                if token not in base_tokens:
+                    base_tokens.append(token)
+                if len(base_tokens) >= 3:
+                    break
+        if not base_tokens:
+            base_tokens = _fallback_source_tokens(source_path, "component", None)[:3]
         base = "-".join([*base_tokens, "component", "set"])
     candidate = slug(base)
     n = 2
@@ -1119,12 +1187,14 @@ def stage_run(
     output_root = (output_root or cr.extractions_root()).resolve()
     history = (history or (REPO_ROOT / "slide-system/registries/extraction-history.json")).resolve()
     registry = (registry or (REPO_ROOT / "slide-system/registries/visual-library.json")).resolve()
+    if not history.exists():
+        write_json(history, {"attempts": []})
     adir = cr._analysis_dir(extraction_id, root)
     request = cr._load_request(adir)
     source_path = request.get("source_path", "")
     request_items = request.get("items", [])
-    region_texts = _extract_region_texts(source_path, request_items) if build_artifacts else {}
-    page_texts = _extract_page_texts(source_path, request_items) if build_artifacts else {}
+    region_texts = _extract_region_texts(source_path, request_items)
+    page_texts = _extract_page_texts(source_path, request_items)
     used_ids = _used_item_ids(output_root, registry)
     summary = {
         "extraction_id": extraction_id,
@@ -1291,6 +1361,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         summary = stage_run(
             args.extraction_id,
+            root=Path(args.output_root),
             output_root=Path(args.output_root),
             history=Path(args.history),
             registry=Path(args.registry),

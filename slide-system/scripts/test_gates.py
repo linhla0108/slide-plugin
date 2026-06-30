@@ -1961,6 +1961,52 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert second["items"][0]["status"] in {"already_staged", "already_staged_region"}
 
 
+def test_auto_stage_cli_reads_analysis_from_output_root() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        output_root = tmpp / "component-extractions"
+        eid = "docling-cli-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        source = tmpp / "source.pdf"
+        source.write_bytes(b"%PDF-1.4\n% test source\n")
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["cli output root hero detected by Docling"],
+                "notes": "Auto-stage this detected hero visual into Draft.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+
+        rc = asc.main([
+            eid,
+            "--output-root", str(output_root),
+            "--history", str(hist),
+            "--registry", str(reg),
+            "--no-catalog",
+            "--no-artifacts",
+        ])
+
+        assert rc == 0, "CLI must read analysis from --output-root"
+        assert hist.is_file(), "CLI should initialize a missing custom history file"
+        run_dirs = [p for p in output_root.iterdir() if p.is_dir() and p.name != eid]
+        assert run_dirs, "CLI should create a staged extraction dir"
+
+
 def test_auto_stage_decomposes_large_cards_as_layout_rows() -> None:
     import importlib
 
@@ -2040,13 +2086,53 @@ def test_auto_stage_semantic_ids_fallback_avoids_full_source_slug() -> None:
     id_b = asc.semantic_item_id(source, item_b, used)
     goal_id = asc.semantic_item_id("input/Kick_off_GOAL_SETTING_2026-2.pdf", goal_card, set())
 
-    assert id_a == "source-icon-1"
-    assert id_b == "source-icon-1-2"
+    assert id_a == "detected-icon-1"
+    assert id_b == "detected-icon-1-2"
     assert goal_id == "goal-setting-card-1"
     assert id_a != id_b
     assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_a)
     assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_b)
     assert "kick-off" not in goal_id and "2026" not in goal_id
+
+
+def test_auto_stage_semantic_ids_use_page_context_before_source_fallback() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p7-1",
+        "slide_or_page": 7,
+        "region": {"x": 0.14, "y": 0.41, "width": 0.70, "height": 0.50,
+                   "unit": "normalized"},
+        "region_text": "Patrick E. Shorey\nMary T. Middleton",
+        "page_text": "This is a contributors slide. Insert your team here.",
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+
+    item_id = asc.semantic_item_id("input/Sun.Presentation.pdf", item, set())
+
+    assert item_id == "contributors-team-visual", item_id
+    assert not item_id.startswith("source-")
+
+
+def test_auto_stage_semantic_ids_do_not_emit_source_visual_for_generic_pdf() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p16-1",
+        "slide_or_page": 16,
+        "region": {"x": 0.04, "y": 0.2, "width": 0.91, "height": 0.52,
+                   "unit": "normalized"},
+        "semantic_intent": ["figure candidate detected by PyMuPDF fallback"],
+        "notes": "DRAFT candidate from PyMuPDF fallback auto-detect.",
+    }
+
+    item_id = asc.semantic_item_id("input/Sun.Presentation.pdf", item, set())
+
+    assert item_id == "detected-visual-1", item_id
+    assert not item_id.startswith("source-")
 
 
 def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
