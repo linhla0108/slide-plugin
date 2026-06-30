@@ -42,24 +42,37 @@ STOPWORDS = {
     "detected", "docling", "dolor", "draft", "elit", "ipsum", "lorem",
     "detect", "descriptor", "for", "from", "in", "item", "of", "on", "or",
     "our", "publish", "region", "rename", "required", "sed", "semantic", "slide",
-    "so", "talk", "the", "then", "this", "to", "was", "we", "were", "will", "with",
+    "goes", "is", "so", "sub", "talk", "that", "the", "then", "this", "to", "was", "we", "were", "will", "with",
     "your", "here", "have", "has", "first", "next", "far",
-    "cac", "cho", "cua", "cung", "duoc", "muc", "nhung", "noi", "va",
+    "anh", "buoc", "cac", "cho", "cua", "cung", "cuoi", "dai", "dau", "duoc",
+    "gia", "han", "loi", "mot", "muc", "nhung", "noi", "phuc", "quyen",
+    "trong", "tu", "va",
     "van",
 }
 ENGLISH_HINTS = {
     "achieved", "action", "agenda", "agent", "ai", "answer", "assistant", "assistants",
     "autocomplete", "benefits", "card", "check", "checklist", "coach",
-    "circle", "circles", "coding", "collaborative", "connect", "content", "contributors", "cover", "development",
+    "circle", "circles", "coding", "collaborative", "company", "connect", "content", "contributors", "cover", "development",
     "do", "dont", "driver", "engagement", "factory", "faq", "framework", "goal",
     "highlight", "how", "improvement", "interview", "leadership", "level",
-    "management", "manager", "maturity", "member", "members", "metric", "networks", "next", "numbered", "overview", "performance",
+    "investment", "long", "management", "manager", "maturity", "member", "members", "metric", "networks", "next", "numbered", "overview", "performance",
     "people", "preparation", "process", "profile", "profiles", "quote", "recognition", "recruitment", "results", "revenue",
     "review", "rewards", "role", "salary", "section", "setting", "share",
-    "size", "software", "statistics", "strategist", "structure", "summary",
-    "stars", "team", "thanks", "timeline", "translator", "takeaway", "takeaways", "workshop", "grow",
+    "size", "software", "statistics", "strategist", "structure", "subtitle", "summary",
+    "stars", "team", "term", "thanks", "timeline", "title", "translator", "takeaway", "takeaways", "trip", "workshop", "grow",
 }
 LOCALIZED_HINTS = [
+    ("sub tittle", ["subtitle"]),
+    ("sub title", ["subtitle"]),
+    ("luong phuc loi", ["salary", "benefits"]),
+    ("phuc loi", ["benefits"]),
+    ("mot buoc au tu", ["investment"]),
+    ("mot buoc dau tu", ["investment"]),
+    ("au tu", ["investment"]),
+    ("dau tu", ["investment"]),
+    ("quyen loi dai han", ["long", "term", "benefits"]),
+    ("company trip", ["company", "trip"]),
+    ("anh gia", ["review"]),
     ("tuyen dung", ["recruitment"]),
     ("phong van", ["interview"]),
     ("muc tieu", ["goal"]),
@@ -71,6 +84,9 @@ LOCALIZED_HINTS = [
     ("do va dont", ["do", "dont"]),
     ("quan ly", ["management"]),
 ]
+TOKEN_ALIASES = {
+    "tittle": "title",
+}
 LABEL_COMPONENT_TYPE = {
     "picture": "visual",
     "figure": "visual",
@@ -96,6 +112,7 @@ def _tokens(*values: object, limit: int = 7) -> list[str]:
         normalized = unicodedata.normalize("NFKD", str(value or ""))
         ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
         for raw in re.findall(r"[A-Za-z0-9]+", ascii_value.lower()):
+            raw = TOKEN_ALIASES.get(raw, raw)
             if raw in STOPWORDS or len(raw) < 2:
                 continue
             if raw not in out:
@@ -266,6 +283,9 @@ def _semantic_core(item: dict, suffix: str) -> list[str]:
     raw_lines = _clean_lines(text)
     lines = _english_lines(text)
     localized = _localized_hint_tokens(text)
+    ascii_text = _ascii_words(text)
+    if "sub tittle" in ascii_text or "sub title" in ascii_text:
+        return ["subtitle"]
     has_english_signal = any(
         _is_ascii(line)
         and any(token in ENGLISH_HINTS and token != "level"

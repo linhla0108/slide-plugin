@@ -2202,6 +2202,40 @@ def test_auto_stage_semantic_ids_translate_vietnamese_hints_to_english() -> None
     assert "dung" not in team_meta["keywords"]
 
 
+def test_auto_stage_semantic_ids_translate_salary_benefit_vietnamese() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    salary_item = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.35, "height": 0.35,
+                   "unit": "normalized"},
+        "region_text": "Lương phúc lợi\nQuyền lợi dài hạn",
+        "semantic_intent": ["picture candidate detected by Docling"],
+    }
+    investment_item = {
+        "item_id": "picture-p3-1",
+        "slide_or_page": 3,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.35, "height": 0.35,
+                   "unit": "normalized"},
+        "region_text": "Một bước đầu tư",
+        "semantic_intent": ["picture candidate detected by Docling"],
+    }
+    subtitle_item = {
+        "item_id": "figure-p4-1",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.55, "height": 0.25,
+                   "unit": "normalized"},
+        "region_text": "goes sub tittle",
+        "semantic_intent": ["figure candidate detected by PyMuPDF fallback"],
+    }
+
+    assert asc.semantic_item_id("input/Salary.pdf", salary_item, set()) == "salary-benefits-long-term-card"
+    assert asc.semantic_item_id("input/Salary.pdf", investment_item, set()) == "investment-card"
+    assert asc.semantic_item_id("input/Sun.Presentation.pdf", subtitle_item, set()) == "subtitle-visual"
+
+
 def test_auto_stage_metadata_keeps_context_intent_with_region_text() -> None:
     import importlib
 
