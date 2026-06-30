@@ -392,7 +392,7 @@ def _slots_in(slots: list[dict], bx: float, by: float, bw: float, bh: float,
 
 def _heading(slots: list[dict]) -> str:
     """Title from a region's heading text: the two largest font-size tiers
-    (heading + subtitle, e.g. 'Level 1 Spicy Autocomplete' / 'Revenue +30%'),
+    (heading + subtitle or a metric headline with value),
     read top-to-bottom/left-to-right.
 
     Long body-copy slots (a sentence, not a heading) are dropped, and repeated

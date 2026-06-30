@@ -91,3 +91,14 @@ Branch: `feature/auto-stage-docling-drafts`.
 **Files:** docs/logs/SESSION-LOG-2026-06-30.md, docs/logs/INDEX.jsonl
 **Symbols:** none
 **State:** Committed fec613d7
+
+## 2026-06-30.9 — Remove source-like docstring example
+
+**When:** 2026-06-30 17:49
+**Request:** Check whether any hardcoded source-specific strings remain in the PR.
+**Actions:**
+- Replaced the `_heading` docstring examples with generic wording so hardcode scans do not match source-specific sample slide text.
+**Result:** Targeted hardcode search no longer finds source-specific production strings; verification passed with `py_compile`, `test_gates.py` 106/106, log index check, and diff check.
+**Files:** docs/logs/SESSION-LOG-2026-06-30.md, docs/logs/INDEX.jsonl, slide-system/scripts/classify_page_components.py
+**Symbols:** _heading
+**State:** Not committed
