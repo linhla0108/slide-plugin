@@ -190,13 +190,16 @@ for example a chart, a title block, a background, or a whole slide.
 > "Look through this file and suggest the reusable parts."
 > *(then share the file)*
 
-Claude can **auto-detect the reusable parts** in a file — charts, tables,
-pictures, and the like — then automatically prepare them as **Draft** items.
+Claude can **auto-detect the reusable parts** in a file — tables, pictures,
+cards, diagrams, and the like — then automatically prepare them as **Draft**
+items.
 You do not need to rename raw candidates or approve an intermediate queue.
 For PDFs, the detection runs page by page so one difficult page does not stop
 the whole file.
 When a slide title or heading only explains a visual, Claude can keep that text
 as search metadata without making a second duplicate Draft.
+Data charts such as pie, bar, or line charts are skipped by auto-detect; ask for
+that exact chart only when you truly want to save it as a reusable part.
 
 After auto-detect finishes, open **Components → Draft**. Each detected part has
 a preview and information panel. Review the Draft, adjust the metadata if
@@ -206,10 +209,12 @@ new slide generation until you publish it from Draft.
 If several detected parts belong together, they may appear as one grouped Draft.
 Use the carousel to review the full component first, then each smaller variant
 inside it.
+If the same component pattern appears on several pages with different text,
+Claude keeps one representative Draft instead of showing every duplicate.
 For a strip of repeated cards, the same Draft can also show each individual card
 and each card's text-free version in the carousel.
-For a large diagram, the carousel can show each horizontal row as its own
-reviewable component pair.
+For a large diagram or a row of repeated cards, the carousel can show each
+horizontal row or each card/cell as its own reviewable component pair.
 
 ### What you'll get
 

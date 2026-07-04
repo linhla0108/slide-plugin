@@ -94,6 +94,15 @@ LABEL_COMPONENT_TYPE = {
     "chart": "chart",
     "form": "form",
 }
+DATA_CHART_RE = re.compile(
+    r"\b(?:pie|donut|bar|line|area|scatter|radar|mix|rating\s+scale)\s+chart\b"
+    r"|\bchart\s+(?:candidate|layout|visualization|visualisation|region)\b",
+    re.I,
+)
+SVG_ASSET_HREF_RE = re.compile(
+    r"(?P<attr>(?:xlink:)?href=)(?P<quote>[\"'])"
+    r"(?P<ref>(?:\.\./artifact/)?assets/(?P<name>[^\"']+))(?P=quote)"
+)
 
 
 class AutoStageError(Exception):
@@ -276,6 +285,127 @@ def _role_suffix(item: dict, label: str) -> str:
     if ratio <= 1.35:
         return "card"
     return "visual"
+
+
+def _auto_stage_skip_reason(item: dict) -> str | None:
+    """Return a reason when a detected candidate should not become a Draft."""
+    original_id = str(item.get("item_id") or "")
+    label = original_id.split("-", 1)[0].lower()
+    if label == "chart":
+        return "chart candidates are skipped by auto-detect"
+
+    text = " ".join(
+        str(value or "")
+        for value in (
+            original_id,
+            item.get("notes"),
+            item.get("region_text"),
+            item.get("context_text"),
+            " ".join(map(str, item.get("semantic_intent") or [])),
+        )
+    )
+    if DATA_CHART_RE.search(text):
+        return "data-chart regions are skipped by auto-detect"
+    return None
+
+
+def _region_band(value: float) -> int:
+    return max(0, min(9, int(value / 0.1)))
+
+
+def _size_band(value: float) -> str:
+    if value < 0.18:
+        return "tiny"
+    if value < 0.75:
+        return "small"
+    return "large"
+
+
+def _ratio_band(width: float, height: float) -> str:
+    ratio = width / max(height, 0.0001)
+    if ratio >= 2.2:
+        return "wide"
+    if ratio <= 0.7:
+        return "tall"
+    return "balanced"
+
+
+def _pattern_region_profile(item: dict) -> tuple[int, int, str, str, str] | None:
+    region = item.get("region") if isinstance(item.get("region"), dict) else {}
+    try:
+        x = float(region.get("x", 0))
+        y = float(region.get("y", 0))
+        width = float(region.get("width", 0))
+        height = float(region.get("height", 0))
+    except (TypeError, ValueError):
+        return None
+    if width <= 0 or height <= 0:
+        return None
+    return (
+        _region_band(x),
+        _region_band(y),
+        _size_band(width),
+        _size_band(height),
+        _ratio_band(width, height),
+    )
+
+
+def _pattern_text_profile(item: dict) -> tuple[int, tuple[int, ...]]:
+    text = " ".join(
+        str(value or "")
+        for value in (
+            item.get("region_text"),
+            item.get("context_text"),
+            " ".join(map(str, item.get("semantic_intent") or [])),
+        )
+    )
+    lines = _clean_lines(text)
+    if not lines:
+        return (0, ())
+    if len(lines) <= 2:
+        line_band = 1
+    elif len(lines) <= 5:
+        line_band = 2
+    else:
+        line_band = 3
+    buckets: list[int] = []
+    for line in lines[:2]:
+        token_count = len(_tokens(line, limit=20))
+        if token_count:
+            if token_count <= 3:
+                buckets.append(1)
+            elif token_count <= 7:
+                buckets.append(2)
+            elif token_count <= 11:
+                buckets.append(3)
+            else:
+                buckets.append(4)
+    return (line_band, tuple(buckets[:2]))
+
+
+def _duplicate_pattern_signature(source_path: str, item: dict) -> tuple | None:
+    original_id = str(item.get("item_id") or "")
+    label = original_id.split("-", 1)[0].lower() or "visual"
+    role = _role_suffix(item, label)
+    if role == "icon":
+        return None
+    if role in {"card", "strip", "visual"}:
+        role = "component"
+    region_profile = _pattern_region_profile(item)
+    if region_profile is None:
+        return None
+    try:
+        area = float((item.get("region") or {}).get("width", 0)) * float((item.get("region") or {}).get("height", 0))
+    except (TypeError, ValueError):
+        area = 0.0
+    if area < 0.025:
+        return None
+    return (
+        slug(Path(source_path).stem),
+        role,
+        region_profile,
+        _pattern_text_profile(item),
+    )
 
 
 def _semantic_core(item: dict, suffix: str) -> list[str]:
@@ -712,6 +842,8 @@ def _existing_stable_ids(output_root: Path) -> set[str]:
             mapping = load_json(mapping_path)
         except Exception:
             continue
+        if mapping.get("status") == "skipped":
+            continue
         stable_id = mapping.get("candidate_stable_id")
         if stable_id:
             stable_ids.add(str(stable_id))
@@ -898,6 +1030,64 @@ def _cluster_staged_records(staged_records: list[dict]) -> list[list[dict]]:
     return clusters
 
 
+def _same_file_bytes(left: Path, right: Path) -> bool:
+    try:
+        return left.read_bytes() == right.read_bytes()
+    except OSError:
+        return False
+
+
+def _copy_svg_with_assets(source_svg: Path, dest_svg: Path,
+                          dest_assets_dir: Path, href_prefix: str) -> None:
+    """Copy an item-local SVG into a new folder without breaking asset hrefs.
+
+    Child item visuals reference `artifact/assets` as `assets/...`. Carousel
+    manifests place those visuals under `artifact/components`, where the same
+    relative href would point at a non-existent `components/assets` directory.
+    Copy the referenced files into the parent artifact asset store and rewrite
+    the SVG for its destination folder.
+    """
+    text = source_svg.read_text(encoding="utf-8")
+    source_artifact_dir = source_svg.parent
+    dest_svg.parent.mkdir(parents=True, exist_ok=True)
+    dest_assets_dir.mkdir(parents=True, exist_ok=True)
+
+    def replace(match: re.Match) -> str:
+        name = match.group("name")
+        rel = Path(name)
+        if rel.is_absolute() or ".." in rel.parts:
+            return match.group(0)
+        source_assets_dir = (
+            source_artifact_dir.parent / "artifact" / "assets"
+            if match.group("ref").startswith("../artifact/")
+            else source_artifact_dir / "assets"
+        )
+        source_asset = source_assets_dir / rel
+        dest_rel = rel
+        dest_asset = dest_assets_dir / dest_rel
+        if source_asset.exists():
+            if dest_asset.exists() and not _same_file_bytes(source_asset, dest_asset):
+                stem = dest_rel.stem
+                suffix = dest_rel.suffix
+                parent = dest_rel.parent
+                idx = 2
+                while True:
+                    candidate = parent / f"{stem}-{idx}{suffix}"
+                    candidate_path = dest_assets_dir / candidate
+                    if not candidate_path.exists() or _same_file_bytes(source_asset, candidate_path):
+                        dest_rel = candidate
+                        dest_asset = candidate_path
+                        break
+                    idx += 1
+            dest_asset.parent.mkdir(parents=True, exist_ok=True)
+            if not dest_asset.exists():
+                shutil.copy2(source_asset, dest_asset)
+        href = href_prefix + dest_rel.as_posix()
+        return f"{match.group('attr')}{match.group('quote')}{href}{match.group('quote')}"
+
+    dest_svg.write_text(SVG_ASSET_HREF_RE.sub(replace, text), encoding="utf-8")
+
+
 def _materialize_group_item(
     extraction_id: str,
     source_path: str,
@@ -982,8 +1172,12 @@ def _materialize_group_item(
         text_free = child_item_dir / "artifact" / "visual.svg"
         if text_free.exists():
             text_free_file = f"{child_id}-text-free.svg"
-            shutil.copy2(text_free, components_dir / text_free_file)
-            shutil.copy2(text_free, artifact_dir / text_free_file)
+            _copy_svg_with_assets(
+                text_free, components_dir / text_free_file,
+                artifact_dir / "assets", "../assets/")
+            _copy_svg_with_assets(
+                text_free, artifact_dir / text_free_file,
+                artifact_dir / "assets", "assets/")
             cards.append({
                 "title": f"{child_name} (Text-free)",
                 "file": f"components/{text_free_file}",
@@ -1185,7 +1379,7 @@ def _decompose_mode(item_dir: Path) -> str | None:
         width = height = 0.0
     if component_type == "table" and area >= 0.10:
         return "layout-row-groups"
-    if component_type in {"card", "visual"} and (
+    if component_type in {"card", "component", "visual"} and (
         area >= 0.35 or (width >= 0.45 and height >= 0.18)
     ):
         return "layout-row-groups"
@@ -1232,6 +1426,7 @@ def stage_run(
         source_hash = None
     items_by_id = {item.get("item_id"): item for item in request_items}
     staged_records: list[dict] = []
+    pattern_representatives: dict[tuple, dict] = {}
     for original_id, item in items_by_id.items():
         if not original_id:
             continue
@@ -1247,6 +1442,29 @@ def stage_run(
                 "reason": "candidate rejected",
             })
             continue
+        skip_reason = _auto_stage_skip_reason(item)
+        if skip_reason:
+            summary["skipped"] += 1
+            summary["items"].append({
+                "candidate_id": original_id,
+                "status": "skipped",
+                "reason": skip_reason,
+            })
+            continue
+        pattern_signature = _duplicate_pattern_signature(source_path, item)
+        item_page = str(item.get("slide_or_page") or "")
+        representative = pattern_representatives.get(pattern_signature)
+        if representative and representative.get("slide_or_page") != item_page:
+            summary["skipped"] += 1
+            summary["items"].append({
+                "candidate_id": original_id,
+                "status": "skipped_duplicate_pattern",
+                "reason": "same component pattern already staged in this run",
+                "duplicate_of_candidate_id": representative["candidate_id"],
+                "duplicate_of_item_id": representative.get("item_id"),
+                "duplicate_of_stable_id": representative.get("stable_id"),
+            })
+            continue
         history_stable_id = _history_stable_id_for_item(
             history_data, source_hash, item)
         if history_stable_id and history_stable_id in existing_stable_ids:
@@ -1257,6 +1475,13 @@ def stage_run(
                 "status": "already_staged_region",
                 "reason": "matching source/page/region already has a Draft",
             })
+            if pattern_signature is not None:
+                pattern_representatives[pattern_signature] = {
+                    "candidate_id": original_id,
+                    "slide_or_page": item_page,
+                    "item_id": None,
+                    "stable_id": history_stable_id,
+                }
             continue
         item_id = semantic_item_id(source_path, item, used_ids)
         metadata = metadata_for(source_path, item, item_id)
@@ -1270,6 +1495,18 @@ def stage_run(
         staged_extraction_id = approved_request["extraction_id"]
         item_dir = output_root / staged_extraction_id / "items" / review["item_id"]
         if (item_dir / "mapping.json").is_file():
+            existing_mapping = load_json(item_dir / "mapping.json")
+            if existing_mapping.get("status") == "skipped":
+                summary["skipped"] += 1
+                summary["items"].append({
+                    "candidate_id": original_id,
+                    "item_id": review["item_id"],
+                    "extraction_id": staged_extraction_id,
+                    "item_dir": str(item_dir),
+                    "status": "skipped_blank_text_free",
+                    "reason": "text-free visual rendered blank; likely text-only region",
+                })
+                continue
             summary["skipped"] += 1
             summary["items"].append({
                 "candidate_id": original_id,
@@ -1278,7 +1515,13 @@ def stage_run(
                 "item_dir": str(item_dir),
                 "status": "already_staged",
             })
-            existing_mapping = load_json(item_dir / "mapping.json")
+            if pattern_signature is not None:
+                pattern_representatives[pattern_signature] = {
+                    "candidate_id": original_id,
+                    "slide_or_page": item_page,
+                    "item_id": review["item_id"],
+                    "stable_id": existing_mapping["candidate_stable_id"],
+                }
             if not existing_mapping.get("collection_parent_id"):
                 staged_records.append({
                     "candidate_id": original_id,
@@ -1309,6 +1552,13 @@ def stage_run(
             "artifact_status": artifact_status,
             "artifact_log": artifact_log,
         })
+        if pattern_signature is not None:
+            pattern_representatives[pattern_signature] = {
+                "candidate_id": original_id,
+                "slide_or_page": item_page,
+                "item_id": review["item_id"],
+                "stable_id": stable_id,
+            }
         staged_records.append({
             "candidate_id": original_id,
             "item": item,

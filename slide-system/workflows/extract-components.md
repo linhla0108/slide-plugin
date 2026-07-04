@@ -2,6 +2,14 @@
 
 This workflow runs only through the manual component-extractor skill.
 
+0. **Mandatory tool readiness check.** Before authoring a request JSON or
+   running Docling/scaffold/artifact commands, check the extraction toolchain:
+   `python3 slide-system/scripts/check_base_requirements.py --input pdf` for
+   PDF sources, `--input pptx` for PPTX sources, or the marker-first base check
+   for SVG/package sources. Stop on any `BLOCKER`. Docling is optional, but the
+   source provider for the input type is not optional; do not fall back from
+   Docling to manual extraction until this check passes.
+
 > **Optional pre-step (auto-detect candidates):** when the user wants help
 > finding the reusable parts, run the analysis-only
 > `scripts/analyze_with_docling.py --source <file> --extraction-id <id>`. It

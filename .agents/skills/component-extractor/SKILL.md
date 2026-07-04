@@ -80,6 +80,24 @@ Good examples: `metric-card`, `timeline-horizontal`, `org-chart-radial`,
 If any value is missing or ambiguous, ask one focused clarification.
 Do not infer and proceed silently.
 
+### Mandatory tool readiness check
+
+Before any extraction command is authored or run — Docling analysis,
+manual request scaffolding, auto-stage, or artifact generation — check the
+toolchain first. This is required for every extraction session; the marker makes
+repeat checks cheap.
+
+- PDF input: run `python3 slide-system/scripts/check_base_requirements.py --input pdf`.
+- PPTX input: run `python3 slide-system/scripts/check_base_requirements.py --input pptx`.
+- SVG/package input: read the readiness marker and run
+  `python3 slide-system/scripts/check_base_requirements.py` only if the marker
+  is missing or not ready.
+
+Stop on any `BLOCKER`. Do not create `extraction-request.json`, do not run
+`scaffold_extraction.py`, and do not fall back from Docling to the manual flow
+until the base extraction provider for the input type passes. Docling itself is
+optional; PyMuPDF/LibreOffice readiness for the source type is not optional.
+
 ### Optional: auto-detect candidate regions (Docling)
 
 When the user wants help finding the reusable parts ("suggest the reusable
@@ -109,7 +127,8 @@ artifact chain when possible (`visual.svg`, `text-slots.json`, cropped
 `source-with-text.svg`, `preview/thumbnail.png`), and rebuilds the catalog.
 The user reviews the resulting items only in **Components → Draft** and decides
 whether to Publish/Delete there. If Docling is not installed it exits cleanly
-with a message; just proceed with the normal manual flow. See
+with a message; proceed with the normal manual flow only after the mandatory
+tool readiness check above has passed. See
 `slide-system/rules/extraction-methods.md` → "Optional: Docling candidate
 auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
 only for scanned PDFs. Tiny decorative candidates are filtered by default
@@ -119,7 +138,10 @@ single bad page cannot crash the whole run; pages with no usable Docling
 candidate can still receive conservative PyMuPDF text/vector row candidates for
 Draft review. If a PyMuPDF row only wraps an existing Docling visual with
 title/context text, it is not staged as a duplicate Draft; that text is attached
-to the existing candidate's retrieval intent instead.
+to the existing candidate's retrieval intent instead. Data-chart candidates
+such as pie/bar/line charts are skipped by auto-detect because they are usually
+source-specific content; manually extract an exact chart only when the user
+explicitly asks for that chart.
 
 ### Automated candidate staging (before Draft review)
 
@@ -143,15 +165,19 @@ review. It is still conservative:
 - Related candidates from the same source page are grouped into one Draft when
   appropriate. The carousel starts with the full grouped component, followed by
   the smaller child variants for review.
+- Repeated components with the same coarse layout profile and text structure
+  across different pages are treated as duplicate patterns. Auto-stage keeps
+  the first representative Draft and skips later copies whose only difference is
+  instance text.
 - Strip-like Drafts are decomposed in-place: the Draft keeps the full component
   preview, then the carousel adds each detected sub-card with text and its
   matching text-free variant. This uses
   `classify_page_components.py --manifest-only` so auto-stage does not create
   extra Drafts for the sub-cards.
-- Large card/diagram Drafts are decomposed by horizontal layout row when the
-  detected region is broad enough to contain multiple component bands. The
-  carousel shows the full diagram first, then each row with text and each row's
-  text-free variant.
+- Large card/diagram Drafts are decomposed by layout row or by individual
+  card/cell when the detected region is broad enough to contain multiple
+  component bands. The carousel shows the full diagram first, then each
+  sub-component with text and its text-free variant.
 - Icon reference sheets stay as one Draft for final review, then
   `split_icon_sheet.py` writes `artifact/icons/icons-manifest.json` so the
   catalog shows a searchable icon grid inside that Draft instead of only the
@@ -160,7 +186,7 @@ review. It is still conservative:
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.
 
-## Preflight (marker-first — do not run the script by default)
+## Preflight (mandatory, marker-first)
 
 Readiness is recorded in `slide-system/registries/extract-readiness.json`.
 Checking it costs one file read, not a Python process:
@@ -246,7 +272,7 @@ not read it separately.
    # Auto-staged Drafts use --manifest-only to keep sub-components in the
    # parent Draft carousel instead of creating separate .gNN Drafts.
    # Large diagram/card regions also use --layout-row-groups to show one
-   # carousel pair per visual row.
+   # carousel pair per visual row or per card/cell in a single-row component set.
    ```
 
 4. For each item write `mapping.json` (the canonical record: fingerprints,

@@ -26,6 +26,10 @@ generic placeholder ids minted here on purpose).
 Docling may run locally (preferred) or via a project-scoped Docling MCP server;
 this script only uses the local Python package. See
 `slide-system/rules/extraction-methods.md` for the optional MCP note.
+
+Data-chart regions are skipped by default during auto-detect because they are
+usually source-specific, not reusable visual components. Manual extraction can
+still target an exact chart region when the user explicitly asks for one.
 """
 
 from __future__ import annotations
@@ -42,7 +46,10 @@ from _common import now_iso, sha256_file, write_json
 # Labels Docling emits that are worth proposing as reusable visual candidates.
 # Prose/text blocks are recorded in page-analysis.json but not turned into
 # candidates (they are editable content, not reusable visual building blocks).
-CANDIDATE_LABELS = {"picture", "figure", "table", "chart", "form"}
+# Data-chart regions are intentionally skipped by auto-detect: they are usually
+# source-specific data, not reusable brand components. A user can still manually
+# extract an exact chart region through component-extractor when requested.
+CANDIDATE_LABELS = {"picture", "figure", "table", "form"}
 
 ID_OK = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 SOURCE_SUFFIXES = {".pdf", ".pptx"}

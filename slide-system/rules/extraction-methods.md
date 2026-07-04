@@ -39,6 +39,10 @@ slots.
 reusable regions (pictures, tables, figures) in a PDF/PPTX so a user does not
 have to name every region by hand. It changes no shared registry state:
 
+- Run the component extraction readiness check before this pre-step:
+  `python3 slide-system/scripts/check_base_requirements.py --input pdf` for PDF
+  sources or `--input pptx` for PPTX sources. If Docling is missing, manual
+  extraction may continue only after this source-provider check passes.
 - It writes only under
   `outputs/component-extractions/<extraction-id>/analysis/`:
   `page-analysis.json`, `docling-report.json`, and — only when at least one
@@ -57,6 +61,10 @@ have to name every region by hand. It changes no shared registry state:
   conservative PyMuPDF text/vector row candidates. When a broad PyMuPDF row only
   surrounds an existing Docling candidate, the row is treated as retrieval
   context for that candidate instead of becoming a duplicate Draft.
+- Data-chart candidates such as pie, bar, line, or rating-scale charts are
+  skipped by default during auto-detect. They are usually source-specific data,
+  not reusable visual components. Manual component extraction can still target
+  an exact chart region when the user explicitly asks for that chart.
 - The emitted `candidate-extraction-request.json` is schema-compatible with
   `extraction-request.schema.json`, but its `item_id`s are placeholders
   (`<label>-p<page>-<n>`). Do not ask the user to review these placeholders.
@@ -122,17 +130,21 @@ into real catalog Draft items:
   as one parent Draft. Its carousel starts with the full grouped component, then
   shows each smaller child variant; child mappings remain on disk for evidence
   but are hidden from the main catalog list.
+- **Duplicate pattern skip:** repeated candidates with the same coarse layout
+  profile, component role, and text-structure profile across different pages are
+  treated as one reusable pattern. Auto-stage keeps the first representative
+  Draft and skips later copies that only differ by instance copy.
 - **Strip Draft decomposition:** a strip-like Draft may still contain reusable
   sub-components. Auto-stage runs `classify_page_components.py --manifest-only`
   for these items so the same Draft carousel includes the full strip, the
   text-free strip, each detected card with text, and each card's text-free
   version. This gives non-technical reviewers one final Draft to approve/delete
   without scattering the sub-cards into separate Draft rows.
-- **Large diagram row decomposition:** broad card/diagram Drafts can contain
-  several reusable horizontal bands rather than repeated cards. Auto-stage runs
-  `classify_page_components.py --manifest-only --layout-row-groups` for these
-  large regions so the carousel shows the full diagram plus row-level
-  source/text-free pairs.
+- **Large diagram row/cell decomposition:** broad card/diagram Drafts can
+  contain several reusable horizontal bands or a single row of repeated cards.
+  Auto-stage runs `classify_page_components.py --manifest-only
+  --layout-row-groups` for these large regions so the carousel shows the full
+  diagram plus row-level or card/cell source/text-free pairs.
 - **Icon sheet decomposition:** icon reference sheets remain one catalog Draft
   for approval, but auto-stage runs `split_icon_sheet.py` after the standard PDF
   artifact chain so `artifact/icons/icons-manifest.json` powers the Draft's

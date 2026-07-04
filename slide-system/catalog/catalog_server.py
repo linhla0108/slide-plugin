@@ -66,6 +66,23 @@ def run(cmd: list[str]) -> tuple[bool, str]:
     return proc.returncode == 0, (out + ("\n" + err if err else "")).strip()
 
 
+def body_bool(body: dict, key: str, default: bool) -> bool:
+    value = body.get(key, default)
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    if isinstance(value, int) and value in {0, 1}:
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "on"}:
+            return True
+        if normalized in {"false", "0", "no", "off"}:
+            return False
+    raise ValueError(f"{key} must be a boolean")
+
+
 def regen_catalog() -> tuple[bool, str]:
     return run([sys.executable, str(SCRIPTS / "build_component_catalog.py")])
 
@@ -363,11 +380,17 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(400, {"ok": False, "error": "Invalid JSON body"})
             extraction_id = str(body.get("extraction_id", ""))
             try:
+                rebuild_catalog = body_bool(body, "rebuild_catalog", True)
+                build_artifacts = body_bool(body, "build_artifacts", True)
                 summary = asc.stage_run(
                     extraction_id,
-                    rebuild_catalog=bool(body.get("rebuild_catalog", True)),
-                    build_artifacts=bool(body.get("build_artifacts", True)),
+                    rebuild_catalog=rebuild_catalog,
+                    build_artifacts=build_artifacts,
                 )
+            except ValueError as exc:
+                return self._json(400, {"ok": False, "error": str(exc)})
+            except (cr.CandidateError, asc.AutoStageError) as exc:
+                return self._json(400, {"ok": False, "error": str(exc)})
             except Exception as exc:  # surface, never crash the server
                 return self._json(500, {"ok": False, "error": str(exc)})
             return self._json(200, {"ok": True, **summary})

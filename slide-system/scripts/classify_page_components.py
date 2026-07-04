@@ -644,6 +644,10 @@ def _center_y(box: dict) -> float:
     return float(box["y"]) + float(box["h"]) / 2
 
 
+def _center_x(box: dict) -> float:
+    return float(box["x"]) + float(box["w"]) / 2
+
+
 def _row_title(slots: list[dict], fallback: str) -> str:
     if not slots:
         return fallback
@@ -682,8 +686,8 @@ def _row_title(slots: list[dict], fallback: str) -> str:
     return " ".join(words[:5]) or fallback
 
 
-def _cluster_layout_rows(instances: list[dict],
-                         dropped_small_entries: list[dict]) -> list[dict]:
+def _cluster_layout_rows_any(instances: list[dict],
+                             dropped_small_entries: list[dict]) -> list[dict]:
     major = [{**inst, "kind": "major"} for inst in instances]
     if len(major) < 2:
         return []
@@ -704,8 +708,6 @@ def _cluster_layout_rows(instances: list[dict],
             target["elements"].append(elem)
 
     rows.sort(key=lambda r: _center_y(_union_box(r["elements"])))
-    if len(rows) < 2:
-        return []
 
     for small in dropped_small_entries:
         nearest = min(rows, key=lambda r: abs(_center_y(small) - _center_y(_union_box(r["elements"]))))
@@ -715,6 +717,45 @@ def _cluster_layout_rows(instances: list[dict],
             nearest["elements"].append({**small, "kind": "small"})
 
     return rows
+
+
+def _cluster_layout_rows(instances: list[dict],
+                         dropped_small_entries: list[dict]) -> list[dict]:
+    rows = _cluster_layout_rows_any(instances, dropped_small_entries)
+    if len(rows) < 2:
+        return []
+    return rows
+
+
+def _cluster_layout_cells(instances: list[dict],
+                          dropped_small_entries: list[dict]) -> list[dict]:
+    rows = _cluster_layout_rows_any(instances, dropped_small_entries)
+    cells: list[dict] = []
+    for row_index, row in enumerate(rows, start=1):
+        majors = sorted(
+            [e for e in row["elements"] if e.get("kind") == "major"],
+            key=lambda e: (_center_x(e), _center_y(e)),
+        )
+        if len(majors) < 2:
+            continue
+        centers = [_center_x(e) for e in majors]
+        boundaries = [(centers[i] + centers[i + 1]) / 2 for i in range(len(centers) - 1)]
+        row_cells = [
+            {"row_index": row_index, "col_index": col_index, "elements": [major]}
+            for col_index, major in enumerate(majors, start=1)
+        ]
+        for elem in row["elements"]:
+            if elem.get("kind") == "major":
+                continue
+            cx = _center_x(elem)
+            idx = 0
+            while idx < len(boundaries) and cx > boundaries[idx]:
+                idx += 1
+            row_cells[idx]["elements"].append(elem)
+        cells.extend(row_cells)
+    if len(cells) < 2:
+        return []
+    return cells
 
 
 def _slots_by_row(rows: list[dict], slots: list[dict],
@@ -733,6 +774,94 @@ def _slots_by_row(rows: list[dict], slots: list[dict],
             idx += 1
         grouped[idx].append(slot)
     return grouped
+
+
+def _slots_by_cells(cells: list[dict], slots: list[dict],
+                    canvas_w: float, canvas_h: float) -> list[list[dict]]:
+    grouped = [[] for _ in cells]
+    if not cells:
+        return grouped
+    cell_boxes = [_union_box(cell["elements"]) for cell in cells]
+    for slot in slots:
+        box = _slot_bounds_px(slot, canvas_w, canvas_h)
+        cx = _center_x(box)
+        cy = _center_y(box)
+        best_idx = None
+        best_dist = None
+        for idx, cell_box in enumerate(cell_boxes):
+            pad_x = max(24.0, cell_box["w"] * 0.08)
+            pad_y = max(24.0, cell_box["h"] * 0.12)
+            inside = (
+                cell_box["x"] - pad_x <= cx <= cell_box["x"] + cell_box["w"] + pad_x
+                and cell_box["y"] - pad_y <= cy <= cell_box["y"] + cell_box["h"] + pad_y
+            )
+            if not inside:
+                continue
+            dist = abs(cx - _center_x(cell_box)) + abs(cy - _center_y(cell_box))
+            if best_dist is None or dist < best_dist:
+                best_idx = idx
+                best_dist = dist
+        if best_idx is not None:
+            grouped[best_idx].append(slot)
+    return grouped
+
+
+def _build_layout_cell_records(prefix: str, instances: list[dict],
+                               dropped_small_entries: list[dict],
+                               groups: list[ET.Element],
+                               all_defs: list[ET.Element], margin: float,
+                               source_dir: Path, ancestor_transform: str,
+                               text_slots: list[dict], canvas_w: float,
+                               canvas_h: float, out_dir: Path,
+                               source_with_text: Path) -> list[dict]:
+    cells = _cluster_layout_cells(instances, dropped_small_entries)
+    if len(cells) < 2:
+        return []
+    cell_slots = _slots_by_cells(cells, text_slots, canvas_w, canvas_h)
+    records: list[dict] = []
+    for n, cell in enumerate(cells, start=1):
+        visual_boxes = [
+            {"x": e["x"], "y": e["y"], "w": e["w"], "h": e["h"]}
+            for e in cell["elements"]
+        ]
+        slot_boxes = [_slot_bounds_px(s, canvas_w, canvas_h) for s in cell_slots[n - 1]]
+        crop_box = _union_box(visual_boxes + slot_boxes) if slot_boxes else _union_box(visual_boxes)
+        members = [m for e in cell["elements"] for m in e["members"]]
+        cell_id = f"{prefix}-cell-{n:02d}"
+        cell_file = f"{cell_id}.svg"
+        source_file = f"{cell_id}-source.svg"
+        frag = _build_fragment(members, groups, all_defs, margin, source_dir,
+                               ancestor_transform, crop_bounds=crop_box)
+        (out_dir / cell_file).write_bytes(ET.tostring(frag))
+        source_written = _build_source_crop(source_with_text, crop_box, margin, out_dir / source_file)
+        title = _row_title(cell_slots[n - 1], f"Card {n}")
+        records.append({
+            "group_id": cell_id,
+            "file": f"components/{cell_file}",
+            "shape_class": 2000 + n,
+            "layout_group": "cell",
+            "title": title,
+            "tags": _tags_from([title]),
+            "member_count": len(cell["elements"]),
+            "distinct_card_count": 1,
+            "group_bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                             "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+            "member_bounds": [
+                {"x": round(e["x"], 1), "y": round(e["y"], 1),
+                 "w": round(e["w"], 1), "h": round(e["h"], 1)}
+                for e in cell["elements"]
+            ],
+            "cards": [{
+                "card_id": cell_id,
+                "file": f"components/{cell_file}",
+                "source_file": f"components/{source_file}" if source_written else None,
+                "title": title,
+                "bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                           "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+                "duplicate_count": 1,
+            }],
+        })
+    return records
 
 
 def _build_layout_row_records(prefix: str, instances: list[dict],
@@ -993,14 +1122,21 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
                 "cards": card_records,
             })
         if layout_row_groups:
+            cell_records = _build_layout_cell_records(
+                prefix, instances, dropped_small_entries, groups, all_defs,
+                margin, visual.parent, ancestor_transform, text_slots,
+                canvas_w, canvas_h, out_dir, source_with_text)
             row_records = _build_layout_row_records(
                 prefix, instances, dropped_small_entries, groups, all_defs,
                 margin, visual.parent, ancestor_transform, text_slots,
                 canvas_w, canvas_h, out_dir, source_with_text)
-            if row_records:
+            keep = set()
+            if cell_records:
+                group_records = cell_records
+            elif row_records:
                 group_records = row_records
-                keep = set()
-                for rec in row_records:
+            if cell_records or row_records:
+                for rec in group_records:
                     if rec.get("file"):
                         keep.add(Path(rec["file"]).name)
                     for card in rec.get("cards", []):

@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import sys
 import tempfile
+import importlib.util
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
@@ -862,6 +863,24 @@ def test_group_title_common_prefix_and_join() -> None:
         == "TRANSLATOR / DRIVER"
 
 
+def test_layout_cells_split_single_row_cards() -> None:
+    instances = [
+        {"x": 10, "y": 20, "w": 120, "h": 240, "members": [{"group": 0, "child": None}]},
+        {"x": 150, "y": 20, "w": 120, "h": 240, "members": [{"group": 1, "child": None}]},
+        {"x": 290, "y": 20, "w": 120, "h": 240, "members": [{"group": 2, "child": None}]},
+    ]
+    small = [
+        {"x": 330, "y": 40, "w": 20, "h": 20, "members": [{"group": 3, "child": None}]},
+    ]
+
+    assert cpc._cluster_layout_rows(instances, small) == []
+    cells = cpc._cluster_layout_cells(instances, small)
+
+    assert len(cells) == 3
+    assert [cell["col_index"] for cell in cells] == [1, 2, 3]
+    assert len(cells[2]["elements"]) == 2, cells
+
+
 def test_tags_from_dedups_and_skips_stopwords() -> None:
     tags = cpc._tags_from(["Level 1 Spicy", "Level 2 Coding", "the and Spicy"])
     assert tags == ["Level", "1", "Spicy", "2", "Coding"], tags
@@ -1111,11 +1130,28 @@ def test_analyze_with_docling_emits_only_draft_ids() -> None:
             "region": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.2,
                        "unit": "normalized"}}
            for p, lbl in [(1, "picture"), (2, "table"), (10, "figure"),
-                          ("x", "chart"), (3, "form")]]
+                          (3, "form")]]
     items = awd.build_candidates(els, "demo", "component", None)
     assert items, "expected candidates from figure-like labels"
     for it in items:
         assert scaffold_ex._DOCLING_DRAFT_ID.match(it["item_id"]), it["item_id"]
+
+
+def test_analyze_with_docling_skips_chart_candidates() -> None:
+    import analyze_with_docling as awd
+
+    els = [
+        {"page": 1, "label": "chart", "text": "Pie chart",
+         "region": {"x": 0.1, "y": 0.1, "width": 0.3,
+                    "height": 0.3, "unit": "normalized"}},
+        {"page": 1, "label": "picture", "text": "Reusable card",
+         "region": {"x": 0.5, "y": 0.1, "width": 0.3,
+                    "height": 0.3, "unit": "normalized"}},
+    ]
+
+    items = awd.build_candidates(els, "demo", "component", None)
+
+    assert [item["item_id"] for item in items] == ["picture-p1-1"]
 
 
 def test_analyze_with_docling_filters_tiny_candidates() -> None:
@@ -1961,6 +1997,141 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert second["items"][0]["status"] in {"already_staged", "already_staged_region"}
 
 
+def test_auto_stage_skips_chart_candidates_from_existing_analysis() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    assert asc._auto_stage_skip_reason({"item_id": "chart-p1-1"})
+    assert asc._auto_stage_skip_reason({
+        "item_id": "picture-p1-1",
+        "semantic_intent": ["pie chart candidate detected by Docling"],
+    })
+    assert asc._auto_stage_skip_reason({
+        "item_id": "picture-p1-1",
+        "semantic_intent": ["org chart radial team structure"],
+    }) is None
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        output_root = tmpp / "component-extractions"
+        eid = "docling-chart-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(tmpp / "source.pdf"),
+            "items": [{
+                "item_id": "chart-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.1, "width": 0.3,
+                           "height": 0.3, "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["chart candidate detected by Docling"],
+                "notes": "DRAFT candidate from Docling auto-detect.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+
+        assert summary["staged"] == 0, summary
+        assert summary["skipped"] == 1, summary
+        assert summary["items"][0]["reason"] == "chart candidates are skipped by auto-detect"
+        assert not (adir / "approved").exists()
+
+
+def test_auto_stage_skips_duplicate_component_patterns_across_pages() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    first = {
+        "item_id": "picture-p3-1",
+        "slide_or_page": 3,
+        "region": {"x": 0.05, "y": 0.08, "width": 0.42,
+                   "height": 0.32, "unit": "normalized"},
+        "semantic_intent": ["Goal setting title card with highlighted subtitle"],
+    }
+    second = {
+        "item_id": "picture-p4-1",
+        "slide_or_page": 4,
+        "region": {"x": 0.052, "y": 0.081, "width": 0.58,
+                   "height": 0.29, "unit": "normalized"},
+        "semantic_intent": ["Check-in title card with highlighted subtitle"],
+    }
+    assert asc._duplicate_pattern_signature("input/goal-setting.pdf", first) == (
+        asc._duplicate_pattern_signature("input/goal-setting.pdf", second)
+    )
+    same_page_neighbour = {
+        **first,
+        "item_id": "picture-p3-2",
+        "region": {"x": 0.55, "y": 0.08, "width": 0.42,
+                   "height": 0.32, "unit": "normalized"},
+    }
+    assert asc._duplicate_pattern_signature("input/goal-setting.pdf", first) != (
+        asc._duplicate_pattern_signature("input/goal-setting.pdf", same_page_neighbour)
+    )
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Goal Setting 2026.pptx"
+        source.write_bytes(b"fake pptx source for hashing only")
+        output_root = tmpp / "component-extractions"
+        eid = "docling-duplicate-pattern-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {
+                    **first,
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "notes": "Year-end evaluation title card",
+                    "replacement_for": None,
+                },
+                {
+                    **second,
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "notes": "Quarterly check-in title card",
+                    "replacement_for": None,
+                },
+            ],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+
+        assert summary["staged"] == 1, summary
+        assert summary["skipped"] == 1, summary
+        duplicate = summary["items"][1]
+        assert duplicate["status"] == "skipped_duplicate_pattern"
+        assert duplicate["duplicate_of_candidate_id"] == "picture-p3-1"
+
+
 def test_auto_stage_cli_reads_analysis_from_output_root() -> None:
     import importlib
 
@@ -2050,6 +2221,8 @@ def test_auto_stage_decomposes_tables_and_broad_visuals_as_layout_rows() -> None
         write_mapping("table", 0.72, 0.38)
         assert asc._decompose_mode(item) == "layout-row-groups"
         write_mapping("visual", 0.55, 0.23)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("component", 0.55, 0.23)
         assert asc._decompose_mode(item) == "layout-row-groups"
         write_mapping("visual", 0.30, 0.20)
         assert asc._decompose_mode(item) is None
@@ -2618,10 +2791,84 @@ def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
         ]
 
 
+def test_auto_stage_group_text_free_svg_rewrites_component_asset_refs() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        child_artifact = tmpp / "child" / "artifact"
+        child_assets = child_artifact / "assets"
+        child_assets.mkdir(parents=True)
+        (child_assets / "icon.png").write_bytes(b"png")
+        child_svg = child_artifact / "visual.svg"
+        child_svg.write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink">'
+            '<defs><g id="mask"/></defs>'
+            '<image xlink:href="assets/icon.png"/>'
+            '<use xlink:href="#mask"/></svg>',
+            encoding="utf-8",
+        )
+
+        parent_artifact = tmpp / "parent" / "artifact"
+        dest_svg = parent_artifact / "components" / "child-text-free.svg"
+        asc._copy_svg_with_assets(
+            child_svg, dest_svg, parent_artifact / "assets", "../assets/")
+
+        copied = dest_svg.read_text(encoding="utf-8")
+        assert 'xlink:href="../assets/icon.png"' in copied, copied
+        assert 'xlink:href="assets/icon.png"' not in copied, copied
+        assert 'xlink:href="#mask"' in copied, copied
+        assert (parent_artifact / "assets" / "icon.png").read_bytes() == b"png"
+
+
+def test_auto_stage_existing_stable_ids_ignore_skipped_outputs() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        skipped = root / "skip" / "items" / "blank" / "mapping.json"
+        active = root / "active" / "items" / "card" / "mapping.json"
+        skipped.parent.mkdir(parents=True)
+        active.parent.mkdir(parents=True)
+        skipped.write_text(json.dumps({
+            "status": "skipped",
+            "candidate_stable_id": "sun.component.blank",
+        }), encoding="utf-8")
+        active.write_text(json.dumps({
+            "status": "staging",
+            "candidate_stable_id": "sun.component.card",
+        }), encoding="utf-8")
+
+        assert asc._existing_stable_ids(root) == {"sun.component.card"}
+
+
 def test_catalog_has_no_candidate_review_top_tab() -> None:
     html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
     assert 'data-section="review"' not in html
     assert 'id="section-review"' not in html
+
+
+def test_catalog_server_parses_stage_candidate_booleans() -> None:
+    path = SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py"
+    spec = importlib.util.spec_from_file_location("catalog_server_under_test", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    assert module.body_bool({}, "build_artifacts", True) is True
+    assert module.body_bool({"build_artifacts": False}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "false"}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "0"}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "true"}, "build_artifacts", False) is True
+    try:
+        module.body_bool({"build_artifacts": "sometimes"}, "build_artifacts", True)
+    except ValueError as exc:
+        assert "build_artifacts" in str(exc)
+    else:
+        raise AssertionError("invalid boolean strings must fail")
 
 
 # --------------------------------------------------------------------------- #
