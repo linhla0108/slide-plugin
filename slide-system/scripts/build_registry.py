@@ -29,14 +29,17 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from _common import load_json, now_iso, resolve_repo_path, write_json
+import build_component_retrieval_index as retrieval
 
 SYSTEM_ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = SYSTEM_ROOT / "library"
 REGISTRY = SYSTEM_ROOT / "registries/visual-library.json"
 COMPACT = SYSTEM_ROOT / "registries/visual-library-compact.json"
+RETRIEVAL = SYSTEM_ROOT / "registries/component-retrieval-index.jsonl"
 HISTORY = SYSTEM_ROOT / "registries/extraction-history.json"
 
 # Keys the scorer's compact registry carries (see score_visual_items.py). Keep
@@ -65,6 +68,14 @@ def registry_artifact_dirs(items: list[dict]) -> set[Path]:
 
 def project_compact(items: list[dict]) -> dict:
     return {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in items]}
+
+
+def retrieval_jsonl(items: list[dict]) -> str:
+    records = retrieval.build_records({"items": items})
+    return "".join(
+        json.dumps(record, ensure_ascii=True, sort_keys=True) + "\n"
+        for record in records
+    )
 
 
 def history_zombie_ids(registry_ids: set[str]) -> list[str]:
@@ -137,6 +148,14 @@ def main() -> int:
 
     if args.check:
         drift = len(dangling) + len(orphans) + len(zombies)
+        desired_retrieval = retrieval_jsonl(kept)
+        retrieval_stale = (
+            not RETRIEVAL.exists()
+            or RETRIEVAL.read_text(encoding="utf-8") != desired_retrieval
+        )
+        if retrieval_stale:
+            print(f"STALE     {RETRIEVAL.relative_to(SYSTEM_ROOT.parent)}")
+            drift += 1
         print(f"{'DRIFT' if drift else 'clean'}: {len(dangling)} dangling, "
               f"{len(orphans)} orphan, {len(zombies)} zombie, {len(kept)} valid items")
         return 1 if drift else 0
@@ -151,6 +170,7 @@ def main() -> int:
         zombies = history_zombie_ids({i["id"] for i in kept})
         purged = purge_history(zombies)
         write_json(COMPACT, project_compact(kept))
+        RETRIEVAL.write_text(retrieval_jsonl(kept), encoding="utf-8", newline="\n")
         print(f"wrote compact ({len(kept)} items); dropped {len(dangling)} dangling; "
               f"purged {purged} zombie history record(s); "
               f"{len(orphans)} orphan folder(s) left for review")

@@ -1333,6 +1333,7 @@ def _build_pdf_artifacts(item_dir: Path, source_path: str, page: int | str) -> t
         commands.append(classify_cmd)
     if _is_icon_sheet_item(item_dir):
         commands.append(["slide-system/scripts/split_icon_sheet.py", "--item-dir", str(item_dir)])
+    commands.append(["slide-system/scripts/quality_gate.py", "--item-dir", str(item_dir)])
     commands.append(["slide-system/scripts/generate_item_preview.py", "--item-dir", str(item_dir)])
     logs: list[str] = []
     for cmd in commands:

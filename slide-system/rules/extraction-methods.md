@@ -149,6 +149,13 @@ into real catalog Draft items:
   for approval, but auto-stage runs `split_icon_sheet.py` after the standard PDF
   artifact chain so `artifact/icons/icons-manifest.json` powers the Draft's
   searchable icon grid.
+- **Draft quality gate:** auto-stage runs `quality_gate.py` after decomposition
+  and before preview generation. This is a fast structural pass, not a browser
+  render audit: it prunes blank/missing component-manifest references, removes
+  empty component manifests, and writes `mapping.json.quality_gate`. The goal is
+  safe extraction, not maximum extraction. Low-confidence or uncertain artifacts
+  stay as Drafts for human review instead of being published or silently
+  promoted.
 - **Never** publishes or mutates the registry/`visual-library.json`. Publish is
   still an explicit user action from **Components → Draft**.
 - **Naming:** auto-stage derives English ids from visible region cues (headings,
@@ -163,3 +170,21 @@ into real catalog Draft items:
 The catalog server exposes `POST /api/stage-candidates` for the same automation.
 The lower-level `candidate_review.py` API remains available for tests/debugging
 but is not a user-facing review surface.
+
+## Retrieval / RAG Readiness
+
+RAG starts from clean published components, not from raw candidates or staging
+Drafts. The deterministic preparation step is:
+
+```bash
+python3 slide-system/scripts/build_component_retrieval_index.py
+python3 slide-system/scripts/build_component_retrieval_index.py --check
+```
+
+This writes `slide-system/registries/component-retrieval-index.jsonl` with one
+JSONL record per `published` registry item. Each record carries the stable id,
+semantic metadata, source/path provenance, and lexical-ready `search_text` /
+`retrieval_terms`. Source paths are kept as provenance but are excluded from
+search terms to avoid path noise. Do not add embedding dependencies, vector DBs,
+or retrieval-time mutation in the extraction pipeline; those belong to a later
+retrieval service that consumes this JSONL.

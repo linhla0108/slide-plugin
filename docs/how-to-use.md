@@ -205,6 +205,9 @@ After auto-detect finishes, open **Components → Draft**. Each detected part ha
 a preview and information panel. Review the Draft, adjust the metadata if
 needed, then choose **Publish** or **Delete draft**. Nothing becomes reusable in
 new slide generation until you publish it from Draft.
+Claude runs a basic quality pass before showing Drafts, so obviously blank
+carousel entries and empty component lists are removed. This is still a review
+queue, not an automatic publish step.
 
 If several detected parts belong together, they may appear as one grouped Draft.
 Use the carousel to review the full component first, then each smaller variant

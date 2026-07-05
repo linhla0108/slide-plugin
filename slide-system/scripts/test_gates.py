@@ -1033,6 +1033,107 @@ def test_build_catalog_collect_icon_set_parses_and_absent() -> None:
         assert iset["icons"][0]["path"].endswith("icon-000.svg")
 
 
+def test_quality_gate_prunes_blank_refs_and_empty_manifests() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "demo"
+        comps = item / "artifact" / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "demo",
+            "status": "staging",
+        }), encoding="utf-8")
+        (comps / "blank.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+            encoding="utf-8",
+        )
+        (comps / "card.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        manifest = comps / "components-manifest.json"
+        manifest.write_text(json.dumps({
+            "groups": [
+                {"group_id": "blank", "file": "components/blank.svg", "cards": []},
+                {"group_id": "card", "file": "components/card.svg", "cards": [
+                    {"card_id": "card", "file": "components/card.svg"},
+                    {"card_id": "blank-card", "file": "components/blank.svg"},
+                ]},
+            ],
+        }), encoding="utf-8")
+
+        summary = qg.sanitize_item(item)
+        cleaned = json.loads(manifest.read_text(encoding="utf-8"))
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["blank_refs_pruned"] == 2, summary
+        assert [g["group_id"] for g in cleaned["groups"]] == ["card"]
+        assert cleaned["groups"][0]["cards"] == [{"card_id": "card", "file": "components/card.svg"}]
+        assert mapping["quality_gate"]["status"] == "reviewable"
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "empty"
+        comps = item / "artifact" / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "empty",
+            "status": "staging",
+        }), encoding="utf-8")
+        manifest = comps / "components-manifest.json"
+        manifest.write_text('{"groups":[]}', encoding="utf-8")
+
+        summary = qg.sanitize_item(item)
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["empty_manifests_removed"] == 1, summary
+        assert not manifest.exists()
+        assert mapping["quality_gate"]["status"] == "needs_review"
+
+
+def test_retrieval_index_builds_published_search_records() -> None:
+    import build_component_retrieval_index as bri
+
+    registry = {
+        "items": [
+            {
+                "id": "sun.component.metric-strip",
+                "name": "Metric Strip",
+                "status": "published",
+                "type": "component",
+                "component_type": "strip",
+                "layout_role": "metric comparison strip",
+                "intent": ["revenue growth"],
+                "tags": ["metric", "growth"],
+                "keywords": ["revenue", "team-size"],
+                "content_structure": ["label", "percentage"],
+                "use_cases": ["Show KPI change"],
+                "anti_use_cases": ["Do not use for pie charts"],
+                "visual_summary": "Two horizontal metric bars.",
+                "retrieval_notes": "Use when user asks for KPI cards.",
+                "source": {"kind": "extraction", "path": "/Users/home/private/source.pdf"},
+                "paths": {"artifact": "slide-system/library/components/metric-strip"},
+            },
+            {
+                "id": "sun.component.draft-only",
+                "name": "Draft Only",
+                "status": "staging",
+                "intent": ["draft"],
+            },
+        ],
+    }
+
+    records = bri.build_records(registry)
+
+    assert [record["id"] for record in records] == ["sun.component.metric-strip"]
+    assert records[0]["retrieval_mode"] == "lexical-ready"
+    assert "revenue" in records[0]["retrieval_terms"]
+    assert "users" not in records[0]["retrieval_terms"]
+    assert "pie" in records[0]["search_text"]
+    assert records[0]["paths"]["artifact"] == "slide-system/library/components/metric-strip"
+
+
 # --------------------------------------------------------------------------- #
 # materialize_groups (classify_page_components + _common hash helpers)
 # --------------------------------------------------------------------------- #

@@ -182,9 +182,33 @@ review. It is still conservative:
   `split_icon_sheet.py` writes `artifact/icons/icons-manifest.json` so the
   catalog shows a searchable icon grid inside that Draft instead of only the
   frequently-used icon subset.
+- After decomposition, `quality_gate.py` runs a fast structural prune before
+  preview generation. It removes obviously blank/missing manifest references,
+  drops empty component manifests, and records `quality_gate` in `mapping.json`.
+  It does not run browser pixel QA in the hot path; uncertain components stay
+  as Drafts for human review instead of being auto-published.
 - It skips candidates already marked `rejected` in `candidate-reviews.json`.
 - If the PDF artifact chain fails, the Draft remains in staging with catalog
   blockers; the user cannot accidentally publish a broken item.
+
+### Retrieval / RAG preparation
+
+Published items remain the only source generation can use. Draft metadata is
+review-only. To prepare future hybrid/RAG retrieval without adding vector
+dependencies, rebuild the deterministic lexical index after publish or registry
+changes:
+
+```bash
+python3 slide-system/scripts/build_component_retrieval_index.py
+python3 slide-system/scripts/build_component_retrieval_index.py --check
+```
+
+The index lives at `slide-system/registries/component-retrieval-index.jsonl`.
+It includes stable ids, intent/tags/keywords, content structure, use cases,
+paths, source provenance, and a `search_text`/`retrieval_terms` projection. It
+keeps source paths as provenance fields but does not feed path strings into
+search terms. Do not add embeddings or external vector stores in extraction;
+that belongs to a separate retrieval layer after component quality is stable.
 
 ## Preflight (mandatory, marker-first)
 

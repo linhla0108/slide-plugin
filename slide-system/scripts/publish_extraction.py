@@ -10,6 +10,7 @@ from pathlib import Path
 
 from _common import load_json, now_iso, write_json
 from build_registry import COMPACT_KEYS
+import build_component_retrieval_index as retrieval
 
 
 TYPE_FOLDERS = {
@@ -205,6 +206,8 @@ def main() -> int:
         str(compact_path),
         {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in registry["items"]]},
     )
+    retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
+    retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
 
     mapping["status"] = "published"
     mapping["published_at"] = now_iso()

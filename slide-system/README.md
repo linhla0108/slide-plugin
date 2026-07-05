@@ -154,8 +154,11 @@ python3 slide-system/scripts/publish_extraction.py \
 `visual-library.json` is the metadata authority (published folders do not keep
 `mapping.json`, so it cannot be rebuilt from disk). `visual-library-compact.json`
 — the file `score_visual_items.py` actually reads — is a derived projection and
-must never be hand-edited. `publish_extraction.py` regenerates it on every
-publish; for bulk reconciles after manual deletes use:
+must never be hand-edited. `component-retrieval-index.jsonl` is the
+lexical/RAG-ready projection for future retrieval work; it is derived from
+published registry items only and has no embedding/vector dependency.
+`publish_extraction.py` regenerates both derived projections on every publish;
+for bulk reconciles after manual deletes use:
 
 ```bash
 python3 slide-system/scripts/build_registry.py --check   # gate: exit 1 on drift
@@ -165,6 +168,13 @@ python3 slide-system/scripts/build_registry.py --write    # drop dangling entrie
 It drops registry entries whose artifact folder is gone and reports library
 folders that have a `visual.svg` but no registry entry (orphans) — it never
 deletes folders itself.
+
+Rebuild/check the retrieval index after publish or registry changes:
+
+```bash
+python3 slide-system/scripts/build_component_retrieval_index.py
+python3 slide-system/scripts/build_component_retrieval_index.py --check
+```
 
 Rebuild and serve the catalog:
 
