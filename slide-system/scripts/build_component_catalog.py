@@ -179,6 +179,11 @@ def publish_readiness(item_dir: Path, mapping: dict) -> dict:
     artifact_dir = item_dir / "artifact"
     if not artifact_dir.is_dir() or not any(f.is_file() for f in artifact_dir.rglob("*")):
         blockers.append("No artifacts in this extraction")
+    artifact_status = mapping.get("artifact_status")
+    if artifact_status and artifact_status != "ready":
+        blockers.append(
+            f"Artifact build status is {artifact_status}; rerun auto-stage artifact generation"
+        )
     evidence_dir = item_dir / "evidence"
     if not evidence_dir.is_dir() or not any(f.is_file() for f in evidence_dir.rglob("*")):
         blockers.append("No source evidence in this extraction")

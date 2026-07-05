@@ -29,7 +29,7 @@ Generation continues to read only `published` registry items.
 
 ```bash
 python3 slide-system/scripts/analyze_with_docling.py \
-  --source <file.pdf|file.pptx> \
+  --source <file.pdf> \
   --extraction-id <run-id> \
   --pages 1-3
 
@@ -67,6 +67,10 @@ processes. A bad page times out or fails independently, and the run can still
 use conservative PyMuPDF text/vector row candidates for pages where Docling
 does not produce reusable regions.
 
+PPTX inputs may be analyzed by Docling, but they are analysis-only in this
+flow until a PPTX artifact builder exists. Use the manual extraction handoff
+for PPTX components that need Draft previews.
+
 ---
 
 ## Review Boundary
@@ -88,7 +92,8 @@ published silently.
 ## Backend / Debug Surfaces
 
 `candidate_review.py` remains as an internal compatibility layer for tests,
-debugging, and explicit reject records:
+debugging, auto-stage metadata, and explicit reject records. It is not a
+separate user-facing catalog API:
 
 - `candidate-reviews.json`
 - `analysis/previews/<candidate-id>.png`

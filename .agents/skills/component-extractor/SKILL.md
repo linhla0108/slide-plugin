@@ -106,7 +106,7 @@ detect candidate regions instead of naming each by hand:
 
 ```bash
 python3 slide-system/scripts/analyze_with_docling.py \
-    --source <file.pdf|file.pptx> --extraction-id <id> [--pages 1|2-4]
+    --source <file.pdf> --extraction-id <id> [--pages 1|2-4]
 ```
 
 It writes analysis under `outputs/component-extractions/<id>/analysis/`. When
@@ -123,7 +123,7 @@ python3 slide-system/scripts/auto_stage_candidates.py <id>
 `auto_stage_candidates.py` deterministically renames Docling placeholders,
 attaches retrieval metadata, writes reviewed request artifacts under
 `analysis/approved/`, scaffolds one Draft per candidate, runs the core PDF
-artifact chain when possible (`visual.svg`, `text-slots.json`, cropped
+artifact chain (`visual.svg`, `text-slots.json`, cropped
 `source-with-text.svg`, `preview/thumbnail.png`), and rebuilds the catalog.
 The user reviews the resulting items only in **Components → Draft** and decides
 whether to Publish/Delete there. If Docling is not installed it exits cleanly
@@ -133,6 +133,8 @@ tool readiness check above has passed. See
 auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
 only for scanned PDFs. Tiny decorative candidates are filtered by default
 (`--min-area 0.015`) and can be relaxed for icon-heavy pages.
+PPTX may be analyzed by Docling, but it is analysis-only here until a PPTX
+artifact builder exists; use manual extraction for PPTX Draft previews.
 For PDFs, analysis runs Docling in page-scoped workers with a timeout so a
 single bad page cannot crash the whole run; pages with no usable Docling
 candidate can still receive conservative PyMuPDF text/vector row candidates for
@@ -159,6 +161,9 @@ review. It is still conservative:
   source filename.
 - It records auto-generated retrieval metadata in `mapping.json` so the Draft
   Info panel and later publish record have useful intent/tags/keywords.
+- The catalog server exposes only Draft-stage actions (`stage-candidates`,
+  `publish`, `delete`); candidate-review files are internal metadata, not a
+  separate UI/API workflow.
 - For PDF sources, artifact scripts are run with the Python interpreter that can
   import PyMuPDF (usually the repo `.venv`) so Drafts get real previews instead
   of placeholder-only mapping folders.

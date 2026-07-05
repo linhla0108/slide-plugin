@@ -962,6 +962,15 @@ def _augment_mapping(item_dir: Path, review: dict, run_id: str,
     write_json(mapping_path, mapping)
 
 
+def _record_artifact_status(item_dir: Path, status: str, log: str = "") -> None:
+    mapping_path = item_dir / "mapping.json"
+    mapping = load_json(mapping_path)
+    mapping["artifact_status"] = status
+    if log:
+        mapping["artifact_log"] = log
+    write_json(mapping_path, mapping)
+
+
 def _sync_history_stable_id(history: Path, extraction_id: str, item_id: str,
                             stable_id: str) -> None:
     if not history.exists():
@@ -1589,6 +1598,7 @@ def stage_run(
                 item_dir, source_path, item.get("slide_or_page", 1))
             if artifact_status != "failed":
                 render_gate_item_dirs.append(item_dir)
+        _record_artifact_status(item_dir, artifact_status, artifact_log)
         _sync_history_stable_id(history, staged_extraction_id, review["item_id"], stable_id)
         summary["staged"] += 1
         summary["items"].append({

@@ -1277,6 +1277,157 @@ def test_retrieval_index_builds_published_search_records() -> None:
     assert records[0]["paths"]["artifact"] == "slide-system/library/components/metric-strip"
 
 
+def test_publish_preserves_retrieval_metadata_and_index() -> None:
+    import importlib
+
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "metric-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>',
+            encoding="utf-8",
+        )
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-meta-demo",
+            "item_id": "metric-strip",
+            "candidate_stable_id": "sun.component.metric-strip",
+            "name": "Metric Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "metrics",
+            "brand": "sun-studio",
+            "semantic_intent": ["revenue growth"],
+            "tags": ["metric", "growth"],
+            "content_structure": ["label", "percentage"],
+            "content_fields": {},
+            "density": "any",
+            "component_type": "strip",
+            "layout_role": "metric comparison strip",
+            "visual_summary": "Two horizontal KPI bars.",
+            "keywords": ["revenue", "team-size"],
+            "use_cases": ["Show KPI change"],
+            "anti_use_cases": ["Do not use for pie charts"],
+            "quality_notes": "Reviewed in Draft.",
+            "retrieval_notes": "Use when user asks for KPI cards.",
+            "artifact_status": "ready",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        library = root / "library"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "metric-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(library),
+        ]
+        try:
+            assert publish.main() == 0
+        finally:
+            sys.argv = old_argv
+
+        item = read_text_slots.load_json(registry)["items"][0]
+        assert item["component_type"] == "strip"
+        assert item["keywords"] == ["revenue", "team-size"]
+        assert item["use_cases"] == ["Show KPI change"]
+        assert item["retrieval_notes"] == "Use when user asks for KPI cards."
+
+        index = (root / "component-retrieval-index.jsonl").read_text(encoding="utf-8")
+        record = json.loads(index.strip())
+        assert record["id"] == "sun.component.metric-strip"
+        assert "revenue" in record["retrieval_terms"]
+        assert "kpi" in record["retrieval_terms"]
+
+
+def test_publish_rejects_failed_auto_stage_artifacts() -> None:
+    import importlib
+
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "broken-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-failed-demo",
+            "item_id": "broken-strip",
+            "candidate_stable_id": "sun.component.broken-strip",
+            "name": "Broken Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "metrics",
+            "brand": "sun-studio",
+            "semantic_intent": ["broken metric"],
+            "tags": [],
+            "content_structure": [],
+            "content_fields": {},
+            "artifact_status": "failed",
+            "artifact_log": "validate_text_slots.py: failed",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "broken-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(root / "library"),
+        ]
+        try:
+            try:
+                publish.main()
+            except SystemExit as exc:
+                assert "Artifact build status is failed" in str(exc)
+            else:
+                raise AssertionError("failed auto-stage artifacts must not publish")
+        finally:
+            sys.argv = old_argv
+        assert read_text_slots.load_json(registry)["items"] == []
+
+
 # --------------------------------------------------------------------------- #
 # materialize_groups (classify_page_components + _common hash helpers)
 # --------------------------------------------------------------------------- #
@@ -3093,6 +3244,13 @@ def test_catalog_has_no_candidate_review_top_tab() -> None:
     html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
     assert 'data-section="review"' not in html
     assert 'id="section-review"' not in html
+
+
+def test_catalog_server_exposes_no_candidate_review_routes() -> None:
+    source = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py").read_text(encoding="utf-8")
+    assert "/api/candidates" not in source
+    assert "_serve_candidate" not in source
+    assert "_candidate_segments" not in source
 
 
 def test_catalog_server_parses_stage_candidate_booleans() -> None:

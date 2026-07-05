@@ -75,3 +75,22 @@ Append-only record, one entry per task in request order. Format per
 **Files:** docs/logs/SESSION-LOG-2026-07-05.md, docs/logs/INDEX.jsonl, slide-system/scripts/auto_stage_candidates.py, slide-system/scripts/build_component_catalog.py, slide-system/scripts/quality_gate.py, slide-system/scripts/render_svg.js, slide-system/scripts/test_gates.py
 **Symbols:** sanitize_item, sanitize_items, svg_has_visible_content, _render_svg_paths, _run_render_quality_gate, collect_images, _blank_item_visual, test_quality_gate_prunes_render_blank_refs_and_marks_base_visual, test_build_catalog_skips_standalone_blank_visual_drafts
 **State:** Not committed
+
+---
+
+## 2026-07-05.5 — Final PR review and publish hardening
+
+**When:** 2026-07-05 14:27
+**Request:** Full review the PR, fix findings, and test with tester so the component system stays simple enough while producing Drafts that end users can review and publish.
+**Actions:**
+- Used the tester workflow plus a read-only reviewer subagent to review PR #1 (`feature/auto-stage-docling-drafts` -> `master`) against the Draft-only component pipeline.
+- Removed the hidden `/api/candidates/*` catalog-server routes so the server exposes only Draft-stage actions: `/api/stage-candidates`, `/api/publish`, and `/api/delete`.
+- Persisted single-Draft `artifact_status`/`artifact_log` from `auto_stage_candidates.py` into `mapping.json`.
+- Hardened publish readiness and `publish_extraction.py` so failed or skipped auto-stage artifact chains cannot be published even if partial artifact/evidence files exist.
+- Preserved Draft retrieval metadata (`component_type`, `layout_role`, `visual_summary`, `keywords`, `use_cases`, `anti_use_cases`, `quality_notes`, `retrieval_notes`) into published registry records and the deterministic retrieval index.
+- Clarified docs that PDF is the auto-stage path with Draft artifacts/previews; PPTX Docling is analysis-only until a PPTX artifact builder exists.
+- Added regression tests for removed candidate API routes, publish metadata preservation into `component-retrieval-index.jsonl`, and publish rejection for failed auto-stage artifacts.
+**Result:** Verification passed: `python -m py_compile slide-system/scripts/auto_stage_candidates.py slide-system/scripts/build_component_catalog.py slide-system/scripts/publish_extraction.py slide-system/scripts/test_gates.py slide-system/catalog/catalog_server.py`; `python slide-system/scripts/test_gates.py` (`126/126`); `python slide-system/scripts/validate_registry.py` (`84` valid); `python slide-system/scripts/build_registry.py --check` (clean); `python slide-system/scripts/build_component_retrieval_index.py --check` (clean); `node --check slide-system/catalog/catalog.js`; `node --check slide-system/scripts/render_svg.js`; in-process catalog-server HTTP smoke (`GET/POST /api/candidates` -> `404`, invalid `POST /api/stage-candidates` -> `400`); `git diff --check` (no whitespace errors; Windows CRLF warnings only).
+**Files:** .agents/skills/component-extractor/SKILL.md, docs/flows/candidate-review-flow.md, docs/how-to-use.md, docs/logs/SESSION-LOG-2026-07-05.md, docs/logs/INDEX.jsonl, slide-system/catalog/catalog_server.py, slide-system/rules/extraction-methods.md, slide-system/scripts/auto_stage_candidates.py, slide-system/scripts/build_component_catalog.py, slide-system/scripts/publish_extraction.py, slide-system/scripts/test_gates.py
+**Symbols:** _record_artifact_status, publish_readiness, publish_extraction.main, Handler.do_PATCH, Handler.do_POST, test_catalog_server_exposes_no_candidate_review_routes, test_publish_preserves_retrieval_metadata_and_index, test_publish_rejects_failed_auto_stage_artifacts
+**State:** Not committed

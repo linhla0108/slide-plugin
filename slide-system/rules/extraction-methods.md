@@ -68,10 +68,12 @@ have to name every region by hand. It changes no shared registry state:
 - The emitted `candidate-extraction-request.json` is schema-compatible with
   `extraction-request.schema.json`, but its `item_id`s are placeholders
   (`<label>-p<page>-<n>`). Do not ask the user to review these placeholders.
-  Run `auto_stage_candidates.py <extraction-id>` to deterministically rename,
-  attach retrieval metadata, scaffold one Draft per candidate, and build core
-  PDF artifacts where possible. User-facing review happens only in the catalog
-  Draft tab.
+  For PDF runs, run `auto_stage_candidates.py <extraction-id>` to
+  deterministically rename, attach retrieval metadata, scaffold one Draft per
+  candidate, and build core PDF artifacts. User-facing review happens only in
+  the catalog Draft tab. PPTX runs are analysis-only until a PPTX artifact
+  builder exists; hand off PPTX components to the manual extraction flow when
+  previews are required.
 - If Docling is not installed the script exits with a clear message and writes
   nothing. Docling normally runs **locally** (`pip install docling`); a
   project-scoped Docling MCP server is an optional alternative and is never

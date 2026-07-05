@@ -196,6 +196,8 @@ items.
 You do not need to rename raw candidates or approve an intermediate queue.
 For PDFs, the detection runs page by page so one difficult page does not stop
 the whole file.
+For PPTX files, use the normal manual extraction flow until PPTX Draft artifact
+generation is added.
 When a slide title or heading only explains a visual, Claude can keep that text
 as search metadata without making a second duplicate Draft.
 Data charts such as pie, bar, or line charts are skipped by auto-detect; ask for
