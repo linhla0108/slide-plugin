@@ -14,6 +14,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 function arg(name) {
   const i = process.argv.indexOf(name);
@@ -35,7 +36,7 @@ function arg(name) {
         viewport: { width: job.width, height: job.height },
         deviceScaleFactor: 1,
       });
-      await page.goto('file://' + path.resolve(job.svg), { waitUntil: 'load' });
+      await page.goto(pathToFileURL(path.resolve(job.svg)).href, { waitUntil: 'load' });
       // SVGs with explicit width/height render at intrinsic size, which may
       // exceed the viewport — the screenshot clip then captures only the
       // top-left portion. Force the SVG root to fill the viewport so the

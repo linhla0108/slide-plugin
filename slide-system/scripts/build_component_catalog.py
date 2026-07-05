@@ -20,10 +20,22 @@ def rel(path: Path | str) -> str:
         return p.as_posix()
 
 
+def _blank_item_visual(item_dir: Path) -> bool:
+    mapping_path = item_dir / "mapping.json"
+    if not mapping_path.exists():
+        return False
+    try:
+        quality = load_json(mapping_path).get("quality_gate") or {}
+    except Exception:
+        return False
+    return bool(quality.get("blank_item_visual"))
+
+
 def collect_images(item_dir: Path) -> list[dict]:
     images: list[dict] = []
 
     artifact_dir = item_dir / "artifact"
+    blank_item_visual = _blank_item_visual(item_dir)
 
     # When the region was decomposed into distinct components
     # (classify_page_components.py), the review surface is one preview per
@@ -46,7 +58,7 @@ def collect_images(item_dir: Path) -> list[dict]:
             if thumb.exists():
                 images.append({"label": "Full component", "path": rel(thumb)})
         visual = artifact_dir / "visual.svg"
-        if visual.exists():
+        if visual.exists() and not blank_item_visual:
             images.append({"label": "Full component (Text-free)", "path": rel(visual)})
         groups = manifest.get("groups") or []
         for rec in groups:
@@ -103,7 +115,7 @@ def collect_images(item_dir: Path) -> list[dict]:
         images.append({"label": "Source with text", "path": rel(src_text)})
 
     visual = artifact_dir / "visual.svg"
-    if visual.exists():
+    if visual.exists() and not blank_item_visual:
         images.append({"label": "Text-free visual", "path": rel(visual)})
 
     ref = evidence_dir / "reference.png"
@@ -249,6 +261,12 @@ def main() -> int:
             if mapping.get("decomposed_into"):
                 continue
             if mapping.get("collection_parent_id"):
+                continue
+            if (
+                (mapping.get("quality_gate") or {}).get("blank_item_visual")
+                and not (artifact_dir / "components" / "components-manifest.json").exists()
+                and not (artifact_dir / "icons" / "icons-manifest.json").exists()
+            ):
                 continue
 
             # Handle two mapping schemas:

@@ -717,6 +717,50 @@ def _run_script(args: list[str]) -> tuple[bool, str]:
     return proc.returncode == 0, (output + ("\n" + error if error else "")).strip()
 
 
+def _chunks(values: list[Path], size: int) -> list[list[Path]]:
+    return [values[i:i + size] for i in range(0, len(values), size)]
+
+
+def _run_render_quality_gate(item_dirs: list[Path]) -> tuple[bool, dict]:
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for item_dir in item_dirs:
+        key = str(Path(item_dir).resolve()).lower()
+        if key in seen or not Path(item_dir).exists():
+            continue
+        seen.add(key)
+        unique.append(Path(item_dir).resolve())
+    summary = {
+        "items": len(unique),
+        "render_blank_refs_pruned": 0,
+        "blank_item_visual": 0,
+        "render_errors": 0,
+        "parse_errors": 0,
+    }
+    if not unique:
+        return True, summary
+    ok_all = True
+    for chunk in _chunks(unique, 40):
+        args = ["slide-system/scripts/quality_gate.py", "--render-check"]
+        for item_dir in chunk:
+            args.extend(["--item-dir", str(item_dir)])
+        ok, log = _run_script(args)
+        ok_all = ok_all and ok
+        if not log:
+            continue
+        try:
+            payload = json.loads(log)
+        except json.JSONDecodeError:
+            summary["parse_errors"] += 1
+            continue
+        for item in payload.get("items") or []:
+            summary["render_blank_refs_pruned"] += int(item.get("render_blank_refs_pruned") or 0)
+            summary["render_errors"] += int(item.get("render_errors") or 0)
+            if item.get("blank_item_visual"):
+                summary["blank_item_visual"] += 1
+    return ok_all, summary
+
+
 def _extract_region_texts(source_path: str, items: list[dict]) -> dict[str, str]:
     source = resolve_repo_path(source_path)
     if source.suffix.lower() != ".pdf":
@@ -1428,6 +1472,7 @@ def stage_run(
     items_by_id = {item.get("item_id"): item for item in request_items}
     staged_records: list[dict] = []
     pattern_representatives: dict[tuple, dict] = {}
+    render_gate_item_dirs: list[Path] = []
     for original_id, item in items_by_id.items():
         if not original_id:
             continue
@@ -1542,6 +1587,8 @@ def stage_run(
         if build_artifacts:
             artifact_status, artifact_log = _build_pdf_artifacts(
                 item_dir, source_path, item.get("slide_or_page", 1))
+            if artifact_status != "failed":
+                render_gate_item_dirs.append(item_dir)
         _sync_history_stable_id(history, staged_extraction_id, review["item_id"], stable_id)
         summary["staged"] += 1
         summary["items"].append({
@@ -1581,10 +1628,16 @@ def stage_run(
         )
         if grouped:
             group_items.append(grouped)
+            if build_artifacts and grouped.get("status") == "grouped":
+                render_gate_item_dirs.append(Path(grouped["item_dir"]))
     if group_items:
         summary["grouped"] = len(group_items)
         summary["group_items"] = group_items
         summary["group_item"] = group_items[0]
+    if build_artifacts and render_gate_item_dirs:
+        ok, render_summary = _run_render_quality_gate(render_gate_item_dirs)
+        summary["quality_gate_render_checked"] = ok
+        summary["quality_gate_render"] = render_summary
     if rebuild_catalog:
         ok, log = _run_script(["slide-system/scripts/build_component_catalog.py"])
         summary["catalog_rebuilt"] = ok

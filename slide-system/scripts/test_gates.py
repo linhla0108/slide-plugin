@@ -1033,6 +1033,80 @@ def test_build_catalog_collect_icon_set_parses_and_absent() -> None:
         assert iset["icons"][0]["path"].endswith("icon-000.svg")
 
 
+def test_build_catalog_skips_blank_text_free_visual_marked_by_quality_gate() -> None:
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "demo"
+        comps = item / "artifact" / "components"
+        evidence = item / "evidence"
+        comps.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "demo",
+            "status": "staging",
+            "quality_gate": {"blank_item_visual": True},
+        }), encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        (item / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        (comps / "components-manifest.json").write_text('{"groups":[]}', encoding="utf-8")
+
+        labels = [image["label"] for image in bcc.collect_images(item)]
+
+        assert labels == ["Full component"], labels
+
+
+def test_build_catalog_skips_standalone_blank_visual_drafts() -> None:
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp) / "component-extractions"
+        item = root / "demo" / "items" / "tiny-label"
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "tiny-label",
+            "candidate_stable_id": "sun.component.tiny-label",
+            "name": "Tiny Label",
+            "status": "staging",
+            "type": "component",
+            "category": "component",
+            "source": {"path": "source.pdf", "slide_or_page": 1},
+            "quality_gate": {"blank_item_visual": True},
+        }), encoding="utf-8")
+        (item / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><text>04</text></svg>',
+            encoding="utf-8",
+        )
+        registry = Path(tmp) / "registry.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        output = Path(tmp) / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(registry),
+            "--extractions", str(root),
+            "--output", str(output),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+
+        catalog = json.loads(output.read_text(encoding="utf-8"))
+
+        assert [item["id"] for item in catalog["items"]] == []
+
+
 def test_quality_gate_prunes_blank_refs_and_empty_manifests() -> None:
     import quality_gate as qg
 
@@ -1090,6 +1164,75 @@ def test_quality_gate_prunes_blank_refs_and_empty_manifests() -> None:
         assert summary["empty_manifests_removed"] == 1, summary
         assert not manifest.exists()
         assert mapping["quality_gate"]["status"] == "needs_review"
+
+
+def test_quality_gate_prunes_render_blank_refs_and_marks_base_visual() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "rendered"
+        artifact = item / "artifact"
+        comps = artifact / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "rendered",
+            "status": "staging",
+        }), encoding="utf-8")
+        visual = artifact / "visual.svg"
+        blank = comps / "render-blank.svg"
+        source = comps / "source.svg"
+        for path in (visual, blank, source):
+            path.write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg">'
+                '<rect width="100" height="80" fill="#3333FF"/></svg>',
+                encoding="utf-8",
+            )
+        manifest = comps / "components-manifest.json"
+        manifest.write_text(json.dumps({
+            "groups": [{
+                "group_id": "rendered",
+                "file": "components/render-blank.svg",
+                "cards": [
+                    {"card_id": "blank", "file": "components/render-blank.svg"},
+                    {"card_id": "source", "source_file": "components/source.svg"},
+                ],
+            }],
+        }), encoding="utf-8")
+        render_results = {
+            str(visual.resolve()).lower(): {"nonwhite_ratio": 0.0},
+            str(blank.resolve()).lower(): {"nonwhite_ratio": 0.0},
+            str(source.resolve()).lower(): {"nonwhite_ratio": 0.05},
+        }
+
+        summary = qg.sanitize_items([item], render_results=render_results)[0]
+        cleaned = json.loads(manifest.read_text(encoding="utf-8"))
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["blank_item_visual"], summary
+        assert summary["render_blank_refs_pruned"] == 2, summary
+        assert summary["status"] == "needs_review"
+        assert "file" not in cleaned["groups"][0]
+        assert cleaned["groups"][0]["cards"] == [
+            {"card_id": "source", "source_file": "components/source.svg"},
+        ]
+        assert mapping["quality_gate"]["blank_item_visual"] is True
+        assert mapping["quality_gate"]["item_visual_nonwhite_ratio"] == 0.0
+
+
+def test_quality_gate_ignores_white_defs_and_masks() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        svg = Path(tmp) / "masked.svg"
+        svg.write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<defs><rect width="100" height="100" fill="#3333FF"/></defs>'
+            '<mask id="m"><rect width="100" height="100" fill="white"/></mask>'
+            '<rect width="100" height="100" fill="white"/></svg>',
+            encoding="utf-8",
+        )
+
+        assert not qg.svg_has_visible_content(svg)
 
 
 def test_retrieval_index_builds_published_search_records() -> None:
