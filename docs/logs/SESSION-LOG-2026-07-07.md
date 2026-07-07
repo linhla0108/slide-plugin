@@ -182,3 +182,17 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 **Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-07.md
 **Symbols:** score_visual_items.load_retrieval_index, score_visual_items.main, test_retrieval_corrupt_index_degrades_to_empty_enrichment
 **State:** Not committed
+
+## 2026-07-07.8 — Final review hybrid retrieval PR
+
+**When:** 2026-07-07 22:48
+**Request:** Full review PR #2 one more time before continuing.
+**Actions:**
+- Verified `feature/hybrid-rag-slide-retrieval` at `68f3bb4f` in `E:\slide-plugin\.claude\worktrees\reverent-feistel-486fce`, with only untracked `dev/` outside tracked files.
+- Used the local CodeGraph cache via `D:\Business\Dashboard\skills\codegraph-context\scripts\codegraph.py summary .` and `insights .`; the cache was valid and not truncated.
+- Reviewed the PR diff against `origin/master...HEAD`, focusing on `score_visual_items.py`, `build_component_retrieval_index.py`, `validate_selection_report.py`, `test_gates.py`, selection-report schema, retrieval index, and workflow/skill docs.
+- Ran targeted probes for selected-runner-up emission, invalid UTF-8 retrieval-index CLI fallback, and retrieval-index published-only/schema-v2/unique-id invariants.
+**Result:** No blocking findings found. `python -m py_compile slide-system/scripts/score_visual_items.py slide-system/scripts/build_component_retrieval_index.py slide-system/scripts/validate_selection_report.py slide-system/scripts/test_gates.py` passed; `python slide-system/scripts/test_gates.py` passed (`139/139`); `python slide-system/scripts/validate_registry.py` passed (`91 valid items`); `python slide-system/scripts/build_registry.py --check` passed; `python slide-system/scripts/build_component_retrieval_index.py --check` passed (`91 records`); `python slide-system/scripts/build_log_index.py --check` passed; `git diff --check` passed; targeted probes passed.
+**Files:** docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** none
+**State:** Not committed
