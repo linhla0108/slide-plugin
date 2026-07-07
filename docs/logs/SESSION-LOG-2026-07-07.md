@@ -154,3 +154,17 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 **Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/test_gates.py, slide-system/workflows/select-visual-items.md, .agents/skills/slide-generator/SKILL.md, docs/logs/SESSION-LOG-2026-07-07.md
 **Symbols:** score_visual_items.load_retrieval_index, score_visual_items.score_request, test_retrieval_selected_runner_up_stays_in_reported_candidates, test_retrieval_corrupt_index_degrades_to_empty_enrichment
 **State:** Not committed
+
+## 2026-07-07.6 — Generate local CodeGraph index for PR worktree
+
+**When:** 2026-07-07 22:30
+**Request:** Add CodeGraph when the PR worktree did not have a `.codegraph` directory.
+**Actions:**
+- Verified `codegraph` was not available on PATH, then used the existing `codegraph-context` shim at `D:\Business\Dashboard\skills\codegraph-context\scripts\codegraph.py`.
+- Ran `scan .` in `E:\slide-plugin\.claude\worktrees\reverent-feistel-486fce`, creating ignored local cache `.codegraph/snapshot.json`.
+- Verified `summary` and `insights` read the generated cache. The PR worktree scan covered 809 source files, 1855 symbols, and was not truncated.
+- Tried the same scan in root `E:\slide-plugin`, but it included nested `.claude/worktrees` and `.uv-cache` content and returned `truncated: true`; removed that root cache to avoid a misleading index.
+**Result:** PR worktree now has local `.codegraph/snapshot.json`; no tracked source files changed by the scan because `.codegraph` is intentionally ignored.
+**Files:** docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** none
+**State:** Not committed
