@@ -185,18 +185,55 @@ for example a chart, a title block, a background, or a whole slide.
 > "Save every slide in this file as reusable parts."
 > *(then share the file)*
 
+**Or let Claude find the parts for you:**
+
+> "Look through this file and suggest the reusable parts."
+> *(then share the file)*
+
+Claude can **auto-detect the reusable parts** in a file — tables, pictures,
+cards, diagrams, and the like — then automatically prepare them as **Draft**
+items.
+You do not need to rename raw candidates or approve an intermediate queue.
+For PDFs, the detection runs page by page so one difficult page does not stop
+the whole file.
+For PPTX files, use the normal manual extraction flow until PPTX Draft artifact
+generation is added.
+When a slide title or heading only explains a visual, Claude can keep that text
+as search metadata without making a second duplicate Draft.
+Data charts such as pie, bar, or line charts are skipped by auto-detect; ask for
+that exact chart only when you truly want to save it as a reusable part.
+
+After auto-detect finishes, open **Components → Draft**. Each detected part has
+a preview and information panel. Review the Draft, adjust the metadata if
+needed, then choose **Publish** or **Delete draft**. Nothing becomes reusable in
+new slide generation until you publish it from Draft.
+Claude runs a basic quality pass before showing Drafts, so obviously blank
+carousel entries and empty component lists are removed. This is still a review
+queue, not an automatic publish step.
+
+If several detected parts belong together, they may appear as one grouped Draft.
+Use the carousel to review the full component first, then each smaller variant
+inside it.
+If the same component pattern appears on several pages with different text,
+Claude keeps one representative Draft instead of showing every duplicate.
+For a strip of repeated cards, the same Draft can also show each individual card
+and each card's text-free version in the carousel.
+For a large diagram or a row of repeated cards, the carousel can show each
+horizontal row or each card/cell as its own reviewable component pair.
+
 ### What you'll get
 
 1. Tell Claude **which file** and **which part** you want (a slide, a range of
    pages, or something specific like "the footer" or "the title").
-2. Claude extracts that part and shows you a preview.
-3. You say **"yes, save it"**, and it's saved so you (or Claude) can drop it
-   into later slides.
+2. Claude prepares matching parts as Drafts and opens the Draft review area.
+3. You review each Draft and choose **Publish** only for the parts you want to
+   reuse later.
 
 **Good to know:**
 
 - This only happens when you ask — Claude never takes any part on its own.
-- You approve each part before it's saved.
+- Auto-detect can create Drafts, but a Draft is not published. It becomes a
+  reusable library item only after you click **Publish**.
 
 <!--
   INSERT IMAGE: Claude showing a preview of the extracted part.

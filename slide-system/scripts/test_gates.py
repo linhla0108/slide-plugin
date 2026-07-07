@@ -14,8 +14,10 @@ Run directly (`python3 test_gates.py`) or under pytest. No network, no install.
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
+import importlib.util
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
@@ -479,6 +481,128 @@ def test_catalog_preview_skips_fullpage_reference_when_cropped() -> None:
         assert "Reference" in labels, "full-page items still surface reference.png"
 
 
+def test_catalog_surfaces_text_free_variant_for_cropped_draft() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "c"
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        (item / "artifact" / "text-slots.json").write_text(
+            _json.dumps({"slots": [], "source": {"region_crop": {"crop_window": [0, 0, 100, 50]}}}),
+            encoding="utf-8",
+        )
+        (item / "artifact" / "visual.svg").write_text("<svg id='text-free'/>", encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text("<svg id='with-text'/>", encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels[:2] == ["Source with text", "Text-free visual"], labels
+
+
+def test_catalog_pairs_classifier_cards_with_text_free_variants() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "ai-coding-maturity-levels-strip"
+        components = item / "artifact" / "components"
+        evidence = item / "evidence"
+        components.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text("<svg id='full-text-free'/>", encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text("<svg id='full-source'/>", encoding="utf-8")
+        for name in [
+            "ai-coding-maturity-levels-strip-group-01.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-01-source.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-01.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-02-source.svg",
+            "ai-coding-maturity-levels-strip-group-01-card-02.svg",
+        ]:
+            (components / name).write_text(f"<svg id='{name}'/>", encoding="utf-8")
+        (components / "components-manifest.json").write_text(_json.dumps({
+            "groups": [{
+                "group_id": "ai-coding-maturity-levels-strip-group-01",
+                "file": "components/ai-coding-maturity-levels-strip-group-01.svg",
+                "shape_class": 1,
+                "title": "Level Cards",
+                "member_count": 5,
+                "distinct_card_count": 5,
+                "cards": [
+                    {
+                        "card_id": "ai-coding-maturity-levels-strip-group-01-card-01",
+                        "title": "Level 1 Spicy Autocomplete",
+                        "source_file": "components/ai-coding-maturity-levels-strip-group-01-card-01-source.svg",
+                        "file": "components/ai-coding-maturity-levels-strip-group-01-card-01.svg",
+                        "duplicate_count": 1,
+                    },
+                    {
+                        "card_id": "ai-coding-maturity-levels-strip-group-01-card-02",
+                        "title": "Level 2 AI Coding Assistants",
+                        "source_file": "components/ai-coding-maturity-levels-strip-group-01-card-02-source.svg",
+                        "file": "components/ai-coding-maturity-levels-strip-group-01-card-02.svg",
+                        "duplicate_count": 1,
+                    },
+                ],
+            }],
+        }), encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels == [
+            "Full component",
+            "Full component (Text-free)",
+            "Level 1 Spicy Autocomplete",
+            "Level 1 Spicy Autocomplete (Text-free)",
+            "Level 2 AI Coding Assistants",
+            "Level 2 AI Coding Assistants (Text-free)",
+        ], labels
+
+
+def test_catalog_pairs_single_layout_row_with_text_free_variant() -> None:
+    import build_component_catalog as bcc
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "goal-card"
+        components = item / "artifact" / "components"
+        evidence = item / "evidence"
+        components.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "artifact" / "visual.svg").write_text("<svg id='full-text-free'/>", encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text("<svg id='full-source'/>", encoding="utf-8")
+        (components / "goal-card-row-01.svg").write_text("<svg id='row-free'/>", encoding="utf-8")
+        (components / "goal-card-row-01-source.svg").write_text("<svg id='row-source'/>", encoding="utf-8")
+        (components / "components-manifest.json").write_text(_json.dumps({
+            "groups": [{
+                "group_id": "goal-card-row-01",
+                "file": "components/goal-card-row-01.svg",
+                "shape_class": 1001,
+                "layout_group": "row",
+                "title": "Goal Key Result Task",
+                "member_count": 5,
+                "distinct_card_count": 1,
+                "cards": [{
+                    "card_id": "goal-card-row-01",
+                    "title": "Goal Key Result Task",
+                    "source_file": "components/goal-card-row-01-source.svg",
+                    "file": "components/goal-card-row-01.svg",
+                    "duplicate_count": 1,
+                }],
+            }],
+        }), encoding="utf-8")
+
+        labels = [im["label"] for im in bcc.collect_images(item)]
+
+        assert labels == [
+            "Full component",
+            "Full component (Text-free)",
+            "Goal Key Result Task",
+            "Goal Key Result Task (Text-free)",
+        ], labels
+
+
+def test_catalog_rel_uses_web_safe_posix_paths() -> None:
+    import build_component_catalog as bcc
+    path = bcc.PROJECT_ROOT / "slide-system" / "library" / "x" / "visual.svg"
+    assert bcc.rel(path) == "slide-system/library/x/visual.svg"
+
+
 # --------------------------------------------------------------------------- #
 # build_registry
 # --------------------------------------------------------------------------- #
@@ -510,6 +634,22 @@ def test_build_registry_live_is_clean() -> None:
 # --------------------------------------------------------------------------- #
 import classify_page_components as cpc
 import extract_editable_text_slots as eets
+
+
+def test_row_title_reads_heading_columns_left_to_right() -> None:
+    slots = [
+        {"text": "Kết quả muốn đạt được", "role": "subheading", "x": 0.10, "y": 0.60,
+         "w": 0.20, "h": 0.03, "size": 30},
+        {"text": "GOAL", "role": "heading", "x": 0.10, "y": 0.45,
+         "w": 0.08, "h": 0.04, "size": 53},
+        {"text": "KEY", "role": "heading", "x": 0.48, "y": 0.44,
+         "w": 0.05, "h": 0.03, "size": 53},
+        {"text": "RESULT", "role": "heading", "x": 0.45, "y": 0.47,
+         "w": 0.10, "h": 0.03, "size": 53},
+        {"text": "TASK", "role": "heading", "x": 0.82, "y": 0.45,
+         "w": 0.07, "h": 0.04, "size": 53},
+    ]
+    assert cpc._row_title(slots, "Row") == "GOAL KEY RESULT TASK"
 
 
 def test_split_runs_breaks_on_large_forward_gap() -> None:
@@ -723,6 +863,24 @@ def test_group_title_common_prefix_and_join() -> None:
         == "TRANSLATOR / DRIVER"
 
 
+def test_layout_cells_split_single_row_cards() -> None:
+    instances = [
+        {"x": 10, "y": 20, "w": 120, "h": 240, "members": [{"group": 0, "child": None}]},
+        {"x": 150, "y": 20, "w": 120, "h": 240, "members": [{"group": 1, "child": None}]},
+        {"x": 290, "y": 20, "w": 120, "h": 240, "members": [{"group": 2, "child": None}]},
+    ]
+    small = [
+        {"x": 330, "y": 40, "w": 20, "h": 20, "members": [{"group": 3, "child": None}]},
+    ]
+
+    assert cpc._cluster_layout_rows(instances, small) == []
+    cells = cpc._cluster_layout_cells(instances, small)
+
+    assert len(cells) == 3
+    assert [cell["col_index"] for cell in cells] == [1, 2, 3]
+    assert len(cells[2]["elements"]) == 2, cells
+
+
 def test_tags_from_dedups_and_skips_stopwords() -> None:
     tags = cpc._tags_from(["Level 1 Spicy", "Level 2 Coding", "the and Spicy"])
     assert tags == ["Level", "1", "Spicy", "2", "Coding"], tags
@@ -875,6 +1033,401 @@ def test_build_catalog_collect_icon_set_parses_and_absent() -> None:
         assert iset["icons"][0]["path"].endswith("icon-000.svg")
 
 
+def test_build_catalog_skips_blank_text_free_visual_marked_by_quality_gate() -> None:
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "demo"
+        comps = item / "artifact" / "components"
+        evidence = item / "evidence"
+        comps.mkdir(parents=True)
+        evidence.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "demo",
+            "status": "staging",
+            "quality_gate": {"blank_item_visual": True},
+        }), encoding="utf-8")
+        (evidence / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        (item / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        (comps / "components-manifest.json").write_text('{"groups":[]}', encoding="utf-8")
+
+        labels = [image["label"] for image in bcc.collect_images(item)]
+
+        assert labels == ["Full component"], labels
+
+
+def test_build_catalog_skips_standalone_blank_visual_drafts() -> None:
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp) / "component-extractions"
+        item = root / "demo" / "items" / "tiny-label"
+        (item / "artifact").mkdir(parents=True)
+        (item / "evidence").mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "tiny-label",
+            "candidate_stable_id": "sun.component.tiny-label",
+            "name": "Tiny Label",
+            "status": "staging",
+            "type": "component",
+            "category": "component",
+            "source": {"path": "source.pdf", "slide_or_page": 1},
+            "quality_gate": {"blank_item_visual": True},
+        }), encoding="utf-8")
+        (item / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item / "evidence" / "source-with-text.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><text>04</text></svg>',
+            encoding="utf-8",
+        )
+        registry = Path(tmp) / "registry.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        output = Path(tmp) / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(registry),
+            "--extractions", str(root),
+            "--output", str(output),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+
+        catalog = json.loads(output.read_text(encoding="utf-8"))
+
+        assert [item["id"] for item in catalog["items"]] == []
+
+
+def test_quality_gate_prunes_blank_refs_and_empty_manifests() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "demo"
+        comps = item / "artifact" / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "demo",
+            "status": "staging",
+        }), encoding="utf-8")
+        (comps / "blank.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+            encoding="utf-8",
+        )
+        (comps / "card.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="100" height="80" fill="#3333FF"/></svg>',
+            encoding="utf-8",
+        )
+        manifest = comps / "components-manifest.json"
+        manifest.write_text(json.dumps({
+            "groups": [
+                {"group_id": "blank", "file": "components/blank.svg", "cards": []},
+                {"group_id": "card", "file": "components/card.svg", "cards": [
+                    {"card_id": "card", "file": "components/card.svg"},
+                    {"card_id": "blank-card", "file": "components/blank.svg"},
+                ]},
+            ],
+        }), encoding="utf-8")
+
+        summary = qg.sanitize_item(item)
+        cleaned = json.loads(manifest.read_text(encoding="utf-8"))
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["blank_refs_pruned"] == 2, summary
+        assert [g["group_id"] for g in cleaned["groups"]] == ["card"]
+        assert cleaned["groups"][0]["cards"] == [{"card_id": "card", "file": "components/card.svg"}]
+        assert mapping["quality_gate"]["status"] == "reviewable"
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "empty"
+        comps = item / "artifact" / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "empty",
+            "status": "staging",
+        }), encoding="utf-8")
+        manifest = comps / "components-manifest.json"
+        manifest.write_text('{"groups":[]}', encoding="utf-8")
+
+        summary = qg.sanitize_item(item)
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["empty_manifests_removed"] == 1, summary
+        assert not manifest.exists()
+        assert mapping["quality_gate"]["status"] == "needs_review"
+
+
+def test_quality_gate_prunes_render_blank_refs_and_marks_base_visual() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "rendered"
+        artifact = item / "artifact"
+        comps = artifact / "components"
+        comps.mkdir(parents=True)
+        (item / "mapping.json").write_text(json.dumps({
+            "item_id": "rendered",
+            "status": "staging",
+        }), encoding="utf-8")
+        visual = artifact / "visual.svg"
+        blank = comps / "render-blank.svg"
+        source = comps / "source.svg"
+        for path in (visual, blank, source):
+            path.write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg">'
+                '<rect width="100" height="80" fill="#3333FF"/></svg>',
+                encoding="utf-8",
+            )
+        manifest = comps / "components-manifest.json"
+        manifest.write_text(json.dumps({
+            "groups": [{
+                "group_id": "rendered",
+                "file": "components/render-blank.svg",
+                "cards": [
+                    {"card_id": "blank", "file": "components/render-blank.svg"},
+                    {"card_id": "source", "source_file": "components/source.svg"},
+                ],
+            }],
+        }), encoding="utf-8")
+        render_results = {
+            str(visual.resolve()).lower(): {"nonwhite_ratio": 0.0},
+            str(blank.resolve()).lower(): {"nonwhite_ratio": 0.0},
+            str(source.resolve()).lower(): {"nonwhite_ratio": 0.05},
+        }
+
+        summary = qg.sanitize_items([item], render_results=render_results)[0]
+        cleaned = json.loads(manifest.read_text(encoding="utf-8"))
+        mapping = json.loads((item / "mapping.json").read_text(encoding="utf-8"))
+
+        assert summary["blank_item_visual"], summary
+        assert summary["render_blank_refs_pruned"] == 2, summary
+        assert summary["status"] == "needs_review"
+        assert "file" not in cleaned["groups"][0]
+        assert cleaned["groups"][0]["cards"] == [
+            {"card_id": "source", "source_file": "components/source.svg"},
+        ]
+        assert mapping["quality_gate"]["blank_item_visual"] is True
+        assert mapping["quality_gate"]["item_visual_nonwhite_ratio"] == 0.0
+
+
+def test_quality_gate_ignores_white_defs_and_masks() -> None:
+    import quality_gate as qg
+
+    with tempfile.TemporaryDirectory() as tmp:
+        svg = Path(tmp) / "masked.svg"
+        svg.write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            '<defs><rect width="100" height="100" fill="#3333FF"/></defs>'
+            '<mask id="m"><rect width="100" height="100" fill="white"/></mask>'
+            '<rect width="100" height="100" fill="white"/></svg>',
+            encoding="utf-8",
+        )
+
+        assert not qg.svg_has_visible_content(svg)
+
+
+def test_retrieval_index_builds_published_search_records() -> None:
+    import build_component_retrieval_index as bri
+
+    registry = {
+        "items": [
+            {
+                "id": "sun.component.metric-strip",
+                "name": "Metric Strip",
+                "status": "published",
+                "type": "component",
+                "component_type": "strip",
+                "layout_role": "metric comparison strip",
+                "intent": ["revenue growth"],
+                "tags": ["metric", "growth"],
+                "keywords": ["revenue", "team-size"],
+                "content_structure": ["label", "percentage"],
+                "use_cases": ["Show KPI change"],
+                "anti_use_cases": ["Do not use for pie charts"],
+                "visual_summary": "Two horizontal metric bars.",
+                "retrieval_notes": "Use when user asks for KPI cards.",
+                "source": {"kind": "extraction", "path": "/Users/home/private/source.pdf"},
+                "paths": {"artifact": "slide-system/library/components/metric-strip"},
+            },
+            {
+                "id": "sun.component.draft-only",
+                "name": "Draft Only",
+                "status": "staging",
+                "intent": ["draft"],
+            },
+        ],
+    }
+
+    records = bri.build_records(registry)
+
+    assert [record["id"] for record in records] == ["sun.component.metric-strip"]
+    assert records[0]["retrieval_mode"] == "lexical-ready"
+    assert "revenue" in records[0]["retrieval_terms"]
+    assert "users" not in records[0]["retrieval_terms"]
+    assert "pie" in records[0]["search_text"]
+    assert records[0]["paths"]["artifact"] == "slide-system/library/components/metric-strip"
+
+
+def test_publish_preserves_retrieval_metadata_and_index() -> None:
+    import importlib
+
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "metric-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>',
+            encoding="utf-8",
+        )
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-meta-demo",
+            "item_id": "metric-strip",
+            "candidate_stable_id": "sun.component.metric-strip",
+            "name": "Metric Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "metrics",
+            "brand": "sun-studio",
+            "semantic_intent": ["revenue growth"],
+            "tags": ["metric", "growth"],
+            "content_structure": ["label", "percentage"],
+            "content_fields": {},
+            "density": "any",
+            "component_type": "strip",
+            "layout_role": "metric comparison strip",
+            "visual_summary": "Two horizontal KPI bars.",
+            "keywords": ["revenue", "team-size"],
+            "use_cases": ["Show KPI change"],
+            "anti_use_cases": ["Do not use for pie charts"],
+            "quality_notes": "Reviewed in Draft.",
+            "retrieval_notes": "Use when user asks for KPI cards.",
+            "artifact_status": "ready",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        library = root / "library"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "metric-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(library),
+        ]
+        try:
+            assert publish.main() == 0
+        finally:
+            sys.argv = old_argv
+
+        item = read_text_slots.load_json(registry)["items"][0]
+        assert item["component_type"] == "strip"
+        assert item["keywords"] == ["revenue", "team-size"]
+        assert item["use_cases"] == ["Show KPI change"]
+        assert item["retrieval_notes"] == "Use when user asks for KPI cards."
+
+        index = (root / "component-retrieval-index.jsonl").read_text(encoding="utf-8")
+        record = json.loads(index.strip())
+        assert record["id"] == "sun.component.metric-strip"
+        assert "revenue" in record["retrieval_terms"]
+        assert "kpi" in record["retrieval_terms"]
+
+
+def test_publish_rejects_failed_auto_stage_artifacts() -> None:
+    import importlib
+
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "broken-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-failed-demo",
+            "item_id": "broken-strip",
+            "candidate_stable_id": "sun.component.broken-strip",
+            "name": "Broken Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "metrics",
+            "brand": "sun-studio",
+            "semantic_intent": ["broken metric"],
+            "tags": [],
+            "content_structure": [],
+            "content_fields": {},
+            "artifact_status": "failed",
+            "artifact_log": "validate_text_slots.py: failed",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "broken-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(root / "library"),
+        ]
+        try:
+            try:
+                publish.main()
+            except SystemExit as exc:
+                assert "Artifact build status is failed" in str(exc)
+            else:
+                raise AssertionError("failed auto-stage artifacts must not publish")
+        finally:
+            sys.argv = old_argv
+        assert read_text_slots.load_json(registry)["items"] == []
+
+
 # --------------------------------------------------------------------------- #
 # materialize_groups (classify_page_components + _common hash helpers)
 # --------------------------------------------------------------------------- #
@@ -936,6 +1489,1788 @@ def test_carved_slots_within_unit_and_subset() -> None:
         cy = s["bounds"]["y"] + s["bounds"]["height"] / 2
         assert region["x"] <= cx <= region["x"] + region["width"]
         assert region["y"] <= cy <= region["y"] + region["height"]
+
+
+# --------------------------------------------------------------------------- #
+# scaffold_extraction — ID gating + analysis-dir coexistence
+# --------------------------------------------------------------------------- #
+import scaffold_extraction as scaffold_ex
+
+
+def test_scaffold_rejects_docling_draft_ids() -> None:
+    # Every placeholder analyze_with_docling.py can mint must be rejected so it
+    # can never become a stable identity without a human rename.
+    for bad in ("picture-p1-1", "figure-p2-3", "table-p10-1", "chart-px-1",
+                "form-p3-2"):
+        assert scaffold_ex._DOCLING_DRAFT_ID.match(bad), bad
+    # Real semantic names (and the suggested renames) must pass.
+    for ok in ("metric-card", "salary-table", "org-chart", "picture-frame",
+               "table-of-contents"):
+        assert not scaffold_ex._DOCLING_DRAFT_ID.match(ok), ok
+
+
+def test_scaffold_still_rejects_positional_ids() -> None:
+    # The pre-existing positional gate is unchanged by the refactor.
+    for bad in ("page-01", "slide-3-full", "42", "top-left", "center"):
+        assert scaffold_ex._BANNED_ID.match(bad), bad
+    for ok in ("left-rail", "top-banner", "metric-card"):
+        assert not scaffold_ex._BANNED_ID.match(ok), ok
+
+
+def test_analyze_with_docling_emits_only_draft_ids() -> None:
+    # Guard the contract between the two scripts: every candidate id the analyzer
+    # produces must be caught by the scaffold draft gate.
+    import analyze_with_docling as awd
+    els = [{"page": p, "label": lbl, "text": "",
+            "region": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.2,
+                       "unit": "normalized"}}
+           for p, lbl in [(1, "picture"), (2, "table"), (10, "figure"),
+                          (3, "form")]]
+    items = awd.build_candidates(els, "demo", "component", None)
+    assert items, "expected candidates from figure-like labels"
+    for it in items:
+        assert scaffold_ex._DOCLING_DRAFT_ID.match(it["item_id"]), it["item_id"]
+
+
+def test_analyze_with_docling_skips_chart_candidates() -> None:
+    import analyze_with_docling as awd
+
+    els = [
+        {"page": 1, "label": "chart", "text": "Pie chart",
+         "region": {"x": 0.1, "y": 0.1, "width": 0.3,
+                    "height": 0.3, "unit": "normalized"}},
+        {"page": 1, "label": "picture", "text": "Reusable card",
+         "region": {"x": 0.5, "y": 0.1, "width": 0.3,
+                    "height": 0.3, "unit": "normalized"}},
+    ]
+
+    items = awd.build_candidates(els, "demo", "component", None)
+
+    assert [item["item_id"] for item in items] == ["picture-p1-1"]
+
+
+def test_analyze_with_docling_filters_tiny_candidates() -> None:
+    import analyze_with_docling as awd
+    els = [
+        {"page": 1, "label": "picture", "text": "",
+         "region": {"x": 0.1, "y": 0.1, "width": 0.02,
+                    "height": 0.02, "unit": "normalized"}},
+        {"page": 1, "label": "picture", "text": "",
+         "region": {"x": 0.2, "y": 0.2, "width": 0.2,
+                    "height": 0.2, "unit": "normalized"}},
+    ]
+    items = awd.build_candidates(els, "demo", "component", None)
+    assert [item["item_id"] for item in items] == ["picture-p1-1"]
+
+
+def test_analyze_with_docling_pdf_fallback_groups_rows() -> None:
+    import analyze_with_docling as awd
+
+    atoms = [
+        {"kind": "text", "text": "2. header",
+         "region": {"x": 0.1, "y": 0.08, "width": 0.4, "height": 0.02, "unit": "normalized"}},
+        {"kind": "drawing", "text": "",
+         "region": {"x": 0.19, "y": 0.14, "width": 0.20, "height": 0.22, "unit": "normalized"}},
+        {"kind": "drawing", "text": "",
+         "region": {"x": 0.41, "y": 0.14, "width": 0.20, "height": 0.22, "unit": "normalized"}},
+        {"kind": "text", "text": "01 LOREM IPSUM",
+         "region": {"x": 0.24, "y": 0.23, "width": 0.12, "height": 0.04, "unit": "normalized"}},
+        {"kind": "text", "text": "GOAL KEY RESULT TASK",
+         "region": {"x": 0.26, "y": 0.48, "width": 0.50, "height": 0.05, "unit": "normalized"}},
+        {"kind": "text", "text": "Kết quả muốn đạt được",
+         "region": {"x": 0.19, "y": 0.59, "width": 0.18, "height": 0.06, "unit": "normalized"}},
+        {"kind": "text", "text": "FOUNDATION TOP1 MICROSOFT XIAOMI",
+         "region": {"x": 0.27, "y": 0.78, "width": 0.45, "height": 0.09, "unit": "normalized"}},
+    ]
+
+    elements = awd.fallback_elements_from_atoms(3, atoms)
+    assert [el["source"] for el in elements] == ["pymupdf-fallback"] * 3
+    assert [round(el["region"]["y"], 2) for el in elements] == [0.13, 0.47, 0.77]
+    items = awd.build_candidates(elements, "demo", "component", None)
+    assert [item["item_id"] for item in items] == [
+        "figure-p3-1",
+        "figure-p3-2",
+        "figure-p3-3",
+    ]
+    assert "PyMuPDF fallback" in items[0]["notes"]
+
+
+def test_analyze_with_docling_fallback_keeps_uncovered_metric_row() -> None:
+    import analyze_with_docling as awd
+
+    fallback_rows = [
+        {
+            "page": 2,
+            "label": "figure",
+            "region": {
+                "x": 0.14, "y": 0.39, "width": 0.68, "height": 0.24,
+                "unit": "normalized",
+            },
+        },
+        {
+            "page": 2,
+            "label": "figure",
+            "region": {
+                "x": 0.17, "y": 0.70, "width": 0.64, "height": 0.20,
+                "unit": "normalized",
+            },
+        },
+    ]
+    existing_docling = [
+        {"x": 0.151, "y": 0.413, "width": 0.151, "height": 0.208, "unit": "normalized"},
+        {"x": 0.316, "y": 0.413, "width": 0.153, "height": 0.207, "unit": "normalized"},
+        {"x": 0.485, "y": 0.413, "width": 0.150, "height": 0.208, "unit": "normalized"},
+        {"x": 0.650, "y": 0.413, "width": 0.151, "height": 0.208, "unit": "normalized"},
+        # Small arrow icons in the metric row must not suppress the broad row.
+        {"x": 0.468, "y": 0.713, "width": 0.055, "height": 0.058, "unit": "normalized"},
+        {"x": 0.470, "y": 0.833, "width": 0.053, "height": 0.059, "unit": "normalized"},
+    ]
+
+    kept = [
+        row for row in fallback_rows
+        if not awd._covered_by_existing_candidates(row["region"], existing_docling)
+    ]
+
+    assert kept == [fallback_rows[1]]
+
+
+def test_analyze_with_docling_fallback_container_becomes_context() -> None:
+    import analyze_with_docling as awd
+
+    ai_visual = {
+        "page": 4,
+        "label": "picture",
+        "text": "",
+        "region": {
+            "x": 0.211145, "y": 0.659546, "width": 0.551944,
+            "height": 0.231766, "unit": "normalized",
+        },
+        "source": "docling",
+    }
+    broad_fallback = {
+        "x": 0.100247, "y": 0.494247, "width": 0.674524,
+        "height": 0.505753, "unit": "normalized",
+    }
+    metric_strip = {
+        "x": 0.170, "y": 0.700, "width": 0.640,
+        "height": 0.200, "unit": "normalized",
+    }
+    small_arrow = {
+        "region": {
+            "x": 0.470, "y": 0.833, "width": 0.053,
+            "height": 0.059, "unit": "normalized",
+        },
+    }
+
+    assert awd._contained_existing_candidate(broad_fallback, [ai_visual]) is ai_visual
+    assert awd._covered_by_existing_candidates(broad_fallback, [ai_visual])
+    assert awd._contained_existing_candidate(metric_strip, [small_arrow]) is None
+    assert not awd._covered_by_existing_candidates(metric_strip, [small_arrow])
+
+    awd._append_context_text(
+        ai_visual,
+        "2. CONTENT XOAY QUANH - build AI team and automation system",
+    )
+    items = awd.build_candidates([ai_visual], "demo", "component", None)
+
+    assert [item["item_id"] for item in items] == ["picture-p4-1"]
+    assert "CONTENT XOAY QUANH" in items[0]["semantic_intent"][0]
+
+
+def test_analyze_with_docling_fallback_text_uses_reading_order() -> None:
+    import analyze_with_docling as awd
+
+    row = [
+        {"kind": "text", "text": "+30%",
+         "region": {"x": 0.55, "y": 0.72, "width": 0.14, "height": 0.06,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "Revenue",
+         "region": {"x": 0.20, "y": 0.735, "width": 0.13, "height": 0.03,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "+30%",
+         "region": {"x": 0.55, "y": 0.84, "width": 0.14, "height": 0.06,
+                    "unit": "normalized"}},
+        {"kind": "text", "text": "Team Size",
+         "region": {"x": 0.20, "y": 0.835, "width": 0.13, "height": 0.03,
+                    "unit": "normalized"}},
+    ]
+
+    assert awd._text_lines_for_row(row) == ["Revenue +30%", "Team Size +30%"]
+
+
+def test_analyze_with_docling_merges_header_and_visual_rows() -> None:
+    import analyze_with_docling as awd
+
+    rows = [
+        {
+            "page": 5,
+            "label": "figure",
+            "text": "This is a contributors slide. Insert your team here.",
+            "region": {"x": 0.28, "y": 0.12, "width": 0.42, "height": 0.13,
+                       "unit": "normalized"},
+            "source": "pymupdf-fallback",
+        },
+        {
+            "page": 5,
+            "label": "figure",
+            "text": "Patrick E. Shorey Mary T. Middleton William R. Hudson",
+            "region": {"x": 0.24, "y": 0.265, "width": 0.50, "height": 0.23,
+                       "unit": "normalized"},
+            "source": "pymupdf-fallback",
+        },
+    ]
+
+    merged = awd._merge_header_visual_rows(rows)
+
+    assert len(merged) == 1
+    assert merged[0]["region"]["y"] < rows[0]["region"]["y"]
+    assert merged[0]["region"]["height"] > 0.35
+    assert "contributors slide" in merged[0]["text"]
+    assert "Patrick" in merged[0]["text"]
+
+
+def test_analyze_with_docling_icon_sheet_candidate_covers_full_glyph_grid() -> None:
+    import analyze_with_docling as awd
+
+    atoms = []
+    for row in range(8):
+        for col in range(8):
+            atoms.append({
+                "kind": "drawing",
+                "text": "",
+                "region": {
+                    "x": 0.10 + col * 0.05,
+                    "y": 0.13 + row * 0.07,
+                    "width": 0.012,
+                    "height": 0.018,
+                    "unit": "normalized",
+                },
+            })
+
+    element = awd._icon_sheet_element_from_atoms(
+        1, atoms, "ICON\n1. NHUNG ICON HAY XUAT HIEN")
+
+    assert element is not None
+    assert element["region"]["x"] < 0.09
+    assert element["region"]["y"] < 0.08
+    assert element["region"]["width"] > 0.36
+    assert element["region"]["height"] > 0.55
+
+
+def test_analyze_with_docling_pdf_page_mode_survives_one_page_failure() -> None:
+    import analyze_with_docling as awd
+
+    class _Size:
+        width = 100
+        height = 100
+
+    class _Page:
+        size = _Size()
+
+    class _Label:
+        value = "picture"
+
+    class _BBox:
+        l = 10
+        t = 10
+        r = 50
+        b = 50
+
+    class _Prov:
+        page_no = 1
+        bbox = _BBox()
+
+    class _Item:
+        label = _Label()
+        text = "Reusable visual"
+        prov = [_Prov()]
+
+    class _Doc:
+        pages = {1: _Page()}
+
+        def iterate_items(self):
+            return [(_Item(), 0)]
+
+    class _Result:
+        document = _Doc()
+
+    class _Converter:
+        def __init__(self) -> None:
+            self.page_ranges: list[tuple[int, int]] = []
+
+        def convert(self, source, **kwargs):
+            page_range = kwargs["page_range"]
+            self.page_ranges.append(page_range)
+            if page_range == (2, 2):
+                raise RuntimeError("page failed")
+            return _Result()
+
+    converter = _Converter()
+    old = awd._page_numbers_for_source
+    awd._page_numbers_for_source = lambda source, pages: ([1, 2, 3], [])
+    try:
+        elements, warnings, stats = awd.analyze_source(
+            converter, Path("demo.pdf"), (1, 3))
+    finally:
+        awd._page_numbers_for_source = old
+
+    assert converter.page_ranges == [(1, 1), (2, 2), (3, 3)]
+    assert [el["page"] for el in elements] == [1, 3]
+    assert any("page 2" in warning for warning in warnings)
+    assert stats["docling_mode"] == "page-by-page"
+    assert stats["docling_pages_attempted"] == 3
+    assert stats["docling_pages_failed"] == 1
+
+
+def test_scaffold_rejects_docling_draft_without_polluting_analysis_dir() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        source = root / "source.pdf"
+        source.write_text("fake", encoding="utf-8")
+        output_root = root / "outputs"
+        analysis = output_root / "docling-demo" / "analysis"
+        analysis.mkdir(parents=True)
+        request_path = root / "request.json"
+        request_path.write_text(json.dumps({
+            "extraction_id": "docling-demo",
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.1, "width": 0.2,
+                           "height": 0.2, "unit": "normalized"},
+                "requested_type": "component",
+                "semantic_intent": ["picture candidate detected by Docling"],
+            }],
+        }), encoding="utf-8")
+        history = root / "history.json"
+        registry = root / "registry.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        old_argv = sys.argv[:]
+        try:
+            sys.argv = [
+                "scaffold_extraction.py", "--request", str(request_path),
+                "--output-root", str(output_root), "--history", str(history),
+                "--registry", str(registry),
+            ]
+            try:
+                scaffold_ex.main()
+            except SystemExit as exc:
+                assert "Docling draft placeholder" in str(exc)
+            else:
+                raise AssertionError("expected Docling draft placeholder rejection")
+        finally:
+            sys.argv = old_argv
+        assert analysis.exists(), "analysis/ should be preserved"
+        assert not (output_root / "docling-demo" / "request.json").exists()
+        assert not (output_root / "docling-demo" / "items").exists()
+
+
+# --------------------------------------------------------------------------- #
+# candidate_review — rename / metadata / approval (analysis-only)
+# --------------------------------------------------------------------------- #
+import candidate_review as crv
+
+_EXTRACTION_SCHEMA = SCRIPTS.parent / "schemas" / "extraction-request.schema.json"
+
+
+def _review_fixture(tmp: Path, candidate_id: str = "picture-p1-1") -> tuple[Path, str]:
+    """Create an extractions root with one analysis run carrying a placeholder
+    candidate. Returns (root, extraction_id)."""
+    extraction_id = "docling-demo"
+    adir = tmp / extraction_id / "analysis"
+    adir.mkdir(parents=True)
+    (adir / "candidate-extraction-request.json").write_text(json.dumps({
+        "extraction_id": extraction_id,
+        "source_path": "input/Demo.pdf",
+        "items": [{
+            "item_id": candidate_id,
+            "slide_or_page": 1,
+            "region": {"x": 0.5, "y": 0.0, "width": 0.4, "height": 0.9,
+                       "unit": "normalized"},
+            "object_ids": [],
+            "requested_type": "component",
+            "semantic_intent": ["picture candidate detected by Docling"],
+            "notes": "DRAFT candidate from Docling auto-detect.",
+            "replacement_for": None,
+        }],
+    }), encoding="utf-8")
+    (adir / "page-analysis.json").write_text('{"elements": []}', encoding="utf-8")
+    (adir / "docling-report.json").write_text('{"candidate_count": 1}', encoding="utf-8")
+    return tmp, extraction_id
+
+
+def _valid_metadata(item_id: str = "kickoff-2026-hero-visual") -> dict:
+    return {
+        "item_id": item_id,
+        "display_name": "Kick-off 2026 hero visual",
+        "requested_type": "component",
+        "component_type": "hero",
+        "layout_role": "full-bleed",
+        "visual_summary": "A tall orange hero illustration on the right column.",
+        "semantic_intent": ["kickoff hero", "goal setting cover"],
+        "content_structure": ["illustration"],
+        "tags": ["hero", "orange"],
+        "keywords": ["kickoff", "2026"],
+        "use_cases": ["cover slide"],
+        "anti_use_cases": ["dense data slide"],
+        "quality_notes": "",
+        "retrieval_notes": "",
+    }
+
+
+def test_candidate_placeholder_id_cannot_be_approved() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        # Save valid metadata but keep the Docling placeholder as item_id.
+        meta = _valid_metadata(item_id="picture-p1-1")
+        crv.save_review(eid, "picture-p1-1", meta, reviewer="t", root=root)
+        try:
+            crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        except crv.CandidateValidationError as exc:
+            assert any("placeholder" in e.lower() for e in exc.errors), exc.errors
+        else:
+            raise AssertionError("placeholder item_id must not be approvable")
+        # No approved artifact written.
+        assert not (root / eid / "analysis" / "approved").exists()
+
+
+def test_candidate_positional_id_rejected() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata("top-left"),
+                        reviewer="t", root=root)
+        errors = crv.validate_review(crv.get_candidates(eid, root=root)
+                                     ["candidates"][0]["review"])
+        assert any("positional" in e.lower() or "generic" in e.lower() for e in errors), errors
+
+
+def test_candidate_required_metadata_enforced() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        # rename only, leave all metadata empty
+        crv.save_review(eid, "picture-p1-1", {"item_id": "kickoff-hero"},
+                        reviewer="t", root=root)
+        try:
+            crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        except crv.CandidateValidationError as exc:
+            joined = " ".join(exc.errors).lower()
+            assert "display name" in joined and "visual summary" in joined, exc.errors
+        else:
+            raise AssertionError("missing required metadata must block approval")
+
+
+def test_candidate_approve_writes_schema_compatible_request() -> None:
+    schema = read_text_slots.load_json(_EXTRACTION_SCHEMA)
+    item_schema = schema["properties"]["items"]["items"]
+    allowed = set(item_schema["properties"])
+    required = set(item_schema["required"])
+    top_required = set(schema["required"])
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        result = crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file(), result
+        req = read_text_slots.load_json(approved_path)
+        assert top_required <= set(req), req
+        item = req["items"][0]
+        assert required <= set(item), item
+        assert set(item) <= allowed, f"extra keys not in schema: {set(item) - allowed}"
+        assert item["item_id"] == "kickoff-2026-hero-visual"
+        # The approved request must also pass the live scaffold gate.
+        scaffold_ex.validate_request_item(item)
+        # review status updated, reviewer recorded.
+        cand = crv.get_candidates(eid, root=root)["candidates"][0]
+        assert cand["review"]["review_status"] == "approved_for_extraction"
+        assert cand["review"]["reviewer"] == "t"
+
+
+def test_candidate_reject_produces_no_approved_request() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file()
+        # Rejecting must drop the stale approved artifact and flip status.
+        review = crv.reject(eid, "picture-p1-1", "wrong crop", reviewer="t", root=root)
+        assert review["review_status"] == "rejected"
+        assert not approved_path.exists(), "reject must remove the approved request"
+        # A reject with no reason is refused.
+        try:
+            crv.reject(eid, "picture-p1-1", "", root=root)
+        except crv.CandidateError:
+            pass
+        else:
+            raise AssertionError("reject without a reason must fail")
+
+
+def test_candidate_review_preserves_analysis_files() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        adir = root / eid / "analysis"
+        before = (adir / "candidate-extraction-request.json").read_text(encoding="utf-8")
+        page_before = (adir / "page-analysis.json").read_text(encoding="utf-8")
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        assert (adir / "candidate-extraction-request.json").read_text(encoding="utf-8") == before
+        assert (adir / "page-analysis.json").read_text(encoding="utf-8") == page_before
+        assert (adir / "docling-report.json").exists()
+
+
+def test_candidate_pdf_preview_is_generated_and_reused() -> None:
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "source.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=200, height=100)
+        page.draw_rect(fitz.Rect(50, 20, 150, 80), color=(1, 0, 0), fill=(1, 0.8, 0.7))
+        page.insert_text((58, 55), "Preview", fontsize=16, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        root = tmpp / "ext"
+        eid = "docling-preview-demo"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "y": 0.2, "width": 0.5, "height": 0.6,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "preview smoke",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        result = crv.get_candidates(eid, root=root)
+        preview = result["candidates"][0]["preview"]
+        assert preview["status"] == "ready", preview
+        png = adir / "previews" / "picture-p1-1.png"
+        assert png.is_file(), preview
+        assert png.read_bytes().startswith(b"\x89PNG"), "preview must be a PNG"
+        first_mtime = png.stat().st_mtime_ns
+
+        second = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert second["path"] == preview["path"]
+        assert png.stat().st_mtime_ns == first_mtime, "existing preview should be reused"
+
+
+def test_candidate_preview_unavailable_for_non_pdf_source() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        root = tmpp / "ext"
+        eid = "docling-preview-fallback"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": "source.pptx",
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "y": 0.2, "width": 0.5, "height": 0.6,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "preview fallback",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        preview = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert preview["status"] == "unavailable", preview
+        assert "PDF sources only" in preview["reason"]
+        assert not (adir / "previews").exists()
+
+
+def test_candidate_preview_unavailable_for_malformed_region() -> None:
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "source.pdf"
+        doc = fitz.open()
+        doc.new_page(width=200, height=100)
+        doc.save(source)
+        doc.close()
+
+        root = tmpp / "ext"
+        eid = "docling-preview-bad-region"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.25, "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["preview candidate"],
+                "notes": "bad region",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        preview = crv.get_candidates(eid, root=root)["candidates"][0]["preview"]
+        assert preview["status"] == "unavailable", preview
+        assert "Preview render failed" in preview["reason"]
+        assert not (adir / "previews").exists()
+
+
+def test_candidate_review_does_not_touch_registry_or_library() -> None:
+    # candidate_review must only write under the analysis dir; the real registry,
+    # compact registry, history, and library must be byte-identical afterwards.
+    repo = SCRIPTS.parents[1]
+    watched = [
+        repo / "slide-system" / "registries" / "visual-library.json",
+        repo / "slide-system" / "registries" / "visual-library-compact.json",
+        repo / "slide-system" / "registries" / "extraction-history.json",
+    ]
+    before = {p: p.read_bytes() for p in watched if p.exists()}
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        crv.reject(eid, "picture-p1-1", "redo", reviewer="t", root=root)
+    after = {p: p.read_bytes() for p in watched if p.exists()}
+    assert before == after, "candidate review must not mutate registry/history/library"
+
+
+def test_candidate_invalid_extraction_id_rejected() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        for bad in ("../escape", "..", "a/b", "/etc", "bad id"):
+            try:
+                crv.get_candidates(bad, root=root)
+            except crv.CandidateError:
+                pass
+            else:
+                raise AssertionError(f"invalid extraction id must be rejected: {bad!r}")
+
+
+def test_candidate_editing_resets_approval() -> None:
+    # Editing an approved candidate must revert it to pending and drop the stale
+    # approved request, so an approval never outlives the metadata it was built on.
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata(), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        approved_path = root / eid / "analysis" / "approved" / "kickoff-2026-hero-visual.extraction-request.json"
+        assert approved_path.is_file()
+        crv.save_review(eid, "picture-p1-1", {"visual_summary": "edited"},
+                        reviewer="t", root=root)
+        assert not approved_path.exists(), "editing must drop the stale approved request"
+        cand = crv.get_candidates(eid, root=root)["candidates"][0]
+        assert cand["review"]["review_status"] == "pending"
+
+
+def test_candidate_multiple_approvals_scaffold_without_collision() -> None:
+    # Regression: every approved request from one run must get its own scaffold
+    # extraction id, else the second candidate fails with "already exists".
+    import scaffold_extraction as sx
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Demo.pdf"
+        source.write_bytes(b"%PDF-1.4 fake source")
+        eid = "docling-demo"
+        root = tmpp / "ext"
+        adir = root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {"item_id": f"picture-p1-{i}", "slide_or_page": 1,
+                 "region": {"x": 0.1 * i, "y": 0.1, "width": 0.3, "height": 0.3,
+                            "unit": "normalized"},
+                 "object_ids": [], "requested_type": "component",
+                 "semantic_intent": ["pic"], "replacement_for": None}
+                for i in (1, 2)
+            ],
+        }), encoding="utf-8")
+
+        for i in (1, 2):
+            crv.save_review(eid, f"picture-p1-{i}", _valid_metadata(f"hero-{i}"),
+                            reviewer="t", root=root)
+            crv.approve(eid, f"picture-p1-{i}", reviewer="t", root=root)
+
+        req1 = read_text_slots.load_json(adir / "approved" / "hero-1.extraction-request.json")
+        req2 = read_text_slots.load_json(adir / "approved" / "hero-2.extraction-request.json")
+        assert req1["extraction_id"] == "docling-demo-hero-1", req1["extraction_id"]
+        assert req1["extraction_id"] != req2["extraction_id"]
+
+        out_root = tmpp / "out"
+        hist = tmpp / "history.json"; hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"; reg.write_text('{"items":[]}', encoding="utf-8")
+        for name in ("hero-1", "hero-2"):
+            req = adir / "approved" / f"{name}.extraction-request.json"
+            old_argv = sys.argv[:]
+            sys.argv = ["scaffold_extraction.py", "--request", str(req),
+                        "--output-root", str(out_root), "--history", str(hist),
+                        "--registry", str(reg)]
+            try:
+                assert sx.main() == 0, name
+            finally:
+                sys.argv = old_argv
+        # Both scaffolded into separate, non-colliding output dirs.
+        assert (out_root / "docling-demo-hero-1" / "items" / "hero-1").is_dir()
+        assert (out_root / "docling-demo-hero-2" / "items" / "hero-2").is_dir()
+
+
+def test_candidate_rename_removes_old_approved_artifact() -> None:
+    # Renaming an approved candidate must not orphan the old item_id's request.
+    with tempfile.TemporaryDirectory() as tmp:
+        root, eid = _review_fixture(Path(tmp))
+        crv.save_review(eid, "picture-p1-1", _valid_metadata("hero-a"), reviewer="t", root=root)
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        old = root / eid / "analysis" / "approved" / "hero-a.extraction-request.json"
+        assert old.is_file()
+        meta = _valid_metadata("hero-b")
+        crv.save_review(eid, "picture-p1-1", meta, reviewer="t", root=root)
+        assert not old.exists(), "old-name approved request must be removed on rename"
+        crv.approve(eid, "picture-p1-1", reviewer="t", root=root)
+        new = root / eid / "analysis" / "approved" / "hero-b.extraction-request.json"
+        assert new.is_file() and not old.exists()
+
+
+def test_auto_stage_candidates_creates_reviewable_draft() -> None:
+    import importlib
+    import build_component_catalog as bcc
+
+    asc = importlib.import_module("auto_stage_candidates")
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Kickoff 2026.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=300, height=180)
+        page.draw_rect(fitz.Rect(45, 35, 245, 135), color=(1, 0.2, 0.05),
+                       fill=(1, 0.85, 0.76))
+        page.insert_text((70, 90), "Kickoff Hero", fontsize=20, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        output_root = tmpp / "component-extractions"
+        eid = "docling-auto-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["kickoff hero detected by Docling"],
+                "notes": "Auto-stage this detected hero visual into Draft.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+        )
+
+        assert summary["staged"] == 1, summary
+        staged = summary["items"][0]
+        item_id = staged["item_id"]
+        assert item_id != "picture-p1-1"
+        assert not scaffold_ex._DOCLING_DRAFT_ID.match(item_id)
+        item_dir = output_root / staged["extraction_id"] / "items" / item_id
+        mapping = read_text_slots.load_json(item_dir / "mapping.json")
+        assert mapping["status"] == "staging"
+        assert mapping["candidate_stable_id"].startswith("sun.component.")
+        assert mapping["source"]["candidate_id"] == "picture-p1-1"
+        assert mapping["review"]["mode"] == "auto-staged"
+        assert (item_dir / "artifact" / "visual.svg").is_file()
+        assert (item_dir / "artifact" / "text-slots.json").is_file()
+        assert (item_dir / "evidence" / "source-with-text.svg").is_file()
+        assert (item_dir / "preview" / "thumbnail.png").is_file()
+
+        catalog_path = tmpp / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(reg),
+            "--extractions", str(output_root),
+            "--output", str(catalog_path),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+        catalog = read_text_slots.load_json(catalog_path)
+        draft = next(item for item in catalog["items"]
+                     if item["id"] == mapping["candidate_stable_id"])
+        assert draft["status"] == "staging"
+        assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
+        assert draft["images"], "Draft must have a visual preview for final review"
+        assert draft["component_type"] == "card"
+        assert draft["layout_role"]
+        assert draft["keywords"]
+        assert draft["use_cases"]
+
+        dup_eid = "docling-auto-demo-duplicate"
+        dup_adir = output_root / dup_eid / "analysis"
+        dup_adir.mkdir(parents=True)
+        (dup_adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": dup_eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["same hero detected by a later Docling run"],
+                "notes": "This region is already staged and must not duplicate.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+        duplicate = asc.stage_run(
+            dup_eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+        assert duplicate["staged"] == 0, duplicate
+        assert duplicate["skipped"] == 1, duplicate
+        assert duplicate["items"][0]["status"] == "already_staged_region"
+        assert duplicate["items"][0]["stable_id"] == mapping["candidate_stable_id"]
+
+        second = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+        assert second["staged"] == 0, second
+        assert second["skipped"] == 1, second
+        assert second["items"][0]["status"] in {"already_staged", "already_staged_region"}
+
+
+def test_auto_stage_skips_chart_candidates_from_existing_analysis() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    assert asc._auto_stage_skip_reason({"item_id": "chart-p1-1"})
+    assert asc._auto_stage_skip_reason({
+        "item_id": "picture-p1-1",
+        "semantic_intent": ["pie chart candidate detected by Docling"],
+    })
+    assert asc._auto_stage_skip_reason({
+        "item_id": "picture-p1-1",
+        "semantic_intent": ["org chart radial team structure"],
+    }) is None
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        output_root = tmpp / "component-extractions"
+        eid = "docling-chart-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(tmpp / "source.pdf"),
+            "items": [{
+                "item_id": "chart-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.1, "width": 0.3,
+                           "height": 0.3, "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["chart candidate detected by Docling"],
+                "notes": "DRAFT candidate from Docling auto-detect.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+
+        assert summary["staged"] == 0, summary
+        assert summary["skipped"] == 1, summary
+        assert summary["items"][0]["reason"] == "chart candidates are skipped by auto-detect"
+        assert not (adir / "approved").exists()
+
+
+def test_auto_stage_skips_duplicate_component_patterns_across_pages() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    first = {
+        "item_id": "picture-p3-1",
+        "slide_or_page": 3,
+        "region": {"x": 0.05, "y": 0.08, "width": 0.42,
+                   "height": 0.32, "unit": "normalized"},
+        "semantic_intent": ["Goal setting title card with highlighted subtitle"],
+    }
+    second = {
+        "item_id": "picture-p4-1",
+        "slide_or_page": 4,
+        "region": {"x": 0.052, "y": 0.081, "width": 0.58,
+                   "height": 0.29, "unit": "normalized"},
+        "semantic_intent": ["Check-in title card with highlighted subtitle"],
+    }
+    assert asc._duplicate_pattern_signature("input/goal-setting.pdf", first) == (
+        asc._duplicate_pattern_signature("input/goal-setting.pdf", second)
+    )
+    same_page_neighbour = {
+        **first,
+        "item_id": "picture-p3-2",
+        "region": {"x": 0.55, "y": 0.08, "width": 0.42,
+                   "height": 0.32, "unit": "normalized"},
+    }
+    assert asc._duplicate_pattern_signature("input/goal-setting.pdf", first) != (
+        asc._duplicate_pattern_signature("input/goal-setting.pdf", same_page_neighbour)
+    )
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Goal Setting 2026.pptx"
+        source.write_bytes(b"fake pptx source for hashing only")
+        output_root = tmpp / "component-extractions"
+        eid = "docling-duplicate-pattern-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {
+                    **first,
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "notes": "Year-end evaluation title card",
+                    "replacement_for": None,
+                },
+                {
+                    **second,
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "notes": "Quarterly check-in title card",
+                    "replacement_for": None,
+                },
+            ],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+            build_artifacts=False,
+        )
+
+        assert summary["staged"] == 1, summary
+        assert summary["skipped"] == 1, summary
+        duplicate = summary["items"][1]
+        assert duplicate["status"] == "skipped_duplicate_pattern"
+        assert duplicate["duplicate_of_candidate_id"] == "picture-p3-1"
+
+
+def test_auto_stage_cli_reads_analysis_from_output_root() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        output_root = tmpp / "component-extractions"
+        eid = "docling-cli-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        source = tmpp / "source.pdf"
+        source.write_bytes(b"%PDF-1.4\n% test source\n")
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [{
+                "item_id": "picture-p1-1",
+                "slide_or_page": 1,
+                "region": {"x": 0.1, "y": 0.12, "width": 0.78, "height": 0.72,
+                           "unit": "normalized"},
+                "object_ids": [],
+                "requested_type": "component",
+                "semantic_intent": ["cli output root hero detected by Docling"],
+                "notes": "Auto-stage this detected hero visual into Draft.",
+                "replacement_for": None,
+            }],
+        }), encoding="utf-8")
+        hist = tmpp / "history.json"
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+
+        rc = asc.main([
+            eid,
+            "--output-root", str(output_root),
+            "--history", str(hist),
+            "--registry", str(reg),
+            "--no-catalog",
+            "--no-artifacts",
+        ])
+
+        assert rc == 0, "CLI must read analysis from --output-root"
+        assert hist.is_file(), "CLI should initialize a missing custom history file"
+        run_dirs = [p for p in output_root.iterdir() if p.is_dir() and p.name != eid]
+        assert run_dirs, "CLI should create a staged extraction dir"
+
+
+def test_auto_stage_decomposes_large_cards_as_layout_rows() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "goal-card"
+        item.mkdir(parents=True)
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "card",
+            "source": {"region": {"width": 0.64, "height": 0.80}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) == "layout-row-groups"
+
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "card",
+            "source": {"region": {"width": 0.20, "height": 0.20}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) is None
+
+        (item / "mapping.json").write_text(_json.dumps({
+            "component_type": "strip",
+            "source": {"region": {"width": 0.20, "height": 0.20}},
+        }), encoding="utf-8")
+        assert asc._decompose_mode(item) == "cards"
+
+
+def test_auto_stage_decomposes_tables_and_broad_visuals_as_layout_rows() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        item = Path(tmp) / "items" / "compound-region"
+        item.mkdir(parents=True)
+
+        def write_mapping(component_type: str, width: float, height: float) -> None:
+            (item / "mapping.json").write_text(_json.dumps({
+                "component_type": component_type,
+                "source": {"region": {"width": width, "height": height}},
+            }), encoding="utf-8")
+
+        write_mapping("table", 0.72, 0.38)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("visual", 0.55, 0.23)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("component", 0.55, 0.23)
+        assert asc._decompose_mode(item) == "layout-row-groups"
+        write_mapping("visual", 0.30, 0.20)
+        assert asc._decompose_mode(item) is None
+
+
+def test_auto_stage_semantic_ids_fallback_avoids_full_source_slug() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    source = "input/SUN.SLIDE.pdf"
+    item_a = {
+        "item_id": "picture-p20-1",
+        "slide_or_page": 20,
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+    item_b = {
+        "item_id": "picture-p21-1",
+        "slide_or_page": 21,
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+    goal_card = {
+        "item_id": "picture-p9-1",
+        "slide_or_page": 9,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.25, "height": 0.35,
+                   "unit": "normalized"},
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+
+    used: set[str] = set()
+    id_a = asc.semantic_item_id(source, item_a, used)
+    id_b = asc.semantic_item_id(source, item_b, used)
+    goal_id = asc.semantic_item_id("input/Kick_off_GOAL_SETTING_2026-2.pdf", goal_card, set())
+
+    assert id_a == "detected-icon-1"
+    assert id_b == "detected-icon-1-2"
+    assert goal_id == "goal-setting-card-1"
+    assert id_a != id_b
+    assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_a)
+    assert not scaffold_ex._DOCLING_DRAFT_ID.match(id_b)
+    assert "kick-off" not in goal_id and "2026" not in goal_id
+
+
+def test_auto_stage_semantic_ids_use_page_context_before_source_fallback() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p7-1",
+        "slide_or_page": 7,
+        "region": {"x": 0.14, "y": 0.41, "width": 0.70, "height": 0.50,
+                   "unit": "normalized"},
+        "region_text": "Patrick E. Shorey\nMary T. Middleton",
+        "page_text": "This is a contributors slide. Insert your team here.",
+        "semantic_intent": ["picture candidate detected by Docling"],
+        "notes": "DRAFT candidate from Docling auto-detect. Rename item_id.",
+    }
+
+    item_id = asc.semantic_item_id("input/Sun.Presentation.pdf", item, set())
+
+    assert item_id == "contributors-team-visual", item_id
+    assert not item_id.startswith("source-")
+
+
+def test_auto_stage_semantic_ids_do_not_emit_source_visual_for_generic_pdf() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p16-1",
+        "slide_or_page": 16,
+        "region": {"x": 0.04, "y": 0.2, "width": 0.91, "height": 0.52,
+                   "unit": "normalized"},
+        "semantic_intent": ["figure candidate detected by PyMuPDF fallback"],
+        "notes": "DRAFT candidate from PyMuPDF fallback auto-detect.",
+    }
+
+    item_id = asc.semantic_item_id("input/Sun.Presentation.pdf", item, set())
+
+    assert item_id == "detected-visual-1", item_id
+    assert not item_id.startswith("source-")
+
+
+def test_auto_stage_semantic_ids_use_region_text_before_source_name() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    source = "input/GUIDLINE_PRESENTATION_SUN.pdf"
+    role_card = {
+        "item_id": "picture-p2-2",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.41, "width": 0.15, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": (
+            "Chuyen muc tieu cong ty thanh huong di ro rang\n"
+            "TRANSLATOR\n"
+            "cho team"
+        ),
+    }
+    level_strip = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.16, "width": 0.66, "height": 0.18,
+                   "unit": "normalized"},
+        "region_text": "AI Coding Assistants\nLevel 1\nAgent Networks\nLevel 4",
+    }
+
+    role_id = asc.semantic_item_id(source, role_card, set())
+    strip_id = asc.semantic_item_id(source, level_strip, set())
+    metadata = asc.metadata_for(source, role_card, role_id)
+
+    assert role_id == "translator-card"
+    assert strip_id == "ai-coding-assistants-levels-strip"
+    assert "guidline" not in role_id
+    assert metadata["component_type"] == "card"
+    assert metadata["keywords"][:2] == ["translator", "card"]
+
+
+def test_auto_stage_semantic_ids_translate_vietnamese_hints_to_english() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    recruitment_item = {
+        "item_id": "picture-p5-1",
+        "slide_or_page": 5,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.3,
+                   "unit": "normalized"},
+        "region_text": "HIEU MUC TIEU TUYEN DUNG",
+    }
+    team_item = {
+        "item_id": "picture-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.5, "height": 0.3,
+                   "unit": "normalized"},
+        "region_text": "XAY DUNG DOI NGU",
+    }
+
+    item_id = asc.semantic_item_id("input/interview-workshop.pdf", recruitment_item, set())
+    team_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", team_item, set())
+    team_meta = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", team_item, team_id)
+
+    assert item_id == "recruitment-goal-card"
+    assert "tuyen" not in item_id and "dung" not in item_id
+    assert item_id.isascii()
+    assert team_id == "team-visual"
+    assert "xay" not in team_id and "ngu" not in team_id
+    assert "xay" not in team_meta["keywords"]
+    assert "dung" not in team_meta["keywords"]
+
+
+def test_auto_stage_semantic_ids_translate_salary_benefit_vietnamese() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    salary_item = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.35, "height": 0.35,
+                   "unit": "normalized"},
+        "region_text": "Lương phúc lợi\nQuyền lợi dài hạn",
+        "semantic_intent": ["picture candidate detected by Docling"],
+    }
+    investment_item = {
+        "item_id": "picture-p3-1",
+        "slide_or_page": 3,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.35, "height": 0.35,
+                   "unit": "normalized"},
+        "region_text": "Một bước đầu tư",
+        "semantic_intent": ["picture candidate detected by Docling"],
+    }
+    subtitle_item = {
+        "item_id": "figure-p4-1",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.1, "width": 0.55, "height": 0.25,
+                   "unit": "normalized"},
+        "region_text": "goes sub tittle",
+        "semantic_intent": ["figure candidate detected by PyMuPDF fallback"],
+    }
+
+    assert asc.semantic_item_id("input/Salary.pdf", salary_item, set()) == "salary-benefits-long-term-card"
+    assert asc.semantic_item_id("input/Salary.pdf", investment_item, set()) == "investment-card"
+    assert asc.semantic_item_id("input/Sun.Presentation.pdf", subtitle_item, set()) == "subtitle-visual"
+
+
+def test_auto_stage_metadata_keeps_context_intent_with_region_text() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.21, "y": 0.66, "width": 0.55, "height": 0.23,
+                   "unit": "normalized"},
+        "region_text": "XAY DUNG DOI NGU AI\nXAY DUNG HE THONG TU DONG HOA",
+        "semantic_intent": [
+            "2. CONTENT XOAY QUANH - build AI team and automation system",
+        ],
+    }
+
+    metadata = asc.metadata_for(
+        "input/GUIDLINE_PRESENTATION_SUN.pdf", item, "team-visual")
+
+    assert metadata["semantic_intent"][0] == "team visual"
+    assert any("CONTENT XOAY QUANH" in value
+               for value in metadata["semantic_intent"])
+    assert "content" in metadata["keywords"]
+
+
+def test_auto_stage_semantic_ids_use_intent_when_region_text_missing() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p5-1",
+        "slide_or_page": 5,
+        "region": {"x": 0.25, "y": 0.28, "width": 0.47, "height": 0.21,
+                   "unit": "normalized"},
+        "region_text": (
+            "Patrick E. Shorey\nRecreational therapist\n"
+            "Mary T. Middleton\nPhysical meteorologist"
+        ),
+        "semantic_intent": [
+            "This is a contributors slide. Insert your team here. Lorem ipsum dolor sit amet.",
+        ],
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "contributors-team-visual"
+    assert not item_id.startswith("source-")
+    assert metadata["keywords"][:3] == ["contributors", "team", "visual"]
+
+
+def test_auto_stage_semantic_ids_filter_mixed_vietnamese_prose() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p4-2",
+        "slide_or_page": 4,
+        "region": {"x": 0.1, "y": 0.4, "width": 0.5, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": "Đảm bảo goal thực tế",
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+
+    assert item_id == "goal-strip"
+    assert "dam" not in item_id and "bao" not in item_id
+    assert "thuc" not in item_id and "te" not in item_id
+
+
+def test_auto_stage_semantic_ids_level_series_without_content_rule() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p2-1",
+        "slide_or_page": 2,
+        "region": {"x": 0.1, "y": 0.2, "width": 0.7, "height": 0.18,
+                   "unit": "normalized"},
+        "region_text": "Design Operations\nLevel 1\nReview System\nLevel 2",
+    }
+
+    item_id = asc.semantic_item_id("input/source.pdf", item, set())
+
+    assert item_id == "design-operations-review-system-strip"
+    assert "source" not in item_id
+
+
+def test_auto_stage_semantic_ids_metric_series_uses_labels_and_strip() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p2-6",
+        "slide_or_page": 2,
+        "region": {"x": 0.19, "y": 0.68, "width": 0.52, "height": 0.24,
+                   "unit": "normalized"},
+        "region_text": "+30%\nRevenue\nTeam Size\n(110 Members)\n+30%",
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "revenue-team-size-metric-strip"
+    assert metadata["component_type"] == "strip"
+    assert metadata["keywords"][:4] == ["revenue", "team", "size", "metric"]
+
+
+def test_auto_stage_icon_reference_uses_page_context() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "figure-p1-1",
+        "slide_or_page": 1,
+        "region": {"x": 0.54, "y": 0.17, "width": 0.38, "height": 0.15,
+                   "unit": "normalized"},
+        "region_text": "BOD\nPersonal\nCompany\nLearning & Sharing",
+        "page_text": "ICON\n1. NHUNG ICON HAY XUAT HIEN",
+        "semantic_intent": ["BOD Personal Company Learning Sharing"],
+    }
+
+    item_id = asc.semantic_item_id("input/GUIDLINE_PRESENTATION_SUN.pdf", item, set())
+    metadata = asc.metadata_for("input/GUIDLINE_PRESENTATION_SUN.pdf", item, item_id)
+
+    assert item_id == "icon-reference-sheet"
+    assert metadata["component_type"] == "icon"
+    assert metadata["layout_role"] == "icon reference sheet"
+    assert "icon-set" in metadata["tags"]
+
+    with tempfile.TemporaryDirectory() as tmp:
+        item_dir = Path(tmp)
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "component_type": "icon",
+        }), encoding="utf-8")
+        assert asc._is_icon_sheet_item(item_dir)
+
+
+def test_auto_stage_overrides_stale_history_stable_id_for_auto_drafts() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        item_dir = tmp_path / "items" / "team-visual"
+        item_dir.mkdir(parents=True)
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "candidate_stable_id": "sun.component.xay-dung-oi-ngu-visual",
+            "status": "staging",
+            "source": {},
+        }), encoding="utf-8")
+        review = asc.metadata_for(
+            "input/GUIDLINE_PRESENTATION_SUN.pdf",
+            {"item_id": "picture-p4-2", "slide_or_page": 4,
+             "region": {"x": 0.1, "y": 0.1, "width": 0.5, "height": 0.3,
+                        "unit": "normalized"},
+             "region_text": "XAY DUNG DOI NGU"},
+            "team-visual",
+        )
+        review["candidate_id"] = "picture-p4-2"
+        asc._augment_mapping(item_dir, review, "docling-run", {"item_id": "picture-p4-2"})
+        mapping = read_text_slots.load_json(item_dir / "mapping.json")
+        assert mapping["candidate_stable_id"] == "sun.component.team-visual"
+
+        history = tmp_path / "history.json"
+        history.write_text(json.dumps({"attempts": [{
+            "extraction_id": "docling-run-team-visual",
+            "item_id": "team-visual",
+            "stable_id": "sun.component.xay-dung-oi-ngu-visual",
+        }]}), encoding="utf-8")
+        asc._sync_history_stable_id(
+            history, "docling-run-team-visual", "team-visual",
+            mapping["candidate_stable_id"],
+        )
+        synced = read_text_slots.load_json(history)
+        assert synced["attempts"][0]["stable_id"] == "sun.component.team-visual"
+
+
+def test_auto_stage_semantic_ids_suffix_existing_component_names() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    item = {
+        "item_id": "picture-p2-2",
+        "slide_or_page": 2,
+        "region": {"x": 0.15, "y": 0.41, "width": 0.15, "height": 0.2,
+                   "unit": "normalized"},
+        "region_text": "TRANSLATOR",
+    }
+
+    item_id = asc.semantic_item_id(
+        "input/GUIDLINE_PRESENTATION_SUN.pdf",
+        item,
+        {"translator-card"},
+    )
+
+    assert item_id == "translator-card-2"
+
+
+def test_auto_stage_clusters_same_page_by_role_and_layout_row() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+
+    def _record(item_id: str, x: float, y: float, width: float, height: float) -> dict:
+        return {
+            "candidate_id": item_id,
+            "item": {
+                "item_id": item_id,
+                "slide_or_page": 2,
+                "region": {"x": x, "y": y, "width": width, "height": height,
+                           "unit": "normalized"},
+            },
+            "review": {"item_id": item_id, "display_name": item_id.replace("-", " ").title()},
+            "item_dir": "unused",
+            "stable_id": f"sun.component.{item_id}",
+        }
+
+    records = [
+        _record("ai-coding-maturity-levels-strip", 0.05, 0.12, 0.8, 0.2),
+        _record("translator-card", 0.05, 0.5, 0.18, 0.25),
+        _record("coach-card", 0.28, 0.5, 0.18, 0.25),
+    ]
+
+    clusters = asc._cluster_staged_records(records)
+
+    assert len(clusters) == 1, clusters
+    assert [record["review"]["item_id"] for record in clusters[0]] == [
+        "translator-card",
+        "coach-card",
+    ]
+
+
+def test_auto_stage_group_records_keep_docling_candidate_order() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    records = []
+    for candidate_id, item_id in [
+        ("picture-p2-5", "coach-card"),
+        ("picture-p2-2", "translator-card"),
+        ("picture-p2-4", "driver-card"),
+        ("picture-p2-3", "strategist-card"),
+    ]:
+        records.append({
+            "candidate_id": candidate_id,
+            "item": {
+                "item_id": candidate_id,
+                "slide_or_page": 2,
+                "region": {"x": 0.5, "y": 0.5, "width": 0.15, "height": 0.2,
+                           "unit": "normalized"},
+            },
+            "review": {"item_id": item_id, "display_name": item_id.replace("-", " ").title()},
+            "item_dir": "unused",
+            "stable_id": f"sun.component.{item_id}",
+        })
+
+    assert [r["review"]["item_id"] for r in asc._sort_group_records(records)] == [
+        "translator-card",
+        "strategist-card",
+        "driver-card",
+        "coach-card",
+    ]
+
+
+def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
+    import importlib
+    import build_component_catalog as bcc
+
+    asc = importlib.import_module("auto_stage_candidates")
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        source = tmpp / "Role cards.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=400, height=220)
+        page.draw_rect(fitz.Rect(40, 40, 170, 180), color=(1, 0.4, 0.2),
+                       fill=(1, 0.9, 0.8))
+        page.insert_text((62, 95), "TRANSLATOR", fontsize=18, color=(0, 0, 0))
+        page.draw_rect(fitz.Rect(230, 40, 360, 180), color=(0.1, 0.2, 1),
+                       fill=(0.8, 0.9, 1))
+        page.insert_text((270, 95), "COACH", fontsize=18, color=(0, 0, 0))
+        doc.save(source)
+        doc.close()
+
+        output_root = tmpp / "component-extractions"
+        eid = "docling-auto-group-demo"
+        adir = output_root / eid / "analysis"
+        adir.mkdir(parents=True)
+        (adir / "candidate-extraction-request.json").write_text(json.dumps({
+            "extraction_id": eid,
+            "source_path": str(source),
+            "items": [
+                {
+                    "item_id": "picture-p1-1",
+                    "slide_or_page": 1,
+                    "region": {"x": 0.1, "y": 0.18, "width": 0.35, "height": 0.66,
+                               "unit": "normalized"},
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "semantic_intent": ["picture candidate detected by Docling"],
+                    "notes": "Translator card",
+                    "replacement_for": None,
+                },
+                {
+                    "item_id": "picture-p1-2",
+                    "slide_or_page": 1,
+                    "region": {"x": 0.55, "y": 0.18, "width": 0.35, "height": 0.66,
+                               "unit": "normalized"},
+                    "object_ids": [],
+                    "requested_type": "component",
+                    "semantic_intent": ["picture candidate detected by Docling"],
+                    "notes": "Coach card",
+                    "replacement_for": None,
+                },
+            ],
+        }), encoding="utf-8")
+
+        hist = tmpp / "history.json"
+        hist.write_text('{"attempts":[]}', encoding="utf-8")
+        reg = tmpp / "registry.json"
+        reg.write_text('{"items":[]}', encoding="utf-8")
+        summary = asc.stage_run(
+            eid,
+            root=output_root,
+            output_root=output_root,
+            history=hist,
+            registry=reg,
+            rebuild_catalog=False,
+        )
+        assert summary["staged"] == 2, summary
+        assert summary["grouped"] == 1, summary
+        group = summary["group_item"]
+        assert group["item_id"] == "translator-coach-card-set"
+        group_dir = output_root / group["extraction_id"] / "items" / group["item_id"]
+        group_mapping = read_text_slots.load_json(group_dir / "mapping.json")
+        assert group_mapping["component_type"] == "component-set"
+        assert len(group_mapping["collection_children"]) == 2
+        assert (group_dir / "artifact" / "components" / "components-manifest.json").is_file()
+        group_thumb = group_dir / "preview" / "thumbnail.png"
+        assert group_thumb.is_file()
+        png = group_thumb.read_bytes()
+        assert png[:8] == b"\x89PNG\r\n\x1a\n"
+        thumb_width = int.from_bytes(png[16:20], "big")
+        thumb_height = int.from_bytes(png[20:24], "big")
+        assert thumb_width > thumb_height, (thumb_width, thumb_height)
+        compact = asc.compact_summary(summary)
+        assert "artifact_log" not in compact["items"][0]
+        assert compact["items"][0]["artifact_log_lines"] > 0
+
+        catalog_path = tmpp / "catalog-data.json"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "build_component_catalog.py",
+            "--registry", str(reg),
+            "--extractions", str(output_root),
+            "--output", str(catalog_path),
+        ]
+        try:
+            assert bcc.main() == 0
+        finally:
+            sys.argv = old_argv
+        catalog = read_text_slots.load_json(catalog_path)
+        ids = [item["id"] for item in catalog["items"]]
+        assert "sun.component.translator-card" not in ids
+        assert "sun.component.coach-card" not in ids
+        draft = next(item for item in catalog["items"]
+                     if item["id"] == "sun.component.translator-coach-card-set")
+        assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
+        assert [image["label"] for image in draft["images"]][:6] == [
+            "Full component",
+            "Full component (Text-free)",
+            "Translator Card",
+            "Translator Card (Text-free)",
+            "Coach Card",
+            "Coach Card (Text-free)",
+        ]
+
+
+def test_auto_stage_group_text_free_svg_rewrites_component_asset_refs() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpp = Path(tmp)
+        child_artifact = tmpp / "child" / "artifact"
+        child_assets = child_artifact / "assets"
+        child_assets.mkdir(parents=True)
+        (child_assets / "icon.png").write_bytes(b"png")
+        child_svg = child_artifact / "visual.svg"
+        child_svg.write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink">'
+            '<defs><g id="mask"/></defs>'
+            '<image xlink:href="assets/icon.png"/>'
+            '<use xlink:href="#mask"/></svg>',
+            encoding="utf-8",
+        )
+
+        parent_artifact = tmpp / "parent" / "artifact"
+        dest_svg = parent_artifact / "components" / "child-text-free.svg"
+        asc._copy_svg_with_assets(
+            child_svg, dest_svg, parent_artifact / "assets", "../assets/")
+
+        copied = dest_svg.read_text(encoding="utf-8")
+        assert 'xlink:href="../assets/icon.png"' in copied, copied
+        assert 'xlink:href="assets/icon.png"' not in copied, copied
+        assert 'xlink:href="#mask"' in copied, copied
+        assert (parent_artifact / "assets" / "icon.png").read_bytes() == b"png"
+
+
+def test_auto_stage_existing_stable_ids_ignore_skipped_outputs() -> None:
+    import importlib
+
+    asc = importlib.import_module("auto_stage_candidates")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        skipped = root / "skip" / "items" / "blank" / "mapping.json"
+        active = root / "active" / "items" / "card" / "mapping.json"
+        skipped.parent.mkdir(parents=True)
+        active.parent.mkdir(parents=True)
+        skipped.write_text(json.dumps({
+            "status": "skipped",
+            "candidate_stable_id": "sun.component.blank",
+        }), encoding="utf-8")
+        active.write_text(json.dumps({
+            "status": "staging",
+            "candidate_stable_id": "sun.component.card",
+        }), encoding="utf-8")
+
+        assert asc._existing_stable_ids(root) == {"sun.component.card"}
+
+
+def test_catalog_has_no_candidate_review_top_tab() -> None:
+    html = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "index.html").read_text(encoding="utf-8")
+    assert 'data-section="review"' not in html
+    assert 'id="section-review"' not in html
+
+
+def test_catalog_server_exposes_no_candidate_review_routes() -> None:
+    source = (SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py").read_text(encoding="utf-8")
+    assert "/api/candidates" not in source
+    assert "_serve_candidate" not in source
+    assert "_candidate_segments" not in source
+
+
+def test_catalog_server_parses_stage_candidate_booleans() -> None:
+    path = SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py"
+    spec = importlib.util.spec_from_file_location("catalog_server_under_test", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    assert module.body_bool({}, "build_artifacts", True) is True
+    assert module.body_bool({"build_artifacts": False}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "false"}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "0"}, "build_artifacts", True) is False
+    assert module.body_bool({"build_artifacts": "true"}, "build_artifacts", False) is True
+    try:
+        module.body_bool({"build_artifacts": "sometimes"}, "build_artifacts", True)
+    except ValueError as exc:
+        assert "build_artifacts" in str(exc)
+    else:
+        raise AssertionError("invalid boolean strings must fail")
 
 
 # --------------------------------------------------------------------------- #

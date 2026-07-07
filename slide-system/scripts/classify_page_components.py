@@ -34,10 +34,12 @@ same renderer the decomposer already uses):
 Usage:
     classify_page_components.py --item-dir <staging-item> [--item-dir ...]
         [--min-area-frac 0.015] [--shape-tol 0.14] [--merge-gap 6]
-        [--group-gap-frac 0.6]
+        [--group-gap-frac 0.6] [--manifest-only] [--layout-row-groups]
 
 Writes per item:
     artifact/components/<prefix>-group-NN.svg   (one per proximity run)
+    artifact/components/<prefix>-group-NN-card-MM.svg
+    artifact/components/<prefix>-group-NN-card-MM-source.svg
     artifact/components/components-manifest.json
 Idempotent: regenerates the components/ dir from scratch each run.
 """
@@ -81,6 +83,56 @@ TEXT_CONTRACT_SCRIPT = SCRIPT_DIR / "apply_text_contract.py"
 
 
 _PERCEPT_GRID = 32   # signature resolution for the perceptual dedup
+XLINK_NS = "http://www.w3.org/1999/xlink"
+
+ET.register_namespace("", SVG_NS)
+ET.register_namespace("xlink", XLINK_NS)
+
+
+def _local_name(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _rewrite_component_asset_refs(root: ET.Element) -> None:
+    for el in root.iter():
+        for attr in ("href", f"{{{XLINK_NS}}}href"):
+            value = el.get(attr)
+            if value and value.startswith("../artifact/assets/"):
+                el.set(attr, "../assets/" + value.split("../artifact/assets/", 1)[1])
+
+
+def _build_source_crop(source_svg: Path, bounds: dict, margin: float, output: Path) -> bool:
+    """Crop the text-preserving evidence SVG to the same card bounds.
+
+    Component fragments are intentionally text-free. This companion crop gives
+    the catalog carousel a human-readable card preview without making the
+    reusable artifact carry semantic text.
+    """
+    if not source_svg.exists():
+        return False
+    try:
+        root = ET.parse(source_svg).getroot()
+    except ET.ParseError:
+        return False
+    x0 = math.floor(float(bounds["x"]) - margin)
+    y0 = math.floor(float(bounds["y"]) - margin)
+    w = math.ceil(float(bounds["w"]) + 2 * margin)
+    h = math.ceil(float(bounds["h"]) + 2 * margin)
+    frag = ET.Element(
+        f"{{{SVG_NS}}}svg",
+        {"viewBox": f"0 0 {w} {h}", "width": str(w), "height": str(h)},
+    )
+    for child in list(root):
+        if _local_name(child.tag) == "defs":
+            frag.append(copy.deepcopy(child))
+    content = ET.SubElement(frag, f"{{{SVG_NS}}}g",
+                            {"transform": f"translate({-x0} {-y0})"})
+    for child in list(root):
+        if _local_name(child.tag) != "defs":
+            content.append(copy.deepcopy(child))
+    _rewrite_component_asset_refs(frag)
+    output.write_bytes(ET.tostring(frag, encoding="utf-8"))
+    return True
 
 
 def _percept_signature(png_path: Path, grid: int = _PERCEPT_GRID):
@@ -320,7 +372,8 @@ def _load_text_slots(item_dir: Path) -> list[dict]:
             size = float(typo.get("font_size") or 0)
         except (TypeError, ValueError):
             size = 0.0
-        out.append({"text": text, "x": b.get("x", 0.0), "y": b.get("y", 0.0),
+        out.append({"text": text, "role": s.get("role", ""),
+                    "x": b.get("x", 0.0), "y": b.get("y", 0.0),
                     "w": b.get("width", 0.0), "h": b.get("height", 0.0), "size": size})
     return out
 
@@ -339,7 +392,7 @@ def _slots_in(slots: list[dict], bx: float, by: float, bw: float, bh: float,
 
 def _heading(slots: list[dict]) -> str:
     """Title from a region's heading text: the two largest font-size tiers
-    (heading + subtitle, e.g. 'Level 1 Spicy Autocomplete' / 'Revenue +30%'),
+    (heading + subtitle or a metric headline with value),
     read top-to-bottom/left-to-right.
 
     Long body-copy slots (a sentence, not a heading) are dropped, and repeated
@@ -514,7 +567,8 @@ def _ancestor_transform(root: ET.Element, parent_map: dict, group_el: ET.Element
 
 def _build_fragment(members: list[dict], groups: list[ET.Element],
                     all_defs: list[ET.Element], margin: float,
-                    source_dir: Path, ancestor_transform: str) -> ET.Element:
+                    source_dir: Path, ancestor_transform: str,
+                    crop_bounds: dict | None = None) -> ET.Element:
     """Self-contained fragment SVG for one instance (mirrors the decomposer's
     fragment builder: defs copied, geometry translated into a 0-based viewport,
     raster assets embedded).
@@ -525,9 +579,15 @@ def _build_fragment(members: list[dict], groups: list[ET.Element],
     own coordinates are in pre-ancestor-transform space, so the fragment must
     re-apply that chain before the viewport translate — otherwise the geometry
     lands off-canvas and the fragment renders blank."""
-    x0, y0, w, h = _bounds(members)
-    x0, y0 = math.floor(x0 - margin), math.floor(y0 - margin)
-    w, h = math.ceil(w + 2 * margin), math.ceil(h + 2 * margin)
+    if crop_bounds:
+        x0 = math.floor(float(crop_bounds["x"]) - margin)
+        y0 = math.floor(float(crop_bounds["y"]) - margin)
+        w = math.ceil(float(crop_bounds["w"]) + 2 * margin)
+        h = math.ceil(float(crop_bounds["h"]) + 2 * margin)
+    else:
+        x0, y0, w, h = _bounds(members)
+        x0, y0 = math.floor(x0 - margin), math.floor(y0 - margin)
+        w, h = math.ceil(w + 2 * margin), math.ceil(h + 2 * margin)
     frag = ET.Element(f"{{{SVG_NS}}}svg",
                       {"viewBox": f"0 0 {w} {h}", "width": str(w), "height": str(h)})
     for d in all_defs:
@@ -563,10 +623,310 @@ def _build_fragment(members: list[dict], groups: list[ET.Element],
     return frag
 
 
+def _slot_bounds_px(slot: dict, canvas_w: float, canvas_h: float) -> dict:
+    return {
+        "x": float(slot["x"]) * canvas_w,
+        "y": float(slot["y"]) * canvas_h,
+        "w": float(slot["w"]) * canvas_w,
+        "h": float(slot["h"]) * canvas_h,
+    }
+
+
+def _union_box(boxes: list[dict]) -> dict:
+    x0 = min(float(b["x"]) for b in boxes)
+    y0 = min(float(b["y"]) for b in boxes)
+    x1 = max(float(b["x"]) + float(b["w"]) for b in boxes)
+    y1 = max(float(b["y"]) + float(b["h"]) for b in boxes)
+    return {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0}
+
+
+def _center_y(box: dict) -> float:
+    return float(box["y"]) + float(box["h"]) / 2
+
+
+def _center_x(box: dict) -> float:
+    return float(box["x"]) + float(box["w"]) / 2
+
+
+def _row_title(slots: list[dict], fallback: str) -> str:
+    if not slots:
+        return fallback
+    signal = [
+        s for s in slots
+        if str(s.get("role") or "").lower() in {"heading", "title", "label"}
+    ] or slots
+    short = [s for s in signal if len(s["text"]) <= 24] or signal
+    max_size = max((float(s.get("size") or 0) for s in short), default=0.0)
+    if max_size <= 0:
+        return fallback
+    pick = [s for s in short if float(s.get("size") or 0) >= max_size * 0.35]
+    pick.sort(key=lambda s: (s["x"] + s["w"] / 2, s["y"]))
+    columns: list[list[dict]] = []
+    for slot in pick:
+        cx = slot["x"] + slot["w"] / 2
+        target = None
+        for col in columns:
+            col_cx = sum(s["x"] + s["w"] / 2 for s in col) / len(col)
+            if abs(cx - col_cx) <= 0.05:
+                target = col
+                break
+        if target is None:
+            columns.append([slot])
+        else:
+            target.append(slot)
+    words: list[str] = []
+    seen: set[str] = set()
+    for col in columns:
+        phrase = " ".join(s["text"] for s in sorted(col, key=lambda s: s["y"]))
+        for word in re.findall(r"[A-Za-z0-9]+", phrase):
+            if word.isdigit() or word.lower() in seen:
+                continue
+            seen.add(word.lower())
+            words.append(word)
+    return " ".join(words[:5]) or fallback
+
+
+def _cluster_layout_rows_any(instances: list[dict],
+                             dropped_small_entries: list[dict]) -> list[dict]:
+    major = [{**inst, "kind": "major"} for inst in instances]
+    if len(major) < 2:
+        return []
+    rows: list[dict] = []
+    for elem in sorted(major, key=lambda e: (_center_y(e), e["x"])):
+        target = None
+        best_delta = None
+        for row in rows:
+            row_box = _union_box(row["elements"])
+            threshold = max(90.0, min(float(elem["h"]), float(row_box["h"])) * 0.45)
+            delta = abs(_center_y(elem) - _center_y(row_box))
+            if delta <= threshold and (best_delta is None or delta < best_delta):
+                target = row
+                best_delta = delta
+        if target is None:
+            rows.append({"elements": [elem]})
+        else:
+            target["elements"].append(elem)
+
+    rows.sort(key=lambda r: _center_y(_union_box(r["elements"])))
+
+    for small in dropped_small_entries:
+        nearest = min(rows, key=lambda r: abs(_center_y(small) - _center_y(_union_box(r["elements"]))))
+        row_box = _union_box(nearest["elements"])
+        pad = max(60.0, row_box["h"] * 0.35)
+        if row_box["y"] - pad <= _center_y(small) <= row_box["y"] + row_box["h"] + pad:
+            nearest["elements"].append({**small, "kind": "small"})
+
+    return rows
+
+
+def _cluster_layout_rows(instances: list[dict],
+                         dropped_small_entries: list[dict]) -> list[dict]:
+    rows = _cluster_layout_rows_any(instances, dropped_small_entries)
+    if len(rows) < 2:
+        return []
+    return rows
+
+
+def _cluster_layout_cells(instances: list[dict],
+                          dropped_small_entries: list[dict]) -> list[dict]:
+    rows = _cluster_layout_rows_any(instances, dropped_small_entries)
+    cells: list[dict] = []
+    for row_index, row in enumerate(rows, start=1):
+        majors = sorted(
+            [e for e in row["elements"] if e.get("kind") == "major"],
+            key=lambda e: (_center_x(e), _center_y(e)),
+        )
+        if len(majors) < 2:
+            continue
+        centers = [_center_x(e) for e in majors]
+        boundaries = [(centers[i] + centers[i + 1]) / 2 for i in range(len(centers) - 1)]
+        row_cells = [
+            {"row_index": row_index, "col_index": col_index, "elements": [major]}
+            for col_index, major in enumerate(majors, start=1)
+        ]
+        for elem in row["elements"]:
+            if elem.get("kind") == "major":
+                continue
+            cx = _center_x(elem)
+            idx = 0
+            while idx < len(boundaries) and cx > boundaries[idx]:
+                idx += 1
+            row_cells[idx]["elements"].append(elem)
+        cells.extend(row_cells)
+    if len(cells) < 2:
+        return []
+    return cells
+
+
+def _slots_by_row(rows: list[dict], slots: list[dict],
+                  canvas_w: float, canvas_h: float) -> list[list[dict]]:
+    if not rows:
+        return []
+    row_boxes = [_union_box(row["elements"]) for row in rows]
+    centers = [_center_y(box) for box in row_boxes]
+    boundaries = [(centers[i] + centers[i + 1]) / 2 for i in range(len(centers) - 1)]
+    grouped = [[] for _ in rows]
+    for slot in slots:
+        box = _slot_bounds_px(slot, canvas_w, canvas_h)
+        cy = _center_y(box)
+        idx = 0
+        while idx < len(boundaries) and cy > boundaries[idx]:
+            idx += 1
+        grouped[idx].append(slot)
+    return grouped
+
+
+def _slots_by_cells(cells: list[dict], slots: list[dict],
+                    canvas_w: float, canvas_h: float) -> list[list[dict]]:
+    grouped = [[] for _ in cells]
+    if not cells:
+        return grouped
+    cell_boxes = [_union_box(cell["elements"]) for cell in cells]
+    for slot in slots:
+        box = _slot_bounds_px(slot, canvas_w, canvas_h)
+        cx = _center_x(box)
+        cy = _center_y(box)
+        best_idx = None
+        best_dist = None
+        for idx, cell_box in enumerate(cell_boxes):
+            pad_x = max(24.0, cell_box["w"] * 0.08)
+            pad_y = max(24.0, cell_box["h"] * 0.12)
+            inside = (
+                cell_box["x"] - pad_x <= cx <= cell_box["x"] + cell_box["w"] + pad_x
+                and cell_box["y"] - pad_y <= cy <= cell_box["y"] + cell_box["h"] + pad_y
+            )
+            if not inside:
+                continue
+            dist = abs(cx - _center_x(cell_box)) + abs(cy - _center_y(cell_box))
+            if best_dist is None or dist < best_dist:
+                best_idx = idx
+                best_dist = dist
+        if best_idx is not None:
+            grouped[best_idx].append(slot)
+    return grouped
+
+
+def _build_layout_cell_records(prefix: str, instances: list[dict],
+                               dropped_small_entries: list[dict],
+                               groups: list[ET.Element],
+                               all_defs: list[ET.Element], margin: float,
+                               source_dir: Path, ancestor_transform: str,
+                               text_slots: list[dict], canvas_w: float,
+                               canvas_h: float, out_dir: Path,
+                               source_with_text: Path) -> list[dict]:
+    cells = _cluster_layout_cells(instances, dropped_small_entries)
+    if len(cells) < 2:
+        return []
+    cell_slots = _slots_by_cells(cells, text_slots, canvas_w, canvas_h)
+    records: list[dict] = []
+    for n, cell in enumerate(cells, start=1):
+        visual_boxes = [
+            {"x": e["x"], "y": e["y"], "w": e["w"], "h": e["h"]}
+            for e in cell["elements"]
+        ]
+        slot_boxes = [_slot_bounds_px(s, canvas_w, canvas_h) for s in cell_slots[n - 1]]
+        crop_box = _union_box(visual_boxes + slot_boxes) if slot_boxes else _union_box(visual_boxes)
+        members = [m for e in cell["elements"] for m in e["members"]]
+        cell_id = f"{prefix}-cell-{n:02d}"
+        cell_file = f"{cell_id}.svg"
+        source_file = f"{cell_id}-source.svg"
+        frag = _build_fragment(members, groups, all_defs, margin, source_dir,
+                               ancestor_transform, crop_bounds=crop_box)
+        (out_dir / cell_file).write_bytes(ET.tostring(frag))
+        source_written = _build_source_crop(source_with_text, crop_box, margin, out_dir / source_file)
+        title = _row_title(cell_slots[n - 1], f"Card {n}")
+        records.append({
+            "group_id": cell_id,
+            "file": f"components/{cell_file}",
+            "shape_class": 2000 + n,
+            "layout_group": "cell",
+            "title": title,
+            "tags": _tags_from([title]),
+            "member_count": len(cell["elements"]),
+            "distinct_card_count": 1,
+            "group_bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                             "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+            "member_bounds": [
+                {"x": round(e["x"], 1), "y": round(e["y"], 1),
+                 "w": round(e["w"], 1), "h": round(e["h"], 1)}
+                for e in cell["elements"]
+            ],
+            "cards": [{
+                "card_id": cell_id,
+                "file": f"components/{cell_file}",
+                "source_file": f"components/{source_file}" if source_written else None,
+                "title": title,
+                "bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                           "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+                "duplicate_count": 1,
+            }],
+        })
+    return records
+
+
+def _build_layout_row_records(prefix: str, instances: list[dict],
+                              dropped_small_entries: list[dict],
+                              groups: list[ET.Element],
+                              all_defs: list[ET.Element], margin: float,
+                              source_dir: Path, ancestor_transform: str,
+                              text_slots: list[dict], canvas_w: float,
+                              canvas_h: float, out_dir: Path,
+                              source_with_text: Path) -> list[dict]:
+    rows = _cluster_layout_rows(instances, dropped_small_entries)
+    if len(rows) < 2:
+        return []
+    row_slots = _slots_by_row(rows, text_slots, canvas_w, canvas_h)
+    records: list[dict] = []
+    for n, row in enumerate(rows, start=1):
+        visual_boxes = [
+            {"x": e["x"], "y": e["y"], "w": e["w"], "h": e["h"]}
+            for e in row["elements"]
+        ]
+        slot_boxes = [_slot_bounds_px(s, canvas_w, canvas_h) for s in row_slots[n - 1]]
+        crop_box = _union_box(visual_boxes + slot_boxes) if slot_boxes else _union_box(visual_boxes)
+        members = [m for e in row["elements"] for m in e["members"]]
+        row_id = f"{prefix}-row-{n:02d}"
+        row_file = f"{row_id}.svg"
+        source_file = f"{row_id}-source.svg"
+        frag = _build_fragment(members, groups, all_defs, margin, source_dir,
+                               ancestor_transform, crop_bounds=crop_box)
+        (out_dir / row_file).write_bytes(ET.tostring(frag))
+        source_written = _build_source_crop(source_with_text, crop_box, margin, out_dir / source_file)
+        title = _row_title(row_slots[n - 1], f"Row {n}")
+        records.append({
+            "group_id": row_id,
+            "file": f"components/{row_file}",
+            "shape_class": 1000 + n,
+            "layout_group": "row",
+            "title": title,
+            "tags": _tags_from([title]),
+            "member_count": len(row["elements"]),
+            "distinct_card_count": 1,
+            "group_bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                             "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+            "member_bounds": [
+                {"x": round(e["x"], 1), "y": round(e["y"], 1),
+                 "w": round(e["w"], 1), "h": round(e["h"], 1)}
+                for e in row["elements"]
+            ],
+            "cards": [{
+                "card_id": row_id,
+                "file": f"components/{row_file}",
+                "source_file": f"components/{source_file}" if source_written else None,
+                "title": title,
+                "bounds": {"x": round(crop_box["x"], 1), "y": round(crop_box["y"], 1),
+                           "w": round(crop_box["w"], 1), "h": round(crop_box["h"], 1)},
+                "duplicate_count": 1,
+            }],
+        })
+    return records
+
+
 def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
                  merge_gap: float, margin: float, bg_coverage: float = 0.7,
                  group_gap_frac: float = 0.6, dedup_mae: float = 3.0,
-                 split_gutter_px: float = 16.0) -> dict:
+                 split_gutter_px: float = 16.0,
+                 layout_row_groups: bool = False) -> dict:
     visual = item_dir / "artifact" / "visual.svg"
     if not visual.exists():
         raise SystemExit(f"no artifact/visual.svg in {item_dir}")
@@ -606,6 +966,7 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
     instances: list[dict] = []
     background: list[dict] = []
     dropped_small: list[dict] = []
+    dropped_small_entries: list[dict] = []
     for members in clusters:
         x0, y0, w, h = _bounds(members)
         area = w * h
@@ -616,6 +977,8 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
             dropped_small.append({"x": round(x0, 1), "y": round(y0, 1),
                                   "w": round(w, 1), "h": round(h, 1),
                                   "area_frac": round(area / canvas_area, 4)})
+            dropped_small_entries.append({"x": x0, "y": y0, "w": w, "h": h,
+                                          "members": members})
             continue
         # A near-full-bleed cluster is the page background, not a component:
         # exclude it from the class list (mirrors how decompose_svg_objects.py
@@ -654,6 +1017,7 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
     out_dir.mkdir(parents=True, exist_ok=True)
     prefix = item_dir.name
     text_slots = _load_text_slots(item_dir)
+    source_with_text = item_dir / "evidence" / "source-with-text.svg"
 
     # Pass 1: build the whole-run fragment for each group, and a per-card
     # fragment for every member instance (written to a temp dir for the dedup
@@ -721,11 +1085,19 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
                     cfile = f"{prefix}-group-{n:02d}-card-{m:02d}.svg"
                     card_id = f"{prefix}-group-{n:02d}-card-{m:02d}"
                     (out_dir / cfile).write_bytes(ET.tostring(card["frag"]))
+                source_file = f"{card_id}-source.svg"
+                source_written = _build_source_crop(
+                    source_with_text,
+                    {"x": inst["x"], "y": inst["y"], "w": inst["w"], "h": inst["h"]},
+                    margin,
+                    out_dir / source_file,
+                )
                 title = _heading(_slots_in(text_slots, inst["x"], inst["y"],
                                            inst["w"], inst["h"], canvas_w, canvas_h))
                 card_records.append({
                     "card_id": card_id,
                     "file": f"components/{cfile}",
+                    "source_file": f"components/{source_file}" if source_written else None,
                     "title": title,
                     "bounds": {"x": round(inst["x"], 1), "y": round(inst["y"], 1),
                                "w": round(inst["w"], 1), "h": round(inst["h"], 1)},
@@ -749,6 +1121,31 @@ def process_item(item_dir: Path, min_area_frac: float, shape_tol: float,
                     for i in member_idxs],
                 "cards": card_records,
             })
+        if layout_row_groups:
+            cell_records = _build_layout_cell_records(
+                prefix, instances, dropped_small_entries, groups, all_defs,
+                margin, visual.parent, ancestor_transform, text_slots,
+                canvas_w, canvas_h, out_dir, source_with_text)
+            row_records = _build_layout_row_records(
+                prefix, instances, dropped_small_entries, groups, all_defs,
+                margin, visual.parent, ancestor_transform, text_slots,
+                canvas_w, canvas_h, out_dir, source_with_text)
+            keep = set()
+            if cell_records:
+                group_records = cell_records
+            elif row_records:
+                group_records = row_records
+            if cell_records or row_records:
+                for rec in group_records:
+                    if rec.get("file"):
+                        keep.add(Path(rec["file"]).name)
+                    for card in rec.get("cards", []):
+                        for key in ("file", "source_file"):
+                            if card.get(key):
+                                keep.add(Path(card[key]).name)
+                for f in out_dir.iterdir():
+                    if f.is_file() and f.name not in keep:
+                        f.unlink()
     finally:
         shutil.rmtree(render_tmp, ignore_errors=True)
 
@@ -899,18 +1296,24 @@ def materialize_groups(item_dir: Path, manifest: dict) -> list[Path]:
             if src_frag.exists():
                 shutil.copy2(src_frag, comp_dir / group_file)
             for card in rec.get("cards", []):
-                card_file = card.get("file", "")
-                if card_file:
-                    src_card = item_dir / "artifact" / card_file
-                    if src_card.exists():
-                        shutil.copy2(src_card, comp_dir / src_card.name)
+                for key in ("file", "source_file"):
+                    card_file = card.get(key, "")
+                    if card_file:
+                        src_card = item_dir / "artifact" / card_file
+                        if src_card.exists():
+                            shutil.copy2(src_card, comp_dir / src_card.name)
+            scoped_cards = []
+            for c in rec.get("cards", []):
+                scoped = dict(c)
+                for key in ("file", "source_file"):
+                    if scoped.get(key):
+                        scoped[key] = f"components/{Path(scoped[key]).name}"
+                scoped_cards.append(scoped)
             scoped_manifest = {
                 "groups": [{
                     **rec,
                     "file": f"components/{group_file}",
-                    "cards": [{**c, "file": f"components/{Path(c['file']).name}"}
-                              for c in rec.get("cards", [])
-                              if c.get("file")],
+                    "cards": scoped_cards,
                 }],
             }
             write_json(comp_dir / "components-manifest.json", scoped_manifest)
@@ -1012,13 +1415,20 @@ def main() -> int:
                         default=True,
                         help="Create real staging items for each detected group "
                              "(default: on)")
+    parser.add_argument("--manifest-only", action="store_true",
+                        help="Only write artifact/components output in the parent item; "
+                             "do not create sibling staging items.")
+    parser.add_argument("--layout-row-groups", action="store_true",
+                        help="Prefer horizontal layout rows as carousel components "
+                             "for compound diagram/board regions.")
     args = parser.parse_args()
 
     for item_dir in args.item_dir:
         resolved = item_dir.resolve()
         m = process_item(resolved, args.min_area_frac, args.shape_tol,
                          args.merge_gap, args.margin, args.bg_coverage,
-                         args.group_gap_frac, args.dedup_mae, args.split_gutter_px)
+                         args.group_gap_frac, args.dedup_mae, args.split_gutter_px,
+                         args.layout_row_groups)
         print(f"{item_dir.name}: {m['instance_count']} instance(s) -> "
               f"{m['shape_class_count']} shape-class(es) -> "
               f"{m['group_count']} group(s) (dropped {m['dropped_small_clusters']} small)")
@@ -1029,7 +1439,9 @@ def main() -> int:
             print(f"  WARNING: dropped {len(m['dropped_small'])} small cluster(s) "
                   f"below min-area-frac (may be real small components): "
                   f"{m['dropped_small']}")
-        if args.materialize_groups and m.get("groups"):
+        if args.manifest_only:
+            print("  -> manifest-only; skipped materialized group item(s)")
+        elif args.materialize_groups and m.get("groups"):
             created = materialize_groups(resolved, m)
             print(f"  -> materialized {len(created)} group item(s)")
     return 0

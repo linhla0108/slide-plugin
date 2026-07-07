@@ -10,6 +10,7 @@ from pathlib import Path
 
 from _common import load_json, now_iso, write_json
 from build_registry import COMPACT_KEYS
+import build_component_retrieval_index as retrieval
 
 
 TYPE_FOLDERS = {
@@ -58,6 +59,12 @@ def main() -> int:
     mapping = load_json(mapping_path)
     if mapping.get("status") == "duplicate":
         raise SystemExit(f"Duplicate already resolves to {mapping.get('duplicate_of')}")
+    artifact_status = mapping.get("artifact_status")
+    if artifact_status and artifact_status != "ready":
+        raise SystemExit(
+            f"Artifact build status is {artifact_status}; rerun artifact generation "
+            "before publishing."
+        )
     if mapping.get("approval", {}).get("status") != "approved":
         raise SystemExit("Publication requires approval.status=approved in mapping.json.")
     if not ID_PATTERN.match(mapping.get("candidate_stable_id", "")):
@@ -172,6 +179,14 @@ def main() -> int:
         "tags": mapping.get("tags", []),
         "content_structure": mapping.get("content_structure", []),
         "content_fields": mapping.get("content_fields", {}),
+        "component_type": mapping.get("component_type"),
+        "layout_role": mapping.get("layout_role"),
+        "visual_summary": mapping.get("visual_summary"),
+        "keywords": mapping.get("keywords", []),
+        "use_cases": mapping.get("use_cases", []),
+        "anti_use_cases": mapping.get("anti_use_cases", []),
+        "quality_notes": mapping.get("quality_notes"),
+        "retrieval_notes": mapping.get("retrieval_notes"),
         "text_contract": text_contract or None,
         "density": mapping.get("density", "any"),
         "source": {
@@ -205,6 +220,8 @@ def main() -> int:
         str(compact_path),
         {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in registry["items"]]},
     )
+    retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
+    retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
 
     mapping["status"] = "published"
     mapping["published_at"] = now_iso()

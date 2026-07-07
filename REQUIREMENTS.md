@@ -50,9 +50,22 @@ tools outside the tables above.
 
 ## Check what you have
 
+Run the readiness check at the start of every component extraction session.
+The script reuses `slide-system/registries/extract-readiness.json`, so repeat
+checks are cheap and do not reinstall anything.
+
 ```bash
 python3 slide-system/scripts/check_base_requirements.py
 ```
 
+For source files that must be converted, use the input-scoped check before
+authoring the extraction request:
+
+```bash
+python3 slide-system/scripts/check_base_requirements.py --input pdf
+python3 slide-system/scripts/check_base_requirements.py --input pptx
+```
+
 Reports each tool as available / missing with the exact install hint. It only
-checks — it never installs.
+checks — it never installs. Stop on `BLOCKER`; do not scaffold or fall back from
+Docling to manual extraction until the required source provider passes.

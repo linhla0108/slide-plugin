@@ -178,8 +178,10 @@ function dismissToast(node) {
    ============================================================ */
 
 const topTabs = $$(".top-tab");
-const sectionComponents = $("#section-components");
-const sectionTemplates = $("#section-templates");
+const SECTION_PANES = {
+  components: $("#section-components"),
+  templates: $("#section-templates"),
+};
 let activeSection = "components";
 
 topTabs.forEach(tab => {
@@ -192,10 +194,12 @@ topTabs.forEach(tab => {
       t.classList.toggle("is-active", on);
       t.setAttribute("aria-selected", on ? "true" : "false");
     });
-    sectionComponents.hidden = section !== "components";
-    sectionComponents.classList.toggle("is-active", section === "components");
-    sectionTemplates.hidden = section !== "templates";
-    sectionTemplates.classList.toggle("is-active", section === "templates");
+    Object.entries(SECTION_PANES).forEach(([name, pane]) => {
+      if (!pane) return;
+      const on = name === section;
+      pane.hidden = !on;
+      pane.classList.toggle("is-active", on);
+    });
   });
 });
 
@@ -671,12 +675,22 @@ function compWireZoom() {
 function compRenderInfoPanel(item) {
   let html = "";
   if (item.brand) html += compInfoRow("Brand", escHtml(item.brand));
+  if (item.component_type) html += compInfoRow("Component type", escHtml(item.component_type));
+  if (item.layout_role) html += compInfoRow("Layout role", escHtml(item.layout_role));
+  if (item.visual_summary) html += compInfoRow("Visual summary", escHtml(item.visual_summary));
   if (item.intent?.length) html += compInfoRow("Intent", '<div class="pills">' + item.intent.map(compPill).join("") + "</div>");
   if (item.tags?.length) html += compInfoRow("Tags", '<div class="pills">' + item.tags.map(compPill).join("") + "</div>");
+  if (item.keywords?.length) html += compInfoRow("Keywords", '<div class="pills">' + item.keywords.map(compPill).join("") + "</div>");
+  if (item.content_structure?.length) html += compInfoRow("Structure", '<div class="pills">' + item.content_structure.map(compPill).join("") + "</div>");
+  if (item.use_cases?.length) html += compInfoRow("Use cases", '<ul class="limitations-list">' + item.use_cases.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
+  if (item.anti_use_cases?.length) html += compInfoRow("Anti use-cases", '<ul class="limitations-list">' + item.anti_use_cases.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
   if (item.source) {
     const src = typeof item.source === "string" ? item.source : (item.source.path || JSON.stringify(item.source));
     html += compInfoRow("Source", '<span style="font-family:var(--mono);font-size:11px;word-break:break-all">' + escHtml(String(src)) + "</span>");
   }
+  if (item.quality_notes) html += compInfoRow("Quality notes", escHtml(item.quality_notes));
+  if (item.retrieval_notes) html += compInfoRow("Retrieval notes", escHtml(item.retrieval_notes));
+  if (item.review?.mode) html += compInfoRow("Review mode", escHtml(item.review.mode));
   if (item.variants?.length) html += compInfoRow("Variants", '<div class="pills">' + item.variants.map(compPill).join("") + "</div>");
   if (item.limitations?.length) html += compInfoRow("Limitations", '<ul class="limitations-list">' + item.limitations.map(l => "<li>" + escHtml(l) + "</li>").join("") + "</ul>");
   const imageCount = item.images?.length || 0;

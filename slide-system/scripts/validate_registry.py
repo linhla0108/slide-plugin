@@ -10,7 +10,11 @@ from pathlib import Path
 from _common import load_json, resolve_repo_path
 
 
-ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+$")
+# Base ID is three dotted segments (family.type.slug). Materialized group items
+# carry an optional `.gNN` suffix (g01, g02, …) minted by classify/publish, e.g.
+# `sun.component.team-contributor-circles.g01`. Both must validate; malformed IDs
+# (wrong segment count, uppercase, bad suffix like `.g` or `.gab`) must not.
+ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+(\.g[0-9]+)?$")
 VALID_STATUS = {"staging", "qa", "published", "deprecated", "rejected"}
 
 

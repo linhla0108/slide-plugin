@@ -15,15 +15,27 @@ IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"}
 def rel(path: Path | str) -> str:
     p = Path(path) if isinstance(path, str) else path
     try:
-        return str(p.relative_to(PROJECT_ROOT))
+        return p.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
-        return str(p)
+        return p.as_posix()
+
+
+def _blank_item_visual(item_dir: Path) -> bool:
+    mapping_path = item_dir / "mapping.json"
+    if not mapping_path.exists():
+        return False
+    try:
+        quality = load_json(mapping_path).get("quality_gate") or {}
+    except Exception:
+        return False
+    return bool(quality.get("blank_item_visual"))
 
 
 def collect_images(item_dir: Path) -> list[dict]:
     images: list[dict] = []
 
     artifact_dir = item_dir / "artifact"
+    blank_item_visual = _blank_item_visual(item_dir)
 
     # When the region was decomposed into distinct components
     # (classify_page_components.py), the review surface is one preview per
@@ -38,30 +50,46 @@ def collect_images(item_dir: Path) -> list[dict]:
             manifest = load_json(components_manifest)
         except Exception:
             manifest = {}
+        overview = item_dir / "evidence" / "source-with-text.svg"
+        if overview.exists():
+            images.append({"label": "Full component", "path": rel(overview)})
+        else:
+            thumb = item_dir / "preview" / "thumbnail.png"
+            if thumb.exists():
+                images.append({"label": "Full component", "path": rel(thumb)})
+        visual = artifact_dir / "visual.svg"
+        if visual.exists() and not blank_item_visual:
+            images.append({"label": "Full component (Text-free)", "path": rel(visual)})
         groups = manifest.get("groups") or []
         for rec in groups:
             frag = artifact_dir / rec.get("file", "")
-            if frag.exists():
+            classifier_group = "shape_class" in rec or "distinct_card_count" in rec
+            if frag.exists() and not (classifier_group and rec.get("cards")):
                 count = rec.get("member_count", 1)
                 suffix = f" (×{count})" if count and count > 1 else ""
                 label = rec.get("title") or rec.get("group_id", frag.stem).replace("-", " ").title()
                 images.append({"label": f"{label}{suffix}", "path": rel(frag)})
             for card in rec.get("cards", []):
-                card_file = artifact_dir / card.get("file", "")
-                if card_file.exists() and card_file != frag:
-                    card_label = card.get("title") or card.get("card_id", card_file.stem).replace("-", " ").title()
+                card_file_value = card.get("file", "")
+                source_file_value = card.get("source_file", "")
+                card_file = artifact_dir / card_file_value if card_file_value else None
+                source_file = artifact_dir / source_file_value if source_file_value else None
+                fallback_stem = card_file.stem if card_file else "card"
+                card_label = card.get("title") or card.get("card_id", fallback_stem).replace("-", " ").title()
+                dup = card.get("duplicate_count", 1)
+                dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
+                if source_file and source_file.exists():
+                    images.append({"label": f"{card_label}{dup_suffix}", "path": rel(source_file)})
+                if card_file and card_file.exists() and (
+                    card_file != frag or (classifier_group and source_file and source_file.exists())
+                ):
                     dup = card.get("duplicate_count", 1)
                     dup_suffix = f" (×{dup})" if dup and dup > 1 else ""
-                    images.append({"label": f"{card_label}{dup_suffix}", "path": rel(card_file)})
+                    text_free_label = card_label
+                    if source_file and source_file.exists() and not text_free_label.endswith("(Text-free)"):
+                        text_free_label = f"{text_free_label} (Text-free)"
+                    images.append({"label": f"{text_free_label}{dup_suffix}", "path": rel(card_file)})
         if images:
-            # One source image of the whole region, for side-by-side comparison.
-            src = item_dir / "evidence" / "source-with-text.svg"
-            if src.exists():
-                images.append({"label": "Source (original region)", "path": rel(src)})
-            else:
-                bg = artifact_dir / "background.png"
-                if bg.exists():
-                    images.append({"label": "Source (original region)", "path": rel(bg)})
             return images
 
     bg = artifact_dir / "background.png"
@@ -85,6 +113,10 @@ def collect_images(item_dir: Path) -> list[dict]:
     src_text = evidence_dir / "source-with-text.svg"
     if src_text.exists():
         images.append({"label": "Source with text", "path": rel(src_text)})
+
+    visual = artifact_dir / "visual.svg"
+    if visual.exists() and not blank_item_visual:
+        images.append({"label": "Text-free visual", "path": rel(visual)})
 
     ref = evidence_dir / "reference.png"
     if ref.exists() and not is_cropped:
@@ -147,6 +179,11 @@ def publish_readiness(item_dir: Path, mapping: dict) -> dict:
     artifact_dir = item_dir / "artifact"
     if not artifact_dir.is_dir() or not any(f.is_file() for f in artifact_dir.rglob("*")):
         blockers.append("No artifacts in this extraction")
+    artifact_status = mapping.get("artifact_status")
+    if artifact_status and artifact_status != "ready":
+        blockers.append(
+            f"Artifact build status is {artifact_status}; rerun auto-stage artifact generation"
+        )
     evidence_dir = item_dir / "evidence"
     if not evidence_dir.is_dir() or not any(f.is_file() for f in evidence_dir.rglob("*")):
         blockers.append("No source evidence in this extraction")
@@ -180,7 +217,12 @@ def main() -> int:
 
         item_images: list[dict] = []
         if art_path and art_path.is_dir() and variants:
+            overview = art_path / "visual.svg"
+            if overview.exists():
+                item_images.append({"label": "Full component", "path": rel(overview)})
             for f in sorted(art_path.iterdir()):
+                if f.name == "visual.svg":
+                    continue
                 if f.suffix.lower() in IMAGE_EXTS:
                     label = f.stem
                     for v in variants:
@@ -222,6 +264,14 @@ def main() -> int:
             artifact_dir = item_dir / "artifact"
 
             if mapping.get("decomposed_into"):
+                continue
+            if mapping.get("collection_parent_id"):
+                continue
+            if (
+                (mapping.get("quality_gate") or {}).get("blank_item_visual")
+                and not (artifact_dir / "components" / "components-manifest.json").exists()
+                and not (artifact_dir / "icons" / "icons-manifest.json").exists()
+            ):
                 continue
 
             # Handle two mapping schemas:
@@ -287,6 +337,16 @@ def main() -> int:
                     "brand": mapping.get("brand"),
                     "intent": mapping.get("semantic_intent", []),
                     "tags": mapping.get("tags", []),
+                    "component_type": mapping.get("component_type"),
+                    "layout_role": mapping.get("layout_role"),
+                    "visual_summary": mapping.get("visual_summary"),
+                    "content_structure": mapping.get("content_structure", []),
+                    "keywords": mapping.get("keywords", []),
+                    "use_cases": mapping.get("use_cases", []),
+                    "anti_use_cases": mapping.get("anti_use_cases", []),
+                    "quality_notes": mapping.get("quality_notes"),
+                    "retrieval_notes": mapping.get("retrieval_notes"),
+                    "review": mapping.get("review"),
                     "source": mapping.get("source", ""),
                     "paths": {
                         "artifact": rel(artifact_dir),

@@ -134,8 +134,8 @@ THEN
 | Score | Decision | Meaning |
 |---|---|---|
 | ≥ 75 | **reuse** | Use the published item as-is |
-| 55–74 | **adapt-local** | Use it but adjust locally for the slide |
-| < 55 | **custom-local** | Build a new one for this slide |
+| 65–74 | **adapt-local** | Use it but adjust locally for the slide |
+| < 65 | **custom-local** | Build a new one for this slide |
 | 0 (no eligible item) | **blocked** | No suitable item available |
 
 ---
@@ -287,8 +287,8 @@ FOR each slide in the deck:
   ├── [SCORE] Run score_visual_items.py
   │     │
   │     ├── score ≥ 75 → REUSE template as-is
-  │     ├── score 55-74 → ADAPT template + local tweaks
-  │     └── score < 55 → CUSTOM build from scratch
+  │     ├── score 65-74 → ADAPT template + local tweaks
+  │     └── score < 65 → CUSTOM build from scratch
   │
   ├── [COMPOSE] Read component-composition.md
   │     │

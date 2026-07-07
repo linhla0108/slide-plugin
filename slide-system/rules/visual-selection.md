@@ -15,9 +15,9 @@ Score candidates with these weights:
 
 Decision thresholds:
 
-- `75-100`: reuse the published item.
-- `55-74`: create a slide-local adaptation without changing the shared item.
-- Below `55`: create a slide-local custom structure.
+- `>= 75`: reuse the published item.
+- `65-74`: create a slide-local adaptation without changing the shared item.
+- `< 65`: create a slide-local custom structure.
 
 Always record selected and rejected candidates with scores and reasons.
 Extraction may be recommended, but generation must never trigger extraction

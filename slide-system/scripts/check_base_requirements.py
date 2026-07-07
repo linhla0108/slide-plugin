@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Preflight the base toolchain for the component-extract + HTML-preview pipeline.
 
-Run this ONCE before starting extraction work. It probes the tools the pipeline
-needs, classifies each as a blocker / warning / optional, and writes a readiness
-marker at `registries/extract-readiness.json`. The marker records the environment
-fingerprint, so a later run with the same environment short-circuits and does NOT
-re-probe or prompt for re-install:
+Run this at the start of every extraction session. It probes the tools the
+pipeline needs, classifies each as a blocker / warning / optional, and writes a
+readiness marker at `registries/extract-readiness.json`. The marker records the
+environment fingerprint, so repeat checks in the same environment short-circuit
+and do NOT re-probe or prompt for re-install:
 
     python3 slide-system/scripts/check_base_requirements.py          # check / reuse marker
     python3 slide-system/scripts/check_base_requirements.py --force  # re-probe ignoring marker
@@ -46,7 +46,7 @@ SCHEMA_VERSION = 2
 REQUIREMENTS = [
     ("python3", "required", ["python3"], ["--version"],
      "Run every slide-system/scripts/ step."),
-    ("xmllint", "required", ["xmllint"], ["--version"],
+    ("xmllint", "required", ["xmllint", r"C:\msys64\usr\bin\xmllint.exe"], ["--version"],
      "Validate that visual.svg / source-with-text.svg stay well-formed XML."),
     ("raster-optimizer", "recommended", ["sips", "magick", "convert"], ["--version"],
      "Downsample / recompress embedded rasters (optimize_svg.py). Without it the "

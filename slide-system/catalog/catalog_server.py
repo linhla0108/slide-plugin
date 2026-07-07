@@ -8,6 +8,8 @@ on this machine:
     POST /api/publish  {id}          -> build preview/, approve, promote into library,
                                         then remove the redundant staging copy
     POST /api/delete   {id, status}  -> remove a published (library) or draft item
+    POST /api/stage-candidates {extraction_id}
+                                      -> auto-stage Docling candidates as Drafts
 
 After every mutation the catalog data is regenerated so the page can reload.
 
@@ -31,6 +33,12 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
+
+# Candidate review is an internal compatibility layer used by auto-stage; the
+# public catalog server exposes only Draft-stage actions.
+sys.path.insert(0, str(SCRIPTS))
+import candidate_review as cr  # noqa: E402
+import auto_stage_candidates as asc  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
@@ -55,6 +63,23 @@ def run(cmd: list[str]) -> tuple[bool, str]:
     out = (proc.stdout or "").strip()
     err = (proc.stderr or "").strip()
     return proc.returncode == 0, (out + ("\n" + err if err else "")).strip()
+
+
+def body_bool(body: dict, key: str, default: bool) -> bool:
+    value = body.get(key, default)
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    if isinstance(value, int) and value in {0, 1}:
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "on"}:
+            return True
+        if normalized in {"false", "0", "no", "off"}:
+            return False
+    raise ValueError(f"{key} must be a boolean")
 
 
 def regen_catalog() -> tuple[bool, str]:
@@ -270,14 +295,42 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def _read_body(self) -> dict | None:
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            return json.loads(self.rfile.read(length) or b"{}")
+        except (ValueError, json.JSONDecodeError):
+            return None
+
+    def do_PATCH(self):
+        self._json(404, {"ok": False, "error": "Unknown endpoint"})
+
     def do_POST(self):
+        if self.path == "/api/stage-candidates":
+            body = self._read_body()
+            if body is None:
+                return self._json(400, {"ok": False, "error": "Invalid JSON body"})
+            extraction_id = str(body.get("extraction_id", ""))
+            try:
+                rebuild_catalog = body_bool(body, "rebuild_catalog", True)
+                build_artifacts = body_bool(body, "build_artifacts", True)
+                summary = asc.stage_run(
+                    extraction_id,
+                    rebuild_catalog=rebuild_catalog,
+                    build_artifacts=build_artifacts,
+                )
+            except ValueError as exc:
+                return self._json(400, {"ok": False, "error": str(exc)})
+            except (cr.CandidateError, asc.AutoStageError) as exc:
+                return self._json(400, {"ok": False, "error": str(exc)})
+            except Exception as exc:  # surface, never crash the server
+                return self._json(500, {"ok": False, "error": str(exc)})
+            return self._json(200, {"ok": True, **summary})
         route = ROUTES.get(self.path)
         if not route:
             return self._json(404, {"ok": False, "error": "Unknown endpoint"})
-        try:
-            length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length) or b"{}")
-        except (ValueError, json.JSONDecodeError):
+        body = self._read_body()
+        if body is None:
             return self._json(400, {"ok": False, "error": "Invalid JSON body"})
         item_id = str(body.get("id", ""))
         if not ID_PATTERN.match(item_id):
@@ -292,7 +345,7 @@ class Handler(SimpleHTTPRequestHandler):
 def main() -> int:
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f"Catalog control server on http://{HOST}:{PORT}/slide-system/catalog/")
-    print("Mutating endpoints: /api/publish, /api/delete")
+    print("Mutating endpoints: /api/publish, /api/delete, /api/stage-candidates")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

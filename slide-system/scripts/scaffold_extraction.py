@@ -24,6 +24,51 @@ def slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
 
 
+# Reject positional/placeholder ids: numeric-suffixed (page-01, slide-3,
+# slide-3-full, item-5), purely numeric (42), and positional-only names built
+# from direction words (top-left, center). Semantic names that merely start with
+# a direction word (e.g. left-rail, top-banner) are allowed.
+_POS = "top|bottom|left|right|center|centre|middle|upper|lower"
+_BANNED_ID = re.compile(
+    rf"^(?:(?:page|slide|item)-\d+(?:-full)?|\d+|(?:{_POS})(?:-(?:{_POS}))*)$"
+)
+# Docling draft placeholders minted by analyze_with_docling.py:
+# "<label>-p<page>-<n>" (e.g. picture-p1-1, figure-p2-3, table-p10-1,
+# chart-px-1, form-p3-2). These are candidate ids that REQUIRE a human rename
+# before scaffolding — never let them become a stable identity.
+_DOCLING_DRAFT_ID = re.compile(
+    r"^(?:picture|figure|table|chart|form)-p[a-z0-9]+-\d+$"
+)
+_GENERIC_INTENT = {"full-page extraction", "full-slide", "page"}
+
+
+def validate_request_item(item: dict) -> None:
+    for key in ("item_id", "slide_or_page", "region", "requested_type", "semantic_intent"):
+        if key not in item or item[key] in (None, "", []):
+            raise SystemExit(f"Item {item.get('item_id', '<unknown>')} is missing {key}")
+    if _BANNED_ID.match(item["item_id"]):
+        raise SystemExit(
+            f"Item ID '{item['item_id']}' is a positional placeholder. "
+            f"Use a semantic name describing the visual content "
+            f"(e.g., 'metric-card', 'timeline-horizontal', 'org-chart')."
+        )
+    if _DOCLING_DRAFT_ID.match(item["item_id"]):
+        raise SystemExit(
+            f"Item ID '{item['item_id']}' is a Docling draft placeholder. "
+            f"Rename it to a semantic ID describing the visual content "
+            f"(e.g., 'metric-card', 'salary-table', 'org-chart') before "
+            f"scaffolding."
+        )
+    intent_set = {v.lower().strip() for v in item["semantic_intent"]}
+    if not intent_set or intent_set <= _GENERIC_INTENT:
+        raise SystemExit(
+            f"Item '{item['item_id']}' has only generic semantic_intent "
+            f"{item['semantic_intent']}. Add descriptive intent values "
+            f"(e.g., 'cover', 'salary-table', 'org-chart')."
+        )
+    normalized_bounds(item["region"])
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--request", required=True)
@@ -71,11 +116,26 @@ def main() -> int:
         raise SystemExit(f"Source path does not exist: {source_path}")
     if not request["items"]:
         raise SystemExit("At least one explicit extraction region is required.")
+    for item in request["items"]:
+        validate_request_item(item)
 
     output_dir = Path(args.output_root) / request["extraction_id"]
     if output_dir.exists():
-        raise SystemExit(f"Extraction output already exists: {output_dir}")
-    output_dir.mkdir(parents=True)
+        # An analysis pre-step (analyze_with_docling.py) writes only `analysis/`
+        # under this same id. That must not block a later scaffold for the same
+        # extraction. Allow the dir through ONLY when it is an analysis-only
+        # shell — it carries `analysis/` and none of the real extraction outputs
+        # (request.json, manifest.json, items/). Anything else is a genuine prior
+        # extraction and is still rejected. The `analysis/` dir is preserved.
+        real_outputs = [
+            name for name in ("request.json", "manifest.json", "items")
+            if (output_dir / name).exists()
+        ]
+        analysis_only = (output_dir / "analysis").is_dir() and not real_outputs
+        if not analysis_only:
+            raise SystemExit(f"Extraction output already exists: {output_dir}")
+    else:
+        output_dir.mkdir(parents=True)
     write_json(output_dir / "request.json", request)
 
     history = load_json(args.history)
@@ -83,33 +143,7 @@ def main() -> int:
     source_hash = sha256_file(source_path)
     batch_items = []
 
-    # Reject positional/placeholder ids: numeric-suffixed (page-01, slide-3,
-    # slide-3-full, item-5), purely numeric (42), and positional-only names
-    # built from direction words (top-left, center). Semantic names that merely
-    # start with a direction word (e.g. left-rail, top-banner) are allowed.
-    _POS = "top|bottom|left|right|center|centre|middle|upper|lower"
-    _BANNED_ID = re.compile(
-        rf"^(?:(?:page|slide|item)-\d+(?:-full)?|\d+|(?:{_POS})(?:-(?:{_POS}))*)$"
-    )
-    _GENERIC_INTENT = {"full-page extraction", "full-slide", "page"}
-
     for item in request["items"]:
-        for key in ("item_id", "slide_or_page", "region", "requested_type", "semantic_intent"):
-            if key not in item or item[key] in (None, "", []):
-                raise SystemExit(f"Item {item.get('item_id', '<unknown>')} is missing {key}")
-        if _BANNED_ID.match(item["item_id"]):
-            raise SystemExit(
-                f"Item ID '{item['item_id']}' is a positional placeholder. "
-                f"Use a semantic name describing the visual content "
-                f"(e.g., 'metric-card', 'timeline-horizontal', 'org-chart')."
-            )
-        intent_set = {v.lower().strip() for v in item["semantic_intent"]}
-        if not intent_set or intent_set <= _GENERIC_INTENT:
-            raise SystemExit(
-                f"Item '{item['item_id']}' has only generic semantic_intent "
-                f"{item['semantic_intent']}. Add descriptive intent values "
-                f"(e.g., 'cover', 'salary-table', 'org-chart')."
-            )
         region = normalized_bounds(item["region"])
         region_hash = region_identity_hash(
             source_hash, item["slide_or_page"], region,

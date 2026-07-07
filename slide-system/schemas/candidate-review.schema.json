@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/candidate-review.schema.json",
+  "title": "Reviewed Docling Candidate",
+  "description": "Retrieval-ready metadata a human attaches to a Docling auto-detect candidate before it is approved for extraction-request generation. Stored under outputs/component-extractions/<id>/analysis/candidate-reviews.json (review-only; never mutates the registry/library or publishes).",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "item_id",
+    "display_name",
+    "requested_type",
+    "semantic_intent",
+    "component_type",
+    "layout_role",
+    "visual_summary",
+    "content_structure",
+    "tags",
+    "keywords",
+    "use_cases",
+    "anti_use_cases",
+    "source_path",
+    "slide_or_page",
+    "region",
+    "review_status",
+    "reviewer",
+    "reviewed_at",
+    "quality_notes",
+    "retrieval_notes"
+  ],
+  "properties": {
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Original Docling placeholder id (e.g. picture-p1-1). Immutable key."
+    },
+    "item_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "description": "Semantic stable local item id to use for scaffold. Must not be a Docling placeholder or a positional/generic name."
+    },
+    "display_name": { "type": "string", "minLength": 1 },
+    "requested_type": { "type": "string", "minLength": 1 },
+    "semantic_intent": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Descriptive intent values; must not be only generic tokens (full-page, page, full-slide)."
+    },
+    "component_type": { "type": "string", "minLength": 1 },
+    "layout_role": { "type": "string", "minLength": 1 },
+    "visual_summary": { "type": "string", "minLength": 1 },
+    "content_structure": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "tags": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "keywords": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "use_cases": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "anti_use_cases": { "type": "array", "items": { "type": "string" } },
+    "source_path": { "type": "string", "minLength": 1 },
+    "slide_or_page": { "type": ["integer", "string"] },
+    "region": {
+      "type": "object",
+      "required": ["x", "y", "width", "height", "unit"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "unit": { "enum": ["px", "pt", "in", "normalized"] }
+      },
+      "additionalProperties": false
+    },
+    "review_status": {
+      "enum": ["pending", "approved_for_extraction", "rejected"]
+    },
+    "reviewer": { "type": ["string", "null"] },
+    "reviewed_at": { "type": ["string", "null"] },
+    "reject_reason": { "type": ["string", "null"] },
+    "quality_notes": { "type": "string" },
+    "retrieval_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

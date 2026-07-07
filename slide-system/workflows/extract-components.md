@@ -2,6 +2,23 @@
 
 This workflow runs only through the manual component-extractor skill.
 
+0. **Mandatory tool readiness check.** Before authoring a request JSON or
+   running Docling/scaffold/artifact commands, check the extraction toolchain:
+   `python3 slide-system/scripts/check_base_requirements.py --input pdf` for
+   PDF sources, `--input pptx` for PPTX sources, or the marker-first base check
+   for SVG/package sources. Stop on any `BLOCKER`. Docling is optional, but the
+   source provider for the input type is not optional; do not fall back from
+   Docling to manual extraction until this check passes.
+
+> **Optional pre-step (auto-detect candidates):** when the user wants help
+> finding the reusable parts, run the analysis-only
+> `scripts/analyze_with_docling.py --source <file> --extraction-id <id>`. It
+> writes draft candidates under
+> `outputs/component-extractions/<id>/analysis/` and changes no shared state
+> (no publish, no registry, no library writes). Review and rename the draft ids
+> before scaffolding. Degrades cleanly when Docling is absent. Details:
+> `rules/extraction-methods.md` → "Optional: Docling candidate auto-detection".
+
 1. Require exact source path, slide/page, and region/object.
 2. Validate batch requests.
 3. Fingerprint each region and check for duplicates.
@@ -45,10 +62,23 @@ This workflow runs only through the manual component-extractor skill.
    on-canvas object in real Chromium layout, spatially clusters them into
    component instances, then merges identical / same-shape-different-color
    instances into ONE representative class each (e.g. 5 colored Level cards →
-   one class ×5). Writes `artifact/components/<item>-class-NN.svg` +
-   `components-manifest.json`. `build_component_catalog.py` then previews one
-   SVG per distinct class followed by the source region for comparison, rather
-   than the glued strip. Needs Chromium; skip only if it is unavailable.
+   one class ×5). Writes `artifact/components/*.svg` +
+   `components-manifest.json`. `build_component_catalog.py` then previews the
+   source region, the text-free region, and detected sub-components for
+   comparison, rather than only the glued strip. Needs Chromium; skip only if it
+   is unavailable.
+
+   **Auto-stage mode**: `auto_stage_candidates.py` calls
+   `classify_page_components.py --manifest-only` for strip-like Drafts. This
+   keeps one parent Draft in Components → Draft, then adds each detected
+   sub-card to that Draft's carousel as a source-with-text preview plus a
+   matching text-free variant. It does not create separate `.gNN` Draft items
+   for those sub-cards.
+
+   For large card/diagram regions, auto-stage adds `--layout-row-groups`.
+   This keeps the full Draft intact but prefers horizontal row components in
+   the carousel (for example: top metric circles, middle goal/key-result/task
+   row, bottom platform circles), each paired with its text-free variant.
 
    **Gutter split**: Before clustering, `_split_on_gutter` un-glues distinct
    components that share a small overlapping leaf. When a clean empty horizontal
@@ -92,11 +122,12 @@ This workflow runs only through the manual component-extractor skill.
 
    - **Per-card variant carousel**: Each materialized group item gets its own
      `artifact/components/` directory containing the group fragment SVG,
-     per-card variant SVGs (one per unique instance inside that group), and a
-     scoped `components-manifest.json`. `collect_images()` in
+     per-card variant SVGs (one per unique instance inside that group),
+     optional source-with-text card crops, and a scoped
+     `components-manifest.json`. `collect_images()` in
      `build_component_catalog.py` reads this manifest to drive the catalog card
-     carousel: whole-row thumbnail → per-card variants → source region, in that
-     order.
+     carousel: full component → text-free full component → card source previews
+     → card text-free variants.
 
    - **Perceptual dedup (MAE)**: Within each group, per-card variant SVGs are
      compared using perceptual signatures derived from rendered PNGs. Cards

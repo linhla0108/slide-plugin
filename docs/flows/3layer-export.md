@@ -67,7 +67,9 @@ Input (prompt / file / mixed)
      Export PPTX — AFTER:  1 orchestrator command, 3-layer PPTX
         │
         │   python3 slide-system/scripts/export_pptx.py             [NEW] the ONLY entry point
-        │           --run-dir <run> [--mode layered|flat]                  (forbid ad-hoc generator)
+        │           --html <run>/deck.html --slides <N>                   (forbid ad-hoc generator)
+        │           --out-dir <run> --output <run>/deck.pptx
+        │           [--mode layered|flat]
         │           │
         │           ├─ (0) cache: key = sha(capture-slides.js)       [NEW] missing 1 of the 3 components
         │           │       + sha(HTML+assets)                             means the cache returns a "ghost render";

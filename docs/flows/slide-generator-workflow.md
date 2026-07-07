@@ -149,8 +149,8 @@ When sources disagree → create a divergence summary, ask the user.
 2. Reject: deprecated / staging / brand-incompatible / export-incompatible
 3. Score with `score_visual_items.py`:
    - ≥75 → reuse as-is
-   - 55–74 → slide-local adaptation
-   - <55 → custom build
+   - 65–74 → slide-local adaptation
+   - <65 → custom build
 4. When `base_template` is set → auto-assign score 100 to slides matching the template intent
 5. Record extraction recommendations (NEVER trigger extraction)
 6. Output: one `analysis/visual-requests.json` + one `analysis/selection-report.json` per run
@@ -175,7 +175,7 @@ Present a single approval package containing:
 ```bash
 # Decompose template artwork (MANDATORY — no hand-splitting, no wholesale embedding)
 .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
-    --svg slide-system/library/templates/<id>/artifact/visual.svg \
+    --svg slide-system/library/templates/<id>/visual.svg \
     --out-dir <job>/assets/page-NN --prefix page-NN \
     --href-base <relative-path-from-deck.html>
 ```
@@ -260,7 +260,11 @@ layered run, or keep `--mode flat` for a patch. Ask the user which path they pre
 **Single entry point:**
 ```bash
 .venv/bin/python3 slide-system/scripts/export_pptx.py \
-    --run-dir <run> [--mode layered|flat]
+    --html <run>/deck.html \
+    --slides <N> \
+    --out-dir <run> \
+    --output <run>/deck.pptx \
+    [--mode layered|flat]
 ```
 - Default: `--mode layered` (3-layer: base + overlay shapes + native text)
 - `--mode flat`: only when the user explicitly requests frozen/non-editable
@@ -440,7 +444,7 @@ outputs/slide-jobs/<job-id>/
 | `compare_renders.py` | Python | Measure parity metrics (always exit 0, not a gate) |
 | `decompose_svg_objects.py` | Python | Split full-page SVG → fragments + tagged snippet.html |
 | `measure_svg_groups.js` | Node.js | Measure group bboxes in Chromium (used by decompose) |
-| `score_visual_items.py` | Python | Score visual candidates (75/55 thresholds) |
+| `score_visual_items.py` | Python | Score visual candidates (75/65 thresholds) |
 | `check_requirements.py` | Python | Validate requirements + capabilities |
 | `package_job.py` | Python | Delivery manifest + prune empty directories |
 | `build_component_catalog.py` | Python | Rebuild visual library review UI |

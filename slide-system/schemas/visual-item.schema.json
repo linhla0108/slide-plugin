@@ -5,7 +5,7 @@
   "type": "object",
   "required": ["id", "version", "name", "type", "category", "status", "intent", "tags", "source", "paths", "compatibility"],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9]+\\.[a-z0-9-]+\\.[a-z0-9-]+$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+\\.[a-z0-9-]+\\.[a-z0-9-]+(\\.g[0-9]+)?$" },
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "name": { "type": "string", "minLength": 1 },
     "type": { "enum": ["card", "component", "section", "template", "style", "icon", "background", "character", "asset"] },

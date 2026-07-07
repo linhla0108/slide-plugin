@@ -65,6 +65,9 @@ Prohibited patterns (`scaffold_extraction.py`'s `_BANNED_ID` gate rejects these)
 - A positional-only id built from direction words — `top`/`bottom`/`left`/
   `right`/`center`/`centre`/`middle`/`upper`/`lower`, alone or joined
   (e.g. `top-left`, `center`, `bottom-right`).
+- A Docling draft placeholder `<label>-p<page>-<n>` (e.g. `picture-p1-1`,
+  `table-p10-1`) minted by `analyze_with_docling.py` — rename it to a semantic
+  id before scaffolding.
 
 A semantic name that merely starts with a direction word is fine
 (`left-rail`, `top-banner`). The gate also rejects items whose
@@ -77,7 +80,142 @@ Good examples: `metric-card`, `timeline-horizontal`, `org-chart-radial`,
 If any value is missing or ambiguous, ask one focused clarification.
 Do not infer and proceed silently.
 
-## Preflight (marker-first — do not run the script by default)
+### Mandatory tool readiness check
+
+Before any extraction command is authored or run — Docling analysis,
+manual request scaffolding, auto-stage, or artifact generation — check the
+toolchain first. This is required for every extraction session; the marker makes
+repeat checks cheap.
+
+- PDF input: run `python3 slide-system/scripts/check_base_requirements.py --input pdf`.
+- PPTX input: run `python3 slide-system/scripts/check_base_requirements.py --input pptx`.
+- SVG/package input: read the readiness marker and run
+  `python3 slide-system/scripts/check_base_requirements.py` only if the marker
+  is missing or not ready.
+
+Stop on any `BLOCKER`. Do not create `extraction-request.json`, do not run
+`scaffold_extraction.py`, and do not fall back from Docling to the manual flow
+until the base extraction provider for the input type passes. Docling itself is
+optional; PyMuPDF/LibreOffice readiness for the source type is not optional.
+
+### Optional: auto-detect candidate regions (Docling)
+
+When the user wants help finding the reusable parts ("suggest the reusable
+parts", "look through this file"), an optional analysis-only pre-step can
+detect candidate regions instead of naming each by hand:
+
+```bash
+python3 slide-system/scripts/analyze_with_docling.py \
+    --source <file.pdf> --extraction-id <id> [--pages 1|2-4]
+```
+
+It writes analysis under `outputs/component-extractions/<id>/analysis/`. When
+at least one candidate is detected, it also writes
+`candidate-extraction-request.json`; when none are found, it writes only
+`page-analysis.json` and `docling-report.json`. It never publishes and never
+touches the registry. To keep the user-facing approval surface unified, auto
+stage detected candidates into catalog Drafts:
+
+```bash
+python3 slide-system/scripts/auto_stage_candidates.py <id>
+```
+
+`auto_stage_candidates.py` deterministically renames Docling placeholders,
+attaches retrieval metadata, writes reviewed request artifacts under
+`analysis/approved/`, scaffolds one Draft per candidate, runs the core PDF
+artifact chain (`visual.svg`, `text-slots.json`, cropped
+`source-with-text.svg`, `preview/thumbnail.png`), and rebuilds the catalog.
+The user reviews the resulting items only in **Components → Draft** and decides
+whether to Publish/Delete there. If Docling is not installed it exits cleanly
+with a message; proceed with the normal manual flow only after the mandatory
+tool readiness check above has passed. See
+`slide-system/rules/extraction-methods.md` → "Optional: Docling candidate
+auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
+only for scanned PDFs. Tiny decorative candidates are filtered by default
+(`--min-area 0.015`) and can be relaxed for icon-heavy pages.
+PPTX may be analyzed by Docling, but it is analysis-only here until a PPTX
+artifact builder exists; use manual extraction for PPTX Draft previews.
+For PDFs, analysis runs Docling in page-scoped workers with a timeout so a
+single bad page cannot crash the whole run; pages with no usable Docling
+candidate can still receive conservative PyMuPDF text/vector row candidates for
+Draft review. If a PyMuPDF row only wraps an existing Docling visual with
+title/context text, it is not staged as a duplicate Draft; that text is attached
+to the existing candidate's retrieval intent instead. Data-chart candidates
+such as pie/bar/line charts are skipped by auto-detect because they are usually
+source-specific content; manually extract an exact chart only when the user
+explicitly asks for that chart.
+
+### Automated candidate staging (before Draft review)
+
+`auto_stage_candidates.py` is the default bridge from Docling analysis to Draft
+review. It is still conservative:
+
+- It never publishes and never mutates `visual-library.json`.
+- It rejects placeholder/generic ids through the same scaffold gate, then writes
+  semantic item ids automatically from extracted PDF region text and layout
+  role; source name/page/Docling label are fallback context only. IDs must stay
+  English and are inferred from visible region cues such as headings, uppercase
+  labels, repeated `Level N` structures, and generic localized concepts — not
+  from slide filename slugs. If the crop text is weak but the analyzer attached
+  title/context intent, auto-stage uses that intent before falling back to the
+  source filename.
+- It records auto-generated retrieval metadata in `mapping.json` so the Draft
+  Info panel and later publish record have useful intent/tags/keywords.
+- The catalog server exposes only Draft-stage actions (`stage-candidates`,
+  `publish`, `delete`); candidate-review files are internal metadata, not a
+  separate UI/API workflow.
+- For PDF sources, artifact scripts are run with the Python interpreter that can
+  import PyMuPDF (usually the repo `.venv`) so Drafts get real previews instead
+  of placeholder-only mapping folders.
+- Related candidates from the same source page are grouped into one Draft when
+  appropriate. The carousel starts with the full grouped component, followed by
+  the smaller child variants for review.
+- Repeated components with the same coarse layout profile and text structure
+  across different pages are treated as duplicate patterns. Auto-stage keeps
+  the first representative Draft and skips later copies whose only difference is
+  instance text.
+- Strip-like Drafts are decomposed in-place: the Draft keeps the full component
+  preview, then the carousel adds each detected sub-card with text and its
+  matching text-free variant. This uses
+  `classify_page_components.py --manifest-only` so auto-stage does not create
+  extra Drafts for the sub-cards.
+- Large card/diagram Drafts are decomposed by layout row or by individual
+  card/cell when the detected region is broad enough to contain multiple
+  component bands. The carousel shows the full diagram first, then each
+  sub-component with text and its text-free variant.
+- Icon reference sheets stay as one Draft for final review, then
+  `split_icon_sheet.py` writes `artifact/icons/icons-manifest.json` so the
+  catalog shows a searchable icon grid inside that Draft instead of only the
+  frequently-used icon subset.
+- After decomposition, `quality_gate.py` runs a fast structural prune before
+  preview generation. It removes obviously blank/missing manifest references,
+  drops empty component manifests, and records `quality_gate` in `mapping.json`.
+  It does not run browser pixel QA in the hot path; uncertain components stay
+  as Drafts for human review instead of being auto-published.
+- It skips candidates already marked `rejected` in `candidate-reviews.json`.
+- If the PDF artifact chain fails, the Draft remains in staging with catalog
+  blockers; the user cannot accidentally publish a broken item.
+
+### Retrieval / RAG preparation
+
+Published items remain the only source generation can use. Draft metadata is
+review-only. To prepare future hybrid/RAG retrieval without adding vector
+dependencies, rebuild the deterministic lexical index after publish or registry
+changes:
+
+```bash
+python3 slide-system/scripts/build_component_retrieval_index.py
+python3 slide-system/scripts/build_component_retrieval_index.py --check
+```
+
+The index lives at `slide-system/registries/component-retrieval-index.jsonl`.
+It includes stable ids, intent/tags/keywords, content structure, use cases,
+paths, source provenance, and a `search_text`/`retrieval_terms` projection. It
+keeps source paths as provenance fields but does not feed path strings into
+search terms. Do not add embeddings or external vector stores in extraction;
+that belongs to a separate retrieval layer after component quality is stable.
+
+## Preflight (mandatory, marker-first)
 
 Readiness is recorded in `slide-system/registries/extract-readiness.json`.
 Checking it costs one file read, not a Python process:
@@ -160,6 +298,10 @@ not read it separately.
    # distinct component + the source region for comparison, instead of the
    # glued strip. Needs Chromium (measure_svg_groups.js); skip only if absent.
    python3 slide-system/scripts/classify_page_components.py --item-dir <item> [--item-dir ...]
+   # Auto-staged Drafts use --manifest-only to keep sub-components in the
+   # parent Draft carousel instead of creating separate .gNN Drafts.
+   # Large diagram/card regions also use --layout-row-groups to show one
+   # carousel pair per visual row or per card/cell in a single-row component set.
    ```
 
 4. For each item write `mapping.json` (the canonical record: fingerprints,
