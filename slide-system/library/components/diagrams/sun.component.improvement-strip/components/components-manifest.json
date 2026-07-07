@@ -1,0 +1,62 @@
+{
+  "source_visual": "artifact/visual.svg",
+  "canvas": {
+    "w": 956.1129760742188,
+    "h": 253.19500732421875
+  },
+  "instance_count": 1,
+  "shape_class_count": 1,
+  "group_count": 1,
+  "dropped_small_clusters": 0,
+  "dropped_small": [],
+  "background_candidates": [],
+  "params": {
+    "min_area_frac": 0.015,
+    "shape_tol": 0.14,
+    "merge_gap": 6.0,
+    "margin": 3.0,
+    "bg_coverage": 0.7,
+    "group_gap_frac": 0.6,
+    "dedup_mae": 3.0
+  },
+  "groups": [
+    {
+      "group_id": "improvement-strip-group-01",
+      "file": "components/improvement-strip-group-01.svg",
+      "shape_class": 1,
+      "title": "",
+      "tags": [],
+      "member_count": 1,
+      "distinct_card_count": 1,
+      "group_bounds": {
+        "x": 675.7,
+        "y": 56.4,
+        "w": 278.0,
+        "h": 195.0
+      },
+      "member_bounds": [
+        {
+          "x": 675.7,
+          "y": 56.4,
+          "w": 278.0,
+          "h": 195.0
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "improvement-strip-group-01",
+          "file": "components/improvement-strip-group-01.svg",
+          "source_file": "components/improvement-strip-group-01-source.svg",
+          "title": "",
+          "bounds": {
+            "x": 675.7,
+            "y": 56.4,
+            "w": 278.0,
+            "h": 195.0
+          },
+          "duplicate_count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "groups": [
+    {
+      "group_id": "translator-card",
+      "title": "Translator Card",
+      "file": "components/translator-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Translator Card (Text-free)",
+          "file": "components/translator-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    },
+    {
+      "group_id": "strategist-card",
+      "title": "Strategist Card",
+      "file": "components/strategist-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Strategist Card (Text-free)",
+          "file": "components/strategist-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    },
+    {
+      "group_id": "driver-card",
+      "title": "Driver Card",
+      "file": "components/driver-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Driver Card (Text-free)",
+          "file": "components/driver-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    },
+    {
+      "group_id": "coach-card",
+      "title": "Coach Card",
+      "file": "components/coach-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Coach Card (Text-free)",
+          "file": "components/coach-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    }
+  ]
+}

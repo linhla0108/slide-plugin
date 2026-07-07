@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "group_id": "recognition-card",
+      "title": "Recognition Card",
+      "file": "components/recognition-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Recognition Card (Text-free)",
+          "file": "components/recognition-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    },
+    {
+      "group_id": "engagement-card",
+      "title": "Engagement Card",
+      "file": "components/engagement-card.png",
+      "member_count": 1,
+      "cards": [
+        {
+          "title": "Engagement Card (Text-free)",
+          "file": "components/engagement-card-text-free.svg",
+          "member_count": 1
+        }
+      ]
+    }
+  ]
+}

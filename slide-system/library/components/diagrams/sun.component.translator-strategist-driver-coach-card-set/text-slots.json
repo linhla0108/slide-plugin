@@ -1,0 +1,2282 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0,
+      0,
+      1910.986,
+      545.9871
+    ],
+    "canvas_width": 1910.986,
+    "canvas_height": 545.9871,
+    "region_crop": {
+      "region": {
+        "x": 0.151478,
+        "y": 0.413151,
+        "width": 0.650254,
+        "height": 0.208141
+      },
+      "page_view_box": [
+        0.0,
+        0.0,
+        2938.83,
+        2623.16
+      ],
+      "crop_window": [
+        445.1681,
+        1083.7612,
+        1910.986,
+        545.9871
+      ],
+      "dropped_source_refs": [
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        },
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            64
+          ]
+        },
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        },
+        {
+          "text_index": 6,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            12
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 8,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            12
+          ]
+        },
+        {
+          "text_index": 8,
+          "tspan_index": 2,
+          "character_range": [
+            0,
+            6
+          ]
+        },
+        {
+          "text_index": 9,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            14
+          ]
+        },
+        {
+          "text_index": 11,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 12,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            8
+          ]
+        },
+        {
+          "text_index": 12,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 13,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 14,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        },
+        {
+          "text_index": 14,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 15,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 16,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        },
+        {
+          "text_index": 17,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        },
+        {
+          "text_index": 18,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        },
+        {
+          "text_index": 19,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        },
+        {
+          "text_index": 20,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            13
+          ]
+        }
+      ],
+      "images_pruned": 9,
+      "evidence_images_pruned": 9
+    }
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "chuy-n-h-a-m-c-ti-u",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Chuyển hóa mục tiêu",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.6253208,
+        "width": 0.1361522,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            20
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-ng-ty-th-nh-ng-n",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "công ty thành ngôn",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.6819781,
+        "width": 0.125548,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            19
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ng-d-hi-u-ch-r",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "ngữ dễ hiểu, chỉ rõ",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.7386353,
+        "width": 0.1203276,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 3,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            20
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "team-ng-g-p-nh",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "team đóng góp như",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.7952926,
+        "width": 0.1265152,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 4,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "th-n-o",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "thế nào.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.8519499,
+        "width": 0.0545628,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 5,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            8
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ch-n-tr-ng-t-m-v-u",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Chọn trọng tâm và ưu",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2756686,
+        "y": 0.6253208,
+        "width": 0.1392713,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 6,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 5,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ti-n-cho-ph-ng-ban",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "tiên cho phòng ban",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2756686,
+        "y": 0.6819781,
+        "width": 0.1174799,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 7,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "th-o-g-blockers",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Tháo gỡ blockers,",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.6253208,
+        "width": 0.1157128,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 8,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "theo-s-t-ti-n-v",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "theo sát tiến độ và",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.6819781,
+        "width": 0.1200662,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 9,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            20
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "feedback-li-n-t-c",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "feedback liên tục để",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.7386353,
+        "width": 0.1301455,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 10,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "m-b-o-team-t",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "đảm bảo team đạt",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.7952926,
+        "width": 0.117766,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 11,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-outcome",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "được outcome.",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.8519499,
+        "width": 0.094588,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 12,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            13
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "trao-i-d-n-d-t-v",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Trao đổi, dẫn dắt và",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.6253208,
+        "width": 0.1270537,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 13,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 12,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ng-thu-n-c-ng-nh-n",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "đồng thuận cùng nhân",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.6819781,
+        "width": 0.144106,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 14,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 13,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "vi-n-v-c-ch-t-o-ra-k-t",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "viên về cách tạo ra kết",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.7386353,
+        "width": 0.1435351,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 15,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 14,
+          "run_index": 0,
+          "character_range": [
+            0,
+            24
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "qu-t-c-ng-n",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "quả tác động đến",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.7952926,
+        "width": 0.1140508,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 16,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 15,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-ng-ty",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "công ty",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.8519499,
+        "width": 0.0472489,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 17,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 16,
+          "run_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "translator",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "TRANSLATOR",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175853,
+        "y": 0.5073782,
+        "width": 0.1303158,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 18,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "strategist",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "STRATEGIST",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2748863,
+        "y": 0.4976751,
+        "width": 0.1188511,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 19,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "driver",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "DRIVER",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310136,
+        "y": 0.4976751,
+        "width": 0.0736938,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 20,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 1,
+          "run_index": 1,
+          "character_range": [
+            10,
+            16
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "coach",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "COACH",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855223,
+        "y": 0.4976751,
+        "width": 0.0708874,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 21,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 1,
+          "tspan_index": 1,
+          "run_index": 2,
+          "character_range": [
+            16,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "chuy-n-m-c-ti-u",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Chuyển mục tiêu",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.6621766,
+        "width": 0.1102643,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 22,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            16
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-ng-ty-th-nh",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "công ty thành",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.7188343,
+        "width": 0.0915339,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 23,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "h-ng-i-r-r-ng",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "hướng đi rõ ràng",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.7754916,
+        "width": 0.1087547,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 24,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "cho-team",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "cho team",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175848,
+        "y": 0.8321489,
+        "width": 0.05362,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 25,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 3,
+          "run_index": 0,
+          "character_range": [
+            0,
+            8
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ch-n-tr-ng-t-m-v-u-2",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Chọn trọng tâm và ưu",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2756686,
+        "y": 0.6621766,
+        "width": 0.1392713,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 26,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 4,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "ti-n-cho-ph-ng-ban-2",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "tiên cho phòng ban",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2756686,
+        "y": 0.7188343,
+        "width": 0.1174799,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 27,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 5,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "th-o-g-tr-ng-i",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Tháo gỡ trở ngại,",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.6621766,
+        "width": 0.1109685,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 28,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 6,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "theo-d-i-ti-n-v",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "theo dõi tiến độ và",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.7188343,
+        "width": 0.120908,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 29,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 7,
+          "run_index": 0,
+          "character_range": [
+            0,
+            20
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "li-n-t-c-feedback",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "liên tục feedback",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.7754916,
+        "width": 0.1115027,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 30,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 8,
+          "run_index": 0,
+          "character_range": [
+            0,
+            18
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "t-k-t-qu",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "để đạt kết quả",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310137,
+        "y": 0.8321489,
+        "width": 0.0881563,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 31,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 9,
+          "run_index": 0,
+          "character_range": [
+            0,
+            14
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "d-n-d-t-v-ng-h-nh",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "Dẫn dắt và đồng hành",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.6621766,
+        "width": 0.1413146,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 32,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 10,
+          "run_index": 0,
+          "character_range": [
+            0,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "c-ng-nh-n-vi-n-t-o-ra",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "cùng nhân viên tạo ra",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.7188343,
+        "width": 0.138737,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 33,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 11,
+          "run_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "k-t-qu",
+      "role": "label",
+      "html_tag": "span",
+      "example_value": "kết quả",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855227,
+        "y": 0.7754916,
+        "width": 0.0468618,
+        "height": 0.0576018
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 34,
+      "typography": {
+        "font_family": "ProximaNova-Semibold",
+        "font_size": 25.7785,
+        "font_size_unit": "source-unit",
+        "font_weight": "bold",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 2,
+          "tspan_index": 12,
+          "run_index": 0,
+          "character_range": [
+            0,
+            7
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "translator-2",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "TRANSLATOR",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0175853,
+        "y": 0.5642526,
+        "width": 0.1303158,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 35,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "strategist-2",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "STRATEGIST",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.2748863,
+        "y": 0.5545496,
+        "width": 0.1188511,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 36,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "driver-2",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "DRIVER",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5310136,
+        "y": 0.5545496,
+        "width": 0.0736938,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 37,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 1,
+          "run_index": 1,
+          "character_range": [
+            10,
+            16
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "coach-2",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "COACH",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.7855223,
+        "y": 0.5545496,
+        "width": 0.0708874,
+        "height": 0.0864025
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 38,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 38.6677,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 3,
+          "tspan_index": 1,
+          "run_index": 2,
+          "character_range": [
+            16,
+            21
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

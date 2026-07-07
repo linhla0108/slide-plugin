@@ -1,0 +1,126 @@
+{
+  "source_visual": "artifact/visual.svg",
+  "canvas": {
+    "w": 1622.0699462890625,
+    "h": 607.958984375
+  },
+  "instance_count": 2,
+  "shape_class_count": 1,
+  "group_count": 2,
+  "dropped_small_clusters": 1,
+  "dropped_small": [
+    {
+      "x": 761.4,
+      "y": 328.2,
+      "w": 75.5,
+      "h": 75.5,
+      "area_frac": 0.0058
+    }
+  ],
+  "background_candidates": [
+    {
+      "x": 21.3,
+      "y": -402.1,
+      "w": 1555.5,
+      "h": 1555.5,
+      "coverage": 2.4536
+    }
+  ],
+  "params": {
+    "min_area_frac": 0.015,
+    "shape_tol": 0.14,
+    "merge_gap": 6.0,
+    "margin": 3.0,
+    "bg_coverage": 0.7,
+    "group_gap_frac": 0.6,
+    "dedup_mae": 3.0
+  },
+  "groups": [
+    {
+      "group_id": "ai-team-visual-row-01",
+      "file": "components/ai-team-visual-row-01.svg",
+      "shape_class": 1001,
+      "layout_group": "row",
+      "title": "N ng c p AI",
+      "tags": [],
+      "member_count": 2,
+      "distinct_card_count": 1,
+      "group_bounds": {
+        "x": 3.8,
+        "y": 123.8,
+        "w": 1618.2,
+        "h": 279.8
+      },
+      "member_bounds": [
+        {
+          "x": 501.1,
+          "y": 179.0,
+          "w": 595.9,
+          "h": 128.6
+        },
+        {
+          "x": 761.4,
+          "y": 328.2,
+          "w": 75.5,
+          "h": 75.5
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "ai-team-visual-row-01",
+          "file": "components/ai-team-visual-row-01.svg",
+          "source_file": "components/ai-team-visual-row-01-source.svg",
+          "title": "N ng c p AI",
+          "bounds": {
+            "x": 3.8,
+            "y": 123.8,
+            "w": 1618.2,
+            "h": 279.8
+          },
+          "duplicate_count": 1
+        }
+      ]
+    },
+    {
+      "group_id": "ai-team-visual-row-02",
+      "file": "components/ai-team-visual-row-02.svg",
+      "shape_class": 1002,
+      "layout_group": "row",
+      "title": "Khuy n kh ch th",
+      "tags": [
+        "Khuy"
+      ],
+      "member_count": 1,
+      "distinct_card_count": 1,
+      "group_bounds": {
+        "x": 249.9,
+        "y": 424.4,
+        "w": 1204.6,
+        "h": 176.3
+      },
+      "member_bounds": [
+        {
+          "x": 501.1,
+          "y": 424.4,
+          "w": 595.9,
+          "h": 128.6
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "ai-team-visual-row-02",
+          "file": "components/ai-team-visual-row-02.svg",
+          "source_file": "components/ai-team-visual-row-02-source.svg",
+          "title": "Khuy n kh ch th",
+          "bounds": {
+            "x": 249.9,
+            "y": 424.4,
+            "w": 1204.6,
+            "h": 176.3
+          },
+          "duplicate_count": 1
+        }
+      ]
+    }
+  ]
+}

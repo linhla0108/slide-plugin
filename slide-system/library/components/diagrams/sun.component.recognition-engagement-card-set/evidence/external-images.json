@@ -1,0 +1,56 @@
+{
+  "svg": "items/recognition-engagement-card-set/artifact/visual.svg",
+  "assets_dir": "artifact/assets",
+  "reference_count": 6,
+  "unique_file_count": 3,
+  "images": [
+    {
+      "reference_index": 1,
+      "svg": "visual.svg",
+      "path": "assets/image-01-4a6e46f998df.jpg",
+      "mime_type": "image/png",
+      "byte_size": 27078747,
+      "sha256": "4a6e46f998dfc262394146e4ab3dc0ebefb512616ad101b8dcde40caf3b4b34e"
+    },
+    {
+      "reference_index": 2,
+      "svg": "visual.svg",
+      "path": "assets/image-02-4c3d5f727fbc.png",
+      "mime_type": "image/png",
+      "byte_size": 10757,
+      "sha256": "4c3d5f727fbc8fffe4e8ab5f440452194c9a82394690a6be3f3c10e6c92a3372"
+    },
+    {
+      "reference_index": 3,
+      "svg": "visual.svg",
+      "path": "assets/image-03-05897b79da36.png",
+      "mime_type": "image/png",
+      "byte_size": 10621,
+      "sha256": "05897b79da36f636b805fe5404b132b6fe03d73276925581b10fcb0eff8dbd7e"
+    },
+    {
+      "reference_index": 4,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-01-4a6e46f998df.jpg",
+      "mime_type": "image/png",
+      "byte_size": 27078747,
+      "sha256": "4a6e46f998dfc262394146e4ab3dc0ebefb512616ad101b8dcde40caf3b4b34e"
+    },
+    {
+      "reference_index": 5,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-02-4c3d5f727fbc.png",
+      "mime_type": "image/png",
+      "byte_size": 10757,
+      "sha256": "4c3d5f727fbc8fffe4e8ab5f440452194c9a82394690a6be3f3c10e6c92a3372"
+    },
+    {
+      "reference_index": 6,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-03-05897b79da36.png",
+      "mime_type": "image/png",
+      "byte_size": 10621,
+      "sha256": "05897b79da36f636b805fe5404b132b6fe03d73276925581b10fcb0eff8dbd7e"
+    }
+  ]
+}

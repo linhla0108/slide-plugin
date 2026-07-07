@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0,
+      0,
+      956.1131,
+      253.1953
+    ],
+    "canvas_width": 956.1131,
+    "canvas_height": 253.1953,
+    "region_crop": {
+      "region": {
+        "x": 0.124655,
+        "y": 0.59531,
+        "width": 0.325338,
+        "height": 0.096523
+      },
+      "page_view_box": [
+        0.0,
+        0.0,
+        2938.83,
+        2623.16
+      ],
+      "crop_window": [
+        366.3399,
+        1561.5934,
+        956.1131,
+        253.1953
+      ],
+      "dropped_source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            37
+          ]
+        },
+        {
+          "text_index": 0,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        },
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        },
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        },
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            103
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 2,
+          "character_range": [
+            0,
+            97
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 3,
+          "character_range": [
+            0,
+            25
+          ]
+        },
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        },
+        {
+          "text_index": 9,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            53
+          ]
+        },
+        {
+          "text_index": 9,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            48
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 11,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        },
+        {
+          "text_index": 11,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 12,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 14,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            19
+          ]
+        }
+      ],
+      "images_pruned": 3,
+      "evidence_images_pruned": 3
+    }
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "work",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "WORK",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0027556,
+        "y": 0.0,
+        "width": 0.281802,
+        "height": 0.4289879
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "environment",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "ENVIRONMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0027556,
+        "y": 0.2810667,
+        "width": 0.679312,
+        "height": 0.4289879
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "improvement",
+      "role": "title",
+      "html_tag": "h1",
+      "example_value": "IMPROVEMENT",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0027556,
+        "y": 0.6326958,
+        "width": 0.679284,
+        "height": 0.3673042
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 3,
+      "typography": {
+        "font_family": "Proxima Nova",
+        "font_size": 89.031,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "normal",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#171717"
+      },
+      "source_refs": [
+        {
+          "text_index": 13,
+          "tspan_index": 2,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

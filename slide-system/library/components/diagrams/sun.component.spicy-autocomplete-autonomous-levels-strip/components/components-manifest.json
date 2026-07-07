@@ -1,0 +1,147 @@
+{
+  "source_visual": "artifact/visual.svg",
+  "canvas": {
+    "w": 1964.1099853515625,
+    "h": 488.78900146484375
+  },
+  "instance_count": 5,
+  "shape_class_count": 1,
+  "group_count": 1,
+  "dropped_small_clusters": 0,
+  "dropped_small": [],
+  "background_candidates": [],
+  "params": {
+    "min_area_frac": 0.015,
+    "shape_tol": 0.14,
+    "merge_gap": 6.0,
+    "margin": 3.0,
+    "bg_coverage": 0.7,
+    "group_gap_frac": 0.6,
+    "dedup_mae": 3.0
+  },
+  "groups": [
+    {
+      "group_id": "spicy-autocomplete-autonomous-levels-strip-group-01",
+      "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01.svg",
+      "shape_class": 1,
+      "title": "Level cards",
+      "tags": [
+        "Level",
+        "1",
+        "Spicy",
+        "Autocomplete",
+        "2",
+        "Coding",
+        "Assistants",
+        "3"
+      ],
+      "member_count": 5,
+      "distinct_card_count": 5,
+      "group_bounds": {
+        "x": 1.9,
+        "y": 6.4,
+        "w": 1960.0,
+        "h": 476.0
+      },
+      "member_bounds": [
+        {
+          "x": 1.9,
+          "y": 6.4,
+          "w": 377.0,
+          "h": 476.0
+        },
+        {
+          "x": 397.9,
+          "y": 6.4,
+          "w": 377.0,
+          "h": 476.0
+        },
+        {
+          "x": 792.9,
+          "y": 6.4,
+          "w": 378.0,
+          "h": 476.0
+        },
+        {
+          "x": 1188.9,
+          "y": 6.4,
+          "w": 377.0,
+          "h": 476.0
+        },
+        {
+          "x": 1583.9,
+          "y": 6.4,
+          "w": 378.0,
+          "h": 476.0
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "spicy-autocomplete-autonomous-levels-strip-group-01-card-01",
+          "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-01.svg",
+          "source_file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-01-source.svg",
+          "title": "Level 1 Spicy Autocomplete",
+          "bounds": {
+            "x": 1.9,
+            "y": 6.4,
+            "w": 377.0,
+            "h": 476.0
+          },
+          "duplicate_count": 1
+        },
+        {
+          "card_id": "spicy-autocomplete-autonomous-levels-strip-group-01-card-02",
+          "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-02.svg",
+          "source_file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-02-source.svg",
+          "title": "Level 2 AI Coding Assistants",
+          "bounds": {
+            "x": 397.9,
+            "y": 6.4,
+            "w": 377.0,
+            "h": 476.0
+          },
+          "duplicate_count": 1
+        },
+        {
+          "card_id": "spicy-autocomplete-autonomous-levels-strip-group-01-card-03",
+          "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-03.svg",
+          "source_file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-03-source.svg",
+          "title": "Level 3 Autonomous Development Agenta",
+          "bounds": {
+            "x": 792.9,
+            "y": 6.4,
+            "w": 378.0,
+            "h": 476.0
+          },
+          "duplicate_count": 1
+        },
+        {
+          "card_id": "spicy-autocomplete-autonomous-levels-strip-group-01-card-04",
+          "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-04.svg",
+          "source_file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-04-source.svg",
+          "title": "Level 4 Collaborative Agent Networks",
+          "bounds": {
+            "x": 1188.9,
+            "y": 6.4,
+            "w": 377.0,
+            "h": 476.0
+          },
+          "duplicate_count": 1
+        },
+        {
+          "card_id": "spicy-autocomplete-autonomous-levels-strip-group-01-card-05",
+          "file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-05.svg",
+          "source_file": "components/spicy-autocomplete-autonomous-levels-strip-group-01-card-05-source.svg",
+          "title": "Level 5 Software Factory",
+          "bounds": {
+            "x": 1583.9,
+            "y": 6.4,
+            "w": 378.0,
+            "h": 476.0
+          },
+          "duplicate_count": 1
+        }
+      ]
+    }
+  ]
+}

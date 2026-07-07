@@ -1,0 +1,86 @@
+{
+  "source_visual": "artifact/visual.svg",
+  "canvas": {
+    "w": 1517.3199462890625,
+    "h": 623.9739990234375
+  },
+  "instance_count": 2,
+  "shape_class_count": 1,
+  "group_count": 1,
+  "dropped_small_clusters": 0,
+  "dropped_small": [],
+  "background_candidates": [],
+  "params": {
+    "min_area_frac": 0.015,
+    "shape_tol": 0.14,
+    "merge_gap": 6.0,
+    "margin": 3.0,
+    "bg_coverage": 0.7,
+    "group_gap_frac": 0.6,
+    "dedup_mae": 3.0
+  },
+  "groups": [
+    {
+      "group_id": "revenue-team-size-metric-strip-group-01",
+      "file": "components/revenue-team-size-metric-strip-group-01.svg",
+      "shape_class": 1,
+      "title": "+30% cards",
+      "tags": [
+        "30",
+        "Revenue",
+        "Team",
+        "Size"
+      ],
+      "member_count": 2,
+      "distinct_card_count": 2,
+      "group_bounds": {
+        "x": -97.4,
+        "y": 26.2,
+        "w": 1775.0,
+        "h": 593.0
+      },
+      "member_bounds": [
+        {
+          "x": -97.4,
+          "y": 26.2,
+          "w": 1775.0,
+          "h": 278.0
+        },
+        {
+          "x": -97.4,
+          "y": 326.2,
+          "w": 1775.0,
+          "h": 293.0
+        }
+      ],
+      "cards": [
+        {
+          "card_id": "revenue-team-size-metric-strip-group-01-card-01",
+          "file": "components/revenue-team-size-metric-strip-group-01-card-01.svg",
+          "source_file": "components/revenue-team-size-metric-strip-group-01-card-01-source.svg",
+          "title": "+30% Revenue",
+          "bounds": {
+            "x": -97.4,
+            "y": 26.2,
+            "w": 1775.0,
+            "h": 278.0
+          },
+          "duplicate_count": 1
+        },
+        {
+          "card_id": "revenue-team-size-metric-strip-group-01-card-02",
+          "file": "components/revenue-team-size-metric-strip-group-01-card-02.svg",
+          "source_file": "components/revenue-team-size-metric-strip-group-01-card-02-source.svg",
+          "title": "+30% Team Size",
+          "bounds": {
+            "x": -97.4,
+            "y": 326.2,
+            "w": 1775.0,
+            "h": 293.0
+          },
+          "duplicate_count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "svg": "items/foundation-top1-microsoft-overlap-circle-set/artifact/visual.svg",
+  "assets_dir": "artifact/assets",
+  "reference_count": 12,
+  "unique_file_count": 5,
+  "images": [
+    {
+      "reference_index": 1,
+      "svg": "visual.svg",
+      "path": "assets/image-01-c886fba65d0d.png",
+      "mime_type": "image/png",
+      "byte_size": 14461,
+      "sha256": "c886fba65d0d0673dae22532db5bda29025fecc7ff17362a8f7214f7354436b9"
+    },
+    {
+      "reference_index": 2,
+      "svg": "visual.svg",
+      "path": "assets/image-02-e5d0446fd303.png",
+      "mime_type": "image/png",
+      "byte_size": 14567,
+      "sha256": "e5d0446fd303bab892d597ec4437dcc2f8f57fc3cfe7079da162adf438fe2b50"
+    },
+    {
+      "reference_index": 3,
+      "svg": "visual.svg",
+      "path": "assets/image-03-3b476efd2568.png",
+      "mime_type": "image/png",
+      "byte_size": 13825,
+      "sha256": "3b476efd2568566e474ddd240db74088616a8487a84b4f77da144f22bdab40ca"
+    },
+    {
+      "reference_index": 4,
+      "svg": "visual.svg",
+      "path": "assets/image-04-b5d510ac5889.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "b5d510ac5889ae4c2ec434b6a2ad589616e5af68a2d2c0397d49bf481f40ece6"
+    },
+    {
+      "reference_index": 5,
+      "svg": "visual.svg",
+      "path": "assets/image-05-6f20183e61ee.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "6f20183e61ee8c7f6580bbb4342f216a108e3e7674aa34e484921b44e89cbcf8"
+    },
+    {
+      "reference_index": 6,
+      "svg": "visual.svg",
+      "path": "assets/image-04-b5d510ac5889.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "b5d510ac5889ae4c2ec434b6a2ad589616e5af68a2d2c0397d49bf481f40ece6"
+    },
+    {
+      "reference_index": 7,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-01-c886fba65d0d.png",
+      "mime_type": "image/png",
+      "byte_size": 14461,
+      "sha256": "c886fba65d0d0673dae22532db5bda29025fecc7ff17362a8f7214f7354436b9"
+    },
+    {
+      "reference_index": 8,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-02-e5d0446fd303.png",
+      "mime_type": "image/png",
+      "byte_size": 14567,
+      "sha256": "e5d0446fd303bab892d597ec4437dcc2f8f57fc3cfe7079da162adf438fe2b50"
+    },
+    {
+      "reference_index": 9,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-03-3b476efd2568.png",
+      "mime_type": "image/png",
+      "byte_size": 13825,
+      "sha256": "3b476efd2568566e474ddd240db74088616a8487a84b4f77da144f22bdab40ca"
+    },
+    {
+      "reference_index": 10,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-04-b5d510ac5889.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "b5d510ac5889ae4c2ec434b6a2ad589616e5af68a2d2c0397d49bf481f40ece6"
+    },
+    {
+      "reference_index": 11,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-05-6f20183e61ee.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "6f20183e61ee8c7f6580bbb4342f216a108e3e7674aa34e484921b44e89cbcf8"
+    },
+    {
+      "reference_index": 12,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-04-b5d510ac5889.png",
+      "mime_type": "image/png",
+      "byte_size": 2416,
+      "sha256": "b5d510ac5889ae4c2ec434b6a2ad589616e5af68a2d2c0397d49bf481f40ece6"
+    }
+  ]
+}

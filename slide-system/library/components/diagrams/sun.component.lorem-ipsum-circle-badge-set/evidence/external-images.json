@@ -1,0 +1,56 @@
+{
+  "svg": "items/lorem-ipsum-circle-badge-set/artifact/visual.svg",
+  "assets_dir": "artifact/assets",
+  "reference_count": 6,
+  "unique_file_count": 3,
+  "images": [
+    {
+      "reference_index": 1,
+      "svg": "visual.svg",
+      "path": "assets/image-01-c886fba65d0d.png",
+      "mime_type": "image/png",
+      "byte_size": 14461,
+      "sha256": "c886fba65d0d0673dae22532db5bda29025fecc7ff17362a8f7214f7354436b9"
+    },
+    {
+      "reference_index": 2,
+      "svg": "visual.svg",
+      "path": "assets/image-02-e5d0446fd303.png",
+      "mime_type": "image/png",
+      "byte_size": 14567,
+      "sha256": "e5d0446fd303bab892d597ec4437dcc2f8f57fc3cfe7079da162adf438fe2b50"
+    },
+    {
+      "reference_index": 3,
+      "svg": "visual.svg",
+      "path": "assets/image-03-3b476efd2568.png",
+      "mime_type": "image/png",
+      "byte_size": 13825,
+      "sha256": "3b476efd2568566e474ddd240db74088616a8487a84b4f77da144f22bdab40ca"
+    },
+    {
+      "reference_index": 4,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-01-c886fba65d0d.png",
+      "mime_type": "image/png",
+      "byte_size": 14461,
+      "sha256": "c886fba65d0d0673dae22532db5bda29025fecc7ff17362a8f7214f7354436b9"
+    },
+    {
+      "reference_index": 5,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-02-e5d0446fd303.png",
+      "mime_type": "image/png",
+      "byte_size": 14567,
+      "sha256": "e5d0446fd303bab892d597ec4437dcc2f8f57fc3cfe7079da162adf438fe2b50"
+    },
+    {
+      "reference_index": 6,
+      "svg": "source-with-text.svg",
+      "path": "assets/image-03-3b476efd2568.png",
+      "mime_type": "image/png",
+      "byte_size": 13825,
+      "sha256": "3b476efd2568566e474ddd240db74088616a8487a84b4f77da144f22bdab40ca"
+    }
+  ]
+}

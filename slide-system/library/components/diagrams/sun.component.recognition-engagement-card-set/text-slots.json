@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "coordinate_space": {
+    "unit": "normalized",
+    "width": 1,
+    "height": 1
+  },
+  "source": {
+    "svg": "../evidence/source-with-text.svg",
+    "view_box": [
+      0,
+      0,
+      1008.9856,
+      477.284
+    ],
+    "canvas_width": 1008.9856,
+    "canvas_height": 477.284,
+    "region_crop": {
+      "region": {
+        "x": 0.125412,
+        "y": 0.735717,
+        "width": 0.343329,
+        "height": 0.18195
+      },
+      "page_view_box": [
+        0.0,
+        0.0,
+        2938.83,
+        2623.16
+      ],
+      "crop_window": [
+        368.5645,
+        1929.9034,
+        1008.9856,
+        477.284
+      ],
+      "dropped_source_refs": [
+        {
+          "text_index": 0,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            37
+          ]
+        },
+        {
+          "text_index": 0,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 1,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        },
+        {
+          "text_index": 2,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 3,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        },
+        {
+          "text_index": 4,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 5,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            22
+          ]
+        },
+        {
+          "text_index": 6,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            17
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            103
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 2,
+          "character_range": [
+            0,
+            97
+          ]
+        },
+        {
+          "text_index": 7,
+          "tspan_index": 3,
+          "character_range": [
+            0,
+            25
+          ]
+        },
+        {
+          "text_index": 8,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            5
+          ]
+        },
+        {
+          "text_index": 9,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            53
+          ]
+        },
+        {
+          "text_index": 9,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            48
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        },
+        {
+          "text_index": 10,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 13,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            4
+          ]
+        },
+        {
+          "text_index": 13,
+          "tspan_index": 1,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 13,
+          "tspan_index": 2,
+          "character_range": [
+            0,
+            11
+          ]
+        },
+        {
+          "text_index": 14,
+          "tspan_index": 0,
+          "character_range": [
+            0,
+            19
+          ]
+        }
+      ],
+      "images_pruned": 4,
+      "evidence_images_pruned": 4
+    }
+  },
+  "artwork_text_exemptions": [],
+  "slots": [
+    {
+      "id": "rewards",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Rewards &",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0387669,
+        "y": 0.0964804,
+        "width": 0.2937713,
+        "height": 0.1536131
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 1,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            9
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "recognition",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Recognition",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.0387669,
+        "y": 0.2223924,
+        "width": 0.3290013,
+        "height": 0.1536131
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 2,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 11,
+          "tspan_index": 1,
+          "run_index": 0,
+          "character_range": [
+            0,
+            11
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    },
+    {
+      "id": "engagement",
+      "role": "heading",
+      "html_tag": "h2",
+      "example_value": "Engagement",
+      "editable": true,
+      "allow_empty": true,
+      "bounds": {
+        "x": 0.5522001,
+        "y": 0.0964804,
+        "width": 0.3642853,
+        "height": 0.1536131
+      },
+      "anchor": "start",
+      "horizontal_align": "left",
+      "vertical_align": "top",
+      "rotation": 0.0,
+      "z_order": 3,
+      "typography": {
+        "font_family": "ProximaNova-ExtrabldIt",
+        "font_size": 60.0959,
+        "font_size_unit": "source-unit",
+        "font_weight": "800",
+        "font_style": "italic",
+        "line_height": 1.0,
+        "letter_spacing": "normal",
+        "color": "#ffffff"
+      },
+      "source_refs": [
+        {
+          "text_index": 12,
+          "tspan_index": 0,
+          "run_index": 0,
+          "character_range": [
+            0,
+            10
+          ]
+        }
+      ],
+      "style_overrides": [
+        "example_value",
+        "bounds",
+        "font_family",
+        "font_size",
+        "font_weight",
+        "font_style",
+        "line_height",
+        "letter_spacing",
+        "color",
+        "horizontal_align",
+        "vertical_align",
+        "rotation"
+      ]
+    }
+  ]
+}

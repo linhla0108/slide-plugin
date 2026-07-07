@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "slide-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8099", "--directory", "outputs/slide-jobs/ai-workflow-deck"],
+      "port": 8099
+    },
+    {
+      "name": "repo-root",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8100", "--directory", "."],
+      "port": 8100
+    }
+  ]
+}
