@@ -4,6 +4,8 @@
 Covers the highest-consequence, previously-untested paths:
   - cleanup_run: deck.html + .pptx survive; intermediates are removed.
   - score_visual_items: 65/75 decision thresholds + extraction recommendation.
+  - score_visual_items hybrid retrieval: capped secondary lexical credit,
+    anti-use-case / count-fit / zero-slot penalties, published-only enrichment.
   - validate_selection_report: equal-score plausibility, provenance, T1 shape-lock.
   - scaffold_slide_from_component: slots preserved, no base64, .bg placeholder.
   - validate_component_fidelity: slot-id coverage pass/fail.
@@ -97,6 +99,223 @@ def test_score_below_floor_is_custom_local_with_extraction() -> None:
     assert dec["score"] < 65, dec
     assert dec["action"] == "custom-local", dec
     assert dec["extraction_recommended"] is True, "weak match must recommend extraction"
+
+
+# --------------------------------------------------------------------------- #
+# score_visual_items — hybrid retrieval (v3.2)
+# --------------------------------------------------------------------------- #
+def _rreq(**over) -> dict:
+    base = {"intent": [], "tags": [], "content_structure": [], "density": "any",
+            "brand": None, "required_exports": []}
+    base.update(over)
+    return base
+
+
+def test_retrieval_secondary_match_lifts_prose_metadata_item() -> None:
+    # metric/KPI strip: docling-style prose intent is invisible to primary
+    # matching; index keywords must lift it via capped secondary credit.
+    strip = _item(id="sun.component.kpi-strip",
+                  intent=["revenue team size metric strip"], tags=["strip"],
+                  content_structure=[])
+    req = _rreq(intent=["statistics", "kpi"], tags=["strip"])
+    _, plain = svi.score_request(req, [strip], svi.WEIGHTS, None)
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.kpi-strip", "status": "published",
+        "keywords": ["revenue", "team", "metric", "strip"],
+        "component_type": "strip", "slot_count": 5,
+    }])
+    _, enriched = svi.score_request(req, [strip], svi.WEIGHTS, None, enrichment=enrichment)
+    assert enriched[0]["score"] > plain[0]["score"], "index keywords must lift the strip"
+    assert enriched[0]["retrieval"]["secondary_matches"] == ["statistics"]
+    assert enriched[0]["retrieval"]["slot_count"] == 5
+
+
+def test_retrieval_tier_strip_trap_stays_below_genuine_component() -> None:
+    # level/tier strip: an OCR-named trap with a "levels" keyword must not
+    # outrank the component that declares tiers/levels as canonical intent.
+    genuine = _item(id="sun.component.tier-set",
+                    intent=["ranking", "levels", "tiers"], tags=["set-of-3"],
+                    content_structure=["heading", "label"])
+    trap = _item(id="sun.component.trap-strip",
+                 intent=["spicy autocomplete autonomous levels strip"],
+                 tags=["strip"], content_structure=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.trap-strip", "status": "published",
+         "keywords": ["levels", "autonomous"], "slot_count": 16},
+    ])
+    req = _rreq(intent=["levels", "tiers", "ranking"],
+                content_structure=["heading", "label"])
+    dec, cands = svi.score_request(req, [trap, genuine], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.tier-set", dec
+    scores = {c["item_id"]: c["score"] for c in cands}
+    assert scores["sun.component.trap-strip"] < scores["sun.component.tier-set"]
+
+
+def test_retrieval_generic_overlap_capped_below_semantic_floor() -> None:
+    # negative case: an unrelated item whose index keywords happen to cover
+    # EVERY request term must stay below the semantic floor -> custom-local.
+    lure = _item(id="sun.component.lure", intent=["ai team visual"], tags=[],
+                 content_structure=["a"])
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.lure", "status": "published",
+        "keywords": ["timeline", "roadmap"], "slot_count": 4,
+    }])
+    dec, cands = svi.score_request(_req(), [lure], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    cap_points = svi.SECONDARY_CAP * svi.WEIGHTS["semantic_intent"]
+    assert cands[0]["criteria"]["semantic_intent"] <= cap_points + 1e-9
+    assert dec["action"] == "custom-local", "generic overlap alone must never select"
+    assert dec["extraction_recommended"] is True
+
+
+def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up() -> None:
+    # A secondary-only lure can outrank a relevant component by raw score. The
+    # decision must skip the lure because it is below the semantic floor, then
+    # choose the best semantically valid runner-up instead of returning
+    # custom-local.
+    lure = _item(
+        id="sun.component.lure",
+        intent=["decorative visual"],
+        tags=[],
+        content_structure=["heading", "label"],
+    )
+    good = _item(
+        id="sun.component.good-timeline",
+        intent=["timeline", "roadmap"],
+        tags=[],
+        content_structure=["heading"],
+    )
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.lure", "status": "published",
+        "keywords": ["timeline", "roadmap", "milestones", "schedule"],
+        "slot_count": 4,
+    }])
+    req = _rreq(
+        intent=["timeline", "roadmap", "milestones", "schedule"],
+        content_structure=["heading", "label"],
+    )
+    dec, cands = svi.score_request(req, [lure, good], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert cands[0]["item_id"] == "sun.component.lure"
+    assert cands[0]["criteria"]["semantic_intent"] < svi.WEIGHTS["semantic_intent"] * 0.3
+    assert dec["item_id"] == "sun.component.good-timeline", dec
+    assert dec["action"] == "adapt-local", dec
+
+
+def test_retrieval_prose_component_outranks_unrelated_item() -> None:
+    # team/contributor/profile: prose-only metadata gains capped rank credit,
+    # so the right component surfaces above unrelated ones in candidates.
+    team = _item(id="sun.component.team-circles",
+                 intent=["team contributor profile circles layout"], tags=[],
+                 content_structure=[])
+    other = _item(id="sun.component.faq", intent=["faq"], tags=[],
+                  content_structure=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.team-circles", "status": "published",
+         "name": "Team Contributor Circles",
+         "intent": ["team contributor profile circles layout"], "slot_count": 0},
+        {"id": "sun.component.faq", "status": "published",
+         "keywords": ["faq"], "slot_count": 4},
+    ])
+    req = _rreq(intent=["team", "profile"], tags=["circles"])
+    _, cands = svi.score_request(req, [other, team], svi.WEIGHTS, None,
+                                 enrichment=enrichment)
+    assert cands[0]["item_id"] == "sun.component.team-circles", cands
+    assert cands[0]["retrieval"]["secondary_matches"], "must explain the lexical match"
+
+
+def test_retrieval_anti_use_case_penalty_for_undeclared_domain() -> None:
+    badge = _item(id="sun.component.badge", intent=["numbered", "grid"],
+                  tags=["cards"])
+    req = _rreq(intent=["statistics"], tags=["numbered"], content_structure=["a"])
+    base_enr = {"id": "sun.component.badge", "status": "published",
+                "keywords": ["badge"], "slot_count": 6}
+    _, plain = svi.score_request(req, [badge], svi.WEIGHTS, None,
+                                 enrichment=svi.build_enrichment([base_enr]))
+    anti_enr = dict(base_enr, anti_use_cases=[
+        "Do not use for data-driven charts or metrics; placeholder diagram."])
+    _, hit = svi.score_request(req, [badge], svi.WEIGHTS, None,
+                               enrichment=svi.build_enrichment([anti_enr]))
+    assert plain[0]["score"] - hit[0]["score"] == svi.ANTI_USE_CASE_PENALTY
+    assert hit[0]["retrieval"]["anti_hits"] == ["statistics"]
+    assert any("Anti-use-case" in r for r in hit[0]["reasons"])
+
+
+def test_retrieval_anti_hit_on_declared_intent_is_caveat_not_exclusion() -> None:
+    # The item declares statistics as honest intent; its anti text mentioning
+    # "metrics" is an editing caveat and must NOT be penalized.
+    circles = _item(id="sun.component.circles", intent=["statistics", "ranking"],
+                    tags=[])
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.circles", "status": "published",
+        "anti_use_cases": ["Do not reuse the baked metrics without editing text slots."],
+        "slot_count": 13,
+    }])
+    req = _rreq(intent=["statistics"], content_structure=["a"])
+    _, cands = svi.score_request(req, [circles], svi.WEIGHTS, None,
+                                 enrichment=enrichment)
+    assert "anti_hits" not in cands[0].get("retrieval", {}), cands[0]
+    assert not any("Anti-use-case" in r for r in cands[0]["reasons"])
+
+
+def test_retrieval_count_fit_penalty_prefers_matching_set_size() -> None:
+    # buildability: wrong declared set size must not beat a better-fit item.
+    three = _item(id="sun.component.three", intent=["roles"],
+                  tags=["cards", "set-of-3"])
+    four = _item(id="sun.component.four", intent=["roles"],
+                 tags=["cards", "set-of-4"])
+    req = _rreq(intent=["roles"], tags=["cards"], content_structure=["a"],
+                item_count=4)
+    dec, cands = svi.score_request(req, [three, four], svi.WEIGHTS, None)
+    assert dec["item_id"] == "sun.component.four", dec
+    three_cand = next(c for c in cands if c["item_id"] == "sun.component.three")
+    assert three_cand["retrieval"]["set_sizes"] == [3]
+    assert any("Count fit" in r for r in three_cand["reasons"])
+
+
+def test_retrieval_zero_slot_component_penalized_when_text_needed() -> None:
+    deco = _item(id="sun.component.deco", intent=["team", "profile"], tags=[])
+    slotted = _item(id="sun.component.slotted", intent=["team", "profile"], tags=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.deco", "status": "published", "slot_count": 0},
+        {"id": "sun.component.slotted", "status": "published", "slot_count": 6},
+    ])
+    req = _rreq(intent=["team", "profile"], content_structure=["a"])
+    dec, cands = svi.score_request(req, [deco, slotted], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.slotted", dec
+    deco_cand = next(c for c in cands if c["item_id"] == "sun.component.deco")
+    assert deco_cand["retrieval"]["slot_count"] == 0
+    assert any("no editable text slots" in r for r in deco_cand["reasons"])
+    # decoration-only requests (no text content) are NOT penalized
+    _, cands2 = svi.score_request(_rreq(intent=["team", "profile"]),
+                                  [deco, slotted], svi.WEIGHTS, None,
+                                  enrichment=enrichment)
+    deco2 = next(c for c in cands2 if c["item_id"] == "sun.component.deco")
+    assert not any("no editable text slots" in r for r in deco2["reasons"])
+
+
+def test_retrieval_enrichment_published_only_and_missing_index() -> None:
+    # Draft/staging records never enrich scoring, even from a stale file, and
+    # a missing index file degrades to plain primary-only scoring.
+    assert svi.build_enrichment([
+        {"id": "sun.component.x", "status": "staging", "keywords": ["timeline"]},
+        {"status": "published", "keywords": ["timeline"]},
+    ]) == {}
+    with tempfile.TemporaryDirectory() as tmp:
+        assert svi.load_retrieval_index(Path(tmp) / "missing.jsonl") == {}
+
+
+def test_retrieval_index_projects_slot_count() -> None:
+    import build_component_retrieval_index as bri
+    registry = {"items": [{
+        "id": "sun.component.slots", "status": "published", "type": "component",
+        "intent": ["grid"], "text_contract": {"slot_count": 7},
+    }]}
+    records = bri.build_records(registry)
+    assert records[0]["slot_count"] == 7
+    assert records[0]["schema_version"] == 2
 
 
 # --------------------------------------------------------------------------- #

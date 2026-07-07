@@ -97,3 +97,45 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 8. Selection score != buildability. Fixing metadata made components selectable but geometry/count/decompose issues remained.
 
 ### Defect tasks opened: #7 decompose mask-def loss, #8 icon labels + UI set, #9 scorer usability/domain-fit. (Prior: #1 metadata spec, #2 metadata gate, #3 backfill, #5 wire slots, #6 brand-gate var fonts.)
+
+## 2026-07-07.2 — Hybrid retrieval for slide scorer (task #9)
+
+**Request:** Implement a lightweight hybrid/RAG-ready retrieval improvement for slide generation on branch `feature/hybrid-rag-slide-retrieval`: better selection of published components from natural-language needs, deterministic/local, no vector DB, no new deps, preserving scorer entrypoint + selection-report compatibility.
+**Actions:**
+- `score_visual_items.py` → v3.2.0: scorer now optionally loads `component-retrieval-index.jsonl` (`--retrieval-index`, default on, `none` to disable; published-only enforced again in `build_enrichment`). Broadened lexical matching over positive index fields (name, keywords, component_type, layout_role, visual_summary, retrieval_notes, use_cases, intent, tags, content_structure) with token normalization (synonym map + naive singular fold). Secondary matches earn 0.5 credit per request term, capped at 0.25 coverage = 8.75 pts < 10.5 semantic floor, so generic metadata overlap alone can never make an item selectable (domain-bias guard from LESSONS 14:10 §7). anti_use_cases matched separately as penalty (−15), skipped when the hit term is also declared in the item's own intent/tags (caveat, not exclusion — found via eval loop: overlap-circle-set was wrongly penalized on its "edit the metrics text" caveat). Count fit: request `item_count` vs declared `set-of-N` in tags/content_structure (−10). Buildability: `slot_count` 0 + request needs text (−10) (score != buildability, LESSONS §8). Candidates now carry a `retrieval` explanation block (primary/secondary matches, anti hits, set_sizes, slot_count); reports carry `retrieval_index`. Prefilter inverted index extended with enrichment tokens; hit order made deterministic (`sorted`). `criteria` keys, floors (65/75/10.5), `generated_by`, and `score_request` signature (new optional trailing `enrichment` arg) unchanged.
+- `build_component_retrieval_index.py`: record schema v2 — added `slot_count` from registry `text_contract` (additive; no consumer pinned v1). Regenerated `component-retrieval-index.jsonl` (91 records, `--check` clean).
+- `selection-report.schema.json`: additive doc-only fields the scorer already/now emits: `generated_by`, `scorer_version`, `retrieval_index`, candidate `retrieval`.
+- Tests: +10 in `test_gates.py` (hermetic eval fixtures: KPI-strip secondary lift, tier-strip trap capped, generic-overlap-below-floor negative, prose team/profile rank lift, anti-use-case penalty + declared-intent caveat exemption, set-of-N count fit, zero-slot buildability, published-only/missing-index degradation, index slot_count projection).
+- Docs: `select-visual-items.md` (item_count + hybrid retrieval behavior), `slide-generator/SKILL.md` step 7, `slide-system/README.md` retrieval-index paragraph. Spec `component-metadata-quality-spec.md` untouched (metadata contract unchanged; backfill stays task #3).
+- Eval (scratchpad, 6-slide batch: kpi/tier/roles/team/negative/build): baseline vs after — s-kpi components: revenue-team-size-metric-strip surfaced from invisible to rank #2 with explanation (top stays overlap-circle-set 71.67 adapt-local); s-tier/s-roles/s-build winners unchanged (83.33/94.17/86.25 reuse); s-roles: set-of-3 items now carry explicit −10 count-fit reasons under item_count=4; s-team: team-contributor-circles scored (was invisible) but ranked below text-capable items due to slot_count=0 penalty — correct per buildability; s-negative: stays custom-local, capped secondary max 48.75 despite keyword overlap. One all-types winner changed only within a 4-way 71.67 tie (deterministic ordering).
+**Result:** test_gates 136/136 PASS; validate_registry 91 valid; build_registry --check clean; retrieval index --check clean (91 records, schema v2); validate_selection_report PASS on generated batch report; py_compile clean; git diff --check clean.
+**Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/build_component_retrieval_index.py, slide-system/scripts/test_gates.py, slide-system/registries/component-retrieval-index.jsonl, slide-system/schemas/selection-report.schema.json, slide-system/workflows/select-visual-items.md, .agents/skills/slide-generator/SKILL.md, slide-system/README.md, docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** score_visual_items.score_request, score_visual_items.build_enrichment, score_visual_items.load_retrieval_index, score_visual_items._norm_token, score_visual_items._field_tokens, score_visual_items._set_sizes, score_visual_items._build_inverted_index, score_visual_items._prefilter, build_component_retrieval_index.build_record
+**State:** Not committed
+
+## 2026-07-07.3 — Review hybrid retrieval scorer edge case
+
+**When:** 2026-07-07 14:54
+**Request:** Review and act on the attached Claude report for the hybrid retrieval branch.
+**Actions:**
+- Verified the changes lived in `E:\slide-plugin\.claude\worktrees\reverent-feistel-486fce`, not the main `master` worktree.
+- Reviewed the scorer diff and found an edge case: a secondary-only candidate could outrank a semantically valid runner-up by raw score, then cause the decision to return `custom-local` because the top candidate was below the semantic floor.
+- Updated `score_visual_items.score_request` so the decision candidate is the best eligible candidate that clears the semantic floor; if none clears it, the report remains `custom-local` and now recommends extraction even when the raw score is high.
+- Added a regression test proving a below-floor top candidate does not block a semantically valid runner-up, and tightened the generic-overlap test to assert extraction is recommended.
+**Result:** `python -m py_compile slide-system/scripts/score_visual_items.py slide-system/scripts/test_gates.py` passed; `python slide-system/scripts/test_gates.py` passed (`137/137`).
+**Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** score_visual_items.score_request, test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up, test_retrieval_generic_overlap_capped_below_semantic_floor
+**State:** Not committed
+
+## 2026-07-07.4 — Run real AI-workflow retrieval smoke
+
+**When:** 2026-07-07 15:02
+**Request:** Continue with the next step: run a real integration smoke before committing and pushing the hybrid retrieval branch.
+**Actions:**
+- Built a temporary 9-slide `visual-requests.json` from `docs/intent/ai-workflow-deck-brief.md` and ran `score_visual_items.py` in hybrid mode and with `--retrieval-index none` for comparison.
+- First smoke intentionally surfaced a request-authoring issue: slide 2 was marked `content_shape: two-column` while the requested visual was a role/card grid; `validate_selection_report.py` correctly failed shape-lock. Reran the smoke with slide 2 marked as `content_shape: comparison`.
+- Confirmed the corrected hybrid selection report validates. Hybrid retrieval lifted slide 2 from `adapt-local` to `reuse` for `sun.component.translator-strategist-driver-coach-card-set`, and lifted slide 5 from `custom-local` to `adapt-local` for `sun.component.foundation-top1-microsoft-overlap-circle-set`; slides without a fitting published component stayed `custom-local`.
+**Result:** Integration smoke passed after fixing the smoke request shape. `validate_selection_report.py` passed on the generated hybrid report; `--retrieval-index none` remained available for comparison.
+**Files:** docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** none
+**State:** Not committed

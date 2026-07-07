@@ -155,8 +155,12 @@ python3 slide-system/scripts/publish_extraction.py \
 `mapping.json`, so it cannot be rebuilt from disk). `visual-library-compact.json`
 — the file `score_visual_items.py` actually reads — is a derived projection and
 must never be hand-edited. `component-retrieval-index.jsonl` is the
-lexical/RAG-ready projection for future retrieval work; it is derived from
-published registry items only and has no embedding/vector dependency.
+lexical/RAG-ready projection; it is derived from published registry items only
+and has no embedding/vector dependency. `score_visual_items.py` consumes it for
+hybrid lexical matching — broadened keyword/summary matches earn reduced,
+capped credit (never enough to cross the semantic floor alone), while
+anti-use-case hits, `set-of-N` count mismatches, and zero editable text slots
+(record schema v2 `slot_count`) subtract score with explicit reasons.
 `publish_extraction.py` regenerates both derived projections on every publish;
 for bulk reconciles after manual deletes use:
 
