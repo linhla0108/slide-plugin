@@ -355,6 +355,8 @@ def test_retrieval_corrupt_index_degrades_to_empty_enrichment() -> None:
             encoding="utf-8",
         )
         assert svi.load_retrieval_index(index) == {}
+        index.write_bytes(b"\xff\xfe")
+        assert svi.load_retrieval_index(index) == {}
 
 
 def test_retrieval_index_projects_slot_count() -> None:

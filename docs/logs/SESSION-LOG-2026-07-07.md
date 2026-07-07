@@ -168,3 +168,17 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 **Files:** docs/logs/SESSION-LOG-2026-07-07.md
 **Symbols:** none
 **State:** Not committed
+
+## 2026-07-07.7 — Harden corrupt retrieval index fallback
+
+**When:** 2026-07-07 22:39
+**Request:** Read the second-pass Claude PR review and act on the remaining corrupt-index fallback finding.
+**Actions:**
+- Verified the PR worktree was on `feature/hybrid-rag-slide-retrieval` with only untracked `dev/` outside tracked changes.
+- Updated `score_visual_items.load_retrieval_index` to catch `ValueError`, covering both malformed JSON and invalid UTF-8 decode failures while preserving the empty-enrichment fallback.
+- Reworded the scorer stderr note from "empty or missing" to "empty, missing, or unreadable" for disabled lexical enrichment.
+- Extended `test_retrieval_corrupt_index_degrades_to_empty_enrichment` with an invalid UTF-8 byte fixture.
+**Result:** `python -m py_compile slide-system/scripts/score_visual_items.py slide-system/scripts/build_component_retrieval_index.py slide-system/scripts/validate_selection_report.py slide-system/scripts/test_gates.py` passed; `python slide-system/scripts/test_gates.py` passed (`139/139`); `python slide-system/scripts/validate_registry.py` passed (`91 valid items`); `python slide-system/scripts/build_registry.py --check` passed; `python slide-system/scripts/build_component_retrieval_index.py --check` passed (`91 records`); direct invalid-UTF-8 `load_retrieval_index` probe returned `{}`.
+**Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** score_visual_items.load_retrieval_index, score_visual_items.main, test_retrieval_corrupt_index_degrades_to_empty_enrichment
+**State:** Not committed

@@ -184,7 +184,7 @@ def load_retrieval_index(path: str | Path) -> dict[str, dict]:
                 line = line.strip()
                 if line:
                     records.append(json.loads(line))
-    except (OSError, json.JSONDecodeError):
+    except (OSError, ValueError):
         return {}
     return build_enrichment(records)
 
@@ -452,7 +452,7 @@ def main() -> int:
     else:
         enrichment = load_retrieval_index(args.retrieval_index)
         if not enrichment:
-            print(f"note: retrieval index empty or missing ({args.retrieval_index}); "
+            print(f"note: retrieval index empty, missing, or unreadable ({args.retrieval_index}); "
                   f"scoring without lexical enrichment", file=sys.stderr)
     retrieval_index_used = str(args.retrieval_index) if enrichment else None
 
