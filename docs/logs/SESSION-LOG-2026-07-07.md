@@ -139,3 +139,18 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 **Files:** docs/logs/SESSION-LOG-2026-07-07.md
 **Symbols:** none
 **State:** Not committed
+
+## 2026-07-07.5 — Address hybrid retrieval PR review findings
+
+**When:** 2026-07-07 16:15
+**Request:** Read the attached Claude PR review and act on the findings before merge.
+**Actions:**
+- Verified the active PR worktree was `E:\slide-plugin\.claude\worktrees\reverent-feistel-486fce` on `feature/hybrid-rag-slide-retrieval`; left untracked `dev/` untouched.
+- Fixed `score_visual_items.score_request` so the selected decision item is appended to the emitted `candidates` array when a semantically valid runner-up falls outside the raw `top_n` slice.
+- Fixed `score_visual_items.load_retrieval_index` to degrade to empty enrichment on unreadable or corrupt JSONL input instead of raising during scoring.
+- Added regression tests for selected-runner-up visibility and corrupt-index fallback.
+- Updated slide-generation workflow docs and the slide-generator skill to document that `decision.item_id` can be a semantically valid runner-up rather than `candidates[0]`.
+**Result:** `python -m py_compile slide-system/scripts/score_visual_items.py slide-system/scripts/build_component_retrieval_index.py slide-system/scripts/validate_selection_report.py slide-system/scripts/test_gates.py` passed; `python slide-system/scripts/test_gates.py` passed (`139/139`); `python slide-system/scripts/validate_registry.py` passed (`91 valid items`); `python slide-system/scripts/build_registry.py --check` passed; `python slide-system/scripts/build_component_retrieval_index.py --check` passed (`91 records`).
+**Files:** slide-system/scripts/score_visual_items.py, slide-system/scripts/test_gates.py, slide-system/workflows/select-visual-items.md, .agents/skills/slide-generator/SKILL.md, docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** score_visual_items.load_retrieval_index, score_visual_items.score_request, test_retrieval_selected_runner_up_stays_in_reported_candidates, test_retrieval_corrupt_index_degrades_to_empty_enrichment
+**State:** Not committed

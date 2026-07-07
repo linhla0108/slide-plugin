@@ -178,11 +178,14 @@ def load_retrieval_index(path: str | Path) -> dict[str, dict]:
     if not index_path.exists():
         return {}
     records = []
-    with index_path.open("r", encoding="utf-8") as handle:
-        for line in handle:
-            line = line.strip()
-            if line:
-                records.append(json.loads(line))
+    try:
+        with index_path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if line:
+                    records.append(json.loads(line))
+    except (OSError, json.JSONDecodeError):
+        return {}
     return build_enrichment(records)
 
 
@@ -396,6 +399,8 @@ def score_request(
         ),
     }
     top_candidates = candidates[:top_n]
+    if chosen and all(item["item_id"] != chosen["item_id"] for item in top_candidates):
+        top_candidates.append(chosen)
     return decision, top_candidates
 
 

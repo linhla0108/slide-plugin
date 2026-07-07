@@ -32,7 +32,10 @@
    with explicit `reasons`; each candidate carries a `retrieval` block
    explaining its matches. Selection score still != buildability — verify
    geometry/count/domain fit before building (see the 2026-07-07 session
-   lessons). Keep the index fresh via
+   lessons). If the highest raw scorer is below the semantic floor, the
+   decision may select the best semantically valid runner-up; that selected
+   item is still emitted in `candidates` with its score and reasons. Keep the
+   index fresh via
    `build_component_retrieval_index.py --check`.
 5. **Validate the selection report (BLOCKING):**
    ```bash

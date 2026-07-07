@@ -203,6 +203,45 @@ def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up()
     assert dec["action"] == "adapt-local", dec
 
 
+def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
+    # The decision may skip several below-floor lures and choose an above-floor
+    # runner-up outside the top-N display slice. The chosen item must still be
+    # emitted so reviewers can inspect its score, criteria, and reasons.
+    lures = [
+        _item(
+            id=f"sun.component.lure-{idx}",
+            intent=["decorative visual"],
+            tags=[],
+            content_structure=["heading", "label"],
+        )
+        for idx in range(6)
+    ]
+    good = _item(
+        id="sun.component.good-timeline",
+        intent=["timeline", "roadmap"],
+        tags=[],
+        content_structure=["heading"],
+    )
+    enrichment = svi.build_enrichment([
+        {
+            "id": lure["id"], "status": "published",
+            "keywords": ["timeline", "roadmap", "milestones", "schedule"],
+            "slot_count": 4,
+        }
+        for lure in lures
+    ])
+    req = _rreq(
+        intent=["timeline", "roadmap", "milestones", "schedule"],
+        content_structure=["heading", "label"],
+    )
+    dec, cands = svi.score_request(req, lures + [good], svi.WEIGHTS, None,
+                                   top_n=5, enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.good-timeline", dec
+    assert cands[0]["item_id"].startswith("sun.component.lure-"), cands
+    assert len(cands) == 6, cands
+    assert any(c["item_id"] == dec["item_id"] for c in cands), cands
+
+
 def test_retrieval_prose_component_outranks_unrelated_item() -> None:
     # team/contributor/profile: prose-only metadata gains capped rank credit,
     # so the right component surfaces above unrelated ones in candidates.
@@ -305,6 +344,17 @@ def test_retrieval_enrichment_published_only_and_missing_index() -> None:
     ]) == {}
     with tempfile.TemporaryDirectory() as tmp:
         assert svi.load_retrieval_index(Path(tmp) / "missing.jsonl") == {}
+
+
+def test_retrieval_corrupt_index_degrades_to_empty_enrichment() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        index = Path(tmp) / "component-retrieval-index.jsonl"
+        index.write_text(
+            '{"id":"sun.component.valid","status":"published","keywords":["kpi"]}\n'
+            '{"id":"sun.component.truncated",',
+            encoding="utf-8",
+        )
+        assert svi.load_retrieval_index(index) == {}
 
 
 def test_retrieval_index_projects_slot_count() -> None:

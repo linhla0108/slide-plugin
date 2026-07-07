@@ -73,8 +73,11 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
    auto-reads `registries/component-retrieval-index.jsonl` for broadened
    (capped) lexical matching plus anti-use-case / count-fit / zero-slot
    penalties; read each candidate's `retrieval` block and `reasons` when
-   reviewing decisions. Score != buildability — still verify
-   geometry/count/domain fit before building a reuse/adapt slide.
+   reviewing decisions. If the top raw scorer is below the semantic floor, the
+   decision may choose the best valid runner-up; review the emitted selected
+   candidate rather than assuming `candidates[0]` is always the decision.
+   Score != buildability — still verify geometry/count/domain fit before
+   building a reuse/adapt slide.
 8. **Validate selection (BLOCKING GATE).**
    ```bash
    .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
