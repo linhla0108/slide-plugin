@@ -6,7 +6,8 @@
 - Treat `#3531FF` as a legacy source value, not a new canonical token.
 - Select components by communication intent before visual similarity.
 - Use Dio mainly on title, section, and closing slides.
-- Use XO patterns and brand washes deliberately and avoid decorative overload.
+- XO patterns are a custom extension, not part of the brand guideline; use
+  brand washes deliberately and avoid decorative overload.
 - Prefer canonical design-system components before project extensions.
 - Project extensions with `qa` status require publication before generation.
 

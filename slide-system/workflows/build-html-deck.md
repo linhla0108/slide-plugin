@@ -11,7 +11,18 @@ Before starting HTML construction, confirm:
 
 ## Post-Build Gate
 
-After HTML construction, before PPTX export:
+After HTML construction, before PPTX export, confirm the deck scales to the
+viewport (uses the `deck_stage.js` runtime, not a hand-rolled fixed-`px`
+stage). EXIT 0 required:
+```bash
+.venv/bin/python3 slide-system/scripts/validate_deck_stage_runtime.py \
+    --html <run>/deck.html
+```
+Fails when `<deck-stage>` is missing or its runtime is not loaded — either
+case ships a deck locked at 1080p that never scales. Writes
+`qa/deck-stage-report.json`.
+
+Then validate brand rules:
 ```bash
 .venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
     --html <run>/deck.html \
@@ -38,7 +49,20 @@ Writes `qa/component-fidelity-report.json`.
 
 ## Build Rules
 
-- Use a `1920x1080` `<deck-stage>`.
+- Use a `1920x1080` `<deck-stage>` **backed by the `deck_stage.js` runtime** —
+  never a hand-rolled static `<div id="stage" style="width:1920px">`. Copy the
+  starter via `copy_starter_component` (`kind: "deck_stage.js"`), load it with a
+  plain `<script src="deck_stage.js"></script>`, and author each slide as a
+  `<section>` child of `<deck-stage width="1920" height="1080">`.
+  - **Why:** the runtime does letterboxed `transform: scale` so the deck fits
+    any viewport when viewed/presented, and honours a `noscale` attribute that
+    drops the transform for 1:1 authored-geometry capture. A raw fixed-`px`
+    stage renders locked at 1080p (no viewport scaling) yet gains nothing for
+    export — the worst of both. Export must pass
+    `resetTransformSelector: "deck-stage"` (gen_pptx) / rely on capture setting
+    `noscale`, so scaling never corrupts PPTX bounds.
+  - `preview.html` and scaffold fragments stay fixed `1920px` on purpose (1:1
+    slot geometry for editing/pasting) — this rule is about the shipped deck.
 - Keep slide content as static, editable HTML.
 - Keep each text item in a leaf element.
 - **Colors**: Use ONLY CSS variables from the brand token set (`var(--sun-orange)`,

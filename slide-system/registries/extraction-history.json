@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-26T14:46:03+07:00",
+  "updated_at": "2026-07-07T12:02:03+07:00",
   "attempts": [
     {
       "attempted_at": "2026-06-07T12:53:02+07:00",
@@ -1183,16 +1183,6 @@
       "semantic_signature_sha256": "c159ac9ea0205ccd9c566987ed87ab6b52f67b0ac14180355cc1ff5e9c694476"
     },
     {
-      "attempted_at": "2026-06-25T10:20:52+07:00",
-      "extraction_id": "guideline-ai-maturity-levels",
-      "item_id": "ai-maturity-levels-board",
-      "stable_id": "sun.component.ai-maturity-levels-board",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
-      "semantic_signature_sha256": "577d0f7aa0e0447d7cb7c2f0dfeadb238a4372a71580e6f7875e8b5da11553c2"
-    },
-    {
       "attempted_at": "2026-06-25T12:01:38+07:00",
       "extraction_id": "guideline-fulldeck",
       "item_id": "brand-icon-reference-sheet",
@@ -1201,26 +1191,6 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "b1803277ec206f6e0c500370f1f2dfa9b198b8edc72c29406541b25079b925ae",
       "semantic_signature_sha256": "b686aeaa2db19ca75ec77aae37b1f59605b7c59b8d513926c5eb2460f7a2512b"
-    },
-    {
-      "attempted_at": "2026-06-25T12:01:38+07:00",
-      "extraction_id": "guideline-fulldeck",
-      "item_id": "style-card-sampler-board",
-      "stable_id": "sun.component.ai-maturity-levels-board",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
-      "semantic_signature_sha256": "f69ae6d4df97eb09748d2cde0741cfdc5d37d738a52646339eb38df015f1be64"
-    },
-    {
-      "attempted_at": "2026-06-25T12:01:38+07:00",
-      "extraction_id": "guideline-fulldeck",
-      "item_id": "feature-step-shape-diagrams",
-      "stable_id": "sun.component.feature-step-shape-diagrams",
-      "status": "staging",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "72dba354f8672f611363f89f5a732a138dfc6ea67faa981438e67df86cee9f18",
-      "semantic_signature_sha256": "7c06001f45afa1e02e0509c66e600217ef1534550a0c8384d5d23ce207d8ab7a"
     },
     {
       "attempted_at": "2026-06-25T15:29:05+07:00",
@@ -2003,26 +1973,6 @@
       "semantic_signature_sha256": "b686aeaa2db19ca75ec77aae37b1f59605b7c59b8d513926c5eb2460f7a2512b"
     },
     {
-      "attempted_at": "2026-06-25T18:21:36+07:00",
-      "extraction_id": "guideline-fulldeck",
-      "item_id": "feature-step-shape-diagrams",
-      "stable_id": "sun.component.feature-step-shape-diagrams",
-      "status": "published",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "72dba354f8672f611363f89f5a732a138dfc6ea67faa981438e67df86cee9f18",
-      "semantic_signature_sha256": "7c06001f45afa1e02e0509c66e600217ef1534550a0c8384d5d23ce207d8ab7a"
-    },
-    {
-      "attempted_at": "2026-06-25T18:21:52+07:00",
-      "extraction_id": "guideline-fulldeck",
-      "item_id": "style-card-sampler-board",
-      "stable_id": "sun.component.style-card-sampler-board",
-      "status": "published",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "d63ad1fff841018bdbb5eea010f64dbda4aec490ba6372dbfc8711fc282580c4",
-      "semantic_signature_sha256": "f69ae6d4df97eb09748d2cde0741cfdc5d37d738a52646339eb38df015f1be64"
-    },
-    {
       "attempted_at": "2026-06-25T18:27:07+07:00",
       "extraction_id": "guideline-resplit-staging",
       "item_id": "goal-setting-checklist-table",
@@ -2163,16 +2113,6 @@
       "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
     },
     {
-      "attempted_at": "2026-06-26T14:30:02+07:00",
-      "extraction_id": "guideline-resplit-staging",
-      "item_id": "work-environment-image-cards-g02",
-      "stable_id": "sun.component.work-environment-image-cards.g02",
-      "status": "published",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "02122283d1ac0868c65b2e2c9824d50bcf7dd32547348d0f781684b4f3b55bc0",
-      "semantic_signature_sha256": "89407e8444dc83b84b52c25c78933fe32c1be4798ff615087e89d58f8dd3a9d5"
-    },
-    {
       "attempted_at": "2026-06-26T14:30:10+07:00",
       "extraction_id": "guideline-resplit-staging",
       "item_id": "goal-setting-checklist-table",
@@ -2191,16 +2131,6 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
       "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
-    },
-    {
-      "attempted_at": "2026-06-26T14:40:22+07:00",
-      "extraction_id": "guideline-resplit-staging",
-      "item_id": "work-environment-image-cards-g02",
-      "stable_id": "sun.component.work-environment-image-cards.g02",
-      "status": "published",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "02122283d1ac0868c65b2e2c9824d50bcf7dd32547348d0f781684b4f3b55bc0",
-      "semantic_signature_sha256": "89407e8444dc83b84b52c25c78933fe32c1be4798ff615087e89d58f8dd3a9d5"
     },
     {
       "attempted_at": "2026-06-26T14:40:49+07:00",
@@ -2263,16 +2193,6 @@
       "semantic_signature_sha256": "a6a942f3a8ed41ee9e97e1f49979a7d7db98b1488eb7ab17367874050b0d285a"
     },
     {
-      "attempted_at": "2026-06-26T14:46:02+07:00",
-      "extraction_id": "guideline-resplit-staging",
-      "item_id": "work-environment-image-cards-g02",
-      "stable_id": "sun.component.work-environment-image-cards.g02",
-      "status": "published",
-      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
-      "region_identity_sha256": "02122283d1ac0868c65b2e2c9824d50bcf7dd32547348d0f781684b4f3b55bc0",
-      "semantic_signature_sha256": "89407e8444dc83b84b52c25c78933fe32c1be4798ff615087e89d58f8dd3a9d5"
-    },
-    {
       "attempted_at": "2026-06-26T14:46:03+07:00",
       "extraction_id": "guideline-resplit-staging",
       "item_id": "goal-setting-checklist-table",
@@ -2281,6 +2201,296 @@
       "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
       "region_identity_sha256": "e79cec7f311c9ee8b61330c66b4ba0000012300653127c9c514d4a38769292dd",
       "semantic_signature_sha256": "950fac3092e90b1a1ea5b30870f4b21fa45e1df3346f2b231c4f402b9f0bae90"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:04+07:00",
+      "extraction_id": "sun-guideline-full-deck-spicy-autocomplete-autonomous-levels-strip",
+      "item_id": "spicy-autocomplete-autonomous-levels-strip",
+      "stable_id": "sun.component.spicy-autocomplete-autonomous-levels-strip",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e9410840accfc14d9dff5064a85c6937abfd86522d027be5185f69c041cab47b",
+      "semantic_signature_sha256": "f74b094d2d5b1dad9101d070baef6dc33d274a239370c7a7600e1bdc5489c02f"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:07+07:00",
+      "extraction_id": "sun-guideline-full-deck-translator-card",
+      "item_id": "translator-card",
+      "stable_id": "sun.component.translator-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "389d8c1baed49e5e7a3b612573038a5daa0f41ae82af3914a4a1a23f0c59fa86",
+      "semantic_signature_sha256": "dc954f60e0d5b0ef5165d5586785c906f41e9a68597e52ba92c2a0c73c9de826"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:08+07:00",
+      "extraction_id": "sun-guideline-full-deck-strategist-card",
+      "item_id": "strategist-card",
+      "stable_id": "sun.component.strategist-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "8680c8001a7c2c2fceb75deef610469434cbccc9af7d9e5e019022582714ed1a",
+      "semantic_signature_sha256": "f9f65eabb789170ee78ebb049d4443bd0fc1248da7fdcf871c113e7de0183280"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:10+07:00",
+      "extraction_id": "sun-guideline-full-deck-driver-card",
+      "item_id": "driver-card",
+      "stable_id": "sun.component.driver-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c1126c8e690c25b07df8061751f46b5546895c74a50fc39a5717519609c1a65b",
+      "semantic_signature_sha256": "5be367b11ba2840100ccf6519277601295355cc1b1d4ff5be18c5fe575ad06ca"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:11+07:00",
+      "extraction_id": "sun-guideline-full-deck-coach-card",
+      "item_id": "coach-card",
+      "stable_id": "sun.component.coach-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "c171dd1f07f0a3e3f4412a10091815387e734f1209f42ebe87403f306b9a0af6",
+      "semantic_signature_sha256": "8cdd6fcfbe7fafd3a9b2eb36d5852e28d62c385b9f877e17c2ecd6e0c80f2692"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:13+07:00",
+      "extraction_id": "sun-guideline-full-deck-foundation-game-app-metric-card",
+      "item_id": "foundation-game-app-metric-card",
+      "stable_id": "sun.component.foundation-game-app-metric-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "630b691079e18351770bd68921be8b44482fcc5f850cecd3ce72a019a528937e",
+      "semantic_signature_sha256": "f0a766a440b2e9ca99ba2d8d72fb6827df4a56904c0ad230ba549a0ffd0f2755"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:16+07:00",
+      "extraction_id": "sun-guideline-full-deck-checklist-manager-goal-metric-table",
+      "item_id": "checklist-manager-goal-metric-table",
+      "stable_id": "sun.component.checklist-manager-goal-metric-table",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b3e5b32cb8759d40f5b47a950d19081e9a0f0ac52105135b55f90467e2143cac",
+      "semantic_signature_sha256": "34776be0946a50c4e6f7c72f989de6b74e2e8e7ce756835483545cb01338f6dd"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:18+07:00",
+      "extraction_id": "sun-guideline-full-deck-ai-team-visual",
+      "item_id": "ai-team-visual",
+      "stable_id": "sun.component.ai-team-visual",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e557ef789b751c0daaab4f9747216e6c86f53fcac574318f4a54ecabd0ed6f25",
+      "semantic_signature_sha256": "ce1d6f01169e4b93db528df225588fcafdbe8246e82a6795017804b32d6dfc0d"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:25+07:00",
+      "extraction_id": "sun-guideline-full-deck-improvement-strip",
+      "item_id": "improvement-strip",
+      "stable_id": "sun.component.improvement-strip",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "cd26476710e377f107fd0c40cda2b08b3c25e3af52e44f385b5459b47fc20818",
+      "semantic_signature_sha256": "0d8f152f75a3f8314c5a2cfb9b65ddd0c88b636d51585b81bc2e653e7ef45df6"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:29+07:00",
+      "extraction_id": "sun-guideline-full-deck-recognition-card",
+      "item_id": "recognition-card",
+      "stable_id": "sun.component.recognition-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "2c7d7c63e4e62cf0a747b9eca2e27876d6fdcfbc0a82011d27e4f3dfeebbb70f",
+      "semantic_signature_sha256": "617e7e692da9c0f833fc182056c530531c5d2925eb277167463d1cd718091924"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:33+07:00",
+      "extraction_id": "sun-guideline-full-deck-engagement-card",
+      "item_id": "engagement-card",
+      "stable_id": "sun.component.engagement-card",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "851f1dc906b308d77a1ab848730867030a6dae2f1c7be7935e9aee7c9ffe0070",
+      "semantic_signature_sha256": "d023d4b4bd6c14d6d7d90cfc96a2fe8a07ad5438d18d713f4c5d02451c2d4a6f"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:40+07:00",
+      "extraction_id": "sun-guideline-full-deck-revenue-team-size-metric-strip",
+      "item_id": "revenue-team-size-metric-strip",
+      "stable_id": "sun.component.revenue-team-size-metric-strip",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "5d4ed98da930e66c6df289c87a20ce4da7bcc4ea31f56c83b7050fff35b6eae9",
+      "semantic_signature_sha256": "ac0b99af0184b9b3f3de247249504fd21578339db74bcf7792545b9f5a01b039"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:42+07:00",
+      "extraction_id": "sun-guideline-full-deck-translator-strategist-driver-coach-card-set",
+      "item_id": "translator-strategist-driver-coach-card-set",
+      "stable_id": "sun.component.translator-strategist-driver-coach-card-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9b478f0e5945031067672a59a1d43e26edd90b6e870f9a4e3c34287034315ed",
+      "semantic_signature_sha256": "37fd6eabb0997c5f48477989b01ffb00bda3b0a52883830aafabf3191d419c6c"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:44+07:00",
+      "extraction_id": "sun-guideline-full-deck-translator-strategist-driver-coach-card-set",
+      "item_id": "translator-strategist-driver-coach-card-set",
+      "stable_id": "sun.component.translator-strategist-driver-coach-card-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9b478f0e5945031067672a59a1d43e26edd90b6e870f9a4e3c34287034315ed",
+      "semantic_signature_sha256": "759327071d27a2e16705ae58012b62dffe4ca35c8b74729b67fe9655abd31cc5"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:44+07:00",
+      "extraction_id": "sun-guideline-full-deck-recognition-engagement-card-set",
+      "item_id": "recognition-engagement-card-set",
+      "stable_id": "sun.component.recognition-engagement-card-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e3bd216cc72ef10ec32e529d4c88db4abaf551b895ccb867d9a5829f34200f01",
+      "semantic_signature_sha256": "76954316e9570489c80a1a4fd50216d1205ff26af41f81d9d70ab6797f533cf0"
+    },
+    {
+      "attempted_at": "2026-07-06T10:49:47+07:00",
+      "extraction_id": "sun-guideline-full-deck-recognition-engagement-card-set",
+      "item_id": "recognition-engagement-card-set",
+      "stable_id": "sun.component.recognition-engagement-card-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e3bd216cc72ef10ec32e529d4c88db4abaf551b895ccb867d9a5829f34200f01",
+      "semantic_signature_sha256": "96c2d07803d8c1a140859445a270ee814928961466061858a50db4a6e46809af"
+    },
+    {
+      "attempted_at": "2026-07-06T10:52:38+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "lorem-ipsum-circle-badge-set",
+      "stable_id": "sun.component.lorem-ipsum-circle-badge-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "2bd1108025f6f53b36ebde3decf1a9e9c5bef88ba6327d4db1059fca4b72f036",
+      "semantic_signature_sha256": "84a52f640ac52c7ac51b5b9c3d3937b33f6e6b0586e141103500712ee2430c0e"
+    },
+    {
+      "attempted_at": "2026-07-06T10:52:38+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "goal-keyresult-task-hexagon-diagram",
+      "stable_id": "sun.component.goal-keyresult-task-hexagon-diagram",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b6a8b239bc96193413c2149a4a6f2359505ed8273261a5d5caee7ab62b099168",
+      "semantic_signature_sha256": "542ea3e254375068c62949c89d52f12c91689603929a97aa09db092517c65e7b"
+    },
+    {
+      "attempted_at": "2026-07-06T10:52:38+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "foundation-top1-microsoft-overlap-circle-set",
+      "stable_id": "sun.component.foundation-top1-microsoft-overlap-circle-set",
+      "status": "staging",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b241036faea3757e70335e7e2e89449a7b97b97fde2da49fa681dfdf3a33e91d",
+      "semantic_signature_sha256": "72775d143ef5897eaa995c7a99cadf707c190939be50ef04695ef8bbdba7d78f"
+    },
+    {
+      "attempted_at": "2026-07-06T11:38:24+07:00",
+      "extraction_id": "sun-guideline-full-deck-revenue-team-size-metric-strip",
+      "item_id": "revenue-team-size-metric-strip",
+      "stable_id": "sun.component.revenue-team-size-metric-strip",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "5d4ed98da930e66c6df289c87a20ce4da7bcc4ea31f56c83b7050fff35b6eae9",
+      "semantic_signature_sha256": "ac0b99af0184b9b3f3de247249504fd21578339db74bcf7792545b9f5a01b039"
+    },
+    {
+      "attempted_at": "2026-07-06T11:38:30+07:00",
+      "extraction_id": "sun-guideline-full-deck-spicy-autocomplete-autonomous-levels-strip",
+      "item_id": "spicy-autocomplete-autonomous-levels-strip",
+      "stable_id": "sun.component.spicy-autocomplete-autonomous-levels-strip",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e9410840accfc14d9dff5064a85c6937abfd86522d027be5185f69c041cab47b",
+      "semantic_signature_sha256": "f74b094d2d5b1dad9101d070baef6dc33d274a239370c7a7600e1bdc5489c02f"
+    },
+    {
+      "attempted_at": "2026-07-06T11:38:33+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "lorem-ipsum-circle-badge-set",
+      "stable_id": "sun.component.lorem-ipsum-circle-badge-set",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "2bd1108025f6f53b36ebde3decf1a9e9c5bef88ba6327d4db1059fca4b72f036",
+      "semantic_signature_sha256": "84a52f640ac52c7ac51b5b9c3d3937b33f6e6b0586e141103500712ee2430c0e"
+    },
+    {
+      "attempted_at": "2026-07-06T11:38:35+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "foundation-top1-microsoft-overlap-circle-set",
+      "stable_id": "sun.component.foundation-top1-microsoft-overlap-circle-set",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b241036faea3757e70335e7e2e89449a7b97b97fde2da49fa681dfdf3a33e91d",
+      "semantic_signature_sha256": "72775d143ef5897eaa995c7a99cadf707c190939be50ef04695ef8bbdba7d78f"
+    },
+    {
+      "attempted_at": "2026-07-06T11:38:38+07:00",
+      "extraction_id": "sun-guideline-full-deck-p3-manual",
+      "item_id": "goal-keyresult-task-hexagon-diagram",
+      "stable_id": "sun.component.goal-keyresult-task-hexagon-diagram",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b6a8b239bc96193413c2149a4a6f2359505ed8273261a5d5caee7ab62b099168",
+      "semantic_signature_sha256": "542ea3e254375068c62949c89d52f12c91689603929a97aa09db092517c65e7b"
+    },
+    {
+      "attempted_at": "2026-07-06T11:39:01+07:00",
+      "extraction_id": "sun-guideline-full-deck-ai-team-visual",
+      "item_id": "ai-team-visual",
+      "stable_id": "sun.component.ai-team-visual",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e557ef789b751c0daaab4f9747216e6c86f53fcac574318f4a54ecabd0ed6f25",
+      "semantic_signature_sha256": "ce1d6f01169e4b93db528df225588fcafdbe8246e82a6795017804b32d6dfc0d"
+    },
+    {
+      "attempted_at": "2026-07-06T11:39:03+07:00",
+      "extraction_id": "sun-guideline-full-deck-recognition-engagement-card-set",
+      "item_id": "recognition-engagement-card-set",
+      "stable_id": "sun.component.recognition-engagement-card-set",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "e3bd216cc72ef10ec32e529d4c88db4abaf551b895ccb867d9a5829f34200f01",
+      "semantic_signature_sha256": "96c2d07803d8c1a140859445a270ee814928961466061858a50db4a6e46809af"
+    },
+    {
+      "attempted_at": "2026-07-06T11:39:05+07:00",
+      "extraction_id": "sun-guideline-full-deck-checklist-manager-goal-metric-table",
+      "item_id": "checklist-manager-goal-metric-table",
+      "stable_id": "sun.component.checklist-manager-goal-metric-table",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "b3e5b32cb8759d40f5b47a950d19081e9a0f0ac52105135b55f90467e2143cac",
+      "semantic_signature_sha256": "34776be0946a50c4e6f7c72f989de6b74e2e8e7ce756835483545cb01338f6dd"
+    },
+    {
+      "attempted_at": "2026-07-06T11:39:12+07:00",
+      "extraction_id": "sun-guideline-full-deck-translator-strategist-driver-coach-card-set",
+      "item_id": "translator-strategist-driver-coach-card-set",
+      "stable_id": "sun.component.translator-strategist-driver-coach-card-set",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "a9b478f0e5945031067672a59a1d43e26edd90b6e870f9a4e3c34287034315ed",
+      "semantic_signature_sha256": "759327071d27a2e16705ae58012b62dffe4ca35c8b74729b67fe9655abd31cc5"
+    },
+    {
+      "attempted_at": "2026-07-06T11:39:15+07:00",
+      "extraction_id": "sun-guideline-full-deck-improvement-strip",
+      "item_id": "improvement-strip",
+      "stable_id": "sun.component.improvement-strip",
+      "status": "published",
+      "source_sha256": "db1312220cbc4b42230f23248a9f5e4c398eb23b02a440f1ed6f9a8aaaec5f33",
+      "region_identity_sha256": "cd26476710e377f107fd0c40cda2b08b3c25e3af52e44f385b5459b47fc20818",
+      "semantic_signature_sha256": "0d8f152f75a3f8314c5a2cfb9b65ddd0c88b636d51585b81bc2e653e7ef45df6"
     }
   ]
 }

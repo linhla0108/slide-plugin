@@ -1,6 +1,6 @@
 ---
 name: sun-studio-design-system
-description: Apply the canonical SUN.STUDIO brand and slide design system to presentations, prototypes, interfaces, and visual assets. Use when work must follow SUN.STUDIO colors, Proxima Nova typography, logo/DIO rules, XO or editorial slide language, reusable layout patterns, or company brand voice.
+description: Apply the canonical SUN.STUDIO brand and slide design system to presentations, prototypes, interfaces, and visual assets. Use when work must follow SUN.STUDIO colors, Proxima Nova typography, logo/DIO rules, editorial slide language, reusable layout patterns, or company brand voice.
 ---
 
 # SUN.STUDIO Design System
@@ -50,16 +50,17 @@ The rules in this skill override patterns inferred from one-off source decks.
 
 ## Choosing A Slide Language
 
-- **XO/poster language:** use for training, workshops, all-hands, frameworks,
-  metrics, and energetic internal communication. Visual cues: warm paper, XO
-  pattern wash, orange/blue numbered circles, strong h1 tabs, cards, arrows,
-  and a clear bottom action capsule.
-- **Editorial/tactile language:** use for onboarding, policy, narrative, or
-  more human and asymmetric communication. Visual cues: one anchor per slide,
-  deliberate asymmetry, large display type, hairlines, paper texture, italic
-  serif as a secondary voice, and restrained tactile details.
-- Do not mix both languages casually within one deck. Choose a dominant system
-  and use contrast slides deliberately.
+- **Editorial/tactile language (canonical):** use for onboarding, policy,
+  narrative, or more human and asymmetric communication. Visual cues: one
+  anchor per slide, deliberate asymmetry, large display type, hairlines, paper
+  texture, italic serif as a secondary voice, and restrained tactile details.
+- **XO/poster language (custom extension, NOT brand guideline):** a personal/
+  project style, not part of the canonical SUN.STUDIO brand. Do not apply
+  unless a deck explicitly opts into it. Visual cues: warm paper, XO pattern
+  wash, orange/blue numbered circles, strong h1 tabs, cards, arrows, and a
+  clear bottom action capsule.
+- Do not mix languages casually within one deck. Choose a dominant system and
+  use contrast slides deliberately.
 
 ## Reusable Layout Patterns
 

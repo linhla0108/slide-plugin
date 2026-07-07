@@ -99,7 +99,7 @@
   --line-strong:       #CFCFCF;
   --soft:              #FAFAFA; /* off-white surface */
   --paper:             #FFFFFF; /* primary surface */
-  --xo-paper:          #FFFDF8; /* warm paper used behind XO pattern */
+  --xo-paper:          #FFFDF8; /* warm paper; XO pattern is a custom extension, not brand guideline */
 
   /* --- Semantic accents (used sparingly: do/don't, errors, success) --- */
   --green:             #22C55E;
