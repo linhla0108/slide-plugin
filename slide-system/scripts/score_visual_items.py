@@ -74,6 +74,28 @@ ANTI_USE_CASE_PENALTY = 15
 COUNT_FIT_PENALTY = 10
 NO_TEXT_SLOT_PENALTY = 10
 
+# Type-intent bias. When a request explicitly asks for a reusable COMPONENT, a
+# full-slide `template` is demoted by this modest amount so a genuinely relevant
+# component is not out-ranked by a whole-slide layout in all-types scoring.
+# It only fires on explicit component intent; template-intent and neutral
+# requests are untouched, and component-only scoring never sees a template, so
+# that path is unchanged.
+TEMPLATE_DEMOTION = 15
+
+# Markers that let a request declare which item *kind* it wants. Matched as
+# substrings against `prefer_type` / free-text `query` / intent / tags.
+# Template intent takes precedence: an explicit "template"/"full slide" ask
+# means a whole-slide layout even if component words also appear.
+TEMPLATE_INTENT_MARKERS = (
+    "template", "full slide", "full-slide", "cover slide", "cover-slide",
+    "slide template", "slide-template", "whole slide", "whole-slide",
+)
+COMPONENT_INTENT_MARKERS = (
+    "reusable component", "reusable-component", "component-set", "component",
+    "card set", "card-set", "icon reference", "icon-reference",
+    "metric strip", "metric-strip", "badge set", "badge-set",
+)
+
 DEFAULT_RETRIEVAL_INDEX = (
     Path(__file__).resolve().parents[1] / "registries/component-retrieval-index.jsonl"
 )
@@ -200,6 +222,26 @@ def _set_sizes(item: dict) -> set[int]:
     return sizes
 
 
+def request_type_intent(request: dict) -> str | None:
+    """Which item kind the request explicitly wants: 'component', 'template',
+    or None. Reads an explicit `prefer_type` first, then scans the free-text
+    `query` plus intent/tags. Template intent wins ties so an explicit
+    full-slide ask is never overridden by an incidental component word."""
+    explicit = str(request.get("prefer_type") or "").strip().lower()
+    if explicit in ("component", "template"):
+        return explicit
+    haystack = " ".join([
+        str(request.get("query") or ""),
+        " ".join(str(t) for t in (request.get("intent") or [])),
+        " ".join(str(t) for t in (request.get("tags") or [])),
+    ]).lower()
+    if any(marker in haystack for marker in TEMPLATE_INTENT_MARKERS):
+        return "template"
+    if any(marker in haystack for marker in COMPONENT_INTENT_MARKERS):
+        return "component"
+    return None
+
+
 def weights_for(item_type: str | None) -> dict[str, int]:
     return TEMPLATE_WEIGHTS if item_type == "template" else WEIGHTS
 
@@ -255,6 +297,7 @@ def score_request(
     req_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
     item_count = request.get("item_count")
     request_needs_text = bool(request.get("content_structure"))
+    type_intent = request_type_intent(request)
 
     for item in registry_items:
         reasons: list[str] = []
@@ -350,6 +393,17 @@ def score_request(
             if item_set == prefer_set:
                 score = min(100, score + 5)
                 reasons.append("Set preference bonus: +5")
+
+        # Type-intent bias: when the request explicitly wants a component, demote
+        # full-slide templates so a relevant component is not out-ranked by a
+        # whole-slide layout. One-directional and bounded; template-intent and
+        # neutral requests never demote anything.
+        if (type_intent == "component" and eligible and score > 0
+                and item.get("type") == "template"):
+            score = max(0.0, round(score - TEMPLATE_DEMOTION, 2))
+            retrieval["type_bias"] = "template-demoted"
+            reasons.append(
+                f"Component intent: full-slide template demoted -{TEMPLATE_DEMOTION}")
         candidate = {
             "item_id": item["id"],
             "eligible": eligible,

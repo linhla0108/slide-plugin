@@ -10,6 +10,13 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
    `brand`, `required_exports`. Optionally include `item_count` (integer — how
    many parallel content items the slide carries, e.g. 4 roles): the scorer
    penalizes components whose declared `set-of-N` size cannot fit it.
+   Optionally include a type-intent hint so all-types scoring does not let a
+   full-slide template out-rank a genuinely relevant component: set
+   `prefer_type` to `component` or `template`, or carry the wording in a
+   free-text `query` (e.g. `reusable component ...`, `full slide template ...`).
+   When component intent is explicit, `type: template` items are demoted a
+   modest, bounded amount (surfaced in `reasons`); template intent and neutral
+   requests demote nothing, and component-only scoring is unaffected.
 4. Run the scorer in **batch mode** to score ALL item types (templates AND
    standalone components — cover, timeline, checklist, comparison, closing, CTA,
    statistics, dividers, layouts) for every slide:

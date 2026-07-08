@@ -317,6 +317,103 @@ def test_score_below_floor_is_custom_local_with_extraction() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# score_visual_items — type-intent bias (component vs template in all-types)
+# --------------------------------------------------------------------------- #
+def _typed_req(query: str, **over) -> dict:
+    base = {"query": query, "intent": ["team", "profile", "roster"],
+            "tags": ["contributors"], "content_structure": ["heading", "label"],
+            "density": "any", "brand": None, "required_exports": []}
+    base.update(over)
+    return base
+
+
+def _template_item() -> dict:
+    # Matches every request term -> out-scores the component when there is no bias.
+    return _item(id="sun.deck.04-contributors", type="template",
+                 intent=["team", "profile", "roster"], tags=["contributors"],
+                 content_structure=["heading", "label"])
+
+
+def _component_item() -> dict:
+    # One fewer intent match -> lower raw score than the template above.
+    return _item(id="sun.component.team-circles", type="component",
+                 intent=["team", "profile"], tags=["contributors"],
+                 content_structure=["heading", "label"])
+
+
+def test_request_type_intent_detection() -> None:
+    assert svi.request_type_intent({"prefer_type": "component"}) == "component"
+    assert svi.request_type_intent({"prefer_type": "template"}) == "template"
+    assert svi.request_type_intent({"query": "reusable component for KPI strip"}) == "component"
+    assert svi.request_type_intent({"query": "full slide template for cover"}) == "template"
+    # template intent wins ties (explicit whole-slide ask beats an incidental word)
+    assert svi.request_type_intent({"query": "component card set full slide template"}) == "template"
+    # markers can arrive via intent/tags, not just free text
+    assert svi.request_type_intent({"tags": ["icon-reference"]}) == "component"
+    assert svi.request_type_intent({"intent": ["team", "profile"]}) is None
+
+
+def test_type_intent_component_query_ranks_component_over_template() -> None:
+    items = [_template_item(), _component_item()]
+    # Neutral phrasing: the template out-scores the component (baseline behavior).
+    dec_n, _ = svi.score_request(_typed_req("team roster"), items, svi.WEIGHTS, None)
+    assert dec_n["item_id"] == "sun.deck.04-contributors", dec_n
+    # Explicit component intent: the template is demoted; the component wins.
+    dec_c, cands = svi.score_request(
+        _typed_req("reusable component team roster"), items, svi.WEIGHTS, None)
+    assert dec_c["item_id"] == "sun.component.team-circles", dec_c
+    tmpl = next(c for c in cands if c["item_id"] == "sun.deck.04-contributors")
+    assert tmpl["retrieval"]["type_bias"] == "template-demoted"
+    assert any("template demoted" in r for r in tmpl["reasons"])
+
+
+def test_type_intent_template_query_lets_template_win() -> None:
+    items = [_template_item(), _component_item()]
+    dec, cands = svi.score_request(
+        _typed_req("full slide template for the team page"), items, svi.WEIGHTS, None)
+    assert dec["item_id"] == "sun.deck.04-contributors", dec
+    tmpl = next(c for c in cands if c["item_id"] == "sun.deck.04-contributors")
+    assert "type_bias" not in tmpl.get("retrieval", {}), "template intent must not demote templates"
+
+
+def test_type_intent_neutral_query_applies_no_bias() -> None:
+    items = [_template_item(), _component_item()]
+    dec, cands = svi.score_request(_typed_req("team roster"), items, svi.WEIGHTS, None)
+    # Same winner and score as a run with the demotion path never triggered.
+    assert dec["item_id"] == "sun.deck.04-contributors", dec
+    for c in cands:
+        assert "type_bias" not in c.get("retrieval", {})
+        assert not any("template demoted" in r for r in c["reasons"])
+
+
+def test_type_intent_leaves_components_unchanged() -> None:
+    # Component-only scoring never sees a template, so the demotion cannot fire:
+    # a component's score is identical with or without component intent.
+    comp = [_component_item()]
+    _, neutral = svi.score_request(_typed_req("team roster"), comp, svi.WEIGHTS, None)
+    _, biased = svi.score_request(_typed_req("reusable component team roster"), comp, svi.WEIGHTS, None)
+    assert neutral[0]["score"] == biased[0]["score"]
+    assert "type_bias" not in biased[0].get("retrieval", {})
+
+
+def test_type_intent_no_component_false_positive_when_nothing_fits() -> None:
+    # A component-intent query with no relevant component must NOT be forced into
+    # a confident reuse just because templates were demoted.
+    template = _item(id="sun.deck.10-chart", type="template",
+                     intent=["chart", "statistics"], tags=["pie"],
+                     content_structure=["metric", "label"])
+    unrelated = _item(id="sun.component.timeline", type="component",
+                      intent=["timeline"], tags=[], content_structure=["heading"])
+    req = {"query": "reusable component financial pie chart",
+           "intent": ["chart", "statistics"], "tags": ["pie-chart", "financial"],
+           "content_structure": ["metric", "label"], "density": "any",
+           "brand": None, "required_exports": []}
+    dec, _ = svi.score_request(req, [template, unrelated], svi.WEIGHTS, None)
+    assert dec["action"] != "reuse", dec
+    assert dec["item_id"] != "sun.component.timeline" or dec["action"] == "custom-local", dec
+
+
+# --------------------------------------------------------------------------- #
 # score_visual_items — hybrid retrieval (v3.2)
 # --------------------------------------------------------------------------- #
 def _rreq(**over) -> dict:
