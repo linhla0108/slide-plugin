@@ -228,3 +228,9 @@ An extraction cannot be published until it has:
 - Source-versus-reconstruction evidence.
 - Tested HTML, PPTX, PDF, and Canva compatibility declarations.
 - Documented limitations and a valid source mapping.
+- For reusable `component` items, retrieval-ready metadata that passes
+  `validate_component_metadata.py` (non-empty intent/tags/content_structure/
+  keywords/use_cases/anti_use_cases, non-blank component_type/layout_role/
+  visual_summary/retrieval_notes/quality_notes, and no auto-stage/OCR
+  placeholder text). `publish_extraction.py` enforces this before any registry
+  or library mutation.

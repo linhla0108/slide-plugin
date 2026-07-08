@@ -1700,6 +1700,194 @@ def test_publish_rejects_failed_auto_stage_artifacts() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# validate_component_metadata — retrieval metadata quality gate
+# --------------------------------------------------------------------------- #
+def _meta_component(**over) -> dict:
+    """A fully retrieval-ready component item (passes the metadata gate)."""
+    base = {
+        "id": "sun.component.demo-strip",
+        "type": "component",
+        "category": "component",
+        "name": "Demo Metric Strip",
+        "intent": ["statistics", "metrics"],
+        "tags": ["strip", "kpi", "set-of-3"],
+        "content_structure": ["label", "metric"],
+        "component_type": "strip",
+        "layout_role": "horizontal metric strip",
+        "visual_summary": "Three KPI figures side by side with labels.",
+        "keywords": ["revenue", "growth", "kpi"],
+        "use_cases": ["Show three headline KPIs on one row"],
+        "anti_use_cases": ["Do not use for narrative body text"],
+        "retrieval_notes": "Select when the slide needs a compact KPI row.",
+        "quality_notes": "Manually reviewed against source render.",
+        "text_contract": {"slot_count": 6},
+    }
+    base.update(over)
+    return base
+
+
+def test_component_metadata_valid_passes() -> None:
+    import validate_component_metadata as vcm
+    assert vcm.validate_item(_meta_component()) == []
+    assert vcm.validate_registry({"items": [_meta_component()]}) == {}
+
+
+def test_component_metadata_missing_fields_fail() -> None:
+    import validate_component_metadata as vcm
+    errs = vcm.validate_item(_meta_component(keywords=[], use_cases=[],
+                                             component_type=None, visual_summary="  "))
+    joined = " ".join(errs)
+    assert "'keywords' is empty" in joined
+    assert "'use_cases' is empty" in joined
+    assert "'component_type' is blank" in joined
+    assert "'visual_summary' is blank" in joined
+
+
+def test_component_metadata_boilerplate_fails() -> None:
+    import validate_component_metadata as vcm
+    # auto-stage tag + Docling placeholder use/anti text must be rejected.
+    errs = vcm.validate_item(_meta_component(
+        tags=["strip", "auto-staged"],
+        use_cases=["Review and publish this strip as a reusable component."],
+        anti_use_cases=["Do not use before the Draft preview and metadata are reviewed."],
+        retrieval_notes="Generated from region text, Docling label, source name, and page.",
+    ))
+    assert any("auto-stage/placeholder text" in e for e in errs), errs
+    # An honest note that merely mentions Docling must NOT trip the gate.
+    ok = vcm.validate_item(_meta_component(
+        retrieval_notes="Region isolated manually; not a Docling auto-detected candidate."))
+    assert ok == [], ok
+
+
+def test_component_metadata_ocr_intent_fails() -> None:
+    import validate_component_metadata as vcm
+    errs = vcm.validate_item(_meta_component(
+        intent=["2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH team"]))
+    assert any("raw slide text/OCR" in e for e in errs), errs
+
+
+def test_component_metadata_ignores_non_component_types() -> None:
+    import validate_component_metadata as vcm
+    # A template with deliberately thin metadata must NOT be gated.
+    thin_template = {"id": "sun.deck.01-cover", "type": "template",
+                     "intent": ["cover"], "tags": []}
+    assert vcm.validate_item(thin_template) == []
+    assert vcm.validate_registry({"items": [thin_template]}) == {}
+
+
+def test_component_metadata_mapping_projection() -> None:
+    import validate_component_metadata as vcm
+    mapping = {
+        "candidate_stable_id": "sun.component.demo-strip", "type": "component",
+        "category": "component", "name": "Demo Metric Strip",
+        "semantic_intent": ["statistics"], "tags": ["strip"],
+        "content_structure": ["metric"], "component_type": "strip",
+        "layout_role": "strip", "visual_summary": "KPI strip.",
+        "keywords": ["kpi"], "use_cases": ["Show KPIs"],
+        "anti_use_cases": ["No body text"], "retrieval_notes": "Pick for KPIs.",
+        "quality_notes": "Reviewed.",
+    }
+    item = vcm.metadata_from_mapping(mapping)
+    assert item["intent"] == ["statistics"], "semantic_intent must map to intent"
+    assert vcm.validate_item(item) == []
+
+
+def test_component_metadata_strict_requires_set_shape() -> None:
+    import validate_component_metadata as vcm
+    set_item = _meta_component(id="sun.component.role-card-set", category="component-set",
+                               name="Role Card Set", tags=["roles", "personas"],
+                               content_structure=["heading"], use_cases=["Show roles"])
+    assert vcm.validate_item(set_item, strict=False) == []
+    strict_errs = vcm.validate_item(set_item, strict=True)
+    assert any("set-of-N" in e for e in strict_errs), strict_errs
+    # Exposing the multiplicity clears the strict check.
+    fixed = _meta_component(id="sun.component.role-card-set", category="component-set",
+                            name="Role Card Set", tags=["cards", "set-of-4"])
+    assert vcm.validate_item(fixed, strict=True) == []
+
+
+def test_component_metadata_real_registry_good_components_pass() -> None:
+    # The three hand-authored components in the live registry must pass; this
+    # guards against the gate regressing into false positives on real data.
+    import validate_component_metadata as vcm
+    registry = read_text_slots.load_json(REGISTRY)
+    by_id = {i["id"]: i for i in registry["items"]}
+    for good in ("sun.component.lorem-ipsum-circle-badge-set",
+                 "sun.component.foundation-top1-microsoft-overlap-circle-set",
+                 "sun.component.goal-keyresult-task-hexagon-diagram"):
+        assert vcm.validate_item(by_id[good]) == [], f"{good} should pass"
+
+
+def test_publish_blocks_weak_component_metadata_before_mutation() -> None:
+    import importlib
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "weak-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-weak-demo",
+            "item_id": "weak-strip",
+            "candidate_stable_id": "sun.component.weak-strip",
+            "name": "Weak Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "component",
+            "brand": "sun-studio",
+            # Auto-stage boilerplate + empty retrieval fields — must be blocked.
+            "semantic_intent": ["weak strip", "picture candidate detected by Docling"],
+            "tags": ["strip", "auto-staged"],
+            "content_structure": [],
+            "content_fields": {},
+            "artifact_status": "ready",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        library = root / "library"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "weak-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(library),
+        ]
+        try:
+            try:
+                publish.main()
+            except SystemExit as exc:
+                assert "metadata gate failed" in str(exc).lower(), str(exc)
+            else:
+                raise AssertionError("weak component metadata must block publish")
+        finally:
+            sys.argv = old_argv
+        # No registry, index, or library mutation may have occurred.
+        assert read_text_slots.load_json(registry)["items"] == []
+        assert not (root / "component-retrieval-index.jsonl").exists()
+        assert not library.exists()
+
+
+# --------------------------------------------------------------------------- #
 # materialize_groups (classify_page_components + _common hash helpers)
 # --------------------------------------------------------------------------- #
 import json as _json_stdlib

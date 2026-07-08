@@ -4,6 +4,7 @@ Publish only approved staging items.
 
 1. Validate the extraction report and visual-item schema.
 2. Confirm status is `approved`. The catalog UI writes `approved_by: "catalog-ui"` and `approved_at: <ISO timestamp>` into the staging mapping.json when the user clicks Publish.
+   - For reusable `component` items, `publish_extraction.py` also runs the metadata quality gate (`validate_component_metadata.py`) before any registry or library mutation. A component carrying auto-stage/Docling placeholder text, OCR-noise intent, or empty retrieval fields (`keywords`, `use_cases`, `component_type`, …) is rejected with nothing mutated — author real English retrieval metadata in the Draft first.
 3. Assign or verify stable ID and semantic version. Materialized group items (e.g. `sun.component.base.g01`) follow the same flow — the `.gNN` suffix is accepted by the ID pattern in both `catalog_server.py` and `publish_extraction.py`.
 4. Copy the artifact into the typed shared library folder.
 5. Update the visual registry and aliases. `publish_extraction.py` carries `mapping.get("approval", {})` into the registry entry so the audit trail (`approved_by`, `approved_at`) is preserved in `visual-library.json`.

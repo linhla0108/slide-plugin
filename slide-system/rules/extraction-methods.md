@@ -190,3 +190,31 @@ semantic metadata, source/path provenance, and lexical-ready `search_text` /
 search terms to avoid path noise. Do not add embedding dependencies, vector DBs,
 or retrieval-time mutation in the extraction pipeline; those belong to a later
 retrieval service that consumes this JSONL.
+
+## Metadata quality gate (pre-publish)
+
+Clean retrieval requires clean metadata, so a reusable `component` must pass a
+metadata contract before it can be published. `publish_extraction.py` calls
+`validate_component_metadata.py::validate_item` **before any registry/library
+mutation**; on failure it exits non-zero and leaves the registry, compact
+projection, retrieval index, and library artifacts untouched.
+
+The contract for `type == "component"` items:
+
+- Non-empty `intent`, `tags`, `content_structure`, `keywords`, `use_cases`,
+  `anti_use_cases`.
+- Non-blank `component_type`, `layout_role`, `visual_summary`, `retrieval_notes`,
+  `quality_notes`.
+- No auto-stage / Docling / OCR-provenance placeholder text (e.g.
+  `auto-staged`, `candidate detected by Docling`, `review and publish this`,
+  `region cue:`). An honest note that merely mentions Docling is fine.
+- `intent` terms are short semantic labels, not raw slide text / OCR runs.
+- A non-generic, non-positional `name`.
+- If a `text_contract` exists, `slot_count` is a real non-negative integer
+  (slot counts are never invented to satisfy the gate).
+- `--strict` also requires set-like components to expose a set-of-N /
+  multiplicity shape in `tags`/`content_structure`/`use_cases`.
+
+Templates, assets, and characters are not gated. Audit the current registry with
+`python3 slide-system/scripts/validate_component_metadata.py --registry
+slide-system/registries/visual-library.json`.

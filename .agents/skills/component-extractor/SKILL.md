@@ -215,6 +215,23 @@ keeps source paths as provenance fields but does not feed path strings into
 search terms. Do not add embeddings or external vector stores in extraction;
 that belongs to a separate retrieval layer after component quality is stable.
 
+### Metadata quality gate (blocks publish)
+
+Retrieval is only as good as the metadata behind it, so `publish_extraction.py`
+runs `validate_component_metadata.py` on every reusable `component` **before it
+mutates the registry or library** — a Draft with auto-stage/Docling placeholder
+text, OCR-noise intent, or empty `keywords`/`use_cases`/`retrieval_notes` cannot
+be published (nothing is copied or written on failure). Author real English
+retrieval metadata in the Draft first. Audit the whole registry any time with:
+
+```bash
+python3 slide-system/scripts/validate_component_metadata.py \
+    --registry slide-system/registries/visual-library.json   # add --strict to tighten
+```
+
+The gate covers only `type == "component"` items; templates, assets, and
+characters are out of scope.
+
 ## Preflight (mandatory, marker-first)
 
 Readiness is recorded in `slide-system/registries/extract-readiness.json`.

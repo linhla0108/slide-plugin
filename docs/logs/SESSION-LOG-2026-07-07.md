@@ -196,3 +196,20 @@ Acted on user's 2 rule complaints (hand-drawn icons; custom instead of component
 **Files:** docs/logs/SESSION-LOG-2026-07-07.md
 **Symbols:** none
 **State:** Not committed
+
+## 2026-07-07.9 — Add component metadata quality gate
+
+**When:** 2026-07-07 23:40
+**Request:** Implement a pre-publish metadata quality gate for reusable components (new branch `feature/component-metadata-quality-gate` off the hybrid-retrieval PR branch); backfill the small failing set (~3 expected), stop and report if far more fail.
+**Actions:**
+- Branched `feature/component-metadata-quality-gate` from `feature/hybrid-rag-slide-retrieval` (db0e0766); left untracked `dev/` alone; oriented via local CodeGraph cache.
+- Added `slide-system/scripts/validate_component_metadata.py`: gate for `type == "component"` items — required non-empty lists (intent/tags/content_structure/keywords/use_cases/anti_use_cases) and non-blank strings (component_type/layout_role/visual_summary/retrieval_notes/quality_notes); rejects auto-stage/Docling/OCR placeholder phrases (without false-flagging honest "not a Docling candidate" notes); flags over-long OCR-style intent terms and generic/positional names; validates `text_contract.slot_count` only when a contract exists (never invents one); `--strict` adds set-of-N exposure for set-like items. CLI: `--registry`, `--item-id`, `--mapping`, `--strict`. No new deps; no shared-vocab extraction (boilerplate phrases are validator-specific and canonical-vocab membership would false-fail good items).
+- Wired the gate into `publish_extraction.py` via `metadata_from_mapping` + `validate_item`, placed AFTER approval/artifact/preview/evidence checks and BEFORE the first library copy/registry write, so a failure mutates nothing.
+- Added 9 tests to `test_gates.py`: valid passes, missing-fields fail, boilerplate fail (+ honest-Docling-note passes), OCR intent fail, non-component ignored, mapping projection, strict set-shape, real-registry good-components pass, and publish-blocks-weak-metadata-before-mutation (asserts empty registry, no index file, no library dir).
+- Ran the validator on the live registry: **10 of 13 published components fail** (3 missing-field: brand-icon-reference-sheet, team-contributor-circles.g01, goal-setting-checklist-table; 7 auto-stage/OCR boilerplate: revenue-team-size-metric-strip, spicy-autocomplete-autonomous-levels-strip, ai-team-visual, checklist-manager-goal-metric-table, improvement-strip, recognition-engagement-card-set, translator-strategist-driver-coach-card-set). Only the 3 hand-authored components pass.
+- Per the task safety valve ("far more than 3 → stop and report before broad backfill"), did NOT backfill. The gate is correctly calibrated (good components pass), so this is a scope/approach decision needing approval — several failures carry Vietnamese OCR content and the 7 auto-staged items may warrant a re-stage decision rather than metadata invention (publish-semantics, out of scope). Registry/compact/index left unchanged (no rebuild needed).
+- Docs: component-extractor SKILL.md, rules/extraction-methods.md, workflows/publish-components.md, README.md publication-minimum.
+**Result:** `python -m py_compile` (validator/publish/build_index/scorer/tests) passed; `python slide-system/scripts/test_gates.py` passed (`148/148`); `validate_component_metadata.py --registry` exits 1 reporting the 10 known-weak components (expected — backfill deferred); `validate_registry.py` (91), `build_registry.py --check`, `build_component_retrieval_index.py --check` (91) all passed; `git diff --check` clean.
+**Files:** slide-system/scripts/validate_component_metadata.py, slide-system/scripts/publish_extraction.py, slide-system/scripts/test_gates.py, .agents/skills/component-extractor/SKILL.md, slide-system/rules/extraction-methods.md, slide-system/workflows/publish-components.md, slide-system/README.md, docs/logs/SESSION-LOG-2026-07-07.md
+**Symbols:** validate_component_metadata.validate_item, validate_component_metadata.validate_registry, validate_component_metadata.metadata_from_mapping, publish_extraction.main
+**State:** Not committed
