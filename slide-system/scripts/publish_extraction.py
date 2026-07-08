@@ -11,6 +11,7 @@ from pathlib import Path
 from _common import load_json, now_iso, write_json
 from build_registry import COMPACT_KEYS
 import build_component_retrieval_index as retrieval
+from validate_component_metadata import metadata_from_mapping, validate_item
 
 
 TYPE_FOLDERS = {
@@ -105,6 +106,20 @@ def main() -> int:
         raise SystemExit("Publication requires at least one preview file.")
     if not evidence_files:
         raise SystemExit("Publication requires source-versus-reconstruction evidence.")
+
+    # Metadata quality gate (pre-mutation): a reusable component must carry
+    # retrieval-ready metadata before it can enter the shared library. This runs
+    # BEFORE any copytree/registry write below, so a failure leaves the library,
+    # registry, compact projection, and retrieval index completely untouched.
+    metadata_errors = validate_item(
+        metadata_from_mapping(mapping, stable_id=mapping.get("candidate_stable_id"))
+    )
+    if metadata_errors:
+        raise SystemExit(
+            "Component metadata gate failed — author real retrieval metadata "
+            "before publishing (nothing was mutated):\n  - "
+            + "\n  - ".join(metadata_errors)
+        )
 
     folder = TYPE_FOLDERS.get(item_type, item_type)
     stable_id = mapping["candidate_stable_id"]
