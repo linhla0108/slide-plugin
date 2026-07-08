@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Build a deterministic component retrieval index for future hybrid/RAG search.
+"""Build a deterministic component retrieval index for hybrid lexical search.
 
 No embeddings, vector DB, network calls, or new dependencies are used here. The
 output is JSONL so a later RAG layer can add embeddings next to the same stable
 records without changing the extraction/publish contract.
+
+`score_visual_items.py` consumes this index to broaden lexical matching beyond
+compact intent/tags and to read compact buildability facts (`slot_count`).
+
+Record schema v2 adds `slot_count` (from the registry `text_contract`; null
+when the item has no text contract). v1 consumers are unaffected — the change
+is additive.
 """
 
 from __future__ import annotations
@@ -86,10 +93,11 @@ def build_record(item: dict) -> dict:
     text_values = _dedupe(text_values)
     search_text = " ".join(text_values).lower()
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "id": item.get("id"),
         "status": item.get("status"),
         "retrieval_mode": "lexical-ready",
+        "slot_count": (item.get("text_contract") or {}).get("slot_count"),
         "type": item.get("type"),
         "brand": item.get("brand"),
         "name": item.get("name"),

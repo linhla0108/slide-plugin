@@ -7,6 +7,9 @@
   "properties": {
     "request_id": { "type": "string" },
     "generated_at": { "type": "string", "format": "date-time" },
+    "generated_by": { "type": "string" },
+    "scorer_version": { "type": "string" },
+    "retrieval_index": { "type": ["string", "null"] },
     "decision": {
       "type": "object",
       "required": ["action", "score"],
@@ -29,7 +32,8 @@
           "eligible": { "type": "boolean" },
           "score": { "type": "number" },
           "criteria": { "type": "object" },
-          "reasons": { "type": "array", "items": { "type": "string" } }
+          "reasons": { "type": "array", "items": { "type": "string" } },
+          "retrieval": { "type": "object" }
         },
         "additionalProperties": false
       }

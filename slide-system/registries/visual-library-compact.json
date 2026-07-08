@@ -3175,13 +3175,24 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "brand icon library reference sheet",
-        "frequently used icon set"
+        "icon-reference",
+        "overview",
+        "icon-library"
       ],
-      "tags": [],
+      "tags": [
+        "icons",
+        "reference-sheet",
+        "outline-icons",
+        "brand-assets",
+        "glyph-grid"
+      ],
       "status": "published",
       "density": "any",
-      "content_structure": [],
+      "content_structure": [
+        "icon",
+        "label",
+        "repeatable-set"
+      ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3191,13 +3202,26 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "team contributor profile circles layout",
-        "three-member team showcase with avatar placeholders and roles"
+        "team",
+        "profile-layout",
+        "contributors"
       ],
-      "tags": [],
+      "tags": [
+        "team",
+        "contributors",
+        "profile-circles",
+        "avatar-placeholders",
+        "set-of-3"
+      ],
       "status": "published",
       "density": "any",
-      "content_structure": [],
+      "content_structure": [
+        "avatar",
+        "heading",
+        "label",
+        "caption",
+        "repeatable-set-of-3"
+      ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
       ]
@@ -3207,26 +3231,17 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "comparison",
         "checklist",
-        "do-dont",
+        "comparison",
         "guidelines",
-        "best-practices",
-        "instructions",
-        "principles",
-        "steps"
+        "goal-setting"
       ],
       "tags": [
-        "comparison",
         "checklist",
-        "table",
+        "goal-setting",
         "do-dont",
-        "columns",
-        "guidelines",
-        "so-sanh",
-        "danh-sach",
-        "bang",
-        "nguyen-tac"
+        "comparison-table",
+        "guidelines"
       ],
       "status": "published",
       "density": "any",
@@ -3234,7 +3249,8 @@
         "heading",
         "label",
         "body",
-        "list-item"
+        "list-item",
+        "column"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
@@ -3245,20 +3261,25 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "revenue team size metric strip",
-        "+30% Revenue +30% Team Size (110 Members)"
+        "kpi",
+        "growth",
+        "metrics",
+        "revenue"
       ],
       "tags": [
-        "strip",
-        "figure",
-        "docling",
-        "auto-staged"
+        "kpi",
+        "metric-strip",
+        "growth",
+        "two-row",
+        "percentage-badges"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "metric",
+        "label",
+        "caption",
+        "repeatable-set-of-2"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
@@ -3269,20 +3290,26 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "spicy autocomplete autonomous levels strip",
-        "picture candidate detected by Docling"
+        "maturity-model",
+        "levels",
+        "tiers",
+        "capability-ladder"
       ],
       "tags": [
-        "strip",
-        "picture",
-        "docling",
-        "auto-staged"
+        "ai",
+        "maturity-model",
+        "level-cards",
+        "set-of-5",
+        "horizontal-strip"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "heading",
+        "label",
+        "icon",
+        "caption",
+        "repeatable-set-of-5"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
@@ -3409,20 +3436,25 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "ai team visual",
-        "2. TH\u01af\u1edcNG D\u00d9NG \u0110\u1ec2 BI\u1ec2U TH\u1eca C\u00c1C D\u1ea0NG CONTENT XOAY QUANH Chia s\u1ebb best practices v\u00e0 use cases trong c\u00e1c team N\u00e2ng c\u1ea5p c\u00e1c c"
+        "radial-map",
+        "diagram",
+        "initiative-map",
+        "team-building"
       ],
       "tags": [
-        "visual",
-        "picture",
-        "docling",
-        "auto-staged"
+        "ai",
+        "team-building",
+        "radial-diagram",
+        "initiative-map",
+        "center-visual"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "visual",
-        "text-bearing region"
+        "heading",
+        "label",
+        "icon",
+        "caption"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
@@ -3433,19 +3465,26 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "Recognition Engagement Card Set"
+        "recognition",
+        "engagement",
+        "employee-experience"
       ],
       "tags": [
-        "component-set",
-        "carousel",
-        "docling",
-        "auto-staged"
+        "card-set",
+        "employee-experience",
+        "recognition",
+        "engagement",
+        "set-of-2",
+        "carousel"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "component-set",
-        "carousel variants"
+        "heading",
+        "body",
+        "icon",
+        "card",
+        "repeatable-set-of-2"
       ],
       "limitations": [
         "Review carousel variants before publishing this grouped component set."
@@ -3456,20 +3495,26 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "checklist manager goal metric table",
-        "table candidate detected by Docling"
+        "checklist",
+        "planning",
+        "goal-setting",
+        "manager"
       ],
       "tags": [
-        "table",
-        "table",
-        "docling",
-        "auto-staged"
+        "manager",
+        "checklist",
+        "goal-setting",
+        "metrics",
+        "question-table"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "table",
-        "text-bearing region"
+        "heading",
+        "row",
+        "column",
+        "list-item",
+        "table"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
@@ -3480,34 +3525,28 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "grid",
-        "overview",
-        "multi-item",
-        "comparison",
+        "role-cards",
         "roles",
-        "categories",
-        "value-grid",
-        "benefit-grid"
+        "personas",
+        "comparison"
       ],
       "tags": [
         "cards",
         "roles",
         "card-set",
-        "three-column",
-        "four-column",
+        "set-of-4",
         "personas",
-        "vai-tro",
-        "the-loai",
-        "grid",
-        "cot"
+        "carousel",
+        "four-column"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
         "heading",
-        "label",
         "body",
-        "repeatable-set"
+        "icon",
+        "card",
+        "repeatable-set-of-4"
       ],
       "limitations": [
         "Review carousel variants before publishing this grouped component set."
@@ -3518,20 +3557,23 @@
       "type": "component",
       "brand": "sun-studio",
       "intent": [
-        "improvement strip",
-        "2. TH\u01af\u1edcNG D\u00d9NG \u0110\u1ec2 BI\u1ec2U TH\u1eca C\u00c1C D\u1ea0NG CONTENT H\u00ccNH Employee Experience WORK ENVIRONMENT IMPROVEMENT"
+        "employee-experience",
+        "improvement",
+        "section-label"
       ],
       "tags": [
-        "strip",
-        "picture",
-        "docling",
-        "auto-staged"
+        "employee-experience",
+        "improvement",
+        "text-strip",
+        "horizontal-strip",
+        "work-environment"
       ],
       "status": "published",
       "density": "any",
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "heading",
+        "label",
+        "caption"
       ],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."

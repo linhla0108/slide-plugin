@@ -4,6 +4,8 @@
 Covers the highest-consequence, previously-untested paths:
   - cleanup_run: deck.html + .pptx survive; intermediates are removed.
   - score_visual_items: 65/75 decision thresholds + extraction recommendation.
+  - score_visual_items hybrid retrieval: capped secondary lexical credit,
+    anti-use-case / count-fit / zero-slot penalties, published-only enrichment.
   - validate_selection_report: equal-score plausibility, provenance, T1 shape-lock.
   - scaffold_slide_from_component: slots preserved, no base64, .bg placeholder.
   - validate_component_fidelity: slot-id coverage pass/fail.
@@ -97,6 +99,275 @@ def test_score_below_floor_is_custom_local_with_extraction() -> None:
     assert dec["score"] < 65, dec
     assert dec["action"] == "custom-local", dec
     assert dec["extraction_recommended"] is True, "weak match must recommend extraction"
+
+
+# --------------------------------------------------------------------------- #
+# score_visual_items — hybrid retrieval (v3.2)
+# --------------------------------------------------------------------------- #
+def _rreq(**over) -> dict:
+    base = {"intent": [], "tags": [], "content_structure": [], "density": "any",
+            "brand": None, "required_exports": []}
+    base.update(over)
+    return base
+
+
+def test_retrieval_secondary_match_lifts_prose_metadata_item() -> None:
+    # metric/KPI strip: docling-style prose intent is invisible to primary
+    # matching; index keywords must lift it via capped secondary credit.
+    strip = _item(id="sun.component.kpi-strip",
+                  intent=["revenue team size metric strip"], tags=["strip"],
+                  content_structure=[])
+    req = _rreq(intent=["statistics", "kpi"], tags=["strip"])
+    _, plain = svi.score_request(req, [strip], svi.WEIGHTS, None)
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.kpi-strip", "status": "published",
+        "keywords": ["revenue", "team", "metric", "strip"],
+        "component_type": "strip", "slot_count": 5,
+    }])
+    _, enriched = svi.score_request(req, [strip], svi.WEIGHTS, None, enrichment=enrichment)
+    assert enriched[0]["score"] > plain[0]["score"], "index keywords must lift the strip"
+    assert enriched[0]["retrieval"]["secondary_matches"] == ["statistics"]
+    assert enriched[0]["retrieval"]["slot_count"] == 5
+
+
+def test_retrieval_tier_strip_trap_stays_below_genuine_component() -> None:
+    # level/tier strip: an OCR-named trap with a "levels" keyword must not
+    # outrank the component that declares tiers/levels as canonical intent.
+    genuine = _item(id="sun.component.tier-set",
+                    intent=["ranking", "levels", "tiers"], tags=["set-of-3"],
+                    content_structure=["heading", "label"])
+    trap = _item(id="sun.component.trap-strip",
+                 intent=["spicy autocomplete autonomous levels strip"],
+                 tags=["strip"], content_structure=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.trap-strip", "status": "published",
+         "keywords": ["levels", "autonomous"], "slot_count": 16},
+    ])
+    req = _rreq(intent=["levels", "tiers", "ranking"],
+                content_structure=["heading", "label"])
+    dec, cands = svi.score_request(req, [trap, genuine], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.tier-set", dec
+    scores = {c["item_id"]: c["score"] for c in cands}
+    assert scores["sun.component.trap-strip"] < scores["sun.component.tier-set"]
+
+
+def test_retrieval_generic_overlap_capped_below_semantic_floor() -> None:
+    # negative case: an unrelated item whose index keywords happen to cover
+    # EVERY request term must stay below the semantic floor -> custom-local.
+    lure = _item(id="sun.component.lure", intent=["ai team visual"], tags=[],
+                 content_structure=["a"])
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.lure", "status": "published",
+        "keywords": ["timeline", "roadmap"], "slot_count": 4,
+    }])
+    dec, cands = svi.score_request(_req(), [lure], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    cap_points = svi.SECONDARY_CAP * svi.WEIGHTS["semantic_intent"]
+    assert cands[0]["criteria"]["semantic_intent"] <= cap_points + 1e-9
+    assert dec["action"] == "custom-local", "generic overlap alone must never select"
+    assert dec["extraction_recommended"] is True
+
+
+def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up() -> None:
+    # A secondary-only lure can outrank a relevant component by raw score. The
+    # decision must skip the lure because it is below the semantic floor, then
+    # choose the best semantically valid runner-up instead of returning
+    # custom-local.
+    lure = _item(
+        id="sun.component.lure",
+        intent=["decorative visual"],
+        tags=[],
+        content_structure=["heading", "label"],
+    )
+    good = _item(
+        id="sun.component.good-timeline",
+        intent=["timeline", "roadmap"],
+        tags=[],
+        content_structure=["heading"],
+    )
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.lure", "status": "published",
+        "keywords": ["timeline", "roadmap", "milestones", "schedule"],
+        "slot_count": 4,
+    }])
+    req = _rreq(
+        intent=["timeline", "roadmap", "milestones", "schedule"],
+        content_structure=["heading", "label"],
+    )
+    dec, cands = svi.score_request(req, [lure, good], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert cands[0]["item_id"] == "sun.component.lure"
+    assert cands[0]["criteria"]["semantic_intent"] < svi.WEIGHTS["semantic_intent"] * 0.3
+    assert dec["item_id"] == "sun.component.good-timeline", dec
+    assert dec["action"] == "adapt-local", dec
+
+
+def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
+    # The decision may skip several below-floor lures and choose an above-floor
+    # runner-up outside the top-N display slice. The chosen item must still be
+    # emitted so reviewers can inspect its score, criteria, and reasons.
+    lures = [
+        _item(
+            id=f"sun.component.lure-{idx}",
+            intent=["decorative visual"],
+            tags=[],
+            content_structure=["heading", "label"],
+        )
+        for idx in range(6)
+    ]
+    good = _item(
+        id="sun.component.good-timeline",
+        intent=["timeline", "roadmap"],
+        tags=[],
+        content_structure=["heading"],
+    )
+    enrichment = svi.build_enrichment([
+        {
+            "id": lure["id"], "status": "published",
+            "keywords": ["timeline", "roadmap", "milestones", "schedule"],
+            "slot_count": 4,
+        }
+        for lure in lures
+    ])
+    req = _rreq(
+        intent=["timeline", "roadmap", "milestones", "schedule"],
+        content_structure=["heading", "label"],
+    )
+    dec, cands = svi.score_request(req, lures + [good], svi.WEIGHTS, None,
+                                   top_n=5, enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.good-timeline", dec
+    assert cands[0]["item_id"].startswith("sun.component.lure-"), cands
+    assert len(cands) == 6, cands
+    assert any(c["item_id"] == dec["item_id"] for c in cands), cands
+
+
+def test_retrieval_prose_component_outranks_unrelated_item() -> None:
+    # team/contributor/profile: prose-only metadata gains capped rank credit,
+    # so the right component surfaces above unrelated ones in candidates.
+    team = _item(id="sun.component.team-circles",
+                 intent=["team contributor profile circles layout"], tags=[],
+                 content_structure=[])
+    other = _item(id="sun.component.faq", intent=["faq"], tags=[],
+                  content_structure=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.team-circles", "status": "published",
+         "name": "Team Contributor Circles",
+         "intent": ["team contributor profile circles layout"], "slot_count": 0},
+        {"id": "sun.component.faq", "status": "published",
+         "keywords": ["faq"], "slot_count": 4},
+    ])
+    req = _rreq(intent=["team", "profile"], tags=["circles"])
+    _, cands = svi.score_request(req, [other, team], svi.WEIGHTS, None,
+                                 enrichment=enrichment)
+    assert cands[0]["item_id"] == "sun.component.team-circles", cands
+    assert cands[0]["retrieval"]["secondary_matches"], "must explain the lexical match"
+
+
+def test_retrieval_anti_use_case_penalty_for_undeclared_domain() -> None:
+    badge = _item(id="sun.component.badge", intent=["numbered", "grid"],
+                  tags=["cards"])
+    req = _rreq(intent=["statistics"], tags=["numbered"], content_structure=["a"])
+    base_enr = {"id": "sun.component.badge", "status": "published",
+                "keywords": ["badge"], "slot_count": 6}
+    _, plain = svi.score_request(req, [badge], svi.WEIGHTS, None,
+                                 enrichment=svi.build_enrichment([base_enr]))
+    anti_enr = dict(base_enr, anti_use_cases=[
+        "Do not use for data-driven charts or metrics; placeholder diagram."])
+    _, hit = svi.score_request(req, [badge], svi.WEIGHTS, None,
+                               enrichment=svi.build_enrichment([anti_enr]))
+    assert plain[0]["score"] - hit[0]["score"] == svi.ANTI_USE_CASE_PENALTY
+    assert hit[0]["retrieval"]["anti_hits"] == ["statistics"]
+    assert any("Anti-use-case" in r for r in hit[0]["reasons"])
+
+
+def test_retrieval_anti_hit_on_declared_intent_is_caveat_not_exclusion() -> None:
+    # The item declares statistics as honest intent; its anti text mentioning
+    # "metrics" is an editing caveat and must NOT be penalized.
+    circles = _item(id="sun.component.circles", intent=["statistics", "ranking"],
+                    tags=[])
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.circles", "status": "published",
+        "anti_use_cases": ["Do not reuse the baked metrics without editing text slots."],
+        "slot_count": 13,
+    }])
+    req = _rreq(intent=["statistics"], content_structure=["a"])
+    _, cands = svi.score_request(req, [circles], svi.WEIGHTS, None,
+                                 enrichment=enrichment)
+    assert "anti_hits" not in cands[0].get("retrieval", {}), cands[0]
+    assert not any("Anti-use-case" in r for r in cands[0]["reasons"])
+
+
+def test_retrieval_count_fit_penalty_prefers_matching_set_size() -> None:
+    # buildability: wrong declared set size must not beat a better-fit item.
+    three = _item(id="sun.component.three", intent=["roles"],
+                  tags=["cards", "set-of-3"])
+    four = _item(id="sun.component.four", intent=["roles"],
+                 tags=["cards", "set-of-4"])
+    req = _rreq(intent=["roles"], tags=["cards"], content_structure=["a"],
+                item_count=4)
+    dec, cands = svi.score_request(req, [three, four], svi.WEIGHTS, None)
+    assert dec["item_id"] == "sun.component.four", dec
+    three_cand = next(c for c in cands if c["item_id"] == "sun.component.three")
+    assert three_cand["retrieval"]["set_sizes"] == [3]
+    assert any("Count fit" in r for r in three_cand["reasons"])
+
+
+def test_retrieval_zero_slot_component_penalized_when_text_needed() -> None:
+    deco = _item(id="sun.component.deco", intent=["team", "profile"], tags=[])
+    slotted = _item(id="sun.component.slotted", intent=["team", "profile"], tags=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.deco", "status": "published", "slot_count": 0},
+        {"id": "sun.component.slotted", "status": "published", "slot_count": 6},
+    ])
+    req = _rreq(intent=["team", "profile"], content_structure=["a"])
+    dec, cands = svi.score_request(req, [deco, slotted], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert dec["item_id"] == "sun.component.slotted", dec
+    deco_cand = next(c for c in cands if c["item_id"] == "sun.component.deco")
+    assert deco_cand["retrieval"]["slot_count"] == 0
+    assert any("no editable text slots" in r for r in deco_cand["reasons"])
+    # decoration-only requests (no text content) are NOT penalized
+    _, cands2 = svi.score_request(_rreq(intent=["team", "profile"]),
+                                  [deco, slotted], svi.WEIGHTS, None,
+                                  enrichment=enrichment)
+    deco2 = next(c for c in cands2 if c["item_id"] == "sun.component.deco")
+    assert not any("no editable text slots" in r for r in deco2["reasons"])
+
+
+def test_retrieval_enrichment_published_only_and_missing_index() -> None:
+    # Draft/staging records never enrich scoring, even from a stale file, and
+    # a missing index file degrades to plain primary-only scoring.
+    assert svi.build_enrichment([
+        {"id": "sun.component.x", "status": "staging", "keywords": ["timeline"]},
+        {"status": "published", "keywords": ["timeline"]},
+    ]) == {}
+    with tempfile.TemporaryDirectory() as tmp:
+        assert svi.load_retrieval_index(Path(tmp) / "missing.jsonl") == {}
+
+
+def test_retrieval_corrupt_index_degrades_to_empty_enrichment() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        index = Path(tmp) / "component-retrieval-index.jsonl"
+        index.write_text(
+            '{"id":"sun.component.valid","status":"published","keywords":["kpi"]}\n'
+            '{"id":"sun.component.truncated",',
+            encoding="utf-8",
+        )
+        assert svi.load_retrieval_index(index) == {}
+        index.write_bytes(b"\xff\xfe")
+        assert svi.load_retrieval_index(index) == {}
+
+
+def test_retrieval_index_projects_slot_count() -> None:
+    import build_component_retrieval_index as bri
+    registry = {"items": [{
+        "id": "sun.component.slots", "status": "published", "type": "component",
+        "intent": ["grid"], "text_contract": {"slot_count": 7},
+    }]}
+    records = bri.build_records(registry)
+    assert records[0]["slot_count"] == 7
+    assert records[0]["schema_version"] == 2
 
 
 # --------------------------------------------------------------------------- #
@@ -627,6 +898,79 @@ def test_build_registry_live_is_clean() -> None:
                 if i.get("paths", {}).get("artifact")
                 and not breg.resolve_repo_path(i["paths"]["artifact"]).exists()]
     assert dangling == [], f"dangling registry entries: {dangling}"
+
+
+def _breg_env(tmp: Path, items: list[dict]):
+    """Point build_registry's module paths at a temp registry with no library
+    (so no orphans) and no history (so no zombies). Returns (registry, compact,
+    retrieval) paths. Caller restores globals in a finally block."""
+    reg = tmp / "visual-library.json"
+    reg.write_text(json.dumps({"items": items}), encoding="utf-8")
+    (tmp / "library").mkdir()
+    breg.REGISTRY = reg
+    breg.COMPACT = tmp / "visual-library-compact.json"
+    breg.RETRIEVAL = tmp / "component-retrieval-index.jsonl"
+    breg.HISTORY = tmp / "extraction-history.json"  # absent -> no zombies
+    breg.LIBRARY = tmp / "library"                  # empty -> no orphans
+    return reg, breg.COMPACT, breg.RETRIEVAL
+
+
+def _run_breg(*flags: str) -> int:
+    old = sys.argv[:]
+    sys.argv = ["build_registry.py", *flags]
+    try:
+        return breg.main()
+    finally:
+        sys.argv = old
+
+
+def test_build_registry_check_detects_stale_compact() -> None:
+    saved = (breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY)
+    items = [{"id": "sun.component.x", "type": "component", "status": "published",
+              "intent": ["kpi"], "tags": ["t"], "content_structure": ["metric"],
+              "brand": "sun-studio", "density": "any", "limitations": []}]
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            reg, compact, retrieval = _breg_env(Path(tmp), items)
+            # Correct retrieval index so ONLY compact drift is under test.
+            retrieval.write_text(breg.retrieval_jsonl(items), encoding="utf-8", newline="\n")
+            # Stale compact: content that does not match the projection.
+            compact.write_text('{"items": []}', encoding="utf-8")
+            assert _run_breg("--check") == 1, "stale compact must fail --check"
+            # A fresh, correct compact passes.
+            compact.write_text(breg.compact_text(items), encoding="utf-8")
+            assert _run_breg("--check") == 0, "matching compact must pass --check"
+            # A missing compact also fails.
+            compact.unlink()
+            assert _run_breg("--check") == 1, "missing compact must fail --check"
+        finally:
+            breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY = saved
+
+
+def test_build_registry_write_regenerates_stale_compact() -> None:
+    saved = (breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY)
+    items = [{"id": "sun.component.y", "type": "component", "status": "published",
+              "intent": ["checklist"], "tags": ["t"], "content_structure": ["heading"],
+              "brand": "sun-studio", "density": "any", "limitations": []}]
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            reg, compact, retrieval = _breg_env(Path(tmp), items)
+            compact.write_text('{"items": []}', encoding="utf-8")  # stale
+            assert _run_breg("--check") == 1
+            assert _run_breg("--write") == 0
+            # --write cleared the drift and produced the exact projection.
+            assert compact.read_text(encoding="utf-8") == breg.compact_text(items)
+            assert _run_breg("--check") == 0
+        finally:
+            breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY = saved
+
+
+def test_build_registry_live_compact_projection_is_clean() -> None:
+    # The committed compact must equal the deterministic projection of the live
+    # full registry (guards against the stale-compact class of bug this fixes).
+    reg = breg.load_json(breg.REGISTRY)
+    assert breg.COMPACT.read_text(encoding="utf-8") == breg.compact_text(reg["items"]), \
+        "visual-library-compact.json is stale — run build_registry.py --write"
 
 
 # --------------------------------------------------------------------------- #
@@ -1426,6 +1770,201 @@ def test_publish_rejects_failed_auto_stage_artifacts() -> None:
         finally:
             sys.argv = old_argv
         assert read_text_slots.load_json(registry)["items"] == []
+
+
+# --------------------------------------------------------------------------- #
+# validate_component_metadata — retrieval metadata quality gate
+# --------------------------------------------------------------------------- #
+def _meta_component(**over) -> dict:
+    """A fully retrieval-ready component item (passes the metadata gate)."""
+    base = {
+        "id": "sun.component.demo-strip",
+        "type": "component",
+        "category": "component",
+        "name": "Demo Metric Strip",
+        "intent": ["statistics", "metrics"],
+        "tags": ["strip", "kpi", "set-of-3"],
+        "content_structure": ["label", "metric"],
+        "component_type": "strip",
+        "layout_role": "horizontal metric strip",
+        "visual_summary": "Three KPI figures side by side with labels.",
+        "keywords": ["revenue", "growth", "kpi"],
+        "use_cases": ["Show three headline KPIs on one row"],
+        "anti_use_cases": ["Do not use for narrative body text"],
+        "retrieval_notes": "Select when the slide needs a compact KPI row.",
+        "quality_notes": "Manually reviewed against source render.",
+        "text_contract": {"slot_count": 6},
+    }
+    base.update(over)
+    return base
+
+
+def test_component_metadata_valid_passes() -> None:
+    import validate_component_metadata as vcm
+    assert vcm.validate_item(_meta_component()) == []
+    assert vcm.validate_registry({"items": [_meta_component()]}) == {}
+
+
+def test_component_metadata_missing_fields_fail() -> None:
+    import validate_component_metadata as vcm
+    errs = vcm.validate_item(_meta_component(keywords=[], use_cases=[],
+                                             component_type=None, visual_summary="  "))
+    joined = " ".join(errs)
+    assert "'keywords' is empty" in joined
+    assert "'use_cases' is empty" in joined
+    assert "'component_type' is blank" in joined
+    assert "'visual_summary' is blank" in joined
+
+
+def test_component_metadata_boilerplate_fails() -> None:
+    import validate_component_metadata as vcm
+    # auto-stage tag + Docling placeholder use/anti text must be rejected.
+    errs = vcm.validate_item(_meta_component(
+        tags=["strip", "auto-staged"],
+        use_cases=["Review and publish this strip as a reusable component."],
+        anti_use_cases=["Do not use before the Draft preview and metadata are reviewed."],
+        retrieval_notes="Generated from region text, Docling label, source name, and page.",
+    ))
+    assert any("auto-stage/placeholder text" in e for e in errs), errs
+    # An honest note that merely mentions Docling must NOT trip the gate.
+    ok = vcm.validate_item(_meta_component(
+        retrieval_notes="Region isolated manually; not a Docling auto-detected candidate."))
+    assert ok == [], ok
+
+
+def test_component_metadata_ocr_intent_fails() -> None:
+    import validate_component_metadata as vcm
+    errs = vcm.validate_item(_meta_component(
+        intent=["2. THƯỜNG DÙNG ĐỂ BIỂU THỊ CÁC DẠNG CONTENT XOAY QUANH team"]))
+    assert any("raw slide text/OCR" in e for e in errs), errs
+
+
+def test_component_metadata_ignores_non_component_types() -> None:
+    import validate_component_metadata as vcm
+    # A template with deliberately thin metadata must NOT be gated.
+    thin_template = {"id": "sun.deck.01-cover", "type": "template",
+                     "intent": ["cover"], "tags": []}
+    assert vcm.validate_item(thin_template) == []
+    assert vcm.validate_registry({"items": [thin_template]}) == {}
+
+
+def test_component_metadata_mapping_projection() -> None:
+    import validate_component_metadata as vcm
+    mapping = {
+        "candidate_stable_id": "sun.component.demo-strip", "type": "component",
+        "category": "component", "name": "Demo Metric Strip",
+        "semantic_intent": ["statistics"], "tags": ["strip"],
+        "content_structure": ["metric"], "component_type": "strip",
+        "layout_role": "strip", "visual_summary": "KPI strip.",
+        "keywords": ["kpi"], "use_cases": ["Show KPIs"],
+        "anti_use_cases": ["No body text"], "retrieval_notes": "Pick for KPIs.",
+        "quality_notes": "Reviewed.",
+    }
+    item = vcm.metadata_from_mapping(mapping)
+    assert item["intent"] == ["statistics"], "semantic_intent must map to intent"
+    assert vcm.validate_item(item) == []
+
+
+def test_component_metadata_strict_requires_set_shape() -> None:
+    import validate_component_metadata as vcm
+    set_item = _meta_component(id="sun.component.role-card-set", category="component-set",
+                               name="Role Card Set", tags=["roles", "personas"],
+                               content_structure=["heading"], use_cases=["Show roles"])
+    assert vcm.validate_item(set_item, strict=False) == []
+    strict_errs = vcm.validate_item(set_item, strict=True)
+    assert any("set-of-N" in e for e in strict_errs), strict_errs
+    # Exposing the multiplicity clears the strict check.
+    fixed = _meta_component(id="sun.component.role-card-set", category="component-set",
+                            name="Role Card Set", tags=["cards", "set-of-4"])
+    assert vcm.validate_item(fixed, strict=True) == []
+
+
+def test_component_metadata_real_registry_good_components_pass() -> None:
+    # The three hand-authored components in the live registry must pass; this
+    # guards against the gate regressing into false positives on real data.
+    import validate_component_metadata as vcm
+    registry = read_text_slots.load_json(REGISTRY)
+    by_id = {i["id"]: i for i in registry["items"]}
+    for good in ("sun.component.lorem-ipsum-circle-badge-set",
+                 "sun.component.foundation-top1-microsoft-overlap-circle-set",
+                 "sun.component.goal-keyresult-task-hexagon-diagram"):
+        assert vcm.validate_item(by_id[good]) == [], f"{good} should pass"
+
+
+def test_component_metadata_live_registry_all_components_pass() -> None:
+    import validate_component_metadata as vcm
+    registry = read_text_slots.load_json(REGISTRY)
+    failures = vcm.validate_registry(registry, strict=True)
+    assert failures == {}, json.dumps(failures, indent=2, ensure_ascii=False)
+
+
+def test_publish_blocks_weak_component_metadata_before_mutation() -> None:
+    import importlib
+    publish = importlib.import_module("publish_extraction")
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        extraction_dir = root / "extract"
+        item_dir = extraction_dir / "items" / "weak-strip"
+        (item_dir / "artifact").mkdir(parents=True)
+        (item_dir / "preview").mkdir()
+        (item_dir / "evidence").mkdir()
+        (item_dir / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "preview" / "thumbnail.png").write_bytes(b"not-a-real-png")
+        (item_dir / "evidence" / "source-with-text.svg").write_text("<svg/>", encoding="utf-8")
+        (item_dir / "mapping.json").write_text(json.dumps({
+            "extraction_id": "publish-weak-demo",
+            "item_id": "weak-strip",
+            "candidate_stable_id": "sun.component.weak-strip",
+            "name": "Weak Strip",
+            "status": "staging",
+            "type": "component",
+            "category": "component",
+            "brand": "sun-studio",
+            # Auto-stage boilerplate + empty retrieval fields — must be blocked.
+            "semantic_intent": ["weak strip", "picture candidate detected by Docling"],
+            "tags": ["strip", "auto-staged"],
+            "content_structure": [],
+            "content_fields": {},
+            "artifact_status": "ready",
+            "approval": {"status": "approved"},
+            "source": {
+                "path": str(root / "source.pdf"),
+                "slide_or_page": 1,
+                "region": {"x": 0, "y": 0, "width": 1, "height": 1, "unit": "normalized"},
+                "sha256": "source-hash",
+            },
+            "fingerprints": {
+                "region_identity_sha256": "region-hash",
+                "semantic_signature_sha256": "semantic-hash",
+            },
+        }), encoding="utf-8")
+        registry = root / "visual-library.json"
+        registry.write_text('{"items":[]}', encoding="utf-8")
+        history = root / "history.json"
+        history.write_text('{"attempts":[]}', encoding="utf-8")
+        library = root / "library"
+        old_argv = sys.argv[:]
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(extraction_dir),
+            "--item-id", "weak-strip",
+            "--registry", str(registry),
+            "--history", str(history),
+            "--library-root", str(library),
+        ]
+        try:
+            try:
+                publish.main()
+            except SystemExit as exc:
+                assert "metadata gate failed" in str(exc).lower(), str(exc)
+            else:
+                raise AssertionError("weak component metadata must block publish")
+        finally:
+            sys.argv = old_argv
+        # No registry, index, or library mutation may have occurred.
+        assert read_text_slots.load_json(registry)["items"] == []
+        assert not (root / "component-retrieval-index.jsonl").exists()
+        assert not library.exists()
 
 
 # --------------------------------------------------------------------------- #

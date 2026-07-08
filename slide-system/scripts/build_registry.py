@@ -20,7 +20,10 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
     an orphan usually means "publish it" or "register it", not "destroy it".
   * COMPACT — `visual-library-compact.json` (what `score_visual_items.py` reads)
     is regenerated as a deterministic projection of the full registry, so it can
-    never drift from it and is never hand-maintained.
+    never drift from it and is never hand-maintained. --check compares the
+    on-disk compact against a freshly recomputed projection and fails on any
+    mismatch, so a backfill that updates the full registry but forgets to
+    regenerate compact can no longer pass the gate.
 
     python3 slide-system/scripts/build_registry.py --check   # gate: exit 1 on drift
     python3 slide-system/scripts/build_registry.py --write    # drop dangling + purge zombie history + rebuild compact
@@ -68,6 +71,21 @@ def registry_artifact_dirs(items: list[dict]) -> set[Path]:
 
 def project_compact(items: list[dict]) -> dict:
     return {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in items]}
+
+
+def compact_text(items: list[dict]) -> str:
+    """Serialize the compact projection exactly as `write_json` writes it, so a
+    text comparison in --check is faithful to what --write would produce."""
+    return json.dumps(project_compact(items), ensure_ascii=True, indent=2) + "\n"
+
+
+def _rel(path: Path) -> str:
+    """Repo-relative display path, falling back to the raw path when the target
+    lives outside the repo (e.g. a temp registry under test)."""
+    try:
+        return str(path.relative_to(SYSTEM_ROOT.parent))
+    except ValueError:
+        return str(path)
 
 
 def retrieval_jsonl(items: list[dict]) -> str:
@@ -148,13 +166,26 @@ def main() -> int:
 
     if args.check:
         drift = len(dangling) + len(orphans) + len(zombies)
+        # COMPACT drift — the scorer reads visual-library-compact.json, so a full
+        # registry edit (e.g. a metadata backfill) that forgets to regenerate the
+        # projection would silently leave the scorer on stale metadata. Compare
+        # the on-disk compact against a freshly recomputed projection.
+        desired_compact = compact_text(kept)
+        compact_stale = (
+            not COMPACT.exists()
+            or COMPACT.read_text(encoding="utf-8") != desired_compact
+        )
+        if compact_stale:
+            print(f"STALE     {_rel(COMPACT)} "
+                  f"(compact projection out of date — run --write)")
+            drift += 1
         desired_retrieval = retrieval_jsonl(kept)
         retrieval_stale = (
             not RETRIEVAL.exists()
             or RETRIEVAL.read_text(encoding="utf-8") != desired_retrieval
         )
         if retrieval_stale:
-            print(f"STALE     {RETRIEVAL.relative_to(SYSTEM_ROOT.parent)}")
+            print(f"STALE     {_rel(RETRIEVAL)}")
             drift += 1
         print(f"{'DRIFT' if drift else 'clean'}: {len(dangling)} dangling, "
               f"{len(orphans)} orphan, {len(zombies)} zombie, {len(kept)} valid items")

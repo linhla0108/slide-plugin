@@ -60,14 +60,24 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
 5. **Stop on blockers** unless user approves override.
 6. **Content analysis** and source authority.
 7. **Score visual library (BLOCKING).** Write `analysis/visual-requests.json`
-   (one entry per slide with `intent`, `tags`, `content_structure`), then:
+   (one entry per slide with `intent`, `tags`, `content_structure`; add
+   `item_count` when the slide carries N parallel items — the scorer
+   penalizes set-of-N mismatches), then:
    ```bash
    .venv/bin/python3 slide-system/scripts/score_visual_items.py \
        --batch-request <run>/analysis/visual-requests.json \
        --output <run>/analysis/selection-report.json
    ```
    Score ALL types (templates + standalone components). Pass
-   `--prefer-set <set>` when brief has `base_template`.
+   `--prefer-set <set>` when brief has `base_template`. The scorer
+   auto-reads `registries/component-retrieval-index.jsonl` for broadened
+   (capped) lexical matching plus anti-use-case / count-fit / zero-slot
+   penalties; read each candidate's `retrieval` block and `reasons` when
+   reviewing decisions. If the top raw scorer is below the semantic floor, the
+   decision may choose the best valid runner-up; review the emitted selected
+   candidate rather than assuming `candidates[0]` is always the decision.
+   Score != buildability — still verify geometry/count/domain fit before
+   building a reuse/adapt slide.
 8. **Validate selection (BLOCKING GATE).**
    ```bash
    .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
