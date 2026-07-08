@@ -92,7 +92,7 @@
     {
       "id": "sun.interview-workshop-sunriser.01-cover",
       "version": "1.0.0",
-      "name": "01 \u2014 Cover: Interview Workshop",
+      "name": "01 — Cover: Interview Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -220,7 +220,7 @@
     {
       "id": "sun.interview-workshop-sunriser.02-timeline",
       "version": "1.0.0",
-      "name": "02 \u2014 Timeline SUN.RISER 2026",
+      "name": "02 — Timeline SUN.RISER 2026",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -447,7 +447,7 @@
     {
       "id": "sun.interview-workshop-sunriser.03-objectives",
       "version": "1.0.0",
-      "name": "03 \u2014 M\u1ee5c ti\u00eau Workshop",
+      "name": "03 — Mục tiêu Workshop",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -628,7 +628,7 @@
     {
       "id": "sun.interview-workshop-sunriser.04-mindset",
       "version": "1.0.0",
-      "name": "04 \u2014 T\u00e2m th\u1ebf tuy\u1ec3n d\u1ee5ng",
+      "name": "04 — Tâm thế tuyển dụng",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -834,7 +834,7 @@
     {
       "id": "sun.interview-workshop-sunriser.05-prep",
       "version": "1.0.0",
-      "name": "05 \u2014 Chu\u1ea9n b\u1ecb tr\u01b0\u1edbc ph\u1ecfng v\u1ea5n",
+      "name": "05 — Chuẩn bị trước phỏng vấn",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1065,7 +1065,7 @@
     {
       "id": "sun.interview-workshop-sunriser.06-tough-candidates",
       "version": "1.0.0",
-      "name": "06 \u2014 \u1ee8ng vi\u00ean kh\u00f3 \u0111\u1ee1",
+      "name": "06 — Ứng viên khó đỡ",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1257,7 +1257,7 @@
     {
       "id": "sun.interview-workshop-sunriser.07-star-method",
       "version": "1.0.0",
-      "name": "07 \u2014 Ph\u01b0\u01a1ng ph\u00e1p STAR",
+      "name": "07 — Phương pháp STAR",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1573,7 +1573,7 @@
     {
       "id": "sun.interview-workshop-sunriser.08-structure-warmup",
       "version": "1.0.0",
-      "name": "08 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Warm-up)",
+      "name": "08 — Cấu trúc phỏng vấn (Warm-up)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -1796,7 +1796,7 @@
     {
       "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
       "version": "1.0.0",
-      "name": "09 \u2014 C\u1ea5u tr\u00fac ph\u1ecfng v\u1ea5n (Deep-dive)",
+      "name": "09 — Cấu trúc phỏng vấn (Deep-dive)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2019,7 +2019,7 @@
     {
       "id": "sun.interview-workshop-sunriser.10-do-dont",
       "version": "1.0.0",
-      "name": "10 \u2014 N\u00ean & Tr\u00e1nh (DO/DON'T)",
+      "name": "10 — Nên & Tránh (DO/DON'T)",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2334,7 +2334,7 @@
     {
       "id": "sun.interview-workshop-sunriser.11-scoring",
       "version": "1.0.0",
-      "name": "11 \u2014 Sau ph\u1ecfng v\u1ea5n: Ch\u1ea5m \u0111i\u1ec3m",
+      "name": "11 — Sau phỏng vấn: Chấm điểm",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -2625,7 +2625,7 @@
     {
       "id": "sun.interview-workshop-sunriser.12-action-items",
       "version": "1.0.0",
-      "name": "12 \u2014 L\u00e0m ngay cho bu\u1ed5i ti\u1ebfp theo",
+      "name": "12 — Làm ngay cho buổi tiếp theo",
       "type": "template",
       "category": "template",
       "status": "published",
@@ -16130,11 +16130,22 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "brand icon library reference sheet",
-        "frequently used icon set"
+        "icon reference",
+        "brand icons",
+        "line icon library"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "icons",
+        "reference-sheet",
+        "outline-icons",
+        "brand-assets",
+        "glyph-grid"
+      ],
+      "content_structure": [
+        "icon-grid",
+        "labeled-icon-examples",
+        "reference-panel"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16256,7 +16267,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "component_type": "icon reference sheet",
+      "layout_role": "brand icon library panel",
+      "visual_summary": "Reference sheet with SUN-style outline icons and labeled frequently used icon examples.",
+      "keywords": [
+        "icon",
+        "glyph",
+        "outline",
+        "brand",
+        "reference",
+        "library"
+      ],
+      "use_cases": [
+        "Inspect available SUN-style outline icons before choosing an icon for a slide.",
+        "Show a compact reference panel of reusable brand icon styles."
+      ],
+      "anti_use_cases": [
+        "Do not use as a final content slide or data chart.",
+        "Do not use when the slide needs one isolated icon rather than a reference sheet."
+      ],
+      "quality_notes": "Published extraction keeps the icon sheet intact; individual glyph extraction should be used for single-icon reuse.",
+      "retrieval_notes": "Select when the generator needs an overview of available SUN outline icon styles or an icon library reference."
     },
     {
       "id": "sun.component.team-contributor-circles.g01",
@@ -16267,11 +16299,22 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "team contributor profile circles layout",
-        "three-member team showcase with avatar placeholders and roles"
+        "team contributors",
+        "profile placeholders",
+        "three-person team"
       ],
-      "tags": [],
-      "content_structure": [],
+      "tags": [
+        "team",
+        "contributors",
+        "profile-circles",
+        "avatar-placeholders",
+        "set-of-3"
+      ],
+      "content_structure": [
+        "three avatar circles",
+        "name labels",
+        "role captions"
+      ],
       "content_fields": {
         "required": [],
         "optional": [],
@@ -16319,7 +16362,28 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-06-26T14:46:02+07:00"
-      }
+      },
+      "component_type": "profile group",
+      "layout_role": "three-person contributor section",
+      "visual_summary": "Three large circular avatar placeholders with contributor names and short role captions arranged in one row.",
+      "keywords": [
+        "team",
+        "contributors",
+        "profile",
+        "avatar",
+        "members",
+        "roles"
+      ],
+      "use_cases": [
+        "Introduce three team members, contributors, speakers, or project owners.",
+        "Reserve image placeholders for portraits while keeping names and roles editable."
+      ],
+      "anti_use_cases": [
+        "Do not use for KPI dashboards, charts, or dense biography text.",
+        "Do not use when the team has fewer or more than three visible people without adapting the layout."
+      ],
+      "quality_notes": "Published extraction keeps the contributor row as a reusable three-person layout with editable text slots.",
+      "retrieval_notes": "Select for slides that need a three-member team showcase with portrait placeholders and short labels."
     },
     {
       "id": "sun.component.goal-setting-checklist-table",
@@ -16330,32 +16394,23 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "comparison",
-        "checklist",
-        "do-dont",
-        "guidelines",
-        "best-practices",
-        "instructions",
-        "principles",
-        "steps"
+        "goal setting checklist",
+        "do-dont guidance",
+        "planning table"
       ],
       "tags": [
-        "comparison",
         "checklist",
-        "table",
+        "goal-setting",
         "do-dont",
-        "columns",
-        "guidelines",
-        "so-sanh",
-        "danh-sach",
-        "bang",
-        "nguyen-tac"
+        "comparison-table",
+        "guidelines"
       ],
       "content_structure": [
         "heading",
-        "label",
-        "body",
-        "list-item"
+        "column labels",
+        "body text",
+        "list items",
+        "checklist rows"
       ],
       "content_fields": {
         "required": [],
@@ -16789,7 +16844,28 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-06-26T14:46:03+07:00"
-      }
+      },
+      "component_type": "checklist table",
+      "layout_role": "goal-setting guidance comparison",
+      "visual_summary": "Wide checklist table for goal-setting guidance with headings, comparison columns, and multiple editable list items.",
+      "keywords": [
+        "goal",
+        "checklist",
+        "planning",
+        "guidelines",
+        "comparison",
+        "table"
+      ],
+      "use_cases": [
+        "Explain goal-setting rules, do/dont guidance, or decision criteria in a structured table.",
+        "Present many short checklist items while preserving a clear column hierarchy."
+      ],
+      "anti_use_cases": [
+        "Do not use for simple one-message slides or visual-only diagrams.",
+        "Do not use when the content has fewer than three checklist rows."
+      ],
+      "quality_notes": "Published extraction retains the original table geometry and editable text slots for checklist-style content.",
+      "retrieval_notes": "Select for dense goal-setting or process-guidance slides that need a structured checklist table."
     },
     {
       "id": "sun.component.revenue-team-size-metric-strip",
@@ -16800,18 +16876,23 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "revenue team size metric strip",
-        "+30% Revenue +30% Team Size (110 Members)"
+        "kpi strip",
+        "growth metrics",
+        "revenue and team size"
       ],
       "tags": [
-        "strip",
-        "figure",
-        "docling",
-        "auto-staged"
+        "kpi",
+        "metric-strip",
+        "growth",
+        "two-row",
+        "percentage-badges"
       ],
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "two stacked metric bars",
+        "label",
+        "percentage",
+        "supporting caption",
+        "arrow badge"
       ],
       "content_fields": {
         "required": [],
@@ -16849,26 +16930,27 @@
           }
         ]
       },
-      "component_type": "strip",
-      "layout_role": "strip extracted from source region",
-      "visual_summary": "Auto-staged strip from page 2 of GUIDLINE_PRESENTATION_SUN.pdf. Region cue: ['+30%', 'Revenue', 'Team Size'].",
+      "component_type": "metric strip",
+      "layout_role": "headline KPI comparison strip",
+      "visual_summary": "Two wide rounded metric bars showing revenue and team size growth with arrow badges and large percentage values.",
       "keywords": [
         "revenue",
-        "team",
-        "size",
+        "team size",
+        "growth",
+        "percentage",
         "metric",
-        "strip",
-        "figure",
-        "members"
+        "kpi"
       ],
       "use_cases": [
-        "Review and publish this strip as a reusable component."
+        "Highlight two related KPI improvements with large percentages.",
+        "Compare business and organization growth metrics in a compact visual strip."
       ],
       "anti_use_cases": [
-        "Do not use before the Draft preview and metadata are reviewed."
+        "Do not use for more than two KPI rows without redesigning the spacing.",
+        "Do not use for detailed chart data or long explanatory copy."
       ],
-      "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft. | Region widened after review: original Docling bbox (width=0.5163) clipped the corner arrow-badge circle on both bars; re-cropped to width=0.582113 to include it fully.",
-      "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
+      "quality_notes": "Reviewed crop includes the full rounded bars and corner arrow badges; text slots remain editable.",
+      "retrieval_notes": "Select when a slide needs a bold two-metric growth strip with labels, percentages, and directional badges.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.revenue-team-size-metric-strip/visual.svg",
@@ -16922,18 +17004,23 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "spicy autocomplete autonomous levels strip",
-        "picture candidate detected by Docling"
+        "ai maturity levels",
+        "level card strip",
+        "capability ladder"
       ],
       "tags": [
-        "strip",
-        "picture",
-        "docling",
-        "auto-staged"
+        "ai",
+        "maturity-model",
+        "level-cards",
+        "set-of-5",
+        "horizontal-strip"
       ],
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "five level cards",
+        "level label",
+        "subtitle",
+        "icon",
+        "corner arrow"
       ],
       "content_fields": {
         "required": [],
@@ -17037,27 +17124,27 @@
           }
         ]
       },
-      "component_type": "strip",
-      "layout_role": "strip extracted from source region",
-      "visual_summary": "Auto-staged strip from page 2 of GUIDLINE_PRESENTATION_SUN.pdf. Region cue: ['Spicy', 'Autocomplete', 'Level 1'].",
+      "component_type": "level card strip",
+      "layout_role": "horizontal maturity ladder",
+      "visual_summary": "Five colored level cards arranged horizontally, each with a level label, capability subtitle, icon, and corner arrow.",
       "keywords": [
-        "spicy",
-        "autocomplete",
-        "autonomous",
+        "ai",
+        "maturity",
         "levels",
-        "strip",
-        "picture",
-        "level",
-        "development"
+        "capability",
+        "ladder",
+        "cards"
       ],
       "use_cases": [
-        "Review and publish this strip as a reusable component."
+        "Show five stages of AI capability, maturity, adoption, or product evolution.",
+        "Compare adjacent maturity levels with strong color-coded cards."
       ],
       "anti_use_cases": [
-        "Do not use before the Draft preview and metadata are reviewed."
+        "Do not use for unrelated process timelines with more or fewer than five stages without adapting the set.",
+        "Do not use when the slide needs dense body text inside each card."
       ],
-      "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft.",
-      "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
+      "quality_notes": "Published extraction preserves the full five-card strip and its editable text slots.",
+      "retrieval_notes": "Select for a five-step maturity model or level ladder that should read as one horizontal component set.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.spicy-autocomplete-autonomous-levels-strip/visual.svg",
@@ -17648,18 +17735,21 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "ai team visual",
-        "2. TH\u01af\u1edcNG D\u00d9NG \u0110\u1ec2 BI\u1ec2U TH\u1eca C\u00c1C D\u1ea0NG CONTENT XOAY QUANH Chia s\u1ebb best practices v\u00e0 use cases trong c\u00e1c team N\u00e2ng c\u1ea5p c\u00e1c c"
+        "ai team building",
+        "team capability map",
+        "radial initiative diagram"
       ],
       "tags": [
-        "visual",
-        "picture",
-        "docling",
-        "auto-staged"
+        "ai",
+        "team-building",
+        "radial-diagram",
+        "initiative-map",
+        "center-visual"
       ],
       "content_structure": [
-        "visual",
-        "text-bearing region"
+        "central goal bands",
+        "surrounding labels",
+        "concentric guide rings"
       ],
       "content_fields": {
         "required": [],
@@ -17757,23 +17847,27 @@
           }
         ]
       },
-      "component_type": "visual",
-      "layout_role": "visual extracted from source region",
-      "visual_summary": "Auto-staged visual from page 4 of GUIDLINE_PRESENTATION_SUN.pdf. Region cue: ['X\u00c2Y D\u1ef0NG \u0110\u1ed8I NG\u0168 AI', 'X\u00c2Y D\u1ef0NG H\u1ec6 TH\u1ed0NG', 'T\u1ef0 \u0110\u1ed8NG HO\u00c1'].",
+      "component_type": "radial diagram",
+      "layout_role": "initiative map visual",
+      "visual_summary": "Radial initiative diagram with central AI team/system goals and surrounding action labels arranged around guide rings.",
       "keywords": [
-        "ai",
-        "team",
-        "visual",
-        "picture"
+        "ai team",
+        "capability",
+        "initiative",
+        "radial",
+        "system",
+        "training"
       ],
       "use_cases": [
-        "Review and publish this visual as a reusable component."
+        "Map several initiatives around a central AI team-building objective.",
+        "Explain related workstreams that support an internal capability-building program."
       ],
       "anti_use_cases": [
-        "Do not use before the Draft preview and metadata are reviewed."
+        "Do not use for numeric KPI comparisons or chart-heavy slides.",
+        "Do not use when the surrounding labels must be read as a strict ordered sequence."
       ],
-      "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft.",
-      "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
+      "quality_notes": "Published extraction keeps the full radial composition and central bands with editable text slots.",
+      "retrieval_notes": "Select for slides about AI team enablement, capability building, or grouped initiatives around a central theme.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.ai-team-visual/visual.svg",
@@ -17827,39 +17921,49 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "Recognition Engagement Card Set"
+        "recognition cards",
+        "engagement cards",
+        "employee experience"
       ],
       "tags": [
-        "component-set",
-        "carousel",
-        "docling",
-        "auto-staged"
+        "card-set",
+        "employee-experience",
+        "recognition",
+        "engagement",
+        "set-of-2",
+        "carousel"
       ],
       "content_structure": [
-        "component-set",
-        "carousel variants"
+        "two carousel variants",
+        "large card",
+        "icon",
+        "heading",
+        "support text"
       ],
       "content_fields": {
         "required": [],
         "optional": []
       },
-      "component_type": "component-set",
-      "layout_role": "grouped carousel component set",
-      "visual_summary": "Grouped 2 related detected components from one source page.",
+      "component_type": "card set",
+      "layout_role": "employee experience card carousel",
+      "visual_summary": "Two related employee-experience card variants for recognition and engagement themes, packaged as a carousel component set.",
       "keywords": [
         "recognition",
         "engagement",
-        "card",
-        "set"
+        "employee experience",
+        "cards",
+        "carousel"
       ],
       "use_cases": [
-        "Review and publish related visual variants as one reusable component set."
+        "Present recognition and engagement as related employee-experience cards.",
+        "Use as a compact carousel-style set when a slide needs two related people-culture themes."
       ],
       "anti_use_cases": [
-        "Do not use before every carousel variant is reviewed."
+        "Do not use for unrelated operational metrics or dense process tables.",
+        "Do not use when each card needs long paragraph content."
       ],
-      "quality_notes": "Auto-grouped from related candidates on one source page.",
-      "retrieval_notes": "Group metadata is generated from child component names and source page context.",
+      "quality_notes": "Published component set keeps the related card variants together for carousel review and reuse.",
+      "retrieval_notes": "Select for recognition, engagement, employee-experience, or people-culture slide sections that need card variants.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.recognition-engagement-card-set/visual.svg",
@@ -17916,18 +18020,23 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "checklist manager goal metric table",
-        "table candidate detected by Docling"
+        "manager checklist",
+        "goal metric table",
+        "planning questions"
       ],
       "tags": [
-        "table",
-        "table",
-        "docling",
-        "auto-staged"
+        "manager",
+        "checklist",
+        "goal-setting",
+        "metrics",
+        "question-table"
       ],
       "content_structure": [
-        "table",
-        "text-bearing region"
+        "table heading",
+        "question prompts",
+        "goal column",
+        "metric column",
+        "checklist items"
       ],
       "content_fields": {
         "required": [],
@@ -18307,25 +18416,27 @@
           }
         ]
       },
-      "component_type": "table",
-      "layout_role": "table extracted from source region",
-      "visual_summary": "Auto-staged table from page 4 of GUIDLINE_PRESENTATION_SUN.pdf. Region cue: ['Checklist cho Qu\u1ea3n l\u00fd', 'Manager n\u00ean h\u1ecfi / trao \u0111\u1ed5i', 'M\u1ee5c ti\u00eau'].",
+      "component_type": "checklist table",
+      "layout_role": "manager planning checklist",
+      "visual_summary": "Manager checklist table that pairs goal-setting prompts with metric and discussion fields across multiple rows.",
       "keywords": [
-        "checklist",
         "manager",
-        "goal",
-        "metric",
-        "table",
-        "team"
+        "goals",
+        "metrics",
+        "questions",
+        "checklist",
+        "planning"
       ],
       "use_cases": [
-        "Review and publish this table as a reusable component."
+        "Guide managers through goal, metric, and discussion prompts during planning.",
+        "Turn many short management checklist items into an editable structured table."
       ],
       "anti_use_cases": [
-        "Do not use before the Draft preview and metadata are reviewed."
+        "Do not use for simple visual summaries or single-question prompts.",
+        "Do not use when the slide needs chart visualization rather than text-heavy checklist rows."
       ],
-      "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft.",
-      "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
+      "quality_notes": "Published extraction preserves the table layout and editable text slots for planning-checklist content.",
+      "retrieval_notes": "Select when a slide asks for manager discussion questions, goal metrics, or a structured planning checklist.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.checklist-manager-goal-metric-table/visual.svg",
@@ -18379,56 +18490,51 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "grid",
-        "overview",
-        "multi-item",
-        "comparison",
-        "roles",
-        "categories",
-        "value-grid",
-        "benefit-grid"
+        "role card set",
+        "team roles",
+        "ai adoption personas"
       ],
       "tags": [
         "cards",
         "roles",
         "card-set",
-        "three-column",
-        "four-column",
+        "set-of-4",
         "personas",
-        "vai-tro",
-        "the-loai",
-        "grid",
-        "cot"
+        "carousel",
+        "four-column"
       ],
       "content_structure": [
-        "heading",
-        "label",
-        "body",
-        "repeatable-set"
+        "four role cards",
+        "icon",
+        "role title",
+        "description",
+        "corner arrow"
       ],
       "content_fields": {
         "required": [],
         "optional": []
       },
-      "component_type": "component-set",
-      "layout_role": "grouped carousel component set",
-      "visual_summary": "Grouped 4 related detected components from one source page.",
+      "component_type": "role card set",
+      "layout_role": "four-role carousel card set",
+      "visual_summary": "Four role cards for Translator, Strategist, Driver, and Coach personas with icons, titles, descriptions, and corner arrows.",
       "keywords": [
         "translator",
         "strategist",
         "driver",
         "coach",
-        "card",
-        "set"
+        "roles",
+        "personas"
       ],
       "use_cases": [
-        "Review and publish related visual variants as one reusable component set."
+        "Explain four roles, personas, or responsibilities in a consistent card set.",
+        "Show team archetypes or AI adoption roles with icon-led cards."
       ],
       "anti_use_cases": [
-        "Do not use before every carousel variant is reviewed."
+        "Do not use for numeric metrics, charts, or a single-role spotlight.",
+        "Do not use when each role requires long body copy beyond the card slots."
       ],
-      "quality_notes": "Auto-grouped from related candidates on one source page.",
-      "retrieval_notes": "Group metadata is generated from child component names and source page context.",
+      "quality_notes": "Published component set keeps the four related role cards together while preserving editable text slots.",
+      "retrieval_notes": "Select for slides that need a four-persona card set or role comparison carousel.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.translator-strategist-driver-coach-card-set/visual.svg",
@@ -18487,18 +18593,20 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
+        "employee experience",
         "improvement strip",
-        "2. TH\u01af\u1edcNG D\u00d9NG \u0110\u1ec2 BI\u1ec2U TH\u1eca C\u00c1C D\u1ea0NG CONTENT H\u00ccNH Employee Experience WORK ENVIRONMENT IMPROVEMENT"
+        "work environment"
       ],
       "tags": [
-        "strip",
-        "picture",
-        "docling",
-        "auto-staged"
+        "employee-experience",
+        "improvement",
+        "text-strip",
+        "horizontal-strip",
+        "work-environment"
       ],
       "content_structure": [
-        "strip",
-        "text-bearing region"
+        "three-word headline",
+        "compact strip"
       ],
       "content_fields": {
         "required": [],
@@ -18524,23 +18632,26 @@
           }
         ]
       },
-      "component_type": "strip",
-      "layout_role": "strip extracted from source region",
-      "visual_summary": "Auto-staged strip from page 5 of GUIDLINE_PRESENTATION_SUN.pdf. Region cue: ['WORK', 'ENVIRONMENT', 'IMPROVEMENT'].",
+      "component_type": "headline strip",
+      "layout_role": "employee experience section label",
+      "visual_summary": "Compact horizontal headline strip for the phrase Work Environment Improvement.",
       "keywords": [
+        "work environment",
         "improvement",
-        "strip",
-        "picture",
-        "content"
+        "employee experience",
+        "headline",
+        "strip"
       ],
       "use_cases": [
-        "Review and publish this strip as a reusable component."
+        "Label an employee-experience section about work environment improvement.",
+        "Use as a compact typographic strip for a short three-part concept."
       ],
       "anti_use_cases": [
-        "Do not use before the Draft preview and metadata are reviewed."
+        "Do not use for KPI data, tables, or multi-step process diagrams.",
+        "Do not use when the slide needs more than a short headline phrase."
       ],
-      "quality_notes": "Auto-generated from PDF text and Docling region; final approval happens in Draft.",
-      "retrieval_notes": "Generated from region text, Docling label, source name, and page.",
+      "quality_notes": "Published extraction is a small typographic strip with editable text slots; use only when the short-label form fits.",
+      "retrieval_notes": "Select for employee-experience or workplace-improvement slides that need a concise label strip.",
       "text_contract": {
         "schema": "slide-system/schemas/text-slots.schema.json",
         "visual": "slide-system/library/components/diagrams/sun.component.improvement-strip/visual.svg",

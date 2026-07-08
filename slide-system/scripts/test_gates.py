@@ -1818,6 +1818,13 @@ def test_component_metadata_real_registry_good_components_pass() -> None:
         assert vcm.validate_item(by_id[good]) == [], f"{good} should pass"
 
 
+def test_component_metadata_live_registry_all_components_pass() -> None:
+    import validate_component_metadata as vcm
+    registry = read_text_slots.load_json(REGISTRY)
+    failures = vcm.validate_registry(registry, strict=True)
+    assert failures == {}, json.dumps(failures, indent=2, ensure_ascii=False)
+
+
 def test_publish_blocks_weak_component_metadata_before_mutation() -> None:
     import importlib
     publish = importlib.import_module("publish_extraction")
