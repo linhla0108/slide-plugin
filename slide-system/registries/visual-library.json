@@ -16130,9 +16130,9 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "icon reference",
-        "brand icons",
-        "line icon library"
+        "icon-reference",
+        "overview",
+        "icon-library"
       ],
       "tags": [
         "icons",
@@ -16142,9 +16142,9 @@
         "glyph-grid"
       ],
       "content_structure": [
-        "icon-grid",
-        "labeled-icon-examples",
-        "reference-panel"
+        "icon",
+        "label",
+        "repeatable-set"
       ],
       "content_fields": {
         "required": [],
@@ -16299,9 +16299,9 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "team contributors",
-        "profile placeholders",
-        "three-person team"
+        "team",
+        "profile-layout",
+        "contributors"
       ],
       "tags": [
         "team",
@@ -16311,9 +16311,11 @@
         "set-of-3"
       ],
       "content_structure": [
-        "three avatar circles",
-        "name labels",
-        "role captions"
+        "avatar",
+        "heading",
+        "label",
+        "caption",
+        "repeatable-set-of-3"
       ],
       "content_fields": {
         "required": [],
@@ -16394,9 +16396,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "goal setting checklist",
-        "do-dont guidance",
-        "planning table"
+        "checklist",
+        "comparison",
+        "guidelines",
+        "goal-setting"
       ],
       "tags": [
         "checklist",
@@ -16407,10 +16410,10 @@
       ],
       "content_structure": [
         "heading",
-        "column labels",
-        "body text",
-        "list items",
-        "checklist rows"
+        "label",
+        "body",
+        "list-item",
+        "column"
       ],
       "content_fields": {
         "required": [],
@@ -16876,9 +16879,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "kpi strip",
-        "growth metrics",
-        "revenue and team size"
+        "kpi",
+        "growth",
+        "metrics",
+        "revenue"
       ],
       "tags": [
         "kpi",
@@ -16888,11 +16892,10 @@
         "percentage-badges"
       ],
       "content_structure": [
-        "two stacked metric bars",
+        "metric",
         "label",
-        "percentage",
-        "supporting caption",
-        "arrow badge"
+        "caption",
+        "repeatable-set-of-2"
       ],
       "content_fields": {
         "required": [],
@@ -17004,9 +17007,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "ai maturity levels",
-        "level card strip",
-        "capability ladder"
+        "maturity-model",
+        "levels",
+        "tiers",
+        "capability-ladder"
       ],
       "tags": [
         "ai",
@@ -17016,11 +17020,11 @@
         "horizontal-strip"
       ],
       "content_structure": [
-        "five level cards",
-        "level label",
-        "subtitle",
+        "heading",
+        "label",
         "icon",
-        "corner arrow"
+        "caption",
+        "repeatable-set-of-5"
       ],
       "content_fields": {
         "required": [],
@@ -17735,9 +17739,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "ai team building",
-        "team capability map",
-        "radial initiative diagram"
+        "radial-map",
+        "diagram",
+        "initiative-map",
+        "team-building"
       ],
       "tags": [
         "ai",
@@ -17747,9 +17752,10 @@
         "center-visual"
       ],
       "content_structure": [
-        "central goal bands",
-        "surrounding labels",
-        "concentric guide rings"
+        "heading",
+        "label",
+        "icon",
+        "caption"
       ],
       "content_fields": {
         "required": [],
@@ -17921,9 +17927,9 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "recognition cards",
-        "engagement cards",
-        "employee experience"
+        "recognition",
+        "engagement",
+        "employee-experience"
       ],
       "tags": [
         "card-set",
@@ -17934,11 +17940,11 @@
         "carousel"
       ],
       "content_structure": [
-        "two carousel variants",
-        "large card",
-        "icon",
         "heading",
-        "support text"
+        "body",
+        "icon",
+        "card",
+        "repeatable-set-of-2"
       ],
       "content_fields": {
         "required": [],
@@ -18020,9 +18026,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "manager checklist",
-        "goal metric table",
-        "planning questions"
+        "checklist",
+        "planning",
+        "goal-setting",
+        "manager"
       ],
       "tags": [
         "manager",
@@ -18032,11 +18039,11 @@
         "question-table"
       ],
       "content_structure": [
-        "table heading",
-        "question prompts",
-        "goal column",
-        "metric column",
-        "checklist items"
+        "heading",
+        "row",
+        "column",
+        "list-item",
+        "table"
       ],
       "content_fields": {
         "required": [],
@@ -18490,9 +18497,10 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "role card set",
-        "team roles",
-        "ai adoption personas"
+        "role-cards",
+        "roles",
+        "personas",
+        "comparison"
       ],
       "tags": [
         "cards",
@@ -18504,11 +18512,11 @@
         "four-column"
       ],
       "content_structure": [
-        "four role cards",
+        "heading",
+        "body",
         "icon",
-        "role title",
-        "description",
-        "corner arrow"
+        "card",
+        "repeatable-set-of-4"
       ],
       "content_fields": {
         "required": [],
@@ -18593,9 +18601,9 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "employee experience",
-        "improvement strip",
-        "work environment"
+        "employee-experience",
+        "improvement",
+        "section-label"
       ],
       "tags": [
         "employee-experience",
@@ -18605,8 +18613,9 @@
         "work-environment"
       ],
       "content_structure": [
-        "three-word headline",
-        "compact strip"
+        "heading",
+        "label",
+        "caption"
       ],
       "content_fields": {
         "required": [],

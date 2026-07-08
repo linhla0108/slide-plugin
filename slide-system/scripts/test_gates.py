@@ -900,6 +900,79 @@ def test_build_registry_live_is_clean() -> None:
     assert dangling == [], f"dangling registry entries: {dangling}"
 
 
+def _breg_env(tmp: Path, items: list[dict]):
+    """Point build_registry's module paths at a temp registry with no library
+    (so no orphans) and no history (so no zombies). Returns (registry, compact,
+    retrieval) paths. Caller restores globals in a finally block."""
+    reg = tmp / "visual-library.json"
+    reg.write_text(json.dumps({"items": items}), encoding="utf-8")
+    (tmp / "library").mkdir()
+    breg.REGISTRY = reg
+    breg.COMPACT = tmp / "visual-library-compact.json"
+    breg.RETRIEVAL = tmp / "component-retrieval-index.jsonl"
+    breg.HISTORY = tmp / "extraction-history.json"  # absent -> no zombies
+    breg.LIBRARY = tmp / "library"                  # empty -> no orphans
+    return reg, breg.COMPACT, breg.RETRIEVAL
+
+
+def _run_breg(*flags: str) -> int:
+    old = sys.argv[:]
+    sys.argv = ["build_registry.py", *flags]
+    try:
+        return breg.main()
+    finally:
+        sys.argv = old
+
+
+def test_build_registry_check_detects_stale_compact() -> None:
+    saved = (breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY)
+    items = [{"id": "sun.component.x", "type": "component", "status": "published",
+              "intent": ["kpi"], "tags": ["t"], "content_structure": ["metric"],
+              "brand": "sun-studio", "density": "any", "limitations": []}]
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            reg, compact, retrieval = _breg_env(Path(tmp), items)
+            # Correct retrieval index so ONLY compact drift is under test.
+            retrieval.write_text(breg.retrieval_jsonl(items), encoding="utf-8", newline="\n")
+            # Stale compact: content that does not match the projection.
+            compact.write_text('{"items": []}', encoding="utf-8")
+            assert _run_breg("--check") == 1, "stale compact must fail --check"
+            # A fresh, correct compact passes.
+            compact.write_text(breg.compact_text(items), encoding="utf-8")
+            assert _run_breg("--check") == 0, "matching compact must pass --check"
+            # A missing compact also fails.
+            compact.unlink()
+            assert _run_breg("--check") == 1, "missing compact must fail --check"
+        finally:
+            breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY = saved
+
+
+def test_build_registry_write_regenerates_stale_compact() -> None:
+    saved = (breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY)
+    items = [{"id": "sun.component.y", "type": "component", "status": "published",
+              "intent": ["checklist"], "tags": ["t"], "content_structure": ["heading"],
+              "brand": "sun-studio", "density": "any", "limitations": []}]
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            reg, compact, retrieval = _breg_env(Path(tmp), items)
+            compact.write_text('{"items": []}', encoding="utf-8")  # stale
+            assert _run_breg("--check") == 1
+            assert _run_breg("--write") == 0
+            # --write cleared the drift and produced the exact projection.
+            assert compact.read_text(encoding="utf-8") == breg.compact_text(items)
+            assert _run_breg("--check") == 0
+        finally:
+            breg.REGISTRY, breg.COMPACT, breg.RETRIEVAL, breg.HISTORY, breg.LIBRARY = saved
+
+
+def test_build_registry_live_compact_projection_is_clean() -> None:
+    # The committed compact must equal the deterministic projection of the live
+    # full registry (guards against the stale-compact class of bug this fixes).
+    reg = breg.load_json(breg.REGISTRY)
+    assert breg.COMPACT.read_text(encoding="utf-8") == breg.compact_text(reg["items"]), \
+        "visual-library-compact.json is stale — run build_registry.py --write"
+
+
 # --------------------------------------------------------------------------- #
 # classify_page_components (pure-logic paths — no browser/Chromium needed)
 # --------------------------------------------------------------------------- #
