@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -35,6 +36,8 @@ CAPTURE = SCRIPT_DIR / "capture-slides.js"
 BUILD = SCRIPT_DIR / "build_hybrid_pptx.py"
 COMPARE = SCRIPT_DIR / "compare_renders.py"
 VALIDATE = SCRIPT_DIR / "validate_export_objects.py"
+THRESHOLDS = REPO_ROOT / "slide-system" / "registries" / "export-qa-thresholds.json"
+PARITY_FINGERPRINT = ".parity-fingerprint.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -96,6 +99,74 @@ def capture_fingerprint(args: argparse.Namespace) -> dict:
     }
 
 
+def qa_fingerprint(args: argparse.Namespace) -> dict:
+    return {
+        **capture_fingerprint(args),
+        "export_script_sha": sha256_file(__file__),
+        "compare_script_sha": sha256_file(COMPARE),
+        "validator_script_sha": sha256_file(VALIDATE),
+        "thresholds_sha": sha256_file(THRESHOLDS),
+    }
+
+
+def expected_parity_reports(parity_dir: Path, manifest: dict) -> list[Path]:
+    return [
+        parity_dir / f"slide-{int(entry['slide']):02d}" / tier / "report.json"
+        for entry in manifest.get("slides", [])
+        for tier in ("tier1", "tier2")
+    ]
+
+
+def write_parity_fingerprint(parity_dir: Path, manifest: dict, fingerprint: dict) -> None:
+    reports = expected_parity_reports(parity_dir, manifest)
+    if not all(path.is_file() for path in reports):
+        raise RuntimeError("cannot fingerprint incomplete parity reports")
+    write_json(parity_dir.parent / PARITY_FINGERPRINT, {
+        "fingerprint": fingerprint,
+        "reports": [
+            {
+                "path_parts": list(path.relative_to(parity_dir).parts),
+                "sha256": sha256_file(path),
+            }
+            for path in reports
+        ],
+    })
+
+
+def parity_cache_valid(parity_dir: Path, manifest: dict, fingerprint: dict) -> bool:
+    marker = parity_dir.parent / PARITY_FINGERPRINT
+    try:
+        payload = json.loads(marker.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if payload.get("fingerprint") != fingerprint:
+        return False
+
+    expected = expected_parity_reports(parity_dir, manifest)
+    expected_parts = {path.relative_to(parity_dir).parts for path in expected}
+    actual_parts = {path.relative_to(parity_dir).parts for path in parity_dir.rglob("report.json")}
+    records = {
+        tuple(record.get("path_parts", [])): record.get("sha256")
+        for record in payload.get("reports", [])
+    }
+    if actual_parts != expected_parts or set(records) != expected_parts:
+        return False
+    return all(path.is_file() and sha256_file(path) == records[path.relative_to(parity_dir).parts]
+               for path in expected)
+
+
+def invalidate_stale_artifacts(out_dir: Path, output: Path, capture_stale: bool) -> None:
+    for path in (out_dir / "export-result.json", output.with_suffix(".validation.json")):
+        path.unlink(missing_ok=True)
+    if not capture_stale:
+        return
+    for name in (".capture-fingerprint.json", PARITY_FINGERPRINT, "export-manifest.json"):
+        (out_dir / name).unlink(missing_ok=True)
+    parity_dir = out_dir / "parity"
+    if parity_dir.exists():
+        shutil.rmtree(parity_dir)
+
+
 def compose_candidates(out_dir: Path, manifest: dict) -> list[dict]:
     """Step (c): PIL-only composition from captured layers (plan §10.1)."""
     from PIL import Image
@@ -141,6 +212,7 @@ def main() -> int:
     if not html.exists():
         raise SystemExit(f"Deck HTML not found: {html}")
     args.html = str(html)
+    output = Path(args.output).resolve()
 
     result = {"mode": args.mode, "steps": {}, "pass": False}
 
@@ -152,18 +224,22 @@ def main() -> int:
     fp_path = out_dir / ".capture-fingerprint.json"
     manifest_path = out_dir / "export-manifest.json"
     parity_dir = out_dir / "parity"
-    cached = (not args.no_cache and fp_path.exists() and manifest_path.exists()
-              and json.loads(fp_path.read_text(encoding="utf-8")) == fp)
-    if cached and args.mode == "layered":
+    try:
+        prev_fp = json.loads(fp_path.read_text(encoding="utf-8"))
         prev = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        prev_fp, prev = None, None
+    cached = not args.no_cache and prev_fp == fp and prev is not None
+    if cached and args.mode == "layered" and prev is not None:
         qa_present = all((out_dir / name).exists()
                          for entry in prev["slides"]
                          for name in (list(entry.get("qa", {}).values())
                                       + [nv["qa_png"] for nv in entry.get("natives", [])
                                          if nv.get("qa_png")]))
-        reports_present = bool(list(parity_dir.rglob("report.json"))) if parity_dir.exists() else False
-        if not qa_present and not reports_present:
+        reports_reusable = parity_cache_valid(parity_dir, prev, qa_fingerprint(args))
+        if not qa_present and not reports_reusable:
             cached = False
+    invalidate_stale_artifacts(out_dir, output, capture_stale=not cached)
     if cached:
         result["steps"]["capture"] = "cached"
         print("[export_pptx] (a) capture: fingerprint match → using cached renders")
@@ -187,7 +263,6 @@ def main() -> int:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
     # (b) build
-    output = Path(args.output).resolve()
     if args.mode == "layered":
         run([sys.executable, str(BUILD), "--manifest", str(manifest_path),
              "--renders", str(out_dir), "--output", str(output),
@@ -207,6 +282,9 @@ def main() -> int:
                                       + [nv["qa_png"] for nv in entry.get("natives", [])
                                          if nv.get("qa_png")]))
         if qa_present:
+            if parity_dir.exists():
+                shutil.rmtree(parity_dir)
+            (out_dir / PARITY_FINGERPRINT).unlink(missing_ok=True)
             jobs = compose_candidates(out_dir, manifest)
             result["steps"]["compose"] = f"{len(jobs)} slides"
             for job in jobs:
@@ -216,6 +294,7 @@ def main() -> int:
                          "--reference", str(job[tier]["reference"]),
                          "--candidate", str(job[tier]["candidate"]),
                          "--output-dir", str(report_dir)], f"(d) compare {tier}")
+            write_parity_fingerprint(parity_dir, manifest, qa_fingerprint(args))
             result["steps"]["compare"] = str(parity_dir)
         else:
             # Cached run after cleanup: renders are gone by design; the kept
@@ -244,8 +323,11 @@ def main() -> int:
         cmd += ["--allow-full-bleed"]
     gate = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True)
     validation_path = output.with_suffix(".validation.json")
-    validation = (json.loads(validation_path.read_text(encoding="utf-8"))
-                  if validation_path.exists() else {"pass": False, "failures": [gate.stderr.strip()]})
+    try:
+        validation = json.loads(validation_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        detail = gate.stderr.strip() or gate.stdout.strip() or "validator produced no current report"
+        validation = {"pass": False, "failures": [detail]}
     result["steps"]["validate"] = validation
     result["pass"] = gate.returncode == 0 and validation.get("pass", False)
 

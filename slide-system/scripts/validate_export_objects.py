@@ -167,14 +167,19 @@ def check_parity(parity_dir: Path, thresholds: dict, failures: list[str]) -> lis
     seen = []
     for report_path in reports:
         report = load_json(report_path)
-        tier = "tier2" if "tier2" in str(report_path) else "tier1"
+        relative_parts = report_path.relative_to(parity_dir).parts
+        tier = next((part for part in relative_parts if part in ("tier1", "tier2")), None)
+        if tier is None:
+            failures.append(f"parity: unrecognized report path {report_path}")
+            continue
+        slide = next((part for part in relative_parts if part.startswith("slide-")), "?")
         gate = thresholds[tier]
         metrics = report["metrics"]
         ok = (metrics["mean_absolute_error"] <= gate["max_mean_err"]
               and metrics["changed_pixel_ratio"] <= gate["max_changed_ratio"])
         if not ok:
             failures.append(
-                f"parity {report_path.parent.name}/{tier}: mean_err "
+                f"parity {slide}/{tier}: mean_err "
                 f"{metrics['mean_absolute_error']} / changed_ratio "
                 f"{metrics['changed_pixel_ratio']} exceeds {gate}")
         seen.append({"report": str(report_path), "tier": tier, "pass": ok, **metrics})

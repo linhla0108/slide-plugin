@@ -26,6 +26,8 @@ SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
 
 import cleanup_run
+import compare_renders
+import export_pptx
 import score_visual_items as svi
 import validate_selection_report as vsr
 import scaffold_slide_from_component as scaffold
@@ -60,6 +62,88 @@ def test_cleanup_keeps_deck_and_pptx() -> None:
         assert not (run / "slide-1-bg.png").exists(), "intermediate png must be removed"
         assert not (run / "parity").exists(), "parity/ dir must be removed"
         assert any("parity" in r for r in removed)
+
+
+# --------------------------------------------------------------------------- #
+# export_pptx / compare_renders — cache consistency and AA-aware parity
+# --------------------------------------------------------------------------- #
+def test_export_invalidates_stale_verdict_and_parity_artifacts() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "export"
+        out.mkdir()
+        output = out / "deck.pptx"
+        output.write_bytes(b"PK\x03\x04current")
+        (out / "export-result.json").write_text("{}", encoding="utf-8")
+        (out / ".capture-fingerprint.json").write_text("{}", encoding="utf-8")
+        (out / ".parity-fingerprint.json").write_text("{}", encoding="utf-8")
+        (out / "export-manifest.json").write_text("{}", encoding="utf-8")
+        output.with_suffix(".validation.json").write_text("{}", encoding="utf-8")
+        report = out / "parity" / "slide-01" / "tier2" / "report.json"
+        report.parent.mkdir(parents=True)
+        report.write_text("{}", encoding="utf-8")
+
+        export_pptx.invalidate_stale_artifacts(out, output, capture_stale=True)
+
+        assert output.exists(), "invalidation must not delete the built PPTX"
+        assert not (out / "export-result.json").exists()
+        assert not output.with_suffix(".validation.json").exists()
+        assert not (out / ".capture-fingerprint.json").exists()
+        assert not (out / ".parity-fingerprint.json").exists()
+        assert not (out / "export-manifest.json").exists()
+        assert not (out / "parity").exists()
+
+
+def test_export_reuses_only_complete_fingerprint_bound_parity_reports() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        parity = Path(tmp) / "parity"
+        manifest = {"slides": [{"slide": 1}, {"slide": 2}]}
+        fingerprint = {"html_sha": "current", "compare_script_sha": "metric-v2"}
+        for report in export_pptx.expected_parity_reports(parity, manifest):
+            report.parent.mkdir(parents=True, exist_ok=True)
+            report.write_text('{"metrics":{"changed_pixel_ratio":0}}', encoding="utf-8")
+
+        export_pptx.write_parity_fingerprint(parity, manifest, fingerprint)
+
+        assert export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+        missing = parity / "slide-02" / "tier2" / "report.json"
+        missing.unlink()
+        assert not export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+
+
+def test_compare_renders_ignores_small_delta_aa_edges() -> None:
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+
+    reference = Image.new("RGB", (400, 400), (120, 120, 120))
+    candidate = reference.copy()
+    for index in range(5000):
+        x = index % 400
+        y = index // 400
+        candidate.putpixel((x, y), (152, 120, 120))
+
+    metrics = compare_renders.compute_metrics(reference, candidate)
+
+    assert metrics["mean_absolute_error"] < 1.0
+    assert metrics["changed_pixel_ratio"] == 0.0
+
+
+def test_compare_renders_still_fails_shifted_solid_block() -> None:
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        return
+
+    reference = Image.new("RGB", (200, 200), "white")
+    candidate = reference.copy()
+    ImageDraw.Draw(reference).rectangle((20, 60, 69, 109), fill="black")
+    ImageDraw.Draw(candidate).rectangle((100, 60, 149, 109), fill="black")
+
+    metrics = compare_renders.compute_metrics(reference, candidate)
+
+    assert metrics["mean_absolute_error"] > 1.0
+    assert metrics["changed_pixel_ratio"] > 0.01
 
 
 # --------------------------------------------------------------------------- #
