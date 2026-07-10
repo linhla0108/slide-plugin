@@ -732,6 +732,23 @@ def test_missing_shape_warns_unless_strict() -> None:
     assert errs and not warns, "missing shape is an error under --strict-shape"
 
 
+def test_shape_lock_covers_component_first_shapes() -> None:
+    reg_tokens = vsr._registry_tokens(read_text_slots.load_json(REGISTRY))
+    cases = {
+        "profile": "sun.component.team-contributor-circles.g01",
+        "tiers": "sun.component.spicy-autocomplete-autonomous-levels-strip",
+        "icons": "sun.component.brand-icon-reference-sheet",
+        "review": "sun.goal-setting-2026.07-quarterly-check-in",
+    }
+    for shape, item_id in cases.items():
+        rep = _single_report(item_id=item_id)
+        errs, _ = vsr._validate_shape_lock(rep, False, {"s1": shape}, reg_tokens, strict_shape=True)
+        assert not errs, f"{shape} -> {item_id} should pass: {errs}"
+    rep = _single_report(item_id="sun.salary-benefits-2026.01-cover")
+    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": "tiers"}, reg_tokens, strict_shape=True)
+    assert errs, "tiers shape locked to a cover template must fail"
+
+
 def test_selection_report_rejects_manual_curation_override() -> None:
     """A scorer result cannot be relabeled custom-local by an agent."""
     with tempfile.TemporaryDirectory() as tmp:

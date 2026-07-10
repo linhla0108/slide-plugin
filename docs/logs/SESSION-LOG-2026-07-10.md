@@ -14,3 +14,14 @@
 **Files:** slide-system/scripts/export_pptx.py, slide-system/scripts/compare_renders.py, slide-system/scripts/validate_export_objects.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-10.md, docs/logs/INDEX.jsonl (ignored scratch evidence under outputs/slide-jobs/*/runs/*/export-fix-test/)
 **Symbols:** export_pptx.qa_fingerprint, export_pptx.expected_parity_reports, export_pptx.write_parity_fingerprint, export_pptx.parity_cache_valid, export_pptx.invalidate_stale_artifacts, compare_renders.DEFAULT_PIXEL_DELTA_THRESHOLD, compare_renders.compute_metrics, validate_export_objects.check_parity, test_export_invalidates_stale_verdict_and_parity_artifacts, test_export_reuses_only_complete_fingerprint_bound_parity_reports, test_compare_renders_ignores_small_delta_aa_edges, test_compare_renders_still_fails_shifted_solid_block
 **State:** Not committed
+
+## 2026-07-10.2 — Add component-first strict shape vocabulary
+
+**When:** 2026-07-10
+**Request:** Extend strict content-shape validation so legitimate published profile, tier, icon, and review items are accepted while mismatched templates are rejected.
+**Actions:**
+- Added component-first shape tokens to the selection validator and regression coverage for valid profile/tier/icon/review selections plus an invalid tier-to-cover selection.
+**Result:** The strict shape lock covers the published component-first vocabulary without weakening category mismatch rejection.
+**Files:** slide-system/scripts/validate_selection_report.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-10.md, docs/logs/INDEX.jsonl
+**Symbols:** validate_selection_report.SHAPE_TYPE_MAP, test_shape_lock_covers_component_first_shapes
+**State:** Not committed
