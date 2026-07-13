@@ -23,10 +23,9 @@ import json
 import sys
 from pathlib import Path
 
-INSTALL_HINT = (
-    "python3 -m venv .venv && .venv/bin/pip install PyMuPDF "
-    "(or run ./slide-system/scripts/setup.sh)"
-)
+from _common import project_python_install_hint
+
+INSTALL_HINT = f"Run {project_python_install_hint()}"
 
 
 def main() -> int:

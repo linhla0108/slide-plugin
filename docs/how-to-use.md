@@ -1,7 +1,7 @@
 # Plugin User Guide
 
-A quick, easy guide to creating slides with the **Claude desktop app**.
-You don't need any technical knowledge — just talk, and Claude does the rest.
+A quick Windows guide for Claude Code, Codex, and OpenCode. After the one-time
+setup, you can describe the slide or component you want in plain language.
 
 > **Reading tip:** Each section includes a **sample conversation box** (what you
 > type, what Claude replies), a **step diagram**, and **a spot to insert your
@@ -11,12 +11,31 @@ You don't need any technical knowledge — just talk, and Claude does the rest.
 
 ## Before You Begin
 
-- All you need to do is open the **Claude desktop app**.
-- Nothing to install. Just talk to Claude in plain words.
-- Have your content ready (text, notes, or a file you want to turn into
-  slides).
+- Open PowerShell in the `slide-plugin` folder and run the one-time setup:
 
-That's it. Now pick what you want to do.
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1
+  ```
+
+- The setup is local to this folder. It uses `.venv\Scripts\python.exe` and the
+  existing project requirements; it does not install a global Python package.
+- Start your chosen host from the repository root so it can discover the skills.
+- Have your content ready (text, notes, or a file you want to turn into slides).
+
+### Install or discover the skills
+
+- **Claude Code:** run `/plugin marketplace add E:\slide-plugin`, then
+  `/plugin install sun-riser@slide-plugin`. Use
+  `/sun-riser:slide-generator` or `/sun-riser:component-extractor`.
+- **Codex:** no install copy is needed. Codex discovers `.agents/skills`
+  automatically from the repo. Mention `$slide-generator` or
+  `$component-extractor` in your prompt.
+- **OpenCode:** no install copy is needed. OpenCode discovers `.agents/skills`
+  automatically. Type `/component <PDF path and what to extract>` for the
+  supported PDF Draft workflow, or ask naturally for slide generation.
+
+There is no portable universal `/component` command. The names above are the
+native entrypoints supported by each host.
 
 <!--
   INSERT IMAGE: The Claude app's home screen with an empty chat box.
@@ -196,6 +215,9 @@ items.
 You do not need to rename raw candidates or approve an intermediate queue.
 For PDFs, the detection runs page by page so one difficult page does not stop
 the whole file.
+The supported entrypoint runs requirements preflight automatically before every
+PDF analysis and Draft staging run. If optional Docling is not installed, it
+uses the approved local PyMuPDF fallback and does not install anything.
 For PPTX files, use the normal manual extraction flow until PPTX Draft artifact
 generation is added.
 When a slide title or heading only explains a visual, Claude can keep that text
@@ -234,6 +256,15 @@ horizontal row or each card/cell as its own reviewable component pair.
 - This only happens when you ask — Claude never takes any part on its own.
 - Auto-detect can create Drafts, but a Draft is not published. It becomes a
   reusable library item only after you click **Publish**.
+
+To open the catalog on Windows, run this in PowerShell and leave the window open:
+
+```powershell
+& .\.venv\Scripts\python.exe .\slide-system\catalog\catalog_server.py
+```
+
+Then open **http://127.0.0.1:8799/slide-system/catalog/**. Do not use a bare
+static server: only `catalog_server.py` provides the Publish/Delete actions.
 
 <!--
   INSERT IMAGE: Claude showing a preview of the extracted part.

@@ -7,9 +7,9 @@ readiness marker at `registries/extract-readiness.json`. The marker records the
 environment fingerprint, so repeat checks in the same environment short-circuit
 and do NOT re-probe or prompt for re-install:
 
-    python3 slide-system/scripts/check_base_requirements.py          # check / reuse marker
-    python3 slide-system/scripts/check_base_requirements.py --force  # re-probe ignoring marker
-    python3 slide-system/scripts/check_base_requirements.py --json   # machine-readable summary
+    <project-python> slide-system/scripts/check_base_requirements.py
+    <project-python> slide-system/scripts/check_base_requirements.py --force
+    <project-python> slide-system/scripts/check_base_requirements.py --json
 
 Requirement levels:
   - required:     pipeline cannot run without it (blocker).
@@ -26,26 +26,33 @@ Requirement levels:
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
-import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
-from _common import SYSTEM_ROOT, environment_fingerprint, now_iso, run_version
+from _common import (
+    REPO_ROOT,
+    SYSTEM_ROOT,
+    ProjectPythonError,
+    environment_fingerprint,
+    now_iso,
+    project_python_install_hint,
+    project_python_path,
+    require_project_python,
+    run_version,
+)
 
 
 MARKER_PATH = SYSTEM_ROOT / "registries" / "extract-readiness.json"
 
 # Bump when the marker shape changes so stale markers are re-evaluated.
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 # (id, level, [candidate executables], version-args, capability sentence)
 REQUIREMENTS = [
-    ("python3", "required", ["python3"], ["--version"],
-     "Run every slide-system/scripts/ step."),
+    ("project-python", "required", [str(project_python_path())], ["--version"],
+     "Run every slide-system/scripts/ Python step from the repository virtualenv."),
     ("xmllint", "required", ["xmllint", r"C:\msys64\usr\bin\xmllint.exe"], ["--version"],
      "Validate that visual.svg / source-with-text.svg stay well-formed XML."),
     ("raster-optimizer", "recommended", ["sips", "magick", "convert"], ["--version"],
@@ -70,16 +77,19 @@ REQUIREMENTS = [
 # Install goes into the repo-local .venv — PEP 668 (Homebrew/Debian) blocks
 # `pip install` into the system interpreter, so the venv is the portable path.
 _PDF_INSTALL_HINT = (
-    "python3 -m venv .venv && .venv/bin/pip install PyMuPDF "
-    "(or run ./slide-system/scripts/setup.sh)"
+    f"Run {project_python_install_hint()} to create the repository virtualenv "
+    "and install PyMuPDF."
 )
 _SOFFICE_CANDIDATES = [
     "soffice",
     "/Applications/LibreOffice.app/Contents/MacOS/soffice",
 ]
+_SOFFICE_INSTALL_HINT = (
+    "Install LibreOffice from "
+    "https://www.libreoffice.org/download/download-libreoffice/"
+)
 
-# Repo root — two levels up from this script (scripts/ → slide-system/ → repo)
-_REPO_ROOT = Path(__file__).resolve().parents[2]
+_REPO_ROOT = REPO_ROOT
 
 def _npm_deps_installed() -> bool:
     """Return True when npm install has been run in the repo root."""
@@ -98,46 +108,31 @@ def probe(candidates: list[str], version_args: list[str]) -> tuple[str | None, s
     return None, None
 
 
-def _venv_python() -> Path:
-    sub = "Scripts/python.exe" if os.name == "nt" else "bin/python3"
-    return _REPO_ROOT / ".venv" / sub
+def selected_python(required_modules: tuple[str, ...] = ()) -> Path:
+    return require_project_python(_REPO_ROOT, required_modules=required_modules)
 
 
 def probe_fitz() -> tuple[str | None, str | None, str | None]:
-    """Locate PyMuPDF: current interpreter first, then the repo-local .venv.
+    """Locate PyMuPDF in the repository virtualenv.
 
     Returns (python_executable, fitz_module_path, version). The executable is
     what downstream conversion steps must invoke — system pythons are often
     PEP 668 externally-managed, so the install lands in <repo>/.venv instead.
     """
     try:
-        spec = importlib.util.find_spec("fitz")
-    except (ImportError, ValueError):
-        spec = None
-    if spec is not None and spec.origin is not None:
-        try:
-            import fitz  # noqa: PLC0415 — version is best-effort, availability is the probe
-
-            version = f"PyMuPDF {fitz.pymupdf_version}"
-        except Exception:
-            version = "present (version unavailable)"
-        return sys.executable, spec.origin, version
-
-    venv_python = _venv_python()
-    if venv_python.exists():
-        try:
-            result = subprocess.run(
-                [str(venv_python), "-c",
-                 "import fitz; print(fitz.__file__); print(fitz.pymupdf_version)"],
-                check=False, capture_output=True, text=True, timeout=20,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            result = None
-        if result is not None and result.returncode == 0:
-            lines = result.stdout.strip().splitlines()
-            module_path = lines[0] if lines else str(venv_python)
-            version = f"PyMuPDF {lines[1]} (.venv)" if len(lines) > 1 else "present (.venv)"
-            return str(venv_python), module_path, version
+        venv_python = selected_python(("fitz",))
+    except ProjectPythonError:
+        return None, None, None
+    result = subprocess.run(
+        [str(venv_python), "-c",
+         "import fitz; print(fitz.__file__); print(fitz.pymupdf_version)"],
+        check=False, capture_output=True, text=True, timeout=20,
+    )
+    if result.returncode == 0:
+        lines = result.stdout.strip().splitlines()
+        module_path = lines[0] if lines else str(venv_python)
+        version = f"PyMuPDF {lines[1]} (.venv)" if len(lines) > 1 else "present (.venv)"
+        return str(venv_python), module_path, version
     return None, None, None
 
 
@@ -170,7 +165,7 @@ def probe_source_providers() -> list[dict]:
             "status": "available" if soffice_path else "missing",
             "path": soffice_path,
             "version": soffice_version,
-            "install_hint": "brew install --cask libreoffice",
+            "install_hint": _SOFFICE_INSTALL_HINT,
             "capability": "Convert PPTX to PDF before the PyMuPDF PDF->SVG step "
                           "(also needs pdf-provider). Blocks PPTX-sourced jobs only.",
         },
@@ -180,7 +175,9 @@ def probe_source_providers() -> list[dict]:
 def fingerprint_paths() -> list[str | None]:
     """Every path whose presence affects readiness — base tools plus source providers."""
     paths: list[str | None] = [
-        shutil.which(c) for _id, _lvl, cands, _v, _d in REQUIREMENTS for c in cands
+        (str(project_python_path()) if req_id == "project-python" else shutil.which(candidate))
+        for req_id, _level, candidates, _args, _description in REQUIREMENTS
+        for candidate in candidates
     ]
     _python, fitz_path, _version = probe_fitz()
     paths.append(fitz_path)
@@ -194,7 +191,15 @@ def evaluate() -> dict:
     blockers: list[str] = []
     warnings: list[str] = []
     for req_id, level, candidates, version_args, capability in REQUIREMENTS:
-        path, version = probe(candidates, version_args)
+        if req_id == "project-python":
+            try:
+                python = selected_python()
+                ok, version = run_version(str(python), version_args)
+                path = str(python) if ok else None
+            except ProjectPythonError as exc:
+                path, version = None, str(exc)
+        else:
+            path, version = probe(candidates, version_args)
         available = path is not None
         requirements.append({
             "id": req_id,
@@ -212,17 +217,22 @@ def evaluate() -> dict:
                 warnings.append(f"{req_id}: install one of {candidates} for raster optimization")
     # Standalone export scripts (non-Claude path)
     standalone = []
-    for script_rel, tool_id, label in [
-        ("slide-system/scripts/capture-slides.js",    "capture-slides",    "capture-slides.js"),
-        ("slide-system/scripts/build_hybrid_pptx.py", "build-hybrid-pptx", "build_hybrid_pptx.py"),
-        ("slide-system/scripts/export-pdf.js",        "playwright-pdf",    "export-pdf.js"),
+    for script_rel, tool_id, label, modules in [
+        ("slide-system/scripts/capture-slides.js", "capture-slides", "capture-slides.js", ()),
+        ("slide-system/scripts/build_hybrid_pptx.py", "build-hybrid-pptx", "build_hybrid_pptx.py", ("pptx", "PIL")),
+        ("slide-system/scripts/export-pdf.js", "playwright-pdf", "export-pdf.js", ()),
     ]:
         ok = _standalone_script_available(script_rel)
+        if ok and modules:
+            try:
+                selected_python(modules)
+            except ProjectPythonError:
+                ok = False
         standalone.append({
             "id": tool_id,
             "label": label,
             "status": "available" if ok else "not-installed",
-            "install_hint": "Run ./slide-system/scripts/setup.sh (requires Node.js 18+)",
+            "install_hint": f"Run {project_python_install_hint()} (requires Node.js 18+)",
         })
 
     # Source-to-SVG providers — input-type-scoped, never global blockers.
@@ -238,6 +248,7 @@ def evaluate() -> dict:
     return {
         "schema_version": SCHEMA_VERSION,
         "status": "blocked" if blockers else "ready",
+        "python": str(project_python_path()),
         "environment_fingerprint": fingerprint,
         "checked_at": now_iso(),
         "requirements": requirements,
@@ -248,23 +259,24 @@ def evaluate() -> dict:
     }
 
 
-def load_marker() -> dict | None:
-    if MARKER_PATH.exists():
+def load_marker(marker_path: Path = MARKER_PATH) -> dict | None:
+    if marker_path.exists():
         try:
-            return json.loads(MARKER_PATH.read_text(encoding="utf-8"))
+            return json.loads(marker_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             return None
     return None
 
 
-def write_marker(result: dict) -> None:
-    MARKER_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MARKER_PATH.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+def write_marker(result: dict, marker_path: Path = MARKER_PATH) -> None:
+    marker_path.parent.mkdir(parents=True, exist_ok=True)
+    marker_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
 
 
-def print_summary(result: dict, reused: bool) -> None:
+def print_summary(result: dict, reused: bool, marker_path: Path = MARKER_PATH) -> None:
     tag = "REUSED marker" if reused else "checked"
-    print(f"[extract-preflight] {result['status'].upper()} ({tag}) — {MARKER_PATH.name}")
+    print(f"[extract-preflight] {result['status'].upper()} ({tag}) — {marker_path.name}")
+    print(f"  Python: {result.get('python', project_python_path())}")
     for req in result["requirements"]:
         mark = "OK " if req["status"] == "available" else "-- "
         print(f"  [{mark}] {req['level']:<11} {req['id']:<17} {req['version'] or req['status']}")
@@ -296,11 +308,14 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="Print the readiness JSON only")
     parser.add_argument("--input", action="append", choices=["pdf", "pptx"],
                         help="Input type the upcoming job must normalize; the matching "
-                             "source provider becomes a blocker for this invocation")
+                              "source provider becomes a blocker for this invocation")
+    parser.add_argument("--marker", default=str(MARKER_PATH),
+                        help="Read/write readiness marker path (default: repository marker)")
     args = parser.parse_args()
+    marker_path = Path(args.marker)
 
     current_fp = environment_fingerprint(fingerprint_paths())
-    marker = load_marker()
+    marker = load_marker(marker_path)
     reused = (
         not args.force
         and marker is not None
@@ -311,7 +326,7 @@ def main() -> int:
 
     result = marker if reused else evaluate()
     if not reused:
-        write_marker(result)
+        write_marker(result, marker_path)
 
     # Per-invocation input gate: a missing source provider blocks ONLY when the
     # upcoming job declared that input type. Never written into the marker.
@@ -333,7 +348,7 @@ def main() -> int:
             }
         print(json.dumps(payload, indent=2))
     else:
-        print_summary(result, reused)
+        print_summary(result, reused, marker_path)
         for blocker in input_blockers:
             print(f"  BLOCKER (input gate): {blocker}")
 

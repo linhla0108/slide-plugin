@@ -15,8 +15,8 @@ extraction runs. It is deliberately inert with respect to shared state:
       - candidate-extraction-request.json   only when at least one candidate is
                                             detected; a draft request for review
       - docling-report.json           run metadata (version, source hash, counts)
-  * If Docling is not installed it exits with a clear, actionable message and
-    writes nothing — no partial analysis, no registry/library writes.
+  * If Docling is not installed, PDF analysis falls back to the approved local
+    PyMuPDF region detector. PPTX auto-detection still reports Docling missing.
 
 The candidate request is a STARTING POINT, not an auto-feed: every candidate
 must be reviewed, given a semantic `item_id`, and approved before
@@ -916,8 +916,9 @@ def main() -> int:
     if args._worker_page is not None:
         return worker_page(source, args._worker_page, args.ocr)
 
-    # --- Docling (lazy; clean degrade) -------------------------------------- #
-    if not _docling_import_available():
+    # --- Docling (lazy; PyMuPDF-only fallback for PDF) ---------------------- #
+    docling_available = _docling_import_available()
+    if not docling_available and source.suffix.lower() != ".pdf":
         print(
             "Docling is not installed, so candidate auto-detection is unavailable.\n"
             "  - This is OPTIONAL: extraction still works fully without it "
@@ -929,9 +930,17 @@ def main() -> int:
         )
         return 3
 
-    if source.suffix.lower() == ".pdf":
+    if source.suffix.lower() == ".pdf" and docling_available:
         elements, warnings, docling_stats = analyze_pdf_pages_in_subprocess(
             source, args.pages, args.ocr, args.page_timeout)
+    elif source.suffix.lower() == ".pdf":
+        elements = []
+        warnings = ["Docling is not installed; used the approved PyMuPDF fallback detector."]
+        docling_stats = {
+            "docling_mode": "pymupdf-fallback-only",
+            "docling_pages_attempted": 0,
+            "docling_pages_failed": 0,
+        }
     else:
         try:
             converter = _load_converter(enable_ocr=args.ocr)

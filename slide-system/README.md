@@ -7,6 +7,9 @@ decks and maintaining a reusable visual library.
 
 - `.agents/skills/slide-generator/SKILL.md`: create a new slide deck.
 - `.agents/skills/component-extractor/SKILL.md`: manually extract exact regions.
+- `slide-system/scripts/extract_pdf_components.py`: preflight a PDF, create
+  review-only Drafts without hand-authored JSON, and rebuild catalog data.
+- `slide-system/catalog/catalog_server.py`: review, publish, or delete Drafts.
 
 ## System Areas
 
@@ -62,12 +65,18 @@ outputs/
 ## Runtime
 
 Python scripts require dependencies (python-pptx, Pillow, PyMuPDF) installed in
-a project-local virtual environment (`.venv`). The agent bootstraps this
-automatically — see the auto-setup rule in `slide-generator/SKILL.md`. For
-manual setup, run `./slide-system/scripts/setup.sh`.
+the project-local `.venv`. On Windows run:
 
-All `python3` commands in this doc assume `.venv` is activated or the agent
-has set `PATH` to include `.venv/bin` before running scripts.
+```powershell
+powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1
+```
+
+On macOS/Linux run `./slide-system/scripts/setup.sh`.
+
+Use `.venv\Scripts\python.exe` on Windows and `.venv/bin/python3` on
+macOS/Linux for every script. The preflight, extraction, catalog, and export
+paths resolve the same interpreter and fail with the matching setup hint rather
+than falling back to a global Python.
 
 The capability registry stores the actual executable path and only advertises
 image analysis when Pillow imports successfully.
@@ -102,6 +111,17 @@ Create a manual extraction staging package:
 python3 slide-system/scripts/scaffold_extraction.py \
   --request <extraction-request.json>
 ```
+
+Create review-only Drafts directly from a PDF without authoring request JSON:
+
+```text
+<project-python> slide-system/scripts/extract_pdf_components.py \
+  --pdf <file.pdf> --extraction-id <id> [--pages 1|2-4]
+```
+
+The command runs PDF preflight before analysis and staging. It never publishes.
+Docling is optional; when absent, PDF analysis uses the approved PyMuPDF
+fallback detector.
 
 Split semantic SVG text into editable slots:
 

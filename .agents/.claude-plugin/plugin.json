@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "sun-riser",
+  "displayName": "SUN.RISER Slide System",
+  "version": "1.0.0",
+  "description": "Create editable slide decks, extract reviewable components, and manage the local component catalog.",
+  "author": {
+    "name": "SUN.STUDIO"
+  }
+}

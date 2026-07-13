@@ -25,11 +25,16 @@ artifacts.
 
 ## How To Run
 
-```bash
-python3 slide-system/scripts/check_base_requirements.py          # check or reuse marker
-python3 slide-system/scripts/check_base_requirements.py --input pdf  # gate: exit 1 if the PDF provider is missing
-python3 slide-system/scripts/check_base_requirements.py --force  # re-probe, ignore marker
-python3 slide-system/scripts/check_base_requirements.py --json   # machine-readable
+Use `.venv\Scripts\python.exe` on Windows or `.venv/bin/python3` on
+macOS/Linux. If that interpreter is missing, run
+`powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1` on
+Windows or `./slide-system/scripts/setup.sh` on macOS/Linux.
+
+```text
+<project-python> slide-system/scripts/check_base_requirements.py
+<project-python> slide-system/scripts/check_base_requirements.py --input pdf
+<project-python> slide-system/scripts/check_base_requirements.py --force
+<project-python> slide-system/scripts/check_base_requirements.py --json
 ```
 
 Exit code `0` = ready (proceed), `1` = blocked (a required tool is missing).
@@ -41,7 +46,7 @@ as warnings only, the gated run treats them as blockers for that job.
 
 The script writes `slide-system/registries/extract-readiness.json` with the
 status, the environment fingerprint, a per-requirement result, and a
-`source_providers` array (schema version 2). On the next run, if the schema
+`source_providers` array (schema version 3). On the next run, if the schema
 version and fingerprint still match and the status is `ready`, it prints
 `REUSED marker` and returns immediately without probing again. This is the
 "don't set up from scratch every time" guarantee — treat a `ready` marker with a
@@ -56,13 +61,14 @@ PyMuPDF, `pptx-provider` for LibreOffice) with availability and an
 blocker. Before accepting a PDF or PPTX input, check the matching
 `source_providers` entry; if it is `missing`, treat that as a blocker for that
 job and install via its hint (repo-local venv for PyMuPDF, see below /
-`brew install --cask libreoffice`). The fingerprint covers provider
+the official LibreOffice download). The fingerprint covers provider
 availability, so installing PyMuPDF or LibreOffice invalidates the marker and
 triggers a re-probe automatically.
 
-The `pdf-provider` entry also records a `python` field — the interpreter that
-actually has PyMuPDF. Run all PDF conversion steps with that interpreter; on
-PEP 668 machines it is `<repo>/.venv/bin/python3`, not the system `python3`.
+The report records the selected project interpreter in top-level `python` and
+in the `pdf-provider` entry. Run all PDF, export, and validation steps with that
+same interpreter; it is `.venv\Scripts\python.exe` on Windows and
+`.venv/bin/python3` on macOS/Linux.
 
 Do not hand-edit the marker; regenerate it with `--force`.
 
@@ -73,7 +79,7 @@ already exist.
 
 | Requirement | Level | Why |
 |---|---|---|
-| `python3` | required | Run every `slide-system/scripts/` step. |
+| project Python | required | Run every `slide-system/scripts/` step from `.venv`. |
 | `xmllint` | required | Validate `visual.svg` / `source-with-text.svg` stay well-formed XML. |
 | raster optimizer (`sips`, `magick`, or `convert`) | recommended | Downsample / recompress embedded rasters in `optimize_svg.py`. Without it the SVG is still precision-trimmed but large images stay at source size. |
 | SVG renderer (`playwright`/Chromium, `rsvg-convert`, `resvg`, `inkscape`, or `cairosvg`) | recommended | Render SVG to PNG for preview/parity checks. Chromium/Playwright is preferred for masks, clips, filters, and gallery-equivalent rendering. |
@@ -157,13 +163,12 @@ Only install from the approved list in `REQUIREMENTS.md`:
 - raster optimizer: `sips` is built into macOS; `optimize_svg.py` silently skips raster optimization when absent — never a hard requirement.
 - SVG renderer: use the built-in Playwright/Chromium for parity checks; do not install standalone renderers.
 - PDF provider (PyMuPDF, the only approved PDF→SVG provider): install into the
-  repo-local venv — `python3 -m venv .venv && .venv/bin/pip install PyMuPDF`,
-  or run `./slide-system/scripts/setup.sh` which does it for you. Do NOT
+  repo-local venv with `setup.ps1` on Windows or `setup.sh` on macOS/Linux. Do NOT
   `pip install` into the system interpreter: Homebrew/Debian pythons are PEP 668
   externally-managed and refuse with `error: externally-managed-environment`;
   never work around that with `--break-system-packages`. The preflight probe
-  finds PyMuPDF in either the current interpreter or `.venv` automatically.
-- PPTX provider: `brew install --cask libreoffice`, then verify fonts used by the deck are installed.
+  checks PyMuPDF in the project `.venv`.
+- PPTX provider: install LibreOffice from its official download, then verify fonts used by the deck are installed.
 
 A missing `optional` tool never blocks extraction — it is recorded as deferred.
 A missing source provider blocks only that source type, not SVG-package

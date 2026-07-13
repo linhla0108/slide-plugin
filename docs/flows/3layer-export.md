@@ -220,10 +220,10 @@ Keep all the old rules, **add**:
 
 ```
 | Standalone machine (no Claude app) / Export editable 3-layer PPTX — export_pptx.py
-| Node.js 18+ → ./slide-system/scripts/setup.sh (installs Playwright, python-pptx, Pillow) |
+| Node.js 18+ → run `setup.ps1` on Windows or `setup.sh` on macOS/Linux (installs Playwright, python-pptx, Pillow) |
 ```
 
-+ pin the Playwright/chromium version in setup.sh so the render is deterministic across agents.
++ pin the Playwright/chromium version in both setup scripts so the render is deterministic across agents.
 
 ## 6. Roadmap (3 phases — verify round 2 merged the doc-only P0 into P1)
 

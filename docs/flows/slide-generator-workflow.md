@@ -4,6 +4,9 @@
 > Updated: 2026-06-17. Sources: `SKILL.md`, `slide-system/workflows/*`, `slide-system/rules/*`,
 > `slide-system/schemas/*`, `slide-system/registries/*`, `slide-system/scripts/*`.
 
+> `<project-python>` means `.venv\Scripts\python.exe` on Windows and
+> `.venv/bin/python3` on macOS/Linux.
+
 ---
 
 ## 0. Architecture Overview
@@ -174,7 +177,7 @@ Present a single approval package containing:
 
 ```bash
 # Decompose template artwork (MANDATORY — no hand-splitting, no wholesale embedding)
-.venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+<project-python> slide-system/scripts/decompose_svg_objects.py \
     --svg slide-system/library/templates/<id>/visual.svg \
     --out-dir <job>/assets/page-NN --prefix page-NN \
     --href-base <relative-path-from-deck.html>
@@ -189,7 +192,7 @@ Present a single approval package containing:
 
 ```bash
 # Decompose extraction artwork (MANDATORY)
-.venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+<project-python> slide-system/scripts/decompose_svg_objects.py \
     --svg <item>/artifact/visual.svg \
     --out-dir <job>/assets/page-NN --prefix page-NN \
     --href-base <relative-path>
@@ -259,7 +262,7 @@ layered run, or keep `--mode flat` for a patch. Ask the user which path they pre
 
 **Single entry point:**
 ```bash
-.venv/bin/python3 slide-system/scripts/export_pptx.py \
+<project-python> slide-system/scripts/export_pptx.py \
     --html <run>/deck.html \
     --slides <N> \
     --out-dir <run> \
@@ -391,8 +394,8 @@ Layer 3 (Editable)  → native text boxes + native autoshapes — editable in Po
 4. Validate: `validate_text_slots.py`
 5. Rebuild catalog:
    ```bash
-   .venv/bin/python3 slide-system/scripts/build_component_catalog.py
-   .venv/bin/python3 slide-system/scripts/build_template_picker_data.py
+   <project-python> slide-system/scripts/build_component_catalog.py
+   <project-python> slide-system/scripts/build_template_picker_data.py
    ```
 6. Confirm to user
 
@@ -455,18 +458,19 @@ outputs/slide-jobs/<job-id>/
 | `export-pdf.js` | Node.js | PDF export via Playwright |
 
 **Environment setup:**
-```bash
-# Auto-setup (idempotent, runs once on first use)
-if [ ! -f .venv/bin/python3 ] || ! .venv/bin/python3 -c "import pptx, PIL, fitz" 2>/dev/null; then
-  ./slide-system/scripts/setup.sh
-fi
+```text
+# Windows setup (idempotent, runs once on first use)
+powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1
 
-# All Python scripts run through the venv
-.venv/bin/python3 slide-system/scripts/<script>.py [args]
+# macOS/Linux setup (idempotent, runs once on first use)
+./slide-system/scripts/setup.sh
+
+# All Python scripts run through the platform project Python
+<project-python> slide-system/scripts/<script>.py [args]
 ```
 
 **Prerequisites (user installs):** Python 3.10+, Node.js 18+
-**Auto-installed by setup.sh:** python-pptx, Pillow, PyMuPDF, Playwright + Chromium
+**Auto-installed by either setup script:** python-pptx, Pillow, PyMuPDF, Playwright + Chromium
 
 ---
 

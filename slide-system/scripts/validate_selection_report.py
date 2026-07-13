@@ -11,9 +11,20 @@ from _common import load_json, now_iso, write_json, SYSTEM_ROOT
 
 VALID_ACTIONS = {"reuse", "adapt-local", "custom-local", "blocked"}
 REQUIRED_CRITERIA = {"semantic_intent", "content_structure", "density", "brand", "export_compatibility", "accessibility"}
+DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended"}
+SINGLE_REPORT_FIELDS = {
+    "request_id", "generated_at", "generated_by", "scorer_version",
+    "retrieval_index", "decision", "candidates",
+}
+BATCH_REPORT_FIELDS = {
+    "job_id", "generated_at", "generated_by", "scorer_version",
+    "retrieval_index", "slides",
+}
+SLIDE_FIELDS = {"request_id", "decision", "candidates"}
 
 # Adapt-local floor — kept in sync with score_visual_items.py decision branch.
 ADAPT_FLOOR = 65
+SEMANTIC_FLOOR = 10.5
 
 # T1 selection-lock: each content_shape maps to the intent/tag tokens a chosen
 # component must carry. Matched (lowercased) against the registry item's
@@ -31,6 +42,68 @@ SHAPE_TYPE_MAP: dict[str, set[str]] = {
 
 def _chk(name: str, ok: bool, detail: str) -> dict:
     return {"name": name, "pass": ok, "detail": detail}
+
+
+def _validate_report_fields(rep: dict, is_batch: bool, errors: list[str]) -> dict:
+    """Reject agent-authored curation fields in the scorer-owned artifact."""
+    allowed_report = BATCH_REPORT_FIELDS if is_batch else SINGLE_REPORT_FIELDS
+    unexpected_report = set(rep) - allowed_report
+    if unexpected_report:
+        errors.append(
+            "selection report contains non-scorer field(s): "
+            + ", ".join(sorted(unexpected_report))
+        )
+
+    entries = rep.get("slides", []) if is_batch else [rep]
+    for index, entry in enumerate(entries):
+        prefix = f"slides[{index}]" if is_batch else "report"
+        if not isinstance(entry, dict):
+            continue
+        unexpected_slide = set(entry) - SLIDE_FIELDS if is_batch else set()
+        if unexpected_slide:
+            errors.append(
+                f"{prefix} contains non-scorer field(s): "
+                + ", ".join(sorted(unexpected_slide))
+            )
+        decision = entry.get("decision") or {}
+        if isinstance(decision, dict):
+            unexpected_decision = set(decision) - DECISION_FIELDS
+            if unexpected_decision:
+                errors.append(
+                    f"{prefix}.decision contains non-scorer field(s): "
+                    + ", ".join(sorted(unexpected_decision))
+                )
+    return _chk("scorer_owned_fields", not unexpected_report and not errors,
+                "Only scorer-owned fields present" if not unexpected_report and not errors
+                else "Found non-scorer fields")
+
+
+def _validate_decision_band(slide: dict, prefix: str, errors: list[str]) -> None:
+    """The decision action must agree with the strongest eligible candidate.
+
+    score_visual_items.py keeps the selected semantic runner-up in candidates,
+    including when a raw-score lure ranks higher. Recomputing its action band
+    here makes a post-score `reuse` -> `custom-local` rewrite fail closed.
+    """
+    decision = slide.get("decision") or {}
+    candidates = [c for c in slide.get("candidates") or [] if isinstance(c, dict) and c.get("eligible")]
+    if not candidates or not isinstance(decision, dict):
+        return
+    semantic = [
+        candidate for candidate in candidates
+        if (candidate.get("criteria") or {}).get("semantic_intent", 0) >= SEMANTIC_FLOOR
+    ]
+    if not semantic:
+        expected_action = "custom-local"
+    else:
+        chosen = max(semantic, key=lambda candidate: candidate.get("score", 0))
+        score = chosen.get("score", 0)
+        expected_action = "reuse" if score >= 75 else "adapt-local" if score >= ADAPT_FLOOR else "custom-local"
+    if decision.get("action") != expected_action:
+        errors.append(
+            f"{prefix}.decision action {decision.get('action')!r} conflicts with scorer band "
+            f"{expected_action!r}; regenerate the report instead of curating it."
+        )
 
 
 def _registry_tokens(registry: dict) -> dict[str, set[str]]:
@@ -117,9 +190,10 @@ def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: li
         errors.append(f"{prefix}: action={action!r} but item_id is null")
     score_val = dec.get("score", 0)
     if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        warnings.append(f"{prefix}: score {score_val} >= 75 but action is {action!r}")
+        errors.append(f"{prefix}: score {score_val} >= 75 but action is {action!r}")
     if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        warnings.append(f"{prefix}: score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+        errors.append(f"{prefix}: score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+    _validate_decision_band(slide, prefix, errors)
     return checks
 
 
@@ -219,9 +293,10 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
     if not adopt_ok:
         fail(f"Adoption: action={action!r} requires non-null item_id")
     if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        warnings.append(f"Score {score_val} >= 75 but action is {action!r}, expected 'reuse'")
+        errors.append(f"Score {score_val} >= 75 but action is {action!r}, expected 'reuse'")
     if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        warnings.append(f"Score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+        errors.append(f"Score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+    _validate_decision_band(rep, "report", errors)
 
 
 def main() -> int:
@@ -250,6 +325,8 @@ def main() -> int:
         _validate_batch(rep, checks, errors, warnings, fail)
     else:
         _validate_single(rep, checks, errors, warnings, fail)
+
+    checks.append(_validate_report_fields(rep, is_batch, errors))
 
     # Provenance (HARD — both modes). The scorer always stamps generated_by;
     # a report that lacks it or carries any other value was not produced by the

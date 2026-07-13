@@ -1,6 +1,8 @@
 # Build HTML Deck
 
 Build only after approval AND after `validate_selection_report.py` exits 0.
+Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
+`.venv/bin/python3` on macOS/Linux.
 
 ## Pre-Build Gate
 
@@ -15,7 +17,7 @@ After HTML construction, before PPTX export, confirm the deck scales to the
 viewport (uses the `deck_stage.js` runtime, not a hand-rolled fixed-`px`
 stage). EXIT 0 required:
 ```bash
-.venv/bin/python3 slide-system/scripts/validate_deck_stage_runtime.py \
+<project-python> slide-system/scripts/validate_deck_stage_runtime.py \
     --html <run>/deck.html
 ```
 Fails when `<deck-stage>` is missing or its runtime is not loaded — either
@@ -24,7 +26,7 @@ case ships a deck locked at 1080p that never scales. Writes
 
 Then validate brand rules:
 ```bash
-.venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
+<project-python> slide-system/scripts/validate_brand_compliance.py \
     --html <run>/deck.html \
     --selection-report <run>/analysis/selection-report.json \
     --brand-pack slide-system/brand-packs/sun-studio/manifest.json
@@ -37,7 +39,7 @@ Then run the component-fidelity gate (T3) — it confirms every `reuse` /
 signature ≥ 70% reuse / ≥ 45% adapt, decomposed asset, or component
 `background-image`), not just a `data-base-component` marker:
 ```bash
-.venv/bin/python3 slide-system/scripts/validate_component_fidelity.py \
+<project-python> slide-system/scripts/validate_component_fidelity.py \
     --html <run>/deck.html \
     --selection-report <run>/analysis/selection-report.json \
     --registry slide-system/registries/visual-library.json \
@@ -92,7 +94,7 @@ Writes `qa/component-fidelity-report.json`.
 - **Full-page artwork SVG (extraction `visual.svg`) MUST go through the
   decomposer — do not hand-split and do not embed it wholesale:**
   ```
-  .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+  <project-python> slide-system/scripts/decompose_svg_objects.py \
       --svg <extraction-item>/artifact/visual.svg \
       --out-dir <job>/assets/page-NN --prefix page-NN \
       --href-base <path from deck.html to that out-dir>
@@ -140,14 +142,14 @@ a `reuse` decision follows the same decompose→fill-slots flow.
 - Scaffold the slide structure from the component's `preview.html` first (keeps
   the real `.bg` + `.slot` layout; you only fill text into slots):
   ```
-  .venv/bin/python3 slide-system/scripts/scaffold_slide_from_component.py \
+  <project-python> slide-system/scripts/scaffold_slide_from_component.py \
       --item-id <id> --registry slide-system/registries/visual-library.json \
       --out <job>/assets/page-NN/fragment.html
   ```
 - Run the item's `visual.svg` through the decomposer for the artwork (do not
   hand-split, do not embed wholesale; the script reads the SVG, you never do):
   ```
-  .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+  <project-python> slide-system/scripts/decompose_svg_objects.py \
       --svg <library-path>/visual.svg \
       --out-dir <job>/assets/page-NN --prefix page-NN \
       --href-base <path from deck.html to that out-dir>

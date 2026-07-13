@@ -18,9 +18,12 @@ table. Nothing is installed — missing tools are reported as SKIP with the exac
 install hint.
 
 Usage:
-    python3 slide-system/scripts/test_export_stack.py
-    python3 slide-system/scripts/test_export_stack.py --keep   # keep work dir
-    python3 slide-system/scripts/test_export_stack.py --json    # machine summary
+    python slide-system/scripts/test_export_stack.py
+    python slide-system/scripts/test_export_stack.py --keep   # keep work dir
+    python slide-system/scripts/test_export_stack.py --json   # machine summary
+
+The launcher resolves and re-runs with the platform-specific repository Python
+(`.venv\\Scripts\\python.exe` on Windows, `.venv/bin/python3` elsewhere).
 
 Exit code: 0 if the lightweight stack covers jobs A+B+C, 1 otherwise.
 """
@@ -36,14 +39,18 @@ import sys
 import tempfile
 import threading
 import time
+import zipfile
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
+
+from _common import ProjectPythonError, project_python_install_hint, require_project_python
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
 SLIDES = 2
 WIDTH, HEIGHT = 1920, 1080
 SAMPLE_WORDS = ["SUN.RISER", "Editable", "Hybrid", "Roadmap"]  # must survive round-trip
+SETUP_HINT = project_python_install_hint()
 
 
 # --------------------------------------------------------------------------- #
@@ -65,8 +72,13 @@ def have(*names) -> str | None:
     return None
 
 
-def py_mod(mod: str) -> bool:
-    return subprocess.run([sys.executable, "-c", f"import {mod}"],
+def selected_python(required_modules: tuple[str, ...] = ()) -> Path:
+    return require_project_python(REPO_ROOT, required_modules=required_modules)
+
+
+def py_mod(mod: str, python: Path | None = None) -> bool:
+    python = python or selected_python()
+    return subprocess.run([str(python), "-c", f"import {mod}"],
                           capture_output=True).returncode == 0
 
 
@@ -76,6 +88,15 @@ def run(cmd, cwd=None, timeout=180):
     p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
     ms = int((time.time() - t0) * 1000)
     return p.returncode, (p.stdout or "") + (p.stderr or ""), ms
+
+
+def markitdown_command(python: Path, *, module_available: bool,
+                       executable: str | None, pptx_path: Path) -> list[str]:
+    if module_available:
+        return [str(python), "-m", "markitdown", str(pptx_path)]
+    if executable:
+        return [executable, str(pptx_path)]
+    return []
 
 
 def free_port() -> int:
@@ -174,17 +195,29 @@ def main() -> int:
     ap.add_argument("--json", action="store_true", help="Print JSON summary only")
     args = ap.parse_args()
 
+    try:
+        python = selected_python()
+    except ProjectPythonError as exc:
+        if args.json:
+            print(json.dumps({"error": str(exc), "lightweight_replaces_heavy": False}, indent=2))
+        else:
+            print(f"[export-stack] {exc}", file=sys.stderr)
+        return 1
+
     results: list[R] = []
     node = have("node")
     npm_pw = (REPO_ROOT / "node_modules" / "playwright").is_dir()
-    has_pptx = py_mod("pptx")
-    has_markitdown = py_mod("markitdown") or have("markitdown") is not None
+    has_pptx = py_mod("pptx", python) and py_mod("PIL", python)
+    markitdown_module = py_mod("markitdown", python)
+    markitdown_exe = have("markitdown")
+    has_markitdown = markitdown_module or markitdown_exe is not None
     soffice = have("soffice", "libreoffice")
     pdftotext = have("pdftotext")
     pdftoppm = have("pdftoppm")
 
     # ---- Tool probe ----
     probe = {
+        "project-python": str(python),
         "node": bool(node),
         "playwright (npm)": npm_pw,
         "python-pptx": has_pptx,
@@ -215,7 +248,7 @@ def main() -> int:
         if not node:
             a_cap.skip("install Node.js 18+ (nodejs.org)")
         elif not npm_pw:
-            a_cap.skip("run ./slide-system/scripts/setup.sh (npm i playwright)")
+            a_cap.skip(f"run {SETUP_HINT} (installs Playwright)")
         else:
             rc, log, ms = run([node, str(SCRIPTS / "capture-slides.js"),
                                "--url", url, "--slides", str(SLIDES),
@@ -232,12 +265,12 @@ def main() -> int:
             if not has_pptx:
                 a_build.skip("pip install python-pptx Pillow")
             else:
-                rc, log, ms = run([sys.executable, str(SCRIPTS / "build_hybrid_pptx.py"),
+                rc, log, ms = run([str(python), str(SCRIPTS / "build_hybrid_pptx.py"),
                                    "--layout", str(renders / "export-layout.json"),
                                    "--renders", str(renders), "--slides", str(SLIDES),
                                    "--output", str(pptx_out),
                                    "--font", "Arial", "--fallback-font", "Arial"])
-                if rc == 0 and pptx_out.exists():
+                if rc == 0 and pptx_out.exists() and zipfile.is_zipfile(pptx_out):
                     a_build.ok(ms, f"{pptx_out.stat().st_size // 1024} KB")
                     ok, note = pptx_is_editable(pptx_out)
                     (a_edit.ok(note=note) if ok else a_edit.fail(note))
@@ -250,7 +283,7 @@ def main() -> int:
         if not node:
             b_pw.skip("install Node.js 18+")
         elif not npm_pw:
-            b_pw.skip("run setup.sh (npm i playwright)")
+            b_pw.skip(f"run {SETUP_HINT} (installs Playwright)")
         else:
             rc, log, ms = run([node, str(SCRIPTS / "export-pdf.js"),
                                "--url", url, "--slides", str(SLIDES),
@@ -283,7 +316,12 @@ def main() -> int:
         elif not has_markitdown:
             c_mi.skip('pip install "markitdown[pptx]"')
         else:
-            rc, log, ms = run([sys.executable, "-m", "markitdown", str(pptx_out)])
+            rc, log, ms = run(markitdown_command(
+                python,
+                module_available=markitdown_module,
+                executable=markitdown_exe,
+                pptx_path=pptx_out,
+            ))
             hits = [w for w in SAMPLE_WORDS if w.lower() in log.lower()]
             (c_mi.ok(ms, f"recovered words: {hits}") if rc == 0 and hits
              else c_mi.fail(f"rc={rc}, words={hits}"))
@@ -315,7 +353,7 @@ def main() -> int:
         else:
             layered_dir = out_dir / "layered"
             layered_pptx = out_dir / "deck-layered.pptx"
-            rc, log, ms = run([sys.executable, str(SCRIPTS / "export_pptx.py"),
+            rc, log, ms = run([str(python), str(SCRIPTS / "export_pptx.py"),
                                "--html", str(deck_dir / "index.html"),
                                "--slides", str(SLIDES),
                                "--out-dir", str(layered_dir),
@@ -364,7 +402,7 @@ def main() -> int:
                 '<rect x="1500" y="900" width="50" height="50" fill="purple"/></g>\n'
                 '</g>\n</svg>\n', encoding="utf-8")
             decomp_dir = out_dir / "decompose"
-            rc, log, ms = run([sys.executable,
+            rc, log, ms = run([str(python),
                                str(SCRIPTS / "decompose_svg_objects.py"),
                                "--svg", str(fixture),
                                "--out-dir", str(decomp_dir),
@@ -447,4 +485,13 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    try:
+        project_python = selected_python()
+    except ProjectPythonError:
+        raise SystemExit(main())
+    if Path(sys.executable).resolve() != project_python.resolve():
+        raise SystemExit(subprocess.run(
+            [str(project_python), str(Path(__file__).resolve()), *sys.argv[1:]],
+            cwd=REPO_ROOT,
+        ).returncode)
     raise SystemExit(main())

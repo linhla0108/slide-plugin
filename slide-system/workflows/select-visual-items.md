@@ -1,5 +1,8 @@
 # Select Visual Items
 
+Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
+`.venv/bin/python3` on macOS/Linux.
+
 1. Load only `published` items from `registries/visual-library.json`.
 2. Reject deprecated, staging, brand-incompatible, or export-incompatible items.
 3. Write `analysis/visual-requests.json` with one request per slide. Each request
@@ -11,7 +14,7 @@
    standalone components — cover, timeline, checklist, comparison, closing, CTA,
    statistics, dividers, layouts) for every slide:
    ```bash
-   .venv/bin/python3 slide-system/scripts/score_visual_items.py \
+   <project-python> slide-system/scripts/score_visual_items.py \
        --batch-request <run>/analysis/visual-requests.json \
        --output <run>/analysis/selection-report.json
    ```
@@ -39,7 +42,7 @@
    `build_component_retrieval_index.py --check`.
 5. **Validate the selection report (BLOCKING):**
    ```bash
-   .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
+   <project-python> slide-system/scripts/validate_selection_report.py \
        --selection-report <run>/analysis/selection-report.json \
        --visual-requests <run>/analysis/visual-requests.json
    ```

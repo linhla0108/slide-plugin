@@ -9,6 +9,7 @@
 #
 # Usage:
 #   ./slide-system/scripts/setup.sh
+# Windows PowerShell users run slide-system/scripts/setup.ps1 instead.
 
 set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

@@ -30,7 +30,14 @@ import subprocess
 import sys
 from pathlib import Path
 
-from _common import SCRIPT_DIR, REPO_ROOT, sha256_file, write_json
+from _common import (
+    SCRIPT_DIR,
+    REPO_ROOT,
+    ProjectPythonError,
+    require_project_python,
+    sha256_file,
+    write_json,
+)
 
 CAPTURE = SCRIPT_DIR / "capture-slides.js"
 BUILD = SCRIPT_DIR / "build_hybrid_pptx.py"
@@ -38,6 +45,10 @@ COMPARE = SCRIPT_DIR / "compare_renders.py"
 VALIDATE = SCRIPT_DIR / "validate_export_objects.py"
 THRESHOLDS = REPO_ROOT / "slide-system" / "registries" / "export-qa-thresholds.json"
 PARITY_FINGERPRINT = ".parity-fingerprint.json"
+
+
+def selected_python(required_modules: tuple[str, ...] = ()) -> Path:
+    return require_project_python(REPO_ROOT, required_modules=required_modules)
 
 
 def parse_args() -> argparse.Namespace:
@@ -359,4 +370,13 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    try:
+        python = selected_python(("pptx", "PIL"))
+    except ProjectPythonError as exc:
+        raise SystemExit(f"[export_pptx] {exc}") from exc
+    if Path(sys.executable).resolve() != python.resolve():
+        raise SystemExit(subprocess.run(
+            [str(python), str(Path(__file__).resolve()), *sys.argv[1:]],
+            cwd=REPO_ROOT,
+        ).returncode)
     raise SystemExit(main())
