@@ -16,7 +16,10 @@ data/
 .DS_Store
 __pycache__/
 *.pyc
-.opencode
+.opencode/*
+!.opencode/commands/
+.opencode/commands/*
+!.opencode/commands/component.md
 .kilocode
 
 # Generated job/extraction outputs — produced locally, not tracked in the repo.

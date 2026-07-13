@@ -87,10 +87,16 @@ manual request scaffolding, auto-stage, or artifact generation — check the
 toolchain first. This is required for every extraction session; the marker makes
 repeat checks cheap.
 
-- PDF input: run `python3 slide-system/scripts/check_base_requirements.py --input pdf`.
-- PPTX input: run `python3 slide-system/scripts/check_base_requirements.py --input pptx`.
+- Windows project Python: `.venv\Scripts\python.exe`.
+- macOS/Linux project Python: `.venv/bin/python3`.
+- If it is missing, run `slide-system/scripts/setup.ps1` on Windows or
+  `./slide-system/scripts/setup.sh` on macOS/Linux.
+- PDF input: run the project Python with
+  `slide-system/scripts/check_base_requirements.py --input pdf`.
+- PPTX input: run the project Python with
+  `slide-system/scripts/check_base_requirements.py --input pptx`.
 - SVG/package input: read the readiness marker and run
-  `python3 slide-system/scripts/check_base_requirements.py` only if the marker
+  `check_base_requirements.py` with the project Python only if the marker
   is missing or not ready.
 
 Stop on any `BLOCKER`. Do not create `extraction-request.json`, do not run
@@ -104,8 +110,20 @@ When the user wants help finding the reusable parts ("suggest the reusable
 parts", "look through this file"), an optional analysis-only pre-step can
 detect candidate regions instead of naming each by hand:
 
+For PDFs, prefer the supported one-command entrypoint. It always preflights,
+analyzes, stages review-only Drafts, and rebuilds catalog data without publishing:
+
+```text
+<project-python> slide-system/scripts/extract_pdf_components.py \
+    --pdf <file.pdf> --extraction-id <id> [--pages 1|2-4]
+```
+
+`<project-python>` means `.venv\Scripts\python.exe` on Windows and
+`.venv/bin/python3` on macOS/Linux. If Docling is absent, PDF analysis uses the
+approved PyMuPDF fallback detector; no dependency is installed.
+
 ```bash
-python3 slide-system/scripts/analyze_with_docling.py \
+<project-python> slide-system/scripts/analyze_with_docling.py \
     --source <file.pdf> --extraction-id <id> [--pages 1|2-4]
 ```
 
@@ -127,8 +145,7 @@ artifact chain (`visual.svg`, `text-slots.json`, cropped
 `source-with-text.svg`, `preview/thumbnail.png`), and rebuilds the catalog.
 The user reviews the resulting items only in **Components → Draft** and decides
 whether to Publish/Delete there. If Docling is not installed it exits cleanly
-with a message; proceed with the normal manual flow only after the mandatory
-tool readiness check above has passed. See
+for PPTX input; PDF input uses the approved PyMuPDF fallback detector. See
 `slide-system/rules/extraction-methods.md` → "Optional: Docling candidate
 auto-detection". OCR is off by default for text-first slide PDFs; use `--ocr`
 only for scanned PDFs. Tiny decorative candidates are filtered by default
@@ -240,13 +257,13 @@ Checking it costs one file read, not a Python process:
 ```bash
 grep -q '"status": "ready"' slide-system/registries/extract-readiness.json 2>/dev/null \
   && echo "preflight: ready (marker)" \
-  || python3 slide-system/scripts/check_base_requirements.py
+  || <project-python> slide-system/scripts/check_base_requirements.py
 ```
 
 - Marker says `ready` → proceed immediately. Do **not** run
   `check_base_requirements.py` and do not invoke the `extract-preflight` skill.
 - **Exception — input is PDF or PPTX:** the marker's `ready` covers base tools
-  only. Run `python3 slide-system/scripts/check_base_requirements.py --input pdf`
+  only. Run `<project-python> slide-system/scripts/check_base_requirements.py --input pdf`
   (or `--input pptx`) instead — it reuses the marker (cheap) but exits 1 when
   the required source provider (PyMuPDF / LibreOffice) is missing. Stop on
   BLOCKER; never substitute another converter or a raster render.
@@ -275,6 +292,9 @@ Read a doc only when its branch is actually hit in the batch:
 not read it separately.
 
 ## Pipeline
+
+Every `python3` command below means the platform-specific project Python defined
+above; never use a global interpreter for these steps.
 
 1. Validate the request, fingerprint every requested region, and check
    extraction history, aliases, and the shared registry for duplicates.

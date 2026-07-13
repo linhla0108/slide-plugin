@@ -7,7 +7,14 @@ import argparse
 import shutil
 from pathlib import Path
 
-from _common import environment_fingerprint, load_json, now_iso, run_version, write_json
+from _common import (
+    environment_fingerprint,
+    load_json,
+    now_iso,
+    project_python_install_hint,
+    run_version,
+    write_json,
+)
 
 
 PROBES = {
@@ -44,7 +51,7 @@ def is_claude_code_environment() -> bool:
     return (Path.home() / ".cache" / "codex-runtimes").exists()
 
 
-SETUP_HINT = "Run: ./slide-system/scripts/setup.sh"
+SETUP_HINT = f"Run: {project_python_install_hint()}"
 
 
 def standalone_script_status(
@@ -97,7 +104,7 @@ STANDALONE_SCRIPTS = {
                 "editable-pptx pipeline. Renders text-free slide backgrounds "
                 "(hides editable text, keeps boxes) and extracts the DOM text "
                 "layout (export-layout.json) that build-hybrid-pptx consumes. "
-                "Run slide-system/scripts/setup.sh to install.",
+                f"{SETUP_HINT} to install.",
     },
     "build-hybrid-pptx": {
         "script": "slide-system/scripts/build_hybrid_pptx.py",
@@ -108,14 +115,14 @@ STANDALONE_SCRIPTS = {
                 "capture-slides' export-layout.json onto the text-free "
                 "backgrounds. Same proven math as the Phase 1 build "
                 "(see scripts/_reference/build_v3_hybrid_editable.py). "
-                "Run slide-system/scripts/setup.sh to install.",
+                f"{SETUP_HINT} to install.",
     },
     "playwright-pdf": {
         "script": "slide-system/scripts/export-pdf.js",
         "requires": "node",
         "capabilities": ["html-to-pdf", "browser-print"],
         "note": "Standalone Playwright PDF exporter. "
-                "Run slide-system/scripts/setup.sh to install.",
+                f"{SETUP_HINT} to install.",
     },
 }
 

@@ -18,16 +18,21 @@ docs unless explicitly referenced above.
 
 ## Environment Auto-Setup
 
-Before running any Python script, check that `.venv` exists and has the
-required packages. If not, bootstrap it silently:
+Before running any Python script, use the repository virtual environment. On
+Windows the interpreter is `.venv\Scripts\python.exe`; on macOS/Linux it is
+`.venv/bin/python3`. If it is missing or cannot import `pptx`, `PIL`, and
+`fitz`, run the matching local setup script and report any actionable error:
 
-```bash
-if [ ! -f .venv/bin/python3 ] || ! .venv/bin/python3 -c "import pptx, PIL, fitz" 2>/dev/null; then
-  ./slide-system/scripts/setup.sh
-fi
+```powershell
+powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1
 ```
 
-Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<script>.py [args]`
+```bash
+./slide-system/scripts/setup.sh
+```
+
+Run every Python command through that platform-specific project interpreter.
+Never fall back to WindowsApps `python3`, a global Python, or a different venv.
 
 ## Absolute Prohibitions (enforced by script gates)
 
@@ -56,6 +61,14 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
    For details on case routing: `slide-system/workflows/intake-and-triage.md`.
 2. **Recap gate.** Plain-language brief recap. Wait for user confirmation.
 3. **Job setup.** Create job + versioned run under `outputs/slide-jobs/`.
+   - **New-job isolation:** Do not read `docs/logs/` or another job under
+     `outputs/slide-jobs/` to judge current library fit, copy a prior deck, or
+     reuse a prior selection report. Historical logs are process history, not
+     generation input. Read them only when the user explicitly asks to resume
+     that named job.
+   - A new brief needs a fresh job/run path. If its `deck.html` or
+     `analysis/selection-report.json` already exists, stop and ask whether to
+     resume that run or create a new version; never silently build over it.
 4. **Requirements check.** Run `check_requirements.py` against capabilities.
 5. **Stop on blockers** unless user approves override.
 6. **Content analysis** and source authority.
@@ -64,7 +77,7 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
    `item_count` when the slide carries N parallel items — the scorer
    penalizes set-of-N mismatches), then:
    ```bash
-   .venv/bin/python3 slide-system/scripts/score_visual_items.py \
+    <project-python> slide-system/scripts/score_visual_items.py \
        --batch-request <run>/analysis/visual-requests.json \
        --output <run>/analysis/selection-report.json
    ```
@@ -78,9 +91,14 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
    candidate rather than assuming `candidates[0]` is always the decision.
    Score != buildability — still verify geometry/count/domain fit before
    building a reuse/adapt slide.
+   The scorer owns this file: never edit `selection-report.json`, add
+   `curation_note`/`scorer_*` fields, or relabel a decision. If the selected
+   item has a real geometry or domain defect, show it during the approval step
+   and ask the user whether to proceed; regenerate the requests/report after
+   the decision rather than mutating scorer output.
 8. **Validate selection (BLOCKING GATE).**
    ```bash
-   .venv/bin/python3 slide-system/scripts/validate_selection_report.py \
+    <project-python> slide-system/scripts/validate_selection_report.py \
        --selection-report <run>/analysis/selection-report.json \
        --visual-requests <run>/analysis/visual-requests.json
    ```
@@ -100,7 +118,7 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
     - Canvas: `1920×1080`. Keep text in leaf elements. Keep editable.
 11. **Validate brand compliance (BLOCKING GATE).**
     ```bash
-    .venv/bin/python3 slide-system/scripts/validate_brand_compliance.py \
+    <project-python> slide-system/scripts/validate_brand_compliance.py \
         --html <run>/deck.html \
         --selection-report <run>/analysis/selection-report.json \
         --brand-pack slide-system/brand-packs/sun-studio/manifest.json
@@ -109,7 +127,7 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
     Then run the component-fidelity gate (T3) — confirms `reuse`/`adapt-local`
     slides actually use their selected component, not just a marker:
     ```bash
-    .venv/bin/python3 slide-system/scripts/validate_component_fidelity.py \
+    <project-python> slide-system/scripts/validate_component_fidelity.py \
         --html <run>/deck.html \
         --selection-report <run>/analysis/selection-report.json \
         --registry slide-system/registries/visual-library.json --warn
@@ -118,13 +136,13 @@ Run all `python3` commands through: `.venv/bin/python3 slide-system/scripts/<scr
     make it blocking once existing decks are rebuilt from scaffold.
 12. **Export PPTX.** Single command:
     ```bash
-    .venv/bin/python3 slide-system/scripts/export_pptx.py \
+    <project-python> slide-system/scripts/export_pptx.py \
         --html <run>/deck.html --output <run>/<name>.pptx --mode layered
     ```
     `validate_export_objects.py` is the pass/fail gate.
 13. **Cleanup (MANDATORY).** Run after export PASS:
     ```bash
-    .venv/bin/python3 slide-system/scripts/cleanup_run.py <run>
+    <project-python> slide-system/scripts/cleanup_run.py <run>
     ```
     This deletes parity images, intermediate PNGs, compacts manifests.
     A finished run should contain ONLY:
@@ -163,13 +181,13 @@ When scorer says `reuse` or `adapt-local`:
    `artifact/` subdirectory.
 2. Scaffold the slide structure from the component's `preview.html`:
    ```bash
-   .venv/bin/python3 slide-system/scripts/scaffold_slide_from_component.py \
+    <project-python> slide-system/scripts/scaffold_slide_from_component.py \
        --item-id <id> --registry slide-system/registries/visual-library.json \
        --out <job>/assets/page-NN/fragment.html
    ```
 3. Decompose the artwork SVG (the script reads it — you never do):
    ```bash
-   .venv/bin/python3 slide-system/scripts/decompose_svg_objects.py \
+    <project-python> slide-system/scripts/decompose_svg_objects.py \
        --svg <library-path>/visual.svg \
        --out-dir <job>/assets/page-NN --prefix page-NN \
        --href-base <relative-path-from-deck.html>
@@ -177,7 +195,7 @@ When scorer says `reuse` or `adapt-local`:
 4. Paste `snippet.html` into the slide div; set the base art as CSS
    `background-image` (no overlay tag). Fill text slots by role/id using:
    ```bash
-   .venv/bin/python3 slide-system/scripts/read_text_slots.py \
+    <project-python> slide-system/scripts/read_text_slots.py \
        --item <library-path> --slots-only
    ```
    (never `Read` `text-slots.json` whole — it is up to ~120 KB).

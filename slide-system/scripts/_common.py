@@ -18,6 +18,63 @@ SYSTEM_ROOT = SCRIPT_DIR.parent
 REPO_ROOT = SYSTEM_ROOT.parent
 
 
+class ProjectPythonError(RuntimeError):
+    """Raised when the repository virtualenv is missing or unusable."""
+
+
+def project_python_path(repo_root: str | Path = REPO_ROOT,
+                        os_name: str | None = None) -> Path:
+    """Return the platform-specific Python path inside the project virtualenv."""
+    platform_name = os.name if os_name is None else os_name
+    relative = Path("Scripts/python.exe") if platform_name == "nt" else Path("bin/python3")
+    return Path(repo_root) / ".venv" / relative
+
+
+def project_python_install_hint(os_name: str | None = None) -> str:
+    platform_name = os.name if os_name is None else os_name
+    if platform_name == "nt":
+        return r"powershell -ExecutionPolicy Bypass -File .\slide-system\scripts\setup.ps1"
+    return "./slide-system/scripts/setup.sh"
+
+
+def require_project_python(repo_root: str | Path = REPO_ROOT,
+                           os_name: str | None = None,
+                           required_modules: tuple[str, ...] = ()) -> Path:
+    """Return a usable project Python or raise with the platform setup command."""
+    python = project_python_path(repo_root, os_name)
+    platform_name = os.name if os_name is None else os_name
+    display = (r".venv\Scripts\python.exe" if platform_name == "nt"
+               else ".venv/bin/python3")
+    hint = project_python_install_hint(platform_name)
+    if not python.is_file():
+        raise ProjectPythonError(
+            f"Project Python is missing at {display}. Run: {hint}"
+        )
+
+    imports = "; ".join(f"import {module}" for module in required_modules)
+    code = f"{imports}; print('ok')" if imports else "print('ok')"
+    try:
+        probe = subprocess.run(
+            [str(python), "-c", code],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=20,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ProjectPythonError(
+            f"Project Python at {display} is not usable ({exc}). Run: {hint}"
+        ) from exc
+    if probe.returncode != 0:
+        detail = (probe.stderr or probe.stdout or f"exit {probe.returncode}").strip().splitlines()
+        suffix = detail[-1] if detail else f"exit {probe.returncode}"
+        modules = f" with required modules {', '.join(required_modules)}" if required_modules else ""
+        raise ProjectPythonError(
+            f"Project Python at {display} is not usable{modules}: {suffix}. Run: {hint}"
+        )
+    return python
+
+
 def load_json(path: str | Path) -> Any:
     with Path(path).open("r", encoding="utf-8") as handle:
         return json.load(handle)

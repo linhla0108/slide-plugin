@@ -1,0 +1,15 @@
+{
+  "name": "slide-plugin",
+  "description": "Local SUN.RISER slide-system plugins.",
+  "owner": {
+    "name": "SUN.STUDIO"
+  },
+  "plugins": [
+    {
+      "name": "sun-riser",
+      "description": "Slide generation, PDF component extraction, and catalog review workflows.",
+      "version": "1.0.0",
+      "source": "./.agents"
+    }
+  ]
+}

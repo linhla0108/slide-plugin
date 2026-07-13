@@ -2,6 +2,8 @@
 
 Run this after a successful PPTX export when the template save prompt
 (pipeline step 12) fires and the user confirms.
+Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
+`.venv/bin/python3` on macOS/Linux.
 
 ## Pre-conditions
 
@@ -50,8 +52,8 @@ listing their source paths (same format as existing templates).
 ### 5. Rebuild catalog
 
 ```bash
-.venv/bin/python3 slide-system/scripts/build_component_catalog.py
-.venv/bin/python3 slide-system/scripts/build_template_picker_data.py
+<project-python> slide-system/scripts/build_component_catalog.py
+<project-python> slide-system/scripts/build_template_picker_data.py
 ```
 
 Both scripts already scan `library/templates/` — no registration code needed.

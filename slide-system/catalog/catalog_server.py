@@ -39,6 +39,7 @@ SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 import candidate_review as cr  # noqa: E402
 import auto_stage_candidates as asc  # noqa: E402
+from _common import require_project_python  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
@@ -50,6 +51,10 @@ EXTRACTIONS = REPO_ROOT / "outputs" / "component-extractions"
 ID_PATTERN = re.compile(r"^[a-z0-9]+\.[a-z0-9-]+\.[a-z0-9-]+(\.g\d+)?$")
 HOST = "127.0.0.1"
 PORT = 8799
+
+
+def selected_python() -> Path:
+    return require_project_python(REPO_ROOT)
 
 
 # ---------- helpers ----------
@@ -83,7 +88,7 @@ def body_bool(body: dict, key: str, default: bool) -> bool:
 
 
 def regen_catalog() -> tuple[bool, str]:
-    return run([sys.executable, str(SCRIPTS / "build_component_catalog.py")])
+    return run([str(selected_python()), str(SCRIPTS / "build_component_catalog.py")])
 
 
 def regen_compact() -> tuple[bool, str]:
@@ -91,7 +96,7 @@ def regen_compact() -> tuple[bool, str]:
     # a registry mutation. publish goes through publish_extraction.py which already
     # does this; the published-delete path edits the registry inline, so it must
     # reproject the compact here or the scorer drifts.
-    return run([sys.executable, str(SCRIPTS / "build_registry.py"), "--write"])
+    return run([str(selected_python()), str(SCRIPTS / "build_registry.py"), "--write"])
 
 
 def within_repo(path: Path) -> bool:
@@ -193,7 +198,7 @@ def action_publish(item_id: str) -> tuple[int, dict]:
     # This keeps the user flow to a single click: review -> Publish -> done.
     preview_dir = item_dir / "preview"
     if not preview_dir.is_dir() or not any(preview_dir.iterdir()):
-        ok, log = run([sys.executable, str(SCRIPTS / "generate_item_preview.py"),
+        ok, log = run([str(selected_python()), str(SCRIPTS / "generate_item_preview.py"),
                        "--item-dir", str(item_dir)])
         if not ok:
             return 500, {"ok": False, "error": "Could not build a preview for this item.", "log": log}
@@ -208,7 +213,7 @@ def action_publish(item_id: str) -> tuple[int, dict]:
     }
     mapping_path.write_text(json.dumps(mapping, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
 
-    ok, log = run([sys.executable, str(SCRIPTS / "publish_extraction.py"),
+    ok, log = run([str(selected_python()), str(SCRIPTS / "publish_extraction.py"),
                    "--extraction-dir", str(batch_dir), "--item-id", folder])
     if not ok:
         return 500, {"ok": False, "error": "Publish failed", "log": log}

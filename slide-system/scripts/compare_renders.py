@@ -8,17 +8,41 @@ from pathlib import Path
 
 from _common import now_iso, write_json
 
+DEFAULT_PIXEL_DELTA_THRESHOLD = 36
+
+
+def _compare_images(reference, candidate, threshold: int) -> tuple[object, dict[str, float]]:
+    from PIL import ImageChops, ImageStat
+
+    diff = ImageChops.difference(reference.convert("RGBA"), candidate.convert("RGBA")).convert("RGB")
+    stat = ImageStat.Stat(diff)
+    mean_error = sum(stat.mean) / 3
+    rms_error = (sum(value * value for value in stat.rms) / 3) ** 0.5
+    pixels = list(diff.get_flattened_data())
+    changed = sum(max(pixel) > threshold for pixel in pixels)
+    return diff, {
+        "mean_absolute_error": mean_error,
+        "rms_error": rms_error,
+        "changed_pixel_ratio": changed / len(pixels),
+    }
+
+
+def compute_metrics(reference, candidate,
+                    threshold: int = DEFAULT_PIXEL_DELTA_THRESHOLD) -> dict[str, float]:
+    """Measure render drift while ignoring low-delta anti-aliasing edge noise."""
+    return _compare_images(reference, candidate, threshold)[1]
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reference", required=True)
     parser.add_argument("--candidate", required=True)
     parser.add_argument("--output-dir", required=True)
-    parser.add_argument("--threshold", type=int, default=24)
+    parser.add_argument("--threshold", type=int, default=DEFAULT_PIXEL_DELTA_THRESHOLD)
     args = parser.parse_args()
 
     try:
-        from PIL import Image, ImageChops, ImageEnhance, ImageStat
+        from PIL import Image, ImageEnhance
     except ImportError as error:
         raise SystemExit(f"Pillow is required: {error}")
 
@@ -29,13 +53,7 @@ def main() -> int:
     if reference.size != candidate.size:
         raise SystemExit(f"Render sizes differ: {reference.size} vs {candidate.size}")
 
-    diff = ImageChops.difference(reference, candidate).convert("RGB")
-    stat = ImageStat.Stat(diff)
-    mean_error = sum(stat.mean) / 3
-    rms_error = (sum(value * value for value in stat.rms) / 3) ** 0.5
-    pixels = list(diff.get_flattened_data())
-    changed = sum(max(pixel) > args.threshold for pixel in pixels)
-    changed_ratio = changed / len(pixels)
+    diff, metrics = _compare_images(reference, candidate, args.threshold)
 
     side = Image.new("RGBA", (reference.width * 2, reference.height), "white")
     side.paste(reference, (0, 0))
@@ -51,14 +69,14 @@ def main() -> int:
         "size": {"width": reference.width, "height": reference.height},
         "threshold": args.threshold,
         "metrics": {
-            "mean_absolute_error": round(mean_error, 4),
-            "rms_error": round(rms_error, 4),
-            "changed_pixel_ratio": round(changed_ratio, 8),
+            "mean_absolute_error": round(metrics["mean_absolute_error"], 4),
+            "rms_error": round(metrics["rms_error"], 4),
+            "changed_pixel_ratio": round(metrics["changed_pixel_ratio"], 8),
         },
         "evidence": ["side-by-side.png", "overlay.png", "diff.png"],
     }
     write_json(output / "report.json", report)
-    print(f"changed_pixel_ratio={changed_ratio:.8f}")
+    print(f"changed_pixel_ratio={metrics['changed_pixel_ratio']:.8f}")
     return 0
 
 

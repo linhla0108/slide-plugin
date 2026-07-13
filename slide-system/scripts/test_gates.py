@@ -20,17 +20,21 @@ import json
 import sys
 import tempfile
 import importlib.util
+import subprocess
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
 
 import cleanup_run
+import compare_renders
+import export_pptx
 import score_visual_items as svi
 import validate_selection_report as vsr
 import scaffold_slide_from_component as scaffold
 import validate_component_fidelity as fidelity
 import read_text_slots
+import _common
 
 REGISTRY = SCRIPTS.parent / "registries" / "visual-library.json"
 
@@ -60,6 +64,217 @@ def test_cleanup_keeps_deck_and_pptx() -> None:
         assert not (run / "slide-1-bg.png").exists(), "intermediate png must be removed"
         assert not (run / "parity").exists(), "parity/ dir must be removed"
         assert any("parity" in r for r in removed)
+
+
+# --------------------------------------------------------------------------- #
+# export_pptx / compare_renders — cache consistency and AA-aware parity
+# --------------------------------------------------------------------------- #
+def test_export_invalidates_stale_verdict_and_parity_artifacts() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "export"
+        out.mkdir()
+        output = out / "deck.pptx"
+        output.write_bytes(b"PK\x03\x04current")
+        (out / "export-result.json").write_text("{}", encoding="utf-8")
+        (out / ".capture-fingerprint.json").write_text("{}", encoding="utf-8")
+        (out / ".parity-fingerprint.json").write_text("{}", encoding="utf-8")
+        (out / "export-manifest.json").write_text("{}", encoding="utf-8")
+        output.with_suffix(".validation.json").write_text("{}", encoding="utf-8")
+        report = out / "parity" / "slide-01" / "tier2" / "report.json"
+        report.parent.mkdir(parents=True)
+        report.write_text("{}", encoding="utf-8")
+
+        export_pptx.invalidate_stale_artifacts(out, output, capture_stale=True)
+
+        assert output.exists(), "invalidation must not delete the built PPTX"
+        assert not (out / "export-result.json").exists()
+        assert not output.with_suffix(".validation.json").exists()
+        assert not (out / ".capture-fingerprint.json").exists()
+        assert not (out / ".parity-fingerprint.json").exists()
+        assert not (out / "export-manifest.json").exists()
+        assert not (out / "parity").exists()
+
+
+def test_export_reuses_only_complete_fingerprint_bound_parity_reports() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        parity = Path(tmp) / "parity"
+        manifest = {"slides": [{"slide": 1}, {"slide": 2}]}
+        fingerprint = {"html_sha": "current", "compare_script_sha": "metric-v2"}
+        for report in export_pptx.expected_parity_reports(parity, manifest):
+            report.parent.mkdir(parents=True, exist_ok=True)
+            report.write_text('{"metrics":{"changed_pixel_ratio":0}}', encoding="utf-8")
+
+        export_pptx.write_parity_fingerprint(parity, manifest, fingerprint)
+
+        assert export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+        missing = parity / "slide-02" / "tier2" / "report.json"
+        missing.unlink()
+        assert not export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+
+
+def test_project_python_path_uses_windows_virtualenv_layout() -> None:
+    root = Path("C:/slide-plugin")
+    assert _common.project_python_path(root, os_name="nt") == (
+        root / ".venv" / "Scripts" / "python.exe"
+    )
+
+
+def test_project_python_path_uses_posix_virtualenv_layout() -> None:
+    root = Path("/workspace/slide-plugin")
+    assert _common.project_python_path(root, os_name="posix") == (
+        root / ".venv" / "bin" / "python3"
+    )
+
+
+def test_missing_project_python_has_platform_install_hint() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            _common.require_project_python(Path(tmp), os_name="nt")
+        except _common.ProjectPythonError as exc:
+            message = str(exc)
+            assert ".venv\\Scripts\\python.exe" in message
+            assert "setup.ps1" in message
+        else:
+            raise AssertionError("missing project virtualenv must fail")
+
+
+def test_invalid_project_python_has_platform_install_hint() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        python = Path(tmp) / ".venv" / "Scripts" / "python.exe"
+        python.parent.mkdir(parents=True)
+        python.write_text("not an executable", encoding="utf-8")
+        try:
+            _common.require_project_python(Path(tmp), os_name="nt")
+        except _common.ProjectPythonError as exc:
+            message = str(exc)
+            assert "not usable" in message
+            assert "setup.ps1" in message
+        else:
+            raise AssertionError("invalid project virtualenv must fail")
+
+
+def test_preflight_export_and_smoke_select_same_project_python() -> None:
+    import check_base_requirements
+    import test_export_stack
+    catalog_path = SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py"
+    spec = importlib.util.spec_from_file_location("catalog_server_python_test", catalog_path)
+    assert spec and spec.loader
+    catalog_server = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(catalog_server)
+
+    expected = _common.require_project_python(SCRIPTS.parents[1])
+    assert check_base_requirements.selected_python() == expected
+    assert export_pptx.selected_python() == expected
+    assert test_export_stack.selected_python() == expected
+    assert catalog_server.selected_python() == expected
+
+
+def test_distribution_surfaces_parse_and_expose_entrypoints() -> None:
+    root = SCRIPTS.parents[1]
+    plugin = json.loads(
+        (root / ".agents/.claude-plugin/plugin.json").read_text(encoding="utf-8")
+    )
+    marketplace = json.loads(
+        (root / ".claude-plugin/marketplace.json").read_text(encoding="utf-8")
+    )
+    assert plugin["name"] == "sun-riser"
+    assert marketplace["plugins"][0]["source"] == "./.agents"
+
+    skill_names = {
+        path.parent.name
+        for path in (root / ".agents/skills").glob("*/SKILL.md")
+    }
+    assert {"slide-generator", "component-extractor", "extract-preflight"} <= skill_names
+
+    component_command = (
+        root / ".opencode/commands/component.md"
+    ).read_text(encoding="utf-8")
+    assert "component-extractor" in component_command
+    assert "$ARGUMENTS" in component_command
+
+
+def test_pdf_component_entrypoint_runs_preflight_before_analysis_and_staging() -> None:
+    import extract_pdf_components
+
+    calls: list[list[str]] = []
+
+    def runner(cmd: list[str], **_kwargs) -> subprocess.CompletedProcess:
+        calls.append([str(value) for value in cmd])
+        return subprocess.CompletedProcess(cmd, 0, stdout='{"status":"ok"}', stderr="")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        pdf = root / "sample.pdf"
+        pdf.write_bytes(b"%PDF-1.4\n%%EOF\n")
+        extract_pdf_components.run_workflow(
+            pdf=pdf,
+            extraction_id="sample-components",
+            output_root=root / "extractions",
+            history=root / "history.json",
+            registry=root / "registry.json",
+            catalog_output=root / "catalog-data.json",
+            marker=root / "extract-readiness.json",
+            python=Path(sys.executable),
+            runner=runner,
+        )
+
+    scripts = [Path(cmd[1]).name for cmd in calls]
+    assert scripts == [
+        "check_base_requirements.py",
+        "analyze_with_docling.py",
+        "auto_stage_candidates.py",
+        "build_component_catalog.py",
+    ]
+    assert calls[0][2:] == ["--input", "pdf", "--json", "--marker", str(root / "extract-readiness.json")]
+    assert "publish_extraction.py" not in " ".join(" ".join(cmd) for cmd in calls)
+
+
+def test_export_smoke_uses_external_markitdown_when_project_module_is_missing() -> None:
+    import test_export_stack
+
+    command = test_export_stack.markitdown_command(
+        Path("C:/repo/.venv/Scripts/python.exe"),
+        module_available=False,
+        executable="C:/Tools/markitdown.exe",
+        pptx_path=Path("C:/temp/deck.pptx"),
+    )
+    assert command == ["C:/Tools/markitdown.exe", str(Path("C:/temp/deck.pptx"))]
+
+
+def test_compare_renders_ignores_small_delta_aa_edges() -> None:
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+
+    reference = Image.new("RGB", (400, 400), (120, 120, 120))
+    candidate = reference.copy()
+    for index in range(5000):
+        x = index % 400
+        y = index // 400
+        candidate.putpixel((x, y), (152, 120, 120))
+
+    metrics = compare_renders.compute_metrics(reference, candidate)
+
+    assert metrics["mean_absolute_error"] < 1.0
+    assert metrics["changed_pixel_ratio"] == 0.0
+
+
+def test_compare_renders_still_fails_shifted_solid_block() -> None:
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        return
+
+    reference = Image.new("RGB", (200, 200), "white")
+    candidate = reference.copy()
+    ImageDraw.Draw(reference).rectangle((20, 60, 69, 109), fill="black")
+    ImageDraw.Draw(candidate).rectangle((100, 60, 149, 109), fill="black")
+
+    metrics = compare_renders.compute_metrics(reference, candidate)
+
+    assert metrics["mean_absolute_error"] > 1.0
+    assert metrics["changed_pixel_ratio"] > 0.01
 
 
 # --------------------------------------------------------------------------- #
@@ -418,6 +633,52 @@ def test_missing_shape_warns_unless_strict() -> None:
     assert not errs and warns, "missing shape is a warning by default"
     errs, warns = vsr._validate_shape_lock(rep, False, {"s1": None}, reg_tokens, strict_shape=True)
     assert errs and not warns, "missing shape is an error under --strict-shape"
+
+
+def test_selection_report_rejects_manual_curation_override() -> None:
+    """A scorer result cannot be relabeled custom-local by an agent."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        report_path = root / "analysis" / "selection-report.json"
+        report_path.parent.mkdir()
+        report_path.write_text(json.dumps({
+            "job_id": "test-job",
+            "generated_at": "2026-07-13T00:00:00+00:00",
+            "generated_by": "score_visual_items.py",
+            "slides": [{
+                "request_id": "s1",
+                "decision": {
+                    "action": "custom-local",
+                    "item_id": None,
+                    "score": 80.0,
+                    "reason": "Manually rejected despite a strong match.",
+                    "scorer_action": "reuse",
+                    "scorer_item_id": "sun.component.timeline",
+                },
+                "candidates": [{
+                    "item_id": "sun.component.timeline",
+                    "eligible": True,
+                    "score": 80.0,
+                    "criteria": {**{key: 1.0 for key in vsr.REQUIRED_CRITERIA},
+                                 "semantic_intent": 20.0},
+                }],
+            }],
+            "curated_by": "agent override",
+        }), encoding="utf-8")
+        original_argv = sys.argv
+        try:
+            sys.argv = ["validate_selection_report.py", "--selection-report", str(report_path)]
+            assert vsr.main() == 1, "manual curation must fail the blocking selection gate"
+        finally:
+            sys.argv = original_argv
+
+
+def test_slide_generator_requires_fresh_selection_for_new_jobs() -> None:
+    skill = (SCRIPTS.parent.parent / ".agents" / "skills" / "slide-generator" / "SKILL.md")
+    text = skill.read_text(encoding="utf-8")
+    assert "Do not read `docs/logs/`" in text
+    assert "outputs/slide-jobs/` to judge current library fit" in text
+    assert "never edit `selection-report.json`" in text
 
 
 # --------------------------------------------------------------------------- #
