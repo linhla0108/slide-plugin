@@ -25,3 +25,17 @@
 **Files:** `slide-system/scripts/build_registry.py`, `slide-system/registries/visual-library.json`, `slide-system/registries/visual-library-compact.json`, `slide-system/registries/component-retrieval-index.jsonl`, `slide-system/scripts/test_gates.py`, `docs/logs/SESSION-LOG-2026-07-08.md`, `docs/logs/INDEX.jsonl`
 **Symbols:** `build_registry.compact_text`, `build_registry._rel`, `build_registry.main`, `test_build_registry_check_detects_stale_compact`, `test_build_registry_write_regenerates_stale_compact`, `test_build_registry_live_compact_projection_is_clean`
 **State:** Not committed
+
+## 2026-07-08.3 — Type-intent bias: components not out-ranked by templates in all-types mode
+
+**Request:** After merging the retrieval stack to master, fix template-vs-component ranking in all-types mode so component-intent queries are not dominated by full-slide templates; smallest correct change, tests, no scoring redesign.
+**Actions:**
+- Updated local `master` to `origin/master` (`b232d194`) after discarding only the two named local log edits (`docs/logs/INDEX.jsonl`, `docs/logs/SESSION-LOG-2026-07-07.md`); branched `feature/template-component-ranking`.
+- Baseline all-types eval (10 queries) reproduced the failure at `q3` (team contributor circles): template `sun.sun-presentation.04-contributors-layout` (81.0) out-ranked component `sun.component.team-contributor-circles.g01` (72.75) — the component actually had the higher semantic_intent (22.75) but lost the −10 zero-slot buildability penalty. 7/8 component top-1; both template controls won.
+- `score_visual_items.py`: added `request_type_intent()` (reads `prefer_type`, else scans free-text `query`+intent+tags for component/template markers; template intent wins ties) and a bounded `TEMPLATE_DEMOTION = 15` applied in `score_request` only to `type == "template"` items when the request explicitly wants a component. One-directional; surfaced in `reasons` and `retrieval.type_bias`. No threshold/weight/floor/registry/publish changes; no new dependency.
+- Added 6 focused tests in `test_gates.py` (detection; component-intent ranks component over a higher-raw-score template; template intent leaves templates; neutral applies no bias; components unchanged / component-only path unaffected; component-intent query with no fit does not become a confident reuse false-positive).
+- Minimal doc note in `workflows/select-visual-items.md`.
+**Result:** After all-types eval: **8/8** positive component top-1 (q3 flipped to the component), template controls **2/2**, neutral query unbiased (template still 81.0), negative pie-chart query stays `custom-local` (no component false-positive). `test_gates.py` 158/158; `validate_component_metadata --strict` all 13; `validate_registry` 91; `build_registry --check` clean; `build_component_retrieval_index --check` clean; `build_log_index --check` clean; `git diff --check` clean.
+**Files:** `slide-system/scripts/score_visual_items.py`, `slide-system/scripts/test_gates.py`, `slide-system/workflows/select-visual-items.md`, `docs/logs/SESSION-LOG-2026-07-08.md`, `docs/logs/INDEX.jsonl`
+**Symbols:** `score_visual_items.request_type_intent`, `score_visual_items.score_request`, `test_request_type_intent_detection`, `test_type_intent_component_query_ranks_component_over_template`, `test_type_intent_template_query_lets_template_win`, `test_type_intent_neutral_query_applies_no_bias`, `test_type_intent_leaves_components_unchanged`, `test_type_intent_no_component_false_positive_when_nothing_fits`
+**State:** Not committed

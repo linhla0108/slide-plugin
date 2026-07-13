@@ -108,3 +108,15 @@
 **Files:** docs/logs/SESSION-LOG-2026-07-13.md, docs/logs/INDEX.jsonl
 **Symbols:** none
 **State:** Not committed
+
+## 2026-07-13.10 — Rebase template-component ranking on current master
+
+**Request:** Rebase PR #5 after the portable PDF Draft workflow merged, preserve both retrieval behaviors, and verify the result before updating the pull request.
+**Actions:**
+- Rebasing `feature/template-component-ranking` onto `origin/master` required resolving derived log-index, daily-log, and test-suite conflicts.
+- Retained component-intent template demotion, component-first strict shape coverage, anti-curation validation, and fresh-job isolation; regenerated `INDEX.jsonl` instead of hand-merging it.
+- Used temporary ignored junctions for `.venv`, `input`, and `node_modules` in the isolated rebase worktree so the repository's integration tests could access the existing local toolchain.
+**Result:** PASS. Python compile, `test_gates.py` (173/173), registry validation, registry/retrieval index checks, log-index check, and diff check passed. No registry/library/runtime config changes were introduced.
+**Files:** docs/logs/SESSION-LOG-2026-07-13.md, docs/logs/INDEX.jsonl, slide-system/scripts/score_visual_items.py, slide-system/scripts/validate_selection_report.py, slide-system/scripts/test_gates.py, slide-system/workflows/select-visual-items.md
+**Symbols:** score_visual_items.request_type_intent, validate_selection_report.SHAPE_TYPE_MAP, test_shape_lock_covers_component_first_shapes
+**State:** Not committed

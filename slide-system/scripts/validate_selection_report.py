@@ -30,6 +30,12 @@ SEMANTIC_FLOOR = 10.5
 # component must carry. Matched (lowercased) against the registry item's
 # intent + tags. Synonyms are included so the map is lenient on phrasing but
 # strict on category (a `timeline` shape can never lock to a `cover` item).
+# The last four shapes were added when component-first retrieval landed: the
+# original six template-era shapes could not express team/profile sets, tier
+# ladders, icon reference sheets, or review/check-in slides, which made
+# --strict-shape unusable for those legitimate published items. Every allowed
+# token below is drawn from real published-item intent/tags or the scorer's
+# canonical vocabulary — do not add generic filler words.
 SHAPE_TYPE_MAP: dict[str, set[str]] = {
     "cover": {"cover", "hero", "title", "opening", "intro"},
     "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
@@ -37,6 +43,10 @@ SHAPE_TYPE_MAP: dict[str, set[str]] = {
     "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
     "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
     "two-column": {"two-column", "split", "split-layout", "layout"},
+    "profile": {"team", "profile", "profile-layout", "profile-circles", "contributors", "roles", "personas"},
+    "tiers": {"levels", "tiers", "ranking", "maturity-model", "capability-ladder"},
+    "icons": {"icons", "icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
+    "review": {"review", "check-in", "evaluation", "assessment", "questions", "quarterly-review", "progress-check"},
 }
 
 
