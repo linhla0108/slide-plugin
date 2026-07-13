@@ -96,3 +96,15 @@
 **Files:** docs/logs/SESSION-LOG-2026-07-13.md
 **Symbols:** score_visual_items.score_request, validate_selection_report._validate_shape_lock
 **State:** Not committed
+
+## 2026-07-13.9 — Publish portable PDF Draft workflow for review
+
+**Request:** Review the accumulated uncommitted implementation, commit the in-scope changes, push the branch, and create a pull request.
+**Actions:**
+- Reviewed the staged plugin, setup, extraction, export, selection-validation, test, and documentation changes; intentionally excluded pre-existing local runtime configuration diffs in `.mcp.json` and `opencode.jsonc`.
+- Re-ran the full gate suite, registry and retrieval checks, export stack, Windows setup check, Claude plugin validation, OpenCode discovery, and an isolated page-1 PDF-to-Draft smoke.
+- Committed the implementation as `75351da9`, pushed `fix/export-parity-qa-cache`, and opened ready PR #6 against `master`.
+**Result:** PASS. `test_gates.py` passed 166/166; registry reported 91 valid items; registry/retrieval projections were clean; editable PPTX/PDF/layered export passed. The isolated PDF workflow created one review-only `staging` Draft and did not publish. PR: https://github.com/linhla0108/slide-plugin/pull/6
+**Files:** docs/logs/SESSION-LOG-2026-07-13.md, docs/logs/INDEX.jsonl
+**Symbols:** none
+**State:** Not committed
