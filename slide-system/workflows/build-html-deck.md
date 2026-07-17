@@ -8,8 +8,10 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
 
 Before starting HTML construction, confirm:
 1. `analysis/selection-report.json` exists and was validated (step 7b).
-2. For every slide with a `reuse` or `adapt-local` decision, the component's
-   `visual.svg` and `text-slots.json` are accessible in the library path.
+2. For every slide with a `reuse` decision, the component's `visual.svg` and
+   `text-slots.json` are accessible in the library path. (`adapt-local` is retired;
+   a `needs_component` slide builds nothing and goes back to the user for library
+   review; `custom-local` only exists with explicit user approval.)
 
 ## Post-Build Gate
 
@@ -34,10 +36,10 @@ Then validate brand rules:
 EXIT 0 required. Fails on: emoji icons, non-brand fonts, excessive non-brand
 colors, claimed reuse with no template reference in HTML.
 
-Then run the component-fidelity gate (T3) — it confirms every `reuse` /
-`adapt-local` slide actually uses its selected component's structure (class
-signature ≥ 70% reuse / ≥ 45% adapt, decomposed asset, or component
-`background-image`), not just a `data-base-component` marker:
+Then run the component-fidelity gate (T3) — it confirms every `reuse` slide
+actually uses its selected component's structure (slot coverage, decomposed asset,
+or component `background-image`), not just a `data-base-component` marker, and
+rejects any component recorded as `auto_reuse.eligible: false`:
 ```bash
 <project-python> slide-system/scripts/validate_component_fidelity.py \
     --html <run>/deck.html \
@@ -48,6 +50,19 @@ signature ≥ 70% reuse / ≥ 45% adapt, decomposed asset, or component
 Run with `--warn` during rollout (reports failures, always exits 0) until
 existing decks are rebuilt from scaffold; drop `--warn` to make it blocking.
 Writes `qa/component-fidelity-report.json`.
+
+**Contract fidelity is not render fitness.** The gate above proves a `reuse`
+slide preserves its component's REFERENCE CONTRACT — slot coverage, bounds, no
+overflow. It says nothing about whether the rendered result is fit for a human
+audience. A component can pass fidelity (coverage 1.0) and still render unfit —
+e.g. a wide-band artwork whose outer content falls off the 16:9 frame under
+full-bleed `cover`, or slot text on too-light a background. The report's
+`render_fitness_advisories` surface those cases (deterministically — see
+`validate_component_fidelity.render_fitness`), but they are ADVISORY: a
+component may only be **auto-reused** if it also passes render fitness, so a
+component confirmed unfit is marked `auto_reuse.eligible: false` (blocked from
+automatic selection, still browseable for manual placement). Fidelity gates the
+contract; `auto_reuse.eligible` gates audience-readiness.
 
 ## Build Rules
 
@@ -129,7 +144,7 @@ Writes `qa/component-fidelity-report.json`.
 
 ## Component/Template-Based Build
 
-This path applies to ALL items with `reuse` or `adapt-local` decisions from
+This path applies to ALL items with a `reuse` decision from
 the scorer — not only when `base_template` is set. A standalone component
 (cover-hero, timeline, checklist, comparison, statistics, closing, CTA) with
 a `reuse` decision follows the same decompose→fill-slots flow.
@@ -162,6 +177,30 @@ a `reuse` decision follows the same decompose→fill-slots flow.
   by `text_contract.overflow_policy` at the item level (typically `"unmanaged"`),
   NOT per slot. Map plan fields (title / subtitle / body / footer) to matching
   slot roles; leave unmatched slots empty rather than inventing content.
+- **Every slot you fill must read as a complete unit.** A slot list is a set of
+  disconnected regions on the artwork, not a sentence: the audience reads each
+  region on its own, in whatever order the design leads their eye. So:
+  - **Do not split one phrase across slots.** `foundation:"Nền tảng"` +
+    `built:"riêng"` renders as two separate marks in two circles — the reader never
+    reassembles "Nền tảng riêng". No slot metadata declares a continuation or group
+    relationship (there is no `group` field, and `required` is `false` on every slot
+    in the library), so there is nothing that licenses a phrase spanning two slots.
+    Until a contract declares one, treat every slot as standing alone.
+  - **Fewer, complete slots beat more, fragmented ones.** Slot coverage is not a
+    score to maximise. A slot whose only purpose in the SOURCE was to continue a
+    phrase (the second line of a stacked headline, a lone `&` between two partner
+    names) has nothing to say on its own — leave it empty. `allow_empty` is `true`
+    on every slot precisely so you can.
+  - **Read the hierarchy off the contract before writing a word.** `role`,
+    `html_tag`, `example_value` and `bounds` together say what each region is for:
+    an `h1` at 26% of the slide height is the punchline, a `span` whose example is
+    `"01"` is a rank, two slots stacked in the same column are one headline block in
+    the source. Note the slot array is in the contract's own order, NOT reading
+    order — sort by `bounds` yourself to see the real layout.
+  - **If the component's geometry cannot carry your content coherently, do not force
+    it.** Say so at the selection gate and pick another published component or leave
+    the request `needs_component`. A slide that passes the overflow gate can still be
+    unreadable — the gate proves text fits its box, never that it makes sense.
 - For slides with `custom-local` or `blocked` decisions, fall back to the
   normal custom build above (with brand color/font/icon rules enforced).
 - If user content exceeds the available slots or overflows the slot bounds,

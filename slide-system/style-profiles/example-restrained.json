@@ -1,0 +1,19 @@
+{
+  "profile_id": "example-restrained",
+  "version": "1.0.0",
+  "owner": "Example User",
+  "description": "Example only, NOT a default. A calm, restrained, diagram-led reviewer who prefers breathing room and clear hierarchy. Copy this file to slide-system/style-profiles/ under your own id and edit. Only the whitelisted keys in style-profile.schema.json are honoured; nothing here can change SUN.STUDIO tokens, readability, canvas bounds, or component fidelity.",
+  "preferences": {
+    "information_density": "balanced",
+    "heading_hierarchy": "bold",
+    "spacing": "airy",
+    "visual_rhythm": "calm",
+    "visual_tone": "restrained",
+    "media_bias": "diagram-led",
+    "language": "vi",
+    "tone": "coaching",
+    "layout_families": ["grid", "columns", "centered"],
+    "preferred_component_intents": ["checklist", "timeline", "comparison"],
+    "avoided_component_intents": ["statistics", "profile"]
+  }
+}

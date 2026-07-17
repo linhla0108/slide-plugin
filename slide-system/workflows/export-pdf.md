@@ -1,5 +1,40 @@
 # Export PDF
 
+## Delivery gate (all PDF routes)
+
+A PDF is a final deliverable, so the same unresolved-delivery rule as PPTX
+applies: if the run's `analysis/selection-report.json` still holds any
+`needs_component` slide, the job is UNRESOLVED and **no PDF is produced** —
+resolve every slide first. This rule binds **every** PDF route below (the
+standalone Node exporter AND the Playwright MCP `browser_pdf` route), because the
+gate lives in `delivery_gate.py`, not in any one exporter.
+
+**Route A — standalone Node exporter.** It runs `delivery_gate.py` itself before
+it opens a browser:
+
+```bash
+node slide-system/scripts/export-pdf.js \
+    --url file://<run>/deck.html \
+    --deck <run>/deck.html \
+    --slides N --showJs "goToSlide({n})" \
+    --output <run>/exports/<name>.pdf
+```
+
+Pass `--deck <run>/deck.html` so the gate can find the sibling selection-report
+(auto-derived when `--url` is a `file://` URL). For an `http(s)` URL, `--deck`
+is required unless the caller explicitly confirms an untracked external deck with
+`--skip-delivery-gate`.
+
+**Route B — Playwright MCP `browser_pdf`.** This route does NOT go through the
+Node exporter, so you MUST run the same gate as a preflight yourself (see the
+step-by-step below) before calling `browser_pdf`.
+
+**Tracked vs untracked (both routes).** A deck WITH a sibling
+`analysis/selection-report.json` is a *tracked* job: the gate is enforced and can
+never be bypassed. A deck with NO sibling report is an external/custom deck and is
+not gated. `--skip-delivery-gate` (Node route only) is a deliberate, visible
+acknowledgement for an untracked deck ONLY — it is refused for a tracked job.
+
 ## Renderer Selection
 
 Pick the first renderer that is available and matches the source:
@@ -16,6 +51,21 @@ Never attempt LibreOffice when its status is `unavailable`.
 ## Playwright MCP — Step-by-step
 
 Use this path for every HTML-source deck, including all non-tech user sessions.
+
+0. **Delivery-gate preflight (required, fail-closed).** BEFORE navigating or
+   calling `browser_pdf`, run the shared gate on the run's deck:
+
+   ```bash
+   .venv/Scripts/python.exe slide-system/scripts/delivery_gate.py --deck <run>/deck.html
+   ```
+
+   - **Tracked job** (a sibling `analysis/selection-report.json` exists): the
+     command exits **non-zero** when any slide is unresolved/malformed and prints
+     a catalog-safe message (never the internal `reason`). **STOP — do NOT call
+     `browser_pdf`; produce no PDF.** Take the job to the user for library review.
+     It exits `0` only when every slide is resolved; only then continue to step 1.
+   - **Untracked/external deck** (no sibling report): the command exits `0`
+     (`"gated": false`) and there is nothing to block — continue to step 1.
 
 1. Serve the HTML deck via the Claude Code preview MCP (preferred) or a local
    static server using the bundled Node.js:

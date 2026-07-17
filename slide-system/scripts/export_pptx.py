@@ -30,6 +30,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import delivery_gate
 from _common import (
     SCRIPT_DIR,
     REPO_ROOT,
@@ -97,6 +98,12 @@ def run(cmd: list[str], label: str) -> None:
 
 
 def capture_fingerprint(args: argparse.Namespace) -> dict:
+    # Every option that changes the captured pixels/layout must be here, or a
+    # cache hit serves stale "ghost" renders. showJs/selector change WHICH slide
+    # each frame captures, so a re-run with a different navigation/selector must
+    # invalidate. (Auto-resolved navigation — when neither is passed — is a
+    # deterministic function of the HTML + capture-slides.js, both already
+    # fingerprinted via html_sha + capture_script_sha, so it needs no extra key.)
     return {
         "capture_script_sha": sha256_file(CAPTURE),
         "html_sha": sha256_file(args.html),
@@ -107,6 +114,8 @@ def capture_fingerprint(args: argparse.Namespace) -> dict:
         "height": args.height,
         "overlay_scale": args.overlay_scale,
         "pad": args.pad,
+        "showjs": args.showJs,
+        "selector": args.selector,
     }
 
 
@@ -224,6 +233,11 @@ def main() -> int:
         raise SystemExit(f"Deck HTML not found: {html}")
     args.html = str(html)
     output = Path(args.output).resolve()
+
+    # Delivery gate: an unresolved job (any needs_component slide in the run's
+    # selection-report) is NOT a deliverable. Fail closed BEFORE spending a
+    # capture pass so no styled diagnostic placeholder deck is ever exported.
+    delivery_gate.enforce_deck_deliverable(html)
 
     result = {"mode": args.mode, "steps": {}, "pass": False}
 

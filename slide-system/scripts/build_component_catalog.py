@@ -1,12 +1,30 @@
 #!/usr/bin/env python3
-"""Generate catalog data from published/QA registry items and staging outputs."""
+"""Build the catalog's PUBLISHED projection from the registry.
+
+Ownership split (the invariant this file exists to hold):
+
+  TRACKED + DETERMINISTIC -- `catalog/catalog-data.json`, written here. A pure
+    function of the tracked `registries/visual-library.json`: published items only,
+    carrying their full metadata (including `auto_reuse` review-only flags). The
+    same tracked repo state yields byte-identical output on any machine, so the
+    file diffs only when the registry actually changes. There is deliberately NO
+    way to fold Drafts into it -- see `collect_draft_items` below.
+
+  RUNTIME-LOCAL -- Drafts. They live only in gitignored
+    `outputs/component-extractions/` and are therefore whatever THIS machine
+    happens to have staged. `catalog_server.py` scans them live and serves them at
+    `GET /api/drafts`; the catalog UI merges them on top of the published
+    projection. Baking them into the tracked file (as this script used to) meant
+    every developer's rebuild replaced the committed Draft rows with their own.
+"""
 
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
-from _common import load_json, now_iso, write_json
+from _common import load_json, write_json
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"}
@@ -190,23 +208,13 @@ def publish_readiness(item_dir: Path, mapping: dict) -> dict:
     return {"ready": not blockers, "blockers": blockers}
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--registry",
-        default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
-    )
-    parser.add_argument(
-        "--extractions",
-        default=str(PROJECT_ROOT / "outputs/component-extractions"),
-    )
-    parser.add_argument(
-        "--output",
-        default=str(Path(__file__).resolve().parents[1] / "catalog/catalog-data.json"),
-    )
-    args = parser.parse_args()
+def build_published_items(registry: dict) -> list[dict]:
+    """The tracked projection: published registry items, in registry order.
 
-    registry = load_json(args.registry)
+    Deterministic by construction — every value comes from the tracked registry or
+    from tracked files under `slide-system/library/` (walked with `sorted`), and
+    paths are repo-relative posix. No wall clock, no machine-local state.
+    """
     items: list[dict] = []
 
     for pub_item in registry.get("items", []):
@@ -253,9 +261,21 @@ def main() -> int:
         item["deletable"] = bool(art_path_str and art_path_str.startswith("slide-system/library/"))
         items.append(item)
 
-    extraction_root = Path(args.extractions)
+    return items
+
+
+def collect_draft_items(extractions_root: Path | str) -> list[dict]:
+    """Machine-local Drafts discovered live under `outputs/component-extractions/`.
+
+    That tree is gitignored, so this result is specific to whoever is running —
+    which is exactly why it must never reach the tracked projection. The catalog
+    server calls this per request (`GET /api/drafts`) and the UI merges the result
+    on top of the published items.
+    """
+    items: list[dict] = []
+    extraction_root = Path(extractions_root)
     if extraction_root.exists():
-        for mapping_path in extraction_root.glob("*/items/*/mapping.json"):
+        for mapping_path in sorted(extraction_root.glob("*/items/*/mapping.json")):
             mapping = load_json(mapping_path)
             status = mapping.get("status", "")
             if status not in {"staging", "qa"}:
@@ -368,16 +388,58 @@ def main() -> int:
                 }
                 items.append(base)
 
+    return items
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Build the TRACKED, published-only catalog projection from the "
+                    "registry. Drafts are runtime-local and are served by "
+                    "catalog_server.py at GET /api/drafts — there is deliberately no "
+                    "flag to fold them in here (it made the tracked file "
+                    "machine-specific).")
+    parser.add_argument(
+        "--registry",
+        default=str(Path(__file__).resolve().parents[1] / "registries/visual-library.json"),
+    )
+    parser.add_argument(
+        "--output",
+        default=str(Path(__file__).resolve().parents[1] / "catalog/catalog-data.json"),
+    )
+    parser.add_argument(
+        "--check", action="store_true",
+        help="report drift and exit 1 if the tracked projection is out of date; "
+             "write nothing.",
+    )
+    args = parser.parse_args(argv)
+
+    registry = load_json(args.registry)
+    items = build_published_items(registry)
     data = {
-        "generated_at": now_iso(),
-        "counts": {
-            "published": sum(item.get("status") == "published" for item in items),
-            "staging": sum(item.get("status") in {"staging", "qa"} for item in items),
-        },
+        # The SOURCE registry's timestamp, deliberately not a wall clock: the
+        # tracked projection must be byte-identical for a given tracked registry,
+        # on any machine, however many times it is rebuilt.
+        "registry_updated_at": registry.get("updated_at"),
+        "counts": {"published": len(items)},
         "items": items,
     }
+    if args.check:
+        # The same gate build_registry --check applies to its own projections. This
+        # file is TRACKED and derived, so a registry edit that forgets to rebuild it
+        # ships a catalog that disagrees with the library. A byte comparison is
+        # faithful precisely because the projection is deterministic (no wall clock);
+        # it must serialize exactly as write_json does or --check would never pass.
+        target = Path(args.output)
+        desired = json.dumps(data, ensure_ascii=True, indent=2) + "\n"
+        if not target.exists() or target.read_text(encoding="utf-8") != desired:
+            print(f"STALE     {args.output} (catalog projection out of date — "
+                  f"rerun without --check)")
+            return 1
+        print(f"clean catalog: {len(items)} published items")
+        return 0
     write_json(args.output, data)
-    print(f"Catalog data: {len(items)} items")
+    print(f"Catalog data: {len(items)} published items "
+          f"(Drafts are runtime-only, via the catalog server's /api/drafts)")
     return 0
 
 

@@ -9,7 +9,7 @@ import shutil
 from pathlib import Path
 
 from _common import load_json, now_iso, write_json
-from build_registry import COMPACT_KEYS
+import build_registry
 import build_component_retrieval_index as retrieval
 from validate_component_metadata import metadata_from_mapping, validate_item
 
@@ -227,14 +227,13 @@ def main() -> int:
         registry["items"].append(item_record)
     registry["updated_at"] = now_iso()
     write_json(args.registry, registry)
-    # Keep the compact projection (what score_visual_items.py reads) in lockstep
-    # with the full registry so it never drifts. build_registry.py --write does
-    # the same projection for bulk reconciles.
+    # Keep the compact projection (what score_visual_items.py reads) in lockstep with
+    # the full registry so it never drifts. Use build_registry's projection rather than
+    # re-deriving it here: it applies the immutable-text audit gate, so a newly
+    # published item projects as `unresolved` until it has actually been audited
+    # instead of becoming automatically reusable the moment it lands.
     compact_path = Path(args.registry).with_name("visual-library-compact.json")
-    write_json(
-        str(compact_path),
-        {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in registry["items"]]},
-    )
+    write_json(str(compact_path), build_registry.project_compact(registry["items"]))
     retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
     retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
 

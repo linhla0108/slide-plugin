@@ -6,8 +6,14 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
 1. Load only `published` items from `registries/visual-library.json`.
 2. Reject deprecated, staging, brand-incompatible, or export-incompatible items.
 3. Write `analysis/visual-requests.json` with one request per slide. Each request
-   must include: `request_id`, `intent`, `tags`, `content_structure`, `density`,
-   `brand`, `required_exports`. Optionally include `item_count` (integer — how
+   must include: `request_id`, `intent`, `tags`, `content_structure`,
+   `content_shape`, `density`, `brand`, `required_exports`. `content_shape` is
+   REQUIRED: it must be one of the shapes in the single shared vocabulary
+   `SHAPE_TYPE_MAP` in `slide-system/scripts/_common.py` — the one source of
+   truth the scorer and validator share; do not copy the list here. It drives
+   shape-aware candidate eligibility, so a missing or wrong `content_shape`
+   changes selection (and fails the strict validation in step 5).
+   Optionally include `item_count` (integer — how
    many parallel content items the slide carries, e.g. 4 roles): the scorer
    penalizes components whose declared `set-of-N` size cannot fit it.
    Optionally include a type-intent hint so all-types scoring does not let a
@@ -51,14 +57,70 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
    ```bash
    <project-python> slide-system/scripts/validate_selection_report.py \
        --selection-report <run>/analysis/selection-report.json \
-       --visual-requests <run>/analysis/visual-requests.json
+       --visual-requests <run>/analysis/visual-requests.json \
+       --strict-shape
    ```
-   EXIT 0 required before HTML build. EXIT 1 = re-run step 4.
-6. Reuse scores of 75 or higher.
-7. Use a slide-local adaptation for scores from 65 through 74.
-8. Use a slide-local custom structure below 65 (no strong match).
-9. Record selected and rejected candidates with reasons.
-10. Record an extraction recommendation when useful. Never trigger extraction.
+   EXIT 0 required before HTML build. EXIT 1 = re-run step 4. `--strict-shape`
+   makes a missing or unknown `content_shape` a hard failure, so shape-aware
+   selection is always enforced in the normal workflow (never silently skipped).
+6. `reuse` (AUTOMATIC) only when the top candidate is published, shape-compatible,
+   slot/render-compatible, **auto-reuse-eligible** (no recorded full-slide QA
+   failure — see `auto_reuse` below), unused elsewhere in the deck, AND clears the
+   high-confidence bar: total score `>= 78` AND `semantic_intent >= 24.5`
+   (`0.7 × 35`). A mediocre total never authorises reuse — the semantic sub-score
+   is the discriminator. Deck allocation considers the FULL scored pool; `--top-n`
+   only trims what the report displays.
+7. `needs_component` for everything else automatic — low confidence, no fit, or
+   duplicate-only. Build NOTHING. The decision carries a plain reason, suggested
+   search terms, top safe candidates, and the exact next user action: search the
+   web catalog, copy a component's ID (or its prompt), and set `component_id` on
+   the slide; or set `unresolved_policy: "custom-local"`.
+8. `custom-local` ONLY when the user explicitly approves it (`unresolved_policy:
+   "custom-local"`) after reviewing the library. The scorer never auto-creates a
+   custom layout. `adapt-local` is retired.
+9. A user may name a component explicitly with `component_id` (a stable id or the
+   catalog "Copy prompt" text). It bypasses the auto bar but still validates
+   (published + shape/type + editable slots + render fidelity); on failure the
+   slide stays `needs_component`.
+10. No published component is auto-reused on two slides. A slide whose only
+    high-confidence candidates are already assigned becomes `needs_component`
+    unless it sets `allow_component_reuse: true` (recorded + shown in review).
+11. A published component may carry `auto_reuse: {eligible:false, reason}` when its
+    full-slide materialization/render QA actually failed. It stays published and
+    catalog/retrieval-browseable for human review, but is NEVER auto-selected; an
+    explicit `component_id` for it is recorded with the warning and the fidelity
+    gate rejects the build.
+12. Record selected and rejected candidates with reasons, and an extraction
+    recommendation when useful. Never trigger extraction.
+
+## The artifact users edit: `<run>/analysis/visual-requests.json`
+
+Per-slide selections live in the batch visual-request artifact — **not** in
+`job-requirements.json`. `score_visual_items.py` validates it BEFORE any scoring;
+a bad field exits non-zero with a plain reason and writes no report. The contract
+is documented in `slide-system/schemas/visual-requests.schema.json` and enforced in
+code by `validate_batch_request()` — the file is not evaluated as JSON Schema at
+runtime (no `jsonschema` dependency), but a parity test reads it and proves the code
+enforces every field and type it declares. To resolve a `needs_component` slide,
+edit that slide object and re-run steps 4–5:
+
+```jsonc
+{
+  "job_id": "my-job",
+  "slides": [
+    {
+      "request_id": "s5-model-tiers",
+      "intent": ["comparison", "tiers"],
+      "content_structure": ["label"],
+      "content_shape": "tiers",
+      // paste a stable id OR the catalog "Copy prompt" text:
+      "component_id": "sun.component.foundation-top1-microsoft-overlap-circle-set",
+      "allow_component_reuse": false,      // true only to reuse an already-assigned component
+      "unresolved_policy": null            // "custom-local" = explicit approval to build custom
+    }
+  ]
+}
+```
 
 Write one `analysis/visual-requests.json` and one `analysis/selection-report.json`
 per run. Do not emit a separate file per section.

@@ -184,6 +184,23 @@ compat tested) → just 1 click needed.
 - **Every mutate → regen catalog** then the UI runs `loadData()` (cache-bust `?t=`); do NOT edit
   `catalog-data.json` by hand (it's a generated file). The extractor (SKILL §5) + server auto-regen —
   a non-tech user does not need to run `build_component_catalog.py` manually.
+- **Published is tracked; Drafts are runtime-local.** This is the invariant that makes
+  `catalog-data.json` safe to commit:
+
+  | | Published | Drafts |
+  |---|---|---|
+  | Source of truth | `registries/visual-library.json` (tracked) | `outputs/component-extractions/` (**gitignored**) |
+  | Reaches the UI via | `catalog/catalog-data.json` (tracked) | `GET /api/drafts` (live scan, per request) |
+  | Written by | `build_component_catalog.py` | nothing — never persisted |
+  | Determinism | same tracked state → **byte-identical** on any machine | whatever this machine has staged |
+
+  So `catalog-data.json` is a pure projection of the registry: published items only,
+  carrying `auto_reuse` review-only metadata, stamped with the registry's
+  `registry_updated_at` instead of a wall clock. The builder has **no** flag to fold
+  Drafts in — it used to, and the effect was that any developer's rebuild replaced the
+  committed Draft rows with their own local ones. Drafts still appear in the catalog
+  exactly as before (now on a plain reload, no rebuild needed); without the control
+  server there are simply no Drafts to show and published browsing still works.
 - Path guard: id must match the stable-id regex; published rm only within `library/`;
   draft rm only within `outputs/component-extractions/`.
 - **Atomic preview dependency:** `render_svg.js` needs `node` + Playwright/Chromium. Missing →

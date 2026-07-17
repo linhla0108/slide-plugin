@@ -6,12 +6,19 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from _common import load_json, now_iso, write_json, SYSTEM_ROOT
+from _common import load_json, now_iso, write_json, SYSTEM_ROOT, SHAPE_TYPE_MAP
+from score_visual_items import AUTO_REUSE_MIN, SEMANTIC_CONFIDENCE_FRAC, WEIGHTS
 
-
-VALID_ACTIONS = {"reuse", "adapt-local", "custom-local", "blocked"}
+# Auto-reuse confidence bar — imported from the scorer so the gate and the scorer
+# cannot drift. reuse/needs_component/custom-local is the new product vocabulary;
+# `adapt-local` and `blocked` are retired as automatic actions (product decision
+# 2026-07-13.20).
+SEMANTIC_CONFIDENCE = round(WEIGHTS["semantic_intent"] * SEMANTIC_CONFIDENCE_FRAC, 2)
+VALID_ACTIONS = {"reuse", "needs_component", "custom-local", "blank"}
 REQUIRED_CRITERIA = {"semantic_intent", "content_structure", "density", "brand", "export_compatibility", "accessibility"}
-DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended"}
+DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended",
+                   "suggested_search", "next_action", "selected_by", "allow_component_reuse",
+                   "immutable_text_conflict", "shortlist"}
 SINGLE_REPORT_FIELDS = {
     "request_id", "generated_at", "generated_by", "scorer_version",
     "retrieval_index", "decision", "candidates",
@@ -22,32 +29,11 @@ BATCH_REPORT_FIELDS = {
 }
 SLIDE_FIELDS = {"request_id", "decision", "candidates"}
 
-# Adapt-local floor — kept in sync with score_visual_items.py decision branch.
-ADAPT_FLOOR = 65
 SEMANTIC_FLOOR = 10.5
 
-# T1 selection-lock: each content_shape maps to the intent/tag tokens a chosen
-# component must carry. Matched (lowercased) against the registry item's
-# intent + tags. Synonyms are included so the map is lenient on phrasing but
-# strict on category (a `timeline` shape can never lock to a `cover` item).
-# The last four shapes were added when component-first retrieval landed: the
-# original six template-era shapes could not express team/profile sets, tier
-# ladders, icon reference sheets, or review/check-in slides, which made
-# --strict-shape unusable for those legitimate published items. Every allowed
-# token below is drawn from real published-item intent/tags or the scorer's
-# canonical vocabulary — do not add generic filler words.
-SHAPE_TYPE_MAP: dict[str, set[str]] = {
-    "cover": {"cover", "hero", "title", "opening", "intro"},
-    "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
-    "comparison": {"comparison", "versus", "do-dont", "what-how", "pros-cons", "contrast"},
-    "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
-    "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
-    "two-column": {"two-column", "split", "split-layout", "layout"},
-    "profile": {"team", "profile", "profile-layout", "profile-circles", "contributors", "roles", "personas"},
-    "tiers": {"levels", "tiers", "ranking", "maturity-model", "capability-ladder"},
-    "icons": {"icons", "icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
-    "review": {"review", "check-in", "evaluation", "assessment", "questions", "quarterly-review", "progress-check"},
-}
+# T1 selection-lock vocabulary now lives in _common.SHAPE_TYPE_MAP so the scorer
+# (candidate eligibility) and this validator (defense-in-depth shape-lock) share
+# one source of truth and cannot drift. Imported above.
 
 
 def _chk(name: str, ok: bool, detail: str) -> dict:
@@ -89,31 +75,53 @@ def _validate_report_fields(rep: dict, is_batch: bool, errors: list[str]) -> dic
 
 
 def _validate_decision_band(slide: dict, prefix: str, errors: list[str]) -> None:
-    """The decision action must agree with the strongest eligible candidate.
-
-    score_visual_items.py keeps the selected semantic runner-up in candidates,
-    including when a raw-score lure ranks higher. Recomputing its action band
-    here makes a post-score `reuse` -> `custom-local` rewrite fail closed.
+    """Enforce the new selection contract against the scored candidates, so a
+    post-score rewrite fails closed:
+      - custom-local requires explicit user approval (selected_by == 'user');
+        the scorer NEVER auto-creates a custom layout.
+      - AUTOMATIC reuse must name a candidate that clears the confidence bar
+        (total >= AUTO_REUSE_MIN AND semantic >= SEMANTIC_CONFIDENCE) and is
+        eligible + shape-compatible.
+      - EXPLICIT reuse (selected_by == 'user') bypasses the score bar but is still
+        subject to the shape-lock/fidelity gates elsewhere.
+      - needs_component carries no band obligation.
     """
     decision = slide.get("decision") or {}
-    candidates = [c for c in slide.get("candidates") or [] if isinstance(c, dict) and c.get("eligible")]
-    if not candidates or not isinstance(decision, dict):
+    if not isinstance(decision, dict):
         return
-    semantic = [
-        candidate for candidate in candidates
-        if (candidate.get("criteria") or {}).get("semantic_intent", 0) >= SEMANTIC_FLOOR
-    ]
-    if not semantic:
-        expected_action = "custom-local"
-    else:
-        chosen = max(semantic, key=lambda candidate: candidate.get("score", 0))
-        score = chosen.get("score", 0)
-        expected_action = "reuse" if score >= 75 else "adapt-local" if score >= ADAPT_FLOOR else "custom-local"
-    if decision.get("action") != expected_action:
+    action = decision.get("action")
+    if action == "custom-local":
+        if decision.get("selected_by") != "user":
+            errors.append(
+                f"{prefix}.decision: custom-local requires explicit user approval "
+                f"(selected_by='user'); the scorer never auto-creates a custom layout.")
+        return
+    if action == "blank":
+        if decision.get("selected_by") != "user":
+            errors.append(
+                f"{prefix}.decision: blank requires an explicit user choice "
+                f"(selected_by='user'); the scorer never blanks a slide automatically.")
+        return
+    if action != "reuse":
+        return
+    if decision.get("selected_by") == "user":
+        return  # explicit selection bypasses the auto bar (still fidelity/shape-gated)
+    cands = {c.get("item_id"): c for c in slide.get("candidates") or [] if isinstance(c, dict)}
+    chosen = cands.get(decision.get("item_id"))
+    if not chosen:
+        errors.append(f"{prefix}.decision: reuse item_id {decision.get('item_id')!r} is not "
+                      f"among the scored candidates.")
+        return
+    if not chosen.get("eligible") or not chosen.get("shape_eligible", True):
+        errors.append(f"{prefix}.decision: automatic reuse of ineligible/shape-incompatible "
+                      f"item {decision.get('item_id')!r}.")
+    score = chosen.get("score", 0)
+    semantic = (chosen.get("criteria") or {}).get("semantic_intent", 0)
+    if score < AUTO_REUSE_MIN or semantic < SEMANTIC_CONFIDENCE:
         errors.append(
-            f"{prefix}.decision action {decision.get('action')!r} conflicts with scorer band "
-            f"{expected_action!r}; regenerate the report instead of curating it."
-        )
+            f"{prefix}.decision: automatic reuse of {decision.get('item_id')!r} (total {score}, "
+            f"semantic {semantic}) is below the confidence bar (>= {AUTO_REUSE_MIN} total AND "
+            f">= {SEMANTIC_CONFIDENCE} semantic). Use needs_component or an explicit selection.")
 
 
 def _registry_tokens(registry: dict) -> dict[str, set[str]]:
@@ -142,7 +150,7 @@ def _content_shapes(vreqs) -> dict[str, str | None]:
 
 def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: dict,
                          strict_shape: bool) -> tuple[list[str], list[str]]:
-    """T1: a reuse/adapt-local item's intent/tags must match the slide's content_shape."""
+    """T1: a `reuse` item's intent/tags must match the slide's content_shape."""
     errs: list[str] = []
     warns: list[str] = []
     if is_batch:
@@ -153,12 +161,25 @@ def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: di
     for rid, dec in decisions:
         action = dec.get("action", "")
         item_id = dec.get("item_id")
-        if action not in ("reuse", "adapt-local") or not item_id:
-            continue
         shape = shapes.get(rid)
+        # Under --strict-shape every scored request must declare a content_shape,
+        # regardless of its decision, so the slide-generator workflow cannot skip
+        # the shape-aware filter by omitting content_shape on a custom-local slide.
+        if strict_shape and not shape:
+            errs.append(f"slide {rid!r}: content_shape is required under --strict-shape")
+            continue
+        # ...and it must be a KNOWN shape from the shared vocabulary. Checked
+        # before the action/item_id early-return so an unknown content_shape also
+        # fails on needs_component/custom-local decisions, not only `reuse`.
+        if strict_shape and shape not in SHAPE_TYPE_MAP:
+            errs.append(f"slide {rid!r}: unknown content_shape {shape!r} under --strict-shape "
+                        f"(allowed: {', '.join(sorted(SHAPE_TYPE_MAP))})")
+            continue
+        if action != "reuse" or not item_id:
+            continue
         if not shape:
-            msg = f"slide {rid!r}: missing content_shape (required for T1 selection-lock)"
-            (errs if strict_shape else warns).append(msg)
+            # non-strict: a reuse decision without a shape is a warning
+            warns.append(f"slide {rid!r}: missing content_shape (required for T1 selection-lock)")
             continue
         if shape not in SHAPE_TYPE_MAP:
             errs.append(f"slide {rid!r}: unknown content_shape {shape!r} "
@@ -196,13 +217,10 @@ def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: li
             errors.append(f"{prefix}.candidates[{j}] criteria missing: {', '.join(sorted(miss))}")
             break
     item_id = dec.get("item_id")
-    if action in ("reuse", "adapt-local") and not item_id:
-        errors.append(f"{prefix}: action={action!r} but item_id is null")
-    score_val = dec.get("score", 0)
-    if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        errors.append(f"{prefix}: score {score_val} >= 75 but action is {action!r}")
-    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        errors.append(f"{prefix}: score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+    if action == "reuse" and not item_id:
+        errors.append(f"{prefix}: action='reuse' but item_id is null")
+    # Band correctness (confidence bar / explicit-only custom-local) is enforced
+    # against the scored candidates in _validate_decision_band.
     _validate_decision_band(slide, prefix, errors)
     return checks
 
@@ -296,16 +314,11 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
         fail(detail)
 
     item_id = dec.get("item_id")
-    score_val = dec.get("score", 0)
-    adopt_ok = not (action in ("reuse", "adapt-local") and not item_id)
+    adopt_ok = not (action == "reuse" and not item_id)
     checks.append(_chk("adoption_compliance", adopt_ok,
         "Adoption rules satisfied" if adopt_ok else f"action={action!r} but item_id is null"))
     if not adopt_ok:
-        fail(f"Adoption: action={action!r} requires non-null item_id")
-    if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        errors.append(f"Score {score_val} >= 75 but action is {action!r}, expected 'reuse'")
-    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        errors.append(f"Score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
+        fail(f"Adoption: action='reuse' requires non-null item_id")
     _validate_decision_band(rep, "report", errors)
 
 

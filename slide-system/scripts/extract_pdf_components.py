@@ -63,10 +63,12 @@ def run_workflow(*, pdf: Path, extraction_id: str, output_root: Path,
         "--registry", str(registry),
         "--no-catalog",
     ], runner)
+    # Refreshes the published projection only. The Drafts just staged above are
+    # runtime-local: the catalog server scans them live at GET /api/drafts, so they
+    # appear at `review_url` without ever entering the tracked catalog file.
     catalog = _run_step("catalog rebuild", [
         python_str, str(SCRIPTS / "build_component_catalog.py"),
         "--registry", str(registry),
-        "--extractions", str(output_root),
         "--output", str(catalog_output),
     ], runner)
     return {

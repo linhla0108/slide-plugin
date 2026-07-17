@@ -73,6 +73,73 @@ def slide_dimensions(canvas_w: float, canvas_h: float) -> tuple[float, float]:
     return 7.5 * aspect, 7.5
 
 
+# Sub-pixel rounding / a scrollbar can make a genuinely paginated slide's root
+# measure a hair larger than the viewport — allow that, but nothing near a
+# second slide's worth.
+CANVAS_TOLERANCE = 0.02
+
+
+def resolve_layered_geometry(manifest: dict) -> tuple[float, float]:
+    """Slide size (inches) for a layered manifest, failing closed when the
+    capture did not isolate one slide per frame.
+
+    capture-slides.js records, per slide, the bounding rect of the capture root.
+    When the deck paginates one slide into the viewport — a <deck-stage>, or a
+    `.slide.active` deck driven by ``--showJs``/``--selector`` — every slide's
+    canvas equals the declared capture viewport (manifest ``canvasW``/``canvasH``).
+    When it does NOT — a deck whose slides are all laid out and visible at once,
+    exported without per-slide navigation — the root spans the WHOLE deck, so
+    ``canvasH`` comes back as the full scroll height, every slide's base render is
+    the same first frame, and each slide carries the entire deck's text. Left
+    unchecked, :func:`build_layered` would derive an absurd sliver slide size and
+    stack all text on every slide, yet the raster parity gate (first frame vs
+    first frame) still passes. Refuse that here so a non-paginated capture fails
+    loudly instead of shipping a broken PPTX.
+    """
+    slides = manifest.get("slides") or []
+    if not slides:
+        raise SystemExit("Layered manifest declares no slides")
+    declared_w = float(manifest.get("canvasW") or 0) or 1920.0
+    declared_h = float(manifest.get("canvasH") or 0) or 1080.0
+    for entry in slides:
+        cw = float(entry.get("canvasW") or declared_w)
+        ch = float(entry.get("canvasH") or declared_h)
+        if ch > declared_h * (1 + CANVAS_TOLERANCE) or cw > declared_w * (1 + CANVAS_TOLERANCE):
+            raise SystemExit(
+                f"slide {entry.get('slide')}: capture canvas {int(cw)}x{int(ch)} exceeds the "
+                f"declared {int(declared_w)}x{int(declared_h)} viewport — the deck was captured "
+                f"un-paginated, so every slide holds the whole deck. A layered export needs one "
+                f"slide per frame: give the deck a `.slide.active` + `goToSlide(n)` navigator and "
+                f'export with --showJs "goToSlide({{n}})" --selector ".slide.active" (or use a '
+                f"<deck-stage>). Refusing to write a broken PPTX."
+            )
+    return slide_dimensions(declared_w, declared_h)
+
+
+def assert_capture_navigated(manifest: dict) -> None:
+    """Fail closed when a multi-slide capture produced the SAME frame for every
+    slide — the signature of a deck captured without per-slide navigation (every
+    pass re-shot slide 1). capture-slides.js now auto-resolves navigation from a
+    <deck-stage> or a `.slide`/`goToSlide(n)` deck, but this is the build-side
+    backstop: a genuine multi-slide deck differs in background OR text somewhere,
+    so identical background AND identical text across EVERY slide can only be a
+    silent navigation failure. The raster parity gate can't catch it (it compares
+    slide-1-vs-slide-1 and passes), so refuse the PPTX here."""
+    slides = manifest.get("slides") or []
+    if len(slides) < 2:
+        return
+    base_shas = {s.get("base", {}).get("sha256") for s in slides}
+    texts = {tuple(t.get("text", "") for t in s.get("text", [])) for s in slides}
+    if len(base_shas) == 1 and None not in base_shas and len(texts) == 1:
+        raise SystemExit(
+            f"all {len(slides)} captured slides share one background AND identical text — the "
+            f"deck was captured without per-slide navigation (slide 1 repeated {len(slides)}x). "
+            f"A layered export needs one slide per frame: capture-slides.js resolves navigation "
+            f"from a <deck-stage> or a `.slide`/`goToSlide(n)` deck, or from explicit "
+            f'--showJs/--selector. Refusing to write a PPTX that is one slide {len(slides)} times.'
+        )
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -373,10 +440,14 @@ def build_layered(args: argparse.Namespace) -> None:
         raise SystemExit(f"--manifest build requires mode=layered, got {manifest['mode']!r} "
                          "(flat decks use the v1 --layout path)")
 
+    # Fails closed if the capture was not paginated one slide per frame:
+    # geometry guard catches an inflated whole-deck canvas; the navigation guard
+    # catches identical-frame (slide-1-repeated) captures.
+    slide_w_in, slide_h_in = resolve_layered_geometry(manifest)
+    assert_capture_navigated(manifest)
     first = manifest["slides"][0] if manifest["slides"] else {}
     first_cw = float(first.get("canvasW") or manifest.get("canvasW") or 1920)
     first_ch = float(first.get("canvasH") or manifest.get("canvasH") or 1080)
-    slide_w_in, slide_h_in = slide_dimensions(first_cw, first_ch)
     prs = Presentation()
     prs.slide_width = Inches(slide_w_in)
     prs.slide_height = Inches(slide_h_in)

@@ -36,7 +36,7 @@ User request
 │  SELECT VISUAL ITEMS                │
 │  → score each slide need            │
 │  → apply --prefer-set if present   │
-│  → decide reuse / adapt / custom    │
+│  → decide reuse / needs_component   │
 └────────────────┬────────────────────┘
                  │
                  ▼
@@ -98,10 +98,14 @@ The set prefix is recorded in the brief and passed down to the scoring step.
      │    77.5      │   │    70.0      │    │    73.75     │
      │  + SET +5    │   │  + SET +5    │    │  (no bonus)  │
      │  ─────────   │   │  ─────────   │    │  ─────────   │
-     │  = 82.5  ✓   │   │  = 75.0  ✓   │    │  = 73.75     │
-     │   REUSE      │   │   REUSE      │    │   ADAPT      │
+     │  = 82.5  ✓   │   │  = 75.0  ✗   │    │  = 73.75  ✗  │
+     │   REUSE      │   │ NEEDS_COMP.  │    │ NEEDS_COMP.  │
      └─────────────┘   └──────────────┘    └──────────────┘
 ```
+
+Totals alone do not decide: only the left box clears BOTH the 78 total and the 24.5
+semantic bar. The middle box shows why the set bonus cannot buy a reuse — 75.0 is
+still under the bar, so the slide goes back to the user as `needs_component`.
 
 ### Scoring criteria (weights unchanged)
 
@@ -131,12 +135,19 @@ THEN
 
 ### Decision thresholds
 
-| Score | Decision | Meaning |
+Automatic reuse needs BOTH bars — a mediocre total never authorises it, because the
+~45-point baseline (density + brand + export + accessibility) inflates totals and the
+semantic sub-score is the real discriminator.
+
+| Condition | Decision | Meaning |
 |---|---|---|
-| ≥ 75 | **reuse** | Use the published item as-is |
-| 65–74 | **adapt-local** | Use it but adjust locally for the slide |
-| < 65 | **custom-local** | Build a new one for this slide |
-| 0 (no eligible item) | **blocked** | No suitable item available |
+| total ≥ 78 **AND** `semantic_intent` ≥ 24.5 (0.7 × 35), published, shape-compatible, auto-reuse-eligible, unused in this deck | **reuse** | Use the published component as-is |
+| anything else automatic — low confidence, no fit, duplicate-only, or a recorded full-slide QA failure (`auto_reuse.eligible: false`) | **needs_component** | Build NOTHING; the user picks a component from the catalog or approves a custom slide |
+| the user set `unresolved_policy: "custom-local"` | **custom-local** | Build a new one for this slide — explicit user approval ONLY |
+
+A user may also name a component outright via `component_id`; that is still `reuse`,
+and it is validated and fidelity-gated like any other. `adapt-local` and `blocked` are
+retired: the scorer never silently adapts or silently custom-builds.
 
 ---
 
@@ -286,9 +297,10 @@ FOR each slide in the deck:
   │
   ├── [SCORE] Run score_visual_items.py
   │     │
-  │     ├── score ≥ 75 → REUSE template as-is
-  │     ├── score 65-74 → ADAPT template + local tweaks
-  │     └── score < 65 → CUSTOM build from scratch
+  │     ├── total ≥ 78 AND semantic ≥ 24.5 → REUSE component as-is
+  │     ├── user set component_id           → REUSE that component (validated)
+  │     ├── user set unresolved_policy      → CUSTOM-LOCAL (explicit approval)
+  │     └── otherwise                       → NEEDS_COMPONENT (build nothing)
   │
   ├── [COMPOSE] Read component-composition.md
   │     │

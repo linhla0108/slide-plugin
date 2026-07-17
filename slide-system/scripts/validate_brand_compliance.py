@@ -118,14 +118,16 @@ def check_template_assets(html: str, selection_report: dict) -> dict:
     for slide in entries:
         action = slide.get("decision", {}).get("action", "")
         item_id = slide.get("decision", {}).get("item_id") or ""
-        if action not in ("reuse", "adapt-local") or not item_id:
+        # `reuse` is the only action that uses a published component (adapt-local is
+        # retired; needs_component/custom-local reference no component).
+        if action != "reuse" or not item_id:
             continue
         patterns = [item_id, item_id.replace(".", "-").replace("_", "-").lower(), item_id.split(".")[-1]]
         if not any(p in html for p in patterns if p):
             missing.append(item_id)
     passed = not missing
     return {"name": "template_assets", "pass": passed,
-            "detail": "All reuse/adapt-local assets referenced." if passed else f"{len(missing)} asset(s) not referenced in HTML.",
+            "detail": "All reuse assets referenced." if passed else f"{len(missing)} asset(s) not referenced in HTML.",
             "missing": missing}
 
 

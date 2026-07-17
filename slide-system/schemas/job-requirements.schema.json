@@ -12,6 +12,16 @@
       "type": ["string", "null"],
       "description": "Published slide template id chosen as the deck's starting layout (for example sun.template.slide-5), or null when no template was picked. Optional; set during intake when the user browses and selects a published template."
     },
+    "style_profile": {
+      "type": ["object", "null"],
+      "description": "Optional explicit per-user style profile selection. Influences safe custom-local composition and within-band tie-breaking only; never overrides brand tokens, readability, canvas bounds, source content, or component fidelity. See slide-system/rules/style-profiles.md.",
+      "required": ["profile_id", "path"],
+      "properties": {
+        "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "path": { "type": "string", "description": "Project-local path to the profile JSON (slide-system/style-profiles/<id>.json)." }
+      },
+      "additionalProperties": false
+    },
     "inputs": {
       "type": "array",
       "items": {

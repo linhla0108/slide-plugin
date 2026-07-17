@@ -111,6 +111,12 @@ def build_record(item: dict) -> dict:
         "anti_use_cases": item.get("anti_use_cases") or [],
         "visual_summary": item.get("visual_summary"),
         "retrieval_notes": item.get("retrieval_notes"),
+        # Carried so the catalog/retrieval projection can surface an item that is
+        # published + browseable but REVIEW-ONLY (barred from automatic reuse).
+        "auto_reuse": item.get("auto_reuse"),
+        # Carried so a reviewer can see that this item's artwork bakes in fixed,
+        # source-specific copy that only suits decks about that context.
+        "immutable_text": item.get("immutable_text"),
         "paths": item.get("paths") or {},
         "source": item.get("source"),
         "search_text": search_text,

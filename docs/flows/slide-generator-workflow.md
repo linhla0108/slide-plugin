@@ -151,9 +151,10 @@ When sources disagree → create a divergence summary, ask the user.
 1. Load only `published` items from `registries/visual-library.json`
 2. Reject: deprecated / staging / brand-incompatible / export-incompatible
 3. Score with `score_visual_items.py`:
-   - ≥75 → reuse as-is
-   - 65–74 → slide-local adaptation
-   - <65 → custom build
+   - total ≥78 AND semantic_intent ≥24.5 → `reuse` as-is (automatic)
+   - user set `component_id` → `reuse` that exact component (validated, fidelity-gated)
+   - user set `unresolved_policy: "custom-local"` → `custom-local` build
+   - anything else → `needs_component`: build nothing, hand the slide back to the user
 4. When `base_template` is set → auto-assign score 100 to slides matching the template intent
 5. Record extraction recommendations (NEVER trigger extraction)
 6. Output: one `analysis/visual-requests.json` + one `analysis/selection-report.json` per run

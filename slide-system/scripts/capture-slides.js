@@ -727,11 +727,38 @@ async function main() {
     await page.waitForTimeout(200);
   }
 
-  // Resolve navigation + selector defaults for deck-stage when not overridden.
-  const showJs = a.showJs || (hasDeckStage
+  // Resolve per-slide navigation + capture selector.
+  //   1. explicit --showJs / --selector always win (any deck shape);
+  //   2. <deck-stage>: its own goTo()/active-attribute navigation;
+  //   3. a plain deck exposing a global goToSlide(n) over a `.slide` collection:
+  //      drive goToSlide and clip each frame to the active slide.
+  // A multi-slide capture with NO resolvable navigation must fail HERE: without
+  // it every pass re-captures slide 1, and the export silently ships one slide N
+  // times (the parity gate then compares slide-1-vs-slide-1 and passes). Never
+  // guess — fail closed with an actionable message instead.
+  let showJs = a.showJs || (hasDeckStage
     ? "document.querySelector('deck-stage').goTo({n})" : null);
-  const selector = a.selector || (hasDeckStage
+  let selector = a.selector || (hasDeckStage
     ? "deck-stage > [data-deck-active]" : null);
+
+  if (!showJs && a.slides > 1) {
+    const nav = await page.evaluate(
+      "({ hasGoToSlide: typeof window.goToSlide === 'function',"
+      + " slideCount: document.querySelectorAll('.slide').length })");
+    if (nav.hasGoToSlide && nav.slideCount >= a.slides) {
+      showJs = "goToSlide({n})";
+      selector = a.selector || ".slide.active";
+      console.log(`[capture-slides] auto-detected goToSlide(n) over ${nav.slideCount} `
+        + `.slide element(s) → navigation "goToSlide({n})", selector "${selector}"`);
+    } else {
+      die(`multi-slide capture (--slides ${a.slides}) has no way to show one slide per `
+        + `frame: no <deck-stage>, and no goToSlide(n) navigator over a matching .slide `
+        + `collection (goToSlide=${nav.hasGoToSlide}, .slide count=${nav.slideCount}). Give `
+        + `the deck a .slide/.slide.active + goToSlide(n) navigator, or pass `
+        + `--showJs "<expr with {n}>" [--selector "<css>"]. Refusing to capture slide 1 `
+        + `${a.slides} times and report success.`);
+    }
+  }
 
   // v2: layered mode takes its own multi-pass path. The loop below stays the
   // frozen v1 (flat) behaviour — isolation rule #1 of the 3-layer plan.

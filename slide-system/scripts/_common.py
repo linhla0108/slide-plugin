@@ -18,6 +18,60 @@ SYSTEM_ROOT = SCRIPT_DIR.parent
 REPO_ROOT = SYSTEM_ROOT.parent
 
 
+# T1 shape vocabulary — the SINGLE source of truth shared by
+# score_visual_items.py (candidate eligibility, before ranking) and
+# validate_selection_report.py (defense-in-depth shape-lock) so the scorer and
+# validator can never drift. Each content_shape maps to the intent/tag tokens a
+# chosen component must carry; matched case-insensitively against the item's
+# intent + tags. Synonyms keep the map lenient on phrasing but strict on
+# category (a `timeline` shape can never lock to a `cover` item). Every token is
+# drawn from real published-item intent/tags or the scorer's canonical
+# vocabulary — do not add generic filler words.
+SHAPE_TYPE_MAP: dict[str, set[str]] = {
+    "cover": {"cover", "hero", "title", "opening", "intro"},
+    "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
+    "comparison": {"comparison", "versus", "do-dont", "what-how", "pros-cons", "contrast"},
+    "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
+    "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
+    "two-column": {"two-column", "split", "split-layout", "layout"},
+    "profile": {"team", "profile", "profile-layout", "profile-circles", "contributors", "roles", "personas"},
+    "tiers": {"levels", "tiers", "ranking", "maturity-model", "capability-ladder"},
+    "icons": {"icons", "icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
+    "review": {"review", "check-in", "evaluation", "assessment", "questions", "quarterly-review", "progress-check"},
+    "closing": {"closing", "thank-you", "farewell", "conclusion", "outro"},
+}
+
+
+def shape_eligible(content_shape: str | None, tokens) -> bool:
+    """Whether an item carrying `tokens` (its intent + tags) may serve a slide's
+    `content_shape`. Shared by the scorer (candidate eligibility) and the
+    validator (shape-lock) so both apply one rule.
+
+    - No content_shape declared -> True (filtering is a no-op; backward compatible).
+    - Known shape -> True iff the item shares at least one allowed token.
+    - Unknown shape (not in SHAPE_TYPE_MAP) -> False: no component can lock to a
+      shape the system has no vocabulary for, so the scorer falls back to
+      custom-local instead of emitting a reuse the validator would reject.
+    """
+    if not content_shape:
+        return True
+    allowed = SHAPE_TYPE_MAP.get(content_shape)
+    if not allowed:
+        return False
+    return bool(allowed & {str(t).lower() for t in tokens})
+
+
+def derive_content_shape(tokens) -> list[str]:
+    """Deterministically infer which content_shape(s) an item fits from its own
+    intent/tags, by reverse-lookup on SHAPE_TYPE_MAP. Returns every shape whose
+    allowed vocabulary the item shares (sorted; may be empty). This is the generic,
+    zero-churn derivation the scorer reports for auditability — the system reasons
+    about an item's shape from its existing metadata, so no shape label is invented
+    and stored on the 91 registry items."""
+    toks = {str(t).lower() for t in tokens}
+    return sorted(shape for shape, allowed in SHAPE_TYPE_MAP.items() if allowed & toks)
+
+
 class ProjectPythonError(RuntimeError):
     """Raised when the repository virtualenv is missing or unusable."""
 

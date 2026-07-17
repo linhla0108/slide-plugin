@@ -175,13 +175,26 @@ def check_parity(parity_dir: Path, thresholds: dict, failures: list[str]) -> lis
         slide = next((part for part in relative_parts if part.startswith("slide-")), "?")
         gate = thresholds[tier]
         metrics = report["metrics"]
+        # mean_err is the primary correctness guard (a shifted/glued/wrong/missing
+        # region spikes it). The secondary edge-coverage guard measures the
+        # CONTIGUOUS changed ratio when the comparator provides it: a faithful
+        # native-text overlay leaves a 1px anti-aliasing halo along every glyph
+        # edge that inflates the raw changed_ratio on text-dense slides even
+        # though nothing is misregistered, so gating on the raw ratio false-fails
+        # them. `significant_changed_pixel_ratio` (changed pixels surviving a 1px
+        # erosion) drops those halos while keeping solid displacement blocks; the
+        # threshold value is unchanged. Older reports without the key fall back to
+        # the raw ratio so nothing silently loosens.
+        edge_ratio = metrics.get("significant_changed_pixel_ratio",
+                                 metrics["changed_pixel_ratio"])
         ok = (metrics["mean_absolute_error"] <= gate["max_mean_err"]
-              and metrics["changed_pixel_ratio"] <= gate["max_changed_ratio"])
+              and edge_ratio <= gate["max_changed_ratio"])
         if not ok:
             failures.append(
                 f"parity {slide}/{tier}: mean_err "
                 f"{metrics['mean_absolute_error']} / changed_ratio "
-                f"{metrics['changed_pixel_ratio']} exceeds {gate}")
+                f"{metrics['changed_pixel_ratio']} / significant_ratio {edge_ratio} "
+                f"exceeds {gate}")
         seen.append({"report": str(report_path), "tier": tier, "pass": ok, **metrics})
     return seen
 

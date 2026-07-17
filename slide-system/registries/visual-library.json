@@ -38,7 +38,14 @@
       "variants": [],
       "limitations": [
         "Use according to SUN.STUDIO brand and licensing rules."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "f74691c933440dfacc4c8618e8f93ba422bbd15c6d3e261218d6e5d673ff7feb"
+        },
+        "reason": "Not a slide: this canonical brand asset declares no paths.visual, so it is composed ONTO slides rather than reused as one — its empty-slot render (2026-07-16 audit) is a blank frame, confirming it contributes no slide artwork that could bake in source text. The artwork itself is the SUN.STUDIO mark: canonical brand, never source-specific."
+      }
     },
     {
       "id": "sun.character.dio",
@@ -87,7 +94,11 @@
       ],
       "limitations": [
         "Use selectively on title, section, and closing slides."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "reason": "Not a slide: this canonical character asset declares no paths.visual and cannot be scaffolded at all (its paths name a DIRECTORY of character art), so no empty-slot render can exist for it — the 2026-07-16 audit records it not-applicable. It is composed ONTO slides as illustration and carries no words."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.01-cover",
@@ -215,10 +226,26 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "3c3e2f4544b62ba2f102c5a2bbca550eff0d7ea61447aaf7386a1b4afc7a1233",
+          "slots_sha256": "77a6309c765d1f339d3603cfd16b66cfe823ae02108f754f02c55af622661f31",
+          "visual_sha256": "728558d455a2d8a0499e5b1190ea4e5d7a6bde6e04caf9c150fef0bbc7f438f9"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      },
+      "build_scope": {
+        "mode": "generic",
+        "reason": "7 role-generic cover slots (label/label + heading title/subtitle + dept/copyright); no source-specific structure, fillable from any brief."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.02-timeline",
+      "anti_use_cases": [
+        "This is a fixed interview/onboarding timeline tied to scheduled dates; do not reuse it for a generic step-by-step how-to, a tool-usage sequence, or a horizontal three-step workflow."
+      ],
       "version": "1.0.0",
       "name": "02 — Timeline SUN.RISER 2026",
       "type": "template",
@@ -442,7 +469,20 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "ecbc5e7a4cbf2e83d8a4918fab36185364e47b6104fb1272d8b2c201e68970bc",
+          "slots_sha256": "9dbd4dc11a8aba078a69416f6fa7739cfdf2fbc2080642c663ddfba0d30215d8",
+          "visual_sha256": "d14d868b27838c8061e1c16a0ce0d6375b7e55af8f1b60ddce733f4ec3363fca"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      },
+      "build_scope": {
+        "mode": "source-specific",
+        "reason": "23 slots bound to this source deck: interview-round labels and fixed dates (22-05, 04-06, 08-06, vong 3, ...); an unrelated brief cannot fill them without inventing content."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.03-objectives",
@@ -623,7 +663,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "78d5b337301f01ff2c58ef4451d3c00626f9fab266d173904d2a8c0135e01bef",
+          "slots_sha256": "26a1b5eb6240cc47f3954eba2db8a1d20c4798daa637b696bdb45bd4a8f5eace",
+          "visual_sha256": "a658a606fc8b57da78a154a1880f97ed04b1d950fe7f0f921a3b595e4b667537"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.04-mindset",
@@ -829,7 +878,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "a668cef6b043190826bbda839494b416767565ada5667cc2c6d10331d1fcf364",
+          "slots_sha256": "4a1f8aabf7c6aac24f7e51a06b6a0ab0c5c7d39fe7a71a37f4a7c18f2469ede4",
+          "visual_sha256": "9f0f0b30359f8ab46d2df787112402091d24a738ed15913f9ec41592584c3a38"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.05-prep",
@@ -1060,7 +1118,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "0da4e850f9411322752683ec7a6f8711ae80452bd4b1c8676fd866e7c401f24f",
+          "slots_sha256": "b05402327af8d6d5ac8a1a5418d6103070da7889cb79e501ff8544f1a3c8be93",
+          "visual_sha256": "fd2ea28e20e8fe14b0fcfdb9a1436a7687fe622f1ac64a2ea0d35ca59653962e"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit, re-run after the text-slot bound repair) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups), the checklist's checkbox glyphs, or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.06-tough-candidates",
@@ -1252,7 +1319,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "8f01829fe35e7b9d04e3d258478a350360de55df16209957bab32411985ed0ad",
+          "slots_sha256": "181fd6abae9855f4ef63b51c72c87a7ac90f54b78bd42131346a70c2c7a5983f",
+          "visual_sha256": "9f8f5cd1c562d705c960f0356316990db8f7fc590758cc79b4aa38dd42aa1ac1"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.07-star-method",
@@ -1568,7 +1644,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "c59073efde73a442f421e3638045107abe3b96e183b0b8cddfa93309c963d7e6",
+          "slots_sha256": "049bccb658f5bfb555c3a619544a05d0f7d292ff4eb945b544f8485c9f3b3e3c",
+          "visual_sha256": "acbfca76e1d745464b4d23cfbf3b904cc6c192a54c888be5ad3bfec7a9e49156"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.08-structure-warmup",
@@ -1791,7 +1876,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "1892c68f2a548012a19d548886c8391a6ced3c3254ff634909e008839b04340b",
+          "slots_sha256": "e701ec9caff27c518e7d6767ee4794cfb8bb2f854b83a6a1abaa459cc0c250c5",
+          "visual_sha256": "67f09b6e89c6bb0f1eb79c79be29c4aa075c1b5f8e756a92c71959c8a9e6ffee"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.09-structure-deepdive",
@@ -2014,7 +2108,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "f2e8bf18b2d565c76823f8c13cd2be76288586ae7939d57b92282782fa6d6a7b",
+          "slots_sha256": "6a6a9ea5b1430acc3545dbbc54a6ac3b3fb803ee929076e845ef6c50358a1d59",
+          "visual_sha256": "7a8ebbe91d84f59c89b9266eb538dc446cf22a8cbd5a5c2b58086ccc671cb165"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.10-do-dont",
@@ -2329,7 +2432,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "dd459dce7100f8f3c253a308fd4e4d94055589e074d0fa6e2c0613000295283c",
+          "slots_sha256": "5aab6ccc96bd3bbb85a3ee7e0288c23bd84b88babcd42c4959a77c7ebc78e3a9",
+          "visual_sha256": "962ff184f3f5f986058b19b20a2e6e61de936a66cad9ddc9ea0f997e20b11996"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.11-scoring",
@@ -2620,7 +2732,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "6e015cf90a72cbf765f1ae8052e9b06901a1c0a59295fada323e384d000ba53a",
+          "slots_sha256": "cf7a275b145d6fc1eae07f89912fd712e78699ddb1b3e408c009135578a1cce4",
+          "visual_sha256": "6a027224582ed3b49b5a4858cbe05e60eb12ee92cc812ebb5bbf9127e8a014e9"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.interview-workshop-sunriser.12-action-items",
@@ -2838,7 +2959,16 @@
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Per-item PPTX/Canva fidelity is validated at first deck generation.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "185fc73de8c0975a9f6c006d3cb92f9b86e19215c6f8255148a9f5002bf31a47",
+          "slots_sha256": "5dd3933d59577620a96d7df56db55003ff721ca33c660355b5b48ef090cce234",
+          "visual_sha256": "56419ec57119fa15d0c66d09c35fd068e3f420ef96de966e2a3e3b873436c7a2"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.01-cover",
@@ -2937,7 +3067,27 @@
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "goal-setting",
+            "2026"
+          ],
+          [
+            "goal",
+            "setting",
+            "2026"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "2aa0fca3e6dee530b7685e445422061ad4c651943ce19c3c699b4ed928b6bffb",
+          "slots_sha256": "ea33edccf7b7fd3ae83f468b666af2954816b212853f5d9b66679202bb0a7ad8",
+          "visual_sha256": "5a8a82a138a10486fa551ae57063a9d9931142db89efb94e91bd5b9a5ea45199"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'GOAL SETTING' lockup baked into the artwork as outlined vector paths (the cover also bakes giant '2026' numerals). Not a text slot; survives with all slots emptied."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.01-cover",
@@ -3072,7 +3222,16 @@
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds.",
         "Full-slide template; the editable text slots carry the slide content over a passive visual.svg background."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "e016a2d5eb8afcade724ae614aa1813ddc0b5cf2b95f347669f5ec37d409e3af",
+          "slots_sha256": "5bed8e3f34ea7e9fac2770ef2c4b5a3ba65b812729c8ff8294713ffb0d522fc2",
+          "visual_sha256": "57876416140240fdfa9f6d97e681280da22c11e1513c516b4a6309600ae6f641"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.01-cover",
@@ -3199,7 +3358,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "665ea0687a095e7371173e0ef3600802665454966d9b9de270170793f22ec706",
+          "preview_sha256": "dcece28bf5c0898835d32f0d4acf7d4c19413df7ef62906667f93447f6dff8f1",
+          "slots_sha256": "36817321a07b5b5f0f794178b106145b138f5a3b564f20d11657585cb38105eb",
+          "visual_sha256": "6ef7ca807c19f8b776905e6038b7e2ccfe8931b57a1cde4f910ab20cb0db0648"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.01-cover",
@@ -3336,7 +3505,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "bac4759809c5bde810151d7a73a835f0b76c63faee4201fc2f42b3ebecd0af88",
+          "slots_sha256": "e41319f8db6d6c1c3c96278ea859014a57629ed7f17b0615b2b1c1c75ade0892",
+          "visual_sha256": "fb835de392dcf91e0026e57b476ae46f34ac1c486dee1b426be518cb65546c43"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.goal-setting-2026.04-intro",
@@ -3544,7 +3733,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "f0b96f644aa9a2f720734de54d3220f731db736110de241ceb70b938bf1ab903",
+          "slots_sha256": "deddb786d418434411703d6efaf8c522ebc54750357dd3d6a4cb3ddec3415a34",
+          "visual_sha256": "b251ae9e460404dc1ba72d4498e536db324edf33d39f1080a7ec10898b2f56bf"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.02-overview",
@@ -3823,10 +4021,22 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "5615f0253822333f60886c4143e6c872ac752781fb45a47c1852ec5555656828",
+          "slots_sha256": "b7518ac08f8d75e58e7defc0f8d5376d0643645069f58fa0c0f5199bbf76ac98",
+          "visual_sha256": "ba3b720e10433a323090c071d94a3abd02aee044ac3dfef6576e4f199ca4fd50"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.05-process",
+      "anti_use_cases": [
+        "This is a specific goal-setting process slide; do not reuse it for a generic step-by-step how-to, a tool-usage sequence, or a horizontal three-step workflow unrelated to goal setting."
+      ],
       "version": "1.0.0",
       "name": "05 Process",
       "type": "template",
@@ -4074,7 +4284,20 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "9681fa1a806c5edf68a6fe1aae347300adcad5d1e232ed36cd4300f4920746d2",
+          "slots_sha256": "9f52506a9930ac5e2aacbbcac3e60b641c36956aed609eb9831ca6b66862ec8f",
+          "visual_sha256": "10fa4ad4afc7f249f36f06da18721a0c1c3d0d3e5fa2de78ea5c2b7dbd780709"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      },
+      "build_scope": {
+        "mode": "source-specific",
+        "reason": "27 slots specific to the 2026 goal-setting cascade (company/dept/personal goals, BOD/leader/manager roles, SMART, mar 5-mar 12 dates); not fillable from a generic request."
+      }
     },
     {
       "id": "sun.goal-setting-2026.09-thanks",
@@ -4192,7 +4415,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "goal-setting",
+            "2026"
+          ],
+          [
+            "goal",
+            "setting",
+            "2026"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "0a3ff1b47d321bffebd44ba083cb406250044c57f4941188e9f838138401cf36",
+          "slots_sha256": "dc228da48afe0d172d06bfcb0fc5dc4f93004bf40a2c3f780e6f7a5ed026a4a5",
+          "visual_sha256": "5077598e756ab65b67b0f0ca9253c95de7461aa8ebef665393fcdeb5e8dfa24c"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'GOAL SETTING' lockup baked into the artwork as outlined vector paths (the cover also bakes giant '2026' numerals). Not a text slot; survives with all slots emptied."
+      }
     },
     {
       "id": "sun.goal-setting-2026.06-structure-breakdown",
@@ -4426,10 +4669,22 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "591fb9d70ecfc30827cbd74f40be0e4eec0bf57ffbdf5f0786316db831eecb86",
+          "slots_sha256": "d151cfa40fd090ef25b14d81f8244d97ed8e051f21debf8fcfbf17c8e9705485",
+          "visual_sha256": "4ceded29a69d562849e84b52d994a05772f6d3514ec3a7e2fedb0d335126dc00"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.03-timeline",
+      "anti_use_cases": [
+        "This is a specific annual goal-setting timeline; do not reuse it for a generic step-by-step how-to, a tool-usage sequence, or a horizontal three-step workflow."
+      ],
       "version": "1.0.0",
       "name": "03 Timeline",
       "type": "template",
@@ -4614,7 +4869,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "993ef197c86566f42d7f37ec26abbd56b165563d15288e656ffcaf978d587f7c",
+          "slots_sha256": "30cd21254432a988637f856728561294d3fb8865920b97044453646dc443bd61",
+          "visual_sha256": "dfc95fd6d2936077947fb9221a4f8e44d5c893c189250e83329645acd8f67fad"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.07-quarterly-check-in",
@@ -4838,7 +5102,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "99440ce742450b3600bb324ada84e722b6dd317b30ecbd6908d54a1006bc508b",
+          "slots_sha256": "ef3373356629366b67eabac782957c26a6606df8dbeb43d235f5fdd1cfc85d6e",
+          "visual_sha256": "89af39a98586246e08efe858232857908db8ee2c2553daf9ed0400ec8db05af9"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.goal-setting-2026.08-year-end-review",
@@ -5053,7 +5326,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "70bd9720334b587f2eca24a3a8eba0692cd880edcb099e0a6d577d5b3557dc8c",
+          "slots_sha256": "d2497bbf979f88ee4f400fd17796586453c5fe288a410ede2999be6ce361f332",
+          "visual_sha256": "ab9a2bd5db91c42b609296685433f3d3be53de59ce7ac2d4e42dbb61b0025a24"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.14-company-culture",
@@ -5223,7 +5505,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "d7c59053948b77dc8c1a5df4fbbb91b4d8897c48ec32a6b649d2481f6c0b5b3e",
+          "slots_sha256": "c04752e604f66b147daddb56edbadf914f76929c8235c4eae351633c17b7d17a",
+          "visual_sha256": "90aa9c35941fbf8b7f84f83198d33c881a5f8ae669cffc917c551140faf866c6"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.04-compensation-divider",
@@ -5339,7 +5630,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "387569eb3185b5cab91607e9cd6b91714627102fb639f56638a1036364ebcdc0",
+          "slots_sha256": "2f5931fb008aba06314119a1d4a2bee63fd7af834bc435a6c8d0d5c34df438cc",
+          "visual_sha256": "481761346b8da6aca2ea789c8a8ce491a675e81151bf73f6331eea502efb3a69"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.06-direct-benefits-divider",
@@ -5460,7 +5760,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "3d2b4bbf030357ebcff3bd438f3818ecd274eaf88711ece836ce0e4a87c33a9f",
+          "slots_sha256": "1364018a50b89e96c206735d5782ca552acd96038b4ced673dbb1511f20591ff",
+          "visual_sha256": "4e06550c66c8d7bc4c3846f84a8f7a579f2450af99a0e90b28d6b78698bc6d50"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.09-direct-benefits-summary",
@@ -5638,7 +5947,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "6c194dbf5b8e7a28408d495e7388fed42769d1e6ad870e08d62a5323dae46be2",
+          "slots_sha256": "d9ef914782f46b66cbb0a58aa673682f93bff5e35ecc119d844289b17bd57dcc",
+          "visual_sha256": "a8d4ed8ab504bec37dba719c6e431ffff0bef11fc0dd97c4c51e527989009836"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.17-employee-notes",
@@ -5836,7 +6154,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "430d04ec6c9ec337b537d5067adddba6cdf8e7ca9f02685346ba2a970fbc8bc0",
+          "slots_sha256": "2c41d872fb8a903b98556f257d8681b0e0057497aa5b0781c447678ff2b46893",
+          "visual_sha256": "42d2b122c5253cf7af44bc72850799de47756f9f021d5402db0f738856c2b3fa"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.05-gross-to-net-explainer",
@@ -6098,7 +6425,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "cf8e2feb897501c8f3a301c3225e5352f109c032a5f150ca71bfebc3650f3ce0",
+          "slots_sha256": "b4b9497087e87abb498b00306566353e30179198734796365c2b60a4085b2133",
+          "visual_sha256": "36c2a99944bce3eaa5a7c535f79795532e8a8ea692a3ed99610803ccf5769f18"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.12-indirect-benefits-divider",
@@ -6218,7 +6554,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "084a6ced93321f97cb224728f49403baa761d15eb0b90d640911776a3d9f6f2a",
+          "slots_sha256": "164e5af351863a4eb1a214ead4ad0a9329594e03209e024503857255f2eebb2e",
+          "visual_sha256": "d0a786bdd088081a3ef22165472f20df557f7389cf343206967321d961b72665"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.13-learning-development",
@@ -6366,7 +6711,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "fd55ef924508f1b7955b4428f45e9df830235cc608924dcf9013338a0e988803",
+          "slots_sha256": "5bd8a7cb84791388a11d72c299b0350df2fe6215963afeb039221ab92b9727fb",
+          "visual_sha256": "872ec917b169a2c78a633fe5bb21b090700ac216e9659952712d6ac5bd4c145d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.08-long-term-benefits",
@@ -6640,7 +6994,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "c75c97d79cdeb1edb717c52eff78e80f363bbcc967eb8ba4d7baa5dc444d891e",
+          "slots_sha256": "55e5240f3cfcc8c8a9f12c0cc4e8400bb7cf9ce0012da7c3ea7614520851d291",
+          "visual_sha256": "ba99b42415d21e4a9e4f6482ff3dde2336c334e3572594e485d18c71033ec92c"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.07-monthly-support-benefits",
@@ -6821,7 +7184,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "7a195fd725ef217380628ce4f9b00b0a6d1c81858c81dff7f99c7437b16f506e",
+          "slots_sha256": "677828d43907249656635368a9ec5bcd118def867201c424f27e6bc114c54625",
+          "visual_sha256": "c622c33cadde3a06ecb4d4c8746f43727b7d99875c8ef4a5b059117b2c780e2b"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.18-thanks",
@@ -6957,7 +7329,20 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "fb5e357816f56f2676a017fc609c92dc3a094d5ba5ecc98abe8ad0a9185b877f",
+          "slots_sha256": "9821cf0f573dfa9fab65977ecf147d54e5a17aa7d8344b8c1ccd87bdb9f03859",
+          "visual_sha256": "69d89ce98227069a0e2165e51221405c2fcf1dca47bdc130d19e44ff37b7fe4c"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      },
+      "build_scope": {
+        "mode": "source-specific",
+        "reason": "9 slots specific to the 2026 salary-benefits policy thank-you (SUN-ers, policy-upgrade year, income/transparency messaging); a generic closing cannot supply this copy."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.02-why-upgrade",
@@ -7198,7 +7583,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "1ee2023192baa8c596815806d26748c2ef181ab448d3745897ef3e54f55fcd3c",
+          "slots_sha256": "8c14f2d4ce4be56526f76700200d5cc4d31cef1e5223d8c7b8d463d8df266117",
+          "visual_sha256": "e82e9674989e806c2c27e5391f1b15e924145109ccb87fbf762431727393b6a5"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.10-team-building-benefits",
@@ -7383,7 +7777,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "962b5f0760a827be83afb59bd65487ff6b7949219764c2def8889776fdce627c",
+          "slots_sha256": "e8b5e07740e878c4ab252d1c2713f8e03eb7120cfd0395a283c19779cabeb366",
+          "visual_sha256": "86aa56f39bf3746a6f093146a794a8897c35206381b92e9cfbba66d12cfaf90d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.11-team-trip-flexibility",
@@ -7572,7 +7975,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "4b363e2bc1eef30951908868732d67353154680becda1fe7a395a6bffe55f552",
+          "slots_sha256": "5183ff950c00e751829eb18cbbbf623273f0668e550b4914fa08c6cc75aaa61d",
+          "visual_sha256": "18c18d5a11fbfe1dc1e7a1145fd1cc33da10781d070e69ef9f43aaa707f864ef"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.03-total-package-overview",
@@ -7748,7 +8160,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "61a24690b468b3649b6185e82055a89c7ac3d3c9854b6b09d8b5b71317dfc104",
+          "slots_sha256": "f75ab763711c90b3e2868b78a0d8a53eb85742e4726524693e34ee300c566f50",
+          "visual_sha256": "aa7058dad958fe03beb1e383f7b44db712197a0d793e56363d63995b31b4e25a"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.16-update-summary",
@@ -7899,7 +8320,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "b2de65d7fcfa2988f06396dedbd4af647ee76f99d0390f17216521ec48876ece",
+          "slots_sha256": "40c00ff5384c64d3c7a616f1997477dd1bd32e804ceb0051b46f884ac3266ef5",
+          "visual_sha256": "59fa79b7756897a0960ea0deac5bc2212620f8a8c40c5176c0ee21976b87d0e7"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.salary-benefits-2026.15-working-environment",
@@ -8338,7 +8768,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "0139f41e4322fbcc478e30e815118e15dc82d1fa0e60ceb80fbd49b88f1ea332",
+          "slots_sha256": "31e505b75e005131ea48fd2b2ea1cdef190308560cfb5de9ddc6d0959b5de6b0",
+          "visual_sha256": "fad283c1134a4a4977780d8db5acac18f60d99d4098b01ba903ffc824cdee99d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.02-agenda-section",
@@ -8534,7 +8973,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "cc70966285fadc718e4fe34d4d604275f7c4f512f34f6ad2ae99f234d733758a",
+          "slots_sha256": "3e50516280c1100324d320e332b5a129833c79113c7adb83405335f6b31f1d68",
+          "visual_sha256": "6e8b282b613e00bcd14043d73a4d61d19f5ab555099f523ab3e2e1d65bbcc57d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.20-closing-thank-you",
@@ -8639,7 +9098,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "f15bdf5e74fcf63aa539fdd49385965450afcc53f847f7a91b8a8d1d234f789f",
+          "slots_sha256": "ed6b3c52ad88fed93598e9999e1a1a81579ff3ffd8efb643ca28d1320d4826d5",
+          "visual_sha256": "f7e9bcc1c0a954cc8fd7d32e518ecd017954fa340c48291f4846e1de6ee63326"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.15-factorial-goals-steps",
@@ -8811,7 +9290,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "182db4c976068abd50275ef05bc2ada03dd0dd2d2f20750b2ce3155ad9b68c6d",
+          "preview_sha256": "1cb577e08831e93328a9365beabaf0c00700483ab4084349b8b02c2c2be4209e",
+          "slots_sha256": "6bfdbe78a31c4d3512d8dc9716d6c3ccc26a543d2aff92bf53d7bcec604505c0",
+          "visual_sha256": "b0c4d8612ea16182e3a0e7a1f062dff615107ff6a65a7607feb48e47a58f67b5"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.16-factorial-review-steps",
@@ -8982,7 +9482,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "f5110b6d5880bec3a6719e145ea73694ffafc4ac04df6afb6bc60487dd44699d",
+          "preview_sha256": "724816481ee7c7cb761520cf524bc9c7f8c7fdd42eb55b3f7bb9a0d649514506",
+          "slots_sha256": "704626f230eacdbcb63d13301b11feef1bd2858eedc317a0f7cfd058adf5abb9",
+          "visual_sha256": "d629c5331aee41afb44bf28c56be5e7e592a7d40e07d8d73b4c9409c647c96ab"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.18-faq-answers-part-1",
@@ -9271,7 +9792,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "0de3f3bbe9e5639c29cf75b8dedb2c7d076f51d6f8182ef302962339150f2419",
+          "slots_sha256": "bef1eb54d0c7d303a0d513aafafc47130c80b6fe1a2da26ca66c48307238e341",
+          "visual_sha256": "aa4eae2ab83eab58ca4e8fdfbc0d3a664afda6d5834ba1759ed60d5313affa69"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.19-faq-answers-part-2",
@@ -9548,7 +10089,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "08eb20b43570b6324144b9690f3419239df1368c32922369cc58c2e32b52d549",
+          "slots_sha256": "3f9f23cb0d0480c94583b22556d996265dad296dca24a213e5fdf5ab20e9a54e",
+          "visual_sha256": "60453f739fee63e9802d60c308de63a6881b1274b964df6de00c4631f75eb771"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.17-faq-header",
@@ -9662,7 +10223,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "a939fafd3a748c69908dc5f55fe2cd2d080d7b40998133200a92a160259f0769",
+          "preview_sha256": "3282c3d6b48bf9b1e4ce56a37425278782a7da4a979c1100d68b889a931857e6",
+          "slots_sha256": "e97289b1826d98ac1b1f7667de1cf9d40428d9e1337d9f1cfac152f242127b4f",
+          "visual_sha256": "77f6bc9be02a043a8236f0d8e9317c0a68959fa47618f6dce06c2f47251db9d1"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.08-how-level-expectation-card",
@@ -10003,7 +10585,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "919c6b9d2de0af9db22b50968d78795530c5361554fc116f5a8881af7bb1a383",
+          "slots_sha256": "bcefa69363489d389e4e187d42038de6cb7af9a94a45b5c387e5fac8f90082e3",
+          "visual_sha256": "5f7dedcf6f5e436487b047603444b205a73c2ec6cabe24d997860d7cf802655f"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.04-intro-explanation-layout",
@@ -10360,7 +10962,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "3bbd4c715663a541e611b93182b1560c8f32f773ce1479dc5455d74da779cece",
+          "preview_sha256": "8c9e7a65d93895fd05e3846d4c6dfe479411c4453eb01401e5028efc512b1498",
+          "slots_sha256": "cdcafdcc47b1b06076bb10d2dc81b04c121335727e49ce7dd97bbce1432ab1af",
+          "visual_sha256": "81552051f5c477422a9ef586019c56abf8becbd43078d14e4bab27673022975a"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.14-preparation-checklist",
@@ -10704,7 +11327,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "b67061507ed8bbd0c8b4c0eb0f698717cdb176870dcbbd60b3862a89602adc54",
+          "slots_sha256": "587e76412ca87c3b0b835c1e07f66f1a79b5b38669e56a686a9060080ef03657",
+          "visual_sha256": "e3ff8d2978e9b5abd7511fb41ce173472e1990bdd7bb50130b07d554f8adad12"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.10-rating-scale-chart",
@@ -11374,10 +12017,33 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "3cef97270daa44893084e116c106066f99b39f0def623780547f4be0b3ad3753",
+          "slots_sha256": "b662b85cba1193ff0cbdf941903226800b2596ecb7b50bb42e3150add00b46f1",
+          "visual_sha256": "1841a778a9228463ef2c00b15d51d0171243fea0a5419801085602ad68618d39"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.12-review-timeline",
+      "anti_use_cases": [
+        "This is a specific performance-review timeline; do not reuse it for a generic step-by-step how-to, a tool-usage sequence, or a horizontal three-step workflow."
+      ],
       "version": "1.0.0",
       "name": "12 - Review Timeline",
       "type": "template",
@@ -11655,7 +12321,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "df3fd6cc55338277a6bdd43fe2f7a2b2e8e7cb9c49981d86d4b34028cae66f16",
+          "slots_sha256": "9a1f095674ab51be59201ac7a55fd0d0cbb2403b1107b714c9c599086be53988",
+          "visual_sha256": "581d0f221a4de7b91a8313db1ccb3f9c42f448c0504045f9bf78677704bf910a"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.03-section-divider-01",
@@ -11771,7 +12457,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "a939fafd3a748c69908dc5f55fe2cd2d080d7b40998133200a92a160259f0769",
+          "preview_sha256": "18c73052aa776fd5512db4b98fb5f98421706abccc87f70c275a1de6c0374baf",
+          "slots_sha256": "017da57de34e70c14902416d995782dca6671e60956c7e355dfc6830a3420946",
+          "visual_sha256": "088b660b7f6d3132b43b4084a5789f1327c7a377bc473d3a7c193ff1e1a17e93"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.05-section-divider-02",
@@ -11887,7 +12594,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "6786f3b5427f2ccc04c391ecf47e960389ef48ceda1c431371a89b1cfdc3cfa0",
+          "preview_sha256": "d7f7d14e3d2c6f544d7de74ef2d315f6ef42d239449c6d418a224d0fe161085f",
+          "slots_sha256": "2d1c243c26f2628ee065ed155a4b85ba75a034a49f1270b9ff11aa4971799fad",
+          "visual_sha256": "18b7f519a42ee954053ebe209784d48cf7133b4dd3a137560aa7a946a0a55f95"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.11-section-divider-03",
@@ -12003,7 +12731,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "185db310c3a98f1240745d429334f33fd144a182834e6dde36d66b6dfecd26b1",
+          "preview_sha256": "85e5b09752213e7b029013ec519c214d54106fb4dcc67bc66077c0201b367640",
+          "slots_sha256": "e8f1ae04f1cb1012cfbb54a09cee3e9d706d885a0c92c42f232acf8dfb3fcbeb",
+          "visual_sha256": "25ce8e033afba7d7af7a6dafc87615362758439edb4510b19c424bc5a53178e9"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.13-section-divider-04",
@@ -12119,7 +12868,28 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "deps_sha256": "6786f3b5427f2ccc04c391ecf47e960389ef48ceda1c431371a89b1cfdc3cfa0",
+          "preview_sha256": "86005ebb8c4d2eb2f9e6139c9bbdc611ff50406ce3b3fe7495f1cb3459c27de0",
+          "slots_sha256": "48b76855287d5f3b1adc1c0b9d92737b97183f5a217eb4ab5f51625a029460db",
+          "visual_sha256": "8fbc0422c5d3317ada683bb8ff123968d44f782b7755239f147ddd14337b73b1"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.07-what-definition-card",
@@ -12332,7 +13102,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "da7b0e05daab009a1802159df9c9670536ec84d4ecd6d4ff87bda59bab07e71b",
+          "slots_sha256": "a44e56bd543e87a748e5f29841e119552d3cde829d818bef86c29cf33a5eaed8",
+          "visual_sha256": "be49652a70efc2269a228d89a0e8e04663f5dc242ba028012c801370a14eb951"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.09-what-how-comparison",
@@ -12740,7 +13530,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "cc29e7e0ea112d59bcd23d903a7b884aa19266b8a3f156f5df7c4e515e2cdacc",
+          "slots_sha256": "ff30d9a2fb7bbe2aeb34ab3390512da0583bbfa464d951d0888aea24fd48ac5d",
+          "visual_sha256": "3bfd8de7154815cf97c279199de6e66c6d99b32875199821b380aed52de5d737"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-studio-performance-review-2025.06-what-how-rating-framework",
@@ -12986,7 +13796,27 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "immutable",
+        "contexts": [
+          [
+            "performance-review",
+            "2025"
+          ],
+          [
+            "performance",
+            "review",
+            "2025"
+          ]
+        ],
+        "evidence": {
+          "preview_sha256": "44586e61c50f864c20286c2a258a61dd017eee9dde38041a33aa723ff5f0a0ea",
+          "slots_sha256": "5f60a6cc9e1c909ef6164674eae3d8984ce5b9f4b489e80fea6fb7f39374c242",
+          "visual_sha256": "9fa6f531bb7a616835c3bb00e1b87009d971301e27208c379da4eb454496db5c"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows a 'Performance Review 2025' lockup baked into the artwork as outlined vector paths — it is on every slide of this source deck, is not a text slot, and survives with all slots emptied. Reusing this slide on another brief ships that programme + year to the audience."
+      }
     },
     {
       "id": "sun.sun-presentation.02-agenda-layout",
@@ -13207,7 +14037,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "77cb7c663d96b109feb82eb1cc66a7cf8cb955c6b90752cb515c279366e88557",
+          "slots_sha256": "89c63ed2870bd95e922bcfd302bd1ab0654a2164e11df7487d158bba2a39b0af",
+          "visual_sha256": "fe2d69f3e4c9f3ac7a0ba0e9b4a9a61327718c6d7f49d5e7f65984a793757863"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.17-closing-thank-you",
@@ -13318,7 +14157,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "665ea0687a095e7371173e0ef3600802665454966d9b9de270170793f22ec706",
+          "preview_sha256": "2f3f494db6601641e86adb09c6b895620f1da3d17c12a727a9a097fdb2a085f3",
+          "slots_sha256": "5018a54203363a676477b8941c962c7f9617b429688bedf9c4e916d8d1a426a1",
+          "visual_sha256": "fdcb35b90d2f7288c02c243701806af584b295bf39a24eab107f4189b9b0313d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.04-contributors-layout",
@@ -13575,7 +14424,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "a66db9899d26cbee1ee786211887ddcd3e8c372d776b645e8c73cc7bcb6ad8c6",
+          "preview_sha256": "d258cc29fd3b6c9f5c949c40a45aeb6ee3a44cf7de7b6e7bf1fac54ee37d6634",
+          "slots_sha256": "e0438f90c1d98f2655ef92d5fa6fb9da6c4aa2921b460e10194fad0c37ad56c0",
+          "visual_sha256": "58ff9661f498a1541502a7a194cc47202a0e4f17c360b8dfae4cbb71e192b873"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.07-contributors-variant",
@@ -13738,7 +14597,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "a66db9899d26cbee1ee786211887ddcd3e8c372d776b645e8c73cc7bcb6ad8c6",
+          "preview_sha256": "3d9ea885926aadfef6a0d84e98dd2f8993a6b6892add2ab1238f787f19eab8cf",
+          "slots_sha256": "3136798e21f473c3e2d6753f8bfa74f3c1f370370df326ac22e9e4433ffe50a7",
+          "visual_sha256": "da3d570c3e19a0edcfc771efe9c9a696abaaa5f37c7623e13986d067a10be87e"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.14-image-and-text-layout",
@@ -13933,7 +14802,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "5a2150308e133bbae240a1597b0ead4d26fc5fbe0228ef56cd8baa1015179bf4",
+          "slots_sha256": "b4be58015ab955eb48b92af0c4caeb5073c93d831ee60179abbc575ab13a4efc",
+          "visual_sha256": "9b5bdd12b7d2defd0e35b837ad8c49b627b58962371d82f97db00c6c335a6b82"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.15-image-and-text-variant",
@@ -14122,7 +15000,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "59402052d49c9b6b1c45226d6c89100023810577749ff7a932a8a7be6008c8ca",
+          "slots_sha256": "8c727b64444dc503bbeb1250ed70c24da4acec8e7608d1286ca4a31c31402816",
+          "visual_sha256": "b16484c6a4c91e7a32e1263de7a321687a2999ac995b5554dc756b568b44643c"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.13-information-structure-layout",
@@ -14320,7 +15207,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "918c1cfc1d81e8281f48b6b8c4921b59d06205b0424191d18eee83b8b5e892b5",
+          "slots_sha256": "119f665e407f8f4b8f5d67b37b4d60a9285922da92804e42535264723cb9513f",
+          "visual_sha256": "7aa5c2bf988e8eb90e6bdad4b5e51ae8035273441097653184294a1accd890cd"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.11-mix-chart-layout",
@@ -14516,7 +15412,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "6c12127f3d63ed1814ae7880d98cbd2df4b1553a71e552d69ab1aed99d8c06c9",
+          "preview_sha256": "13e950cf54c3547bc21d29570943cf0e4a2d1e177fe2274e4af145645fd3a6ab",
+          "slots_sha256": "b348d716e5b6bbb615ab92789431dbf4ff8051968fb6ed2b66e5e7f13785bf5f",
+          "visual_sha256": "4e755875dc7af3926f516ee1456e660594d2fc30b4953cf88f6002719010088b"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.08-next-steps-cta",
@@ -14643,7 +15549,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "1662c78bfe52f7ea5508054a06c989419bc91aed4e40a81a528bb484c69ce3dc",
+          "slots_sha256": "230ac8c584db4a68b21c502d8c9e240cd2c12fcc634a1f719eeb06d49b9e6dd4",
+          "visual_sha256": "f84dbc5c4e7b70524af8905fda6fd3abc136ad35ea67e812b903d0af73ddffc6"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.16-quote-or-highlight-layout",
@@ -14806,7 +15721,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "4d2adece82182a4798a2531b23b621532f0d9fc90898fc19ee30008b1b942398",
+          "slots_sha256": "10245de8f2a25bfe159a3cc23157d612c3409ee22daf20cfb5e3250b18fb2d20",
+          "visual_sha256": "ba82c388df2e12684a285ca843a666d58e1cba8ab17d196226e71a28d1c9f818"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.05-scan-me-callout",
@@ -14927,7 +15851,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "7a1301d38341e8d40359bf2f6fd2d8c5c2ae756edfc2b592a9969831514b82b3",
+          "preview_sha256": "c8e728c93e893b87c06f3981bb8a4c3acf1ab5faf679fb9c895a8659db5bc845",
+          "slots_sha256": "68717da437ba7556b06294d04d1bd284aa6ab571f30e0f55d42bb18b742ac9b9",
+          "visual_sha256": "6d7d16f7191cdd002026394443330f7d0388d1bf81ddc1c0261574985273cb56"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.03-section-intro",
@@ -15075,7 +16009,17 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "83c4f5bff550619c9d0bb40a108ef1083cb8cc4ec075e386285b607aa12d305e",
+          "preview_sha256": "c717374571ac3bbd3cc166ab07742f1ece04276e9fc1a4a6ed8d7909000e590d",
+          "slots_sha256": "3c5aa0947448030f762d27e4c175ae86350cd62ac8e4a934df2a8f211a2d0412",
+          "visual_sha256": "9b9ce1cead291dda1608d5d06a842ca706d0b6a6cd82ed9d269577cd5f61b0a7"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.12-statistics-layout",
@@ -15315,7 +16259,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "cd03d28c676655cf5beda526ff43dd03d11d2fbbb697adbb5ace18ea316860d8",
+          "slots_sha256": "6e6978b9015d34e6ecc13cc71c26186205fc408ceec45d43aabd9c9ef74d9bee",
+          "visual_sha256": "282481b28df2a5b392b133395be7d1b869e822b56a46d0c5d398c2599f14ffee"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.09-summary-grid",
@@ -15501,7 +16454,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "91fc334ec7510d4d332d6fb5949f4ed4dd364d88bd362ef90b968151e4d493a3",
+          "slots_sha256": "73e90d98a3d84c75d12d2a374af9cd99f76d8f3162041f30553cfd1c959bcaff",
+          "visual_sha256": "30b36da260d12bcfb70f0c77a60329e9879fe0e4dfa4e9fa2d42c3f6ec1daa07"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.10-text-heavy-content",
@@ -15866,7 +16828,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "bf4afafd27a088f5f865b2a83f4e6a59d2ad200a5a440d79f5ab349aa8d1d3fd",
+          "slots_sha256": "549ce683616871e414fa1ffbe879b624ef42d5baa5c5162d98138417d70c1f18",
+          "visual_sha256": "1188413ad05e11eab6295a6962ebaca78bd50f5b28c2da8a26cb647699c378dc"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.sun-presentation.06-two-column-content",
@@ -16119,7 +17090,16 @@
       "variants": [],
       "limitations": [
         "Text overflow is intentionally unmanaged; callers may edit content, font size, and bounds."
-      ]
+      ],
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "ce11e198ac8bf9f8c924b5a21478d49ccbd8c6e8bbe26f226eaedd52972fb289",
+          "slots_sha256": "800e810eaeaa5aefee95e81ac270e179bea0fe9296fd396af4a9e21595c18718",
+          "visual_sha256": "cb4727b193e7244dafd6558192f02b822822966983446d2c365a05dd39813ad2"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.component.brand-icon-reference-sheet",
@@ -16288,7 +17268,16 @@
         "Do not use when the slide needs one isolated icon rather than a reference sheet."
       ],
       "quality_notes": "Published extraction keeps the icon sheet intact; individual glyph extraction should be used for single-icon reuse.",
-      "retrieval_notes": "Select when the generator needs an overview of available SUN outline icon styles or an icon library reference."
+      "retrieval_notes": "Select when the generator needs an overview of available SUN outline icon styles or an icon library reference.",
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "3069a650319626f77681b44354521e298026410d5de321ac91fa6eb736240780",
+          "slots_sha256": "ccebf10607a6af6b97a31b2586236fc1fc8348b5cc2f7427b9fe57dbfa44e470",
+          "visual_sha256": "6b801951d40e430cf9838ecd87372f06da01c3d5b410de16e1275863a3e648f2"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.component.team-contributor-circles.g01",
@@ -16385,7 +17374,17 @@
         "Do not use when the team has fewer or more than three visible people without adapting the layout."
       ],
       "quality_notes": "Published extraction keeps the contributor row as a reusable three-person layout with editable text slots.",
-      "retrieval_notes": "Select for slides that need a three-member team showcase with portrait placeholders and short labels."
+      "retrieval_notes": "Select for slides that need a three-member team showcase with portrait placeholders and short labels.",
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "8803d319c35dd9c872ada7f7e966e1907970bdde123350b9305b842e926117b4",
+          "preview_sha256": "6591005ef1aa179278bb468de825c291be9bafc16526be05b70c6c27c705ad30",
+          "slots_sha256": "fd55b670f8f30e36b10ed09e16fa046170f41e59700750b67dbe08d40354fa2f",
+          "visual_sha256": "d69a69ea73d0e308aafc9b881ed1e1872e07ed30532e60b949e00a20b25f221f"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.component.goal-setting-checklist-table",
@@ -16868,10 +17867,23 @@
         "Do not use when the content has fewer than three checklist rows."
       ],
       "quality_notes": "Published extraction retains the original table geometry and editable text slots for checklist-style content.",
-      "retrieval_notes": "Select for dense goal-setting or process-guidance slides that need a structured checklist table."
+      "retrieval_notes": "Select for dense goal-setting or process-guidance slides that need a structured checklist table.",
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "885cf00a7e07a896459293475a4afb3d4c5e98e6063dae4c60fdb794cad139d4",
+          "slots_sha256": "2cdc6edbea1d6b31c37ba274ce6895ed34de6cb12f854841be36d47be5d72091",
+          "visual_sha256": "40e75216733a01cc528806b1ac837dfbbe32d2216fac99cacbf531d97667bc78"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
+      }
     },
     {
       "id": "sun.component.revenue-team-size-metric-strip",
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Failed full-slide QA (2026-07-13 distinct-deck): metric text overflows its own slot boxes under real materialization at 1920x1080 (measured: '+30%' renders 507px wide in a 478px box; label text 192px tall in a 169px box). Review-only until the strip is re-extracted at deck scale."
+      },
       "version": "1.0.0",
       "name": "Revenue Team Size Metric Strip",
       "type": "component",
@@ -16996,6 +18008,16 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:38:24+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "8709b47e324939eaa8f18dc7a80daf77c3f7b7dea311c9ad45888731f188fa0e",
+          "preview_sha256": "29dbd274f274b9538a0336c050abc15ff40bddddd04f11d3bb1b4fc6716ec313",
+          "slots_sha256": "9c291b1f61137315afb7a2e76f17f46b0f1025584642f9f392d1dfaa5f583624",
+          "visual_sha256": "58eedfd378b98f0d2a2048f7a35360d121686b33639ddb7a3ac8bb414a4267ea"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -17191,6 +18213,20 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:38:30+07:00"
+      },
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Failed full-slide QA (2026-07-16 catalog-determinism-qa): at 1920x1080 the 5-card strip is cropped by the canvas — the level-1 card loses its left edge and rounded corner, and the binary/icon glyph at its foot is sliced to a bare '1 1'. The Cap-4 card's `agent-networks` slot also over-declares its box (runs to x=1503 while the card artwork ends near x=1410), so copy that fits the slot still spills onto the next card. Review-only until re-cropped or re-extracted at deck aspect."
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "bd37a30bb81b0c4e93dfae3e194feb1cc05a276cbadc8f8a361089ef1348d49f",
+          "preview_sha256": "b3822d59648b066572ea5ef013da8b7536c257258f9daf80bccba624f4eefcec",
+          "slots_sha256": "02ae69209f8e2d2d8e5c45665b53f2041f6aba8bff9ca4724e0318c7c3d4ed98",
+          "visual_sha256": "f97c84bcaa641e7d0a862fe91c351f5075a7d0bd5c1cc6ead9eb7732e42423a7"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -17334,6 +18370,20 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:38:33+07:00"
+      },
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Failed full-slide QA (2026-07-16 component-safety-qa): at 1920x1080 the badge circles are cover-cropped — the 01 and 03 circles run off the left and right canvas edges — and their caption slots sit outside the circle artwork, so the white caption text lands on the white background and is unreadable ('Chọn việc lặp' spilled out of the 01 circle). Slot fidelity passes because each caption fits its own declared box; the drift is artwork-vs-contract. Review-only until re-cropped or re-extracted at deck aspect."
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "2fbb1c4a0f61700fe5fe6d82759df984ee5af1ab90bdfa5465c1167c01decee6",
+          "preview_sha256": "ca1bf84d0bad3f2a7f91f0d97bf26701c4a7012c5c835325e4026f035dcecdba",
+          "slots_sha256": "8b9053dbcd358318a961b638f837a46135c3e4ad4389a505f67966358a3e5dc3",
+          "visual_sha256": "4f799b6274a0c4eebf79350502d8b46215815abd4eacedb61759afe676cde80a"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -17345,26 +18395,19 @@
       "status": "published",
       "brand": "sun-studio",
       "intent": [
-        "ranking",
-        "levels",
-        "tiers",
         "comparison",
         "milestones",
         "statistics",
         "overview",
-        "steps"
+        "achievements",
+        "track-record"
       ],
       "tags": [
-        "ranking",
         "overlap-circle",
         "milestone",
-        "tiers",
-        "levels",
         "metric",
         "set-of-3",
-        "xep-hang",
-        "cap-do",
-        "thang-bac"
+        "achievement"
       ],
       "content_structure": [
         "heading",
@@ -17459,7 +18502,7 @@
       },
       "component_type": "milestone-set",
       "layout_role": "three-item overlapping gradient circle milestone row",
-      "visual_summary": "Three overlapping blue-to-white gradient circles in a horizontal row, each with a numbered rank ('01'/'02'/'03'), a category label, and a bold headline metric ('FOUNDATION BUILT', 'TOP1', 'MICROSOFT & XIAOMI').",
+      "visual_summary": "Three overlapping blue-to-white gradient circles in a horizontal row, each with a numbered rank ('01'/'02'/'03'), a category label, and a headline achievement. The middle headline is the intentional HERO: h1 at 134px against h2 at 61px and 53px in the outer circles (~2.2x), so the set reads as one standout flanked by two supporting highlights — not as three equal levels.",
       "keywords": [
         "foundation",
         "top1",
@@ -17476,7 +18519,9 @@
         "Company track-record or growth-story visual"
       ],
       "anti_use_cases": [
-        "Do not reuse the specific company names/metrics for unrelated brand content without editing text slots."
+        "Do not reuse the specific company names/metrics for unrelated brand content without editing text slots.",
+        "Do not use for a sequential or procedural workflow, a step-by-step how-to, or a process sequence flow: this is a set of parallel ranked milestone circles, not a sequence.",
+        "Do not use for a balanced tier/level ladder, maturity model or capability ladder: the middle circle's headline is deliberately ~2.2x the outer two (h1 134px vs h2 61px/53px), so three equal-weight levels render with a false hierarchy that says the middle tier is the point."
       ],
       "quality_notes": "Manually extracted; Docling had merged this with two unrelated diagram groups on the same page into one oversized region. Cropped and re-verified against source render.",
       "retrieval_notes": "Region isolated manually from page 3 of GUIDLINE_PRESENTATION_SUN.pdf; not a Docling auto-detected candidate.",
@@ -17522,10 +18567,28 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:38:35+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "ddbe80a80fb936cee8631e56332bbac022f14f98ee08099f23ff0e728e85057a",
+          "preview_sha256": "099a79c3ef285c5e67053f3de42a4737f74a3239dae98e5d9b8d3bb4b89b2d58",
+          "slots_sha256": "29066ec8c9e2953c4fda04eb07ee826a8287cccc16bfcfc3227c92773ad2905a",
+          "visual_sha256": "8993b34e260b1238be402027e9b5a8e47e2ad9d6f7c3625b50766778575fac18"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit, re-run after the slot alignment correction) shows no words at all: the artwork is three gradient circles and every string a viewer reads comes from an editable slot."
+      },
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Not fit for automatic full-bleed reuse at 1920x1080. Its artwork is a wide band (aspect 3.23:1), so a background-size:cover materialization scales it to fill the 1080px height and crops 45% of its width off the frame — the outer two circles fall off both slide edges (verified in the 2026-07-16 milestone QA render). The surviving outer-circle labels also render white on the light end of the gradient at low contrast (WCAG ~2.2-3.9). Contract fidelity passes (slot geometry is preserved, cov=1.0) but the rendered result is not audience-ready. Kept published and browseable for manual placement; blocked from automatic selection. See validate_component_fidelity.render_fitness."
       }
     },
     {
       "id": "sun.component.goal-keyresult-task-hexagon-diagram",
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Failed full-slide QA (2026-07-13 distinct-deck): the wide hexagon diagram is cover-cropped at 1920x1080 — the GOAL and TASK lobes fall outside the frame and their slot text no longer aligns with the artwork. Review-only until re-cropped or re-extracted at deck aspect."
+      },
       "version": "1.0.0",
       "name": "Goal Keyresult Task Hexagon Diagram",
       "type": "component",
@@ -17728,6 +18791,16 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:38:38+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "d889f76bd22df593a1caea26bd1e8f3d78c4e11407e62e1454e007d91d0a87c3",
+          "preview_sha256": "1537ecde57bdd135a0f7fb321610ee6011ef0d4e5b2f5fec3e33c44ed3cb3c03",
+          "slots_sha256": "498bc5730482167682136c5aca4fa5bdcf8de6e37dea8677830a105c22d64b63",
+          "visual_sha256": "8ff849b5a5072ecbd565722a30015185d8ddc5ac4d9a9910d5b2f9b97f29461b"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -17916,6 +18989,15 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:39:01+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "de486ee176bbd82a8348eb19f00b23d0edac486e3435cd3bae0b262908405ebf",
+          "slots_sha256": "e6dce661856b5d06cb2c3e6f0baeb53603e7e5ee1ec3d9bc83a8825e6529ed89",
+          "visual_sha256": "430ecba75239334557d975ac5211be1fb0e8f743de4fcac4c2b1f3ee724d2649"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -18015,6 +19097,16 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:39:03+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "be4508de4c744f54735757efdc1c947ad3bfd058dd9040eb0ebe61ae9b0deb02",
+          "preview_sha256": "c331208d8e28eb02d8bf9914ce45f356f9588587dc4b4e668c0e5ef17f1479dd",
+          "slots_sha256": "8f5c87527a08b23103246b36a8a65a26dead7d129778027d6fd4911efc76c57a",
+          "visual_sha256": "6d1fd7f0b36781b2d8b78d5b3f2359983a1205537928dd4bf66cf5d04d514df8"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -18486,6 +19578,15 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:39:04+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "preview_sha256": "74f8c32dd76124a6b70c04869067d365c65a256d112edd7afa316361528e798e",
+          "slots_sha256": "51c9385a92572df09f5fb660ca335ecaa0181a4f0bc60d82b7ae0da182cedd17",
+          "visual_sha256": "f0edfd9ee4060bf138e40af521bf2b5bc10ee5a6bf8440b60efd3a8deaa54f3d"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -18590,6 +19691,20 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:39:12+07:00"
+      },
+      "auto_reuse": {
+        "eligible": false,
+        "reason": "Failed full-slide QA (2026-07-16 catalog-determinism-qa): the artwork shows TWO cards but the text contract declares FOUR title groups (translator/strategist/driver/coach), so the 3rd and 4th columns land on the 2nd card and the 1st column's body text clips off the card's left edge. Slot fidelity passes because each text fits its own declared box — the drift is artwork-vs-contract. Review-only until the contract matches the artwork."
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "651121d7e7e721f40ba20d476982ab8a855d95f8a3d9af008b53f92d7dbe1f80",
+          "preview_sha256": "15e00c3cdb8351654d3698b169ff70ccc1f4040ebe83c9a066dd94a8b79ec3bc",
+          "slots_sha256": "1ffa47a7188bd85a6a99ed5fbe0c08e65a02245217cb511d1eaee2f4bd0baac3",
+          "visual_sha256": "62afdb7f6631e421d038c7e5d5e1f884ee310c2b9ae12d616a161395f5e9e4c3"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     },
     {
@@ -18703,6 +19818,16 @@
         "status": "approved",
         "approved_by": "catalog-ui",
         "approved_at": "2026-07-06T11:39:15+07:00"
+      },
+      "immutable_text": {
+        "audit": "clean",
+        "evidence": {
+          "deps_sha256": "1f872eaa4bfe2476af395878156fa4dc8d61000385325c33531085f61d0f2679",
+          "preview_sha256": "35b35853c0c8569eaef1c417197674a5229055a97f5fa5afccfb8131522bcd71",
+          "slots_sha256": "6bce4c50c183ae0bdf6fba3655bdee3b393ed4266b9b72128cc9a069b504e6be",
+          "visual_sha256": "93a422c70e9e2d292d58b7b1d4a4fa638c5a98163f6d1a9a94e9a07befb84f47"
+        },
+        "reason": "Empty-slot render (2026-07-16 immutable-text audit) shows no source-specific words: every string a viewer reads comes from an editable slot. Any remaining marks are canonical brand (SUN.STUDIO / SUN.RISER lockups) or decorative artwork."
       }
     }
   ]

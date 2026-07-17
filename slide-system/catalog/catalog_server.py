@@ -2,9 +2,10 @@
 """Local control server for the visual-library catalog.
 
 Serves the catalog (and all repo-relative assets) exactly like
-`python3 -m http.server`, plus two POST endpoints that mutate the real repo
-on this machine:
+`python3 -m http.server`, plus one GET endpoint and three POST endpoints that read
+or mutate the real repo on this machine:
 
+    GET  /api/drafts                 -> this machine's staged Draft items, scanned live
     POST /api/publish  {id}          -> build preview/, approve, promote into library,
                                         then remove the redundant staging copy
     POST /api/delete   {id, status}  -> remove a published (library) or draft item
@@ -12,6 +13,11 @@ on this machine:
                                       -> auto-stage Docling candidates as Drafts
 
 After every mutation the catalog data is regenerated so the page can reload.
+
+This server OWNS Draft discovery. Drafts live in gitignored
+`outputs/component-extractions/`, so they are specific to this machine; serving
+them live keeps them out of the tracked, deterministic `catalog-data.json`
+(published-only — see `build_component_catalog.py`). The UI merges the two.
 
 Binds to 127.0.0.1 only. This is a local authoring tool, not a public service.
 
@@ -39,6 +45,7 @@ SCRIPTS = REPO_ROOT / "slide-system" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 import candidate_review as cr  # noqa: E402
 import auto_stage_candidates as asc  # noqa: E402
+import build_component_catalog as bcc  # noqa: E402
 from _common import require_project_python  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
@@ -270,9 +277,25 @@ def action_delete(item_id: str, status: str) -> tuple[int, dict]:
                  "removed": removed, "history_purged": purged}
 
 
+def action_drafts() -> tuple[int, dict]:
+    """This machine's Draft items, scanned fresh on every request.
+
+    `outputs/component-extractions/` is gitignored, so Drafts are runtime-local by
+    definition. They are served from here instead of being written into the tracked
+    catalog projection, which stays a deterministic published-only view of the
+    registry. Scanning per request also means a newly staged Draft shows up on a
+    plain page reload — no catalog rebuild needed.
+    """
+    return 200, {"ok": True, "items": bcc.collect_draft_items(EXTRACTIONS)}
+
+
 ROUTES = {
     "/api/publish": lambda body: action_publish(body.get("id", "")),
     "/api/delete": lambda body: action_delete(body.get("id", ""), body.get("status", "")),
+}
+
+GET_ROUTES = {
+    "/api/drafts": action_drafts,
 }
 
 
@@ -309,6 +332,19 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_PATCH(self):
         self._json(404, {"ok": False, "error": "Unknown endpoint"})
+
+    def do_GET(self):
+        # Only /api/* is ours; everything else stays plain static file serving.
+        route = GET_ROUTES.get(self.path.split("?", 1)[0])
+        if not route:
+            if self.path.split("?", 1)[0].startswith("/api/"):
+                return self._json(404, {"ok": False, "error": "Unknown endpoint"})
+            return super().do_GET()
+        try:
+            code, payload = route()
+        except Exception as exc:  # surface, never crash the server
+            code, payload = 500, {"ok": False, "error": str(exc)}
+        self._json(code, payload)
 
     def do_POST(self):
         if self.path == "/api/stage-candidates":

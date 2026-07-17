@@ -114,8 +114,20 @@ def split_runs(
     result = []
     for start, end in zip(breaks, breaks[1:]):
         value = text[start:end]
-        if value.strip():
-            result.append((value, xs[start:end], start, end))
+        if not value.strip():
+            continue
+        # Trim leading/trailing WHITESPACE GLYPHS before the run is measured. A space
+        # carries an x like any other glyph, but it is not ink: keeping it starts the
+        # slot box where the space starts rather than where the reader sees the first
+        # letter, so the box drifts left over whatever artwork sits behind it. That is
+        # how 05-prep's checkbox ended up underneath "Ghi rõ…" while its sibling row —
+        # whose source happened to put the same space in its own tspan — sat correctly.
+        # The caller records `example_value` as run_text.strip(), so without this the
+        # recorded value and the recorded box describe different glyphs. Interior
+        # spaces are real structure and are left alone.
+        run_start = start + (len(value) - len(value.lstrip()))
+        run_end = end - (len(value) - len(value.rstrip()))
+        result.append((text[run_start:run_end], xs[run_start:run_end], run_start, run_end))
     return result or [(text, xs, 0, len(text))]
 
 

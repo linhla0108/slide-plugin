@@ -3,22 +3,124 @@
   "$id": "https://sun.studio/slide-system/selection-report.schema.json",
   "title": "Visual Selection Report",
   "type": "object",
-  "required": ["request_id", "generated_at", "decision", "candidates"],
+  "required": [
+    "request_id",
+    "generated_at",
+    "decision",
+    "candidates"
+  ],
   "properties": {
-    "request_id": { "type": "string" },
-    "generated_at": { "type": "string", "format": "date-time" },
-    "generated_by": { "type": "string" },
-    "scorer_version": { "type": "string" },
-    "retrieval_index": { "type": ["string", "null"] },
+    "request_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "scorer_version": {
+      "type": "string"
+    },
+    "retrieval_index": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "decision": {
       "type": "object",
-      "required": ["action", "score"],
+      "required": [
+        "action",
+        "score"
+      ],
       "properties": {
-        "action": { "enum": ["reuse", "adapt-local", "custom-local", "blocked"] },
-        "item_id": { "type": ["string", "null"] },
-        "score": { "type": "number", "minimum": 0, "maximum": 100 },
-        "reason": { "type": "string" },
-        "extraction_recommended": { "type": "boolean" }
+        "action": {
+          "enum": [
+            "reuse",
+            "needs_component",
+            "custom-local",
+            "blank"
+          ],
+          "description": "reuse = auto high-confidence OR explicit user selection; needs_component = UNRESOLVED (user must pick a library component, explicitly blank it, or approve custom — an unresolved job is NOT a deliverable and produces no PPTX/PDF); custom-local = explicit user approval only; blank = explicit user choice to leave the slide blank. adapt-local/blocked are retired."
+        },
+        "item_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "reason": {
+          "type": "string"
+        },
+        "extraction_recommended": {
+          "type": "boolean"
+        },
+        "suggested_search": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "needs_component: plain search terms for the catalog."
+        },
+        "next_action": {
+          "type": "string",
+          "description": "needs_component: the exact next user step."
+        },
+        "shortlist": {
+          "type": "array",
+          "description": "needs_component: a small ranked list of SAFE published near-matches to preview (published, auto-reuse-eligible, immutable-clean, slot-ready). Advisory only — the scorer never selects a shortlist item; each says which required concept groups are still missing.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["item_id"],
+            "properties": {
+              "item_id": { "type": "string" },
+              "score": { "type": "number" },
+              "missing_concepts": {
+                "type": "array",
+                "items": { "type": "array", "items": { "type": "string" } }
+              },
+              "why": { "type": "string" }
+            }
+          }
+        },
+        "selected_by": {
+          "enum": [
+            "user"
+          ],
+          "description": "Present when the outcome came from an explicit user choice (component_id or unresolved_policy)."
+        },
+        "allow_component_reuse": {
+          "type": "boolean",
+          "description": "Present + true when the user overrode the per-deck no-duplicate rule for this slide."
+        },
+        "immutable_text_conflict": {
+          "type": "object",
+          "description": "Present ONLY on an explicit user selection whose artwork carries fixed, non-editable copy that this deck's context does not match (registry `immutable_text`). Recorded by the scorer so the render/fidelity gate fails the build closed rather than shipping a slide about the wrong subject.",
+          "required": [
+            "terms",
+            "reason"
+          ],
+          "properties": {
+            "terms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },
@@ -26,14 +128,35 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["item_id", "eligible", "score", "criteria", "reasons"],
+        "required": [
+          "item_id",
+          "eligible",
+          "score",
+          "criteria",
+          "reasons"
+        ],
         "properties": {
-          "item_id": { "type": "string" },
-          "eligible": { "type": "boolean" },
-          "score": { "type": "number" },
-          "criteria": { "type": "object" },
-          "reasons": { "type": "array", "items": { "type": "string" } },
-          "retrieval": { "type": "object" }
+          "item_id": {
+            "type": "string"
+          },
+          "eligible": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": "number"
+          },
+          "criteria": {
+            "type": "object"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "retrieval": {
+            "type": "object"
+          }
         },
         "additionalProperties": false
       }
@@ -41,4 +164,3 @@
   },
   "additionalProperties": false
 }
-

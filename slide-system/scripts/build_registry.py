@@ -32,11 +32,13 @@ cannot be regenerated from disk. This tool keeps it honest against disk:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
-from _common import load_json, now_iso, resolve_repo_path, write_json
+from _common import load_json, now_iso, resolve_repo_path, sha256_file, write_json
 import build_component_retrieval_index as retrieval
+import materialize_component_visual as materialize
 
 SYSTEM_ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = SYSTEM_ROOT / "library"
@@ -49,7 +51,8 @@ HISTORY = SYSTEM_ROOT / "registries/extraction-history.json"
 # this list in lockstep with what the scorer actually reads.
 COMPACT_KEYS = [
     "id", "type", "brand", "intent", "tags", "status",
-    "density", "content_structure", "limitations",
+    "density", "content_structure", "limitations", "auto_reuse", "immutable_text",
+    "build_scope",
 ]
 
 
@@ -69,8 +72,186 @@ def registry_artifact_dirs(items: list[dict]) -> set[Path]:
     return dirs
 
 
+# Every `paths.*` file whose bytes decide what the generated scaffold/render shows,
+# paired with the fingerprint key it contributes. This is the ONE place that answers
+# "which files decide the render", so the audit cannot fingerprint a different set than
+# the scaffold reads. `scaffold_slide_from_component.py` reads all three at build time:
+#   - `visual`     -> the `.bg` background artwork (materialize_component_visual);
+#   - `preview`    -> preview.html, the source of the `.slot` markup AND geometry a
+#                     TEMPLATE renders from (omitting it was the reported bypass: editing
+#                     preview.html moved slots while the fingerprint stayed identical);
+#   - `text_slots` -> the editable-slot contract (fallback geometry + font scale).
+# A raster-only asset (no `visual`) carries its artwork in `preview`, so hashing the
+# same fields still binds it correctly. Order is fixed so the projection is stable.
+RENDER_INPUT_FIELDS: tuple[tuple[str, str], ...] = (
+    ("visual", "visual_sha256"),
+    ("preview", "preview_sha256"),
+    ("text_slots", "slots_sha256"),
+)
+
+
+def render_input_files(item: dict) -> list[tuple[str, Path]]:
+    """The render-input FILES this item declares that exist on disk, as
+    (fingerprint_key, path). A `paths.*` that is missing or is a directory (Dio's
+    character-art folder) contributes nothing — content only, no mtimes, no machine
+    paths, so the same bytes fingerprint the same in any checkout."""
+    paths = item.get("paths") or {}
+    out: list[tuple[str, Path]] = []
+    for key, field in RENDER_INPUT_FIELDS:
+        value = paths.get(key)
+        if not value:
+            continue
+        target = resolve_repo_path(value)
+        if target.is_file():
+            out.append((field, target))
+    return out
+
+
+def visual_dependencies(item: dict) -> tuple[list[tuple[str, Path]], list[str]]:
+    """The local image files this item's `visual.svg` references — which
+    `materialize_component_visual` base64-inlines into the rendered background, so they
+    decide the render as much as visual.svg itself. Returns (safe, unresolved) using the
+    SAME classifier materialization uses, so the audit and the render can never disagree
+    on which references are safe/local/resolved. Empty when the item declares no visual
+    file (raster-preview assets, Dio)."""
+    visual = (item.get("paths") or {}).get("visual")
+    if not visual:
+        return [], []
+    target = resolve_repo_path(visual)
+    if not target.is_file():
+        return [], []          # a missing visual is already a finding via visual_sha256
+    svg = target.read_text(encoding="utf-8", errors="replace")
+    return materialize.image_dependencies(svg, target.parent)
+
+
+def _visual_dependency_fingerprint(item: dict) -> str | None:
+    """A single stable aggregate over the SAFE local image dependencies of visual.svg:
+    sha256 of sorted `<reference-identity>\\t<content-hash>` lines. The identity is the
+    reference string as written in the SVG (repo-relative to the component), so the
+    aggregate is content-only and machine-independent — no mtimes, no absolute paths.
+    None when there are no safe dependencies. Unsafe/missing references are handled by
+    `gate_immutable_text` (fail closed), not silently folded in here."""
+    safe, _unresolved = visual_dependencies(item)
+    if not safe:
+        return None
+    lines = sorted(f"{ref}\t{sha256_file(path)}" for ref, path in safe)
+    return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+
+
+def immutable_text_fingerprint(item: dict) -> dict:
+    """Content hashes of every file that decides what the empty-slot render shows —
+    `visual.svg`, `preview.html`, `text-slots.json` (see `RENDER_INPUT_FIELDS`), PLUS a
+    `deps_sha256` aggregate over the local image files visual.svg references and
+    materialization inlines into the background. Binding the verdict to ALL of them means
+    changing any one — including a referenced tile.png — invalidates the audit, so no
+    render input can be edited past the gate."""
+    out = {field: sha256_file(target) for field, target in render_input_files(item)}
+    deps = _visual_dependency_fingerprint(item)
+    if deps:
+        out["deps_sha256"] = deps
+    return out
+
+
+def renders_as_slide(item: dict) -> bool:
+    """Whether this item DECLARES artwork a verdict must be bound to — i.e. whether the
+    audit gate applies. Deliberately about what the item claims, not about what is on
+    disk right now: an item whose declared `visual` has gone missing is unverifiable,
+    which is a finding, not an exemption (`immutable_text_fingerprint` returns {} in
+    both cases, so testing the hash instead would silently exempt deleted artwork).
+
+    False only for an item that can never name an artifact file: Dio's paths point at a
+    DIRECTORY of character art, so there is nothing to hash and it cannot be scaffolded
+    into a slide (audit_immutable_text.py records it `not-applicable`). It can bake no
+    slide text, so demanding a fingerprint it can never produce would strand it as
+    permanently `unresolved`. The moment it names a real file, the gate applies.
+
+    Note the exemption is "names a directory", not "the file is absent" — a declared
+    artifact that has gone missing is unverifiable, and must fail closed."""
+    paths = item.get("paths") or {}
+    if paths.get("visual"):
+        return True
+    preview = paths.get("preview")
+    if not preview:
+        return False
+    return not resolve_repo_path(preview).is_dir()
+
+
+def immutable_text_drift(item: dict) -> str | None:
+    """Why this item's recorded audit no longer describes its artifact, or None.
+
+    An audit verdict is evidence about ONE version of the artwork. A re-extraction
+    that replaces visual.svg — or a change to which slots are editable — can turn a
+    `clean` item into one that ships a baked lockup, while the stale verdict still
+    says it is safe. Comparing the recorded fingerprint against the files on disk is
+    what stops that."""
+    imm = item.get("immutable_text") or {}
+    recorded = imm.get("evidence")
+    if not recorded:
+        return None  # handled by the caller: no fingerprint at all is its own finding
+    current = immutable_text_fingerprint(item)
+    for field in ("visual_sha256", "slots_sha256", "preview_sha256", "deps_sha256"):
+        was, now = recorded.get(field), current.get(field)
+        if was == now:
+            continue
+        if now is None:
+            return f"{field} was audited but the artifact file is missing now"
+        if was is None:
+            return f"{field} is not covered by the recorded audit evidence"
+        return f"{field} changed since the audit ({was[:12]}… -> {now[:12]}…)"
+    return None
+
+
+def gate_immutable_text(item: dict) -> dict | None:
+    """The `immutable_text` a PUBLISHED item projects into the compact registry — the
+    file `score_visual_items.py` actually reads. Fails closed, so an item can only be
+    automatically reused while its audit genuinely describes the artifact on disk:
+
+      - never audited            -> unresolved (a newly published or re-extracted item
+                                    cannot silently become automatically reusable);
+      - audited without evidence -> unresolved (the verdict cannot be re-checked);
+      - fingerprint drifted      -> unresolved (the verdict describes older artwork).
+
+    Anything else passes through untouched. Unpublished items are left alone: they are
+    not selectable anyway, and Draft/publish semantics are not this gate's business."""
+    imm = item.get("immutable_text")
+    if item.get("status") != "published":
+        return imm
+    # A visual that references a local image dependency which is missing or unsafe
+    # cannot be materialized into a slide at all (materialization refuses it), so no
+    # verdict about its render can hold — fail closed regardless of what was recorded.
+    _safe, unresolved = visual_dependencies(item)
+    if unresolved:
+        return {"audit": "unresolved", "reason": (
+            f"visual.svg references {len(unresolved)} local image dependency(ies) that are "
+            f"missing or unsafe ({unresolved[:3]}); the component cannot be materialized, so "
+            "its render — and any verdict about it — is invalid. Fix the reference and "
+            "re-run audit_immutable_text.py.")}
+    if not imm:
+        return {"audit": "unresolved", "reason": (
+            "No immutable-text audit recorded for this published item. Automatic reuse "
+            "fails closed until slide-system/scripts/audit_immutable_text.py has rendered "
+            "it with every slot empty and a human has classified the result.")}
+    if not imm.get("evidence") and renders_as_slide(item):
+        return {"audit": "unresolved", "reason": (
+            "The immutable-text audit recorded no artifact fingerprint, so the verdict "
+            f"cannot be bound to the artwork on disk (recorded: {imm.get('audit')!r}). "
+            "Re-run audit_immutable_text.py.")}
+    drift = immutable_text_drift(item)
+    if drift:
+        return {"audit": "unresolved", "reason": (
+            f"The immutable-text audit is stale — {drift} — so the recorded verdict "
+            f"({imm.get('audit')!r}) describes artwork that is no longer there. "
+            "Re-run audit_immutable_text.py.")}
+    return imm
+
+
 def project_compact(items: list[dict]) -> dict:
-    return {"items": [{k: item.get(k) for k in COMPACT_KEYS} for item in items]}
+    out = []
+    for item in items:
+        row = {k: item.get(k) for k in COMPACT_KEYS}
+        row["immutable_text"] = gate_immutable_text(item)
+        out.append(row)
+    return {"items": out}
 
 
 def compact_text(items: list[dict]) -> str:
@@ -94,6 +275,41 @@ def retrieval_jsonl(items: list[dict]) -> str:
         json.dumps(record, ensure_ascii=True, sort_keys=True) + "\n"
         for record in records
     )
+
+
+def live_registry_items() -> list[dict]:
+    """The full registry minus DANGLING entries — exactly the set the generated
+    projections are built from, so a freshness comparison against them is faithful."""
+    return [
+        item for item in load_json(REGISTRY).get("items", [])
+        if not (item.get("paths", {}).get("artifact")
+                and not resolve_repo_path(item["paths"]["artifact"]).exists())
+    ]
+
+
+def generated_projection_staleness(items: list[dict] | None = None) -> list[str]:
+    """Why the GENERATED projections no longer describe the registry and the artifact
+    bytes on disk. Empty list = fresh.
+
+    This is the single freshness predicate: `--check` reports it and the scorer
+    refuses to score on it, so a stale projection cannot be caught in one place and
+    missed in the other. It needs no fingerprint logic of its own — recomputing the
+    projection runs `gate_immutable_text`, which re-hashes every artifact, so a
+    visual.svg that changed AFTER the projection was built shows up here as compact
+    drift (that item now projects `unresolved`, the on-disk copy still says `clean`)."""
+    if items is None:
+        items = live_registry_items()
+    stale: list[str] = []
+    if not COMPACT.exists() or COMPACT.read_text(encoding="utf-8") != compact_text(items):
+        stale.append(f"{_rel(COMPACT)} (compact projection out of date)")
+    if not RETRIEVAL.exists() or RETRIEVAL.read_text(encoding="utf-8") != retrieval_jsonl(items):
+        stale.append(f"{_rel(RETRIEVAL)} (retrieval index out of date)")
+    return stale
+
+
+# What an operator must run to regenerate the projections. Kept here so the scorer's
+# refusal and this tool's own reports name the same command.
+REFRESH_HINT = "python slide-system/scripts/build_registry.py --write"
 
 
 def history_zombie_ids(registry_ids: set[str]) -> list[str]:
@@ -166,26 +382,12 @@ def main() -> int:
 
     if args.check:
         drift = len(dangling) + len(orphans) + len(zombies)
-        # COMPACT drift — the scorer reads visual-library-compact.json, so a full
-        # registry edit (e.g. a metadata backfill) that forgets to regenerate the
-        # projection would silently leave the scorer on stale metadata. Compare
-        # the on-disk compact against a freshly recomputed projection.
-        desired_compact = compact_text(kept)
-        compact_stale = (
-            not COMPACT.exists()
-            or COMPACT.read_text(encoding="utf-8") != desired_compact
-        )
-        if compact_stale:
-            print(f"STALE     {_rel(COMPACT)} "
-                  f"(compact projection out of date — run --write)")
-            drift += 1
-        desired_retrieval = retrieval_jsonl(kept)
-        retrieval_stale = (
-            not RETRIEVAL.exists()
-            or RETRIEVAL.read_text(encoding="utf-8") != desired_retrieval
-        )
-        if retrieval_stale:
-            print(f"STALE     {_rel(RETRIEVAL)}")
+        # Generated-projection drift — the scorer reads visual-library-compact.json, so
+        # a full registry edit (e.g. a metadata backfill) that forgets to regenerate the
+        # projection, or an artifact that changed since it was built, would otherwise
+        # leave the scorer on stale metadata. Same predicate the scorer preflights on.
+        for stale in generated_projection_staleness(kept):
+            print(f"STALE     {stale} — run --write")
             drift += 1
         print(f"{'DRIFT' if drift else 'clean'}: {len(dangling)} dangling, "
               f"{len(orphans)} orphan, {len(zombies)} zombie, {len(kept)} valid items")

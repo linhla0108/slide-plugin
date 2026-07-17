@@ -433,6 +433,48 @@ def main() -> int:
                 e_run.fail(log.strip().splitlines()[-1] if log.strip() else f"rc={rc}")
         results += [e_run]
 
+        # ================= JOB F: DEFAULT-command navigation (no explicit flags) =
+        # The public export command passes NO --showJs/--selector. capture-slides.js
+        # must (1) auto-detect the `.slide` + goToSlide(n) navigator and capture each
+        # slide distinctly, and (2) fail closed on a multi-slide deck with no
+        # resolvable navigation instead of shooting slide 1 N times and reporting
+        # success. (Jobs A/D above pass an explicit --showJs — the same "showJs is
+        # set" branch a <deck-stage> takes — so that path is already covered.)
+        f_auto = R("F1 default cmd auto-detects goToSlide (distinct slides)")
+        f_closed = R("F2 stacked deck w/o navigator fails closed")
+        if not (node and npm_pw):
+            f_auto.skip("needs Node+playwright")
+            f_closed.skip("needs Node+playwright")
+        else:
+            import hashlib
+            f1_dir = out_dir / "default-nav"; f1_dir.mkdir()
+            rc, log, ms = run([node, str(SCRIPTS / "capture-slides.js"),
+                               "--url", url, "--slides", str(SLIDES),
+                               "--out-dir", str(f1_dir), "--mode", "layered"])
+            pngs = sorted(f1_dir.glob("slide-*-bg.png"))
+            shas = {hashlib.sha256(p.read_bytes()).hexdigest() for p in pngs}
+            if rc == 0 and len(pngs) == SLIDES and len(shas) == SLIDES:
+                f_auto.ok(ms, f"{len(pngs)} DISTINCT slide backgrounds via auto-detected goToSlide")
+            else:
+                f_auto.fail(f"rc={rc}, pngs={len(pngs)}, distinct_bg={len(shas)} "
+                            f"(want {SLIDES} distinct — identical == slide-1 repeated)")
+
+            stacked = deck_dir / "stacked.html"
+            stacked.write_text(
+                "<!doctype html><html><body>"
+                "<section class='slide'>Alpha</section>"
+                "<section class='slide'>Bravo</section>"
+                "</body></html>", encoding="utf-8")
+            f2_dir = out_dir / "stacked-nav"; f2_dir.mkdir()
+            rc, log, ms = run([node, str(SCRIPTS / "capture-slides.js"),
+                               "--url", f"http://127.0.0.1:{port}/stacked.html",
+                               "--slides", "2", "--out-dir", str(f2_dir), "--mode", "layered"])
+            if rc != 0 and ("goToSlide" in log or "navigation" in log):
+                f_closed.ok(ms, "capture refused a multi-slide deck with no navigator")
+            else:
+                f_closed.fail(f"expected non-zero exit + actionable message, got rc={rc}")
+        results += [f_auto, f_closed]
+
     finally:
         httpd.shutdown()
         if not args.keep:
@@ -445,6 +487,8 @@ def main() -> int:
         "C read PPTX":     next(r for r in results if r.name.startswith("C1")).status,
         "D layered 3-lớp": next(r for r in results if r.name.startswith("D2")).status,
         "E decompose artwork": next(r for r in results if r.name.startswith("E1")).status,
+        "F1 default-cmd nav": next(r for r in results if r.name.startswith("F1")).status,
+        "F2 fail-closed nav": next(r for r in results if r.name.startswith("F2")).status,
     }
     light_ok = all(s == "PASS" for s in light_jobs.values())
 

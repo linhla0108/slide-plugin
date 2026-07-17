@@ -36,6 +36,7 @@
   --yellow: oklch(0.65 0.14 85);
   --yellow-light: oklch(0.65 0.14 85 / 0.12);
   --red: oklch(0.55 0.21 25);
+  --red-light: oklch(0.55 0.21 25 / 0.1);
 
   --paper: oklch(0.992 0.006 95);
   --paper-sink: oklch(0.968 0.01 90);
@@ -541,6 +542,31 @@ h1, h2, h3 {
   background: var(--orange);
 }
 
+/* Review-only: published and browseable, but recorded as having failed
+   full-slide QA (registry `auto_reuse.eligible: false`). Sits NEXT TO the
+   Published dot — it qualifies the status, it does not replace it. */
+
+.status-dot.review {
+  background: var(--red-light);
+  color: var(--red);
+}
+
+.status-dot.review::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.review-note {
+  border-left: 2px solid var(--red);
+  background: var(--red-light);
+  padding: 8px 10px;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.5;
+}
+
 /* ============================================================
    SKELETON LOADING
    ============================================================ */
@@ -787,16 +813,23 @@ h1, h2, h3 {
   transition: all 0.15s var(--ease);
 }
 
-.copy-btn:hover {
+.copy-btn:hover:not(:disabled) {
   border-color: var(--hair-strong);
   box-shadow: var(--shadow-sm);
 }
 
-.copy-btn:active { transform: scale(0.97); }
+.copy-btn:active:not(:disabled) { transform: scale(0.97); }
 
 .copy-btn:focus-visible {
   outline: 2px solid var(--orange);
   outline-offset: 2px;
+}
+
+/* Copy prompt is disabled for review-only components (see catalog.js). Same
+   treatment as a blocked Publish: dimmed, not-allowed, reason in the tooltip. */
+.copy-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .copy-btn-primary {

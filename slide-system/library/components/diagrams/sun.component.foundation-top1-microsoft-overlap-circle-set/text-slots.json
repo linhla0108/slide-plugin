@@ -240,7 +240,7 @@
         "height": 0.1202734
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 1,
@@ -294,7 +294,7 @@
         "height": 0.0642234
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 2,
@@ -348,7 +348,7 @@
         "height": 0.0621629
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 3,
@@ -402,7 +402,7 @@
         "height": 0.0621629
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 4,
@@ -456,7 +456,7 @@
         "height": 0.2637753
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 5,
@@ -510,7 +510,7 @@
         "height": 0.0642234
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 6,
@@ -564,7 +564,7 @@
         "height": 0.0621629
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 7,
@@ -618,7 +618,7 @@
         "height": 0.0621629
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 8,
@@ -672,7 +672,7 @@
         "height": 0.1051858
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 9,
@@ -726,7 +726,7 @@
         "height": 0.1051858
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 10,
@@ -780,7 +780,7 @@
         "height": 0.1051858
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 11,
@@ -834,7 +834,7 @@
         "height": 0.0642234
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 12,
@@ -888,7 +888,7 @@
         "height": 0.0621629
       },
       "anchor": "start",
-      "horizontal_align": "left",
+      "horizontal_align": "center",
       "vertical_align": "top",
       "rotation": 0.0,
       "z_order": 13,

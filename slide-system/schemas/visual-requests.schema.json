@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/visual-requests.schema.json",
+  "title": "Batch Visual Requests",
+  "description": "The batch input consumed by `score_visual_items.py --batch-request`, written to <run>/analysis/visual-requests.json. THIS is the artifact a user edits and re-submits to make a per-slide component selection (component_id / allow_component_reuse / unresolved_policy). Slide selections live here — NOT in job-requirements.json. NOTE ON ENFORCEMENT: nothing evaluates this file as JSON Schema at runtime (`jsonschema` is not a declared dependency of this repo). score_visual_items.validate_batch_request() re-states these rules in code and runs before any scoring; test_gates.test_batch_request_validator_matches_schema_field_by_field reads THIS file and proves the code enforces every field and type it declares, so the two cannot drift apart silently. The code additionally rejects duplicate request_id and blank-only strings, which JSON Schema cannot express cleanly here.",
+  "type": "object",
+  "required": ["job_id", "slides"],
+  "additionalProperties": false,
+  "properties": {
+    "job_id": { "type": "string", "minLength": 1 },
+    "brief": { "type": "string", "description": "Optional plain-language note about the deck." },
+    "note": { "type": "string", "description": "Optional free-text note for reviewers." },
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/slide" }
+    }
+  },
+  "$defs": {
+    "slide": {
+      "type": "object",
+      "required": ["request_id"],
+      "additionalProperties": false,
+      "properties": {
+        "request_id": { "type": "string", "minLength": 1, "description": "Unique per deck." },
+        "intent": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "concepts": {
+          "type": "array",
+          "items": { "type": "array", "items": { "type": "string" } },
+          "description": "Optional required semantic concept groups: a list of groups, each a non-empty list of OR-alternative concept terms; the groups are AND requirements. When present, semantic coverage = matched_groups/total_groups and intent/tags feed retrieval/ranking only (they no longer inflate the required denominator). Omit for the legacy flat intent+tags behaviour."
+        },
+        "content_structure": { "type": "array", "items": { "type": "string" } },
+        "content_shape": { "type": ["string", "null"], "description": "Required under --strict-shape; must be a shape in _common.SHAPE_TYPE_MAP." },
+        "item_count": { "type": ["integer", "null"] },
+        "density": { "type": ["string", "null"] },
+        "brand": { "type": ["string", "null"] },
+        "required_exports": { "type": "array", "items": { "type": "string" } },
+        "query": { "type": "string" },
+        "prefer_type": { "type": ["string", "null"] },
+        "recommend_extraction": { "type": "boolean" },
+        "component_id": {
+          "type": ["string", "null"],
+          "description": "EXPLICIT user selection: a stable published id (sun.component.x) OR the catalog 'Copy prompt' text, which is resolved deterministically to the id in parentheses. Bypasses the auto-confidence bar but is still validated (published + shape + slots) and fidelity-gated."
+        },
+        "allow_component_reuse": {
+          "type": "boolean",
+          "description": "Override the per-deck no-duplicate rule for THIS slide. Recorded in the decision and surfaced in review."
+        },
+        "unresolved_policy": {
+          "enum": ["custom-local", "blank", null],
+          "description": "How the user explicitly resolves an unresolved (needs_component) slide without picking a component_id: \"custom-local\" authorises a custom slide, \"blank\" leaves it deliberately blank. Both are user-only outcomes. Omit to leave the slide unresolved (needs_component) — an unresolved job is NOT a deliverable."
+        }
+      }
+    }
+  }
+}

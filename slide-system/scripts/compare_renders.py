@@ -12,18 +12,35 @@ DEFAULT_PIXEL_DELTA_THRESHOLD = 36
 
 
 def _compare_images(reference, candidate, threshold: int) -> tuple[object, dict[str, float]]:
-    from PIL import ImageChops, ImageStat
+    from PIL import ImageChops, ImageFilter, ImageStat
 
     diff = ImageChops.difference(reference.convert("RGBA"), candidate.convert("RGBA")).convert("RGB")
     stat = ImageStat.Stat(diff)
     mean_error = sum(stat.mean) / 3
     rms_error = (sum(value * value for value in stat.rms) / 3) ** 0.5
     pixels = list(diff.get_flattened_data())
+    total = len(pixels)
     changed = sum(max(pixel) > threshold for pixel in pixels)
+
+    # `changed_pixel_ratio` counts every pixel whose max channel diff clears the
+    # threshold — but a faithful native-text overlay still leaves a 1px
+    # anti-aliasing halo along every glyph edge (text has far more edge length
+    # than a handful of vector overlays, so text-dense slides inflate this even
+    # though mean_err stays near zero). Real defects — a shifted/missing/wrong/
+    # duplicated slide or a visible overlap — move a CONTIGUOUS region, not a
+    # 1px fringe. `significant_changed_pixel_ratio` keeps only changed pixels that
+    # survive a 1px erosion (MinFilter(3)): thin AA halos vanish, solid blocks
+    # remain. This is the contiguous-change guard; mean_err stays the primary one.
+    r, g, b = diff.split()
+    channel_max = ImageChops.lighter(ImageChops.lighter(r, g), b)
+    mask = channel_max.point(lambda v: 255 if v > threshold else 0)
+    eroded = mask.filter(ImageFilter.MinFilter(3))
+    significant = eroded.histogram()[255]
     return diff, {
         "mean_absolute_error": mean_error,
         "rms_error": rms_error,
-        "changed_pixel_ratio": changed / len(pixels),
+        "changed_pixel_ratio": changed / total,
+        "significant_changed_pixel_ratio": significant / total,
     }
 
 
@@ -72,6 +89,7 @@ def main() -> int:
             "mean_absolute_error": round(metrics["mean_absolute_error"], 4),
             "rms_error": round(metrics["rms_error"], 4),
             "changed_pixel_ratio": round(metrics["changed_pixel_ratio"], 8),
+            "significant_changed_pixel_ratio": round(metrics["significant_changed_pixel_ratio"], 8),
         },
         "evidence": ["side-by-side.png", "overlay.png", "diff.png"],
     }

@@ -272,6 +272,34 @@ function compStatusMatches(item) {
     : ["staging", "qa"].includes(item.status);
 }
 
+/* Review-only: published and browseable, but recorded as having FAILED full-slide
+   materialization/render QA (registry `auto_reuse.eligible: false`). The scorer
+   never auto-selects these and the fidelity gate rejects their build, so the
+   catalog must not offer them as a ready-to-paste component. */
+
+function compIsReviewOnly(item) {
+  return item.status === "published" && item.auto_reuse?.eligible === false;
+}
+
+function compReviewReason(item) {
+  return (item.auto_reuse?.reason || "").trim() ||
+    "Recorded as failing full-slide QA; no reason was stored.";
+}
+
+const REVIEW_ONLY_TITLE =
+  "Review-only: this component failed full-slide QA, so it cannot safely build as a " +
+  "full-slide reuse. Preview it and copy its ID for reference; see the reason in Info.";
+
+function compStatusBadges(item) {
+  const cls = item.status === "published" ? "published" : "draft";
+  const label = item.status === "published" ? "Published" : "Draft";
+  let html = `<span class="status-dot ${cls}">${label}</span>`;
+  if (compIsReviewOnly(item)) {
+    html += `<span class="status-dot review" title="${escAttr(compReviewReason(item))}">Review-only</span>`;
+  }
+  return html;
+}
+
 function compFilterItems() {
   const term = compDom.search.value.trim().toLowerCase();
   compState.filtered = compState.items.filter(item => {
@@ -340,8 +368,6 @@ function compCreateTile(item, idx) {
 
   const imgUrl = compResolveImageUrl(item);
   const svgTile = isSvgPath(imgUrl);
-  const statusClass = item.status === "published" ? "published" : "draft";
-  const statusLabel = item.status === "published" ? "Published" : "Draft";
 
   let previewHtml;
   if (!imgUrl) {
@@ -360,7 +386,7 @@ function compCreateTile(item, idx) {
       <div class="tile-name" title="${escAttr(item.name)}">${escHtml(item.name)}</div>
       <div class="tile-info">
         <span>${escHtml(item.type)}</span>
-        <span class="status-dot ${statusClass}">${statusLabel}</span>
+        ${compStatusBadges(item)}
       </div>
     </div>`;
 
@@ -510,11 +536,16 @@ function compRenderModal() {
     }
   }
 
-  const statusClass = item.status === "published" ? "published" : "draft";
-  const statusLabel = item.status === "published" ? "Published" : "Draft";
   compDom.modalId.innerHTML = `
     <span>${escHtml(item.id)} &middot; v${escHtml(item.version)}</span>
-    <span class="status-dot ${statusClass}">${statusLabel}</span>`;
+    ${compStatusBadges(item)}`;
+
+  // Copy ID stays available (audit/reference); Copy prompt is disabled for a
+  // review-only item so nobody pastes a component that cannot pass the build gate.
+  // Reset BOTH ways — the button is a persistent node reused across items.
+  const reviewOnly = compIsReviewOnly(item);
+  compDom.copyPrompt.disabled = reviewOnly;
+  compDom.copyPrompt.title = reviewOnly ? REVIEW_ONLY_TITLE : "Copy prompt";
 
   compRenderInfoPanel(item);
   compRenderManageBar(item);
@@ -674,6 +705,12 @@ function compWireZoom() {
 
 function compRenderInfoPanel(item) {
   let html = "";
+  // First row on purpose: the reason this component must not be built as a
+  // full-slide reuse outranks every descriptive field below it.
+  if (compIsReviewOnly(item)) {
+    html += compInfoRow("Review only",
+      '<div class="review-note">' + escHtml(compReviewReason(item)) + "</div>");
+  }
   if (item.brand) html += compInfoRow("Brand", escHtml(item.brand));
   if (item.component_type) html += compInfoRow("Component type", escHtml(item.component_type));
   if (item.layout_role) html += compInfoRow("Layout role", escHtml(item.layout_role));
@@ -931,14 +968,30 @@ document.addEventListener("keydown", e => {
 
 compShowSkeleton();
 
+/* Drafts are NOT in catalog-data.json: that file is tracked and must stay a
+   deterministic published-only projection of the registry, or every developer's
+   rebuild would rewrite it with their own local Drafts. Drafts live in gitignored
+   outputs/component-extractions/ and are scanned live by catalog_server.py.
+   Without the control server (e.g. a plain static file server) there simply are no
+   Drafts to show — published browsing still works. */
+
+function compLoadDrafts() {
+  return fetch("/api/drafts")
+    .then(r => (r.ok ? r.json() : null))
+    .then(data => (data && data.ok && Array.isArray(data.items) ? data.items : []))
+    .catch(() => []);
+}
+
 function compLoadData() {
-  return fetch("catalog-data.json?t=" + Date.now())
-    .then(r => {
+  return Promise.all([
+    fetch("catalog-data.json?t=" + Date.now()).then(r => {
       if (!r.ok) throw new Error("Failed to load catalog: " + r.status);
       return r.json();
-    })
-    .then(data => {
-      compState.items = data.items || [];
+    }),
+    compLoadDrafts(),
+  ])
+    .then(([data, drafts]) => {
+      compState.items = (data.items || []).concat(drafts);
       const nonTpl = compState.items.filter(i => i.type !== "template");
       const pubCount = nonTpl.filter(i => i.status === "published").length;
       const draftCount = nonTpl.filter(i => ["staging", "qa"].includes(i.status)).length;

@@ -19,9 +19,10 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable
 
-from _common import load_json, now_iso, write_json
+from _common import (load_json, now_iso, write_json, SHAPE_TYPE_MAP, shape_eligible,
+                     derive_content_shape)
 
 
 SCORER_VERSION = "3.2.0"
@@ -73,6 +74,18 @@ SECONDARY_CAP = 0.25
 ANTI_USE_CASE_PENALTY = 15
 COUNT_FIT_PENALTY = 10
 NO_TEXT_SLOT_PENALTY = 10
+
+# Automatic-reuse confidence bar (product decision 2026-07-13.20). A component is
+# auto-reused ONLY when it clears BOTH gates — a high TOTAL score AND a strong
+# SEMANTIC sub-score. The ~45-pt baseline (density+brand+export+accessibility)
+# inflates the total, so the total alone cannot tell a genuine match from a
+# keyword-lucky one; the semantic sub-score (primary intent overlap) is the real
+# discriminator. Calibrated from the live registry (scratchpad/calibrate.py): true
+# strong matches land >=78 total / >=24.5 semantic with 3-4 primary intent hits,
+# while mediocre "matches" fall below on semantic and now become needs_component.
+# Materially stricter than the retired adapt band (65) and old reuse band (75).
+AUTO_REUSE_MIN = 78
+SEMANTIC_CONFIDENCE_FRAC = 0.70  # * WEIGHTS["semantic_intent"] (=24.5)
 
 # Type-intent bias. When a request explicitly asks for a reusable COMPONENT, a
 # full-slide `template` is demoted by this modest amount so a genuinely relevant
@@ -161,6 +174,52 @@ def _norm_token(term: str) -> str:
         base = low[:-1]
         return smap.get(base, base)
     return smap.get(low + "s", low)
+
+
+def _concept_groups(request: dict) -> list[set[str]] | None:
+    """Required semantic concept groups for a request, canonicalized. Each group is
+    a set of OR-alternative concepts; the groups are AND requirements. Returns None
+    when the request declares no `concepts`, so the flat `intent + tags` denominator
+    applies unchanged — full backward compatibility for legacy requests."""
+    raw = request.get("concepts")
+    if not raw:
+        return None
+    groups = [g for g in (_canonicalize(group) for group in raw if group) if g]
+    return groups or None
+
+
+def _concept_coverage(groups: list[set[str]], item_terms: set[str],
+                      record: dict | None) -> tuple[float, dict, set[str]]:
+    """Semantic coverage over concept GROUPS (OR within a group, AND across groups):
+    a group is satisfied when the item's canonical terms intersect any of its
+    alternatives. Coverage = matched_groups / total_groups, so descriptor terms and
+    synonyms never inflate the required denominator, while AND-across keeps a
+    multi-concept slide (e.g. role AND card-layout) from matching on one concept
+    alone. An unmatched group can still earn the SAME capped, below-floor secondary
+    credit as the flat path (a broadened lexical hit can never buy a reuse on its
+    own). Returns (semantic_fraction, report, secondary_terms)."""
+    matched, missing = [], []
+    for group in groups:
+        hit = group & item_terms
+        (matched if hit else missing).append((group, hit))
+    semantic = len(matched) / len(groups) if groups else 1.0
+    secondary: set[str] = set()
+    if record and missing:
+        sec_groups = 0
+        for group, _ in missing:
+            hits = {t for t in group if _norm_token(t) in record["positive"]}
+            if hits:
+                sec_groups += 1
+                secondary |= hits
+        if sec_groups:
+            semantic = min(1.0, semantic + min(
+                SECONDARY_WEIGHT * (sec_groups / len(groups)), SECONDARY_CAP))
+    report = {
+        "required": [sorted(group) for group in groups],
+        "matched": [{"group": sorted(group), "via": sorted(hit)} for group, hit in matched],
+        "missing": [sorted(group) for group, _ in missing],
+    }
+    return semantic, report, secondary
 
 
 def _field_tokens(record: dict, fields: Iterable[str]) -> set[str]:
@@ -285,19 +344,249 @@ def _prefilter(request: dict, items: list[dict], index: dict[str, list[int]]) ->
     return [items[i] for i in sorted(hit_indices)]
 
 
+_STABLE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
+_PROMPT_ID_RE = re.compile(r"\(([a-z0-9][a-z0-9._-]*)\)")
+
+
+def _auto_reuse_ok(cand: dict) -> bool:
+    """False only when the item records a FAILED full-slide materialization/render
+    QA (`auto_reuse.eligible: false` in the registry). Absent metadata means
+    eligible, so nothing needs backfilling to stay selectable."""
+    return ((cand.get("retrieval") or {}).get("auto_reuse") or {}).get("eligible", True)
+
+
+def _build_scope_ok(cand: dict) -> bool:
+    """Whether the item is a GENERIC, auto-buildable template/component that a short
+    unrelated brief can safely scaffold and fill — the buildability half of reuse
+    (semantic relevance is the other half). Only an item REVIEWED as
+    `build_scope.mode == "generic"` qualifies. CONSERVATIVE by design: an absent or
+    "source-specific" verdict is NOT auto-buildable, so a high semantic score can
+    never auto-reuse a specific published slide (dates, named people, source-context
+    slots) merely because concepts match. Such items stay published and manually
+    selectable — an explicit user pick still routes through the scaffold/fidelity
+    gate, which fails closed if the request cannot fill the slots."""
+    return ((cand.get("retrieval") or {}).get("build_scope") or {}).get("mode") == "generic"
+
+
+def _immutable_contexts(immutable: dict) -> list[set[str]]:
+    """The declared immutable contexts, canonicalized: a list of groups, each a set of
+    terms that must ALL be present for that group to count."""
+    return [_canonicalize(group) for group in (immutable.get("contexts") or [])
+            if group]
+
+
+def _immutable_context_matched(req_terms: set[str], contexts: list[set[str]]) -> set[str] | None:
+    """The first COMPLETE context group the request satisfies, or None.
+
+    All-of within a group, any-of across groups. A group is the whole context the
+    fixed copy names — a programme AND its year, say — so a request that shares only
+    part of it (a bare `2025`) is not about that subject and must fail closed. The
+    earlier gate accepted any single overlapping term and let exactly that through."""
+    for group in contexts:
+        if group and group <= req_terms:
+            return group
+    return None
+
+
+def _immutable_text_ok(cand: dict) -> bool:
+    """Whether the item's immutable-text audit permits AUTOMATIC reuse here.
+
+    - no audit recorded -> True (un-audited items keep their existing behaviour; the
+                           compact projection the scorer reads stamps every published
+                           item, so this only covers synthetic/unpublished ones);
+    - `clean`           -> True (the empty-slot render showed no source-specific words);
+    - `immutable`       -> only when the request satisfies a COMPLETE declared context
+                           (see `_immutable_context_matched`);
+    - `unresolved`      -> False, fail closed until a human resolves the audit.
+
+    Purely metadata-driven: the contexts come from the item, the match comes from the
+    request, and nothing here knows any component id or phrase."""
+    imm = (cand.get("retrieval") or {}).get("immutable_text")
+    if not imm:
+        return True
+    audit = imm.get("audit")
+    if audit == "clean":
+        return True
+    if audit == "unresolved":
+        return False
+    return bool(imm.get("matched"))
+
+
+def resolve_component_id(raw: str | None) -> str | None:
+    """Resolve an explicit user component choice to a stable id. Accepts a bare id
+    (`sun.component.foo`) or the catalog 'Copy prompt' text, which embeds the id in
+    parentheses: `Use the published component "Name" (sun.component.foo) ...`.
+    Deterministic: a bare id wins outright, else the LAST parenthesised id-shaped
+    token; None when nothing id-shaped is present."""
+    if not raw or not isinstance(raw, str):
+        return None
+    s = raw.strip()
+    if _STABLE_ID_RE.match(s):
+        return s
+    hits = _PROMPT_ID_RE.findall(s)
+    return hits[-1] if hits else None
+
+
+def _suggested_search(request: dict) -> list[str]:
+    """Plain search terms for a needs_component slide, from its own intent/tags."""
+    terms: list[str] = []
+    shape = request.get("content_shape")
+    if shape:
+        terms.append(str(shape).lower())
+    for t in (request.get("intent") or []) + (request.get("tags") or []):
+        t = str(t).strip().lower()
+        if t and t not in terms:
+            terms.append(t)
+    return terms[:6]
+
+
+_NEXT_ACTION = ("Open the SUN.STUDIO catalog, search/preview published components, "
+                "copy a component's ID (or its prompt), and set `component_id` on this "
+                "slide to reuse it; or set `unresolved_policy: \"custom-local\"` to "
+                "approve a custom slide as a last resort.")
+
+
+def _needs_component_decision(request: dict, selectable: list[dict], any_published: bool,
+                              req_shape: str | None, blocker: Callable[[dict], str | None]) -> dict:
+    """Unresolved: no candidate could be automatically reused and the user has not
+    chosen. Build nothing — hand back a plain reason, suggested search terms, and the
+    exact next action. The ranked safe candidates stay in the report's `candidates`.
+
+    The reason names the ACTUAL blocker for the best candidate, taken from the same
+    function the reuse gate uses, so the report can never explain a decision by a rule
+    that did not cause it."""
+    top = selectable[0] if selectable else None
+    if not any_published:
+        reason = "No published component is eligible for this slide."
+    elif not selectable:
+        reason = (f"No published component matches the required content_shape {req_shape!r}."
+                  if req_shape else "No published component is a semantic fit for this slide.")
+    else:
+        reason = (f"Best candidate {top['item_id']} {blocker(top).rstrip('. ')}. "
+                  f"Not confident enough to auto-reuse.")
+    return {
+        "action": "needs_component",
+        "item_id": None,
+        "score": top["score"] if top else 0,
+        "reason": reason,
+        "extraction_recommended": True,
+        "suggested_search": _suggested_search(request),
+        "shortlist": _safe_shortlist(request, selectable, blocker),
+        "next_action": _NEXT_ACTION,
+    }
+
+
+def _safe_shortlist(request: dict, selectable: list[dict],
+                    blocker: Callable[[dict], str | None]) -> list[dict]:
+    """A small ranked shortlist of SAFE near-matches for a non-technical reviewer:
+    published + shape-compatible (already true of `selectable`) AND auto-reuse-
+    eligible, immutable-clean, and slot-ready — everything the reuse gate needs
+    EXCEPT the high-confidence concept/score bar. Each entry says what concept is
+    missing and stays advisory: this never selects a component (the decision is
+    already needs_component), it just tells the user which published components are
+    worth previewing. Empty when nothing is a plausible, safe near-match."""
+    request_needs_text = bool(request.get("content_structure"))
+    shortlist: list[dict] = []
+    for cand in selectable:
+        retrieval = cand.get("retrieval") or {}
+        if not (_auto_reuse_ok(cand) and _immutable_text_ok(cand)):
+            continue
+        if request_needs_text and retrieval.get("slot_count") == 0:
+            continue
+        concepts = retrieval.get("concepts") or {}
+        # Only plausible near-matches: at least one primary concept matched (or, for
+        # a flat request, a non-zero semantic sub-score).
+        if not (concepts.get("matched") or cand["criteria"]["semantic_intent"] > 0):
+            continue
+        shortlist.append({
+            "item_id": cand["item_id"],
+            "score": cand["score"],
+            "missing_concepts": concepts.get("missing", []),
+            "why": (blocker(cand) or "").rstrip(". "),
+        })
+        if len(shortlist) >= 3:
+            break
+    return shortlist
+
+
+def _explicit_decision(explicit_id: str, candidates: list[dict], req_shape: str | None,
+                       request_needs_text: bool) -> dict:
+    """Validate an explicit user component choice. It may bypass the auto-confidence
+    bar but must still be published, shape/type-compatible, and slot-ready (render
+    fidelity is enforced later at build). On any failure the slide stays
+    needs_component with a plain reason — never a silent substitution."""
+    cand = next((c for c in candidates if c["item_id"] == explicit_id), None)
+
+    def _fail(reason: str) -> dict:
+        return {
+            "action": "needs_component", "item_id": None,
+            "score": (cand or {}).get("score", 0), "reason": reason,
+            "selected_by": "user", "extraction_recommended": True,
+            "suggested_search": [], "next_action": _NEXT_ACTION,
+        }
+
+    if cand is None:
+        return _fail(f"Explicit component_id {explicit_id!r} is not in the published library.")
+    if not cand["eligible"]:
+        return _fail(f"Explicit component_id {explicit_id!r} is not published.")
+    if req_shape and not cand.get("shape_eligible", True):
+        return _fail(f"Explicit component_id {explicit_id!r} does not support content_shape "
+                     f"{req_shape!r}.")
+    if request_needs_text and (cand.get("retrieval") or {}).get("slot_count") == 0:
+        return _fail(f"Explicit component_id {explicit_id!r} has no editable text slots for "
+                     f"this slide's copy.")
+    reason = (f"Explicit user selection of published component {explicit_id!r} "
+              f"(bypasses the auto-confidence bar; still validated + fidelity-gated).")
+    if not _auto_reuse_ok(cand):
+        # Selectable for review, but never silently: carry the recorded QA failure so
+        # the reviewer sees it, and the build/render gate fails this closed.
+        qa = ((cand.get("retrieval") or {}).get("auto_reuse") or {}).get("reason")
+        reason += (f" WARNING: this component is marked review-only after a failed "
+                   f"full-slide QA ({qa}); the render fidelity gate will reject the build.")
+    decision = {
+        "action": "reuse", "item_id": explicit_id, "score": cand["score"],
+        "reason": reason,
+        "selected_by": "user", "extraction_recommended": False,
+    }
+    if not _immutable_text_ok(cand):
+        # The user may deliberately want this component, but its artwork would ship
+        # visible copy about another subject (or its audit is unresolved, so nobody
+        # knows). Warn plainly AND record the conflict on the decision so the
+        # render/fidelity gate fails the build closed.
+        imm = (cand.get("retrieval") or {}).get("immutable_text") or {}
+        what = ("its immutable-text audit is unresolved"
+                if imm.get("audit") == "unresolved"
+                else "its artwork carries fixed text this deck does not match")
+        decision["reason"] += (
+            f" WARNING: {what} ({imm.get('reason')}); the render fidelity gate will "
+            f"reject the build.")
+        decision["immutable_text_conflict"] = {"contexts": imm.get("contexts") or [],
+                                               "reason": imm.get("reason")}
+    return decision
+
+
 def score_request(
     request: dict,
     registry_items: list[dict],
     weights: dict[str, int],
     prefer_set: str | None,
-    top_n: int = 5,
+    top_n: int | None = 5,
     enrichment: dict[str, dict] | None = None,
 ) -> tuple[dict, list[dict]]:
+    """Returns (decision, candidates). `top_n=None` returns the FULL scored pool
+    (used by the batch path for deck allocation); an int returns the compact
+    report slice via `report_candidates`."""
     candidates = []
-    req_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
+    # Required semantic concepts. When the request declares `concepts`, coverage is
+    # measured over those OR-groups (AND across); `intent`/`tags` then feed retrieval
+    # only. Absent `concepts`, `req_terms` IS the flat intent+tags denominator (legacy).
+    concept_groups = _concept_groups(request)
+    flat_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
+    req_terms = (flat_terms | set().union(*concept_groups)) if concept_groups else flat_terms
     item_count = request.get("item_count")
     request_needs_text = bool(request.get("content_structure"))
     type_intent = request_type_intent(request)
+    req_shape = request.get("content_shape")
 
     for item in registry_items:
         reasons: list[str] = []
@@ -306,21 +595,42 @@ def score_request(
         if not eligible:
             reasons.append(f"Rejected status: {item.get('status')}")
 
-        item_terms = _canonicalize(item.get("intent", []) + item.get("tags", []))
-        primary_matched = req_terms & item_terms
-        semantic = 1.0 if not req_terms else len(primary_matched) / len(req_terms)
+        # Copy the artwork bakes in and no slot can edit is genuinely part of what
+        # this item says, so its terms match like any other vocabulary — that is what
+        # lets a deck ABOUT that context reuse the item at full confidence. The gate
+        # below is what stops every OTHER deck from doing so. Only an `immutable`
+        # verdict carries contexts; `clean`/`unresolved` add no vocabulary.
+        immutable = item.get("immutable_text") or {}
+        immutable_contexts = (_immutable_contexts(immutable)
+                              if immutable.get("audit") == "immutable" else [])
+        immutable_terms = set().union(*immutable_contexts) if immutable_contexts else set()
+        item_terms = _canonicalize(item.get("intent", []) + item.get("tags", [])) | immutable_terms
         record = (enrichment or {}).get(item.get("id"))
-        secondary_matched: set[str] = set()
-        if record and req_terms:
-            remaining = req_terms - primary_matched
-            secondary_matched = {t for t in remaining if _norm_token(t) in record["positive"]}
+        primary_matched = req_terms & item_terms
+        if concept_groups is not None:
+            # Required concepts drive the denominator; the flat overlap above is kept
+            # only as retrieval evidence (primary_matches).
+            semantic, concept_report, secondary_matched = _concept_coverage(
+                concept_groups, item_terms, record)
+            retrieval["concepts"] = concept_report
             if secondary_matched:
-                secondary_cov = len(secondary_matched) / len(req_terms)
-                semantic = min(1.0, semantic + min(SECONDARY_WEIGHT * secondary_cov, SECONDARY_CAP))
                 reasons.append(
                     "Broadened lexical match (retrieval index): "
                     + ", ".join(sorted(secondary_matched))
                 )
+        else:
+            semantic = 1.0 if not req_terms else len(primary_matched) / len(req_terms)
+            secondary_matched = set()
+            if record and req_terms:
+                remaining = req_terms - primary_matched
+                secondary_matched = {t for t in remaining if _norm_token(t) in record["positive"]}
+                if secondary_matched:
+                    secondary_cov = len(secondary_matched) / len(req_terms)
+                    semantic = min(1.0, semantic + min(SECONDARY_WEIGHT * secondary_cov, SECONDARY_CAP))
+                    reasons.append(
+                        "Broadened lexical match (retrieval index): "
+                        + ", ".join(sorted(secondary_matched))
+                    )
         if primary_matched:
             retrieval["primary_matches"] = sorted(primary_matched)
         if secondary_matched:
@@ -386,9 +696,10 @@ def score_request(
         if prefer_set and eligible and score > 0:
             # id convention is sun.<set>.<slide>, so segment [1] is always the
             # set regardless of how many dots follow. The +5 is applied here,
-            # BEFORE the decision branch below, so it can promote an item across
-            # the 65 (adapt) / 75 (reuse) boundary. That is intentional but is
-            # surfaced in `reasons` so the operator can see why the tier changed.
+            # BEFORE the decision branch below, so it can lift an item over the
+            # AUTO_REUSE_MIN total. It can never buy a reuse on its own: the
+            # semantic sub-score is untouched, so a set-mate still has to clear
+            # SEMANTIC_CONFIDENCE_FRAC. Surfaced in `reasons` either way.
             item_set = item["id"].split(".")[1] if item["id"].count(".") >= 2 else ""
             if item_set == prefer_set:
                 score = min(100, score + 5)
@@ -404,6 +715,72 @@ def score_request(
             retrieval["type_bias"] = "template-demoted"
             reasons.append(
                 f"Component intent: full-slide template demoted -{TEMPLATE_DEMOTION}")
+
+        # Shape-aware eligibility (T1): a chosen component's intent/tags must be
+        # compatible with the slide's content_shape. Incompatible items stay in
+        # the report for auditability but are marked ineligible so they cannot be
+        # selected — the scorer no longer ranks a generic badge/card into a
+        # comparison/profile/timeline slide on generic keyword overlap alone.
+        item_shape_ok = shape_eligible(
+            req_shape, item.get("intent", []) + item.get("tags", []))
+        # Deterministic shape derivation for auditability (no stored label): which
+        # content_shape(s) this component fits, from its own intent/tags.
+        derived_shapes = derive_content_shape(item.get("intent", []) + item.get("tags", []))
+        if derived_shapes:
+            retrieval["derived_shapes"] = derived_shapes
+        if req_shape and not item_shape_ok:
+            allowed = SHAPE_TYPE_MAP.get(req_shape)
+            if allowed:
+                reasons.append(
+                    f"Shape mismatch: content_shape {req_shape!r} needs one of "
+                    f"{sorted(allowed)}; item intent/tags carry none")
+            else:
+                reasons.append(
+                    f"Shape mismatch: content_shape {req_shape!r} is outside the "
+                    f"shape vocabulary {sorted(SHAPE_TYPE_MAP)}; no component can "
+                    f"lock to it")
+        # Automatic-reuse eligibility (registry `auto_reuse`): an item with a
+        # recorded full-slide QA failure stays published + browseable and keeps its
+        # score for review, but is barred from AUTOMATIC selection.
+        auto = item.get("auto_reuse") or {}
+        if auto.get("eligible") is False:
+            retrieval["auto_reuse"] = {"eligible": False, "reason": auto.get("reason")}
+            reasons.append(f"Not eligible for automatic reuse (review-only): {auto.get('reason')}")
+        # Buildability scope (registry `build_scope`): is this a GENERIC template a
+        # short unrelated brief can fill, or a SOURCE-SPECIFIC slide? Recorded so the
+        # reuse gate and the reviewer both see it; absent == unreviewed == not
+        # auto-buildable (conservative). Source-specific/unreviewed items stay
+        # published + manually selectable.
+        bscope = item.get("build_scope") or {}
+        if bscope:
+            retrieval["build_scope"] = {"mode": bscope.get("mode"), "reason": bscope.get("reason")}
+            if bscope.get("mode") != "generic":
+                reasons.append(f"Not a generic auto-buildable template "
+                               f"[build_scope: {bscope.get('mode')}]: {bscope.get('reason')}")
+        # Immutable-text audit (registry `immutable_text`): does the artwork name a
+        # specific context in words no slot can edit? Record the verdict for THIS
+        # request; `_immutable_text_ok` turns a miss (or an unresolved audit) into a
+        # bar on automatic reuse, while the item stays published, scored and
+        # browseable. An un-audited item records nothing and behaves as before.
+        if immutable:
+            audit = immutable.get("audit")
+            rec = {"audit": audit, "reason": immutable.get("reason")}
+            if audit == "immutable":
+                group = _immutable_context_matched(req_terms, immutable_contexts)
+                rec["contexts"] = [sorted(g) for g in immutable_contexts]
+                rec["matched"] = group is not None
+                if group is not None:
+                    rec["matched_context"] = sorted(group)
+                else:
+                    reasons.append(
+                        f"Fixed source text does not match this deck — it needs a COMPLETE "
+                        f"context, one of {[sorted(g) for g in immutable_contexts]} "
+                        f"(a partial match is not the same subject): {immutable.get('reason')}")
+            elif audit == "unresolved":
+                reasons.append(
+                    f"Immutable-text audit unresolved — not safe for automatic reuse: "
+                    f"{immutable.get('reason')}")
+            retrieval["immutable_text"] = rec
         candidate = {
             "item_id": item["id"],
             "eligible": eligible,
@@ -411,54 +788,401 @@ def score_request(
             "criteria": criteria,
             "reasons": reasons,
         }
+        if req_shape is not None:
+            candidate["shape_eligible"] = item_shape_ok
         if retrieval:
             candidate["retrieval"] = retrieval
         candidates.append(candidate)
 
     candidates.sort(key=lambda item: (item["eligible"], item["score"]), reverse=True)
-    semantic_floor = weights["semantic_intent"] * 0.3
-    ranked_best = next((item for item in candidates if item["eligible"]), None)
-    best = next(
-        (
-            item for item in candidates
-            if item["eligible"] and item["criteria"]["semantic_intent"] >= semantic_floor
-        ),
-        None,
-    )
-    chosen = best or ranked_best
-    score = chosen["score"] if chosen else 0
-    best_semantic = ranked_best["criteria"]["semantic_intent"] if ranked_best else 0
-    if not ranked_best:
-        action, reason = "blocked", "No published export-compatible item was eligible."
-    elif not best:
-        action, reason = "custom-local", f"Semantic intent too low ({best_semantic:.1f} < {semantic_floor:.1f}). No relevant component."
-    elif score >= 75:
-        action, reason = "reuse", "The best published item meets the reuse threshold."
-    elif score >= 65:
-        action, reason = "adapt-local", "Use a slide-local adaptation."
+    semantic_conf = weights["semantic_intent"] * SEMANTIC_CONFIDENCE_FRAC
+
+    def _selectable(cand: dict) -> bool:
+        # Published AND shape-compatible. shape_eligible defaults True when no
+        # content_shape was declared, so shape-less requests behave as before.
+        return cand["eligible"] and cand.get("shape_eligible", True)
+
+    def _reuse_blocker(cand: dict) -> str | None:
+        # Why this candidate cannot be AUTOMATICALLY reused, in the reader's words, or
+        # None when it can. The AUTO-reuse bar: selectable, auto-reuse-eligible (no
+        # recorded full-slide QA failure), context-compatible (no baked-in source copy
+        # about another subject), high TOTAL score, strong SEMANTIC sub-score, and
+        # slot-ready when the slide needs text. Deck-level de-duplication and render
+        # fidelity are enforced later (deck assignment / build gate).
+        #
+        # Returning the reason rather than a bool is what keeps the decision and its
+        # explanation honest: several of these blocks apply to candidates that clear
+        # BOTH confidence bars, so a bool leaves the report guessing — and it used to
+        # guess "score too low", sending the reader to raise a score that could never
+        # unblock it.
+        # Each string is a predicate, so it reads as "Best candidate <id> <blocker>."
+        retrieval = cand.get("retrieval") or {}
+        if not _selectable(cand):
+            return "is not published, or is incompatible with the requested content_shape"
+        if not _auto_reuse_ok(cand):
+            return (f"is not eligible for automatic reuse (review-only): "
+                    f"{(retrieval.get('auto_reuse') or {}).get('reason')}")
+        if not _immutable_text_ok(cand):
+            imm = retrieval.get("immutable_text") or {}
+            return (f"carries fixed source text that does not fit this deck "
+                    f"[audit: {imm.get('audit')}] — {imm.get('reason')}")
+        if not _build_scope_ok(cand):
+            bs = retrieval.get("build_scope") or {}
+            mode = bs.get("mode") or "unreviewed"
+            detail = bs.get("reason") or ("not reviewed as a generic auto-buildable template — "
+                                          "source-specific/high-content items are manual selection only")
+            return (f"is not a generic auto-buildable template [build_scope: {mode}] — {detail}. "
+                    f"A semantic match is not proof this slide's slots can be filled from the brief")
+        if cand["score"] < AUTO_REUSE_MIN or cand["criteria"]["semantic_intent"] < semantic_conf:
+            return (f"scored {cand['score']} (semantic {cand['criteria']['semantic_intent']}) — "
+                    f"below the high-confidence reuse bar (>= {AUTO_REUSE_MIN} total AND "
+                    f">= {round(semantic_conf, 1)} semantic)")
+        if request_needs_text and retrieval.get("slot_count") == 0:
+            return "declares no editable text slots, and this slide needs text"
+        return None
+
+    def _reuse_ready(cand: dict) -> bool:
+        return _reuse_blocker(cand) is None
+
+    any_published = any(item["eligible"] for item in candidates)
+    selectable = [c for c in candidates if _selectable(c)]
+    reuse_ready = [c for c in selectable if _reuse_ready(c)]
+
+    explicit_id = resolve_component_id(request.get("component_id"))
+    unresolved_policy = request.get("unresolved_policy")
+
+    if explicit_id:
+        # Explicit user choice: validate, never silently substitute.
+        decision = _explicit_decision(explicit_id, candidates, req_shape, request_needs_text)
+    elif reuse_ready:
+        # Genuinely high-confidence automatic reuse (top-ranked ready candidate).
+        top = reuse_ready[0]
+        decision = {
+            "action": "reuse", "item_id": top["item_id"], "score": top["score"],
+            "reason": (f"High-confidence match: total {top['score']} >= {AUTO_REUSE_MIN} and "
+                       f"semantic {top['criteria']['semantic_intent']} >= {round(semantic_conf, 1)}."),
+            "extraction_recommended": bool(request.get("recommend_extraction", False)),
+        }
+    elif unresolved_policy == "custom-local":
+        # The ONLY automatic-path to custom-local: the user pre-approved it.
+        top = selectable[0] if selectable else None
+        decision = {
+            "action": "custom-local", "item_id": None,
+            "score": top["score"] if top else 0,
+            "reason": "User explicitly approved custom-local after reviewing the library.",
+            "extraction_recommended": bool(request.get("recommend_extraction", False)),
+            "selected_by": "user",
+        }
+    elif unresolved_policy == "blank":
+        # Explicit user resolution: leave this slide deliberately blank after
+        # library review. Like custom-local it is a user-only outcome (never
+        # automatic), so an unresolved slide the user chose to skip resolves
+        # instead of blocking delivery.
+        top = selectable[0] if selectable else None
+        decision = {
+            "action": "blank", "item_id": None,
+            "score": top["score"] if top else 0,
+            "reason": "User explicitly chose to leave this slide blank after reviewing the library.",
+            "extraction_recommended": bool(request.get("recommend_extraction", False)),
+            "selected_by": "user",
+        }
     else:
-        action, reason = "custom-local", "No strong match (score < 65). Create a slide-local custom structure."
+        # Unresolved: not confident enough, and the user has not chosen. Build
+        # nothing; present the slide for library review.
+        decision = _needs_component_decision(
+            request, selectable, any_published, req_shape, _reuse_blocker)
 
-    # Below the adapt-local floor (65) there is no strong match, so recommend
-    # extracting/authoring a new component rather than forcing a weak reuse.
-    low_score = bool(best) and score < 65
-    no_semantic_match = bool(ranked_best) and not best
-    decision = {
-        "action": action,
-        "item_id": chosen["item_id"] if chosen else None,
-        "score": score,
-        "reason": reason,
-        "extraction_recommended": (
-            bool(request.get("recommend_extraction", False)) or low_score or no_semantic_match
-        ),
-    }
-    top_candidates = candidates[:top_n]
-    if chosen and all(item["item_id"] != chosen["item_id"] for item in top_candidates):
-        top_candidates.append(chosen)
-    return decision, top_candidates
+    # top_n=None returns the FULL scored pool — the batch path needs it so deck
+    # allocation can reach a valid candidate ranked below the report cut-off.
+    if top_n is None:
+        return decision, candidates
+    return decision, report_candidates(candidates, decision, weights, top_n)
 
 
-def main() -> int:
+def report_candidates(candidates: list[dict], decision: dict, weights: dict[str, int],
+                      top_n: int) -> list[dict]:
+    """Compact, user-visible candidate slice: the ranked top-N PLUS the selected
+    item when it ranks below the cut-off (deck de-dup can pick a lower-ranked
+    candidate), plus the best safe candidate for an unresolved slide. `top_n` is a
+    presentation limit only — it never constrains selection or deck allocation."""
+    shown = candidates[:top_n]
+    chosen_id = decision.get("item_id")
+    if chosen_id and all(item["item_id"] != chosen_id for item in shown):
+        chosen = next((c for c in candidates if c["item_id"] == chosen_id), None)
+        if chosen:
+            shown = shown + [chosen]
+    elif decision.get("action") == "needs_component":
+        # Surface the best SAFE (selectable + above the semantic floor) candidate for
+        # the user to consider, even when floor-failing lures out-rank it by total.
+        semantic_floor = weights["semantic_intent"] * 0.3
+        relevant = next((c for c in candidates
+                         if c.get("eligible") and c.get("shape_eligible", True)
+                         and (c.get("criteria") or {}).get("semantic_intent", 0) >= semantic_floor),
+                        None)
+        if relevant and all(c["item_id"] != relevant["item_id"] for c in shown):
+            shown = shown + [relevant]
+    return shown
+
+
+_BATCH_TOP_FIELDS = {"job_id", "brief", "note", "slides"}
+_SLIDE_REQUEST_FIELDS = {
+    "request_id", "intent", "tags", "content_structure", "content_shape", "item_count",
+    "density", "brand", "required_exports", "query", "prefer_type", "recommend_extraction",
+    "component_id", "allow_component_reuse", "unresolved_policy", "concepts",
+}
+_STRING_LIST_FIELDS = ("intent", "tags", "content_structure", "required_exports")
+# Optional string-or-null fields. `content_shape` is the one that mattered: a list
+# passed validation and then raised `TypeError: unhashable type: 'list'` deep inside
+# _common.shape_eligible(), after scoring had already started.
+_NULLABLE_TEXT_FIELDS = ("content_shape", "density", "brand", "prefer_type")
+_TEXT_FIELDS = ("query",)          # string, and not nullable (mirrors the schema)
+_TOP_TEXT_FIELDS = ("brief", "note")
+
+
+def validate_batch_request(batch, require_concepts: bool = False) -> list[str]:
+    """Plain-language validation of <run>/analysis/visual-requests.json — the artifact
+    a user edits to submit per-slide selections. Returns [] when valid.
+
+    `require_concepts` (the normal new-run contract, `--require-concepts`) makes a
+    non-empty `concepts` list mandatory on every slide, so a fresh run always scores
+    on concept groups rather than the legacy flat intent+tags dilution. It is left
+    OFF by default as the deliberate, documented compatibility path for an old or
+    resumed run whose requests predate concepts.
+
+    This is a hand-written mirror of schemas/visual-requests.schema.json, not a
+    JSON Schema evaluation: `jsonschema` is not a declared dependency of this repo
+    (there is no Python dependency manifest at all), no script imports it, and it is
+    not in the project venv these scripts pin. The two are held in lockstep by
+    test_gates.test_batch_request_validator_matches_schema_field_by_field, which
+    reads the schema and proves every field it declares is enforced here — a
+    property that only the schema knows about must never reach the scorer. Two
+    checks are deliberately code-only: duplicate `request_id` (JSON Schema cannot
+    express it cleanly) and blank-only strings (stricter than `minLength: 1`)."""
+    if not isinstance(batch, dict):
+        return ["visual-requests must be a JSON object with 'job_id' and 'slides'"]
+    errors: list[str] = []
+    unknown = set(batch) - _BATCH_TOP_FIELDS
+    if unknown:
+        errors.append(f"unknown top-level key(s) {sorted(unknown)}; allowed: "
+                      f"{sorted(_BATCH_TOP_FIELDS)}")
+    if not isinstance(batch.get("job_id"), str) or not batch["job_id"].strip():
+        errors.append("job_id is required and must be a non-empty string")
+    for key in _TOP_TEXT_FIELDS:
+        if key in batch and not isinstance(batch[key], str):
+            errors.append(f"{key} must be text, got {batch[key]!r}")
+    slides = batch.get("slides")
+    if not isinstance(slides, list) or not slides:
+        errors.append("slides is required and must be a non-empty array")
+        return errors
+
+    seen: set[str] = set()
+    for i, s in enumerate(slides):
+        p = f"slides[{i}]"
+        if not isinstance(s, dict):
+            errors.append(f"{p} must be an object (one per slide)")
+            continue
+        unk = set(s) - _SLIDE_REQUEST_FIELDS
+        if unk:
+            errors.append(f"{p}: unknown field(s) {sorted(unk)} — check the spelling; "
+                          f"allowed: {sorted(_SLIDE_REQUEST_FIELDS)}")
+        rid = s.get("request_id")
+        if not isinstance(rid, str) or not rid.strip():
+            errors.append(f"{p}: request_id is required and must be a non-empty string")
+        elif rid in seen:
+            errors.append(f"{p}: duplicate request_id {rid!r}; each slide needs its own")
+        else:
+            seen.add(rid)
+        cid = s.get("component_id")
+        if cid is not None and not isinstance(cid, str):
+            errors.append(f"{p}: component_id must be a string (a stable published id, or "
+                          f"the catalog 'Copy prompt' text) or null")
+        if "allow_component_reuse" in s and not isinstance(s["allow_component_reuse"], bool):
+            errors.append(f"{p}: allow_component_reuse must be true or false, got "
+                          f"{s['allow_component_reuse']!r}")
+        pol = s.get("unresolved_policy")
+        if pol is not None and pol not in ("custom-local", "blank"):
+            errors.append(f"{p}: unresolved_policy must be \"custom-local\", \"blank\", or omitted, "
+                          f"got {pol!r} — resolving an unresolved slide (custom slide or an "
+                          f"explicit blank) needs explicit user approval")
+        if "recommend_extraction" in s and not isinstance(s["recommend_extraction"], bool):
+            errors.append(f"{p}: recommend_extraction must be true or false, got "
+                          f"{s['recommend_extraction']!r}")
+        for key in _STRING_LIST_FIELDS:
+            val = s.get(key)
+            if val is not None and (not isinstance(val, list)
+                                    or any(not isinstance(x, str) for x in val)):
+                errors.append(f"{p}: {key} must be a list of strings")
+        for key in _NULLABLE_TEXT_FIELDS:
+            if s.get(key) is not None and not isinstance(s[key], str):
+                errors.append(f"{p}: {key} must be one piece of text (or omitted), got "
+                              f"{s[key]!r}")
+        for key in _TEXT_FIELDS:
+            if key in s and not isinstance(s[key], str):
+                errors.append(f"{p}: {key} must be text, got {s[key]!r}")
+        n = s.get("item_count")
+        if n is not None and (isinstance(n, bool) or not isinstance(n, int)):
+            errors.append(f"{p}: item_count must be a whole number")
+        concepts = s.get("concepts")
+        if require_concepts and not (isinstance(concepts, list) and concepts):
+            errors.append(f"{p}: concepts is required (--require-concepts): each slide must "
+                          f"declare >= 1 semantic concept group derived from its purpose/shape, "
+                          f"so scoring uses concept coverage, not the legacy flat intent+tags path")
+        if concepts is not None:
+            if not isinstance(concepts, list):
+                errors.append(f"{p}: concepts must be a list of concept groups "
+                              f"(each a non-empty list of concept terms)")
+            else:
+                for gi, group in enumerate(concepts):
+                    if (not isinstance(group, list) or not group
+                            or any(not isinstance(t, str) or not t.strip() for t in group)):
+                        errors.append(f"{p}: concepts[{gi}] must be a non-empty list of "
+                                      f"non-empty concept terms (OR alternatives for one "
+                                      f"required concept)")
+    return errors
+
+
+def _reuse_ready_ids(candidates: list[dict], request_needs_text: bool,
+                     semantic_conf: float) -> list[str]:
+    """Ranked ids of the candidates that clear the auto-reuse bar (same gate as
+    score_request._reuse_ready), for deck-level de-duplication."""
+    out: list[str] = []
+    for c in candidates:
+        if (c.get("eligible") and c.get("shape_eligible", True) and _auto_reuse_ok(c)
+                and _immutable_text_ok(c)
+                and c.get("score", 0) >= AUTO_REUSE_MIN
+                and (c.get("criteria") or {}).get("semantic_intent", 0) >= semantic_conf
+                and not (request_needs_text and (c.get("retrieval") or {}).get("slot_count") == 0)):
+            out.append(c["item_id"])
+    return out
+
+
+def assign_deck_components(slide_results: list[dict], requests_by_id: dict,
+                          semantic_conf: float) -> list[dict]:
+    """Deck-aware de-duplication. A published component reserved by one slide is
+    UNAVAILABLE to later AUTOMATIC selection. Explicit user selections reserve
+    first; automatic reuse is then resolved most-constrained-first (fewest ready
+    candidates) so a generic slide cannot consume the only component a constrained
+    slide needs. Duplicate-only automatic reuse becomes needs_component unless the
+    slide carries `allow_component_reuse: true` (recorded + surfaced)."""
+    used: dict[str, str] = {}  # item_id -> request_id that owns it
+
+    def _reserve(dec: dict, rid: str, req: dict, iid: str) -> bool:
+        if iid in used and used[iid] != rid:
+            if req.get("allow_component_reuse"):
+                dec["allow_component_reuse"] = True
+                dec["reason"] = (dec.get("reason", "")
+                                 + f" [reuse override: also assigned to slide {used[iid]!r}]")
+                return True
+            return False
+        used.setdefault(iid, rid)
+        return True
+
+    def _dup_needs(s: dict, ready: list[str]) -> None:
+        rid = s["request_id"]
+        owners = sorted({used[i] for i in ready if i in used})
+        req = requests_by_id.get(rid, {})
+        s["decision"] = {
+            "action": "needs_component", "item_id": None,
+            "score": s["decision"].get("score", 0),
+            "reason": (f"All high-confidence candidates are already assigned to earlier "
+                       f"slide(s) {owners}; no unused component fits this deck."),
+            "extraction_recommended": True,
+            "suggested_search": _suggested_search(req),
+            "next_action": ("Set `allow_component_reuse: true` on this slide to reuse an "
+                            "assigned component, pick a different published component, or set "
+                            "`unresolved_policy: \"custom-local\"`."),
+        }
+
+    # Pass 1: explicit user reuse selections reserve their exact component.
+    for s in slide_results:
+        dec = s["decision"]
+        if dec.get("action") == "reuse" and dec.get("selected_by") == "user":
+            rid = s["request_id"]
+            if not _reserve(dec, rid, requests_by_id.get(rid, {}), dec["item_id"]):
+                _dup_needs(s, [dec["item_id"]])
+
+    # Pass 2: automatic reuse, most-constrained-first (stable within equal counts).
+    auto = [s for s in slide_results
+            if s["decision"].get("action") == "reuse"
+            and s["decision"].get("selected_by") != "user"]
+    auto.sort(key=lambda s: len(_reuse_ready_ids(
+        s["candidates"], bool(requests_by_id.get(s["request_id"], {}).get("content_structure")),
+        semantic_conf)))
+    for s in auto:
+        dec = s["decision"]
+        rid = s["request_id"]
+        req = requests_by_id.get(rid, {})
+        ready = _reuse_ready_ids(s["candidates"], bool(req.get("content_structure")), semantic_conf)
+        if req.get("allow_component_reuse"):
+            _reserve(dec, rid, req, dec["item_id"])
+            continue
+        pick = next((iid for iid in ready if iid not in used), None)
+        if pick is None:
+            _dup_needs(s, ready)
+        elif pick != dec.get("item_id"):
+            cand = next(c for c in s["candidates"] if c["item_id"] == pick)
+            dec["item_id"] = pick
+            dec["score"] = cand["score"]
+            dec["reason"] = (f"High-confidence match (deck de-dup: earlier top pick was taken; "
+                             f"using next unused ready candidate {pick}): total {cand['score']}.")
+            used[pick] = rid
+        else:
+            used[pick] = rid
+    return slide_results
+
+
+def scoring_items(registry_path: str) -> list[dict]:
+    """The items to score, with the immutable-text audit gate applied to every one.
+
+    Two shapes reach this CLI and BOTH must be gated, or the safety rule would depend
+    on which file the caller happened to pass:
+
+      * the canonical compact projection (the default, and what the workflow runs) is
+        GENERATED, so it can be stale — an artifact can change after it was built,
+        leaving a `clean` verdict on disk that no longer describes the artwork. It
+        cannot be re-derived from itself, so freshness is verified against the full
+        registry and the artifact bytes, and stale input is REFUSED rather than scored.
+      * a full registry (`--registry .../visual-library.json`) carries `paths`, so it
+        is projected through the very same `gate_immutable_text` IN MEMORY. Nothing is
+        written: scoring never mutates the registry.
+
+    Any other input (a synthetic or hand-built compact, as the tests use) has no
+    artifacts to be stale against and is scored as declared — `_immutable_text_ok`
+    still fails `unresolved` closed. The pre-build fidelity gate re-checks every
+    SELECTED item against the registry on disk, so that path cannot ship stale
+    evidence either.
+
+    Raises SystemExit with a remediation message rather than scoring on stale data."""
+    import build_registry
+
+    registry = load_json(registry_path)
+    items = registry.get("items", [])
+    # The canonical GENERATED compact is verified fresh FIRST — before the
+    # full-registry re-projection below — and returned from here. It is the default
+    # the workflow scores and cannot be re-derived from itself, so a stale `clean`
+    # verdict must be REFUSED, never scored. Checking freshness ahead of the
+    # `any("paths")` branch closes the bypass where a compact that carried a stray
+    # `paths` key would be re-projected in memory (masking staleness) instead.
+    if Path(registry_path).resolve() == build_registry.COMPACT.resolve():
+        stale = build_registry.generated_projection_staleness()
+        if stale:
+            raise SystemExit(
+                "Refusing to score: the generated projections no longer match the "
+                "registry and the artifacts on disk, so their immutable-text audit "
+                "verdicts cannot be trusted.\n  "
+                + "\n  ".join(stale)
+                + f"\n\nRegenerate them, then re-run:\n  {build_registry.REFRESH_HINT}\n"
+                "Any item whose artwork changed will then project as "
+                "immutable_text.audit=unresolved and stop auto-reusing until "
+                "slide-system/scripts/audit_immutable_text.py has re-audited it."
+            )
+        return items
+    if any("paths" in item for item in items):
+        return build_registry.project_compact(items)["items"]
+    return items
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     source_group = parser.add_mutually_exclusive_group(required=True)
     source_group.add_argument("--request", default=None)
@@ -476,7 +1200,8 @@ def main() -> int:
     parser.add_argument(
         "--prefer-set",
         default=None,
-        help="Template-set prefix (e.g. interview-workshop-sunriser). Same-set items get a +5 bonus.",
+        help="Template-set slug: the `<set>` segment of a sun.<set>.<slide> id. "
+             "Same-set items get a +5 bonus.",
     )
     parser.add_argument(
         "--top-n",
@@ -485,19 +1210,25 @@ def main() -> int:
         help="Number of top candidates to include in output (default: 5).",
     )
     parser.add_argument(
+        "--require-concepts",
+        action="store_true",
+        help="Normal new-run contract: every slide must declare a non-empty `concepts` list "
+             "(concept-group scoring). Omit only for a legacy/resumed run whose requests "
+             "predate concepts (documented compatibility path).",
+    )
+    parser.add_argument(
         "--retrieval-index",
         default=str(DEFAULT_RETRIEVAL_INDEX),
         help="Published-only retrieval projection (JSONL) used to broaden "
              "lexical matching. Pass 'none' to disable enrichment.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    registry = load_json(args.registry)
     weights = weights_for(args.item_type)
 
     registry_items = [
         item
-        for item in registry.get("items", [])
+        for item in scoring_items(args.registry)
         if args.item_type is None or item.get("type") == args.item_type
     ]
 
@@ -530,11 +1261,32 @@ def main() -> int:
 
     else:
         batch = load_json(args.batch_request)
+        # Validate the user-editable selection artifact BEFORE any scoring, so a typo
+        # in component_id / allow_component_reuse / unresolved_policy fails loudly
+        # instead of being silently ignored.
+        batch_errors = validate_batch_request(batch, require_concepts=args.require_concepts)
+        if batch_errors:
+            print(f"ERROR: invalid visual-requests batch ({args.batch_request}); "
+                  f"see slide-system/schemas/visual-requests.schema.json", file=sys.stderr)
+            for e in batch_errors:
+                print(f"  - {e}", file=sys.stderr)
+            return 1
         job_id = batch.get("job_id", "batch")
+        requests_by_id = {r.get("request_id", ""): r for r in batch.get("slides", [])}
         slide_results = []
         for slide_req in batch.get("slides", []):
             filtered = _prefilter(slide_req, registry_items, index)
-            decision, candidates = score_request(slide_req, filtered, weights, args.prefer_set, args.top_n, enrichment)
+            # An explicit user component choice must be scored even if the prefilter
+            # dropped it (the user asked for this exact item on purpose).
+            explicit = resolve_component_id(slide_req.get("component_id"))
+            if explicit and not any(it.get("id") == explicit for it in filtered):
+                match = next((it for it in registry_items if it.get("id") == explicit), None)
+                if match:
+                    filtered = filtered + [match]
+            # Score with the FULL pool (top_n=None): deck allocation must be able to
+            # reach a valid unused candidate ranked below the report cut-off.
+            decision, candidates = score_request(slide_req, filtered, weights, args.prefer_set,
+                                                 None, enrichment)
             slide_results.append(
                 {
                     "request_id": slide_req.get("request_id", ""),
@@ -542,7 +1294,18 @@ def main() -> int:
                     "candidates": candidates,
                 }
             )
-            print(f"{slide_req.get('request_id', '?')}: {decision['action']}: {decision['item_id']} ({decision['score']})")
+        # Deck-aware de-duplication (no component auto-reused on two slides), over
+        # the full pool.
+        assign_deck_components(slide_results, requests_by_id,
+                               weights["semantic_intent"] * SEMANTIC_CONFIDENCE_FRAC)
+        # Only now compact each slide's candidates for the public report; the
+        # selected item is always kept even if it ranks below top-N.
+        for s in slide_results:
+            s["candidates"] = report_candidates(s["candidates"], s["decision"], weights,
+                                                args.top_n)
+        for s in slide_results:
+            d = s["decision"]
+            print(f"{s['request_id']}: {d['action']}: {d.get('item_id')} ({d.get('score')})")
         report = {
             "job_id": job_id,
             "generated_at": now_iso(),

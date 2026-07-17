@@ -17,6 +17,8 @@ Run directly (`python3 test_gates.py`) or under pytest. No network, no install.
 from __future__ import annotations
 
 import json
+import re
+import shutil
 import sys
 import tempfile
 import importlib.util
@@ -28,7 +30,10 @@ sys.path.insert(0, str(SCRIPTS))
 
 import cleanup_run
 import compare_renders
+import delivery_gate
 import export_pptx
+import build_hybrid_pptx as bhp
+import validate_export_objects as veo
 import score_visual_items as svi
 import validate_selection_report as vsr
 import scaffold_slide_from_component as scaffold
@@ -37,9 +42,52 @@ import read_text_slots
 import _common
 
 REGISTRY = SCRIPTS.parent / "registries" / "visual-library.json"
+QA_LOOP = SCRIPTS / "run_claude_codex_qa_loop.ps1"
 
 # A real template item with positioned slots (verified to have .slot divs).
 ITEM_WITH_SLOTS = "sun.interview-workshop-sunriser.04-mindset"
+
+
+# --------------------------------------------------------------------------- #
+# run_claude_codex_qa_loop — automation must plan by default and refuse a
+# dirty baseline unless the operator deliberately opts in.
+# --------------------------------------------------------------------------- #
+def test_qa_loop_plan_is_dry_run_and_explains_dirty_baseline_guard() -> None:
+    assert QA_LOOP.exists(), "the bounded Claude/Codex QA runner must exist"
+    with tempfile.TemporaryDirectory() as tmp:
+        prompt = Path(tmp) / "task.md"
+        prompt.write_text("Review-only smoke task.", encoding="utf-8")
+        result = subprocess.run(
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(QA_LOOP),
+             "-PromptFile", str(prompt), "-Plan"],
+            cwd=SCRIPTS.parent.parent,
+            text=True,
+            capture_output=True,
+            timeout=30,
+        )
+    assert result.returncode == 0, result.stderr
+    assert "PLAN ONLY" in result.stdout
+    assert "-AllowDirtyBaseline" in result.stdout
+    assert "claude -p" in result.stdout and "codex exec" in result.stdout
+
+
+def test_qa_loop_accepts_csv_scope_before_dirty_baseline_guard() -> None:
+    """`powershell -File` receives a CSV scope as one argument on Windows."""
+    with tempfile.TemporaryDirectory() as tmp:
+        prompt = Path(tmp) / "task.md"
+        prompt.write_text("Review-only smoke task.", encoding="utf-8")
+        result = subprocess.run(
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(QA_LOOP),
+             "-Run", "-PromptFile", str(prompt),
+             "-AllowedPath", "slide-system/scripts,docs/logs"],
+            cwd=SCRIPTS.parent.parent,
+            text=True,
+            capture_output=True,
+            timeout=30,
+        )
+    assert result.returncode != 0, "the test worktree is intentionally dirty"
+    assert "Worktree is already dirty" in (result.stdout + result.stderr)
+    assert "positional parameter" not in (result.stdout + result.stderr).lower()
 
 
 # --------------------------------------------------------------------------- #
@@ -110,6 +158,565 @@ def test_export_reuses_only_complete_fingerprint_bound_parity_reports() -> None:
         missing = parity / "slide-02" / "tier2" / "report.json"
         missing.unlink()
         assert not export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+
+
+# --------------------------------------------------------------------------- #
+# build_hybrid_pptx — layered geometry must reject an un-paginated capture
+#
+# capture-slides.js records each slide's capture-root bounding rect. A deck that
+# paginates one slide into the viewport (deck-stage, or `.slide.active` driven by
+# --showJs/--selector) reports every slide's canvas == the declared capture
+# viewport. A deck whose slides are all laid out at once, exported without
+# per-slide navigation, reports the WHOLE-DECK scroll height for every slide —
+# and the layered build would then derive a sliver slide size and stack the
+# entire deck's text on every slide, while the first-frame-vs-first-frame parity
+# gate still passes. The build must fail closed on that signature.
+# --------------------------------------------------------------------------- #
+def _layered_manifest(canvas_h_per_slide: float, n: int = 3, declared_h: float = 1080):
+    return {
+        "manifest_version": 2, "mode": "layered",
+        "canvasW": 1920, "canvasH": declared_h,
+        "slides": [{"slide": i + 1, "canvasW": 1920, "canvasH": canvas_h_per_slide}
+                   for i in range(n)],
+    }
+
+
+def test_layered_geometry_accepts_paginated_single_slide_canvas() -> None:
+    w, h = bhp.resolve_layered_geometry(_layered_manifest(1080))
+    assert (round(w, 3), round(h, 3)) == (13.333, 7.5)
+
+
+def test_layered_geometry_rejects_unpaginated_whole_deck_capture() -> None:
+    # 3 slides stacked (each 1080px + 24px margin) -> the root spans 3264px, the
+    # exact signature of a deck captured with no per-slide navigation.
+    bad = _layered_manifest(3 * 1080 + 2 * 24)
+    try:
+        bhp.resolve_layered_geometry(bad)
+    except SystemExit as exc:
+        assert "paginat" in str(exc).lower() or "viewport" in str(exc).lower()
+    else:
+        raise AssertionError("resolve_layered_geometry must fail closed on a whole-deck "
+                             "capture instead of returning a (sliver) slide size")
+
+
+def test_layered_geometry_tolerates_subpixel_canvas_rounding() -> None:
+    # A 1px scrollbar / sub-pixel rounding on a genuinely paginated slide must
+    # NOT trip the guard.
+    w, h = bhp.resolve_layered_geometry(_layered_manifest(1081))
+    assert (round(w, 3), round(h, 3)) == (13.333, 7.5)
+
+
+# --------------------------------------------------------------------------- #
+# build_hybrid_pptx — navigation backstop: a paginated deck (correct canvas)
+# captured WITHOUT navigation re-shoots slide 1 every frame, so canvasH looks
+# fine but every slide is identical. The geometry guard can't see that; this
+# backstop fails closed when EVERY slide shares one background AND identical text.
+# --------------------------------------------------------------------------- #
+def _captured_manifest(slides):
+    return {"manifest_version": 2, "mode": "layered", "canvasW": 1920, "canvasH": 1080,
+            "slides": slides}
+
+
+def test_build_backstop_rejects_repeated_first_slide_capture() -> None:
+    # 9 frames, one background sha, one identical text list == slide-1 repeated.
+    slides = [{"slide": i + 1, "canvasW": 1920, "canvasH": 1080,
+               "base": {"sha256": "SAME"}, "text": [{"text": "© SUN.STUDIO"}]}
+              for i in range(9)]
+    try:
+        bhp.assert_capture_navigated(_captured_manifest(slides))
+    except SystemExit as exc:
+        assert "navigation" in str(exc).lower() or "repeated" in str(exc).lower()
+    else:
+        raise AssertionError("must fail closed when every captured frame is slide 1")
+
+
+def test_build_backstop_accepts_shared_solid_bg_with_distinct_text() -> None:
+    # A legitimate deck may share one solid brand background while each slide
+    # carries its own title — distinct text proves navigation worked. (This is a
+    # navigation backstop only; the DELIVERY contract for unresolved jobs is
+    # enforced by delivery_gate, tested below.)
+    slides = [{"slide": i + 1, "canvasW": 1920, "canvasH": 1080,
+               "base": {"sha256": "SOLID"},
+               "text": [{"text": "Agenda"}, {"text": f"slide {i} title"}]}
+              for i in range(8)]
+    bhp.assert_capture_navigated(_captured_manifest(slides))  # must not raise
+
+
+# --------------------------------------------------------------------------- #
+# delivery_gate — the unresolved-delivery contract (replaces the retired
+# "a needs_component placeholder deck is a valid deliverable" expectation).
+# A job with ANY needs_component slide is UNRESOLVED and must NOT produce a
+# final deck/PPTX/PDF; the internal diagnostic reason never leaks to end-user
+# output; explicit blank / explicit component follow their own paths; a fully
+# resolved reuse job is deliverable.
+# --------------------------------------------------------------------------- #
+def _dec_slide(rid: str, decision: dict) -> dict:
+    return {"request_id": rid, "decision": decision, "candidates": []}
+
+
+def _batch_report(slides: list[dict]) -> dict:
+    return {"job_id": "j", "generated_by": "score_visual_items.py", "slides": slides}
+
+
+# A reuse decision must name a component that is PUBLISHED in the full registry.
+# Tests inject the published-id set (or a temp registry file, see
+# test_delivery_gate_rejects_reuse_of_unpublished_id) so delivery_gate.py never
+# hardcodes a real component id.
+_FIXTURE_PUBLISHED = frozenset({
+    "sun.component.x", "sun.component.auto", "sun.component.user",
+})
+
+
+def test_delivery_gate_blocks_unresolved_needs_component_job() -> None:
+    # Product contract: one needs_component slide makes the whole job UNRESOLVED,
+    # so no final deliverable is produced. The styled diagnostic placeholder deck
+    # is NOT valid.
+    report = _batch_report([
+        _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.x", "score": 90}),
+        _dec_slide("s2", {"action": "needs_component", "item_id": None, "score": 60,
+                          "reason": "INTERNAL: no confident published match; audit unresolved.",
+                          "suggested_search": ["role cards"],
+                          "next_action": "Pick a component in the catalog."}),
+    ])
+    state = delivery_gate.delivery_state(report, _FIXTURE_PUBLISHED)
+    assert state["deliverable"] is False
+    assert state["status"] == "awaiting_component_selection"
+    assert [u["request_id"] for u in state["unresolved"]] == ["s2"]
+    try:
+        delivery_gate.assert_deliverable(report, _FIXTURE_PUBLISHED)
+    except SystemExit as exc:
+        assert "UNRESOLVED" in str(exc), exc
+    else:
+        raise AssertionError("an unresolved job must not be deliverable")
+
+
+def test_delivery_gate_never_leaks_internal_reason_to_user_output() -> None:
+    # The internal diagnostic `reason` stays only in selection-report.json (catalog
+    # input). It must never appear in anything end-user / deliverable-facing: the
+    # gate's user-facing state and its block message carry only the catalog-safe
+    # pointer (suggested_search / next_action / shortlist), never `reason`.
+    secret = "INTERNAL: audit unresolved for sun.component.secret"
+    report = _batch_report([
+        _dec_slide("s1", {"action": "needs_component", "item_id": None, "score": 55,
+                          "reason": secret, "suggested_search": ["timeline"],
+                          "next_action": "Preview timeline components."}),
+    ])
+    state = delivery_gate.delivery_state(report)
+    assert secret not in json.dumps(state)
+    try:
+        delivery_gate.assert_deliverable(report)
+    except SystemExit as exc:
+        assert secret not in str(exc), exc
+    else:
+        raise AssertionError("must block")
+
+
+def test_delivery_gate_passes_fully_resolved_reuse_blank_custom() -> None:
+    # The three explicit resolution paths make a job deliverable.
+    report = _batch_report([
+        _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.x", "score": 90,
+                          "selected_by": "user"}),
+        _dec_slide("s2", {"action": "blank", "item_id": None, "score": 0,
+                          "selected_by": "user", "reason": "User chose blank."}),
+        _dec_slide("s3", {"action": "custom-local", "item_id": None, "score": 40,
+                          "selected_by": "user", "reason": "User approved custom-local."}),
+    ])
+    state = delivery_gate.delivery_state(report, _FIXTURE_PUBLISHED)
+    assert state["deliverable"] is True and state["status"] == "complete", state
+    delivery_gate.assert_deliverable(report, _FIXTURE_PUBLISHED)  # must not raise
+
+
+def test_delivery_gate_fails_closed_on_non_explicit_or_malformed_actions() -> None:
+    # A hand-edited report must not promote an unresolved job to a deliverable.
+    # custom-local / blank are user-only; reuse must name a usable component id.
+    # Each of these carries a terminal action string but fails the provenance
+    # contract, so the gate treats it as unknown and blocks delivery.
+    for label, dec in [
+        # custom-local without selected_by: user
+        ("custom-local-no-user", {"action": "custom-local", "item_id": None, "score": 40}),
+        # blank without explicit user selection
+        ("blank-no-user", {"action": "blank", "item_id": None, "score": 0}),
+        # reuse without a usable item_id (None / empty / non-string)
+        ("reuse-null-id", {"action": "reuse", "item_id": None, "score": 90}),
+        ("reuse-empty-id", {"action": "reuse", "item_id": "  ", "score": 90}),
+        ("reuse-missing-id", {"action": "reuse", "score": 90}),
+    ]:
+        report = _batch_report([_dec_slide("s1", dec)])
+        state = delivery_gate.delivery_state(report)
+        assert state["deliverable"] is False, (label, state)
+        assert state["unknown_actions"] == ["s1"], (label, state)
+        try:
+            delivery_gate.assert_deliverable(report)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(f"{label}: a non-explicit/malformed action must block delivery")
+
+
+def test_delivery_gate_passes_automatic_and_explicit_user_reuse() -> None:
+    # Legitimate scorer-generated automatic reuse (no selected_by, real item_id)
+    # and explicit user reuse (selected_by: user, real item_id) both stay
+    # deliverable — the fail-closed fix must not regress valid reuse.
+    report = _batch_report([
+        _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.auto", "score": 92}),
+        _dec_slide("s2", {"action": "reuse", "item_id": "sun.component.user", "score": 88,
+                          "selected_by": "user"}),
+    ])
+    state = delivery_gate.delivery_state(report, _FIXTURE_PUBLISHED)
+    assert state["deliverable"] is True and state["status"] == "complete", state
+    delivery_gate.assert_deliverable(report, _FIXTURE_PUBLISHED)  # must not raise
+
+
+def test_delivery_gate_rejects_reuse_of_unpublished_id() -> None:
+    # A reuse decision that names a non-empty id which is NOT published in the
+    # full registry (an arbitrary / staging / unpublished id) must fail closed —
+    # a non-empty id alone is not enough. Valid published reuse (auto scorer and
+    # explicit user) still passes. Driven by a TEMP fixture registry so product
+    # code never hardcodes a component id.
+    with tempfile.TemporaryDirectory() as tmpd:
+        registry = Path(tmpd) / "visual-library.json"
+        registry.write_text(json.dumps({"items": [
+            {"id": "sun.component.published-auto", "status": "published"},
+            {"id": "sun.component.published-user", "status": "published"},
+            {"id": "sun.component.staging", "status": "candidate"},  # not published
+        ]}), encoding="utf-8")
+        published = delivery_gate.published_item_ids(registry)
+        assert published == frozenset(
+            {"sun.component.published-auto", "sun.component.published-user"}), published
+
+        # bogus (absent), staging (present but unpublished) → both unknown/blocked
+        for bad in ("sun.component.does-not-exist", "sun.component.staging"):
+            report = _batch_report([
+                _dec_slide("s1", {"action": "reuse", "item_id": bad, "score": 95})])
+            state = delivery_gate.delivery_state(report, published)
+            assert state["deliverable"] is False, (bad, state)
+            assert state["unknown_actions"] == ["s1"], (bad, state)
+
+        # valid published reuse (automatic scorer + explicit user) still delivers
+        ok = _batch_report([
+            _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.published-auto",
+                              "score": 92}),
+            _dec_slide("s2", {"action": "reuse", "item_id": "sun.component.published-user",
+                              "score": 88, "selected_by": "user"}),
+        ])
+        state = delivery_gate.delivery_state(ok, published)
+        assert state["deliverable"] is True and state["status"] == "complete", state
+        delivery_gate.assert_deliverable(ok, published)  # must not raise
+
+
+def test_export_pptx_delivery_gate_blocks_unresolved_run_before_build() -> None:
+    # export_pptx runs the delivery gate before capture/build: an unresolved run's
+    # selection-report next to deck.html fails closed, so no PPTX is produced.
+    with tempfile.TemporaryDirectory() as tmpd:
+        run = Path(tmpd)
+        (run / "analysis").mkdir()
+        (run / "deck.html").write_text("<html></html>", encoding="utf-8")
+        (run / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "needs_component", "item_id": None,
+                                  "score": 50, "reason": "unresolved"})])),
+            encoding="utf-8")
+        try:
+            delivery_gate.enforce_deck_deliverable(run / "deck.html")
+        except SystemExit as exc:
+            assert "delivery blocked" in str(exc), exc
+        else:
+            raise AssertionError("export must refuse an unresolved run")
+        # A resolved run passes the same guard.
+        (run / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.x",
+                                  "score": 90, "selected_by": "user"})])),
+            encoding="utf-8")
+        assert delivery_gate.enforce_deck_deliverable(
+            run / "deck.html", _FIXTURE_PUBLISHED)["deliverable"]
+
+
+def test_export_pptx_main_runs_delivery_gate_before_capture() -> None:
+    # P2 integration proof: drive export_pptx.main() far enough to prove the
+    # delivery guard fires BEFORE any capture/build. An unresolved run must raise
+    # SystemExit from the gate — no node/Playwright/LibreOffice, and no .pptx.
+    with tempfile.TemporaryDirectory() as tmpd:
+        run = Path(tmpd)
+        (run / "analysis").mkdir()
+        (run / "deck.html").write_text("<html></html>", encoding="utf-8")
+        (run / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "needs_component", "item_id": None,
+                                  "score": 50, "reason": "unresolved"})])),
+            encoding="utf-8")
+        out_dir = run / "work"
+        output = run / "deck.pptx"
+        argv = ["export_pptx.py", "--html", str(run / "deck.html"),
+                "--slides", "1", "--out-dir", str(out_dir),
+                "--output", str(output), "--mode", "layered"]
+        saved = sys.argv
+        sys.argv = argv
+        try:
+            export_pptx.main()
+        except SystemExit as exc:
+            assert "delivery blocked" in str(exc), exc
+        else:
+            raise AssertionError("export_pptx.main must refuse an unresolved run")
+        finally:
+            sys.argv = saved
+        assert not output.exists(), "no PPTX may be produced for an unresolved run"
+
+
+def test_delivery_gate_deck_cli_blocks_unresolved_run() -> None:
+    # PDF output boundary proof: export-pdf.js shells out to
+    # `delivery_gate.py --deck <deck.html>`; the same CLI must exit non-zero with
+    # a catalog-safe message for an unresolved run, and 0 for a deck with no
+    # sibling selection-report (external/custom, not gated here).
+    with tempfile.TemporaryDirectory() as tmpd:
+        run = Path(tmpd)
+        (run / "analysis").mkdir()
+        (run / "deck.html").write_text("<html></html>", encoding="utf-8")
+        secret = "INTERNAL: audit reason must not leak"
+        (run / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "needs_component", "item_id": None,
+                                  "score": 50, "reason": secret})])),
+            encoding="utf-8")
+        try:
+            delivery_gate.main(["--deck", str(run / "deck.html")])
+        except SystemExit as exc:
+            assert "delivery blocked" in str(exc), exc
+            assert secret not in str(exc), exc
+        else:
+            raise AssertionError("--deck must refuse an unresolved run")
+
+        # No sibling report → external/custom deck, not gated here (exit 0).
+        external = run / "external"
+        external.mkdir()
+        (external / "deck.html").write_text("<html></html>", encoding="utf-8")
+        assert delivery_gate.main(["--deck", str(external / "deck.html")]) == 0
+
+
+def test_delivery_gate_fails_closed_on_empty_or_malformed_slides() -> None:
+    # P2: a batch report with zero USABLE slide records (empty slides array, or a
+    # wholly non-dict record set) must NOT be vacuously deliverable — fail closed.
+    for label, report in [
+        ("empty-slides", _batch_report([])),
+        ("all-malformed", {"job_id": "j", "generated_by": "score_visual_items.py",
+                           "slides": ["not-a-dict", 42, None]}),
+    ]:
+        state = delivery_gate.delivery_state(report)
+        assert state["deliverable"] is False, (label, state)
+        try:
+            delivery_gate.assert_deliverable(report)
+        except SystemExit as exc:
+            assert "delivery blocked" in str(exc), (label, exc)
+        else:
+            raise AssertionError(f"{label}: an empty/malformed report must block delivery")
+    # One malformed record mixed with a resolved one still blocks (never dropped).
+    mixed = {"job_id": "j", "generated_by": "score_visual_items.py", "slides": [
+        _dec_slide("s1", {"action": "reuse", "item_id": "sun.component.x", "score": 90}),
+        "not-a-dict",
+    ]}
+    assert delivery_gate.delivery_state(mixed, _FIXTURE_PUBLISHED)["deliverable"] is False
+    # The supported single-report input (no slides array) is unaffected.
+    single = {"request_id": "s1",
+              "decision": {"action": "reuse", "item_id": "sun.component.x", "score": 90}}
+    assert delivery_gate.delivery_state(single, _FIXTURE_PUBLISHED)["deliverable"] is True
+
+
+def test_export_pdf_js_gate_blocks_tracked_unresolved_job() -> None:
+    # P2 exporter-level proof: `node export-pdf.js` must NOT produce a PDF for a
+    # tracked unresolved run, --skip-delivery-gate must NOT bypass a tracked job,
+    # and an HTTP url does not bypass when --deck locates the sibling report. The
+    # gate runs BEFORE Playwright is required, so no browser is needed. Skipped
+    # only when Node itself is unavailable.
+    node = shutil.which("node")
+    if node is None:
+        print("  SKIP  test_export_pdf_js_gate_blocks_tracked_unresolved_job (node not found)")
+        return
+    exporter = SCRIPTS / "export-pdf.js"
+    secret = "INTERNAL: audit reason must not leak to the exporter output"
+    with tempfile.TemporaryDirectory() as tmpd:
+        run = Path(tmpd)
+        (run / "analysis").mkdir()
+        (run / "deck.html").write_text("<html></html>", encoding="utf-8")
+        (run / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "needs_component", "item_id": None,
+                                  "score": 50, "reason": secret})])),
+            encoding="utf-8")
+        out_pdf = run / "exports" / "deck.pdf"
+        deck_html = str(run / "deck.html")
+        deck_url = (run / "deck.html").as_uri()
+        base = [node, str(exporter), "--url", deck_url, "--deck", deck_html,
+                "--output", str(out_pdf)]
+
+        # (a) --skip-delivery-gate is REFUSED for a tracked job (no bypass), and
+        #     the internal reason never leaks. This path dies before .venv/browser.
+        res = subprocess.run(base + ["--skip-delivery-gate"],
+                             capture_output=True, text=True)
+        combined = res.stdout + res.stderr
+        assert res.returncode != 0, combined
+        assert not out_pdf.exists(), "skip flag must not bypass a tracked job"
+        assert "cannot bypass" in combined, combined
+        assert secret not in combined, "internal reason must never leak"
+
+        # (b) The plain gated path also blocks the unresolved job — no PDF, no leak.
+        res2 = subprocess.run(base, capture_output=True, text=True)
+        assert res2.returncode != 0, res2.stdout + res2.stderr
+        assert not out_pdf.exists(), "no PDF for an unresolved tracked run"
+        assert secret not in (res2.stdout + res2.stderr), "internal reason must never leak"
+
+        # (c) An HTTP url does not bypass: with --deck the gate still finds the
+        #     sibling report and blocks (no dependence on the url scheme).
+        res3 = subprocess.run(
+            [node, str(exporter), "--url", "http://localhost:8080",
+             "--deck", deck_html, "--output", str(out_pdf)],
+            capture_output=True, text=True)
+        assert res3.returncode != 0, res3.stdout + res3.stderr
+        assert not out_pdf.exists(), "HTTP route must not bypass a tracked job"
+
+
+def test_export_pdf_js_gate_survives_url_scheme_case_and_deck_vouching() -> None:
+    # P1 regression: URL schemes are case-insensitive (RFC 3986) and the browser
+    # normalizes them, but the gate tested `startsWith("file://")` case-sensitively.
+    # So `--url FILE:///<unresolved>/deck.html --deck <resolved>/deck.html` made the
+    # unresolved deck look like "not a file URL", skipped the deck/url match, let the
+    # RESOLVED deck satisfy the gate, and then PRINTED the unresolved deck. The same
+    # shape let any non-file URL (data:, about:) be vouched for by --deck.
+    # Failure paths only, so no browser is required.
+    node = shutil.which("node")
+    if node is None:
+        print("  SKIP  test_export_pdf_js_gate_survives_url_scheme_case_and_deck_vouching "
+              "(node not found)")
+        return
+    exporter = SCRIPTS / "export-pdf.js"
+    with tempfile.TemporaryDirectory() as tmpd:
+        root = Path(tmpd)
+        ok = root / "resolved"
+        (ok / "analysis").mkdir(parents=True)
+        (ok / "deck.html").write_text("<html>ok</html>", encoding="utf-8")
+        (ok / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "blank", "selected_by": "user",
+                                  "item_id": None, "score": 0})])), encoding="utf-8")
+        bad = root / "unresolved"
+        (bad / "analysis").mkdir(parents=True)
+        (bad / "deck.html").write_text("<html>must not ship</html>", encoding="utf-8")
+        (bad / "analysis" / "selection-report.json").write_text(
+            json.dumps(_batch_report([
+                _dec_slide("s1", {"action": "needs_component", "item_id": None,
+                                  "score": 50, "reason": "unresolved"})])), encoding="utf-8")
+        out = root / "out.pdf"
+        upper = (bad / "deck.html").as_uri().replace("file://", "FILE://", 1)
+
+        def run(url, *extra):
+            out.unlink(missing_ok=True)
+            proc = subprocess.run(
+                [node, str(exporter), "--url", url, "--output", str(out), *extra],
+                capture_output=True, text=True)
+            return proc, out.exists()
+
+        # (a) Upper-case FILE:// unresolved deck vouched by a resolved --deck.
+        proc, made = run(upper, "--deck", str(ok / "deck.html"))
+        assert proc.returncode != 0, proc.stdout + proc.stderr
+        assert not made, "a resolved --deck must never vouch for a different deck"
+        # (b) Upper-case FILE:// alone is still recognised as a file URL AND gated.
+        proc, made = run(upper)
+        assert proc.returncode != 0 and not made, proc.stdout + proc.stderr
+        assert "delivery blocked" in (proc.stdout + proc.stderr), proc.stdout + proc.stderr
+        # (c) A non-file URL cannot be vouched for by --deck.
+        proc, made = run("data:text/html,<h1>x</h1>", "--deck", str(ok / "deck.html"))
+        assert proc.returncode != 0, proc.stdout + proc.stderr
+        assert not made, "--deck must not authorise an arbitrary non-file URL"
+
+
+def test_build_backstop_accepts_distinct_backgrounds() -> None:
+    slides = [{"slide": i + 1, "canvasW": 1920, "canvasH": 1080,
+               "base": {"sha256": f"BG{i}"}, "text": [{"text": "same"}]}
+              for i in range(3)]
+    bhp.assert_capture_navigated(_captured_manifest(slides))  # distinct bg -> ok
+
+
+# --------------------------------------------------------------------------- #
+# export_pptx — the capture cache must invalidate when navigation/selector change
+# --------------------------------------------------------------------------- #
+def _capture_args(**overrides):
+    import argparse
+    base = dict(html=str(REGISTRY), mode="layered", slides=9, width=1920, height=1080,
+                overlay_scale=2, pad=96, showJs=None, selector=None)
+    base.update(overrides)
+    return argparse.Namespace(**base)
+
+
+def test_capture_fingerprint_invalidates_on_nav_or_selector_change() -> None:
+    base = export_pptx.capture_fingerprint(_capture_args())
+    assert "showjs" in base and "selector" in base
+    nav = export_pptx.capture_fingerprint(_capture_args(showJs="goToSlide({n})"))
+    sel = export_pptx.capture_fingerprint(_capture_args(selector=".slide.active"))
+    assert base != nav, "changing --showJs must change the capture fingerprint"
+    assert base != sel, "changing --selector must change the capture fingerprint"
+    assert nav != sel
+
+
+# --------------------------------------------------------------------------- #
+# compare_renders / validate_export_objects — the secondary parity guard must
+# ignore 1px text-edge AA halo but still catch contiguous displacement.
+# --------------------------------------------------------------------------- #
+def test_significant_ratio_drops_thin_edges_keeps_solid_blocks() -> None:
+    from PIL import Image, ImageDraw, ImageChops
+    ref = Image.new("RGB", (200, 200), "white")
+    draw = ImageDraw.Draw(ref)
+    for x in range(20, 180, 6):  # dense thin strokes == a text-heavy slide's edges
+        draw.line([(x, 20), (x, 180)], fill="black", width=1)
+
+    aa = ImageChops.offset(ref, 1, 0)  # 1px shift -> pure thin-edge diff (AA-like)
+    m_aa = compare_renders.compute_metrics(ref, aa)
+    assert m_aa["changed_pixel_ratio"] > 0.01, "raw ratio should trip on the edge halo"
+    assert m_aa["significant_changed_pixel_ratio"] < 0.002, "erosion must clear thin edges"
+
+    block = ref.copy()
+    ImageDraw.Draw(block).rectangle([60, 60, 140, 140], fill="black")  # contiguous defect
+    m_block = compare_renders.compute_metrics(ref, block)
+    assert m_block["significant_changed_pixel_ratio"] > 0.05, "solid block must survive erosion"
+
+
+def _write_parity(parity_dir: Path, slide: str, tier: str, **metrics) -> None:
+    d = parity_dir / slide / tier
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "report.json").write_text(json.dumps({"metrics": metrics}), encoding="utf-8")
+
+
+def test_parity_gate_passes_text_aa_halo_but_fails_contiguous_shift() -> None:
+    thresholds = json.loads((SCRIPTS.parent / "registries" / "export-qa-thresholds.json")
+                            .read_text(encoding="utf-8"))
+    with tempfile.TemporaryDirectory() as tmp:
+        parity = Path(tmp)
+        # faithful text-dense slide: raw ratio over 0.01 but significant ~0, mean low
+        _write_parity(parity, "slide-01", "tier2", mean_absolute_error=0.77,
+                      changed_pixel_ratio=0.0155, significant_changed_pixel_ratio=0.0)
+        # real misregistration (2px shift): significant + mean both high
+        _write_parity(parity, "slide-02", "tier2", mean_absolute_error=9.0,
+                      changed_pixel_ratio=0.058, significant_changed_pixel_ratio=0.0179)
+        failures: list[str] = []
+        seen = veo.check_parity(parity, thresholds, failures)
+        by = {next(p for p in s["report"].replace("\\", "/").split("/") if p.startswith("slide-")): s
+              for s in seen}
+        assert by["slide-01"]["pass"], "faithful AA-halo slide must pass"
+        assert not by["slide-02"]["pass"], "2px-shift slide must still fail"
+        assert any("slide-02" in f for f in failures)
+        assert not any("slide-01" in f for f in failures)
+
+
+def test_parity_gate_falls_back_to_raw_ratio_for_pre_erosion_reports() -> None:
+    # An older report without the significant key must NOT silently loosen: the
+    # raw changed_ratio still gates.
+    thresholds = json.loads((SCRIPTS.parent / "registries" / "export-qa-thresholds.json")
+                            .read_text(encoding="utf-8"))
+    with tempfile.TemporaryDirectory() as tmp:
+        parity = Path(tmp)
+        _write_parity(parity, "slide-01", "tier2", mean_absolute_error=0.4,
+                      changed_pixel_ratio=0.05)  # no significant key
+        failures: list[str] = []
+        seen = veo.check_parity(parity, thresholds, failures)
+        assert not seen[0]["pass"], "must fall back to raw changed_ratio when significant absent"
 
 
 def test_project_python_path_uses_windows_virtualenv_layout() -> None:
@@ -288,7 +895,10 @@ def _req() -> dict:
 def _item(**over) -> dict:
     base = {"id": "sun.set.x", "status": "published", "intent": ["timeline"],
             "tags": [], "content_structure": ["a"], "density": "any",
-            "brand": None, "limitations": []}
+            "brand": None, "limitations": [],
+            # Reviewed generic-buildable by default so the pre-existing gate tests keep
+            # exercising THEIR gate; the buildability tests below override this.
+            "build_scope": {"mode": "generic", "reason": "test generic template"}}
     base.update(over)
     return base
 
@@ -299,21 +909,1755 @@ def test_score_perfect_match_is_reuse() -> None:
     assert dec["extraction_recommended"] is False
 
 
-def test_score_mid_band_is_adapt_local() -> None:
-    # semantic 35 + structure 0 + density 4 + brand 10 + export 15 + access 10 = 74
+def test_score_mid_band_is_needs_component() -> None:
+    # semantic 35 + structure 0 + density 4 + brand 10 + export 15 + access 10 = 74.
+    # Total 74 < AUTO_REUSE_MIN (78): not confident enough to auto-reuse -> unresolved.
+    # (The old 65-74 'adapt-local' band is retired.)
     item = _item(content_structure=[], density="fixed")
     dec, _ = svi.score_request(_req(), [item], svi.WEIGHTS, None)
-    assert 65 <= dec["score"] < 75, dec
-    assert dec["action"] == "adapt-local", dec
+    assert 65 <= dec["score"] < svi.AUTO_REUSE_MIN, dec
+    assert dec["action"] == "needs_component", dec
+    assert dec["item_id"] is None, "unresolved slides name no component"
+    assert dec["suggested_search"] and dec["next_action"], dec
 
 
-def test_score_below_floor_is_custom_local_with_extraction() -> None:
-    # drop brand match too -> 64 -> custom-local + extraction recommended
+def test_score_below_floor_is_needs_component_with_extraction() -> None:
+    # drop brand match too -> 64 -> still unresolved (needs_component), never an
+    # automatic custom layout.
     item = _item(content_structure=[], density="fixed", brand="other")
     dec, _ = svi.score_request(_req(), [item], svi.WEIGHTS, None)
     assert dec["score"] < 65, dec
-    assert dec["action"] == "custom-local", dec
+    assert dec["action"] == "needs_component", dec
     assert dec["extraction_recommended"] is True, "weak match must recommend extraction"
+
+
+# --------------------------------------------------------------------------- #
+# Semantic concept groups (2026-07-16.13): a request may declare `concepts`
+# (OR within a group, AND across groups). Coverage is matched_groups/total_groups,
+# so descriptor tags/synonyms no longer inflate the required denominator, while
+# AND-across preserves discrimination. Absent `concepts` -> flat behaviour.
+# Canonical vocabulary only — no source-specific slide text.
+# --------------------------------------------------------------------------- #
+def _citem(**over) -> dict:
+    base = {"id": "sun.set.x", "status": "published", "intent": [], "tags": [],
+            "content_structure": ["a", "b"], "density": "any", "brand": None,
+            "limitations": [],
+            # Reviewed generic-buildable by default; the buildability tests below
+            # pass build_scope=None (unreviewed) or mode=source-specific to test the gate.
+            "build_scope": {"mode": "generic", "reason": "test generic template"}}
+    base.update(over)
+    return base
+
+
+def _creq(concepts, **over) -> dict:
+    base = {"intent": [], "tags": [], "content_structure": ["a", "b"],
+            "density": "medium", "brand": "sun", "required_exports": [],
+            "concepts": concepts}
+    base.update(over)
+    return base
+
+
+def test_concepts_true_timeline_match_not_diluted_by_descriptor_terms() -> None:
+    # One required concept (timeline/sequence, OR alternatives). A diluting tag
+    # ("flow") and an unrelated intent term would sink the flat denominator, but
+    # the group is fully satisfied by the item -> full semantic -> reuse.
+    req = _creq([["timeline", "roadmap", "process", "steps", "sequence", "flow"]],
+                intent=["timeline", "flow"], tags=["chronology", "milestones"])
+    item = _citem(intent=["timeline", "roadmap", "process", "steps"], tags=["phases"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+    assert cands[0]["criteria"]["semantic_intent"] >= _CONF
+
+
+def test_concepts_closing_matches_without_requiring_cta() -> None:
+    req = _creq([["closing", "thank-you", "end", "farewell", "conclusion"]],
+                intent=["closing", "cta"], tags=["final-slide", "cta"])
+    item = _citem(intent=["closing", "thank-you", "end", "farewell"], tags=["conclusion"])
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec  # missing 'cta' must not block
+
+
+def test_concepts_optional_tags_do_not_become_semantic_requirements() -> None:
+    # Item matches the single required group but NONE of the many request tags.
+    req = _creq([["timeline", "roadmap", "process"]],
+                tags=["unrelated1", "unrelated2", "unrelated3", "unrelated4"])
+    item = _citem(intent=["timeline", "process"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["criteria"]["semantic_intent"] >= _CONF, cands[0]
+    assert dec["action"] == "reuse", dec
+
+
+def test_concepts_and_across_groups_blocks_partial_match() -> None:
+    # Role-cards slide: role AND card-layout. An item with 'role' but no card
+    # layout satisfies 1/2 groups = 0.5 < 0.70 -> needs_component.
+    req = _creq([["role", "persona", "audience"], ["card", "card-set", "cards"]])
+    item = _citem(intent=["role", "action-items"], tags=["responsibilities"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["criteria"]["semantic_intent"] < _CONF, cands[0]
+    assert dec["action"] == "needs_component", dec
+
+
+def test_concepts_zero_group_match_is_needs_component() -> None:
+    # Principles slide: item is a shape-adjacent checklist that declares NO
+    # principle/rule concept -> 0/1 groups -> semantic 0 -> needs_component.
+    req = _creq([["principle", "rule", "guideline", "tenet"]])
+    item = _citem(intent=["checklist", "steps", "to-do", "action-list"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["criteria"]["semantic_intent"] == 0.0, cands[0]
+    assert dec["action"] == "needs_component", dec
+
+
+def test_concepts_report_lists_required_matched_and_missing() -> None:
+    req = _creq([["role", "persona"], ["card", "card-set"]])
+    item = _citem(intent=["role"])
+    _, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    concepts = cands[0]["retrieval"]["concepts"]
+    assert [sorted(g) for g in concepts["required"]] == [["card", "card-set"], ["persona", "role"]] \
+        or concepts["required"], concepts
+    matched_groups = [m["group"] for m in concepts["matched"]]
+    assert ["persona", "role"] in [sorted(g) for g in matched_groups], concepts
+    assert ["card", "card-set"] in [sorted(g) for g in concepts["missing"]], concepts
+
+
+def test_concepts_review_only_component_still_blocked_despite_full_match() -> None:
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(intent=["timeline", "roadmap", "process"],
+                  auto_reuse={"eligible": False, "reason": "failed full-slide QA"})
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec  # concept match cannot override review-only
+
+
+def test_concepts_needs_component_shortlist_is_safe_and_never_selects() -> None:
+    # A safe near-match (published, auto-eligible, immutable-clean) that matches
+    # only 1/2 groups appears in the shortlist with its missing concept, but the
+    # decision stays needs_component and names no component.
+    req = _creq([["role", "persona"], ["card", "card-set"]])
+    near = _citem(id="sun.set.near", intent=["role", "persona"])  # 1/2 groups
+    dec, _ = svi.score_request(req, [near], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and dec["item_id"] is None, dec
+    shortlist = dec.get("shortlist")
+    assert shortlist and shortlist[0]["item_id"] == "sun.set.near", dec
+    assert shortlist[0]["missing_concepts"], "shortlist must say what is missing"
+
+
+def test_legacy_request_without_concepts_keeps_flat_dilution_behaviour() -> None:
+    # Backward-compat: no `concepts` -> the flat intent+tags denominator still
+    # applies, so a diluting extra concept still lowers semantic below the bar.
+    req = {"intent": ["timeline"], "tags": ["callout"], "content_structure": ["a"],
+           "density": "medium", "brand": "sun", "required_exports": []}
+    item = _item(intent=["timeline"], tags=[])  # matches 1 of 2 canonical concepts
+    _, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["criteria"]["semantic_intent"] == round(0.5 * 35, 2), cands[0]
+
+
+def test_concepts_published_only_boundary_unchanged() -> None:
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(status="staging", intent=["timeline", "roadmap", "process"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["eligible"] is False, "non-published must stay ineligible"
+    assert dec["action"] == "needs_component", dec
+
+
+def test_concept_scoring_eval_fixture() -> None:
+    # A small deterministic scorer eval on the CANONICAL vocabulary (no source
+    # slide text): positive timeline/closing matches must reuse; keyword-lucky and
+    # partial-AND matches must stay needs_component.
+    cases = [
+        # (concept groups, item intent/tags, expected action)
+        ([["timeline", "roadmap", "process", "steps"]], ["timeline", "roadmap", "process"], "reuse"),
+        ([["closing", "thank-you", "farewell", "conclusion"]], ["closing", "thank-you", "end"], "reuse"),
+        # keyword-lucky: item shares NO concept term -> semantic 0 -> needs_component
+        ([["tier", "level", "ladder"]], ["checklist", "steps", "to-do"], "needs_component"),
+        # partial AND: role matched, card-layout missing -> 1/2 < 0.70 -> needs_component
+        ([["role", "persona"], ["card", "card-set"]], ["role", "action-items"], "needs_component"),
+    ]
+    for concepts, item_intent, expected in cases:
+        dec, _ = svi.score_request(_creq(concepts), [_citem(intent=item_intent)], svi.WEIGHTS, None)
+        assert dec["action"] == expected, (concepts, item_intent, dec)
+
+
+def test_derive_content_shape_is_generic_and_reported() -> None:
+    # Metadata-quality: content_shape is derived generically from an item's own
+    # intent/tags (no label invented/stored on the 91 registry items), and the
+    # scorer reports it for auditability.
+    from _common import derive_content_shape
+    assert "timeline" in derive_content_shape(["roadmap", "process"])
+    assert "closing" in derive_content_shape(["thank-you"])
+    assert derive_content_shape(["nothing-maps-here"]) == []
+    _, cands = svi.score_request(_creq([["timeline", "roadmap"]]),
+                                 [_citem(intent=["timeline", "roadmap"])], svi.WEIGHTS, None)
+    assert "timeline" in cands[0]["retrieval"]["derived_shapes"], cands[0]
+
+
+# --------------------------------------------------------------------------- #
+# Buildability contract (2026-07-17): a semantic match is not proof the item can
+# be scaffolded and filled. Auto-reuse also requires build_scope.mode == generic;
+# absent/unreviewed and source-specific stay published + manual-only.
+# --------------------------------------------------------------------------- #
+def test_source_specific_item_cannot_auto_reuse_despite_full_concept_match() -> None:
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(intent=["timeline", "roadmap", "process"], build_scope=None)  # unreviewed
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert cands[0]["criteria"]["semantic_intent"] >= _CONF, "semantic still passes"
+    assert dec["action"] == "needs_component", dec  # but buildability blocks auto-reuse
+
+
+def test_explicit_source_specific_build_scope_also_blocks_auto_reuse() -> None:
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(intent=["timeline", "roadmap", "process"],
+                  build_scope={"mode": "source-specific", "reason": "23 source-date slots"})
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+
+
+def test_generic_reviewed_slot_compatible_item_can_auto_reuse() -> None:
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(intent=["timeline", "roadmap", "process"],
+                  build_scope={"mode": "generic", "reason": "role-generic slots, any brief"})
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+
+
+def test_explicit_user_selection_bypasses_build_scope_but_stays_fidelity_gated() -> None:
+    # An explicit pick of a source-specific published item is allowed (user's choice)
+    # and returns reuse selected_by=user; the scaffold/fidelity gate is the safety net.
+    req = _creq([["timeline"]], component_id="sun.set.x")
+    item = _citem(id="sun.set.x", intent=["timeline"], content_shape=None,
+                  build_scope={"mode": "source-specific", "reason": "specific"})
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec.get("selected_by") == "user", dec
+
+
+def test_needs_component_is_the_only_automatic_unresolved_outcome() -> None:
+    # No automatic custom-local: an unbuildable/unmatched slide resolves to
+    # needs_component, never a custom slide, unless the user set unresolved_policy.
+    req = _creq([["timeline", "roadmap", "process"]])
+    item = _citem(intent=["timeline", "roadmap", "process"], build_scope=None)
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and dec["action"] != "custom-local", dec
+
+
+# --------------------------------------------------------------------------- #
+# concepts are the NORMAL new-run contract (--require-concepts); legacy runs use
+# the deliberate compatibility path (no flag).
+# --------------------------------------------------------------------------- #
+def test_require_concepts_rejects_missing_or_empty_concepts() -> None:
+    missing = {"job_id": "j", "slides": [{"request_id": "s1", "content_shape": "timeline"}]}
+    empty = {"job_id": "j", "slides": [{"request_id": "s1", "concepts": []}]}
+    assert svi.validate_batch_request(missing, require_concepts=True), "missing concepts must fail"
+    assert svi.validate_batch_request(empty, require_concepts=True), "empty concepts must fail"
+    # Legacy compatibility path: without the flag, absent concepts are accepted.
+    assert svi.validate_batch_request(missing, require_concepts=False) == []
+
+
+def test_require_concepts_accepts_valid_concepts() -> None:
+    ok = {"job_id": "j", "slides": [{"request_id": "s1", "concepts": [["timeline", "roadmap"]]}]}
+    assert svi.validate_batch_request(ok, require_concepts=True) == []
+
+
+# --------------------------------------------------------------------------- #
+# build-coherence: an automatic reuse decision is not a completed build unless the
+# deck actually scaffolded a matching component instance.
+# --------------------------------------------------------------------------- #
+def test_reuse_decision_without_deck_instance_fails_build_coherence() -> None:
+    report = {"slides": [{"request_id": "s1",
+                          "decision": {"action": "reuse", "item_id": "sun.set.x"}}]}
+    deck = "<html><body><section>no component instance here</section></body></html>"
+    registry = {"items": [{"id": "sun.set.x", "status": "published", "paths": {}}]}
+    results = fidelity.check_fidelity(deck, report, registry, require_instance_ids=True)
+    fails = [r for r in results if not r["pass_"]]
+    assert fails and "missing data-component-instance" in fails[0]["reason"], results
+
+
+def test_scorer_has_no_hardcoded_component_ids_or_brief_text() -> None:
+    # No selection logic keys on specific real component IDs, source-set slugs, or brief
+    # wording — the contract must be metadata-driven. (Generic id-SHAPE examples like
+    # `sun.component.x` in docstrings are fine; concrete published ids and brief strings
+    # are not.)
+    src = (SCRIPTS / "score_visual_items.py").read_text(encoding="utf-8")
+    # Concrete published slide-component ids and source-deck set slugs have no
+    # legitimate reason to appear in the scorer — including in CLI help. `--prefer-set`
+    # is a real, metadata-driven feature (it compares the request's set to each id's
+    # `<set>` segment), so its help must describe the mechanism, not name a source deck;
+    # gaming a specific brief would show up here.
+    for token in ("01-cover", "02-timeline", "05-process", "18-thanks",
+                  "salary-benefits-2026", "sun-studio-performance-review-2025",
+                  "interview-workshop-sunriser"):
+        assert token not in src, f"scorer must not reference the concrete slug {token!r}"
+    for brief_word in ("Tìm", "nguyên tắc", "SUN.RISER", "workflow thông minh"):
+        assert brief_word not in src, f"no brief text ({brief_word!r}) in scorer logic"
+
+
+# --------------------------------------------------------------------------- #
+# Selection product decision (2026-07-13.20): high-confidence reuse /
+# needs_component / explicit selection / no-duplicate / explicit-only custom-local
+# --------------------------------------------------------------------------- #
+_CONF = svi.WEIGHTS["semantic_intent"] * svi.SEMANTIC_CONFIDENCE_FRAC
+
+
+def test_prev_adapt_band_is_now_needs_component() -> None:
+    # F1: a candidate in the retired 65-74 band is unresolved, never adapt-local.
+    dec, _ = svi.score_request(_req(), [_item(content_structure=[], density="fixed")],
+                               svi.WEIGHTS, None)
+    assert 65 <= dec["score"] < svi.AUTO_REUSE_MIN, dec
+    assert dec["action"] == "needs_component", dec
+
+
+def test_low_confidence_is_needs_component_not_custom() -> None:
+    # F2: low confidence -> needs_component with guidance; no auto custom artifact.
+    dec, _ = svi.score_request(_req(), [_item(id="sun.component.weak", intent=["unrelated"],
+                                              content_structure=[])], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and dec["item_id"] is None, dec
+    assert dec["suggested_search"] and dec["next_action"], dec
+
+
+def test_high_confidence_is_reuse() -> None:
+    # F3: a genuinely high-confidence, shape/slot-compatible match auto-reuses.
+    dec, _ = svi.score_request(_req(), [_item()], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec.get("selected_by") != "user", dec
+    assert dec["score"] >= svi.AUTO_REUSE_MIN, dec
+
+
+def test_explicit_id_reuses_below_auto_threshold() -> None:
+    # F4: an explicit user selection reuses a mid-band item the auto bar would skip.
+    item = _item(id="sun.component.pick", content_structure=[], density="fixed")  # ~74 < 78
+    dec, _ = svi.score_request({**_req(), "component_id": "sun.component.pick"},
+                               [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec["item_id"] == "sun.component.pick", dec
+    assert dec["selected_by"] == "user" and dec["score"] < svi.AUTO_REUSE_MIN, dec
+
+
+def test_explicit_id_resolves_from_catalog_prompt() -> None:
+    # F4b: the catalog 'Copy prompt' text resolves deterministically to the id.
+    prompt = ('Use the published component "Foo Bar" (sun.component.pick) from the '
+              'SUN.STUDIO visual library.')
+    assert svi.resolve_component_id(prompt) == "sun.component.pick"
+    assert svi.resolve_component_id("sun.component.pick") == "sun.component.pick"
+    assert svi.resolve_component_id("no id here") is None
+
+
+def test_explicit_invalid_unpublished_incompatible_stays_needs_component() -> None:
+    # F5: invalid / unpublished / shape-incompatible explicit ids never substitute.
+    dec, _ = svi.score_request({**_req(), "component_id": "sun.component.nope"},
+                               [_item()], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and dec.get("selected_by") == "user", dec
+    dec2, _ = svi.score_request({**_req(), "component_id": "sun.component.draft"},
+                                [_item(id="sun.component.draft", status="staging")],
+                                svi.WEIGHTS, None)
+    assert dec2["action"] == "needs_component" and "not published" in dec2["reason"], dec2
+    req = {"intent": ["timeline"], "tags": [], "content_structure": ["a"],
+           "content_shape": "timeline", "density": "any", "brand": None,
+           "component_id": "sun.test.badstats"}
+    dec3, _ = svi.score_request(req, [_shape_item("sun.test.badstats", ["statistics"], ["flow"])],
+                                svi.WEIGHTS, None)
+    assert dec3["action"] == "needs_component" and "content_shape" in dec3["reason"], dec3
+
+
+def _mk_slide(rid: str, item_ids: list[str], req: dict | None = None) -> dict:
+    dec, cands = svi.score_request(req or _req(), [_item(id=x) for x in item_ids],
+                                   svi.WEIGHTS, None)
+    return {"request_id": rid, "decision": dec, "candidates": cands}
+
+
+def test_no_auto_duplicate_across_deck() -> None:
+    # F6: the same component is auto-reused on at most one slide per deck.
+    results = [_mk_slide("s0", ["sun.component.hero"]),
+               _mk_slide("s1", ["sun.component.hero"])]
+    svi.assign_deck_components(results, {"s0": _req(), "s1": _req()}, _CONF)
+    actions = [s["decision"]["action"] for s in results]
+    assert actions.count("reuse") == 1 and "needs_component" in actions, results
+    dup = next(s for s in results if s["decision"]["action"] == "needs_component")
+    assert "already assigned" in dup["decision"]["reason"], dup
+
+
+def test_second_slide_duplicate_only_becomes_needs_component() -> None:
+    # F7: a later slide whose only ready candidate is already used is unresolved.
+    results = [_mk_slide("s0", ["sun.component.only"]),
+               _mk_slide("s1", ["sun.component.only"])]
+    svi.assign_deck_components(results, {"s0": _req(), "s1": _req()}, _CONF)
+    assert results[0]["decision"]["action"] == "reuse", results
+    assert results[1]["decision"]["action"] == "needs_component", results
+    assert results[1]["decision"]["item_id"] is None
+
+
+def test_most_constrained_slide_wins_shared_component() -> None:
+    # F7b: most-constrained-first — the sole-candidate slide (listed LAST) still
+    # gets the shared component; the flexible slide takes the alternative.
+    results = [_mk_slide("B", ["sun.component.shared", "sun.component.extra"]),
+               _mk_slide("A", ["sun.component.shared"])]
+    svi.assign_deck_components(results, {"A": _req(), "B": _req()}, _CONF)
+    by = {s["request_id"]: s["decision"] for s in results}
+    assert by["A"]["action"] == "reuse" and by["A"]["item_id"] == "sun.component.shared", by
+    assert by["B"]["action"] == "reuse" and by["B"]["item_id"] == "sun.component.extra", by
+
+
+def test_allow_component_reuse_override_recorded() -> None:
+    # F8: an explicit override lets a component repeat, and it is recorded/surfaced.
+    results = [_mk_slide("s0", ["sun.component.hero"]),
+               _mk_slide("s1", ["sun.component.hero"])]
+    svi.assign_deck_components(results, {"s0": _req(),
+                                         "s1": {**_req(), "allow_component_reuse": True}}, _CONF)
+    by = {s["request_id"]: s["decision"] for s in results}
+    assert by["s0"]["action"] == "reuse" and by["s1"]["action"] == "reuse", by
+    assert by["s1"]["item_id"] == "sun.component.hero", by
+    assert by["s1"]["allow_component_reuse"] is True, by
+
+
+def test_custom_local_only_with_explicit_approval() -> None:
+    # F9: custom-local is impossible automatically; only the user's policy yields it,
+    # and the validator rejects an auto (non-user) custom-local.
+    weak = _item(id="sun.component.weak", intent=["unrelated"], content_structure=[])
+    dec, _ = svi.score_request(_req(), [weak], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    dec2, _ = svi.score_request({**_req(), "unresolved_policy": "custom-local"}, [weak],
+                                svi.WEIGHTS, None)
+    assert dec2["action"] == "custom-local" and dec2["selected_by"] == "user", dec2
+    errs: list = []
+    vsr._validate_decision_band(
+        {"decision": {"action": "custom-local", "item_id": None}, "candidates": []}, "r", errs)
+    assert errs and "explicit user approval" in errs[0], errs
+
+
+def test_explicit_blank_policy_resolves_slide_without_forcing_a_component() -> None:
+    # An unresolved slide the user explicitly blanks resolves to action "blank"
+    # (user-only, names no component) instead of needs_component — so it no longer
+    # blocks delivery, and no component is invented or forced.
+    weak = _item(id="sun.component.weak", intent=["unrelated"], content_structure=[])
+    dec, _ = svi.score_request({**_req(), "unresolved_policy": "blank"}, [weak],
+                               svi.WEIGHTS, None)
+    assert dec["action"] == "blank" and dec["item_id"] is None, dec
+    assert dec["selected_by"] == "user", dec
+    # The validator requires blank to be a user choice, never an automatic one.
+    errs: list = []
+    vsr._validate_decision_band(
+        {"decision": {"action": "blank", "item_id": None}, "candidates": []}, "r", errs)
+    assert errs and "explicit user choice" in errs[0], errs
+    # A batch request may carry unresolved_policy "blank".
+    assert svi.validate_batch_request(
+        {"job_id": "j", "slides": [{"request_id": "s1", "unresolved_policy": "blank"}]}) == []
+
+
+def test_deck_allocation_uses_full_pool_not_report_top_n() -> None:
+    # Fix A regression: six equally high-confidence components + six slides. The
+    # first five get reserved, so the sixth slide must still AUTO-select the sixth
+    # component. (The old code truncated candidates to --top-n=5 BEFORE deck
+    # allocation, so the sixth was invisible and the slide fell to needs_component.)
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        items = [_item(id=f"sun.component.hero-{i}") for i in range(6)]
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"items": items}), encoding="utf-8")
+        batch = tmp / "batch.json"
+        batch.write_text(json.dumps({"job_id": "j", "slides": [
+            {**_req(), "request_id": f"s{i}"} for i in range(6)]}), encoding="utf-8")
+        out = tmp / "rep.json"
+        rc = svi.main(["--batch-request", str(batch), "--registry", str(reg),
+                       "--output", str(out), "--retrieval-index", "none", "--top-n", "5"])
+        assert rc == 0
+        rep = json.loads(out.read_text(encoding="utf-8"))
+        acts = [s["decision"]["action"] for s in rep["slides"]]
+        ids = [s["decision"]["item_id"] for s in rep["slides"]]
+        assert acts == ["reuse"] * 6, rep["slides"]
+        assert len(set(ids)) == 6, ids          # the 6th was reachable -> no duplicates
+        assert "sun.component.hero-5" in ids, ids
+        for s in rep["slides"]:
+            shown = s["candidates"]
+            # report stays capped at top-N (5) + the selected item when it ranks below
+            assert len(shown) <= 6, shown
+            assert any(c["item_id"] == s["decision"]["item_id"] for c in shown), s
+        # the slide holding the below-cutoff pick proves requirement 4 explicitly
+        sixth = next(s for s in rep["slides"] if s["decision"]["item_id"] == "sun.component.hero-5")
+        assert len(sixth["candidates"]) == 6, sixth["candidates"]   # 5 ranked + selected
+
+
+def test_auto_ineligible_component_never_auto_selected() -> None:
+    # Fix B: a published component with a RECORDED full-slide QA failure keeps its
+    # (best possible) score and stays browseable, but can never be auto-selected.
+    bad = _item(id="sun.component.badqa",
+                auto_reuse={"eligible": False, "reason": "overflows its own slot boxes"})
+    dec, cands = svi.score_request(_req(), [bad], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and dec["item_id"] is None, dec
+    c = cands[0]
+    assert c["eligible"] is True and c["score"] >= svi.AUTO_REUSE_MIN, c   # still scored
+    assert c["retrieval"]["auto_reuse"]["eligible"] is False, c
+    assert any("review-only" in r for r in c["reasons"]), c["reasons"]
+    # ...and the deck allocator must not hand it out either.
+    assert svi._reuse_ready_ids(cands, True, _CONF) == [], cands
+
+
+def test_explicit_selection_of_unsafe_component_fails_closed_at_fidelity() -> None:
+    # Fix B: explicit selection may be recorded for review, but NEVER silently, and
+    # the build/render gate fails it closed.
+    bad = _item(id="sun.component.badqa",
+                auto_reuse={"eligible": False, "reason": "cropped at 1920x1080"})
+    dec, _ = svi.score_request({**_req(), "component_id": "sun.component.badqa"},
+                               [bad], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec["selected_by"] == "user", dec
+    assert "review-only" in dec["reason"] and "cropped at 1920x1080" in dec["reason"], dec
+    reg = {"items": [{"id": "sun.component.badqa", "status": "published",
+                      "auto_reuse": {"eligible": False, "reason": "cropped at 1920x1080"},
+                      "paths": {"preview": "x"}}]}
+    report = {"slides": [{"request_id": "s",
+                          "decision": {"action": "reuse", "item_id": "sun.component.badqa"}}]}
+    res = fidelity.check_fidelity("<div>anything</div>", report, reg)
+    assert res and res[0]["pass_"] is False, res
+    assert "not eligible for full-slide reuse" in res[0]["reason"], res
+
+
+def test_known_failed_components_excluded_from_realistic_auto_reuse() -> None:
+    # Every component whose real full-slide QA failed must not auto-reuse for the
+    # very request that previously selected it. Each entry is a REAL library item and
+    # the request that actually picked it in a QA run.
+    cases = [
+        ("sun.component.goal-keyresult-task-hexagon-diagram",
+         {"request_id": "w", "intent": ["process", "steps", "workflow"],
+          "tags": ["flow", "hexagon"], "content_structure": ["heading", "subheading"],
+          "content_shape": "timeline", "density": "medium", "brand": "sun-studio"}),
+        ("sun.component.revenue-team-size-metric-strip",
+         {"request_id": "k", "intent": ["kpi", "growth", "metrics"],
+          "tags": ["kpi", "metric-strip"], "content_structure": ["title", "heading"],
+          "content_shape": "stats", "density": "medium", "brand": "sun-studio"}),
+        # 2026-07-16 QA: cropped by the canvas (level-1 card + binary glyph sliced).
+        ("sun.component.spicy-autocomplete-autonomous-levels-strip",
+         {"request_id": "a", "intent": ["maturity-model", "levels", "tiers"],
+          "tags": ["ai", "maturity-model", "level-cards"],
+          "content_structure": ["heading", "label", "body"], "content_shape": "tiers",
+          "density": "medium", "brand": "sun-studio", "item_count": 5}),
+        # 2026-07-16 QA: 2 cards of artwork vs 4 declared title groups.
+        ("sun.component.translator-strategist-driver-coach-card-set",
+         {"request_id": "r", "intent": ["personas", "roles", "profile"],
+          "tags": ["cards", "roles", "personas"],
+          "content_structure": ["heading", "label", "body"], "content_shape": "profile",
+          "density": "medium", "brand": "sun-studio", "item_count": 4}),
+        # 2026-07-16 QA: badge circles cover-cropped; caption slots sit outside the
+        # artwork, so white caption text landed on the white background.
+        ("sun.component.lorem-ipsum-circle-badge-set",
+         {"request_id": "b", "intent": ["numbered", "cards", "three-column"],
+          "tags": ["numbered", "circle-badge"], "content_structure": ["heading", "label"],
+          "content_shape": "stats", "density": "medium", "brand": "sun-studio",
+          "item_count": 3}),
+    ]
+    for cid, req in cases:
+        dec, cands = _score_real(req)
+        assert dec["item_id"] != cid, dec           # never automatically selected
+        c = next((x for x in cands if x["item_id"] == cid), None)
+        if c:                                        # still discoverable + scored
+            assert c["retrieval"]["auto_reuse"]["eligible"] is False, c
+            assert c["eligible"] is True, c          # ...and still published
+
+
+REVIEW_ONLY_IDS = {
+    "sun.component.goal-keyresult-task-hexagon-diagram",
+    "sun.component.revenue-team-size-metric-strip",
+    "sun.component.spicy-autocomplete-autonomous-levels-strip",
+    "sun.component.translator-strategist-driver-coach-card-set",
+    "sun.component.lorem-ipsum-circle-badge-set",
+    # Blocked from automatic full-bleed reuse because its wide-band artwork crops ~45%
+    # of its width off the 16:9 frame (render fitness, not contract fidelity). Stays
+    # published/browseable. See test_severe_crop_component_is_review_only_and_not_auto_selected.
+    "sun.component.foundation-top1-microsoft-overlap-circle-set",
+}
+
+# --------------------------------------------------------------------------- #
+# immutable_text — artwork that bakes in non-editable, source-specific copy
+# --------------------------------------------------------------------------- #
+_PR_CLOSING = "sun.sun-studio-performance-review-2025.20-closing-thank-you"
+
+
+def _closing_req(**over) -> dict:
+    req = {"request_id": "closing", "intent": ["thank-you", "closing", "full-slide"],
+           "tags": ["closing", "thank-you", "end"],
+           "content_structure": ["label", "title", "body"], "content_shape": "closing",
+           "density": "medium", "brand": "sun-studio"}
+    req.update(over)
+    return req
+
+
+def test_immutable_partial_context_match_fails_closed_on_year_alone() -> None:
+    # The proven defect: the gate accepted ANY overlapping term, so a closing request
+    # whose only context word was "2025" auto-selected the Performance Review closing.
+    # A year alone is not the context — every group term must match.
+    dec, cands = _score_real(_closing_req(intent=["thank-you", "closing", "2025"]))
+    assert dec["item_id"] != _PR_CLOSING, dec
+    cand = next((c for c in cands if c["item_id"] == _PR_CLOSING), None)
+    if cand:
+        imm = cand["retrieval"]["immutable_text"]
+        assert imm["matched"] is False, imm
+        assert imm["contexts"], imm
+
+
+def test_immutable_partial_context_match_fails_closed_on_programme_alone() -> None:
+    # Symmetric half: the programme without its year is still not the full context.
+    dec, _ = _score_real(_closing_req(
+        intent=["thank-you", "closing", "performance-review"],
+        tags=["closing", "performance", "review"]))
+    assert dec["item_id"] != _PR_CLOSING, dec
+
+
+def test_goal_setting_does_not_unlock_on_year_alone() -> None:
+    # Same rule on the other backfilled context, so nothing is special-cased.
+    req = {"request_id": "c", "intent": ["cover", "title", "2026"], "tags": ["cover", "hero"],
+           "content_structure": ["title"], "content_shape": "cover",
+           "density": "medium", "brand": "sun-studio"}
+    dec, _ = _score_real(req)
+    assert dec["item_id"] != "sun.goal-setting-2026.01-cover", dec
+
+
+def test_immutable_context_groups_are_all_of_within_a_group_any_of_across() -> None:
+    # The rule itself, on a synthetic item so nothing is keyed to a real component id
+    # or phrase: invented terms must behave exactly like the real backfilled ones.
+    item = _item(id="sun.component.made-up", intent=["closing"], tags=["closing"])
+    item["immutable_text"] = {
+        "audit": "immutable",
+        "contexts": [["zephyr-summit", "2031"], ["zephyr", "summit", "2031"]],
+        "reason": "Artwork bakes in the Zephyr Summit 2031 lockup.",
+    }
+    base = {"intent": ["closing"], "tags": [], "content_structure": ["a"],
+            "density": "medium", "brand": None, "required_exports": []}
+
+    def act(**over):
+        return svi.score_request(dict(base, **over), [item], svi.WEIGHTS, None)[0]["action"]
+
+    assert act() == "needs_component"                                     # no context
+    assert act(intent=["closing", "2031"]) == "needs_component"           # partial
+    assert act(intent=["closing", "zephyr-summit"]) == "needs_component"  # partial
+    assert act(intent=["closing", "zephyr", "summit"]) == "needs_component"  # partial group 2
+    assert act(intent=["closing", "zephyr-summit", "2031"]) == "reuse"    # group 1 complete
+    assert act(intent=["closing", "zephyr", "summit", "2031"]) == "reuse"  # group 2 complete
+
+
+def test_immutable_text_blocks_auto_reuse_when_deck_context_differs() -> None:
+    # The real defect: this closing matched on "closing" and auto-selected into an
+    # AI-2026 deck, but its artwork bakes in a "Performance Review 2025" lockup that
+    # no text slot can edit. A generic closing request must not auto-select it.
+    dec, cands = _score_real(_closing_req())
+    assert dec["item_id"] != _PR_CLOSING, dec
+    cand = next((c for c in cands if c["item_id"] == _PR_CLOSING), None)
+    if cand:  # still published, scored and browseable — just not auto-selectable
+        assert cand["eligible"] is True, cand
+        imm = cand["retrieval"]["immutable_text"]
+        assert imm["matched"] is False and imm["reason"], cand
+        assert any("fixed" in r.lower() or "immutable" in r.lower() for r in cand["reasons"]), cand
+
+
+def test_immutable_text_context_match_clears_immutable_but_buildability_still_gates() -> None:
+    # A deck that IS the 2025 performance review declares the COMPLETE context, so the
+    # immutable-text gate no longer blocks (the fixed lockup is correct here). But this
+    # is a SOURCE-SPECIFIC slide (unreviewed build_scope), so AUTOMATIC reuse is still
+    # withheld — the buildability contract requires an explicit user pick for a
+    # contextual slide (see the explicit-selection test below). The blocker names
+    # build_scope, proving the immutable gate is NOT what stopped it.
+    dec, cands = _score_real(_closing_req(
+        intent=["thank-you", "closing", "performance-review"],
+        tags=["closing", "thank-you", "performance", "review", "2025"]))
+    top = next((c for c in cands if c["item_id"] == _PR_CLOSING), None)
+    assert top is not None and (top.get("retrieval") or {}).get("immutable_text", {}).get("matched") \
+        is True, "the complete context is declared -> immutable gate satisfied"
+    assert dec["action"] == "needs_component", dec
+    assert "auto-buildable" in dec["reason"], dec["reason"]
+
+
+def test_immutable_text_explicit_selection_is_deterministic_and_warned() -> None:
+    # Explicit user choice still wins, but must be visibly warned AND recorded so the
+    # render gate can fail it closed — never silently shipped.
+    dec, _ = _score_real(_closing_req(component_id=_PR_CLOSING))
+    assert dec["action"] == "reuse" and dec["item_id"] == _PR_CLOSING, dec
+    assert dec["selected_by"] == "user", dec
+    assert "WARNING" in dec["reason"], dec["reason"]
+    conflict = dec["immutable_text_conflict"]
+    assert conflict["reason"] and conflict["contexts"], dec
+    # Deterministic: the same request yields the same decision.
+    again, _ = _score_real(_closing_req(component_id=_PR_CLOSING))
+    assert again == dec
+
+
+def test_item_without_immutable_text_keeps_current_behaviour() -> None:
+    # Absent metadata must change nothing: a plain item still auto-reuses, carries no
+    # immutable_text retrieval block, and records no conflict.
+    dec, cands = svi.score_request(_req(), [_item()], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+    assert "immutable_text_conflict" not in dec, dec
+    assert "immutable_text" not in (cands[0].get("retrieval") or {}), cands[0]
+
+
+_PREP = "sun.interview-workshop-sunriser.05-prep"
+
+
+def _prep_req(**over) -> dict:
+    """The generic AI/workshop checklist request that auto-selected 05-prep."""
+    req = {"request_id": "prep", "intent": ["checklist", "preparation", "steps"],
+           "tags": ["checklist", "do-dont"], "content_structure": ["heading", "label"],
+           "content_shape": "checklist", "density": "medium", "brand": "sun-studio"}
+    req.update(over)
+    return req
+
+
+def test_audited_clean_template_is_not_blocked_by_immutable_but_by_buildability() -> None:
+    # 05-prep's empty-slot render shows ZERO words: all 25 source strings are editable
+    # slots, so the immutable-text gate does NOT block it (audited `clean`). But a clean
+    # audit is no longer sufficient for automatic reuse: 05-prep is a 25-slot,
+    # multi-section prep checklist (unreviewed build_scope), which a short unrelated
+    # brief cannot fill. So it resolves to needs_component, and the blocker names
+    # buildability — not immutability.
+    reg = _common.load_json(REGISTRY)
+    prep = next(i for i in reg["items"] if i["id"] == _PREP)
+    assert prep["immutable_text"]["audit"] == "clean", prep["immutable_text"]
+    assert "contexts" not in prep["immutable_text"], "a clean verdict declares no contexts"
+    dec, cands = _score_real(_prep_req())
+    prep_cand = next((c for c in cands if c["item_id"] == _PREP), None)
+    assert prep_cand and _immutable_text_ok_local(prep_cand), "immutable gate is satisfied"
+    assert dec["action"] == "needs_component", dec
+    assert "auto-buildable" in dec["reason"], dec["reason"]
+
+
+def _immutable_text_ok_local(cand: dict) -> bool:
+    imm = (cand.get("retrieval") or {}).get("immutable_text") or {}
+    return not imm or imm.get("audit") == "clean" or imm.get("matched") is True
+
+
+def test_audit_unresolved_blocks_automatic_reuse() -> None:
+    # An audited-but-unclassifiable item must fail closed: nobody knows what its
+    # artwork says, so it can never be auto-selected.
+    item = _item(id="sun.component.unaudited", intent=["timeline"], tags=[])
+    item["immutable_text"] = {"audit": "unresolved",
+                              "reason": "empty-slot render could not be produced"}
+    dec, cands = svi.score_request(_req(), [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    assert cands[0]["retrieval"]["immutable_text"]["audit"] == "unresolved"
+    assert any("unresolved" in r for r in cands[0]["reasons"]), cands[0]["reasons"]
+    # ...and an explicit selection of it is warned + recorded for the fidelity gate.
+    dec2, _ = svi.score_request({**_req(), "component_id": "sun.component.unaudited"},
+                                [item], svi.WEIGHTS, None)
+    assert dec2["action"] == "reuse" and dec2["selected_by"] == "user", dec2
+    assert "unresolved" in dec2["reason"] and "WARNING" in dec2["reason"], dec2["reason"]
+    assert dec2["immutable_text_conflict"], dec2
+
+
+def test_audit_distinguishes_editable_slot_text_from_baked_semantic_text() -> None:
+    # The audit's whole point, on the two real templates that prove both sides:
+    # 05-prep renders NO words with slots emptied (every string is editable), while
+    # every performance-review slide keeps its outlined "Performance Review 2025"
+    # lockup. Neither fact is visible in the markup — visual.svg has no <text> at all.
+    import audit_immutable_text as audit
+    reg = _common.load_json(REGISTRY)
+    by_id = {i["id"]: i for i in reg["items"]}
+
+    for iid in (_PREP, _PR_CLOSING):
+        vis = (by_id[iid].get("paths") or {}).get("visual")
+        assert audit.source_text_nodes(vis) == [], (
+            f"{iid}: visual.svg is expected to carry no live <text> — the baked lockup "
+            f"survives only as outlined paths, which is why the render is the evidence")
+        # Every live source string IS represented by an editable slot on both items.
+        assert audit.source_text_uncovered(by_id[iid]) == [], iid
+
+    # So the two items are told apart only by the recorded audit verdict.
+    assert by_id[_PREP]["immutable_text"]["audit"] == "clean"
+    assert by_id[_PR_CLOSING]["immutable_text"]["audit"] == "immutable"
+    assert by_id[_PR_CLOSING]["immutable_text"]["contexts"]
+
+
+def _audit_item(tmp: Path, iid: str = "sun.component.aud") -> dict:
+    """A published item with a real visual + slot contract on disk, so the audit
+    fingerprint has something to bind to."""
+    vis = tmp / "visual.svg"
+    vis.write_text('<svg xmlns="http://www.w3.org/2000/svg"><rect width="9" height="9"/></svg>',
+                   encoding="utf-8")
+    slots = tmp / "text-slots.json"
+    slots.write_text(json.dumps({"slots": [{"id": "a", "bounds": {"x": 0.1, "y": 0.1,
+                                                                  "width": 0.2, "height": 0.1}}]}),
+                     encoding="utf-8")
+    return {"id": iid, "status": "published", "type": "component",
+            "paths": {"visual": str(vis), "text_slots": str(slots), "preview": str(vis)}}
+
+
+def test_audit_verdict_is_bound_to_the_artifact_fingerprint() -> None:
+    # A verdict is evidence about ONE version of the artwork. Re-extracting visual.svg
+    # must invalidate it: the compact registry the scorer reads projects `unresolved`,
+    # so automatic reuse fails closed until someone re-audits.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        item = _audit_item(tmp)
+        item["immutable_text"] = {"audit": "clean", "reason": "no words survive",
+                                  "evidence": br.immutable_text_fingerprint(item)}
+        assert br.immutable_text_drift(item) is None
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+
+        # The artwork is replaced by a re-extraction...
+        (tmp / "visual.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg"><text>Zephyr Summit 2031</text></svg>',
+            encoding="utf-8")
+        assert "visual_sha256 changed" in (br.immutable_text_drift(item) or "")
+        gated = br.gate_immutable_text(item)
+        assert gated["audit"] == "unresolved", gated
+        # ...and the scorer, which reads the compact projection, now fails closed.
+        compact = br.project_compact([dict(item, intent=["timeline"], tags=[],
+                                           content_structure=["a"], density="any",
+                                           brand=None, limitations=[])])["items"][0]
+        dec, _ = svi.score_request(_req(), [compact], svi.WEIGHTS, None)
+        assert dec["action"] == "needs_component", dec
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        # The slot contract is the other half: which copy is editable decides which
+        # surviving words are immutable, so changing it invalidates the verdict too.
+        tmp = Path(tmpd)
+        item = _audit_item(tmp)
+        item["immutable_text"] = {"audit": "clean", "reason": "no words survive",
+                                  "evidence": br.immutable_text_fingerprint(item)}
+        (tmp / "text-slots.json").write_text(json.dumps({"slots": []}), encoding="utf-8")
+        assert "slots_sha256 changed" in (br.immutable_text_drift(item) or "")
+
+
+def _dep_item(tmp: Path, asset_bytes: bytes = b"\x89PNG\r\n\x1a\n-tile-v1",
+              ref: str = "assets/tile.png") -> dict:
+    """A published template whose visual.svg references a LOCAL raster that
+    materialization base64-inlines into the rendered background."""
+    (tmp / "assets").mkdir(exist_ok=True)
+    (tmp / ref).write_bytes(asset_bytes)
+    vis = tmp / "visual.svg"
+    vis.write_text('<svg xmlns="http://www.w3.org/2000/svg" '
+                   'xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080">'
+                   f'<rect width="9" height="9"/><image xlink:href="{ref}"/></svg>',
+                   encoding="utf-8")
+    slots = tmp / "text-slots.json"
+    slots.write_text(json.dumps({"slots": [{"id": "a", "bounds": {"x": .1, "y": .1,
+                                                                  "width": .2, "height": .1}}]}),
+                     encoding="utf-8")
+    prev = tmp / "preview.html"
+    prev.write_text('<div class="slot" data-slot-id="a"></div>', encoding="utf-8")
+    return {"id": "sun.template.deps", "status": "published", "type": "template",
+            "paths": {"visual": str(vis), "text_slots": str(slots), "preview": str(prev)}}
+
+
+def test_local_image_dependency_of_visual_is_fingerprinted() -> None:
+    # P1 (deeper): materialize_component_visual base64-inlines local <image> refs from
+    # visual.svg into the rendered background. So a referenced tile.png decides the
+    # render exactly like visual.svg does — mutating it alone must invalidate the audit,
+    # or the same bypass class stays open one level down.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        item = _dep_item(tmp)
+        fp = br.immutable_text_fingerprint(item)
+        assert "deps_sha256" in fp, fp                     # the dependency aggregate is bound
+        item["immutable_text"] = {"audit": "clean", "reason": "no words survive", "evidence": fp}
+        assert br.immutable_text_drift(item) is None
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+
+        # Change ONLY the referenced raster — visual.svg/preview/slots are byte-identical.
+        (tmp / "assets/tile.png").write_bytes(b"\x89PNG\r\n\x1a\n-tile-v2-DIFFERENT")
+        assert "deps_sha256 changed" in (br.immutable_text_drift(item) or ""), \
+            "mutating a referenced local asset alone must invalidate the audit"
+        assert br.gate_immutable_text(item)["audit"] == "unresolved"
+
+
+def test_missing_or_unsafe_visual_dependency_fails_closed() -> None:
+    # A declared local dependency that goes missing (or was never safe) must FAIL CLOSED,
+    # not silently vanish from evidence — the component can no longer materialize.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        item = _dep_item(tmp)
+        item["immutable_text"] = {"audit": "clean", "reason": "ok",
+                                  "evidence": br.immutable_text_fingerprint(item)}
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+        # delete the asset the visual references
+        (tmp / "assets/tile.png").unlink()
+        assert br.gate_immutable_text(item)["audit"] == "unresolved", "missing dep must fail closed"
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        # An UNSAFE ref (path traversal) is fail-closed for the audit exactly as
+        # materialization refuses it — the two must agree.
+        tmp = Path(tmpd)
+        item = _dep_item(tmp, ref="assets/tile.png")
+        vis = Path(item["paths"]["visual"])
+        vis.write_text(vis.read_text(encoding="utf-8").replace(
+            'xlink:href="assets/tile.png"', 'xlink:href="../../../etc/passwd.png"'),
+            encoding="utf-8")
+        item["immutable_text"] = {"audit": "clean", "reason": "ok",
+                                  "evidence": {"visual_sha256": "0"*64}}
+        assert br.gate_immutable_text(item)["audit"] == "unresolved"
+        # materialization and the audit agree the ref is unsafe/unresolved
+        safe, unresolved = br.visual_dependencies(item)
+        assert unresolved and not safe, (safe, unresolved)
+
+
+def test_data_uri_http_and_fragment_refs_are_not_dependencies() -> None:
+    # Self-contained (data:) and external (http/#fragment) refs are NOT local files, so
+    # they contribute no dependency hash and do not make an item unresolved.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        vis = tmp / "visual.svg"
+        vis.write_text('<svg xmlns="http://www.w3.org/2000/svg" '
+                       'xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080">'
+                       '<rect width="9" height="9"/><circle r="3"/><path d="M0 0"/>'
+                       '<image xlink:href="data:image/png;base64,AAAA"/>'
+                       '<image xlink:href="http://example.com/x.png"/>'
+                       '<image xlink:href="#frag"/></svg>', encoding="utf-8")
+        item = {"id": "sun.template.ext", "status": "published", "type": "template",
+                "paths": {"visual": str(vis)}}
+        safe, unresolved = br.visual_dependencies(item)
+        assert safe == [] and unresolved == [], (safe, unresolved)
+        assert "deps_sha256" not in br.immutable_text_fingerprint(item)
+
+
+def test_build_registry_and_materialization_agree_on_dependencies() -> None:
+    # The two consumers must classify refs identically (shared helper, no divergence).
+    import build_registry as br
+    import materialize_component_visual as mat
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        item = _dep_item(tmp)
+        vis = Path(item["paths"]["visual"])
+        svg = vis.read_text(encoding="utf-8")
+        safe_reg, unresolved_reg = br.visual_dependencies(item)
+        safe_mat, unresolved_mat = mat.image_dependencies(svg, vis.parent)
+        assert [r for r, _ in safe_reg] == [r for r, _ in safe_mat]
+        assert unresolved_reg == unresolved_mat
+        # and inline_external_images resolves exactly the safe set (round-trip behaviour kept)
+        out, un = mat.inline_external_images(svg, vis.parent)
+        assert un == [] and out.count("data:image/png;base64,") == len(safe_mat)
+
+
+class _DriftedDependency:
+    """Byte-change one real local image asset referenced by a published visual.svg,
+    then restore it. Proves a dependency-only change fails closed on real data."""
+
+    def __enter__(self) -> dict:
+        import build_registry as br
+        reg = _common.load_json(REGISTRY)
+        for it in reg["items"]:
+            if it.get("status") != "published":
+                continue
+            safe, unresolved = br.visual_dependencies(it)
+            if safe and not unresolved and (it.get("immutable_text") or {}).get("audit") == "clean":
+                self.item, self.path = it, safe[0][1]
+                self.original = self.path.read_bytes()
+                self.path.write_bytes(self.original + b"\x00driftbyte")
+                return it
+        raise AssertionError("no published clean item with a safe local visual dependency")
+
+    def __exit__(self, *exc) -> None:
+        self.path.write_bytes(self.original)
+
+
+def test_dependency_only_drift_fails_closed_end_to_end() -> None:
+    # Same three gates as preview-only drift, driven on real data through the CLIs:
+    # a referenced raster changed, nothing else.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        batch = Path(tmpd) / "batch.json"
+        out = Path(tmpd) / "rep.json"
+        assert br.generated_projection_staleness() == [], "precondition: repo starts fresh"
+        with _DriftedDependency() as item:
+            batch.write_text(json.dumps({"job_id": "j", "slides": [
+                {**_req(), "request_id": "s"}]}), encoding="utf-8")
+            # 1) fresh projection now marks the changed item unresolved
+            row = next(r for r in br.project_compact(br.live_registry_items())["items"]
+                       if r["id"] == item["id"])
+            assert row["immutable_text"]["audit"] == "unresolved", row["immutable_text"]
+            # 2) canonical compact scorer refuses on the now-stale projection
+            try:
+                svi.main(["--batch-request", str(batch), "--output", str(out)])
+                assert False, "scorer scored against a dependency-stale projection"
+            except SystemExit as exc:
+                assert "Refusing to score" in str(exc), exc
+            # 3) full-registry scoring projects it unresolved WITHOUT writing a file
+            gated = svi.scoring_items(REGISTRY.as_posix())
+            grow = next(r for r in gated if r["id"] == item["id"])
+            assert (grow.get("immutable_text") or {}).get("audit") == "unresolved", grow
+            # 4) pre-build fidelity rejects a report that selected it before the change
+            report = {"slides": [{"request_id": "s", "decision": {
+                "action": "reuse", "item_id": item["id"]}}]}
+            res = fidelity.check_fidelity("<div>x</div>", report, _common.load_json(REGISTRY))
+            assert res and res[0]["pass_"] is False and "stale" in res[0]["reason"], res
+        assert br.generated_projection_staleness() == []
+
+
+def test_verdict_binds_to_whatever_artifact_decides_the_render() -> None:
+    # Not every published item is an SVG + slot contract: `sun.asset.logo` is a raster
+    # with only a preview, and its verdict must still be bound to the artwork on disk.
+    # The rule is generic — fingerprint the inputs that decide the render, whatever
+    # form they take — so no item type is exempt by accident.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        png = tmp / "logo.png"
+        png.write_bytes(b"\x89PNG\r\n\x1a\n-pretend-this-is-the-mark")
+        item = {"id": "sun.asset.made-up", "status": "published", "type": "asset",
+                "paths": {"artifact": str(png), "preview": str(png)}}
+        fp = br.immutable_text_fingerprint(item)
+        assert fp == {"preview_sha256": _common.sha256_file(png)}, fp
+        assert br.renders_as_slide(item) is True
+
+        item["immutable_text"] = {"audit": "clean", "reason": "the brand mark only",
+                                  "evidence": fp}
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+        png.write_bytes(b"\x89PNG\r\n\x1a\n-now-it-bakes-in-Zephyr-Summit-2031")
+        assert "preview_sha256 changed" in (br.immutable_text_drift(item) or "")
+        assert br.gate_immutable_text(item)["audit"] == "unresolved"
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        # A directory-valued preview (Dio) hashes to nothing and cannot be scaffolded
+        # into a slide, so it is exempt rather than permanently `unresolved`.
+        d = Path(tmpd) / "dio"
+        d.mkdir()
+        item = {"id": "sun.character.made-up", "status": "published", "type": "character",
+                "paths": {"artifact": str(d), "preview": str(d)}}
+        assert br.immutable_text_fingerprint(item) == {}
+        assert br.renders_as_slide(item) is False
+        item["immutable_text"] = {"audit": "clean", "reason": "not a slide"}
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+
+
+def test_preview_html_is_a_fingerprinted_render_input() -> None:
+    # P1: scaffold_slide_from_component reads paths.preview (preview.html) at build
+    # time for its .slot markup and geometry, so preview.html decides the render just
+    # as much as visual.svg does. The fingerprint must cover it even when visual.svg
+    # exists — otherwise editing ONLY preview.html leaves the verdict `clean` while the
+    # rendered slide changed (the exact bypass reported).
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        vis = tmp / "visual.svg"
+        vis.write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">'
+                       '<rect width="9" height="9"/></svg>', encoding="utf-8")
+        slots = tmp / "text-slots.json"
+        slots.write_text(json.dumps({"slots": [{"id": "a", "bounds": {"x": .1, "y": .1,
+                                                                      "width": .2, "height": .1}}]}),
+                         encoding="utf-8")
+        prev = tmp / "preview.html"
+        prev.write_text('<div class="slot" data-slot-id="a" '
+                        'style="left:100px;top:100px"></div>', encoding="utf-8")
+        item = {"id": "sun.template.made-up", "status": "published", "type": "template",
+                "paths": {"visual": str(vis), "text_slots": str(slots), "preview": str(prev)}}
+
+        fp = br.immutable_text_fingerprint(item)
+        assert set(fp) == {"visual_sha256", "slots_sha256", "preview_sha256"}, fp
+
+        item["immutable_text"] = {"audit": "clean", "reason": "no words survive",
+                                  "evidence": fp}
+        assert br.immutable_text_drift(item) is None
+        assert br.gate_immutable_text(item)["audit"] == "clean"
+
+        # Change ONLY preview.html — visual.svg and text-slots.json are byte-identical.
+        prev.write_text('<div class="slot" data-slot-id="a" '
+                        'style="left:900px;top:100px"></div>', encoding="utf-8")
+        assert "preview_sha256 changed" in (br.immutable_text_drift(item) or ""), \
+            "editing preview.html alone must invalidate the audit"
+        assert br.gate_immutable_text(item)["audit"] == "unresolved"
+
+        # A stale full-registry input therefore projects unresolved WITHOUT any write.
+        row = br.project_compact([dict(item, intent=["timeline"], tags=[],
+                                       content_structure=["a"], density="any",
+                                       brand=None, limitations=[])])["items"][0]
+        dec, _ = svi.score_request(_req(), [row], svi.WEIGHTS, None)
+        assert dec["action"] == "needs_component", dec
+
+
+def test_preview_only_drift_invalidates_a_real_template_end_to_end() -> None:
+    # The same, on a REAL published template (visual + text-slots + preview.html), driven
+    # through the actual CLIs — the reported bypass reproduced and closed.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        batch = Path(tmpd) / "batch.json"
+        batch.write_text(json.dumps({"job_id": "j", "slides": [_prep_req()]}), encoding="utf-8")
+        out = Path(tmpd) / "rep.json"
+        assert br.generated_projection_staleness() == [], "precondition: repo starts fresh"
+
+        with _DriftedArtifact(field="preview", also="visual") as item:
+            # 1) the changed item now projects unresolved in a fresh projection
+            row = next(r for r in br.project_compact(br.live_registry_items())["items"]
+                       if r["id"] == item["id"])
+            assert row["immutable_text"]["audit"] == "unresolved", row["immutable_text"]
+
+            # 2) the canonical compact scorer refuses to run on the now-stale projection
+            try:
+                svi.main(["--batch-request", str(batch), "--output", str(out)])
+                assert False, "scorer scored against a preview-stale projection"
+            except SystemExit as exc:
+                assert "Refusing to score" in str(exc), exc
+            assert not out.exists()
+
+            # 3) pre-build fidelity rejects a report that selected it before the change
+            report = {"slides": [{"request_id": "s", "decision": {
+                "action": "reuse", "item_id": item["id"]}}]}
+            res = fidelity.check_fidelity("<div>x</div>", report, _common.load_json(REGISTRY))
+            assert res and res[0]["pass_"] is False and "stale" in res[0]["reason"], res
+        # restored
+        assert br.generated_projection_staleness() == []
+
+
+class _DriftedArtifact:
+    """Byte-change one real published render-input file, and put it back afterwards.
+
+    `field` selects WHICH render input to drift — `visual`, `preview`, or
+    `text_slots` — so a test can prove that changing any of them (not just the SVG)
+    invalidates the audit. The canonical library is the user's data: every test that
+    needs a stale artifact restores the exact original bytes, including when the test
+    body raises."""
+
+    def __init__(self, audit: str = "clean", field: str = "visual", also: str | None = None):
+        self.audit = audit
+        self.field = field
+        # An extra path the chosen item must ALSO declare (as a real file). Used to
+        # pick a template that has BOTH visual and preview, so drifting `preview`
+        # proves preview.html is an independent render input rather than the artwork.
+        self.also = also
+
+    def __enter__(self) -> dict:
+        reg = _common.load_json(REGISTRY)
+        def ok(i):
+            paths = i.get("paths") or {}
+            if not (paths.get(self.field)
+                    and (i.get("immutable_text") or {}).get("audit") == self.audit
+                    and _common.resolve_repo_path(paths[self.field]).is_file()):
+                return False
+            return not self.also or (paths.get(self.also)
+                                     and _common.resolve_repo_path(paths[self.also]).is_file())
+        self.item = next(i for i in reg["items"] if ok(i))
+        self.path = _common.resolve_repo_path(self.item["paths"][self.field])
+        self.original = self.path.read_bytes()
+        self.path.write_bytes(self.original + b"\n<!-- test drift -->\n")
+        return self.item
+
+    def __exit__(self, *exc) -> None:
+        self.path.write_bytes(self.original)
+
+
+def test_default_cli_scoring_refuses_a_stale_projection() -> None:
+    # Finding 1: build_registry --check caught artifact drift, but the scorer read the
+    # generated compact without proving it was fresh — so a `clean` verdict recorded
+    # against artwork that had since changed still auto-reused. The default CLI path
+    # must refuse to score rather than select on stale audit metadata.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        batch = Path(tmpd) / "batch.json"
+        batch.write_text(json.dumps({"job_id": "j", "slides": [_prep_req()]}), encoding="utf-8")
+        out = Path(tmpd) / "rep.json"
+
+        assert br.generated_projection_staleness() == [], "precondition: repo starts fresh"
+        with _DriftedArtifact() as item:
+            stale = br.generated_projection_staleness()
+            assert stale and "compact" in stale[0], stale
+            try:
+                svi.main(["--batch-request", str(batch), "--output", str(out)])
+                assert False, "the scorer scored against a stale projection"
+            except SystemExit as exc:
+                msg = str(exc.code if isinstance(exc.code, str) else exc)
+                assert "Refusing to score" in msg, msg
+                assert br.REFRESH_HINT in msg, msg          # plain remediation
+                assert "unresolved" in msg, msg
+            assert not out.exists(), "no selection report may be written from stale data"
+            # ...and the drifted item is exactly the one the refusal is about.
+            assert br.gate_immutable_text(item)["audit"] == "unresolved"
+        # Restored: the normal path scores again (exit 0, a report is written). The
+        # decision itself is gated by the full contract — 05-prep is a high-content
+        # source-specific slide, so it resolves needs_component — but the point here is
+        # that a FRESH projection scores rather than refusing.
+        assert br.generated_projection_staleness() == []
+        assert svi.main(["--batch-request", str(batch), "--output", str(out)]) == 0
+        action = json.loads(out.read_text(encoding="utf-8"))["slides"][0]["decision"]["action"]
+        assert action in ("reuse", "needs_component"), action
+
+
+def test_refreshed_projection_makes_the_changed_item_unresolved() -> None:
+    # Step 3 of the contract: after the operator runs the normal refresh, the changed
+    # item projects `unresolved` and stops auto-reusing until it is re-audited. Proven
+    # on the REAL projection, without writing to the repo's registries.
+    import build_registry as br
+
+    with _DriftedArtifact() as item:
+        refreshed = br.project_compact(br.live_registry_items())["items"]   # what --write would emit
+        row = next(r for r in refreshed if r["id"] == item["id"])
+        assert row["immutable_text"]["audit"] == "unresolved", row["immutable_text"]
+        assert "audit_immutable_text.py" in row["immutable_text"]["reason"]
+        dec, _ = svi.score_request(_prep_req(), refreshed, svi.WEIGHTS, None)
+        assert dec["item_id"] != item["id"], dec
+        # Every other item is untouched: one artifact changing must not disable the library.
+        assert sum(1 for r in refreshed
+                   if (r.get("immutable_text") or {}).get("audit") == "unresolved") == 1
+
+
+def test_full_registry_scoring_path_cannot_bypass_the_gate() -> None:
+    # Requirement 4: `--registry .../visual-library.json` carries raw, ungated
+    # immutable_text. It must be projected through the same gate in memory, so the
+    # safety rule cannot depend on which file the caller passed.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        vis = tmp / "visual.svg"
+        vis.write_text('<svg xmlns="http://www.w3.org/2000/svg"><rect width="9" height="9"/></svg>',
+                       encoding="utf-8")
+        item = {"id": "sun.component.stale", "status": "published", "type": "component",
+                "intent": ["timeline"], "tags": [], "content_structure": ["a"],
+                "density": "any", "brand": None, "limitations": [],
+                "paths": {"visual": str(vis)},
+                "build_scope": {"mode": "generic", "reason": "test generic component"},
+                # Evidence for artwork that is NOT what is on disk.
+                "immutable_text": {"audit": "clean", "reason": "no words survive",
+                                   "evidence": {"visual_sha256": "0" * 64}}}
+        reg = tmp / "full-registry.json"
+        reg.write_text(json.dumps({"items": [item]}), encoding="utf-8")
+
+        gated = svi.scoring_items(str(reg))
+        assert gated[0]["immutable_text"]["audit"] == "unresolved", gated[0]
+        dec, _ = svi.score_request(_req(), gated, svi.WEIGHTS, None)
+        assert dec["action"] == "needs_component", dec
+        # The registry file itself is never rewritten by scoring.
+        assert json.loads(reg.read_text(encoding="utf-8"))["items"][0]["immutable_text"] \
+            == item["immutable_text"]
+        # And correct evidence still reuses normally.
+        item["immutable_text"]["evidence"] = br.immutable_text_fingerprint(item)
+        reg.write_text(json.dumps({"items": [item]}), encoding="utf-8")
+        dec2, _ = svi.score_request(_req(), svi.scoring_items(str(reg)), svi.WEIGHTS, None)
+        assert dec2["action"] == "reuse", dec2
+
+
+def test_canonical_compact_freshness_cannot_be_bypassed_by_a_paths_key() -> None:
+    # Ordering guard: the canonical compact's freshness gate must fire BEFORE the
+    # full-registry re-projection branch. If a compact ever carried a stray `paths`
+    # key, the old order re-projected it in memory (masking staleness) instead of
+    # refusing. Point build_registry.COMPACT at a stale file whose items ALSO carry
+    # `paths`; scoring must still REFUSE, never project.
+    import build_registry as br
+
+    original = br.COMPACT
+    with tempfile.TemporaryDirectory() as tmpd:
+        fake = Path(tmpd) / "visual-library-compact.json"
+        # Stale by construction (does not equal the live projection) AND carries a
+        # `paths` key — exactly the shape that used to slip through the paths branch.
+        fake.write_text(json.dumps({"items": [
+            {"id": "sun.component.x", "status": "published", "type": "component",
+             "intent": ["timeline"], "tags": [], "content_structure": ["a"],
+             "density": "any", "brand": None, "limitations": [],
+             "paths": {"visual": "does/not/matter.svg"},
+             "immutable_text": {"audit": "clean", "reason": "stale clean"}}]}),
+                        encoding="utf-8")
+        br.COMPACT = fake
+        try:
+            assert br.generated_projection_staleness(), "precondition: fake compact is stale"
+            try:
+                svi.scoring_items(str(fake))
+                assert False, "compact freshness gate was bypassed by the paths branch"
+            except SystemExit as exc:
+                assert "Refusing to score" in str(exc), exc
+        finally:
+            br.COMPACT = original
+
+
+def test_selection_report_is_rejected_when_its_artifact_changed_after_scoring() -> None:
+    # Requirement 5: a report scored against artwork that has since changed must not
+    # reach build/export. This is the backstop that makes the compact, full-registry
+    # and pre-build paths agree.
+    with _DriftedArtifact() as item:
+        reg = _common.load_json(REGISTRY)
+        report = {"slides": [{"request_id": "s", "decision": {
+            "action": "reuse", "item_id": item["id"]}}]}
+        res = fidelity.check_fidelity("<div>anything</div>", report, reg)
+        assert res and res[0]["pass_"] is False, res
+        assert "stale" in res[0]["reason"] and "visual_sha256 changed" in res[0]["reason"], res[0]
+    # Unchanged artwork: this gate says nothing, and the normal geometry checks run.
+    reg = _common.load_json(REGISTRY)
+    item = next(i for i in reg["items"] if i["id"] == _PREP)
+    report = {"slides": [{"request_id": "s", "decision": {"action": "reuse", "item_id": _PREP}}]}
+    res = fidelity.check_fidelity("<div>anything</div>", report, reg)
+    assert res and "stale" not in res[0]["reason"], res[0]
+
+
+def test_declared_artwork_that_is_missing_fails_closed_not_exempt() -> None:
+    # An item that DECLARES artwork but whose file is not on disk must fail closed. The
+    # exemption is only for items with no artifact file to hash at all (Dio, a
+    # directory) — never for one whose artwork simply is not there, or a deleted
+    # visual.svg would silently turn "unverifiable" into "clean".
+    import build_registry as br
+
+    item = {"id": "sun.component.ghost", "status": "published", "type": "component",
+            "paths": {"visual": "library/components/diagrams/gone/visual.svg"},
+            "immutable_text": {"audit": "clean", "reason": "it was clean once"}}
+    assert br.immutable_text_fingerprint(item) == {}      # nothing to hash: the file is gone
+    assert br.renders_as_slide(item) is True              # ...but it still claims artwork
+    assert br.gate_immutable_text(item)["audit"] == "unresolved", br.gate_immutable_text(item)
+
+    # Same for a preview-only item whose raster is missing.
+    ghost_png = {"id": "sun.asset.ghost", "status": "published", "type": "asset",
+                 "paths": {"preview": "library/assets/gone/logo.png"},
+                 "immutable_text": {"audit": "clean", "reason": "brand mark"}}
+    assert br.renders_as_slide(ghost_png) is True
+    assert br.gate_immutable_text(ghost_png)["audit"] == "unresolved"
+
+
+def test_needs_component_reason_names_the_real_blocker() -> None:
+    # The reason a slide got no component must be the reason that is actually true.
+    # The immutable-context gate blocks candidates that clear BOTH confidence bars, and
+    # reporting "below the high-confidence reuse bar" for those sends the reader off to
+    # raise a score that can never unblock it.
+    item = _item(id="sun.component.locked", intent=["closing"], tags=["closing"])
+    item["immutable_text"] = {"audit": "immutable", "contexts": [["zephyr-summit", "2031"]],
+                              "reason": "Artwork bakes in the Zephyr Summit 2031 lockup."}
+    req = {"intent": ["closing"], "tags": [], "content_structure": ["a"],
+           "density": "medium", "brand": None, "required_exports": []}
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    top = cands[0]
+    # Precondition: this candidate is blocked DESPITE clearing both bars.
+    assert top["score"] >= svi.AUTO_REUSE_MIN, top
+    assert top["criteria"]["semantic_intent"] >= 35 * svi.SEMANTIC_CONFIDENCE_FRAC, top
+    assert "below the high-confidence reuse bar" not in dec["reason"], dec["reason"]
+    assert "Zephyr Summit 2031" in dec["reason"], dec["reason"]
+
+    # And a genuinely low-scoring candidate still reports the confidence bar.
+    weak = _item(id="sun.component.weak", intent=["timeline"], tags=[])
+    dec2, _ = svi.score_request(dict(req, intent=["closing"]), [weak], svi.WEIGHTS, None)
+    assert dec2["action"] == "needs_component", dec2
+    assert "reuse bar" in dec2["reason"] or "semantic fit" in dec2["reason"], dec2["reason"]
+
+
+def test_new_published_item_cannot_bypass_the_audit_gate() -> None:
+    # A freshly published / re-extracted item carries no audit. It must not become
+    # automatically reusable just by landing in the registry.
+    import build_registry as br
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        item = _audit_item(Path(tmpd))
+        gated = br.gate_immutable_text(item)
+        assert gated["audit"] == "unresolved", gated
+        assert "No immutable-text audit recorded" in gated["reason"]
+        # An audit with no fingerprint is equally unusable — it cannot be re-checked.
+        item["immutable_text"] = {"audit": "clean", "reason": "trust me"}
+        assert br.gate_immutable_text(item)["audit"] == "unresolved"
+        # A DRAFT is left alone: it is not selectable, and publish semantics are not
+        # this gate's business.
+        assert br.gate_immutable_text(dict(item, status="staging")) == item["immutable_text"]
+
+
+def test_static_audit_cannot_overwrite_or_downgrade_a_rendered_report() -> None:
+    # The defect: a --no-render pass overwrote audit-report.json, leaving it claiming
+    # 91 audited with 0 rendered while 90 real renders sat on disk next to it.
+    import audit_immutable_text as audit
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        out = Path(tmpd) / "immutable-text-audit"
+        out.mkdir(parents=True)
+        rendered = out / "audit-report.json"
+        marker = {"mode": "rendered", "status": "complete", "items": [{"id": "x"}]}
+        rendered.write_text(json.dumps(marker), encoding="utf-8")
+
+        rc = audit.main(["--out-dir", str(out), "--no-render",
+                         "--ids", "sun.interview-workshop-sunriser.05-prep"])
+        assert rc == 0
+        # The rendered evidence is untouched...
+        assert json.loads(rendered.read_text(encoding="utf-8")) == marker
+        # ...and the static pass is clearly labelled, elsewhere, and unusable as proof.
+        static = json.loads((out / "audit-report.static.json").read_text(encoding="utf-8"))
+        assert static["mode"] == "static-only"
+        assert static["status"] == "incomplete"
+        assert static["usable_as_verdict_evidence"] is False
+        assert all(r["render"]["status"] == "skipped" for r in static["items"])
+
+
+def test_rendered_audit_records_real_render_evidence() -> None:
+    # A completed rendered report must carry durable, repo-relative evidence for every
+    # renderable item — not an absolute machine path, and never a null.
+    import audit_immutable_text as audit
+    if not fidelity._node_available():
+        print("  (skip: node/playwright unavailable)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        out = Path(tmpd) / "immutable-text-audit"
+        rc = audit.main(["--out-dir", str(out), "--ids",
+                         f"{_PREP},{_PR_CLOSING}"])
+        assert rc == 0
+        rep = json.loads((out / "audit-report.json").read_text(encoding="utf-8"))
+        assert rep["mode"] == "rendered", rep["mode"]
+        assert rep["status"] == "complete", rep
+        assert rep["usable_as_verdict_evidence"] is True
+        assert rep["counts"]["render_rendered"] == 2, rep["counts"]
+        for r in rep["items"]:
+            assert r["render"]["status"] == "rendered", r
+            assert r["render"]["path"] and not Path(r["render"]["path"]).is_absolute(), r
+            assert (out / "renders" / f"{r['id']}.png").is_file(), r
+            # Every record carries the fingerprint of the artwork it is evidence about.
+            assert r["artifact_fingerprint"]["visual_sha256"], r
+
+
+def test_immutable_text_conflict_fails_closed_at_fidelity() -> None:
+    # An explicitly selected item whose fixed text conflicts with the deck must not
+    # build: the scorer records the conflict on the decision and the render gate
+    # rejects it, exactly like a review-only component.
+    reg = {"items": [{"id": "sun.component.made-up", "status": "published",
+                      "paths": {"preview": "x"}}]}
+    report = {"slides": [{"request_id": "s", "decision": {
+        "action": "reuse", "item_id": "sun.component.made-up", "selected_by": "user",
+        "immutable_text_conflict": {"contexts": [["zephyr-summit", "2031"]],
+                                    "reason": "Artwork bakes in the Zephyr Summit 2031 lockup."}}}]}
+    res = fidelity.check_fidelity("<div>anything</div>", report, reg)
+    assert res and res[0]["pass_"] is False, res
+    assert "Zephyr Summit 2031" in res[0]["reason"], res
+
+
+def test_retrieval_index_marks_review_only_but_published() -> None:
+    # Review-only items stay published + browseable in the retrieval projection,
+    # each with a human-readable reason. Pinned to the exact id set so a future
+    # backfill cannot quietly mark unrelated components unsafe.
+    idx = REGISTRY.parent / "component-retrieval-index.jsonl"
+    rows = [json.loads(l) for l in idx.read_text(encoding="utf-8").splitlines() if l.strip()]
+    flagged = [r for r in rows if (r.get("auto_reuse") or {}).get("eligible") is False]
+    assert {r["id"] for r in flagged} == REVIEW_ONLY_IDS, sorted(r["id"] for r in flagged)
+    for r in flagged:
+        assert r["status"] == "published", r
+        assert r["auto_reuse"]["reason"], r
+
+
+CATALOG_DATA = SCRIPTS.parent / "catalog" / "catalog-data.json"
+
+
+def test_catalog_data_marks_flagged_published_items_review_only() -> None:
+    # F2: the catalog UI reads ONLY catalog-data.json, so a review-only component
+    # that reaches a human as a plain "Published" card is the whole defect. The
+    # shipped projection must carry the flag and the reason.
+    data = _common.load_json(CATALOG_DATA)
+    items = {i["id"]: i for i in data["items"]}
+    flagged = [i for i in data["items"] if (i.get("auto_reuse") or {}).get("eligible") is False]
+    assert {i["id"] for i in flagged} == REVIEW_ONLY_IDS, sorted(i["id"] for i in flagged)
+    for item in flagged:
+        assert item["status"] == "published", item      # still published + browseable
+        assert item["auto_reuse"]["reason"].strip(), item   # with a human-readable reason
+        assert item.get("images"), item                 # preview stays available
+    # A normal published component keeps no review-only state at all.
+    normal = items[ITEM_WITH_SLOTS]
+    assert normal["status"] == "published", normal
+    assert "auto_reuse" not in normal, normal.get("auto_reuse")
+
+
+def test_catalog_builder_projects_auto_reuse_from_registry() -> None:
+    # F2: prove the projection, not just today's snapshot — a registry flag must
+    # reach catalog-data.json, and an unflagged item must stay unflagged.
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        flagged = _item(id="sun.component.flagged")
+        flagged["auto_reuse"] = {"eligible": False, "reason": "failed full-slide QA"}
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"items": [flagged, _item(id="sun.component.normal")]}),
+                       encoding="utf-8")
+        out = tmp / "catalog-data.json"
+        proc = subprocess.run(
+            [sys.executable, str(SCRIPTS / "build_component_catalog.py"),
+             "--registry", str(reg), "--output", str(out)], capture_output=True, text=True)
+        assert proc.returncode == 0, proc.stderr
+        items = {i["id"]: i for i in _common.load_json(out)["items"]}
+        assert items["sun.component.flagged"]["auto_reuse"] == {
+            "eligible": False, "reason": "failed full-slide QA"}
+        assert items["sun.component.flagged"]["status"] == "published"
+        assert "auto_reuse" not in items["sun.component.normal"]
+
+
+def _local_draft(root: Path, folder: str, stable_id: str) -> Path:
+    """A machine-local Draft on disk, in the layout the runtime scanner reads.
+    Real Drafts live under gitignored outputs/component-extractions/."""
+    item = root / "demo" / "items" / folder
+    (item / "artifact").mkdir(parents=True)
+    (item / "evidence").mkdir(parents=True)
+    (item / "artifact" / "visual.svg").write_text("<svg/>", encoding="utf-8")
+    (item / "evidence" / "source-with-text.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><text>x</text></svg>', encoding="utf-8")
+    (item / "mapping.json").write_text(json.dumps({
+        "item_id": folder, "candidate_stable_id": stable_id, "name": "Local Draft",
+        "status": "staging", "type": "component", "category": "component",
+        "source": {"path": "source.pdf", "slide_or_page": 1},
+    }), encoding="utf-8")
+    return item
+
+
+def test_tracked_catalog_projection_is_deterministic_and_draft_free() -> None:
+    # Fix A: catalog-data.json is TRACKED, so it must be a pure function of the
+    # tracked registry. Machine-local Drafts (gitignored outputs/) previously got
+    # baked in, so any developer's rebuild replaced the committed Draft rows with
+    # their own — noisy, unsafe diffs. The tracked projection is now published-only
+    # and carries no wall-clock timestamp.
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        extractions = tmp / "component-extractions"
+        _local_draft(extractions, "local-draft", "sun.component.local-draft")
+        flagged = _item(id="sun.component.flagged")
+        flagged["auto_reuse"] = {"eligible": False, "reason": "failed full-slide QA"}
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"updated_at": "2026-07-06T11:39:15+07:00",
+                                   "items": [_item(id="sun.component.pub"), flagged]}),
+                       encoding="utf-8")
+
+        def _build(out: Path) -> bytes:
+            rc = bcc.main(["--registry", str(reg), "--output", str(out)])
+            assert rc == 0
+            return out.read_bytes()
+
+        first = _build(tmp / "a.json")
+        second = _build(tmp / "b.json")
+        # 1. Byte-stable: same tracked state in, identical bytes out (no now_iso()).
+        assert first == second, "tracked catalog rebuild must be byte-stable"
+
+        data = json.loads(first.decode("utf-8"))
+        ids = [i["id"] for i in data["items"]]
+        # 2. Published items survive, INCLUDING review-only metadata.
+        assert ids == ["sun.component.pub", "sun.component.flagged"], ids
+        assert all(i["status"] == "published" for i in data["items"]), data["items"]
+        by_id = {i["id"]: i for i in data["items"]}
+        assert by_id["sun.component.flagged"]["auto_reuse"] == {
+            "eligible": False, "reason": "failed full-slide QA"}
+        # 3. A normal published component is untouched by any of this.
+        assert "auto_reuse" not in by_id["sun.component.pub"]
+        # 4. The local Draft contaminates nothing...
+        assert "sun.component.local-draft" not in ids
+        # ...and no CLI path can inject Drafts into the tracked projection.
+        proc = subprocess.run(
+            [sys.executable, str(SCRIPTS / "build_component_catalog.py"),
+             "--registry", str(reg), "--output", str(tmp / "c.json"),
+             "--extractions", str(extractions)], capture_output=True, text=True)
+        assert proc.returncode != 0, "tracked builder must not accept a Drafts source"
+
+
+def test_local_drafts_stay_discoverable_through_the_runtime_catalog_api() -> None:
+    # Fix A other half: Drafts are still the user's to review — they are just owned
+    # by the RUNTIME server (live scan), never by the tracked file.
+    import build_component_catalog as bcc
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        extractions = Path(tmpd) / "component-extractions"
+        _local_draft(extractions, "local-draft", "sun.component.local-draft")
+        drafts = bcc.collect_draft_items(extractions)
+        assert [d["id"] for d in drafts] == ["sun.component.local-draft"], drafts
+        assert drafts[0]["status"] == "staging"
+        assert drafts[0]["publish_readiness"]["ready"] is True, drafts[0]
+
+    # The server exposes exactly that scan over its existing /api pattern.
+    path = SCRIPTS.parents[1] / "slide-system" / "catalog" / "catalog_server.py"
+    spec = importlib.util.spec_from_file_location("catalog_server_drafts", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert "/api/drafts" in module.GET_ROUTES
+    code, payload = module.GET_ROUTES["/api/drafts"]()
+    assert code == 200 and payload["ok"] is True, payload
+    assert isinstance(payload["items"], list)
+    # The UI merges runtime Drafts on top of the tracked published projection.
+    js = (SCRIPTS.parent / "catalog" / "catalog.js").read_text(encoding="utf-8")
+    assert "/api/drafts" in js, "catalog UI must load Drafts from the runtime API"
+
+
+def test_template_scaffold_centres_slot_text_for_accented_scripts() -> None:
+    # Preview slots are copied top-aligned at the contract's tight line-height (1.0),
+    # sized to the SOURCE copy's ink. Vietnamese diacritics (Ứ/Ụ) make the ink taller,
+    # so its box escapes the wrapper's top even when the text "fits" — the real cover
+    # measured 646x135 ink in a 728x146 box yet still read as outside. Centre it in the
+    # room the box already has, exactly as the slot-contract path does; never shrink.
+    slot = ('<div class="slot" data-slot-id="title" style="position:absolute;left:0;top:0;'
+            'width:700px;height:146px;display:flex;justify-content:flex-start;'
+            'align-items:flex-start;overflow:visible"><h1 style="margin:0">Old</h1></div>')
+    out = scaffold.build_scaffold("sun.x.y", [slot], bg_url="assets/comp/x.svg")
+    assert "align-items:center" in out, out
+    assert "align-items:flex-start" not in out, out
+    # Horizontal placement is contract-owned and must survive untouched.
+    assert "justify-content:flex-start" in out, out
+
+
+def test_template_scaffold_strips_unquotable_source_font_family() -> None:
+    # A published preview.html emits its source family INSIDE a double-quoted style
+    # attribute: style="...;font-family:"ProximaNova-Semibold", "Proxima Nova",
+    # sans-serif;font-size:120px;...". Those inner quotes close the attribute early,
+    # so the browser silently drops font-size/weight/colour — a 120px hero title
+    # rendered at the default 32px, and the brand-font gate saw mangled fragments.
+    # Same rule the slot-contract path already applies: the brand pack outranks a
+    # component's foundry family, so drop it and inherit the deck font.
+    slot = ('<div class="slot" data-slot-id="title" style="position:absolute;left:10px">'
+            '<h1 style="margin:0;font-family:"ProximaNova-Bold", "Proxima Nova", '
+            'sans-serif;font-size:120px;color:#171717">Old</h1></div>')
+    out = scaffold.build_scaffold("sun.x.y", [slot], bg_url="assets/comp/x.svg")
+
+    assert "font-family:" not in out, "raw source font-family must not survive"
+    assert "ProximaNova-Bold" not in out
+    # Everything the contract legitimately owns must still be there...
+    assert "font-size:120px" in out and "color:#171717" in out
+    assert 'data-slot-id="title"' in out and "left:10px" in out
+    # ...and every style attribute must now be well-formed (no stray inner quote).
+    for style in re.findall(r'style="([^"]*)"', out):
+        assert '"' not in style, style
+    for decl in re.findall(r'style="([^"]*)"', out):
+        for part in filter(None, decl.split(";")):
+            assert ":" in part, f"malformed declaration {part!r} in {decl!r}"
+
+
+def test_catalog_ui_gates_review_only_components() -> None:
+    # F2: the badge/reason/Copy-prompt rules live in catalog.js, which has no test
+    # runner in this repo. This asserts the wiring exists and stays wired to
+    # `auto_reuse.eligible`; the rendered proof is the browser smoke in the log.
+    js = (SCRIPTS.parent / "catalog" / "catalog.js").read_text(encoding="utf-8")
+    assert "auto_reuse?.eligible === false" in js, "review-only must key off auto_reuse"
+    assert "Review-only" in js, "review-only badge label missing"
+    # Copy prompt is disabled for review-only; Copy ID stays available.
+    assert "compDom.copyPrompt.disabled = reviewOnly" in js
+    assert "compDom.copyId.disabled" not in js, "Copy ID must stay available for audit"
+
+
+def _valid_batch(**slide_over) -> dict:
+    slide = {"request_id": "s1", "intent": ["timeline"], "tags": [],
+             "content_structure": ["a"], "content_shape": "timeline",
+             "density": "medium", "brand": "sun-studio"}
+    slide.update(slide_over)
+    return {"job_id": "j", "slides": [slide]}
+
+
+REQUESTS_SCHEMA = SCRIPTS.parent / "schemas" / "visual-requests.schema.json"
+# One sample per JSON type. A value is "bad" for a property when its JSON type is
+# not among the types that property declares.
+_TYPE_SAMPLES = (("string", "x"), ("integer", 3), ("boolean", True),
+                 ("array", ["x"]), ("object", {"k": "v"}))
+
+
+def _schema_rejects(spec: dict) -> list:
+    """Values the JSON Schema `spec` forbids — used to prove the hand-written
+    validator enforces exactly what the schema declares."""
+    if "enum" in spec:
+        return ["not-in-enum"]
+    declared = spec.get("type")
+    types = {declared} if isinstance(declared, str) else set(declared or [])
+    bad = [value for name, value in _TYPE_SAMPLES if name not in types]
+    if "array" in types and (spec.get("items") or {}).get("type") == "string":
+        bad.append([123])  # right container, wrong element type
+    return bad
+
+
+def test_batch_request_validator_matches_schema_field_by_field() -> None:
+    # F1 parity: `jsonschema` is not a declared dependency of this repo (there is
+    # no Python dependency manifest at all), so validate_batch_request() is
+    # hand-written. This test is what keeps it honest: the field vocabulary and
+    # every declared type are checked against the schema file itself, so a schema
+    # property the validator forgets can never pass silently and then crash the
+    # scorer downstream.
+    schema = _common.load_json(REQUESTS_SCHEMA)
+    top = schema["properties"]
+    slide = schema["$defs"]["slide"]["properties"]
+
+    assert svi._BATCH_TOP_FIELDS == set(top), "top-level fields drifted from the schema"
+    assert svi._SLIDE_REQUEST_FIELDS == set(slide), "slide fields drifted from the schema"
+
+    for field, spec in top.items():
+        for bad in _schema_rejects(spec):
+            batch = _valid_batch()
+            batch[field] = bad
+            assert svi.validate_batch_request(batch), f"{field}={bad!r} must be rejected"
+    for field, spec in slide.items():
+        for bad in _schema_rejects(spec):
+            assert svi.validate_batch_request(_valid_batch(**{field: bad})), \
+                f"slides[0].{field}={bad!r} must be rejected"
+
+
+def test_batch_request_duplicate_request_id_rejected() -> None:
+    # The one invariant JSON Schema cannot express cleanly, so it is enforced
+    # only in code and must keep its own test.
+    errs = svi.validate_batch_request(
+        {"job_id": "j", "slides": [{"request_id": "s"}, {"request_id": "s"}]})
+    assert any("duplicate request_id" in e for e in errs), errs
+    assert svi.validate_batch_request(
+        {"job_id": "j", "slides": [{"request_id": "a"}, {"request_id": "b"}]}) == []
+
+
+def test_batch_request_bad_content_shape_fails_clean_without_traceback() -> None:
+    # F1 regression: `content_shape: ["flow"]` passed the validator and then blew
+    # up in _common.shape_eligible() with `TypeError: unhashable type: 'list'`.
+    # The user must get a plain validation error instead — and no report.
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"items": [_item()]}), encoding="utf-8")
+        batch = tmp / "batch.json"
+        batch.write_text(json.dumps(_valid_batch(content_shape=["flow"])), encoding="utf-8")
+        out = tmp / "rep.json"
+        proc = subprocess.run(
+            [sys.executable, str(SCRIPTS / "score_visual_items.py"),
+             "--batch-request", str(batch), "--registry", str(reg),
+             "--output", str(out), "--retrieval-index", "none"],
+            capture_output=True, text=True)
+        assert proc.returncode != 0, proc.stdout
+        assert "Traceback" not in proc.stderr, proc.stderr
+        assert "TypeError" not in proc.stderr, proc.stderr
+        assert "content_shape" in proc.stderr, proc.stderr
+        assert not out.exists(), "no selection report may be written for an invalid batch"
+
+
+def test_batch_request_valid_explicit_selection_passes() -> None:
+    # Fix C: a valid explicit selection batch validates clean.
+    assert svi.validate_batch_request(_valid_batch(
+        component_id="sun.component.x", allow_component_reuse=True)) == []
+    assert svi.validate_batch_request(_valid_batch(
+        component_id=None, unresolved_policy="custom-local")) == []
+    # ...and the real shipped QA artifacts remain accepted.
+    for run in ("nine-slide-brief", "distinct-deck"):
+        p = (SCRIPTS.parents[1] / "outputs/slide-jobs/selection-revision-20260715/runs"
+             / run / "analysis/visual-requests.json")
+        if p.exists():
+            assert svi.validate_batch_request(_common.load_json(p)) == [], run
+
+
+def test_batch_request_invalid_inputs_fail_before_scoring() -> None:
+    # Fix C: each malformed selection input is rejected with a plain reason.
+    def _errs(batch):
+        return " ".join(svi.validate_batch_request(batch))
+    assert "unresolved_policy" in _errs(_valid_batch(unresolved_policy="custom"))
+    assert "allow_component_reuse" in _errs(_valid_batch(allow_component_reuse="yes"))
+    assert "component_id" in _errs(_valid_batch(component_id=123))
+    assert "request_id" in _errs({"job_id": "j", "slides": [{"intent": ["x"]}]})
+    assert "must be an object" in _errs({"job_id": "j", "slides": ["nope"]})
+    assert "unknown field" in _errs(_valid_batch(**{"componentid": "sun.component.x"}))
+    assert "job_id" in _errs({"slides": [{"request_id": "s1"}]})
+    assert "slides" in _errs({"job_id": "j"})
+    # F1: types the schema declares but the validator used to ignore — the
+    # content_shape list is the one that reached _common.shape_eligible() and
+    # raised `TypeError: unhashable type: 'list'`.
+    assert "content_shape" in _errs(_valid_batch(content_shape=["flow"]))
+    assert "brief" in _errs({**_valid_batch(), "brief": 123})
+    assert "note" in _errs({**_valid_batch(), "note": ["x"]})
+    assert "query" in _errs(_valid_batch(query=7))
+    assert "density" in _errs(_valid_batch(density=["medium"]))
+    assert "brand" in _errs(_valid_batch(brand=1))
+    assert "prefer_type" in _errs(_valid_batch(prefer_type=["component"]))
+    assert "recommend_extraction" in _errs(_valid_batch(recommend_extraction="yes"))
+
+
+def test_batch_request_invalid_exits_nonzero_before_scoring() -> None:
+    # Fix C: the CLI fails closed (non-zero, no report written) on a bad batch.
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"items": [_item()]}), encoding="utf-8")
+        batch = tmp / "batch.json"
+        batch.write_text(json.dumps(_valid_batch(unresolved_policy="custom")), encoding="utf-8")
+        out = tmp / "rep.json"
+        rc = svi.main(["--batch-request", str(batch), "--registry", str(reg),
+                       "--output", str(out), "--retrieval-index", "none"])
+        assert rc == 1, "invalid batch must exit non-zero"
+        assert not out.exists(), "no selection report may be written for an invalid batch"
+
+
+def test_published_only_still_enforced_for_auto_reuse() -> None:
+    # F10: existing published-only gate still holds — an unpublished item never
+    # auto-reuses even if its raw score would be high.
+    dec, cands = svi.score_request(_req(), [_item(id="sun.component.draft", status="staging")],
+                                   svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component" and cands[0]["eligible"] is False, dec
 
 
 # --------------------------------------------------------------------------- #
@@ -477,7 +2821,8 @@ def test_retrieval_generic_overlap_capped_below_semantic_floor() -> None:
                                    enrichment=enrichment)
     cap_points = svi.SECONDARY_CAP * svi.WEIGHTS["semantic_intent"]
     assert cands[0]["criteria"]["semantic_intent"] <= cap_points + 1e-9
-    assert dec["action"] == "custom-local", "generic overlap alone must never select"
+    assert dec["action"] == "needs_component", "generic overlap alone must never auto-select"
+    assert dec["item_id"] is None, dec
     assert dec["extraction_recommended"] is True
 
 
@@ -511,8 +2856,12 @@ def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up()
                                    enrichment=enrichment)
     assert cands[0]["item_id"] == "sun.component.lure"
     assert cands[0]["criteria"]["semantic_intent"] < svi.WEIGHTS["semantic_intent"] * 0.3
-    assert dec["item_id"] == "sun.component.good-timeline", dec
-    assert dec["action"] == "adapt-local", dec
+    # Neither the lure nor the weak runner-up clears the high-confidence bar, so
+    # the slide is unresolved; the relevant runner-up stays in candidates for the
+    # user to select explicitly (never a silent auto-selection or custom layout).
+    assert dec["action"] == "needs_component", dec
+    assert dec["item_id"] is None, dec
+    assert any(c["item_id"] == "sun.component.good-timeline" for c in cands), cands
 
 
 def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
@@ -548,10 +2897,11 @@ def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
     )
     dec, cands = svi.score_request(req, lures + [good], svi.WEIGHTS, None,
                                    top_n=5, enrichment=enrichment)
-    assert dec["item_id"] == "sun.component.good-timeline", dec
+    # Unresolved (nothing clears the bar), but the relevant runner-up must still be
+    # emitted outside the top-N display slice so reviewers can inspect + pick it.
+    assert dec["action"] == "needs_component", dec
     assert cands[0]["item_id"].startswith("sun.component.lure-"), cands
-    assert len(cands) == 6, cands
-    assert any(c["item_id"] == dec["item_id"] for c in cands), cands
+    assert any(c["item_id"] == "sun.component.good-timeline" for c in cands), cands
 
 
 def test_retrieval_prose_component_outranks_unrelated_item() -> None:
@@ -823,6 +3173,52 @@ def test_scaffold_rejects_compact_registry() -> None:
             raise AssertionError("registry without paths must be rejected")
 
 
+# Part C: slot rendering carries the component's own typography + alignment from
+# the contract (not a generic overlay), with a deterministic no-auto-shrink size.
+def test_slot_scaffold_emits_contract_typography() -> None:
+    slot = {
+        "id": "title", "role": "heading", "html_tag": "h2",
+        "horizontal_align": "center", "vertical_align": "middle",
+        "bounds": {"x": 0.1, "y": 0.2, "width": 0.5, "height": 0.1},
+        "typography": {"font_family": "ProximaNova-Bold", "font_size": 54.0,
+                       "font_weight": "bold", "font_style": "normal",
+                       "line_height": 1.0, "letter_spacing": "normal",
+                       "color": "#ffffff"},
+    }
+    frag = scaffold.build_slot_scaffold("sun.component.x", [slot])
+    assert 'data-component-slot="title"' in frag
+    # typography copied from the contract onto the text element
+    assert "font-weight:bold" in frag, frag
+    assert "font-style:normal" in frag
+    assert "color:#ffffff" in frag
+    # the raw source foundry name is NOT emitted — slot text inherits the deck's
+    # brand font (brand pack outranks component styling; keeps the brand-font gate).
+    assert "ProximaNova-Bold" not in frag, frag
+    assert "font-family" not in frag, frag
+    assert "line-height:1" in frag
+    assert "font-size:54.0px" in frag, frag          # vscale defaults to 1.0
+    assert "text-align:center" in frag
+    # alignment maps to flex placement
+    assert "justify-content:center" in frag and "align-items:center" in frag
+    # deterministic fit: the box clips (overflow hidden); nothing shrinks text at
+    # runtime (no script). A too-long string is caught by the render-aware gate,
+    # not silently resized here.
+    assert "overflow:hidden" in frag
+    assert "<script" not in frag.lower()
+
+
+def test_slot_scaffold_scales_font_size_by_vertical_source_ratio() -> None:
+    # font_size is in source-units; on the deck canvas it scales by CANVAS_H /
+    # source_canvas_height. A half-height source doubles the rendered px.
+    slot = {"id": "t", "role": "label", "html_tag": "span",
+            "horizontal_align": "left", "vertical_align": "top",
+            "bounds": {"x": 0.0, "y": 0.0, "width": 0.2, "height": 0.1},
+            "typography": {"font_size": 30.0, "color": "#000000"}}
+    vscale = scaffold.CANVAS_H / (scaffold.CANVAS_H / 2)   # source half as tall -> x2
+    frag = scaffold.build_slot_scaffold("sun.component.x", [slot], vscale=vscale)
+    assert "font-size:60.0px" in frag, frag
+
+
 # --------------------------------------------------------------------------- #
 # validate_component_fidelity
 # --------------------------------------------------------------------------- #
@@ -843,6 +3239,358 @@ def test_fidelity_pass_and_fail() -> None:
 
     res = fidelity.check_fidelity("<html>nothing</html>", report, reg)
     assert res and res[0]["pass_"] is False, "deck with no slots/bg must fail fidelity"
+
+
+# Part D / P2: fidelity is scoped to a UNIQUE component OCCURRENCE
+# (data-component-instance) and render-aware. Two uses of the same component are
+# validated independently; overflow/overlap/broken-artwork fail; release mode
+# (require_instance_ids / --require-render) fails closed.
+def _text_slot_registry(tmp: Path, slots: list[dict] | None = None,
+                        item: str = "sun.component.a") -> dict:
+    slots = slots or [
+        {"id": "s1", "bounds": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.1}},
+        {"id": "s2", "bounds": {"x": 0.5, "y": 0.5, "width": 0.2, "height": 0.1}}]
+    ts = tmp / f"{item}-slots.json"
+    ts.write_text(json.dumps({"slots": slots}), encoding="utf-8")
+    prev = tmp / f"{item}-preview.html"
+    prev.write_text('<div class="stage"><div class="bg"></div></div>', encoding="utf-8")
+    return {"items": [{
+        "id": item, "status": "published",
+        "text_contract": {"semantic_text_in_visual": False, "editable": True},
+        "paths": {"preview": str(prev), "text_slots": str(ts)},
+    }]}
+
+
+def _box(sid: str, left: int, top: int, w: int, h: int, text: str = "hi") -> str:
+    return (f'<div class="component-slot" data-component-slot="{sid}" '
+            f'style="position:absolute;left:{left}px;top:{top}px;width:{w}px;height:{h}px;'
+            f'overflow:hidden"><span class="slot-text">{text}</span></div>')
+
+
+_S1S2 = _box("s1", 192, 108, 384, 108) + _box("s2", 960, 540, 384, 108)
+
+
+def _instance_deck(instance_id: str, boxes: str, bg: str = '<svg width="9" height="9"><rect/></svg>',
+                   item: str = "sun.component.a") -> str:
+    inst = f' data-component-instance="{instance_id}"' if instance_id else ""
+    return (f'<div class="slide-scaffold" data-base-component="{item}"{inst} data-slot-contract="1">'
+            f'<div class="bg" data-base-component="{item}">{bg}</div>{boxes}</div>')
+
+
+def _reuse_report(item: str = "sun.component.a") -> dict:
+    return {"slides": [{"request_id": "sA",
+                        "decision": {"action": "reuse", "item_id": item}}]}
+
+
+def _slot_rec(overflowX=False, overflowY=False, outside=False, rendered=True, visible=True,
+              tx=0.0, ty=0.0, tw=10.0, th=10.0) -> dict:
+    return {"overflowX": overflowX, "overflowY": overflowY, "textOutsideWrapper": outside,
+            "rendered": rendered, "textVisible": visible,
+            "textX": tx, "textY": ty, "textW": tw, "textH": th}
+
+
+def _measure(instance_id: str, slots: dict, bg_loaded=True,
+             component="sun.component.a") -> dict:
+    return {instance_id: {"component": component,
+            "bg": {"present": True, "loaded": bg_loaded, "w": 1920, "h": 1080},
+            "slots": slots}}
+
+
+def _fit_pair(**s1_over) -> dict:
+    """Two slots whose rendered text ink boxes are far apart (no spurious overlap);
+    overrides apply to s1 so a single test can make just s1 overflow/spill."""
+    return {"s1": _slot_rec(tx=200, ty=120, tw=300, th=80, **s1_over),
+            "s2": _slot_rec(tx=1000, ty=560, tw=300, th=80)}
+
+
+# (1) two OCCURRENCES of the same component id: an empty one cannot borrow the
+#     other's slot evidence — each is validated on its own.
+def test_fidelity_two_instances_no_slot_borrow() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))
+        deck = _instance_deck("sun.component.a#p1", "") + _instance_deck("sun.component.a#p2", _S1S2)
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg)
+        by = {r["instance"]: r for r in res}
+        assert by["sun.component.a#p1"]["pass_"] is False, res   # empty: cannot borrow p2
+        assert by["sun.component.a#p2"]["pass_"] is True, res     # filled: passes on its own
+
+
+# (2) per-instance measurements do not overwrite each other.
+def test_fidelity_measurements_not_pooled_between_instances() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))
+        deck = _instance_deck("sun.component.a#p1", _S1S2) + _instance_deck("sun.component.a#p2", _S1S2)
+        m = {}
+        m.update(_measure("sun.component.a#p1", _fit_pair(overflowX=True)))
+        m.update(_measure("sun.component.a#p2", _fit_pair()))
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg, measurements=m)
+        by = {r["instance"]: r for r in res}
+        assert by["sun.component.a#p1"]["pass_"] is False and "overflow" in by["sun.component.a#p1"]["reason"]
+        assert by["sun.component.a#p2"]["pass_"] is True, res     # p1's overflow did not leak
+
+
+# (3) actual text positioned outside its wrapper fails.
+def test_fidelity_fails_text_outside_wrapper() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))
+        deck = _instance_deck("sun.component.a#p1", _S1S2)
+        m = _measure("sun.component.a#p1", _fit_pair(outside=True))
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg, measurements=m)
+        assert res[0]["pass_"] is False and "overflow" in res[0]["reason"], res
+
+
+# (4) actual rendered text of two different slots overlapping (beyond source) fails.
+def test_fidelity_fails_actual_text_overlap() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))          # s1,s2 declared non-overlapping
+        deck = _instance_deck("sun.component.a#p1", _S1S2)
+        m = _measure("sun.component.a#p1", {
+            "s1": _slot_rec(tx=200, ty=120, tw=300, th=80),
+            "s2": _slot_rec(tx=210, ty=130, tw=300, th=80)})   # ~fully overlapping ink boxes
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg, measurements=m)
+        assert res[0]["pass_"] is False and "overlap" in res[0]["reason"], res
+
+
+# (5) long Vietnamese copy that clips in a narrow slot (real Chromium, gated).
+def test_render_long_vietnamese_clips() -> None:
+    if not fidelity._node_available():
+        print("  (skip: node/playwright unavailable)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        html = Path(tmpd) / "d.html"
+        long_vi = "Chuyển đổi quy trình làm việc với trí tuệ nhân tạo một cách hiệu quả"
+        html.write_text(_instance_deck(
+            "sun.component.a#p1",
+            f'<div class="component-slot" data-component-slot="s1" '
+            f'style="position:absolute;left:0;top:0;width:120px;height:40px;overflow:hidden;'
+            f'font-size:34px"><span class="slot-text" style="white-space:nowrap">{long_vi}</span></div>'
+            + _box("s2", 0, 300, 700, 200, "ok")), encoding="utf-8")
+        measure = fidelity.measure_rendered_slots(html)
+        assert measure is not None
+        rec = measure["sun.component.a#p1"]["slots"]["s1"]
+        assert rec["overflowX"] or rec["textOutsideWrapper"], rec
+
+
+def _template_registry(tmp: Path, item: str = "sun.template.t") -> dict:
+    """A full-slide TEMPLATE item: its preview.html wires `.slot` boxes by
+    data-slot-id (no text-slot contract), which is the shape the scaffold copies."""
+    prev = tmp / f"{item}-preview.html"
+    prev.write_text(
+        '<div class="stage"><div class="bg"></div>'
+        '<div class="slot" data-slot-id="title"><h1>x</h1></div>'
+        '<div class="slot" data-slot-id="foot"><span>y</span></div></div>',
+        encoding="utf-8")
+    return {"items": [{"id": item, "status": "published",
+                       "paths": {"preview": str(prev)}}]}
+
+
+def _tpl_box(sid: str, left: int, top: int, w: int, h: int, text: str, fs: int = 20) -> str:
+    return (f'<div class="slot" data-slot-id="{sid}" '
+            f'style="position:absolute;left:{left}px;top:{top}px;width:{w}px;height:{h}px;'
+            f'overflow:hidden"><span style="white-space:nowrap;font-size:{fs}px">{text}</span></div>')
+
+
+def test_render_measures_template_slots_and_fails_oversized_copy() -> None:
+    # Fix C: template previews bind `data-slot-id`, which the measurer used to skip
+    # entirely — so a cover/closing whose copy overflowed still passed --require-render
+    # and needed a manual probe to catch. Real Chromium, real overflow.
+    if not fidelity._node_available():
+        print("  (skip: node/playwright unavailable)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        reg = _template_registry(tmp)
+        long_vi = "Chúc SUN-ers một năm bứt phá cùng trí tuệ nhân tạo trong mọi quy trình"
+        deck_bad = _instance_deck(
+            "sun.template.t#s1",
+            _tpl_box("title", 0, 0, 160, 40, long_vi, fs=40)   # far too long for the box
+            + _tpl_box("foot", 0, 400, 600, 60, "ngắn gọn"),
+            item="sun.template.t")
+        html = tmp / "bad.html"
+        html.write_text(deck_bad, encoding="utf-8")
+
+        measure = fidelity.measure_rendered_slots(html)
+        assert measure is not None, "expected a real Chromium measurement"
+        slots = measure["sun.template.t#s1"]["slots"]
+        # 1. template slots are measured at all, and tagged as such...
+        assert set(slots) == {"title", "foot"}, slots
+        assert {s["kind"] for s in slots.values()} == {"template"}, slots
+        # 2. ...with real rendered bounds showing the overflow.
+        assert slots["title"]["overflowX"] or slots["title"]["textOutsideWrapper"], slots["title"]
+        assert not (slots["foot"]["overflowX"] or slots["foot"]["textOutsideWrapper"]), slots["foot"]
+        # 3. and the release gate rejects the slide on it.
+        report = _reuse_report("sun.template.t")
+        res = fidelity.check_fidelity(deck_bad, report, reg, html_path=html,
+                                      measurements=measure, require_instance_ids=True)
+        assert res and res[0]["pass_"] is False, res
+        assert "overflows/clips" in res[0]["reason"] and "title" in res[0]["reason"], res
+
+        # 4. the same template with copy that FITS still passes render fidelity.
+        deck_ok = _instance_deck(
+            "sun.template.t#s1",
+            _tpl_box("title", 0, 0, 600, 60, "Ứng dụng AI", fs=40)
+            + _tpl_box("foot", 0, 400, 600, 60, "ngắn gọn"),
+            item="sun.template.t")
+        ok_html = tmp / "ok.html"
+        ok_html.write_text(deck_ok, encoding="utf-8")
+        m_ok = fidelity.measure_rendered_slots(ok_html)
+        res_ok = fidelity.check_fidelity(deck_ok, report, reg, html_path=ok_html,
+                                         measurements=m_ok, require_instance_ids=True)
+        assert res_ok and res_ok[0]["pass_"] is True, res_ok
+
+
+# (6) blank/broken base artwork for THIS instance fails even though an unrelated
+#     SVG exists elsewhere on the deck (scope excludes it; render bg not loaded).
+def test_fidelity_fails_broken_artwork_despite_unrelated_svg() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))
+        deck = (_instance_deck("sun.component.a#p1", _S1S2, bg="")   # empty bg
+                + '<svg width="100" height="100"><rect/></svg>')     # unrelated, outside instance
+        # static: the unrelated SVG is out of scope -> blank artifact for this instance
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg)
+        assert res[0]["pass_"] is False and "artifact" in res[0]["reason"], res
+        # render: bg present but not loaded -> hard fail
+        m = _measure("sun.component.a#p1", _fit_pair(), bg_loaded=False)
+        res2 = fidelity.check_fidelity(deck, _reuse_report(), reg, measurements=m)
+        assert res2[0]["pass_"] is False and "artwork" in res2[0]["reason"], res2
+
+
+# (7) --require-render fails closed when node/playwright is unavailable.
+def test_require_render_fails_closed_without_node() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        reg = _text_slot_registry(tmp)
+        reg_path = tmp / "reg.json"; reg_path.write_text(json.dumps(reg), encoding="utf-8")
+        rep_path = tmp / "rep.json"; rep_path.write_text(json.dumps(_reuse_report()), encoding="utf-8")
+        html = tmp / "d.html"; html.write_text(_instance_deck("sun.component.a#p1", _S1S2), encoding="utf-8")
+        orig = fidelity._node_available
+        fidelity._node_available = lambda: False       # simulate no render infra
+        try:
+            rc = fidelity.main(["--html", str(html), "--selection-report", str(rep_path),
+                                "--registry", str(reg_path), "--require-render"])
+            assert rc == 1, "release gate must fail closed without render evidence"
+        finally:
+            fidelity._node_available = orig
+
+
+# (8) valid source-designed overlap remains allowed.
+def test_fidelity_allows_source_designed_overlap() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        # declared s1,s2 that themselves overlap in the source contract
+        reg = _text_slot_registry(Path(tmpd), slots=[
+            {"id": "s1", "bounds": {"x": 0.1, "y": 0.1, "width": 0.3, "height": 0.3}},
+            {"id": "s2", "bounds": {"x": 0.2, "y": 0.2, "width": 0.3, "height": 0.3}}])
+        deck = _instance_deck("sun.component.a#p1",
+                              _box("s1", 192, 108, 576, 324) + _box("s2", 384, 216, 576, 324))
+        # rendered text rects overlap by roughly the same designed amount -> allowed
+        m = _measure("sun.component.a#p1", {
+            "s1": _slot_rec(tx=200, ty=120, tw=560, th=300),
+            "s2": _slot_rec(tx=400, ty=230, tw=560, th=300)})
+        res = fidelity.check_fidelity(deck, _reuse_report(), reg, measurements=m)
+        assert res[0]["pass_"] is True, res
+
+
+# (9) legacy (no instance id) is warn-only; fresh release output requires ids.
+def test_fidelity_legacy_warn_only_release_requires_instance_id() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        reg = _text_slot_registry(Path(tmpd))
+        legacy = _instance_deck("", _S1S2)              # no data-component-instance
+        # non-release: tolerated (occurrence id is None, validated normally -> passes)
+        res = fidelity.check_fidelity(legacy, _reuse_report(), reg, require_instance_ids=False)
+        assert res[0]["instance"] is None and res[0]["pass_"] is True, res
+        # release: a fresh deck MUST carry a unique instance id -> legacy fails closed
+        res2 = fidelity.check_fidelity(legacy, _reuse_report(), reg, require_instance_ids=True)
+        assert res2[0]["pass_"] is False and "instance" in res2[0]["reason"], res2
+        # fresh deck with an instance id validates normally under release
+        fresh = _instance_deck("sun.component.a#p1", _S1S2)
+        res3 = fidelity.check_fidelity(fresh, _reuse_report(), reg, require_instance_ids=True)
+        assert res3[0]["pass_"] is True, res3
+
+
+def test_render_measurement_is_instance_keyed() -> None:
+    # Gated: the real measurement is keyed by the unique instance id and carries
+    # bg + per-slot text metrics.
+    if not fidelity._node_available():
+        print("  (skip: node/playwright unavailable)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        html = Path(tmpd) / "d.html"
+        html.write_text(
+            _instance_deck("sun.component.a#p1",
+                           '<div data-component-slot="big" style="position:absolute;left:0;top:0;'
+                           'width:60px;height:40px;overflow:hidden;font-size:40px">'
+                           '<span class="slot-text" style="white-space:nowrap">WWWWWWWWWWWW</span></div>'
+                           + _box("ok", 0, 300, 600, 200, "ok")), encoding="utf-8")
+        measure = fidelity.measure_rendered_slots(html)
+        assert measure is not None and "sun.component.a#p1" in measure, measure
+        inst = measure["sun.component.a#p1"]
+        assert inst["slots"]["big"]["overflowX"] is True, inst
+        assert inst["slots"]["ok"]["overflowX"] is False, inst
+        assert inst["bg"]["present"] is True, inst
+
+
+# --------------------------------------------------------------------------- #
+# Phase 3: per-user style profile (validation + resolution, precedence-bounded)
+# --------------------------------------------------------------------------- #
+def test_style_profile_example_validates() -> None:
+    import validate_style_profile as vsp
+    prof = _common.load_json(SCRIPTS.parent / "style-profiles" / "example-restrained.json")
+    assert vsp.validate_profile(prof) == [], vsp.validate_profile(prof)
+
+
+def test_style_profile_rejects_markup_unknown_and_non_enum() -> None:
+    import validate_style_profile as vsp
+    # markup/script in a free-text field
+    assert any("markup" in e for e in vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {},
+         "owner": "<script>alert(1)</script>"}))
+    # unknown top-level key (e.g. an attempt to inject CSS)
+    assert any("unknown top-level" in e for e in vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {}, "custom_css": ".x{color:red}"}))
+    # unknown preference key
+    assert any("unknown preference" in e for e in vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {"raw_css": "x"}}))
+    # non-enum value
+    assert any("information_density" in e for e in vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {"information_density": "ultra"}}))
+    # intent slug carrying markup
+    assert vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {"preferred_component_intents": ["<b>"]}})
+    # a minimal valid profile passes clean
+    assert vsp.validate_profile(
+        {"profile_id": "u", "version": "1.0.0", "preferences": {"spacing": "airy"}}) == []
+
+
+def test_resolve_records_provenance_rejects_locked_intent_and_never_mutates() -> None:
+    import resolve_style_profile as rsp
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        prof = tmp / "p.json"
+        prof.write_text(json.dumps({"profile_id": "u", "version": "2.1.0", "preferences": {
+            "spacing": "airy", "avoided_component_intents": ["statistics"]}}), encoding="utf-8")
+        report = {"slides": [{"request_id": "s5",
+                              "decision": {"action": "reuse",
+                                           "item_id": "sun.component.circ", "score": 80.0},
+                              "candidates": []}]}
+        rep = tmp / "rep.json"; before = json.dumps(report, indent=1)
+        rep.write_text(before, encoding="utf-8")
+        reg = tmp / "reg.json"
+        reg.write_text(json.dumps({"items": [{"id": "sun.component.circ",
+                                              "intent": ["statistics", "ranking"]}]}), encoding="utf-8")
+        out = tmp / "plan.json"
+        rc = rsp.main(["--profile", str(prof), "--selection-report", str(rep),
+                       "--registry", str(reg), "--output", str(out)])
+        assert rc == 0
+        plan = json.loads(out.read_text(encoding="utf-8"))
+        assert plan["style_profile"]["version"] == "2.1.0"
+        assert len(plan["style_profile"]["sha256"]) == 64
+        assert plan["selection_report_mutated"] is False
+        assert rep.read_text(encoding="utf-8") == before, "selection report must be untouched"
+        # avoided 'statistics' hits the SELECTED reuse's intent -> cannot force it out
+        assert any(r["preference"] == "avoided_component_intents" and r["value"] == "statistics"
+                   for r in plan["rejected_preferences"]), plan
+        # safe composition preference is applied
+        assert any(a["preference"] == "spacing" for a in plan["applied_preferences"]), plan
 
 
 # --------------------------------------------------------------------------- #
@@ -1396,6 +4144,204 @@ def test_split_runs_still_breaks_on_line_wrap() -> None:
     runs = eets.split_runs(text, xs, font_size=20)
     assert [r[0] for r in runs] == ["ABC", "DE"], runs
 
+
+_CIRCLES = "sun.component.foundation-top1-microsoft-overlap-circle-set"
+
+
+def test_asymmetric_hero_component_is_not_a_balanced_tier_component() -> None:
+    # Source geometry: the middle circle's headline is h1 @134px against h2 @61px and
+    # @53px in the outer two (~2.2x). That is one hero flanked by two supports — a
+    # ranked achievement highlight, which its own use_cases always said ("3 ranked
+    # highlights", "track-record"). The tier vocabulary in intent/tags contradicted
+    # both, so a balanced `tiers` request auto-selected it and rendered a false
+    # hierarchy. The correction is metadata-only: no scorer branch knows this id.
+    reg = _common.load_json(REGISTRY)
+    item = next(i for i in reg["items"] if i["id"] == _CIRCLES)
+    tokens = {t.lower() for t in item["intent"] + item["tags"]}
+    assert not (tokens & _common.SHAPE_TYPE_MAP["tiers"]), (
+        f"{_CIRCLES} still claims balanced-tier vocabulary: "
+        f"{sorted(tokens & _common.SHAPE_TYPE_MAP['tiers'])}")
+    assert not _common.shape_eligible("tiers", tokens)
+    # It stays honestly reusable as what it IS: a milestone/achievement highlight.
+    assert _common.shape_eligible("timeline", tokens)
+    assert any("balanced tier" in a for a in item["anti_use_cases"]), item["anti_use_cases"]
+
+    # ...and the real scorer therefore does not auto-select it for a tier request.
+    req = {"request_id": "t", "intent": ["ranking", "levels", "tiers", "comparison"],
+           "tags": ["ranking", "overlap-circle", "milestone"],
+           "content_structure": ["heading", "label", "title"], "content_shape": "tiers",
+           "density": "medium", "brand": "sun-studio"}
+    dec, cands = _score_real(req)
+    assert dec["item_id"] != _CIRCLES, dec
+    cand = next((c for c in cands if c["item_id"] == _CIRCLES), None)
+    if cand:                       # still published and browseable, just not tier-shaped
+        assert cand.get("shape_eligible") is False, cand
+
+
+def test_slot_contract_alignment_is_honoured_where_evidence_supports_it() -> None:
+    # Within each circle every slot's box CENTRE agrees to within ~18px across 4-5
+    # slots: the design centres text on the circle's axis. `horizontal_align` was
+    # `left`, derived from the source's text-anchor="start" — meaningless when the
+    # source places every glyph at an absolute x — so replacement copy shorter than
+    # the source's ink drifted off the circle. The scaffold already honours this
+    # field; only the data was wrong.
+    slots = json.loads(subprocess.run(
+        [sys.executable, str(SCRIPTS / "read_text_slots.py"), "--item-id", _CIRCLES,
+         "--slots-only"], capture_output=True, text=True, check=True).stdout)
+    bands: list[list[float]] = []
+    for c in sorted(s["bounds"]["x"] + s["bounds"]["width"] / 2 for s in slots):
+        if bands and c - bands[-1][-1] <= 0.12:     # same circle
+            bands[-1].append(c)
+        else:
+            bands.append([c])
+    assert len(bands) == 3, bands                   # three circles
+    for band in bands:
+        assert len(band) >= 4, band
+        assert (max(band) - min(band)) * 1920 < 20, band   # one shared axis per circle
+
+    entry = next(i for i in _common.load_json(REGISTRY)["items"] if i["id"] == _CIRCLES)
+    contract = _common.load_json(_common.resolve_repo_path(entry["paths"]["text_slots"]))
+    assert {s["horizontal_align"] for s in contract["slots"]} == {"center"}, \
+        "every slot in this component sits on its circle's centre axis"
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        out = Path(tmpd) / "frag.html"
+        rc = subprocess.run([sys.executable, str(SCRIPTS / "scaffold_slide_from_component.py"),
+                             "--item-id", _CIRCLES, "--out", str(out), "--instance-id", "t"],
+                            capture_output=True, text=True)
+        assert rc.returncode == 0, rc.stderr
+        html = out.read_text(encoding="utf-8")
+        assert "justify-content:center" in html, "scaffold must honour the contract"
+        assert "text-align:center" in html
+        assert "justify-content:flex-start" not in html
+
+    # The DEFAULT is untouched: a component that declares no alignment still goes left.
+    plain = {"id": "x", "role": "body", "html_tag": "p",
+             "bounds": {"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.1}}
+    assert scaffold._JUSTIFY.get(str(plain.get("horizontal_align") or "left")) == "flex-start"
+
+
+def test_cover_crop_fraction_measures_full_bleed_edge_loss() -> None:
+    # Deterministic arithmetic: how much of an artwork's LONGER axis a full-bleed
+    # background-size:cover pushes off a 1920x1080 canvas. A 16:9 artwork loses
+    # nothing; a wide band loses a large fraction of its width off both edges.
+    f = fidelity.cover_crop_fraction
+    assert f(1920, 1080) == 0.0                       # same aspect: nothing cropped
+    assert abs(f(1999.29, 619.853) - 0.449) < 0.01    # the circle band: ~45% of width off
+    assert abs(f(1080, 1920) - 0.684) < 0.01          # a 9:16 portrait crops ~68% of height
+    assert 0.0 <= f(2106, 1005) < 0.20                # a near-16:9 component stays low
+
+
+def test_render_fitness_flags_severe_edge_crop_not_normal_components() -> None:
+    # The guard that would have caught the milestone slide: contract fidelity checks
+    # slot GEOMETRY (cov=1.0 proved that), render fitness checks whether the rendered
+    # result is fit for a human audience. A component whose artwork is cropped ~45% at
+    # full bleed is flagged; a full-slide 16:9 template is not.
+    reg = _common.load_json(REGISTRY)
+    by = {i["id"]: i for i in reg["items"]}
+    warns = fidelity.render_fitness(by[_CIRCLES])
+    assert any("crop" in w.lower() for w in warns), warns
+    # The circle band is WIDE, so the advisory must name the WIDTH / left-right edges,
+    # not report "width" for everything (the reviewer's diagnostic-correctness point).
+    assert "width" in warns[0] and "left and right" in warns[0], warns[0]
+    assert "height" not in warns[0], warns[0]
+
+    template_16x9 = next(i for i in reg["items"]
+                         if i.get("type") == "template" and (i.get("paths") or {}).get("visual"))
+    assert fidelity.render_fitness(template_16x9) == [], template_16x9["id"]
+
+
+def test_render_fitness_names_the_cropped_axis_for_tall_artwork() -> None:
+    # A PORTRAIT artwork is cropped vertically, not horizontally — the advisory must say
+    # so. Synthetic visual so nothing depends on a specific component's dimensions.
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmpd:
+        vis = Path(tmpd) / "visual.svg"
+        vis.write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920">'
+                       '<rect/></svg>', encoding="utf-8")
+        item = {"id": "sun.component.tall", "paths": {"visual": str(vis)}}
+        warns = fidelity.render_fitness(item)
+        assert warns and "height" in warns[0] and "top and bottom" in warns[0], warns
+        assert "width" not in warns[0], warns[0]
+
+
+def test_severe_crop_component_is_review_only_and_not_auto_selected() -> None:
+    # Disposition: the circle component is inherently unsafe for automatic full-bleed
+    # reuse at 1920x1080 (its outer circles fall off the frame), so it is marked
+    # review-only. It must NOT auto-select even for the milestone/achievement request
+    # it is otherwise shape-compatible with — but it stays published and browseable.
+    reg = _common.load_json(REGISTRY)
+    item = next(i for i in reg["items"] if i["id"] == _CIRCLES)
+    assert (item.get("auto_reuse") or {}).get("eligible") is False, item.get("auto_reuse")
+    assert "crop" in (item["auto_reuse"]["reason"].lower())
+
+    req = {"request_id": "m", "intent": ["milestones", "achievements", "track-record"],
+           "tags": ["milestone", "achievement", "overlap-circle", "set-of-3"],
+           "content_structure": ["heading", "label", "title"], "content_shape": "timeline",
+           "density": "medium", "brand": "sun-studio"}
+    dec, cands = _score_real(req)
+    assert dec["item_id"] != _CIRCLES, dec
+    cand = next((c for c in cands if c["item_id"] == _CIRCLES), None)
+    assert cand is not None, "must remain a scored, browseable candidate"
+    assert (cand["retrieval"].get("auto_reuse") or {}).get("eligible") is False, cand
+
+    # ...and it is still in the published retrieval index (browseable/reviewable).
+    idx = [json.loads(l) for l in
+           (REGISTRY.parent / "component-retrieval-index.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    assert any(r["id"] == _CIRCLES for r in idx), "review-only item must stay browseable"
+
+
+def test_split_runs_trims_leading_whitespace_glyphs_from_the_ink_box() -> None:
+    # A leading space is a GLYPH with its own x, but it is not ink. Including it put
+    # the slot box where the space starts instead of where the reader sees the first
+    # letter — the box then sat on top of the artwork behind it (05-prep's checkbox).
+    # The extractor already stripped the whitespace out of `example_value`, so the
+    # box and the value disagreed; this keeps them describing the same glyphs.
+    runs = eets.split_runs(" ABC", [100, 133, 143, 153], font_size=20)
+    assert [r[0] for r in runs] == ["ABC"], runs
+    assert runs[0][1] == [133, 143, 153], runs[0][1]   # box starts at the INK, not the space
+    assert runs[0][2] == 1, runs[0]                    # char_start advances past the space
+
+    # Trailing whitespace is the same story on the other edge.
+    runs = eets.split_runs("ABC  ", [10, 20, 30, 40, 50], font_size=20)
+    assert [r[0] for r in runs] == ["ABC"], runs
+    assert runs[0][1] == [10, 20, 30], runs[0][1]
+    assert runs[0][3] == 3, runs[0]
+
+    # Interior spaces are ink-bearing structure and must NOT be trimmed.
+    runs = eets.split_runs("AB CD", [10, 20, 30, 40, 50], font_size=20)
+    assert [r[0] for r in runs] == ["AB CD"], runs
+    assert runs[0][1] == [10, 20, 30, 40, 50], runs[0][1]
+
+
+def test_extracted_box_starts_at_first_inked_glyph() -> None:
+    # End-to-end on the real defect's shape: two sibling rows of the same list, one
+    # whose source tspan carries a leading space and one whose does not, must land on
+    # the SAME left edge. Measured from 05-prep's source evidence: the clean sibling
+    # starts at x=1107.84 and the space-prefixed row's first letter at x=1107.82.
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmpd:
+        art = Path(tmpd) / "artifact"
+        (art).mkdir()
+        (Path(tmpd) / "evidence").mkdir()
+        (art / "page.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">'
+            '<text transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="Arial">'
+            '<tspan y="-651.82" x="1107.84 1120 1132">abc</tspan></text>'
+            '<text transform="matrix(1 0 -0 1 0 1080)" font-size="25" font-family="Arial">'
+            '<tspan y="-615.81" x="1074.55 1107.82 1120 1132"> abc</tspan></text>'
+            "</svg>", encoding="utf-8")
+        eets.extract_item(Path(tmpd), "page.svg")
+        slots = json.loads((art / "text-slots.json").read_text(encoding="utf-8"))["slots"]
+        assert len(slots) == 2, slots
+        assert {s["example_value"] for s in slots} == {"abc"}, slots
+        xs = sorted(s["bounds"]["x"] for s in slots)
+        # Within a pixel: the real source rows differ by 0.02px (1107.82 vs 1107.84).
+        # Before the fix the space-prefixed row landed at 1074.55 -> 0.5597, i.e. 33px
+        # (a whole checkbox indent) left of its sibling.
+        assert abs(xs[1] - xs[0]) * 1920 < 1.0, f"sibling rows must share a left edge: {xs}"
+        assert abs(xs[0] - 1107.84 / 1920) < 1e-3, xs  # the INK edge, not the space's
+
 _SVGNS = "http://www.w3.org/2000/svg"
 
 
@@ -1806,24 +4752,10 @@ def test_build_catalog_skips_standalone_blank_visual_drafts() -> None:
             '<svg xmlns="http://www.w3.org/2000/svg"><text>04</text></svg>',
             encoding="utf-8",
         )
-        registry = Path(tmp) / "registry.json"
-        registry.write_text('{"items":[]}', encoding="utf-8")
-        output = Path(tmp) / "catalog-data.json"
-        old_argv = sys.argv[:]
-        sys.argv = [
-            "build_component_catalog.py",
-            "--registry", str(registry),
-            "--extractions", str(root),
-            "--output", str(output),
-        ]
-        try:
-            assert bcc.main() == 0
-        finally:
-            sys.argv = old_argv
-
-        catalog = json.loads(output.read_text(encoding="utf-8"))
-
-        assert [item["id"] for item in catalog["items"]] == []
+        # Drafts are runtime-local, so this filtering lives on the live scanner —
+        # asserting it against the published-only tracked build would pass for the
+        # wrong reason (that build never looks at Drafts at all).
+        assert [i["id"] for i in bcc.collect_draft_items(root)] == []
 
 
 def test_quality_gate_prunes_blank_refs_and_empty_manifests() -> None:
@@ -3237,20 +6169,10 @@ def test_auto_stage_candidates_creates_reviewable_draft() -> None:
         assert (item_dir / "evidence" / "source-with-text.svg").is_file()
         assert (item_dir / "preview" / "thumbnail.png").is_file()
 
-        catalog_path = tmpp / "catalog-data.json"
-        old_argv = sys.argv[:]
-        sys.argv = [
-            "build_component_catalog.py",
-            "--registry", str(reg),
-            "--extractions", str(output_root),
-            "--output", str(catalog_path),
-        ]
-        try:
-            assert bcc.main() == 0
-        finally:
-            sys.argv = old_argv
-        catalog = read_text_slots.load_json(catalog_path)
-        draft = next(item for item in catalog["items"]
+        # Drafts reach the catalog UI through the runtime scan (GET /api/drafts),
+        # never through the tracked published-only projection.
+        drafts = bcc.collect_draft_items(output_root)
+        draft = next(item for item in drafts
                      if item["id"] == mapping["candidate_stable_id"])
         assert draft["status"] == "staging"
         assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
@@ -4071,23 +6993,12 @@ def test_auto_stage_groups_related_candidates_as_carousel_draft() -> None:
         assert "artifact_log" not in compact["items"][0]
         assert compact["items"][0]["artifact_log_lines"] > 0
 
-        catalog_path = tmpp / "catalog-data.json"
-        old_argv = sys.argv[:]
-        sys.argv = [
-            "build_component_catalog.py",
-            "--registry", str(reg),
-            "--extractions", str(output_root),
-            "--output", str(catalog_path),
-        ]
-        try:
-            assert bcc.main() == 0
-        finally:
-            sys.argv = old_argv
-        catalog = read_text_slots.load_json(catalog_path)
-        ids = [item["id"] for item in catalog["items"]]
+        # Draft grouping is a property of the runtime scan (GET /api/drafts).
+        drafts = bcc.collect_draft_items(output_root)
+        ids = [item["id"] for item in drafts]
         assert "sun.component.translator-card" not in ids
         assert "sun.component.coach-card" not in ids
-        draft = next(item for item in catalog["items"]
+        draft = next(item for item in drafts
                      if item["id"] == "sun.component.translator-coach-card-set")
         assert draft["publish_readiness"]["ready"], draft["publish_readiness"]
         assert [image["label"] for image in draft["images"]][:6] == [
@@ -4185,6 +7096,449 @@ def test_catalog_server_parses_stage_candidate_booleans() -> None:
         assert "build_artifacts" in str(exc)
     else:
         raise AssertionError("invalid boolean strings must fail")
+
+
+# --------------------------------------------------------------------------- #
+# score_visual_items — shape-aware candidate eligibility (T1 in the scorer)
+# --------------------------------------------------------------------------- #
+def _shape_item(item_id: str, intent: list, tags: list, **over) -> dict:
+    base = {"id": item_id, "status": "published", "type": "component",
+            "intent": intent, "tags": tags, "content_structure": ["card"],
+            "density": "any", "brand": None, "limitations": [],
+            # Generic-buildable by default so shape/legacy tests isolate their gate.
+            "build_scope": {"mode": "generic", "reason": "test generic component"}}
+    base.update(over)
+    return base
+
+
+def test_shape_filter_excludes_incompatible_generic_for_comparison() -> None:
+    # A generic numbered badge set out-scores a genuine comparison card set on
+    # raw overlap, but its intent/tags carry no comparison token. Shape-aware
+    # eligibility must keep it from being the selected item.
+    req = {"request_id": "cmp", "content_shape": "comparison",
+           "intent": ["comparison"], "tags": ["cards", "grid", "numbered"],
+           "content_structure": ["card"], "density": "medium",
+           "brand": "sun-studio", "item_count": 3}
+    badge = _shape_item("sun.test.badge-set", ["statistics"],
+                        ["cards", "grid", "numbered", "set-of-3"])
+    cards = _shape_item("sun.test.compare-cards", ["comparison"],
+                        ["cards", "grid", "numbered", "set-of-4"])
+    dec, cands = svi.score_request(req, [badge, cards], svi.WEIGHTS, None)
+    assert dec["item_id"] != "sun.test.badge-set", dec
+    badge_c = next(c for c in cands if c["item_id"] == "sun.test.badge-set")
+    assert badge_c["shape_eligible"] is False, badge_c
+    assert any("Shape mismatch" in r for r in badge_c["reasons"]), badge_c
+
+
+def test_shape_filter_keeps_compatible_tier_and_timeline_reuse() -> None:
+    # Regression guard: genuine shape-compatible matches must still reuse.
+    tier_req = {"request_id": "t", "content_shape": "tiers", "intent": ["tiers"],
+                "tags": ["levels", "ranking"], "content_structure": ["card"],
+                "density": "medium", "brand": "sun-studio", "item_count": 3}
+    tier = _shape_item("sun.test.tier-ladder", ["tiers", "levels", "ranking"],
+                       ["levels", "set-of-3"])
+    dec, cands = svi.score_request(tier_req, [tier], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec["item_id"] == "sun.test.tier-ladder", dec
+    assert cands[0]["shape_eligible"] is True, cands[0]
+
+    tl_req = {"request_id": "tl", "content_shape": "timeline",
+              "intent": ["timeline"], "tags": ["process", "steps"],
+              "content_structure": ["card"], "density": "medium",
+              "brand": "sun-studio", "item_count": 3}
+    tl = _shape_item("sun.test.process-flow", ["timeline", "process"],
+                     ["steps", "set-of-3"])
+    dec2, _ = svi.score_request(tl_req, [tl], svi.WEIGHTS, None)
+    assert dec2["action"] == "reuse" and dec2["item_id"] == "sun.test.process-flow", dec2
+
+
+def test_shape_filter_no_compatible_returns_needs_component() -> None:
+    # Only a shape-incompatible (but semantically overlapping) item is available:
+    # unresolved (needs_component), never a forced reuse or an auto custom layout.
+    req = {"request_id": "x", "content_shape": "timeline", "intent": ["timeline"],
+           "tags": ["flow", "sequence"], "content_structure": ["card"],
+           "density": "medium", "brand": "sun-studio"}
+    item = _shape_item("sun.test.stats-strip", ["statistics"],
+                       ["flow", "sequence", "numbers"])
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    assert dec["item_id"] is None, dec
+    assert dec["extraction_recommended"] is True, dec
+
+
+def test_unknown_content_shape_returns_needs_component() -> None:
+    # A content_shape outside the shared vocabulary (here 'mindmap') means no
+    # component can lock to it -> unresolved, even though the only candidate is a
+    # strong semantic match.
+    req = {"request_id": "c", "content_shape": "mindmap", "intent": ["mindmap"],
+           "tags": ["radial", "nodes"], "content_structure": ["card"],
+           "density": "low", "brand": "sun-studio"}
+    item = _shape_item("sun.test.radial", ["mindmap", "radial"],
+                       ["nodes", "branches"])
+    dec, _ = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    assert dec["item_id"] is None, dec
+    assert dec["extraction_recommended"] is True, dec
+
+
+def test_validator_band_accepts_shape_filtered_needs_component() -> None:
+    # A shape-incompatible item is available but the scorer returns needs_component;
+    # the validator's band recompute must NOT reject an unresolved slide.
+    req = {"request_id": "s", "content_shape": "timeline", "intent": ["timeline"],
+           "tags": ["flow"], "content_structure": ["card"], "density": "medium",
+           "brand": "sun-studio"}
+    bad = _shape_item("sun.test.badstats", ["statistics"], ["flow", "numbers"])
+    dec, cands = svi.score_request(req, [bad], svi.WEIGHTS, None)
+    assert dec["action"] == "needs_component", dec
+    slide = {"request_id": "s", "decision": dec, "candidates": cands}
+    errors: list = []
+    vsr._validate_decision_band(slide, "report", errors)
+    assert errors == [], errors
+
+
+def test_band_still_rejects_curation_of_shape_compatible_reuse() -> None:
+    # Anti-curation guard survives shape awareness: downgrading a shape-compatible
+    # reuse-worthy candidate to custom-local must still fail closed.
+    slide = {"request_id": "s",
+             "decision": {"action": "custom-local", "item_id": None, "score": 90,
+                          "reason": "x", "extraction_recommended": True},
+             "candidates": [{"item_id": "sun.test.g", "eligible": True,
+                             "shape_eligible": True, "score": 90,
+                             "criteria": {**{k: 1.0 for k in vsr.REQUIRED_CRITERIA},
+                                          "semantic_intent": 20.0}}]}
+    errors: list = []
+    vsr._validate_decision_band(slide, "report", errors)
+    assert errors, "curating a shape-compatible reuse to custom-local must be rejected"
+
+
+# --------------------------------------------------------------------------- #
+# Workflow enforcement: content_shape mandatory under --strict-shape, scorer
+# API stays lenient, docs must keep the strict contract, closing vocabulary.
+# --------------------------------------------------------------------------- #
+def test_strict_shape_requires_content_shape_on_every_request() -> None:
+    # Under --strict-shape a request that omits content_shape must FAIL even
+    # when its decision is custom-local, so the slide-generator workflow cannot
+    # silently bypass the shape-aware filter by leaving content_shape out.
+    rep = {"slides": [{
+        "request_id": "s1",
+        "decision": {"action": "custom-local", "item_id": None, "score": 0, "reason": "x"},
+        "candidates": [{"item_id": "sun.test.x", "eligible": True, "score": 0,
+                        "criteria": {k: 0.0 for k in vsr.REQUIRED_CRITERIA}}],
+    }]}
+    errs, _ = vsr._validate_shape_lock(rep, True, {"s1": None}, {}, strict_shape=True)
+    assert errs, "missing content_shape under --strict-shape must fail (even custom-local)"
+    errs2, _ = vsr._validate_shape_lock(rep, True, {"s1": None}, {}, strict_shape=False)
+    assert not errs2, f"non-strict must not fail a shapeless custom-local: {errs2}"
+    errs3, _ = vsr._validate_shape_lock(rep, True, {"s1": "checklist"}, {}, strict_shape=True)
+    assert not errs3, f"a request that declares content_shape passes strict: {errs3}"
+
+
+def test_strict_shape_rejects_unknown_shape_on_non_selecting_decisions() -> None:
+    # --strict-shape must reject an UNKNOWN content_shape even when the decision
+    # selects no component (custom-local / needs_component), not just for reuse, so
+    # the documented "missing OR unknown -> hard failure" contract actually holds.
+    for action in ("custom-local", "needs_component"):
+        rep = {"request_id": "s1",
+               "decision": {"action": action, "item_id": None, "score": 0, "reason": "x"}}
+        errs, warns = vsr._validate_shape_lock(
+            rep, False, {"s1": "not-a-real-shape"}, {}, strict_shape=True)
+        assert errs, f"unknown content_shape under --strict-shape must fail for {action}"
+        assert not warns, f"unknown shape must be an error, not a warning ({action})"
+    # Backward compatible: without --strict-shape a non-selecting decision with an
+    # unknown shape stays lenient (no error, no warning).
+    rep = {"request_id": "s1", "decision": {"action": "custom-local", "item_id": None}}
+    errs2, warns2 = vsr._validate_shape_lock(
+        rep, False, {"s1": "not-a-real-shape"}, {}, strict_shape=False)
+    assert not errs2 and not warns2, f"non-strict must stay backward compatible: {errs2}, {warns2}"
+
+
+def test_shapeless_direct_scorer_request_preserves_legacy() -> None:
+    # The scorer API stays lenient: a request without content_shape scores and
+    # selects exactly as before, and emits no shape_eligible field.
+    req = {"intent": ["timeline"], "tags": [], "content_structure": ["a"],
+           "density": "medium", "brand": "sun", "required_exports": []}
+    item = _shape_item("sun.test.legacy", ["timeline"], [], content_structure=["a"])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse" and dec["item_id"] == "sun.test.legacy", dec
+    assert "shape_eligible" not in cands[0], "no content_shape -> no shape_eligible field"
+
+
+def test_workflow_docs_enforce_strict_shape_contract() -> None:
+    skill = (SCRIPTS.parent.parent / ".agents" / "skills" / "slide-generator"
+             / "SKILL.md").read_text(encoding="utf-8")
+    workflow = (SCRIPTS.parent / "workflows"
+                / "select-visual-items.md").read_text(encoding="utf-8")
+    for name, doc in (("SKILL.md", skill), ("select-visual-items.md", workflow)):
+        assert "--strict-shape" in doc, f"{name} must invoke validate with --strict-shape"
+        assert "content_shape" in doc, f"{name} must require content_shape"
+
+
+def test_closing_shape_vocabulary_present_and_discriminative() -> None:
+    assert "closing" in _common.SHAPE_TYPE_MAP, "closing must be in the shared shape vocabulary"
+    assert _common.shape_eligible("closing", ["closing", "thank-you"]) is True
+    assert _common.shape_eligible("closing", ["timeline", "process", "milestones"]) is False
+
+
+def test_published_closing_item_is_closing_eligible() -> None:
+    reg = read_text_slots.load_json(REGISTRY)
+    published = [it for it in reg.get("items", []) if it.get("status") == "published"]
+
+    def toks(it: dict) -> list:
+        return [str(t).lower() for t in (it.get("intent", []) + it.get("tags", []))]
+
+    closing_items = [it for it in published
+                     if "closing" in toks(it) or "thank-you" in toks(it)]
+    assert closing_items, "expected at least one published closing/thank-you item"
+    assert any(_common.shape_eligible("closing", toks(it)) for it in closing_items), \
+        "a published closing item must be shape-eligible under 'closing'"
+    assert _common.shape_eligible("closing", ["timeline", "schedule", "roadmap"]) is False
+
+
+# --------------------------------------------------------------------------- #
+# component fidelity — text-slot contract (bindings + geometry, not bare marker)
+# --------------------------------------------------------------------------- #
+def _slot_div(sid: str, x: float, y: float, w: float, h: float) -> str:
+    return (f'<div class="component-slot" data-component-slot="{sid}" '
+            f'style="position:absolute;left:{round(x*1920)}px;top:{round(y*1080)}px;'
+            f'width:{round(w*1920)}px;height:{round(h*1080)}px">text</div>')
+
+
+def test_fidelity_slot_contract_rejects_bare_marker() -> None:
+    # A text-slot component tagged only with data-base-component (no bound slots)
+    # must FAIL — this is the root-cause defect being fixed.
+    declared = {"a": (0.1, 0.1, 0.2, 0.1), "b": (0.5, 0.1, 0.2, 0.1)}
+    html = '<div class="slide-scaffold" data-base-component="c"><div class="bg"></div></div>'
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert not ok and "data-component-slot" in reason, reason
+
+
+def test_fidelity_slot_contract_passes_bound_slots() -> None:
+    declared = {"a": (0.1, 0.1, 0.2, 0.1), "b": (0.5, 0.1, 0.2, 0.1)}
+    html = _slot_div("a", 0.1, 0.1, 0.2, 0.1) + _slot_div("b", 0.5, 0.1, 0.2, 0.1) + "<svg></svg>"
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert ok and cov == 1.0, reason
+
+
+def test_fidelity_slot_text_outside_bounds_fails() -> None:
+    declared = {"a": (0.1, 0.1, 0.2, 0.1), "b": (0.5, 0.1, 0.2, 0.1)}
+    # 'a' authored far from its declared box → outside its slot.
+    html = _slot_div("a", 0.7, 0.7, 0.2, 0.1) + _slot_div("b", 0.5, 0.1, 0.2, 0.1) + "<svg></svg>"
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert not ok and "outside" in reason, reason
+
+
+def test_fidelity_overlapping_slot_text_fails() -> None:
+    # Declared far apart, but 'b' is authored on top of 'a' -> NEW overlap the
+    # deck introduced beyond the component's design.
+    declared = {"a": (0.1, 0.1, 0.25, 0.12), "b": (0.6, 0.1, 0.25, 0.12)}
+    html = _slot_div("a", 0.1, 0.1, 0.25, 0.12) + _slot_div("b", 0.12, 0.1, 0.25, 0.12) + "<svg></svg>"
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert not ok and "overlap" in reason, reason
+
+
+def test_fidelity_tolerates_designed_slot_overlap() -> None:
+    # Two slots whose DECLARED boxes overlap (like this artwork) must NOT be
+    # flagged when authored at their declared positions.
+    declared = {"a": (0.30, 0.30, 0.20, 0.30), "b": (0.34, 0.28, 0.12, 0.10)}
+    html = _slot_div("a", 0.30, 0.30, 0.20, 0.30) + _slot_div("b", 0.34, 0.28, 0.12, 0.10) + "<svg></svg>"
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert ok, reason
+
+
+def test_fidelity_missing_blank_artifact_fails() -> None:
+    declared = {"a": (0.1, 0.1, 0.2, 0.1)}
+    html = _slot_div("a", 0.1, 0.1, 0.2, 0.1)  # bound slot but no rendered artifact
+    ok, cov, reason = fidelity._check_slot_contract(html, None, declared)
+    assert not ok and "artifact" in reason, reason
+
+
+def test_fidelity_end_to_end_rejects_bare_marker_for_slot_component() -> None:
+    # Evidence-based: a real text-slot-contract component that is still auto-reusable,
+    # so a deck that only MARKS it (no data-component-slot bindings) reaches and fails
+    # the slot-binding check rather than short-circuiting on a review-only flag.
+    reg = read_text_slots.load_json(REGISTRY)
+
+    def bare_marker_result(cid):
+        html = f'<div class="slide-scaffold" data-base-component="{cid}"><div class="bg"></div></div>'
+        report = {"slides": [{"request_id": "s5",
+                              "decision": {"action": "reuse", "item_id": cid}}]}
+        res = fidelity.check_fidelity(html, report, reg)
+        return res[0] if res else None
+
+    entry = next(i for i in reg["items"]
+                 if i.get("status") == "published"
+                 and fidelity.declared_text_slots(i)
+                 and (i.get("auto_reuse") or {}).get("eligible") is not False
+                 and "data-component-slot" in ((bare_marker_result(i["id"]) or {}).get("reason") or ""))
+    result = bare_marker_result(entry["id"])
+    assert result and not result["pass_"], result
+    assert "data-component-slot" in result["reason"], result["reason"]
+
+
+def test_materialize_inlines_external_images_and_nonblank() -> None:
+    import materialize_component_visual as mat
+    svg = '<svg><rect/><image xlink:href="assets/x.png"/><path d="M0 0"/><circle/></svg>'
+    out, missing = mat.inline_external_images(svg, Path("."))
+    assert "assets/x.png" in missing, missing          # unresolved local ref reported
+    assert mat.is_nonblank(out)                          # >=3 shapes -> non-blank
+    assert not mat.is_nonblank("<svg></svg>")            # empty -> blank
+    keep = '<svg><image href="data:image/png;base64,AAA"/><image href="http://x/y.png"/></svg>'
+    out2, missing2 = mat.inline_external_images(keep, Path("."))
+    assert not missing2 and out2 == keep                 # data:/http refs untouched
+
+
+# --------------------------------------------------------------------------- #
+# Part B: materialization is wired into the reuse path and fails hard on a
+# missing/unsafe/unresolved local visual ref (never writes an incomplete SVG).
+# --------------------------------------------------------------------------- #
+def test_materialize_main_fails_on_missing_local_ref() -> None:
+    import materialize_component_visual as mat
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "visual.svg"
+        src.write_text('<svg><image xlink:href="missing.png"/><rect/><circle/></svg>',
+                       encoding="utf-8")
+        out = Path(tmp) / "out.svg"
+        assert mat.main(["--svg", str(src), "--out", str(out)]) == 1
+        assert not out.exists(), "must not write an incomplete 'successful' visual"
+
+
+def test_materialize_main_fails_on_unsafe_ref() -> None:
+    # A ref escaping the visual's own directory (traversal/absolute) is unsafe and
+    # must fail even though the target file exists.
+    import materialize_component_visual as mat
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "secret.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 8)
+        comp = Path(tmp) / "comp"; comp.mkdir()
+        src = comp / "visual.svg"
+        src.write_text('<svg><image xlink:href="../secret.png"/><rect/><circle/></svg>',
+                       encoding="utf-8")
+        out = Path(tmp) / "out.svg"
+        assert mat.main(["--svg", str(src), "--out", str(out)]) == 1
+        assert not out.exists()
+
+
+def test_materialize_main_succeeds_and_inlines_local_ref() -> None:
+    import materialize_component_visual as mat
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "tile.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 160)
+        src = Path(tmp) / "visual.svg"
+        src.write_text('<svg><image xlink:href="tile.png"/></svg>', encoding="utf-8")
+        out = Path(tmp) / "out.svg"
+        assert mat.main(["--svg", str(src), "--out", str(out)]) == 0
+        text = out.read_text(encoding="utf-8")
+        assert "data:image/png;base64," in text          # inlined -> self-contained
+        assert 'href="tile.png"' not in text             # no external ref remains
+
+
+def _mk_component_registry(tmp: Path, svg_body: str) -> Path:
+    reg = tmp / "reg.json"
+    reg.write_text(json.dumps({"items": [{
+        "id": "sun.component.matx", "status": "published",
+        "paths": {"visual": str(tmp / "visual.svg")}}]}), encoding="utf-8")
+    (tmp / "visual.svg").write_text(svg_body, encoding="utf-8")
+    return reg
+
+
+def test_scaffold_materializes_self_contained_bg_from_visual() -> None:
+    import re as _re
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        (tmp / "tile.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 160)
+        reg = _mk_component_registry(tmp, '<svg><image xlink:href="tile.png"/></svg>')
+        out = tmp / "slide.html"
+        rc = scaffold.main(["--item-id", "sun.component.matx",
+                            "--registry", str(reg), "--out", str(out)])
+        assert rc == 0
+        frag = out.read_text(encoding="utf-8")
+        m = _re.search(r"background-image:url\('([^']+)'\)", frag)
+        assert m, "the .bg must be wired to the materialized visual, got:\n" + frag
+        sidecar = out.parent / m.group(1)
+        assert sidecar.exists(), "materialized sidecar SVG must be written"
+        assert "data:image/png;base64," in sidecar.read_text(encoding="utf-8")
+
+
+def test_scaffold_fails_when_component_visual_ref_missing() -> None:
+    with tempfile.TemporaryDirectory() as tmpd:
+        tmp = Path(tmpd)
+        reg = _mk_component_registry(tmp, '<svg><image xlink:href="gone.png"/><rect/></svg>')
+        out = tmp / "slide.html"
+        rc = scaffold.main(["--item-id", "sun.component.matx",
+                            "--registry", str(reg), "--out", str(out)])
+        assert rc == 1, "a broken component visual must fail the scaffold"
+        assert not out.exists(), "must not emit a scaffold that references a broken .bg"
+
+
+# --------------------------------------------------------------------------- #
+# Part A: domain-locked timelines must not be reused for a generic how-to.
+# These run the real selection path against the SHIPPED compact registry +
+# retrieval index — the same artifacts production reads — so they regress the
+# metadata, not a fixture. (RED before the anti_use_cases were added: S7 pulled in
+# sun.interview-workshop-sunriser.02-timeline at 65.0, which the bands of the day
+# accepted; that band is retired, so today the same score is needs_component.)
+# --------------------------------------------------------------------------- #
+_DOMAIN_TIMELINES = {
+    "sun.interview-workshop-sunriser.02-timeline",
+    "sun.goal-setting-2026.05-process",
+    "sun.goal-setting-2026.03-timeline",
+    "sun.sun-studio-performance-review-2025.12-review-timeline",
+}
+
+
+def _score_real(request: dict) -> tuple[dict, list]:
+    compact = REGISTRY.parent / "visual-library-compact.json"
+    index = REGISTRY.parent / "component-retrieval-index.jsonl"
+    reg = _common.load_json(compact)
+    enr = svi.load_retrieval_index(index)
+    idx = svi._build_inverted_index(reg["items"], enr)
+    filt = svi._prefilter(request, reg["items"], idx)
+    return svi.score_request(request, filt, svi.WEIGHTS, None, top_n=5, enrichment=enr)
+
+
+def test_s7_generic_howto_is_needs_component_not_domain_timeline_reuse() -> None:
+    # A generic find-install-use / horizontal / three-step how-to (S7 in the
+    # AI-workflow brief) must NOT reuse a domain-locked timeline. The name used to say
+    # "selects custom-local", which the scorer has never done automatically — the
+    # actual, asserted behaviour is `needs_component`: build nothing, hand it back.
+    req = {
+        "request_id": "s7-skills-timeline-3",
+        "intent": ["timeline", "process", "steps"],
+        "tags": ["three-steps", "horizontal", "sequence", "find-install-use"],
+        "content_structure": ["step", "label", "heading"],
+        "content_shape": "timeline", "density": "medium", "brand": "sun-studio",
+        "item_count": 3,
+    }
+    dec, _ = _score_real(req)
+    assert dec["action"] == "needs_component", dec
+    assert dec["item_id"] is None, dec
+    # ...and it is not a hidden domain-timeline reuse: scored directly, each domain
+    # timeline takes the accurate anti penalty and lands well below any reuse bar.
+    compact = _common.load_json(REGISTRY.parent / "visual-library-compact.json")
+    enr = svi.load_retrieval_index(REGISTRY.parent / "component-retrieval-index.jsonl")
+    domain_items = [it for it in compact["items"] if it["id"] in _DOMAIN_TIMELINES]
+    assert len(domain_items) == len(_DOMAIN_TIMELINES), "domain timelines missing from registry"
+    _, dcands = svi.score_request(req, domain_items, svi.WEIGHTS, None, enrichment=enr)
+    for c in dcands:
+        assert c["retrieval"].get("anti_hits"), c
+        assert c["score"] < 65, c
+
+
+def test_domain_timelines_stay_eligible_for_their_own_workflow() -> None:
+    # The anti wording targets generic how-tos only; for a real interview/date
+    # workflow the domain timeline must stay an ELIGIBLE, unpenalized top candidate
+    # (the user can pick it), even if the strict confidence bar leaves the slide
+    # unresolved.
+    interview = {
+        "request_id": "iv",
+        "intent": ["interview", "timeline", "schedule", "hr"],
+        "tags": ["interview", "schedule", "lich-trinh", "hr", "dates", "onboarding"],
+        "content_structure": ["date", "label", "heading"],
+        "content_shape": "timeline", "density": "medium", "brand": "sun-studio",
+    }
+    dec, cands = _score_real(interview)
+    assert dec["action"] in {"reuse", "needs_component"}, dec
+    top = next(c for c in cands if c["eligible"] and c.get("shape_eligible", True))
+    assert top["item_id"] in _DOMAIN_TIMELINES, top
+    assert not top.get("retrieval", {}).get("anti_hits"), top
+    assert not dec.get("retrieval", {}).get("anti_hits"), dec
 
 
 # --------------------------------------------------------------------------- #

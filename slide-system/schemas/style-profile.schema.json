@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sun.studio/slide-system/style-profile.schema.json",
+  "title": "SUN.STUDIO Per-User Slide Style Profile",
+  "description": "A versioned, human-editable, project-local set of APPROVED design preferences for one user. It influences safe composition and within-band tie-breaking only. It can never override approved source content, SUN.STUDIO canonical brand tokens, accessibility/readability, canvas bounds, published-only retrieval, content fidelity, or component slot contracts. It carries NO CSS/HTML/JS, no raw deck text, no secrets, and no inferred data. See slide-system/rules/style-profiles.md for precedence.",
+  "type": "object",
+  "required": ["profile_id", "version", "preferences"],
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "description": "User-scoped id. Profiles are selected explicitly by id/path; one user's profile is never loaded implicitly for another."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of this profile file."
+    },
+    "owner": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Human-readable owner label. Not an identity/auth field."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Optional plain-language note about this profile."
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Only these whitelisted, enum-bounded design preferences are honoured. Anything else is rejected by validate_style_profile.py.",
+      "properties": {
+        "information_density": { "enum": ["minimal", "balanced", "rich"] },
+        "heading_hierarchy": { "enum": ["understated", "balanced", "bold"] },
+        "spacing": { "enum": ["tight", "balanced", "airy"] },
+        "visual_rhythm": { "enum": ["calm", "dynamic"] },
+        "visual_tone": { "enum": ["restrained", "expressive"] },
+        "media_bias": { "enum": ["image-led", "diagram-led", "balanced"] },
+        "language": { "enum": ["vi", "en", "bilingual"] },
+        "tone": { "enum": ["coaching", "formal", "energetic", "neutral"] },
+        "layout_families": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 8,
+          "items": { "enum": ["grid", "columns", "timeline", "cards", "centered", "split", "editorial", "list"] }
+        },
+        "preferred_component_intents": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 20,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "maxLength": 40 }
+        },
+        "avoided_component_intents": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 20,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "maxLength": 40 }
+        }
+      }
+    }
+  }
+}
