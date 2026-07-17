@@ -2,8 +2,9 @@
 /**
  * export-pdf.js — Standalone HTML-deck → PDF exporter (no Claude Code required).
  *
- * Opens the deck URL in a headless Chromium browser via Playwright and prints
- * it to PDF with background graphics, landscape orientation, and A4 page size.
+ * Opens the deck URL in a headless Chromium browser via Playwright and prints it
+ * to PDF with background graphics, on a page the exact size of the deck itself
+ * (--width x --height, default 1920x1080 => a 1440x810pt landscape sheet).
  * For multi-slide HTML decks, iterates through all slides before printing.
  *
  * Usage:
@@ -267,9 +268,13 @@ async function main() {
   }
 
   console.log("[export-pdf] Printing to PDF…");
+  // NO `landscape` here: --width/--height already describe the deck's own page
+  // (1920x1080 => a landscape 1440x810pt sheet). Passing `landscape: true` as well
+  // made Chromium apply the orientation a SECOND time and swap the paper to
+  // 810x1440 portrait, which cropped the deck to ~56% of its width and left two
+  // thirds of every page empty. The deck's dimensions are the orientation.
   await page.pdf({
     path: outputPath,
-    landscape: true,
     printBackground: true,
     width: `${args.width}px`,
     height: `${args.height}px`,

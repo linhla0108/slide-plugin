@@ -37,6 +37,80 @@ function arg(name) {
   return i > -1 ? process.argv[i + 1] : undefined;
 }
 
+const nextFrame = (page) => page.evaluate(() => new Promise((done) =>
+  requestAnimationFrame(() => requestAnimationFrame(done))));
+
+/**
+ * Measure every instance while ITS OWN slide is visible.
+ *
+ * A deck follows the paginated contract (`.slide{display:none}` /
+ * `.slide.active`, global `goToSlide(n)`), so measuring the page as loaded only
+ * ever sees slide 0. Every later instance then measured bg 0x0 / loaded:false
+ * and slot rects 0x0 — reported as "artwork did not load/render" for artwork
+ * that is fine, and, worse, silently VACUOUS readability checks (`overflowX` is
+ * `scrollW > clientW` = `0 > 0` = false; a 0-width text rect skips the overlap
+ * and visibility tests). So this drives the deck's own navigator, exactly like
+ * capture-slides.js, and fails closed when it cannot.
+ */
+async function measureNavigated(page, measureInstances) {
+  const plan = await page.evaluate(() => {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const instances = Array.from(document.querySelectorAll('[data-component-instance]'))
+      .map((inst) => {
+        const slide = inst.closest('.slide');
+        const r = inst.getBoundingClientRect();
+        return {
+          id: inst.getAttribute('data-component-instance'),
+          slide: slide ? slides.indexOf(slide) : -1,
+          visible: r.width > 0 && r.height > 0,
+        };
+      });
+    return {
+      instances,
+      hasGoToSlide: typeof window.goToSlide === 'function',
+    };
+  });
+
+  // Nothing hidden (single-page deck, or every slide already visible): the
+  // as-loaded state is already each instance's real state.
+  const hidden = plan.instances.filter((i) => !i.visible);
+  if (!hidden.length) return measureInstances(null);
+
+  // Hidden instances exist, so the deck MUST expose navigation we can drive —
+  // otherwise we would emit zeros that read as a component defect.
+  const unreachable = hidden.filter((i) => i.slide < 0);
+  if (unreachable.length) {
+    console.error('[measure_deck_slots] FATAL: instance(s) are not rendered and are not '
+      + `inside a .slide, so they cannot be made visible to measure: `
+      + `${unreachable.map((i) => i.id).join(', ')}`);
+    process.exit(2);
+  }
+  if (!plan.hasGoToSlide) {
+    console.error('[measure_deck_slots] FATAL: this deck hides '
+      + `${hidden.length} component instance(s) on inactive slides but exposes no `
+      + 'goToSlide(n) navigator, so their text fit / artwork cannot be measured. '
+      + 'Give the deck the documented .slide/.slide.active + goToSlide(n) contract.');
+    process.exit(2);
+  }
+
+  // One navigation per slide that actually holds instances.
+  const bySlide = new Map();
+  for (const i of plan.instances) {
+    if (!bySlide.has(i.slide)) bySlide.set(i.slide, []);
+    bySlide.get(i.slide).push(i.id);
+  }
+  const instances = [];
+  for (const [idx, ids] of [...bySlide.entries()].sort((a, b) => a[0] - b[0])) {
+    if (idx > -1) {
+      await page.evaluate((n) => window.goToSlide(n), idx);
+      await nextFrame(page);
+    }
+    const part = await measureInstances(ids);
+    instances.push(...part.instances);
+  }
+  return { instances };
+}
+
 (async () => {
   const htmlPath = arg('--html');
   const outPath = arg('--out');
@@ -56,7 +130,10 @@ function arg(name) {
     await page.evaluate(() => (document.fonts && document.fonts.ready) || Promise.resolve());
     await page.evaluate(() => new Promise((done) =>
       requestAnimationFrame(() => requestAnimationFrame(done))));
-    const result = await page.evaluate(() => {
+    // Measure the instances named by `wanted` (null = all) in the CURRENT visual
+    // state of the page. The caller is responsible for making each instance's
+    // slide visible first — see measureNavigated.
+    const measureInstances = (wanted) => page.evaluate((ids) => {
       const TOL = 1; // px slack so sub-pixel rounding is not an overflow.
       const r4 = (r) => ({ x: r.x, y: r.y, w: r.width, h: r.height });
       function textRect(el) {
@@ -119,6 +196,8 @@ function arg(name) {
       }
       const instances = [];
       for (const inst of document.querySelectorAll('[data-component-instance]')) {
+        const iid = inst.getAttribute('data-component-instance');
+        if (ids && ids.indexOf(iid) === -1) continue;
         const slots = [];
         // Scoped to THIS instance, so a template slot is always attributed to the
         // occurrence it renders in (never pooled across two uses of a component).
@@ -128,14 +207,16 @@ function arg(name) {
           }
         }
         instances.push({
-          instance: inst.getAttribute('data-component-instance'),
+          instance: iid,
           component: inst.getAttribute('data-base-component'),
           bg: bgState(inst),
           slots,
         });
       }
       return { instances };
-    });
+    }, wanted);
+
+    const result = await measureNavigated(page, measureInstances);
     fs.writeFileSync(outPath, JSON.stringify(result, null, 1));
     const nslots = result.instances.reduce((a, i) => a + i.slots.length, 0);
     console.log(`measured ${result.instances.length} instance(s), ${nslots} slot(s) -> ${outPath}`);

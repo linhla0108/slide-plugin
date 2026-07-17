@@ -1174,18 +1174,23 @@ def test_scorer_has_no_hardcoded_component_ids_or_brief_text() -> None:
     # wording — the contract must be metadata-driven. (Generic id-SHAPE examples like
     # `sun.component.x` in docstrings are fine; concrete published ids and brief strings
     # are not.)
-    src = (SCRIPTS / "score_visual_items.py").read_text(encoding="utf-8")
-    # Concrete published slide-component ids and source-deck set slugs have no
-    # legitimate reason to appear in the scorer — including in CLI help. `--prefer-set`
-    # is a real, metadata-driven feature (it compares the request's set to each id's
-    # `<set>` segment), so its help must describe the mechanism, not name a source deck;
-    # gaming a specific brief would show up here.
-    for token in ("01-cover", "02-timeline", "05-process", "18-thanks",
-                  "salary-benefits-2026", "sun-studio-performance-review-2025",
-                  "interview-workshop-sunriser"):
-        assert token not in src, f"scorer must not reference the concrete slug {token!r}"
-    for brief_word in ("Tìm", "nguyên tắc", "SUN.RISER", "workflow thông minh"):
-        assert brief_word not in src, f"no brief text ({brief_word!r}) in scorer logic"
+    # `_common.py` is covered too: it carries selection-contract logic the scorer
+    # shares (the shape vocabulary, and content-capacity derivation), so a concrete
+    # id smuggled in there would evade a scorer-only check.
+    for module in ("score_visual_items.py", "_common.py"):
+        src = (SCRIPTS / module).read_text(encoding="utf-8")
+        # Concrete published slide-component ids and source-deck set slugs have no
+        # legitimate reason to appear here — including in CLI help. `--prefer-set`
+        # is a real, metadata-driven feature (it compares the request's set to each id's
+        # `<set>` segment), so its help must describe the mechanism, not name a source
+        # deck; gaming a specific brief would show up here.
+        for token in ("01-cover", "02-timeline", "05-process", "18-thanks",
+                      "08-next-steps-cta", "10-do-dont",
+                      "salary-benefits-2026", "sun-studio-performance-review-2025",
+                      "interview-workshop-sunriser", "sun-presentation"):
+            assert token not in src, f"{module} must not reference the concrete slug {token!r}"
+        for brief_word in ("Tìm", "nguyên tắc", "SUN.RISER", "workflow thông minh"):
+            assert brief_word not in src, f"no brief text ({brief_word!r}) in {module}"
 
 
 # --------------------------------------------------------------------------- #
@@ -7539,6 +7544,361 @@ def test_domain_timelines_stay_eligible_for_their_own_workflow() -> None:
     assert top["item_id"] in _DOMAIN_TIMELINES, top
     assert not top.get("retrieval", {}).get("anti_hits"), top
     assert not dec.get("retrieval", {}).get("anti_hits"), dec
+
+
+def _paginated_deck_html(n: int) -> str:
+    """A deck that follows the documented paginated contract: every `.slide` is
+    `display:none` until `goToSlide(n)` makes one `.active`. Each slide carries its
+    own component instance, `.bg` artwork (a self-contained data: URI, so "did the
+    artwork load" is never an asset-path question) and a real text slot."""
+    art = ("data:image/svg+xml;utf8,"
+           "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'>"
+           "<rect width='16' height='9' fill='%23123456'/></svg>")
+    slides = "\n".join(
+        f'<section class="slide" data-slide="s{i}">'
+        f'<div class="slide-scaffold" data-base-component="c.{i}" '
+        f'data-component-instance="c.{i}#s{i}">'
+        f'<div class="bg" style="position:absolute;inset:0;width:1920px;height:1080px;'
+        f"background-image:url(\"{art}\");background-size:cover\"></div>"
+        f'<div class="slot" data-slot-id="title" style="position:absolute;left:100px;'
+        f'top:100px;width:600px;height:80px;font-size:40px;line-height:80px;">'
+        f"<span>Slide {i} title</span></div>"
+        f"</div></section>"
+        for i in range(n))
+    return (
+        "<!DOCTYPE html><html><head><meta charset='utf-8'><style>"
+        ".slide{position:absolute;top:0;left:0;width:1920px;height:1080px;"
+        "overflow:hidden;display:none}.slide.active{display:block}"
+        "</style></head><body><div class='deck'>" + slides + "</div><script>"
+        "function goToSlide(n){document.querySelectorAll('.slide')"
+        ".forEach(function(el,i){el.classList.toggle('active',i===n);});}"
+        "goToSlide(0);</script></body></html>")
+
+
+def test_measure_deck_slots_navigates_paginated_deck():
+    # P1 regression: measure_deck_slots.js measured the deck AS LOADED. In the
+    # documented paginated contract only slide 0 is `.active`; every later slide is
+    # `display:none`, so its instance measured bg 0x0 / loaded:false and every slot
+    # rect 0x0. That made the render-aware fidelity gate report "base component
+    # artwork did not load/render" for perfectly good artwork, and — worse — made
+    # its readability checks VACUOUS past slide 0: `overflowX` is
+    # `scrollW > clientW` = `0 > 0` = false, and a 0-width text rect skips the
+    # overlap/visibility checks. No reuse occurrence after the first was ever really
+    # validated. The measurer must navigate the deck (like capture-slides.js) so
+    # every instance is measured while its own slide is visible.
+    node = shutil.which("node")
+    if node is None:
+        print("  SKIP  test_measure_deck_slots_navigates_paginated_deck (node not found)")
+        return
+    if not (SCRIPTS.parents[1] / "node_modules" / "playwright").is_dir():
+        print("  SKIP  test_measure_deck_slots_navigates_paginated_deck (playwright not installed)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        root = Path(tmpd)
+        deck = root / "deck.html"
+        deck.write_text(_paginated_deck_html(3), encoding="utf-8")
+        out = root / "slots.json"
+        proc = subprocess.run(
+            [node, str(SCRIPTS / "measure_deck_slots.js"), "--html", str(deck),
+             "--out", str(out)],
+            capture_output=True, text=True, cwd=str(SCRIPTS.parents[1]))
+        assert proc.returncode == 0, proc.stdout + proc.stderr
+        data = json.loads(out.read_text(encoding="utf-8"))
+        insts = {i["instance"]: i for i in data["instances"]}
+        assert len(insts) == 3, sorted(insts)
+        for i in range(3):
+            rec = insts[f"c.{i}#s{i}"]
+            bg = rec["bg"]
+            assert bg["present"] and bg["loaded"], f"slide {i} bg not loaded: {bg}"
+            assert bg["w"] > 0 and bg["h"] > 0, f"slide {i} bg has no size: {bg}"
+            slot = rec["slots"][0]
+            assert slot["rendered"], f"slide {i} slot did not render: {slot}"
+            assert slot["wrapperW"] > 0 and slot["textW"] > 0, (
+                f"slide {i} slot measured empty — readability checks would be "
+                f"vacuous here: {slot}")
+
+
+# --------------------------------------------------------------------------- #
+# Content capacity — a component must be able to HOLD the planned content.
+# --------------------------------------------------------------------------- #
+def _slot(sid: str, x: float, y: float, w: float, h: float) -> dict:
+    return {"id": sid, "bounds": {"x": x, "y": y, "width": w, "height": h}}
+
+
+# The real shape of a CTA slide: one headline wrapped across three slots, plus
+# page furniture. Geometry copied from the published 08-next-steps-cta contract.
+_CTA_SLOTS = [
+    _slot("line-1", 0.052, 0.077, 0.595, 0.090),
+    _slot("line-2", 0.052, 0.157, 0.344, 0.090),
+    _slot("accent", 0.378, 0.157, 0.116, 0.090),
+    _slot("deck-label", 0.756, 0.045, 0.104, 0.023),
+    _slot("page-no", 0.936, 0.937, 0.014, 0.023),
+    _slot("footer", 0.052, 0.936, 0.099, 0.023),
+]
+# A list layout: four rows separated by real vertical gaps.
+_LIST_SLOTS = [_slot("title", 0.05, 0.12, 0.40, 0.06)] + [
+    _slot(f"item-{i}", 0.073, y, 0.30, 0.027)
+    for i, y in enumerate((0.30, 0.43, 0.59, 0.77))
+] + [_slot("footer", 0.038, 0.914, 0.207, 0.023)]
+
+
+def test_content_blocks_merges_wrapped_headline_and_drops_chrome() -> None:
+    # A CTA headline split across 3 slots is ONE content item, not three, and page
+    # furniture is not capacity. This is the distinction `slot_count` cannot make:
+    # the real component is slot_count=8 yet holds exactly one statement, which is
+    # why a multi-item brief got silently compressed into one vague line.
+    assert _common.content_blocks(_CTA_SLOTS) == 1, _common.content_blocks(_CTA_SLOTS)
+    # Rows separated by real gaps stay distinct: title + 4 items = 5 blocks.
+    assert _common.content_blocks(_LIST_SLOTS) == 5, _common.content_blocks(_LIST_SLOTS)
+    # No slots / unusable bounds -> no capacity, never a crash.
+    assert _common.content_blocks([]) == 0
+    assert _common.content_blocks([{"id": "x"}]) == 0
+
+
+def test_content_blocks_matches_the_real_published_library() -> None:
+    # The signal is only worth gating on if it reads the REAL library the way a
+    # human would. Derived from each item's own published slot contract.
+    reg = json.loads((SCRIPTS.parents[1] / "slide-system/registries"
+                      / "visual-library.json").read_text(encoding="utf-8"))
+    items = {i["id"]: i for i in reg["items"]}
+
+    def blocks_of(item_id: str) -> int:
+        rel = (items[item_id].get("text_contract") or {}).get("slots")
+        slots = json.loads((SCRIPTS.parents[1] / rel).read_text(encoding="utf-8"))["slots"]
+        return _common.content_blocks(slots)
+
+    # A CTA/closing holds one statement; a checklist/process holds many.
+    assert blocks_of("sun.sun-presentation.08-next-steps-cta") == 1
+    assert blocks_of("sun.sun-presentation.17-closing-thank-you") == 1
+    assert blocks_of("sun.interview-workshop-sunriser.10-do-dont") > 5
+    assert blocks_of("sun.goal-setting-2026.05-process") > 5
+
+
+def test_retrieval_index_carries_content_blocks() -> None:
+    # Capacity is a compact buildability fact, so it ships in the index beside
+    # slot_count rather than being recomputed per scoring run.
+    import build_component_retrieval_index as bcri
+    rec = bcri.build_record({
+        "id": "sun.x.y", "status": "published",
+        "text_contract": {"slot_count": 8, "slots": None},
+    })
+    assert "content_blocks" in rec
+    assert rec["content_blocks"] is None, rec["content_blocks"]  # unknown, not 0
+
+
+def _cap_enrich(**blocks) -> dict:
+    return svi.build_enrichment([
+        {"id": i, "status": "published", "slot_count": 8, "content_blocks": b}
+        for i, b in blocks.items()
+    ])
+
+
+def test_capacity_multi_item_request_rejects_cta_only_component() -> None:
+    # THE defect this gate exists for: a 4-item "next steps" plan must not
+    # auto-select a component that can only hold one statement. Without this the
+    # selector reused a CTA slide and the plan got compressed to one vague line.
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=4)
+    dec, cands = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                                   enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert dec["action"] == "needs_component", dec
+    cand = next(c for c in cands if c["item_id"] == "sun.deck.cta")
+    assert cand["retrieval"]["content_blocks"] == 1
+    assert any("capacity" in r.lower() for r in cand["reasons"]), cand["reasons"]
+    # Unresolved, NOT silently downgraded to custom-local.
+    assert dec["item_id"] is None
+
+
+def test_capacity_fitting_multi_item_component_stays_eligible() -> None:
+    # The gate must not just say no: a component that genuinely fits the plan is
+    # still auto-reusable, so real multi-item slides keep building.
+    checklist = _item(id="sun.deck.checklist", intent=["checklist", "action-items"],
+                      tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=4)
+    dec, cands = svi.score_request(req, [checklist], svi.WEIGHTS, None,
+                                   enrichment=_cap_enrich(**{"sun.deck.checklist": 9}))
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.deck.checklist"
+    cand = next(c for c in cands if c["item_id"] == "sun.deck.checklist")
+    assert not any("capacity" in r.lower() for r in cand["reasons"]), cand["reasons"]
+
+
+def test_capacity_sparse_cta_request_still_matches_cta_component() -> None:
+    # A one-statement CTA slide is a legitimate design. A plan of ONE item must
+    # still reuse a one-block component — the gate is a floor, not a preference
+    # for big layouts.
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=1)
+    dec, _ = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                               enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert dec["action"] == "reuse", dec
+
+
+def test_capacity_prefers_the_component_that_fits_the_plan() -> None:
+    # Given both, the plan decides: 4 items go to the layout that can hold them.
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    checklist = _item(id="sun.deck.checklist", intent=["checklist", "action-items"],
+                      tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=4)
+    dec, _ = svi.score_request(req, [cta, checklist], svi.WEIGHTS, None,
+                               enrichment=_cap_enrich(**{"sun.deck.cta": 1,
+                                                         "sun.deck.checklist": 9}))
+    assert dec["action"] == "reuse" and dec["item_id"] == "sun.deck.checklist", dec
+
+
+def test_capacity_content_plan_supplies_the_item_count() -> None:
+    # The brief's structured expansion IS the plan: 3 planned next-steps means 3
+    # items, so the count never has to be restated (and cannot silently disagree).
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                content_plan=["Confirm owners", "Agree the plan", "Book the review"])
+    assert svi.planned_item_count(req) == 3
+    dec, _ = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                               enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert dec["action"] == "needs_component", dec
+    # Restating the count is allowed only in agreement — see
+    # test_content_plan_and_item_count_must_agree.
+    assert svi.planned_item_count({**req, "item_count": 3}) == 3
+
+
+def test_content_plan_and_item_count_must_agree() -> None:
+    # The contract says content_plan IS the plan, so its length is the count. Letting
+    # item_count silently override it meant a request could claim 1 item while listing
+    # 3 — the capacity gate would then size the slide to the lie and wave through a
+    # component that cannot hold the real content. A disagreement is an authoring
+    # mistake, so it fails validation BEFORE scoring rather than being resolved by
+    # precedence.
+    three = ["Confirm owners", "Agree the plan", "Book the review"]
+    bad = _valid_batch(content_plan=three, item_count=4)
+    errors = svi.validate_batch_request(bad)
+    assert any("item_count" in e and "content_plan" in e for e in errors), errors
+    # The message must name both numbers, so the author can see which is wrong.
+    assert any("4" in e and "3" in e for e in errors), errors
+
+    # Backward compatible: every non-conflicting shape stays valid.
+    assert svi.validate_batch_request(_valid_batch(content_plan=three)) == []
+    assert svi.validate_batch_request(_valid_batch(item_count=4)) == []
+    assert svi.validate_batch_request(_valid_batch()) == []
+    assert svi.validate_batch_request(_valid_batch(content_plan=three, item_count=3)) == []
+
+
+def test_planned_item_count_reads_the_plan_as_the_count() -> None:
+    three = ["Confirm owners", "Agree the plan", "Book the review"]
+    # content_plan only -> its length.
+    assert svi.planned_item_count({"content_plan": three}) == 3
+    # item_count only -> that count (a request may state a count without listing copy).
+    assert svi.planned_item_count({"item_count": 4}) == 4
+    # Both, in agreement -> the same number either way.
+    assert svi.planned_item_count({"content_plan": three, "item_count": 3}) == 3
+    # Neither -> no plan, so the capacity gate is a no-op.
+    assert svi.planned_item_count({}) is None
+    # The plan is the ground truth: validation rejects a mismatch before scoring, so
+    # this case is unreachable in the real flow, but the function must never prefer a
+    # bare number over the actual listed content.
+    assert svi.planned_item_count({"content_plan": three, "item_count": 1}) == 3
+    # Non-counts are ignored, not crashed on.
+    assert svi.planned_item_count({"item_count": True}) is None
+    assert svi.planned_item_count({"item_count": 0}) is None
+    assert svi.planned_item_count({"content_plan": []}) is None
+
+
+def test_capacity_explicit_user_selection_warns_but_never_bypasses_fidelity() -> None:
+    # The user may still pick the component. That choice is not evidence the
+    # content fits, so the decision carries a plain capacity warning and stays
+    # subject to the downstream scaffold/fidelity/export gates.
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=4, component_id="sun.deck.cta")
+    dec, _ = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                               enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert dec["action"] == "reuse", dec
+    assert dec["selected_by"] == "user"
+    assert "WARNING" in dec["reason"] and "capacity" in dec["reason"].lower(), dec["reason"]
+    assert dec["capacity_conflict"]["planned_items"] == 4
+    assert dec["capacity_conflict"]["content_blocks"] == 1
+
+
+def test_capacity_unknown_data_is_a_no_op_not_a_regression() -> None:
+    # Conservative/fail-safe compatibility: when either side is unknown the gate
+    # cannot know anything, so it must not invent a verdict. Requests with no plan,
+    # and components with no readable slot contract, behave exactly as before.
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    plan_only = _rreq(intent=["checklist", "action-items"], content_structure=["a"])
+    dec, _ = svi.score_request(plan_only, [cta], svi.WEIGHTS, None,
+                               enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert dec["action"] == "reuse", dec  # no plan -> no capacity opinion
+    # Plan present, capacity unknown (no slot contract) -> still no opinion.
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=9)
+    dec2, _ = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                                enrichment=_cap_enrich(**{"sun.deck.cta": None}))
+    assert dec2["action"] == "reuse", dec2
+    # No enrichment at all (no index) -> unchanged.
+    dec3, _ = svi.score_request(req, [cta], svi.WEIGHTS, None)
+    assert dec3["action"] == "reuse", dec3
+
+
+def _pdf_media_boxes(pdf: Path) -> list[tuple[float, float]]:
+    """(width, height) in points for each /MediaBox in a PDF. Enough to prove page
+    geometry without a PDF library (none is declared as a dependency)."""
+    raw = pdf.read_bytes()
+    out = []
+    for m in re.finditer(rb"/MediaBox\s*\[([^\]]+)\]", raw):
+        nums = [float(x) for x in m.group(1).split()]
+        if len(nums) == 4:
+            out.append((nums[2] - nums[0], nums[3] - nums[1]))
+    return out
+
+
+def test_export_pdf_js_emits_landscape_deck_sized_pages():
+    # P1 regression: export-pdf.js printed with BOTH `landscape: true` and an
+    # explicit width/height of the 1920x1080 deck. The width/height already ARE
+    # landscape, so Chromium applied the orientation a second time and swapped the
+    # paper: every PDF came out 810x1440 PORTRAIT with the deck cropped to ~56% of
+    # its width and two thirds of the page empty. No gate measured PDF geometry, so
+    # every PDF this repo produced was silently wrong. A 1920x1080 deck must print
+    # as 1440x810pt landscape pages.
+    node = shutil.which("node")
+    if node is None:
+        print("  SKIP  test_export_pdf_js_emits_landscape_deck_sized_pages (node not found)")
+        return
+    if not (SCRIPTS.parents[1] / "node_modules" / "playwright").is_dir():
+        print("  SKIP  test_export_pdf_js_emits_landscape_deck_sized_pages "
+              "(playwright not installed)")
+        return
+    with tempfile.TemporaryDirectory() as tmpd:
+        root = Path(tmpd)
+        # Untracked deck (no sibling analysis/selection-report.json) => not gated.
+        deck = root / "deck.html"
+        deck.write_text(
+            "<!DOCTYPE html><html><head><meta charset='utf-8'><style>"
+            "html,body{margin:0;padding:0}"
+            ".slide{width:1920px;height:1080px;background:#123456}"
+            "</style></head><body><div class='slide'></div></body></html>",
+            encoding="utf-8")
+        out = root / "deck.pdf"
+        proc = subprocess.run(
+            [node, str(SCRIPTS / "export-pdf.js"), "--url", deck.as_uri(),
+             "--output", str(out)],
+            capture_output=True, text=True, cwd=str(SCRIPTS.parents[1]))
+        if proc.returncode != 0 and "playwright" in (proc.stdout + proc.stderr).lower() \
+                and "not found" in (proc.stdout + proc.stderr).lower():
+            print("  SKIP  test_export_pdf_js_emits_landscape_deck_sized_pages "
+                  "(playwright browser unavailable)")
+            return
+        assert proc.returncode == 0, proc.stdout + proc.stderr
+        boxes = _pdf_media_boxes(out)
+        assert boxes, "no /MediaBox found in the exported PDF"
+        for w, h in boxes:
+            assert w > h, (f"deck PDF page is PORTRAIT {w}x{h}pt — a 1920x1080 deck "
+                           f"must print landscape; the deck is cropped like this")
+            # 1920px @ 96dpi = 1440pt, 1080px = 810pt.
+            assert abs(w - 1440) <= 2 and abs(h - 810) <= 2, (
+                f"expected a 1440x810pt page for a 1920x1080 deck, got {w}x{h}")
 
 
 # --------------------------------------------------------------------------- #

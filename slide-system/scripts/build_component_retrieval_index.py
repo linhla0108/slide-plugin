@@ -20,9 +20,10 @@ import json
 import re
 from pathlib import Path
 
-from _common import load_json
+from _common import content_blocks, load_json
 
 SYSTEM_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = SYSTEM_ROOT.parent
 REGISTRY = SYSTEM_ROOT / "registries/visual-library.json"
 DEFAULT_OUTPUT = SYSTEM_ROOT / "registries/component-retrieval-index.jsonl"
 TOKEN_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)?", re.I)
@@ -81,6 +82,25 @@ def _terms(text: str) -> list[str]:
     return out
 
 
+def _content_blocks_of(item: dict) -> int | None:
+    """How many distinct content items this component can hold, from its own
+    text-slot contract (`_common.content_blocks`). None when the item has no
+    readable slot contract — capacity is then UNKNOWN, and every consumer must
+    treat unknown as "do not gate" rather than invent a number."""
+    slots_rel = (item.get("text_contract") or {}).get("slots")
+    if not slots_rel:
+        return None
+    path = REPO_ROOT / str(slots_rel)
+    try:
+        data = load_json(path)
+    except (OSError, ValueError):
+        return None
+    slots = data.get("slots") if isinstance(data, dict) else None
+    if not isinstance(slots, list):
+        return None
+    return content_blocks(slots)
+
+
 def build_record(item: dict) -> dict:
     text_values: list[str] = []
     for field in TEXT_FIELDS:
@@ -98,6 +118,7 @@ def build_record(item: dict) -> dict:
         "status": item.get("status"),
         "retrieval_mode": "lexical-ready",
         "slot_count": (item.get("text_contract") or {}).get("slot_count"),
+        "content_blocks": _content_blocks_of(item),
         "type": item.get("type"),
         "brand": item.get("brand"),
         "name": item.get("name"),

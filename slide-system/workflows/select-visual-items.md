@@ -13,9 +13,28 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
    truth the scorer and validator share; do not copy the list here. It drives
    shape-aware candidate eligibility, so a missing or wrong `content_shape`
    changes selection (and fails the strict validation in step 5).
-   Optionally include `item_count` (integer — how
-   many parallel content items the slide carries, e.g. 4 roles): the scorer
-   penalizes components whose declared `set-of-N` size cannot fit it.
+   Include `content_plan` — the structured expansion of the user's brief for this
+   slide: the ACTUAL content items the approved plan holds, one string per item
+   (the three distinct next-steps, not one merged sentence). Write it BEFORE
+   selection, so the plan drives the component choice instead of the component
+   silently capping the content. Its length is the planned item count. Selection
+   compares that count against each candidate's capacity (`content_blocks` — how
+   many distinct content items the component's own slot contract can hold): a
+   component that cannot hold the plan is barred from AUTOMATIC reuse, because
+   reusing it would force approved content to be cut down to fit (a one-headline
+   CTA slide can never auto-serve a 4-item checklist). It is a FLOOR, so a 1-item
+   plan still fits a 1-block component and sparse-by-design covers/CTAs/closings
+   keep working. An explicit `component_id` may still pick a component that does
+   not fit, but the decision records a plain capacity warning (`capacity_conflict`)
+   and stays subject to the scaffold/fidelity/export gates — choosing it is not
+   evidence the content fits. Omit `content_plan` when the slide has no itemised
+   plan: the check is then a no-op.
+   Optionally include `item_count` (integer — how many parallel content items the
+   slide carries, e.g. 4 roles) for a slide that states a count without listing the
+   copy; the scorer also penalizes components whose declared `set-of-N` size cannot
+   fit it. It does NOT override `content_plan`: when a request carries both they
+   MUST agree, and a mismatch fails validation before scoring (step 5) rather than
+   being silently resolved by precedence.
    Optionally include a type-intent hint so all-types scoring does not let a
    full-slide template out-rank a genuinely relevant component: set
    `prefer_type` to `component` or `template`, or carry the wording in a

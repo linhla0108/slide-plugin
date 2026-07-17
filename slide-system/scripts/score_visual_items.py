@@ -249,6 +249,9 @@ def build_enrichment(records: Iterable[dict]) -> dict[str, dict]:
             "positive": _field_tokens(record, ENRICH_POSITIVE_FIELDS),
             "anti": _field_tokens(record, ("anti_use_cases",)),
             "slot_count": record.get("slot_count"),
+            # How many distinct content items this component can hold. None ==
+            # unknown (no readable slot contract) -> the capacity gate stays silent.
+            "content_blocks": record.get("content_blocks"),
         }
     return enrichment
 
@@ -366,6 +369,50 @@ def _build_scope_ok(cand: dict) -> bool:
     selectable — an explicit user pick still routes through the scaffold/fidelity
     gate, which fails closed if the request cannot fill the slots."""
     return ((cand.get("retrieval") or {}).get("build_scope") or {}).get("mode") == "generic"
+
+
+def planned_item_count(request: dict) -> int | None:
+    """How many distinct content items this slide's approved plan holds, or None
+    when the request carries no plan.
+
+    `content_plan` is the structured expansion of the user's brief — the actual
+    planned items — so its LENGTH is the count, and it wins here: a bare number can
+    never be more authoritative than the listed content it describes. `item_count`
+    supplies the count only for a request that states one without listing the copy.
+
+    The two may both appear only in agreement: `validate_batch_request` rejects a
+    mismatch before scoring, so they can never silently disagree in the real flow.
+    """
+    plan = request.get("content_plan")
+    if isinstance(plan, list) and plan:
+        return len(plan)
+    count = request.get("item_count")
+    if isinstance(count, int) and not isinstance(count, bool) and count > 0:
+        return count
+    return None
+
+
+def _capacity_ok(cand: dict, planned_items: int | None) -> bool:
+    """Whether this component can actually HOLD the slide's planned content.
+
+    Capacity is `content_blocks` — how many distinct content items the component's
+    own slot contract can carry (see `_common.content_blocks`). Semantic relevance
+    is not evidence of fit: a one-statement CTA slide matches "next steps" perfectly
+    and then forces a 4-action plan to be cut down to one vague line, which is the
+    failure this gate exists to stop.
+
+    A FLOOR, not a preference for big layouts: a 1-item plan still fits a 1-block
+    component, so sparse-by-design covers/CTAs/closings keep working. Either side
+    unknown -> True, so requests with no plan and components with no readable slot
+    contract behave exactly as before (same conservative no-op rule as
+    `shape_eligible`).
+    """
+    if planned_items is None:
+        return True
+    blocks = (cand.get("retrieval") or {}).get("content_blocks")
+    if not isinstance(blocks, int):
+        return True
+    return blocks >= planned_items
 
 
 def _immutable_contexts(immutable: dict) -> list[set[str]]:
@@ -510,7 +557,7 @@ def _safe_shortlist(request: dict, selectable: list[dict],
 
 
 def _explicit_decision(explicit_id: str, candidates: list[dict], req_shape: str | None,
-                       request_needs_text: bool) -> dict:
+                       request_needs_text: bool, planned_items: int | None = None) -> dict:
     """Validate an explicit user component choice. It may bypass the auto-confidence
     bar but must still be published, shape/type-compatible, and slot-ready (render
     fidelity is enforced later at build). On any failure the slide stays
@@ -543,11 +590,26 @@ def _explicit_decision(explicit_id: str, candidates: list[dict], req_shape: str 
         qa = ((cand.get("retrieval") or {}).get("auto_reuse") or {}).get("reason")
         reason += (f" WARNING: this component is marked review-only after a failed "
                    f"full-slide QA ({qa}); the render fidelity gate will reject the build.")
+    capacity_conflict = None
+    if not _capacity_ok(cand, planned_items):
+        # The user may deliberately want this component, but choosing it is NOT
+        # evidence that the content fits. Say so plainly and record the conflict, so
+        # the reviewer sees it and the downstream scaffold/fidelity/export gates
+        # still decide the build on the rendered truth.
+        blocks = (cand.get("retrieval") or {}).get("content_blocks")
+        capacity_conflict = {"planned_items": planned_items, "content_blocks": blocks}
+        reason += (f" WARNING: capacity mismatch — this component holds {blocks} content "
+                   f"block(s) but this slide plans {planned_items} item(s). Reusing it "
+                   f"means the approved content does not fit as planned; the scaffold and "
+                   f"render-fidelity gates still apply and will fail a slide whose copy "
+                   f"cannot be placed.")
     decision = {
         "action": "reuse", "item_id": explicit_id, "score": cand["score"],
         "reason": reason,
         "selected_by": "user", "extraction_recommended": False,
     }
+    if capacity_conflict:
+        decision["capacity_conflict"] = capacity_conflict
     if not _immutable_text_ok(cand):
         # The user may deliberately want this component, but its artwork would ship
         # visible copy about another subject (or its audit is unresolved, so nobody
@@ -584,6 +646,7 @@ def score_request(
     flat_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
     req_terms = (flat_terms | set().union(*concept_groups)) if concept_groups else flat_terms
     item_count = request.get("item_count")
+    planned_items = planned_item_count(request)
     request_needs_text = bool(request.get("content_structure"))
     type_intent = request_type_intent(request)
     req_shape = request.get("content_shape")
@@ -685,6 +748,17 @@ def score_request(
                 )
             if record and record.get("slot_count") is not None:
                 retrieval["slot_count"] = record["slot_count"]
+            # Content capacity: how many distinct items this component can hold.
+            # Recorded for EVERY candidate (not only mismatches) so a reviewer can
+            # see the fit — including the over-capacity case this slice does not
+            # gate (tiny content in a large layout).
+            if record and isinstance(record.get("content_blocks"), int):
+                retrieval["content_blocks"] = record["content_blocks"]
+                if planned_items is not None and record["content_blocks"] < planned_items:
+                    reasons.append(
+                        f"Capacity: this slide plans {planned_items} content item(s) but "
+                        f"the component holds {record['content_blocks']} — reusing it "
+                        f"would force the approved content to be cut down to fit")
             if record and record.get("slot_count") == 0 and request_needs_text:
                 score = max(0.0, score - NO_TEXT_SLOT_PENALTY)
                 reasons.append(
@@ -833,6 +907,12 @@ def score_request(
                                           "source-specific/high-content items are manual selection only")
             return (f"is not a generic auto-buildable template [build_scope: {mode}] — {detail}. "
                     f"A semantic match is not proof this slide's slots can be filled from the brief")
+        if not _capacity_ok(cand, planned_items):
+            blocks = (cand.get("retrieval") or {}).get("content_blocks")
+            return (f"holds {blocks} content block(s) but this slide plans "
+                    f"{planned_items} item(s) — reusing it would force the approved "
+                    f"content to be cut down to fit. A semantic match is not proof the "
+                    f"content fits; pick a component that can hold the plan, or extract one")
         if cand["score"] < AUTO_REUSE_MIN or cand["criteria"]["semantic_intent"] < semantic_conf:
             return (f"scored {cand['score']} (semantic {cand['criteria']['semantic_intent']}) — "
                     f"below the high-confidence reuse bar (>= {AUTO_REUSE_MIN} total AND "
@@ -853,7 +933,8 @@ def score_request(
 
     if explicit_id:
         # Explicit user choice: validate, never silently substitute.
-        decision = _explicit_decision(explicit_id, candidates, req_shape, request_needs_text)
+        decision = _explicit_decision(explicit_id, candidates, req_shape,
+                                      request_needs_text, planned_items)
     elif reuse_ready:
         # Genuinely high-confidence automatic reuse (top-ranked ready candidate).
         top = reuse_ready[0]
@@ -928,9 +1009,10 @@ _BATCH_TOP_FIELDS = {"job_id", "brief", "note", "slides"}
 _SLIDE_REQUEST_FIELDS = {
     "request_id", "intent", "tags", "content_structure", "content_shape", "item_count",
     "density", "brand", "required_exports", "query", "prefer_type", "recommend_extraction",
-    "component_id", "allow_component_reuse", "unresolved_policy", "concepts",
+    "component_id", "allow_component_reuse", "unresolved_policy", "concepts", "content_plan",
 }
-_STRING_LIST_FIELDS = ("intent", "tags", "content_structure", "required_exports")
+_STRING_LIST_FIELDS = ("intent", "tags", "content_structure", "required_exports",
+                       "content_plan")
 # Optional string-or-null fields. `content_shape` is the one that mattered: a list
 # passed validation and then raised `TypeError: unhashable type: 'list'` deep inside
 # _common.shape_eligible(), after scoring had already started.
@@ -1022,6 +1104,19 @@ def validate_batch_request(batch, require_concepts: bool = False) -> list[str]:
         n = s.get("item_count")
         if n is not None and (isinstance(n, bool) or not isinstance(n, int)):
             errors.append(f"{p}: item_count must be a whole number")
+        # content_plan IS the plan, so its length is the count. A request that also
+        # restates item_count must agree: a disagreement is an authoring mistake, and
+        # resolving it by precedence would let a slide claim one item while listing
+        # several — sizing the capacity gate to the wrong number and waving through a
+        # component that cannot hold the real content. Fail here, before scoring.
+        plan = s.get("content_plan")
+        if (isinstance(plan, list) and plan
+                and isinstance(n, int) and not isinstance(n, bool) and n > 0
+                and n != len(plan)):
+            errors.append(
+                f"{p}: item_count is {n} but content_plan lists {len(plan)} item(s) — "
+                f"they must agree. content_plan is the plan, so its length is the "
+                f"count: drop item_count, or correct one of them.")
         concepts = s.get("concepts")
         if require_concepts and not (isinstance(concepts, list) and concepts):
             errors.append(f"{p}: concepts is required (--require-concepts): each slide must "

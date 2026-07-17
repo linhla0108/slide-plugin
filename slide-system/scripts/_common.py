@@ -61,6 +61,80 @@ def shape_eligible(content_shape: str | None, tokens) -> bool:
     return bool(allowed & {str(t).lower() for t in tokens})
 
 
+# Content capacity — how many DISTINCT content items a component can actually
+# hold, derived from its own text-slot contract (the artifact the scaffolder
+# fills and the fidelity gate measures, i.e. the operational truth). Shared by
+# build_component_retrieval_index.py (which bakes the number into the index) and
+# the tests, so one rule defines capacity everywhere.
+#
+# Why not the metadata: `component_type`/`layout_role` are populated on a small
+# minority of items and `set_sizes` on none; declared `content_structure` is well
+# populated but over-tagged for this purpose (single-headline CTA slides declare
+# `list-item`). Why not `slot_count`: it measures MARKUP, not capacity — such a
+# CTA can be 8 slots, of which 5 are page furniture and 3 are one wrapped sentence.
+#
+# Bounds are normalized (0..1) per the text-slots contract.
+CHROME_MAX_HEIGHT = 0.030   # page furniture is small type…
+CHROME_TOP = 0.10           # …and lives in the header…
+CHROME_BOTTOM = 0.90        # …or footer margin band.
+BLOCK_MERGE_TOLERANCE = 0.012  # slots this close read as ONE block of copy.
+
+
+def _slot_rect(slot: dict) -> tuple[float, float, float, float] | None:
+    b = (slot or {}).get("bounds") or {}
+    try:
+        x, y = float(b.get("x", 0)), float(b.get("y", 0))
+        w, h = float(b.get("width", 0)), float(b.get("height", 0))
+    except (TypeError, ValueError):
+        return None
+    return (x, y, w, h) if w > 0 and h > 0 else None
+
+
+def is_chrome_slot(slot: dict) -> bool:
+    """Page furniture — logo, page number, footer, section label: small type in the
+    header/footer margin band. It repeats on every slide of a deck, so it is not
+    capacity for the slide's own content."""
+    rect = _slot_rect(slot)
+    if rect is None:
+        return False
+    _, y, _, h = rect
+    return h <= CHROME_MAX_HEIGHT and (y < CHROME_TOP or y + h > CHROME_BOTTOM)
+
+
+def _rects_touch(a: tuple, b: tuple, tol: float) -> bool:
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return not (ax + aw + tol < bx or bx + bw < ax - tol
+                or ay + ah + tol < by or by + bh < ay - tol)
+
+
+def content_blocks(slots) -> int:
+    """The number of distinct content blocks in a text-slot contract == how many
+    separate content items the component can hold.
+
+    Chrome is excluded, then the remaining slots are merged when their boxes sit
+    within `BLOCK_MERGE_TOLERANCE`: a headline wrapped across several slots
+    collapses to ONE block, while list/card rows separated by real gaps stay
+    distinct. So a CTA slide scores 1 no matter how many fragments its headline is
+    split into, and a checklist scores its true number of items.
+    """
+    rects = [r for r in (_slot_rect(s) for s in (slots or [])
+                         if not is_chrome_slot(s)) if r is not None]
+    parent = list(range(len(rects)))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(rects)):
+        for j in range(i + 1, len(rects)):
+            if _rects_touch(rects[i], rects[j], BLOCK_MERGE_TOLERANCE):
+                parent[find(i)] = find(j)
+    return len({find(i) for i in range(len(rects))})
+
+
 def derive_content_shape(tokens) -> list[str]:
     """Deterministically infer which content_shape(s) an item fits from its own
     intent/tags, by reverse-lookup on SHAPE_TYPE_MAP. Returns every shape whose
