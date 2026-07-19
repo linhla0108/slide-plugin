@@ -33,7 +33,6 @@ import re
 import shutil
 import subprocess
 import sys
-from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -46,7 +45,14 @@ sys.path.insert(0, str(SCRIPTS))
 import candidate_review as cr  # noqa: E402
 import auto_stage_candidates as asc  # noqa: E402
 import build_component_catalog as bcc  # noqa: E402
-from _common import require_project_python  # noqa: E402
+from _common import (
+    library_mutation_lock,
+    library_mutation_unlock,
+    mutex_dir,
+    now_iso,
+    quarantine_path,
+    require_project_python,
+)  # noqa: E402
 REGISTRY = REPO_ROOT / "slide-system" / "registries" / "visual-library.json"
 HISTORY = REPO_ROOT / "slide-system" / "registries" / "extraction-history.json"
 LIBRARY = REPO_ROOT / "slide-system" / "library"
@@ -65,9 +71,6 @@ def selected_python() -> Path:
 
 
 # ---------- helpers ----------
-
-def now_iso() -> str:
-    return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
 def run(cmd: list[str]) -> tuple[bool, str]:
@@ -196,40 +199,41 @@ def prune_staging(item_dir: Path) -> None:
 # ---------- actions ----------
 
 def action_publish(item_id: str) -> tuple[int, dict]:
-    found = find_staging(item_id)
-    if not found:
-        return 404, {"ok": False, "error": f"Draft item not found: {item_id}"}
-    item_dir, batch_dir, folder = found
+    lock_dir = mutex_dir()
+    if not library_mutation_lock(lock_dir):
+        return 409, {"ok": False, "error": "Another library mutation is in progress; try again."}
+    try:
+        found = find_staging(item_id)
+        if not found:
+            return 404, {"ok": False, "error": f"Draft item not found: {item_id}"}
+        item_dir, batch_dir, folder = found
 
-    # Author the publish-grade preview/ on demand if the extraction didn't.
-    # This keeps the user flow to a single click: review -> Publish -> done.
-    preview_dir = item_dir / "preview"
-    if not preview_dir.is_dir() or not any(preview_dir.iterdir()):
-        ok, log = run([str(selected_python()), str(SCRIPTS / "generate_item_preview.py"),
-                       "--item-dir", str(item_dir)])
+        preview_dir = item_dir / "preview"
+        if not preview_dir.is_dir() or not any(preview_dir.iterdir()):
+            ok, log = run([str(selected_python()), str(SCRIPTS / "generate_item_preview.py"),
+                           "--item-dir", str(item_dir)])
+            if not ok:
+                return 500, {"ok": False, "error": "Could not build a preview for this item.", "log": log}
+
+        mapping_path = item_dir / "mapping.json"
+        mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+        mapping["approval"] = {
+            "status": "approved",
+            "approved_by": "catalog-ui",
+            "approved_at": now_iso(),
+        }
+        mapping_path.write_text(json.dumps(mapping, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+
+        ok, log = run([str(selected_python()), str(SCRIPTS / "publish_extraction.py"),
+                       "--extraction-dir", str(batch_dir), "--item-id", folder])
         if not ok:
-            return 500, {"ok": False, "error": "Could not build a preview for this item.", "log": log}
+            return 500, {"ok": False, "error": "Publish failed", "log": log}
 
-    # The deliberate Publish click is the explicit human approval.
-    mapping_path = item_dir / "mapping.json"
-    mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
-    mapping["approval"] = {
-        "status": "approved",
-        "approved_by": "catalog-ui",
-        "approved_at": now_iso(),
-    }
-    mapping_path.write_text(json.dumps(mapping, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
-
-    ok, log = run([str(selected_python()), str(SCRIPTS / "publish_extraction.py"),
-                   "--extraction-dir", str(batch_dir), "--item-id", folder])
-    if not ok:
-        return 500, {"ok": False, "error": "Publish failed", "log": log}
-
-    # Staging copy is now redundant — the artifacts live in library/. Remove it
-    # and prune the emptied items/ and batch dirs (outputs/ is gitignored).
-    prune_staging(item_dir)
-    regen_catalog()
-    return 200, {"ok": True, "message": "Published to library", "log": log}
+        prune_staging(item_dir)
+        regen_catalog()
+        return 200, {"ok": True, "message": "Published to library", "log": log}
+    finally:
+        library_mutation_unlock(lock_dir)
 
 
 def action_delete(item_id: str, status: str) -> tuple[int, dict]:
@@ -238,23 +242,48 @@ def action_delete(item_id: str, status: str) -> tuple[int, dict]:
         if not entry:
             return 404, {"ok": False, "error": f"Published item not found: {item_id}"}
         artifact = entry.get("paths", {}).get("artifact")
-        # Hard guard: only items owned by the library may be deleted. Canonical
-        # assets (logo, Dio) live under .agents/ and are protected by AGENTS.md.
         if not artifact or not artifact.startswith("slide-system/library/"):
             return 403, {"ok": False, "error": "This item is a protected/canonical asset and cannot be deleted here."}
         target = (REPO_ROOT / artifact).resolve()
         if not (within_repo(target) and LIBRARY in target.parents):
             return 403, {"ok": False, "error": "Refusing to delete outside the library."}
-        if target.is_dir():
-            shutil.rmtree(target)
-        elif target.is_file():
-            target.unlink()
-        registry["items"] = [i for i in registry["items"] if i.get("id") != item_id]
-        registry["updated_at"] = now_iso()
-        REGISTRY.write_text(json.dumps(registry, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
-        regen_compact()
-        regen_catalog()
-        return 200, {"ok": True, "message": "Published item deleted", "removed": artifact}
+        lock_dir = mutex_dir()
+        if not library_mutation_lock(lock_dir):
+            return 409, {"ok": False, "error": "Another library mutation is in progress; try again."}
+        try:
+            # Phase 1: move artifact to quarantine (recoverable).
+            q = quarantine_path(target)
+            if q.exists():
+                shutil.rmtree(q)
+            shutil.move(str(target), str(q))
+            # Phase 2: update registry and derived projections.
+            registry["items"] = [i for i in registry["items"] if i.get("id") != item_id]
+            registry["updated_at"] = now_iso()
+            REGISTRY.write_text(json.dumps(registry, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+            ok_c, _ = regen_compact()
+            ok_r, _ = regen_catalog()
+            if not (ok_c and ok_r):
+                # Rollback: restore artifact, revert registry.
+                shutil.move(str(q), str(target))
+                registry["items"].append(entry)
+                registry["updated_at"] = now_iso()
+                REGISTRY.write_text(json.dumps(registry, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+                regen_compact()
+                regen_catalog()
+                return 500, {"ok": False, "error": "Failed to regenerate derived projections; deletion rolled back."}
+            # Phase 3: success — remove quarantine.
+            if q.exists():
+                shutil.rmtree(q)
+            return 200, {"ok": True, "message": "Published item deleted", "removed": artifact}
+        except BaseException:
+            # Unexpected failure — restore artifact if possible.
+            if q.exists() and not target.exists():
+                shutil.move(str(q), str(target))
+                library_mutation_unlock(lock_dir)
+                return 500, {"ok": False, "error": "Deletion failed partway through; artifact restored from quarantine."}
+            raise
+        finally:
+            library_mutation_unlock(lock_dir)
 
     # draft / staging: remove EVERY staging folder for this id (gitignored =
     # permanent) and purge its history trail so disk, catalog, and history agree.

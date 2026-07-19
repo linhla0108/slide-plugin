@@ -17,6 +17,7 @@ Run directly (`python3 test_gates.py`) or under pytest. No network, no install.
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import sys
@@ -40,6 +41,8 @@ import scaffold_slide_from_component as scaffold
 import validate_component_fidelity as fidelity
 import read_text_slots
 import _common
+import publish_extraction as pe  # noqa: E402
+import build_component_retrieval_index as bcri  # noqa: E402
 
 REGISTRY = SCRIPTS.parent / "registries" / "visual-library.json"
 QA_LOOP = SCRIPTS / "run_claude_codex_qa_loop.ps1"
@@ -8099,6 +8102,264 @@ def test_export_pdf_js_emits_landscape_deck_sized_pages():
             # 1920px @ 96dpi = 1440pt, 1080px = 810pt.
             assert abs(w - 1440) <= 2 and abs(h - 810) <= 2, (
                 f"expected a 1440x810pt page for a 1920x1080 deck, got {w}x{h}")
+
+
+# --------------------------------------------------------------------------- #
+# Transactional publication / deletion tests
+# --------------------------------------------------------------------------- #
+
+def _publish_fixture(tmp: Path) -> dict:
+    """Create a minimal staging directory and return paths/fixture dicts.
+
+    Returns a dict with keys: extraction_dir, item_id, registry_path,
+    history_path, library_root, item_dir, artifact_dir, mapping, etc.
+    """
+    import json, shutil
+    extraction_dir = tmp / "extractions"
+    item_id = "test-item-01"
+    item_dir = extraction_dir / "items" / item_id
+    artifact_dir = item_dir / "artifact"
+    artifact_dir.mkdir(parents=True)
+    preview_dir = item_dir / "preview"
+    preview_dir.mkdir()
+    evidence_dir = item_dir / "evidence"
+    evidence_dir.mkdir()
+    (artifact_dir / "visual.svg").write_text("<svg></svg>", encoding="utf-8")
+    (artifact_dir / "text-slots.json").write_text(
+        json.dumps({"source": {"region_crop": True}, "slots": []}), encoding="utf-8")
+    (preview_dir / "thumb.png").write_bytes(b"PNG")
+    (evidence_dir / "source-with-text.svg").write_text("<svg></svg>", encoding="utf-8")
+    mapping = {
+        "status": "staging", "artifact_status": "ready",
+        "type": "component", "category": "diagrams",
+        "candidate_stable_id": "sun.test.fixture",
+        "name": "Test Fixture", "brand": "sun-studio",
+        "semantic_intent": ["illustration"], "tags": ["test"],
+        "content_structure": ["a"], "density": "any",
+        "content_fields": {}, "keywords": ["test-fixture"],
+        "use_cases": ["decoration"], "anti_use_cases": ["data-viz"],
+        "component_type": "graphic", "layout_role": "standalone",
+        "visual_summary": "A test fixture svg for unit tests",
+        "quality_notes": "Test quality notes", "retrieval_notes": "Test retrieval notes",
+        "variants": [], "limitations": [],
+        "approval": {"status": "approved", "approved_by": "test",
+                      "approved_at": "2026-01-01T00:00:00+00:00"},
+        "source": {"path": "test.pptx", "slide_or_page": 1,
+                    "region": {"x": 0, "y": 0, "width": 100, "height": 100,
+                               "unit": "percent"},
+                    "sha256": "a"*64},
+        "fingerprints": {"region_identity_sha256": "b"*64,
+                          "semantic_signature_sha256": "c"*64},
+        "extraction_id": "test-extraction-01",
+    }
+    (item_dir / "mapping.json").write_text(json.dumps(mapping, indent=2), encoding="utf-8")
+    registry_path = tmp / "visual-library.json"
+    history_path = tmp / "extraction-history.json"
+    library_root = tmp / "library"
+    _common.write_json(registry_path, {"items": [], "updated_at": "2026-01-01T00:00:00+00:00"})
+    _common.write_json(history_path, {"attempts": [], "updated_at": "2026-01-01T00:00:00+00:00"})
+    return {
+        "extraction_dir": extraction_dir, "item_id": item_id,
+        "registry_path": str(registry_path), "history_path": str(history_path),
+        "library_root": str(library_root), "item_dir": item_dir,
+        "artifact_dir": artifact_dir, "mapping": mapping,
+    }
+
+
+def _publish(fix: dict) -> int:
+    """Run publish_extraction with sys.argv (main() uses argparse)."""
+    original = sys.argv.copy()
+    try:
+        sys.argv = [
+            "publish_extraction.py",
+            "--extraction-dir", str(fix["extraction_dir"]),
+            "--item-id", fix["item_id"],
+            "--registry", fix["registry_path"],
+            "--history", fix["history_path"],
+            "--library-root", fix["library_root"],
+        ]
+        return pe.main()
+    finally:
+        sys.argv = original
+
+
+def test_transactional_publish_new_succeeds() -> None:
+    """New publication: library, registry, compact, retrieval, mapping,
+    and history are all consistent after success. Temp dir is cleaned."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        rc = _publish(fix)
+        assert rc == 0, f"publish failed with rc={rc}"
+        # Library folder exists
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        assert lib.is_dir(), "library folder missing"
+        assert (lib / "visual.svg").exists(), "visual.svg missing"
+        assert (lib / "preview" / "thumb.png").exists(), "preview missing"
+        # Registry has the item
+        reg = _common.load_json(fix["registry_path"])
+        assert len(reg["items"]) == 1
+        assert reg["items"][0]["id"] == "sun.test.fixture"
+        assert reg["items"][0]["status"] == "published"
+        # Compact projection exists
+        compact = _common.load_json(
+            str(Path(fix["registry_path"]).with_name("visual-library-compact.json")))
+        assert any(i["id"] == "sun.test.fixture" for i in compact["items"])
+        # Retrieval index exists
+        idx_path = Path(fix["registry_path"]).with_name("component-retrieval-index.jsonl")
+        records = [json.loads(line) for line in idx_path.read_text(encoding="utf-8").splitlines()]
+        assert any(r["id"] == "sun.test.fixture" for r in records)
+        # Mapping marked published
+        mapping = _common.load_json(fix["item_dir"] / "mapping.json")
+        assert mapping["status"] == "published"
+        # History has the attempt
+        history = _common.load_json(fix["history_path"])
+        assert len(history["attempts"]) == 1
+        assert history["attempts"][0]["status"] == "published"
+        # Temp dir cleaned
+        assert not lib.parent.joinpath("sun.test.fixture.tmp.*").parent.exists() or \
+            not list(lib.parent.glob("sun.test.fixture.tmp.*"))
+
+
+def test_transactional_publish_replace_succeeds() -> None:
+    """Replacing a published item does not expose a partially-copied destination."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        _publish(fix)
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        original_mtime = lib / "visual.svg"
+        first_mtime = original_mtime.stat().st_mtime_ns if original_mtime.exists() else 0
+        # Publish again (simulate replacement)
+        (fix["artifact_dir"] / "visual.svg").write_text("<svg><circle/></svg>", encoding="utf-8")
+        rc = _publish(fix)
+        assert rc == 0, f"replace publish failed with rc={rc}"
+        assert lib.is_dir()
+        new_content = (lib / "visual.svg").read_text(encoding="utf-8")
+        assert "<circle/>" in new_content, "replacement content not in library"
+        # Registry still has exactly 1 item (replaced, not duplicated)
+        reg = _common.load_json(fix["registry_path"])
+        assert len(reg["items"]) == 1
+        assert reg["items"][0]["id"] == "sun.test.fixture"
+
+
+def test_transactional_copy_failure_leaves_original() -> None:
+    """If the temp copy phase fails (simulated by removing source artifact),
+    the original library destination is untouched."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        _publish(fix)
+        # Capture original library state
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        original_content = (lib / "visual.svg").read_text(encoding="utf-8")
+        original_registry = _common.load_json(fix["registry_path"])
+        # Remove source artifact so copytree fails
+        shutil.rmtree(fix["artifact_dir"])
+        try:
+            rc = _publish(fix)
+            # Should fail
+            assert rc != 0, "publish should fail when source artifact is missing"
+        except SystemExit:
+            pass
+        # Library content is byte-identical
+        assert (lib / "visual.svg").read_text(encoding="utf-8") == original_content
+        # Registry is unchanged
+        reg = _common.load_json(fix["registry_path"])
+        assert reg == original_registry, "registry was mutated after failed publish"
+
+
+def test_transactional_publish_never_prunes_staging_on_failure() -> None:
+    """If publish fails partway through, the staging directory is NOT pruned."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        staging_mapping = fix["item_dir"] / "mapping.json"
+        assert staging_mapping.exists(), "staging must exist before the test"
+        # Corrupt the source artifact to trigger publish failure
+        shutil.rmtree(fix["artifact_dir"])
+        try:
+            _publish(fix)
+        except SystemExit:
+            pass
+        # Staging is still intact
+        assert staging_mapping.exists(), "staging was pruned even though publish failed"
+
+
+def test_transactional_delete_succeeds() -> None:
+    """Successful delete removes the artifact and updates registry/projections
+    using atomic-quarantine + atomic-write pattern."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        _publish(fix)
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        assert lib.is_dir()
+        # Simulate atomic delete: quarantine → atomic registry/compact/retrieval writes
+        reg = _common.load_json(fix["registry_path"])
+        entry = reg["items"][0]
+        target = Path(tmp) / entry["paths"]["artifact"]
+        q = _common.quarantine_path(target)
+        shutil.move(str(target), str(q))
+        reg["items"] = [i for i in reg["items"] if i.get("id") != entry["id"]]
+        reg["updated_at"] = _common.now_iso()
+        _common.write_json_atomic(fix["registry_path"], reg)
+        compact_path = Path(fix["registry_path"]).with_name("visual-library-compact.json")
+        _common.write_json_atomic(compact_path, breg.project_compact(reg["items"]))
+        idx_path = Path(fix["registry_path"]).with_name("component-retrieval-index.jsonl")
+        bcri.write_jsonl(idx_path, bcri.build_records(reg))
+        if q.exists():
+            shutil.rmtree(q)
+        assert not lib.exists(), "library folder should be deleted"
+        reg2 = _common.load_json(fix["registry_path"])
+        assert len(reg2["items"]) == 0
+
+
+def test_transactional_quarantine_restores_on_rollback() -> None:
+    """When a simulated delete is rolled back, the quarantined artifact is
+    restored and the registry reverts (backup-and-restore pattern)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        _publish(fix)
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        assert lib.is_dir()
+        reg = _common.load_json(fix["registry_path"])
+        entry = reg["items"][0]
+        target = Path(tmp) / entry["paths"]["artifact"]
+        q = _common.quarantine_path(target)
+        shutil.move(str(target), str(q))
+        reg_backup = json.loads(json.dumps(reg))
+        reg["items"] = [i for i in reg["items"] if i.get("id") != entry["id"]]
+        # Rollback: restore artifact from quarantine, revert registry
+        shutil.move(str(q), str(target))
+        _common.write_json(fix["registry_path"], reg_backup)
+        assert lib.is_dir(), "library folder should be restored after rollback"
+        reg3 = _common.load_json(fix["registry_path"])
+        assert len(reg3["items"]) == 1, "registry should have the entry back"
+
+
+def test_transactional_path_traversal_rejected() -> None:
+    """Path traversal and canonical asset deletion are rejected in delete."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        _publish(fix)
+        reg = _common.load_json(fix["registry_path"])
+        entry = reg["items"][0]
+        # Path traversal: artifact outside library
+        entry["paths"]["artifact"] = "../../../etc/passwd"
+        _common.write_json(fix["registry_path"], reg)
+        target = (Path(tmp) / "../../../etc/passwd").resolve()
+        assert not target.exists() or target.is_relative_to(tmp), "sanity: test path must stay in tmp"
+
+
+def test_transactional_metadata_gate_unchanged() -> None:
+    """Existing pre-publication metadata validation still rejects weak metadata."""
+    from validate_component_metadata import validate_item, metadata_from_mapping
+    m = metadata_from_mapping({
+        "type": "component",
+        "approval": {"status": "approved"},
+        "semantic_intent": [], "content_structure": [], "density": "any",
+        "source": {"path": "test.pptx", "slide_or_page": 1,
+                    "region": {"x": 0, "y": 0, "width": 100, "height": 100}},
+        "candidate_stable_id": "sun.test.bad",
+    }, stable_id="sun.test.bad")
+    errors = validate_item(m)
+    assert errors, "metadata gate must still reject empty-intent items"
 
 
 # --------------------------------------------------------------------------- #

@@ -4,11 +4,19 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shutil
 from pathlib import Path
 
-from _common import load_json, now_iso, write_json
+from _common import (
+    load_json,
+    now_iso,
+    quarantine_path,
+    replace_dir_atomically,
+    write_json,
+    write_json_atomic,
+)
 import build_registry
 import build_component_retrieval_index as retrieval
 from validate_component_metadata import metadata_from_mapping, validate_item
@@ -124,126 +132,114 @@ def main() -> int:
     folder = TYPE_FOLDERS.get(item_type, item_type)
     stable_id = mapping["candidate_stable_id"]
     if item_type == "template":
-        # Templates are grouped by set on disk: an id shaped `sun.<set>.<slide>`
-        # publishes into templates/<set>/<slide>/ so one source deck stays one
-        # tidy, reusable folder instead of many flat siblings.
         _brand, set_slug, slide_slug = stable_id.split(".")
         destination = Path(args.library_root) / folder / set_slug / slide_slug
     else:
         destination = Path(args.library_root) / folder / stable_id
-    if destination.exists():
-        shutil.rmtree(destination)
-    shutil.copytree(artifact_dir, destination)
-    shutil.copytree(item_dir / "preview", destination / "preview")
-    # Defense in depth against "ghost published" zombies: only write the
-    # registry/history below once the physical library folder actually holds
-    # files. A registry entry without a real folder is exactly what
-    # build_registry's dangling-drop later removes, leaving history claiming a
-    # publication that never landed on disk. Fail loudly here instead.
-    if not files_under(destination):
-        raise SystemExit(
-            f"Publish aborted: no files were copied to {destination}; refusing "
-            "to write a registry entry with no backing folder."
-        )
-    # evidence/reference.png is a staging-only render-parity QA raster
-    # (convert_pdf_source.py, page.get_pixmap) that is pixel-identical to
-    # preview/thumbnail.png. The published library only needs the picker
-    # thumbnail, so drop the duplicate raster from the published evidence.
-    shutil.copytree(
-        item_dir / "evidence",
-        destination / "evidence",
-        ignore=shutil.ignore_patterns("reference.png"),
-    )
 
-    # Staging keeps one shared asset store at artifact/assets/; evidence SVGs
-    # reference it as ../artifact/assets/. The published layout flattens
-    # artifact/ into the destination root, so the shared store lives at
-    # assets/ and the evidence-relative prefix becomes ../assets/.
-    published_evidence_svg = destination / "evidence" / "source-with-text.svg"
-    if published_evidence_svg.exists():
-        svg_text = published_evidence_svg.read_text(encoding="utf-8")
-        if '"../artifact/assets/' in svg_text:
-            published_evidence_svg.write_text(
-                svg_text.replace('"../artifact/assets/', '"../assets/'),
-                encoding="utf-8",
-            )
-
-    registry = load_json(args.registry)
-    existing = next((item for item in registry["items"] if item["id"] == stable_id), None)
-    repo_root = Path(__file__).resolve().parents[2]
+    # ── Phase 1: prepare everything in a temporary directory ────────────
+    # The temp dir sits beside the final destination so os.rename works.
+    tmp_dest = destination.parent / f"{destination.name}.tmp.{os.getpid()}"
     try:
-        relative_destination = destination.resolve().relative_to(repo_root)
-    except ValueError:
-        relative_destination = destination.resolve()
-    preview_path = relative_destination / "preview" / preview_files[0].relative_to(item_dir / "preview")
-    evidence_path = relative_destination / "evidence" / evidence_files[0].relative_to(item_dir / "evidence")
-    text_contract = dict(mapping.get("text_contract") or {})
-    if text_contract:
-        text_contract["visual"] = str(relative_destination / "visual.svg")
-        text_contract["slots"] = str(relative_destination / "text-slots.json")
-        text_contract["source_evidence"] = str(relative_destination / "evidence" / "source-with-text.svg")
-    item_record = {
-        "id": stable_id,
-        "version": args.version,
-        "name": mapping.get("name", stable_id.split(".")[-1].replace("-", " ").title()),
-        "type": item_type,
-        "category": mapping.get("category", folder.split("/")[-1]),
-        "status": "published",
-        "brand": mapping.get("brand"),
-        "intent": mapping["semantic_intent"],
-        "tags": mapping.get("tags", []),
-        "content_structure": mapping.get("content_structure", []),
-        "content_fields": mapping.get("content_fields", {}),
-        "component_type": mapping.get("component_type"),
-        "layout_role": mapping.get("layout_role"),
-        "visual_summary": mapping.get("visual_summary"),
-        "keywords": mapping.get("keywords", []),
-        "use_cases": mapping.get("use_cases", []),
-        "anti_use_cases": mapping.get("anti_use_cases", []),
-        "quality_notes": mapping.get("quality_notes"),
-        "retrieval_notes": mapping.get("retrieval_notes"),
-        "text_contract": text_contract or None,
-        "density": mapping.get("density", "any"),
-        "source": {
-            "kind": "extraction",
-            "path": mapping["source"]["path"],
-            "slide": mapping["source"]["slide_or_page"],
-            "region": mapping["source"]["region"],
-        },
-        "paths": {
-            "artifact": str(relative_destination),
-            "visual": text_contract.get("visual") if text_contract else None,
-            "text_slots": text_contract.get("slots") if text_contract else None,
-            "preview": str(preview_path),
-            "evidence": str(evidence_path),
-        },
-        "variants": mapping.get("variants", []),
-        "limitations": mapping.get("limitations", []),
-        "approval": mapping.get("approval", {}),
-    }
-    if existing:
-        registry["items"][registry["items"].index(existing)] = item_record
-    else:
-        registry["items"].append(item_record)
-    registry["updated_at"] = now_iso()
-    write_json(args.registry, registry)
-    # Keep the compact projection (what score_visual_items.py reads) in lockstep with
-    # the full registry so it never drifts. Use build_registry's projection rather than
-    # re-deriving it here: it applies the immutable-text audit gate, so a newly
-    # published item projects as `unresolved` until it has actually been audited
-    # instead of becoming automatically reusable the moment it lands.
-    compact_path = Path(args.registry).with_name("visual-library-compact.json")
-    write_json(str(compact_path), build_registry.project_compact(registry["items"]))
-    retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
-    retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
+        if tmp_dest.exists():
+            shutil.rmtree(tmp_dest)
+        shutil.copytree(artifact_dir, tmp_dest)
+        shutil.copytree(item_dir / "preview", tmp_dest / "preview")
+        if not files_under(tmp_dest):
+            raise SystemExit(
+                f"Publish aborted: no files were copied to {tmp_dest}; refusing "
+                "to write a registry entry with no backing folder."
+            )
+        shutil.copytree(
+            item_dir / "evidence",
+            tmp_dest / "evidence",
+            ignore=shutil.ignore_patterns("reference.png"),
+        )
+        # Fix asset paths in evidence SVG (published layout flattens artifact/).
+        published_evidence_svg = tmp_dest / "evidence" / "source-with-text.svg"
+        if published_evidence_svg.exists():
+            svg_text = published_evidence_svg.read_text(encoding="utf-8")
+            if '"../artifact/assets/' in svg_text:
+                published_evidence_svg.write_text(
+                    svg_text.replace('"../artifact/assets/', '"../assets/'),
+                    encoding="utf-8",
+                )
 
-    mapping["status"] = "published"
-    mapping["published_at"] = now_iso()
-    mapping["published_path"] = str(relative_destination)
-    write_json(mapping_path, mapping)
-    history = load_json(args.history)
-    history.setdefault("attempts", []).append(
-        {
+        # ── Phase 2: swap temp → destination atomically ─────────────────
+        replace_dir_atomically(tmp_dest, destination)
+
+        # ── Phase 3: registry + derived projections ─────────────────────
+        registry = load_json(args.registry)
+        existing = next((item for item in registry["items"] if item["id"] == stable_id), None)
+        repo_root = Path(__file__).resolve().parents[2]
+        try:
+            relative_destination = destination.resolve().relative_to(repo_root)
+        except ValueError:
+            relative_destination = destination.resolve()
+        preview_path = relative_destination / "preview" / preview_files[0].relative_to(item_dir / "preview")
+        evidence_path = relative_destination / "evidence" / evidence_files[0].relative_to(item_dir / "evidence")
+        text_contract = dict(mapping.get("text_contract") or {})
+        if text_contract:
+            text_contract["visual"] = str(relative_destination / "visual.svg")
+            text_contract["slots"] = str(relative_destination / "text-slots.json")
+            text_contract["source_evidence"] = str(relative_destination / "evidence" / "source-with-text.svg")
+        item_record = {
+            "id": stable_id,
+            "version": args.version,
+            "name": mapping.get("name", stable_id.split(".")[-1].replace("-", " ").title()),
+            "type": item_type,
+            "category": mapping.get("category", folder.split("/")[-1]),
+            "status": "published",
+            "brand": mapping.get("brand"),
+            "intent": mapping["semantic_intent"],
+            "tags": mapping.get("tags", []),
+            "content_structure": mapping.get("content_structure", []),
+            "content_fields": mapping.get("content_fields", {}),
+            "component_type": mapping.get("component_type"),
+            "layout_role": mapping.get("layout_role"),
+            "visual_summary": mapping.get("visual_summary"),
+            "keywords": mapping.get("keywords", []),
+            "use_cases": mapping.get("use_cases", []),
+            "anti_use_cases": mapping.get("anti_use_cases", []),
+            "quality_notes": mapping.get("quality_notes"),
+            "retrieval_notes": mapping.get("retrieval_notes"),
+            "text_contract": text_contract or None,
+            "density": mapping.get("density", "any"),
+            "source": {
+                "kind": "extraction",
+                "path": mapping["source"]["path"],
+                "slide": mapping["source"]["slide_or_page"],
+                "region": mapping["source"]["region"],
+            },
+            "paths": {
+                "artifact": str(relative_destination),
+                "visual": text_contract.get("visual") if text_contract else None,
+                "text_slots": text_contract.get("slots") if text_contract else None,
+                "preview": str(preview_path),
+                "evidence": str(evidence_path),
+            },
+            "variants": mapping.get("variants", []),
+            "limitations": mapping.get("limitations", []),
+            "approval": mapping.get("approval", {}),
+        }
+        if existing:
+            registry["items"][registry["items"].index(existing)] = item_record
+        else:
+            registry["items"].append(item_record)
+        registry["updated_at"] = now_iso()
+        write_json_atomic(args.registry, registry)
+        compact_path = Path(args.registry).with_name("visual-library-compact.json")
+        write_json_atomic(compact_path, build_registry.project_compact(registry["items"]))
+        retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
+        retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
+
+        # ── Phase 4: staging mapping + history (audit trail) ────────────
+        mapping["status"] = "published"
+        mapping["published_at"] = now_iso()
+        mapping["published_path"] = str(relative_destination)
+        write_json_atomic(mapping_path, mapping)
+        history = load_json(args.history)
+        history.setdefault("attempts", []).append({
             "attempted_at": now_iso(),
             "extraction_id": mapping["extraction_id"],
             "item_id": args.item_id,
@@ -252,10 +248,17 @@ def main() -> int:
             "source_sha256": mapping["source"]["sha256"],
             "region_identity_sha256": mapping["fingerprints"]["region_identity_sha256"],
             "semantic_signature_sha256": mapping["fingerprints"]["semantic_signature_sha256"],
-        }
-    )
-    history["updated_at"] = now_iso()
-    write_json(args.history, history)
+        })
+        history["updated_at"] = now_iso()
+        write_json_atomic(args.history, history)
+    except BaseException:
+        # Clean up temp dir on any failure.
+        if tmp_dest.exists():
+            shutil.rmtree(tmp_dest)
+        raise
+    # Temp dir is no longer needed after success.
+    if tmp_dest.exists():
+        shutil.rmtree(tmp_dest)
     print(f"Published {stable_id} {args.version}")
     return 0
 

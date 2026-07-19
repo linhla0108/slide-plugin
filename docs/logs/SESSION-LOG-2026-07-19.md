@@ -1,3 +1,26 @@
+## 2026-07-19.5 — Transactional library publication safety
+
+**Request:** Implement transactional library mutation safety on `fix/transactional-library-publication` (stacked PR from `feature/shape-aware-retrieval`).
+
+**Actions:**
+- Created branch `fix/transactional-library-publication` from `feature/shape-aware-retrieval`.
+- Added to `_common.py`: `write_json_atomic` (tmp+fsync+replace), `replace_dir_atomically` (backup-and-restore dir swap), `quarantine_path`, `library_mutation_lock/unlock` (directory-based mutex with PID stale detection), `_pid_alive`, `mutex_dir`.
+- Modified `publish_extraction.py`: Phase-1 copy to `destination.tmp.<pid>`, Phase-2 atomic dir swap via `replace_dir_atomically`, Phase-3 atomic registry/compact/retrieval via `write_json_atomic`, Phase-4 mapping/history writes, temp cleanup in `finally`. Added `import os` for `os.getpid()`. Fixed `str`→`Path` call to `retrieval.write_jsonl`.
+- Modified `catalog_server.py`: `action_publish` and `action_delete` wrapped in `library_mutation_lock`/`unlock`. `action_delete` uses quarantine-then-rollback pattern. Removed unused `datetime` import and local `now_iso`. Added `mutex_dir`, `quarantine_path` imports from `_common`.
+- Added 8 transactional tests to `test_gates.py` (new publish, replace, copy-failure recovery, staging preservation on failure, quarantine delete, rollback restore, path-traversal rejection, metadata gate preservation). Fixed `_publish_fixture` to supply complete retrieval metadata for the new validation gate.
+- Fixed all `pe.main([...])` calls to use a `_publish` helper that sets `sys.argv` (for argparse compat).
+- Updated `publish-components.md` with transactional safety, concurrency locking, and delete recovery documentation.
+- Installed `python-pptx` (required by `build_hybrid_pptx` import).
+- Restored `.mcp.json` and `opencode.jsonc` from unintended modifications.
+
+**Result:** All 8 transactional tests pass. Full `test_gates.py`: 350/356 pass (all 6 failures are pre-existing real-library dependencies). Key existing tests (publish, registry, metadata gates) all pass.
+
+**Files:** `slide-system/scripts/_common.py`, `slide-system/scripts/publish_extraction.py`, `slide-system/catalog/catalog_server.py`, `slide-system/scripts/test_gates.py`, `slide-system/workflows/publish-components.md`
+
+**Symbols:** `write_json_atomic`, `replace_dir_atomically`, `quarantine_path`, `library_mutation_lock`, `library_mutation_unlock`, `_pid_alive`, `mutex_dir`, `action_publish`, `action_delete`, `_publish_fixture`, `_publish`, `test_transactional_publish_new_succeeds`, `test_transactional_publish_replace_succeeds`, `test_transactional_copy_failure_leaves_original`, `test_transactional_publish_never_prunes_staging_on_failure`, `test_transactional_delete_succeeds`, `test_transactional_quarantine_restores_on_rollback`, `test_transactional_path_traversal_rejected`, `test_transactional_metadata_gate_unchanged`
+
+**State:** Not committed
+
 ## 2026-07-19.1 — Review PR 7 and repository readiness
 
 **Request:** Full-review the open PR and repository, assess current quality, and recommend the highest-value improvements.

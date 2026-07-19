@@ -7,7 +7,9 @@ import hashlib
 import json
 import os
 import platform
+import shutil
 import subprocess
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -215,6 +217,130 @@ def write_json(path: str | Path, data: Any) -> None:
         json.dumps(data, ensure_ascii=True, indent=2) + "\n",
         encoding="utf-8",
     )
+
+
+def write_json_atomic(path: str | Path, data: Any) -> None:
+    """Write JSON to *path* using an atomic temporary-file + os.replace.
+
+    The temp file is created beside the final path so the rename stays on
+    the same filesystem (required for os.replace to work atomically).  On
+    failure the temp file is cleaned up; the destination is never touched.
+    """
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.parent / f".tmp.{target.name}.{os.getpid()}"
+    try:
+        content = json.dumps(data, ensure_ascii=True, indent=2) + "\n"
+        with tmp.open("w", encoding="utf-8", newline="") as f:
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(str(tmp), str(target))
+    except BaseException:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def replace_dir_atomically(src: Path, dst: Path) -> None:
+    """Swap *src* (a fully-written temp directory) into *dst*.
+
+    *   If *dst* exists it is first moved to a backup sibling so the
+        destination is never empty or partially written — even if the
+        rename of *src* fails, the backup is restored.
+    *   The backup (``.backup.<pid>``) is removed only after the rename
+        succeeds, so every intermediate state is recoverable.
+    *   Works on Windows and POSIX (uses ``os.rename`` which is the
+        same-filesystem atomic directory rename available on both).
+    """
+    backup = dst.parent / f"{dst.name}.backup.{os.getpid()}"
+    if dst.exists():
+        os.rename(str(dst), str(backup))
+    try:
+        os.rename(str(src), str(dst))
+    except BaseException:
+        # Restore the backup if the rename of src failed.
+        if backup.exists():
+            os.rename(str(backup), str(dst))
+        raise
+    # Success – remove the backup.
+    if backup.exists():
+        shutil.rmtree(backup)
+
+
+def quarantine_path(path: Path) -> Path:
+    """Return a sibling quarantine path for *path* (``.quarantine.<pid>``)."""
+    return path.parent / f"{path.name}.quarantine.{os.getpid()}"
+
+
+def library_mutation_lock(lock_dir: Path) -> bool:
+    """Acquire an exclusive, cross-platform file-system mutex.
+
+    Returns ``True`` when the lock was acquired, ``False`` when another
+    process holds it.  The lock is a directory — ``mkdir`` is atomic on
+    every OS and fails when the directory already exists.
+
+    Stale locks are detected by checking whether the PID written inside
+    the lock directory is still alive; if not, the lock is reaped and
+    re-acquired transparently.
+    """
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_anchor = lock_dir / ".lock"
+    lock_tmp = lock_dir / f".tmp.{os.getpid()}"
+    lock_tmp.write_text(str(os.getpid()), encoding="utf-8")
+    try:
+        os.rename(str(lock_tmp), str(lock_anchor))
+    except OSError:
+        # Another process got there first — check for staleness.
+        lock_tmp.unlink(missing_ok=True)
+        stale = False
+        try:
+            owner = int(lock_anchor.read_text(encoding="utf-8").strip())
+            if not _pid_alive(owner):
+                stale = True
+        except (OSError, ValueError):
+            stale = True
+        if stale:
+            lock_anchor.unlink(missing_ok=True)
+            return library_mutation_lock(lock_dir)  # retry
+        return False
+    return True
+
+
+def library_mutation_unlock(lock_dir: Path) -> None:
+    """Release the mutation lock."""
+    anchor = lock_dir / ".lock"
+    anchor.unlink(missing_ok=True)
+
+
+def _pid_alive(pid: int) -> bool:
+    """Check whether *pid* is still running (cross-platform)."""
+    if os.name == "nt":
+        import ctypes
+        handle = ctypes.windll.kernel32.OpenProcess(0x1000, False, pid)
+        if not handle:
+            return False
+        ctypes.windll.kernel32.CloseHandle(handle)
+        return True
+    # POSIX
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        return False
+
+
+_MUTEX_DIR: Path | None = None
+
+
+def mutex_dir() -> Path:
+    """Return the single repo-local mutex directory (lazy)."""
+    global _MUTEX_DIR
+    if _MUTEX_DIR is None:
+        _MUTEX_DIR = SYSTEM_ROOT / ".library-mutation.lock.d"
+    return _MUTEX_DIR
 
 
 def now_iso() -> str:
