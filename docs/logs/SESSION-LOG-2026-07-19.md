@@ -36,3 +36,16 @@
 **Files:** slide-system/scripts/test_export_stack.py, slide-system/scripts/validate_selection_report.py, slide-system/scripts/test_gates.py, slide-system/schemas/selection-report.schema.json
 **Symbols:** validate_selection_report.main, validate_selection_report.DECISION_FIELDS, test_export_stack.B1, score_visual_items._explicit_decision, test_gates.test_selection_report_accepts_capacity_conflict, test_gates.test_selection_report_accepts_immutable_text_conflict_contexts, test_gates.test_selection_report_schema_drift_edge_cases
 **State:** Not committed
+
+> ⚠️ SUPERSEDED by entry 2026-07-19.3
+
+## 2026-07-19.3 — Re-test PR 7 blocker fixes
+
+**Request:** Independently review OpenCode commit `82617b70` and determine whether PR #7 is ready.
+**Actions:**
+- Reviewed the focused commit and PR state, then reran `test_gates.py`, `test_export_stack.py --json`, registry/index checks, and PowerShell JSON Schema validation against tracked production selection reports.
+- Confirmed the export smoke and Python validator fixes pass, but found the schema omits production candidate field `shape_eligible`; the schema regression test skips without `jsonschema` while the runner still reports it as passed.
+**Result:** PR #7 remains merge-blocked. Tests report 348/348 and export stack passes, but a current scorer-owned batch report fails `selection-report.schema.json`; PR is otherwise GitHub `CLEAN`/`MERGEABLE` with no checks configured.
+**Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
+**Symbols:** none
+**State:** Not committed

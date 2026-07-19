@@ -93,6 +93,7 @@
         "score": { "type": "number" },
         "criteria": { "type": "object" },
         "reasons": { "type": "array", "items": { "type": "string" } },
+        "shape_eligible": { "type": "boolean" },
         "retrieval": { "type": "object" }
       },
       "additionalProperties": false
