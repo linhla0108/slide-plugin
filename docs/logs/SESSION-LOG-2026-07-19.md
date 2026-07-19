@@ -48,4 +48,35 @@
 **Result:** PR #7 remains merge-blocked. Tests report 348/348 and export stack passes, but a current scorer-owned batch report fails `selection-report.schema.json`; PR is otherwise GitHub `CLEAN`/`MERGEABLE` with no checks configured.
 **Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
 **Symbols:** none
+**State:** Committed b1b2bde2
+
+## 2026-07-19.4 — Fix QA audit findings (shape_eligible, schema test, __pycache__, PR body)
+
+**Request:** Address four QA findings: (P1) schema rejects `shape_eligible` on production artifacts, (P1) schema tests false-positive (skip without `jsonschema` but still PASS), (P2) tracked `__pycache__` deleted accidentally, (P2) PR body Markdown broken by PowerShell escaping.
+
+**Actions:**
+- Added `shape_eligible: { "type": "boolean" }` to `$defs.candidate.properties` in `selection-report.schema.json`.
+- Rewrote `test_selection_report_schema_drift_edge_cases` to NEVER SKIP: always runs stdlib field-coverage assertion (parses schema JSON, extracts declared candidate property names, runs scorer, asserts every emitted field exists in schema) plus validates a real report through the hand-written `validate_selection_report.py` validator. `jsonschema`-gated negative/edge checks remain additive.
+- Restored `.agents/skills/svg-extractor/scripts/__pycache__/extract_svg.cpython-312.pyc` via `git checkout HEAD --`.
+- Rewrote PR body using `--body-file` (markdown file) to avoid PowerShell inline escaping issues.
+- Validated a real production batch report through PowerShell `Test-Json`: returns `True`.
+- Real production batch report also passes `validate_selection_report.py`: PASS.
+- Cleared stale `__pycache__` dirs, restored tracked pycache after clearance.
+
+**Result:** All QA findings addressed. 348/348 tests pass (schema test now never skips). PR OPEN, MERGEABLE.
+**Files:** slide-system/schemas/selection-report.schema.json, slide-system/scripts/test_gates.py, .agents/skills/svg-extractor/scripts/__pycache__/extract_svg.cpython-312.pyc, docs/logs/INDEX.jsonl, docs/logs/SESSION-LOG-2026-07-19.md
+**Symbols:** selection-report.schema.json $defs.candidate.properties.shape_eligible, test_gates.test_selection_report_schema_drift_edge_cases
+**State:** Not committed
+
+## 2026-07-19.4 — Audit system architecture and operating cost
+
+**Request:** Review the current system architecture in depth, identify structural gaps, and recommend changes that improve output quality while reducing runtime and operating cost.
+**Actions:**
+- Traced PDF analysis, auto-staging, Draft review, publication, retrieval/scoring, deck build, delivery gates, and PPTX/PDF export against the current branch and local worktree.
+- Measured 91 published items but only one `build_scope: generic` item, 149 live Drafts, 243 extraction directories (525.3 MiB), and recent real scoring outcomes dominated by `needs_component`.
+- Verified eager extraction runs a serial 9–11-script artifact pipeline per candidate; reviewed non-atomic publish/delete mutations, file-inferred run state, delivery-gate behavior, schema-policy duplication, and missing GitHub CI.
+- Ran `test_gates.py`, registry/retrieval checks, `test_export_stack.py --json`, `git diff --check`, and inspected PR #7 status.
+**Result:** Core gates pass (348/348; 91 valid registry items; clean compact/retrieval projections; full export stack PASS), but the highest-value next work is transactional state/publish safety, explicit fail-closed run manifests, page-cached and lazy Draft artifact construction, and generic library readiness. Vector RAG is not currently justified; retrieval speed is already adequate and hard eligibility/data coverage is the bottleneck.
+**Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
+**Symbols:** none
 **State:** Not committed
