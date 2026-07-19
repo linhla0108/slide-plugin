@@ -103,3 +103,52 @@
 **Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
 **Symbols:** none
 **State:** Not committed
+
+## 2026-07-19.6 — Review PR 8 transaction guarantees
+
+**Request:** Review PR #8 and recommend the next action.
+**Actions:**
+- Reviewed the stacked PR diff and production publish/delete paths, then ran compile, all 356 gates, registry/retrieval checks, export-stack smoke, log-index check, and diff checks.
+- Injected real registry and retrieval write failures into `publish_extraction.main`; both left the replacement library artifact committed while metadata remained old.
+- Exercised the real published-delete rollback with two registry items; the artifact returned, but registry bytes and item order changed.
+- Audited the new tests and found delete, rollback, and path-traversal cases simulate helper steps instead of calling `catalog_server.action_delete`; the mutation lock is not used by the direct publish CLI and its POSIX acquisition primitive is not exclusive.
+**Result:** PR #8 is not merge-ready despite 356/356 and export PASS. Publication rollback, cross-platform locking, production-path failure tests, PR-body accuracy, and previously preserved local config state require correction.
+**Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
+**Symbols:** none
+**State:** Not committed
+
+## 2026-07-19.7 — Audit cross-agent build-review-test skill
+
+**Request:** Evaluate the global `lead-build-review-test` skill for this repository and identify remaining fixes.
+**Actions:**
+- Reviewed the skill contract, current OpenCode/Claude/Codex CLI surfaces, the repository QA-loop runner and its documentation, the tester contract, and harness loop-safety gates.
+- Compared role mapping, state transitions, scope enforcement, evidence persistence, stop conditions, budgets, and slide-specific acceptance needs.
+- Kept the audit read-only apart from this required session-log entry; no skill or implementation file was changed.
+**Result:** The skill is a useful policy skeleton but is not ready to drive this repository unchanged. It needs a complete review/fix/re-review/retest state machine, machine-enforced write boundaries, structured outputs, durable state/evidence, cost and stagnation limits, and a repo-specific slide acceptance profile. The existing runner also conflicts with the skill because it uses Claude as builder and omits independent Claude QA.
+**Files:** docs/logs/SESSION-LOG-2026-07-19.md, docs/logs/INDEX.jsonl
+**Symbols:** none
+**State:** Not committed
+
+## 2026-07-19.8 — Transactional P1 merge-blocker fixes: lock rewrite, byte-identical rollback, production-path tests
+
+**Request:** Fix all confirmed P1 merge blockers in PR #8: publication rollback after directory swap, atomic JSONL, cross-platform exclusive lock, byte-identical delete rollback, production-path tests, and malformed PR body.
+
+**Actions:**
+- Added `socket`, `time` imports, `_ownership_token()`, `write_jsonl_atomic`, `snapshot_path`, `restore_path`, `restore_dir_from_backup` to `_common.py`.
+- Rewrote `library_mutation_lock` to use `O_CREAT | O_EXCL` with ownership token (`hostname:pid:timestamp_ns`); stale-lock detection via cross-platform `_pid_alive`; unlock verifies token before removal.
+- Rewrote `replace_dir_atomically` to return backup `Path` (caller manages lifetime); added `restore_dir_from_backup` for recovery.
+- Rewrote `publish_extraction.py` as full recoverable transaction: Phase-0 lock, Phase-1 snapshots, Phase-2 swap (backup retained), Phase-3 atomic metadata writes via `write_json_atomic`/`write_jsonl_atomic`, rollback restores every surface byte-for-byte, never prunes Draft staging on failure.
+- Fixed `catalog_server.py` `action_publish`: removed own lock acquisition (CLI acquires it internally).
+- Fixed `catalog_server.py` `action_delete`: byte-identical rollback using `snapshot_path`/`restore_path`, lock token parameter, index-based item removal preserves item order.
+- Updated `build_component_retrieval_index.py`: `main()` uses `write_jsonl_atomic`; legacy `write_jsonl` delegates to it.
+- Replaced 8 inline/simulated tests with 28 production-path tests calling `pe.main()`, `cs.action_delete()` with `tempfile.TemporaryDirectory` isolation and real registry-format expectations.
+- Added `_load_catalog_for_test` helper: imports `catalog_server` with all paths redirected to temp dirs; monkeypatches `regen_compact`/`regen_catalog` to work on temp paths.
+- Updated PR body with proper markdown (fixed PowerShell escaping) via `gh pr edit`.
+
+**Result:** 28/28 transactional tests pass, 370/376 full suite (6 pre-existing failures), all real assets untouched.
+
+**Files:** `slide-system/scripts/_common.py`, `slide-system/scripts/publish_extraction.py`, `slide-system/catalog/catalog_server.py`, `slide-system/scripts/build_component_retrieval_index.py`, `slide-system/scripts/test_gates.py`, `docs/logs/SESSION-LOG-2026-07-19.md`
+
+**Symbols:** `_common.library_mutation_lock`, `_common.library_mutation_unlock`, `_common._ownership_token`, `_common._pid_alive`, `_common.write_jsonl_atomic`, `_common.snapshot_path`, `_common.restore_path`, `_common.restore_dir_from_backup`, `_common.replace_dir_atomically`, `publish_extraction.main`, `catalog_server.action_publish`, `catalog_server.action_delete`, `catalog_server.regen_compact`, `catalog_server.regen_catalog`, `build_component_retrieval_index.main`, `build_component_retrieval_index.write_jsonl`, `test_gates._inject_write_failure`, `test_gates._load_catalog_for_test`, `test_gates._publish_item_to`, `test_gates._assert_publish_rollback`
+
+**State:** Not committed

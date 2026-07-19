@@ -10,12 +10,19 @@ import shutil
 from pathlib import Path
 
 from _common import (
+    library_mutation_lock,
+    library_mutation_unlock,
     load_json,
+    mutex_dir,
     now_iso,
     quarantine_path,
     replace_dir_atomically,
+    restore_dir_from_backup,
+    restore_path,
+    snapshot_path,
     write_json,
     write_json_atomic,
+    write_jsonl_atomic,
 )
 import build_registry
 import build_component_retrieval_index as retrieval
@@ -137,12 +144,35 @@ def main() -> int:
     else:
         destination = Path(args.library_root) / folder / stable_id
 
-    # ── Phase 1: prepare everything in a temporary directory ────────────
-    # The temp dir sits beside the final destination so os.rename works.
+    # ── Phase 0: acquire mutation lock ──────────────────────────────────
+    lock_dir = mutex_dir()
+    lock_token = library_mutation_lock(lock_dir)
+    if lock_token is None:
+        raise SystemExit(
+            "Another library mutation is in progress; try again later."
+        )
+
+    # ── Snapshot every surface we may mutate ────────────────────────────
+    registry_path = Path(args.registry)
+    compact_path = registry_path.with_name("visual-library-compact.json")
+    retrieval_path = registry_path.with_name("component-retrieval-index.jsonl")
+    history_path = Path(args.history)
+
+    registry_snap = snapshot_path(registry_path)
+    compact_snap = snapshot_path(compact_path)
+    retrieval_snap = snapshot_path(retrieval_path)
+    mapping_snap = snapshot_path(mapping_path)
+    history_snap = snapshot_path(history_path)
+
+    destination_existed = destination.exists()
+    artifact_backup: Path | None = None
     tmp_dest = destination.parent / f"{destination.name}.tmp.{os.getpid()}"
+
     try:
         if tmp_dest.exists():
             shutil.rmtree(tmp_dest)
+
+        # ── Phase 1: prepare everything in a temporary directory ────────
         shutil.copytree(artifact_dir, tmp_dest)
         shutil.copytree(item_dir / "preview", tmp_dest / "preview")
         if not files_under(tmp_dest):
@@ -155,7 +185,6 @@ def main() -> int:
             tmp_dest / "evidence",
             ignore=shutil.ignore_patterns("reference.png"),
         )
-        # Fix asset paths in evidence SVG (published layout flattens artifact/).
         published_evidence_svg = tmp_dest / "evidence" / "source-with-text.svg"
         if published_evidence_svg.exists():
             svg_text = published_evidence_svg.read_text(encoding="utf-8")
@@ -165,8 +194,8 @@ def main() -> int:
                     encoding="utf-8",
                 )
 
-        # ── Phase 2: swap temp → destination atomically ─────────────────
-        replace_dir_atomically(tmp_dest, destination)
+        # ── Phase 2: swap temp → destination (retains backup) ──────────
+        artifact_backup = replace_dir_atomically(tmp_dest, destination)
 
         # ── Phase 3: registry + derived projections ─────────────────────
         registry = load_json(args.registry)
@@ -227,11 +256,9 @@ def main() -> int:
         else:
             registry["items"].append(item_record)
         registry["updated_at"] = now_iso()
-        write_json_atomic(args.registry, registry)
-        compact_path = Path(args.registry).with_name("visual-library-compact.json")
+        write_json_atomic(registry_path, registry)
         write_json_atomic(compact_path, build_registry.project_compact(registry["items"]))
-        retrieval_path = Path(args.registry).with_name("component-retrieval-index.jsonl")
-        retrieval.write_jsonl(retrieval_path, retrieval.build_records(registry))
+        write_jsonl_atomic(retrieval_path, retrieval.build_records(registry))
 
         # ── Phase 4: staging mapping + history (audit trail) ────────────
         mapping["status"] = "published"
@@ -250,15 +277,31 @@ def main() -> int:
             "semantic_signature_sha256": mapping["fingerprints"]["semantic_signature_sha256"],
         })
         history["updated_at"] = now_iso()
-        write_json_atomic(args.history, history)
+        write_json_atomic(history_path, history)
+
     except BaseException:
-        # Clean up temp dir on any failure.
+        # ── Rollback: restore every surface to its pre-operation state ──
+        if artifact_backup and artifact_backup.exists():
+            restore_dir_from_backup(destination, artifact_backup)
+        elif not destination_existed and destination.exists():
+            shutil.rmtree(destination)
+        restore_path(registry_path, registry_snap)
+        restore_path(compact_path, compact_snap)
+        restore_path(retrieval_path, retrieval_snap)
+        restore_path(mapping_path, mapping_snap)
+        restore_path(history_path, history_snap)
         if tmp_dest.exists():
             shutil.rmtree(tmp_dest)
+        # Never prune Draft staging on failure.
+        library_mutation_unlock(lock_dir, lock_token)
         raise
-    # Temp dir is no longer needed after success.
+
+    # ── Cleanup on success ──────────────────────────────────────────────
+    if artifact_backup and artifact_backup.exists():
+        shutil.rmtree(artifact_backup)
     if tmp_dest.exists():
         shutil.rmtree(tmp_dest)
+    library_mutation_unlock(lock_dir, lock_token)
     print(f"Published {stable_id} {args.version}")
     return 0
 

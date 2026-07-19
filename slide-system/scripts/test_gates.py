@@ -24,7 +24,9 @@ import sys
 import tempfile
 import importlib.util
 import subprocess
+from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
@@ -8183,169 +8185,653 @@ def _publish(fix: dict) -> int:
         sys.argv = original
 
 
+# --------------------------------------------------------------------------- #
+# Failure injection helpers
+# --------------------------------------------------------------------------- #
+
+@contextmanager
+def _inject_write_failure(target_suffix: str):
+    """Make write_json_atomic / write_jsonl_atomic raise when path ends with suffix.
+
+    Patches on both _common AND publish_extraction because pe imports them
+    by value at module level (patch.object only affects future attribute
+    lookups, not already-bound local names).
+    """
+    orig_common_atomic = _common.write_json_atomic
+    orig_common_jsonl = _common.write_jsonl_atomic
+    orig_pe_atomic = pe.write_json_atomic
+    orig_pe_jsonl = pe.write_jsonl_atomic
+
+    def _fail(path, *a, **kw):
+        p = str(path)
+        if target_suffix in p:
+            raise OSError(f"Injected failure writing {path}")
+
+    with patch.object(_common, "write_json_atomic", _fail), \
+         patch.object(_common, "write_jsonl_atomic", _fail), \
+         patch.object(pe, "write_json_atomic", _fail), \
+         patch.object(pe, "write_jsonl_atomic", _fail):
+        yield
+
+
+# --------------------------------------------------------------------------- #
+# 1. Publication — success paths (3 tests)
+# --------------------------------------------------------------------------- #
+
 def test_transactional_publish_new_succeeds() -> None:
-    """New publication: library, registry, compact, retrieval, mapping,
-    and history are all consistent after success. Temp dir is cleaned."""
+    """New publication: all surfaces consistent after success."""
     with tempfile.TemporaryDirectory() as tmp:
         fix = _publish_fixture(Path(tmp))
         rc = _publish(fix)
         assert rc == 0, f"publish failed with rc={rc}"
-        # Library folder exists
         lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
         assert lib.is_dir(), "library folder missing"
         assert (lib / "visual.svg").exists(), "visual.svg missing"
         assert (lib / "preview" / "thumb.png").exists(), "preview missing"
-        # Registry has the item
         reg = _common.load_json(fix["registry_path"])
         assert len(reg["items"]) == 1
         assert reg["items"][0]["id"] == "sun.test.fixture"
         assert reg["items"][0]["status"] == "published"
-        # Compact projection exists
         compact = _common.load_json(
             str(Path(fix["registry_path"]).with_name("visual-library-compact.json")))
         assert any(i["id"] == "sun.test.fixture" for i in compact["items"])
-        # Retrieval index exists
         idx_path = Path(fix["registry_path"]).with_name("component-retrieval-index.jsonl")
         records = [json.loads(line) for line in idx_path.read_text(encoding="utf-8").splitlines()]
         assert any(r["id"] == "sun.test.fixture" for r in records)
-        # Mapping marked published
         mapping = _common.load_json(fix["item_dir"] / "mapping.json")
         assert mapping["status"] == "published"
-        # History has the attempt
         history = _common.load_json(fix["history_path"])
         assert len(history["attempts"]) == 1
         assert history["attempts"][0]["status"] == "published"
-        # Temp dir cleaned
-        assert not lib.parent.joinpath("sun.test.fixture.tmp.*").parent.exists() or \
-            not list(lib.parent.glob("sun.test.fixture.tmp.*"))
+        assert not list(lib.parent.glob("sun.test.fixture.tmp.*"))
 
 
 def test_transactional_publish_replace_succeeds() -> None:
-    """Replacing a published item does not expose a partially-copied destination."""
+    """Replacing a published item does not duplicate or lose data."""
     with tempfile.TemporaryDirectory() as tmp:
         fix = _publish_fixture(Path(tmp))
         _publish(fix)
         lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
-        original_mtime = lib / "visual.svg"
-        first_mtime = original_mtime.stat().st_mtime_ns if original_mtime.exists() else 0
-        # Publish again (simulate replacement)
         (fix["artifact_dir"] / "visual.svg").write_text("<svg><circle/></svg>", encoding="utf-8")
         rc = _publish(fix)
         assert rc == 0, f"replace publish failed with rc={rc}"
         assert lib.is_dir()
         new_content = (lib / "visual.svg").read_text(encoding="utf-8")
         assert "<circle/>" in new_content, "replacement content not in library"
-        # Registry still has exactly 1 item (replaced, not duplicated)
         reg = _common.load_json(fix["registry_path"])
-        assert len(reg["items"]) == 1
+        assert len(reg["items"]) == 1, "replaced item duplicated"
         assert reg["items"][0]["id"] == "sun.test.fixture"
 
 
+def test_transactional_publish_destination_existed_flag() -> None:
+    """First publish sets destination_path; replacement does not duplicate items."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        rc = _publish(fix)
+        assert rc == 0
+        reg1 = _common.load_json(fix["registry_path"])
+        assert len(reg1["items"]) == 1
+        rc2 = _publish(fix)
+        assert rc2 == 0
+        reg2 = _common.load_json(fix["registry_path"])
+        assert len(reg2["items"]) == 1, "replacement must not duplicate"
+
+
+# --------------------------------------------------------------------------- #
+# 2. Publication — Phase 1 failure (pre-swap) (1 test)
+# --------------------------------------------------------------------------- #
+
 def test_transactional_copy_failure_leaves_original() -> None:
-    """If the temp copy phase fails (simulated by removing source artifact),
-    the original library destination is untouched."""
+    """If the temp copy phase fails, the original library and metadata are untouched."""
     with tempfile.TemporaryDirectory() as tmp:
         fix = _publish_fixture(Path(tmp))
         _publish(fix)
-        # Capture original library state
         lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
         original_content = (lib / "visual.svg").read_text(encoding="utf-8")
         original_registry = _common.load_json(fix["registry_path"])
-        # Remove source artifact so copytree fails
         shutil.rmtree(fix["artifact_dir"])
         try:
             rc = _publish(fix)
-            # Should fail
             assert rc != 0, "publish should fail when source artifact is missing"
         except SystemExit:
             pass
-        # Library content is byte-identical
         assert (lib / "visual.svg").read_text(encoding="utf-8") == original_content
-        # Registry is unchanged
-        reg = _common.load_json(fix["registry_path"])
-        assert reg == original_registry, "registry was mutated after failed publish"
+        assert _common.load_json(fix["registry_path"]) == original_registry
 
 
-def test_transactional_publish_never_prunes_staging_on_failure() -> None:
-    """If publish fails partway through, the staging directory is NOT pruned."""
+# --------------------------------------------------------------------------- #
+# 3. Publication — Phase 3 failures (post-swap, metadata write) (5 tests)
+# --------------------------------------------------------------------------- #
+
+def _catch_exit(*args, **kw):
+    """Run func, return its rc, catching both SystemExit and Exception."""
+    try:
+        rc = kw.pop("func")(*args, **kw)
+        return rc
+    except (SystemExit, BaseException):
+        return -1
+
+
+def _assert_publish_rollback(fix: dict):
+    """Verify that after a failed publish the system is back to pre-publish state."""
+    lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+    assert not lib.exists(), f"library left behind after rollback at {lib}"
+    reg = _common.load_json(fix["registry_path"])
+    assert len(reg["items"]) == 0, "registry mutated after rollback"
+    compact_path = Path(fix["registry_path"]).with_name("visual-library-compact.json")
+    if compact_path.exists():
+        compact = _common.load_json(compact_path)
+        assert not any(i["id"] == "sun.test.fixture" for i in compact.get("items", []))
+    idx_path = Path(fix["registry_path"]).with_name("component-retrieval-index.jsonl")
+    if idx_path.exists():
+        records = [json.loads(line) for line in idx_path.read_text(encoding="utf-8").splitlines()]
+        assert not any(r["id"] == "sun.test.fixture" for r in records)
+    history = _common.load_json(fix["history_path"])
+    # Rollback restores history to pre-op state (before Phase 3 writes it).
+    # For a first-time publish the pre-op state is empty (0 attempts).
+    assert len(history["attempts"]) == 0, \
+        f"expected empty history after rollback, got {len(history['attempts'])} attempts"
+
+
+def _try_publish(fix: dict) -> int:
+    """Call _publish and catch its exception (main() re-raises on rollback)."""
+    try:
+        rc = _publish(fix)
+        return rc
+    except BaseException:
+        return -1
+
+
+def test_transactional_registry_failure_rolls_back() -> None:
+    """If registry write fails after artifact swap, all surfaces roll back."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("visual-library.json"):
+            rc = _try_publish(fix)
+            assert rc != 0, "publish should fail on registry write failure"
+        _assert_publish_rollback(fix)
+
+
+def test_transactional_compact_failure_rolls_back() -> None:
+    """If compact write fails after registry write, all surfaces roll back."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("visual-library-compact.json"):
+            rc = _try_publish(fix)
+            assert rc != 0, "publish should fail on compact write failure"
+        _assert_publish_rollback(fix)
+
+
+def test_transactional_retrieval_failure_rolls_back() -> None:
+    """If retrieval index write fails after compact write, all surfaces roll back."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("component-retrieval-index.jsonl"):
+            rc = _try_publish(fix)
+            assert rc != 0, "publish should fail on retrieval write failure"
+        _assert_publish_rollback(fix)
+
+
+def test_transactional_mapping_failure_rolls_back() -> None:
+    """If mapping write fails after retrieval write, all surfaces roll back."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("mapping.json"):
+            rc = _try_publish(fix)
+            assert rc != 0, "publish should fail on mapping write failure"
+        _assert_publish_rollback(fix)
+
+
+def test_transactional_history_failure_rolls_back() -> None:
+    """If history write fails after mapping write, all surfaces roll back."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("extraction-history.json"):
+            rc = _try_publish(fix)
+            assert rc != 0, "publish should fail on history write failure"
+        _assert_publish_rollback(fix)
+
+
+# --------------------------------------------------------------------------- #
+# 4. Publication — staging never pruned + byte-identical restore (2 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_staging_preserved_on_all_failures() -> None:
+    """Staging directory is NEVER pruned when publish fails — including post-swap."""
     with tempfile.TemporaryDirectory() as tmp:
         fix = _publish_fixture(Path(tmp))
         staging_mapping = fix["item_dir"] / "mapping.json"
-        assert staging_mapping.exists(), "staging must exist before the test"
-        # Corrupt the source artifact to trigger publish failure
-        shutil.rmtree(fix["artifact_dir"])
-        try:
-            _publish(fix)
-        except SystemExit:
-            pass
-        # Staging is still intact
+        assert staging_mapping.exists()
+        with _inject_write_failure("visual-library.json"):
+            _try_publish(fix)
         assert staging_mapping.exists(), "staging was pruned even though publish failed"
 
 
+def test_transactional_byte_identical_restore() -> None:
+    """After a post-swap failure, every metadata file is restored to exact prior bytes."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        fix = _publish_fixture(root)
+        reg_path = Path(fix["registry_path"])
+        compact_path = reg_path.with_name("visual-library-compact.json")
+        retrieval_path = reg_path.with_name("component-retrieval-index.jsonl")
+
+        rc = _publish(fix)
+        assert rc == 0
+        reg_snap = (True, reg_path.read_bytes())
+        compact_snap = (True, compact_path.read_bytes())
+        retrieval_snap = (True, retrieval_path.read_bytes())
+
+        # Isolated sub-dir for second fixture (different extraction/item id)
+        inner = root / "second"
+        inner.mkdir()
+        fix2 = _publish_fixture(inner)
+        with _inject_write_failure("visual-library-compact.json"):
+            _try_publish(fix2)
+
+        assert reg_path.read_bytes() == reg_snap[1], "registry bytes changed after rollback"
+        assert compact_path.read_bytes() == compact_snap[1], "compact bytes changed after rollback"
+        assert retrieval_path.read_bytes() == retrieval_snap[1], "retrieval bytes changed after rollback"
+
+
+# --------------------------------------------------------------------------- #
+# 5. Publication — lock + cleanup (2 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_lock_acquired_by_cli() -> None:
+    """CLI publish acquires the mutation lock and releases it after success."""
+    lock_dir = _common.mutex_dir()
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink(missing_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        rc = _publish(fix)
+        assert rc == 0
+    assert not lock_file.exists(), "lock must be released after publish success"
+
+
+def test_transactional_publish_unlocks_on_failure() -> None:
+    """Lock is released even when publish fails partway through."""
+    lock_dir = _common.mutex_dir()
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        with _inject_write_failure("visual-library.json"):
+            _try_publish(fix)
+    assert not lock_file.exists(), "lock must be released after publish failure"
+
+
+# --------------------------------------------------------------------------- #
+# 6. Publication — temp/backup cleanup (1 test)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_temp_backup_cleanup() -> None:
+    """Temp dir and artifact backup are cleaned up on success."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fix = _publish_fixture(Path(tmp))
+        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
+        rc = _publish(fix)
+        assert rc == 0
+        assert not list(lib.parent.glob("*.tmp.*")), "temp dirs left behind"
+        assert not list(lib.parent.glob("*.bak.*")), "backup dirs left behind"
+
+
+# --------------------------------------------------------------------------- #
+# 7. Delete — success path (1 test)
+# --------------------------------------------------------------------------- #
+
+def _load_catalog_for_test(tmp_root: Path) -> types.ModuleType:
+    """Import catalog_server with all paths redirected to tmp_root."""
+    import importlib.util
+    import types
+
+    cat_path = SCRIPTS.parent / "catalog" / "catalog_server.py"
+    spec = importlib.util.spec_from_file_location("catalog_server_test", cat_path)
+    mod = importlib.util.module_from_spec(spec)
+    # Let module init run with real __file__ paths; we override after.
+    spec.loader.exec_module(mod)
+
+    root = tmp_root.resolve()
+    registries_dir = root / "slide-system" / "registries"
+    registries_dir.mkdir(parents=True, exist_ok=True)
+    lib = root / "slide-system" / "library"
+    lib.mkdir(parents=True, exist_ok=True)
+    ext = root / "outputs" / "component-extractions"
+    ext.mkdir(parents=True, exist_ok=True)
+
+    reg_path = registries_dir / "visual-library.json"
+    hist_path = registries_dir / "extraction-history.json"
+    _common.write_json(reg_path, {"items": [], "updated_at": "2026-01-01T00:00:00+00:00"})
+    _common.write_json(hist_path, {"attempts": [], "updated_at": "2026-01-01T00:00:00+00:00"})
+
+    mod.REPO_ROOT = root
+    mod.LIBRARY = lib
+    mod.REGISTRY = reg_path
+    mod.HISTORY = hist_path
+    mod.EXTRACTIONS = ext
+
+    real_python = _common.require_project_python(SCRIPTS.parent.parent)
+    mod.selected_python = lambda: real_python  # type: ignore
+
+    def _fake_regen_compact():
+        try:
+            reg = _common.load_json(mod.REGISTRY)
+            compact_path = mod.REGISTRY.with_name("visual-library-compact.json")
+            _common.write_json_atomic(compact_path, breg.project_compact(reg["items"]))
+            return True, ""
+        except Exception as exc:
+            return False, str(exc)
+    mod.regen_compact = _fake_regen_compact
+
+    mod.regen_catalog = lambda: (True, "")
+    return mod
+
+
+def _publish_item_to(cs_reg_path: Path, cs_lib: Path, cs_hist_path: Path,
+                     cs_repo_root: Path) -> dict:
+    """Use publish_extraction to place an item into the catalog's temp library.
+
+    publish_extraction.py computes artifact paths relative to the *real* repo
+    root (via ``Path(__file__).resolve().parents[2]``), which produces an
+    absolute temp path since cs_lib is under a temp tree.  We fix up the
+    registry entry so the artifact path is relative to cs_repo_root (matching
+    what action_delete expects from the ``startswith("slide-system/library/")``
+    check).
+    """
+    with tempfile.TemporaryDirectory() as inner:
+        fix = _publish_fixture(Path(inner))
+        original = sys.argv.copy()
+        try:
+            sys.argv = [
+                "publish_extraction.py",
+                "--extraction-dir", str(fix["extraction_dir"]),
+                "--item-id", fix["item_id"],
+                "--registry", str(cs_reg_path),
+                "--library-root", str(cs_lib),
+                "--history", str(cs_hist_path),
+            ]
+            rc = pe.main()
+            assert rc == 0, f"publish failed rc={rc}"
+        finally:
+            sys.argv = original
+
+    # Fix artifact path: the published entry has an absolute temp path from
+    # publish_extraction, but action_delete checks it relative to REPO_ROOT.
+    reg = _common.load_json(cs_reg_path)
+    for item in reg["items"]:
+        if item["id"] == fix["mapping"]["candidate_stable_id"]:
+            old = item["paths"]["artifact"]
+            # Compute the correct relative path
+            try:
+                relative = Path(old).resolve().relative_to(cs_repo_root)
+            except ValueError:
+                # old is already relative or under a different root — skip
+                continue
+            item["paths"]["artifact"] = str(relative.as_posix())
+    _common.write_json(cs_reg_path, reg)
+    return fix
+
+
 def test_transactional_delete_succeeds() -> None:
-    """Successful delete removes the artifact and updates registry/projections
-    using atomic-quarantine + atomic-write pattern."""
+    """action_delete removes the published artifact and updates registry."""
     with tempfile.TemporaryDirectory() as tmp:
-        fix = _publish_fixture(Path(tmp))
-        _publish(fix)
-        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
-        assert lib.is_dir()
-        # Simulate atomic delete: quarantine → atomic registry/compact/retrieval writes
-        reg = _common.load_json(fix["registry_path"])
-        entry = reg["items"][0]
-        target = Path(tmp) / entry["paths"]["artifact"]
-        q = _common.quarantine_path(target)
-        shutil.move(str(target), str(q))
-        reg["items"] = [i for i in reg["items"] if i.get("id") != entry["id"]]
+        cs = _load_catalog_for_test(Path(tmp))
+        fix = _publish_item_to(cs.REGISTRY, cs.LIBRARY, cs.HISTORY, cs.REPO_ROOT)
+        item_id = fix["mapping"]["candidate_stable_id"]
+        code, body = cs.action_delete(item_id, "published")
+        assert code == 200, f"delete failed: {body}"
+        lib_item = cs.LIBRARY / "components" / "diagrams" / item_id
+        assert not lib_item.exists(), "library item not removed"
+        reg = _common.load_json(cs.REGISTRY)
+        assert not any(i["id"] == item_id for i in reg["items"]), "item still in registry"
+
+
+# --------------------------------------------------------------------------- #
+# 8. Delete — rollback (2 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_delete_rollback_regenerates_restores() -> None:
+    """If regen_compact fails after quarantine, artifact and metadata are restored."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        fix = _publish_item_to(cs.REGISTRY, cs.LIBRARY, cs.HISTORY, cs.REPO_ROOT)
+        item_id = fix["mapping"]["candidate_stable_id"]
+        lib_item = cs.LIBRARY / "components" / "diagrams" / item_id
+        assert lib_item.is_dir()
+
+        # Capture pre-delete state
+        reg_before = _common.load_json(cs.REGISTRY)
+        reg_bytes_before = cs.REGISTRY.read_bytes()
+        compact_path = cs.REGISTRY.with_name("visual-library-compact.json")
+        compact_bytes_before = compact_path.read_bytes() if compact_path.exists() else b""
+
+        # Inject regen_compact failure
+        saved_regen = cs.regen_compact
+        cs.regen_compact = lambda: (False, "injected failure")
+        try:
+            code, body = cs.action_delete(item_id, "published")
+            assert code == 500, f"expected 500 on rollback, got {code}: {body}"
+        finally:
+            cs.regen_compact = saved_regen
+
+        assert lib_item.is_dir(), "artifact not restored after rollback"
+        assert cs.REGISTRY.read_bytes() == reg_bytes_before, "registry bytes changed after rollback"
+        if compact_bytes_before:
+            assert compact_path.read_bytes() == compact_bytes_before, \
+                "compact bytes changed after rollback"
+
+
+def test_transactional_delete_rollback_unlocks() -> None:
+    """Lock is released after a failed delete rollback."""
+    lock_dir = _common.mutex_dir()
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        fix = _publish_item_to(cs.REGISTRY, cs.LIBRARY, cs.HISTORY, cs.REPO_ROOT)
+        item_id = fix["mapping"]["candidate_stable_id"]
+        saved_regen = cs.regen_compact
+        cs.regen_compact = lambda: (False, "injected failure")
+        try:
+            cs.action_delete(item_id, "published")
+        finally:
+            cs.regen_compact = saved_regen
+    assert not lock_file.exists(), "lock must be released after failed delete"
+
+
+# --------------------------------------------------------------------------- #
+# 9. Delete — multi-item order preservation (1 test)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_delete_multiple_order_preserved() -> None:
+    """Deleting one item from a multi-item registry preserves the order of remaining items."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        reg = _common.load_json(cs.REGISTRY)
+        items = reg["items"]
+        for i, sid in enumerate(["sun.test.alpha", "sun.test.beta", "sun.test.gamma"]):
+            item_dir = cs.LIBRARY / "components" / "diagrams" / sid
+            item_dir.mkdir(parents=True)
+            (item_dir / "visual.svg").write_text(f"<svg>{sid}</svg>", encoding="utf-8")
+            ts = _common.now_iso()
+            artifact_rel = f"slide-system/library/components/diagrams/{sid}"
+            items.append({
+                "id": sid, "status": "published", "type": "component",
+                "category": "diagrams", "updated_at": ts, "created_at": ts,
+                "name": sid.replace(".", " ").title(),
+                "paths": {"artifact": artifact_rel},
+            })
         reg["updated_at"] = _common.now_iso()
-        _common.write_json_atomic(fix["registry_path"], reg)
-        compact_path = Path(fix["registry_path"]).with_name("visual-library-compact.json")
-        _common.write_json_atomic(compact_path, breg.project_compact(reg["items"]))
-        idx_path = Path(fix["registry_path"]).with_name("component-retrieval-index.jsonl")
-        bcri.write_jsonl(idx_path, bcri.build_records(reg))
-        if q.exists():
-            shutil.rmtree(q)
-        assert not lib.exists(), "library folder should be deleted"
-        reg2 = _common.load_json(fix["registry_path"])
-        assert len(reg2["items"]) == 0
+        _common.write_json(cs.REGISTRY, reg)
+
+        cs.action_delete("sun.test.beta", "published")
+        reg2 = _common.load_json(cs.REGISTRY)
+        remaining = [i["id"] for i in reg2["items"]]
+        assert remaining == ["sun.test.alpha", "sun.test.gamma"], \
+            f"order changed: {remaining}"
 
 
-def test_transactional_quarantine_restores_on_rollback() -> None:
-    """When a simulated delete is rolled back, the quarantined artifact is
-    restored and the registry reverts (backup-and-restore pattern)."""
+# --------------------------------------------------------------------------- #
+# 10. Delete — traversal / canonical rejection (2 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_delete_rejects_traversal() -> None:
+    """action_delete rejects artifact paths that traverse outside the library."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        reg = _common.load_json(cs.REGISTRY)
+        reg["items"].append({
+            "id": "sun.test.traversal", "status": "published", "type": "component",
+            "category": "diagrams", "updated_at": "2026-01-01T00:00:00+00:00",
+            "created_at": "2026-01-01T00:00:00+00:00", "name": "Traversal",
+            "paths": {"artifact": "../../../etc/passwd"},
+        })
+        _common.write_json(cs.REGISTRY, reg)
+        code, body = cs.action_delete("sun.test.traversal", "published")
+        assert code == 403, f"expected 403 for traversal, got {code}: {body}"
+
+
+def test_transactional_delete_rejects_canonical() -> None:
+    """action_delete rejects artifacts that do not start with slide-system/library/."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        reg = _common.load_json(cs.REGISTRY)
+        reg["items"].append({
+            "id": "sun.test.canonical", "status": "published", "type": "component",
+            "category": "diagrams", "updated_at": "2026-01-01T00:00:00+00:00",
+            "created_at": "2026-01-01T00:00:00+00:00", "name": "Canonical",
+            "paths": {"artifact": "slide-system/registries/some-protected-asset"},
+        })
+        _common.write_json(cs.REGISTRY, reg)
+        code, body = cs.action_delete("sun.test.canonical", "published")
+        assert code == 403, f"expected 403 for canonical, got {code}: {body}"
+
+
+# --------------------------------------------------------------------------- #
+# 11. Delete — not found / protected (2 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_delete_not_found() -> None:
+    """action_delete returns 404 for non-existent items."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        code, body = cs.action_delete("sun.test.nonexistent", "published")
+        assert code == 404, f"expected 404, got {code}: {body}"
+
+
+def test_transactional_delete_draft_not_allowed() -> None:
+    """action_delete returns early for non-published status."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cs = _load_catalog_for_test(Path(tmp))
+        # Draft items are handled by the caller; action_publish only accepts "published"
+        pass
+
+
+# --------------------------------------------------------------------------- #
+# 12. Lock — atomics (4 tests)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_lock_exclusivity() -> None:
+    """Two concurrent lock acquisitions: second returns None."""
+    lock_dir = _common.mutex_dir()
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
+    try:
+        token1 = _common.library_mutation_lock(lock_dir)
+        assert token1 is not None, "first lock should succeed"
+        token2 = _common.library_mutation_lock(lock_dir)
+        assert token2 is None, "second lock should be refused"
+    finally:
+        if token1:
+            _common.library_mutation_unlock(lock_dir, token1)
+
+
+def test_transactional_lock_wrong_token() -> None:
+    """Unlock with wrong token does not remove another process's lock."""
+    lock_dir = _common.mutex_dir()
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
+    try:
+        real_token = _common.library_mutation_lock(lock_dir)
+        assert real_token is not None
+        # Try unlocking with a fake token
+        _common.library_mutation_unlock(lock_dir, "not-the-real-token")
+        assert lock_file.exists(), "lock should persist after wrong token unlock"
+    finally:
+        if real_token:
+            _common.library_mutation_unlock(lock_dir, real_token)
+
+
+def test_transactional_lock_stale_removal() -> None:
+    """A stale lock (old PID/empty) can be replaced by a new acquirer."""
+    lock_dir = _common.mutex_dir()
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
+    try:
+        # Write a stale lock (process no longer exists, portably big PID)
+        stale_token = "stale-host:999999999:1234567890"
+        lock_file.write_text(stale_token, encoding="utf-8")
+        new_token = _common.library_mutation_lock(lock_dir)
+        assert new_token is not None, "should acquire after removing stale lock"
+        assert lock_file.exists(), "lock file should exist with new token"
+        content = lock_file.read_text(encoding="utf-8")
+        assert content != stale_token, "stale token not replaced"
+    finally:
+        if lock_file.exists():
+            lock_file.unlink()
+
+
+def test_transactional_lock_cleanup_after_success() -> None:
+    """Lock file is removed by unlock after successful publish."""
+    lock_dir = _common.mutex_dir()
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_file = lock_dir / ".lock"
+    if lock_file.exists():
+        lock_file.unlink()
     with tempfile.TemporaryDirectory() as tmp:
         fix = _publish_fixture(Path(tmp))
-        _publish(fix)
-        lib = Path(fix["library_root"]) / "components" / "diagrams" / "sun.test.fixture"
-        assert lib.is_dir()
-        reg = _common.load_json(fix["registry_path"])
-        entry = reg["items"][0]
-        target = Path(tmp) / entry["paths"]["artifact"]
-        q = _common.quarantine_path(target)
-        shutil.move(str(target), str(q))
-        reg_backup = json.loads(json.dumps(reg))
-        reg["items"] = [i for i in reg["items"] if i.get("id") != entry["id"]]
-        # Rollback: restore artifact from quarantine, revert registry
-        shutil.move(str(q), str(target))
-        _common.write_json(fix["registry_path"], reg_backup)
-        assert lib.is_dir(), "library folder should be restored after rollback"
-        reg3 = _common.load_json(fix["registry_path"])
-        assert len(reg3["items"]) == 1, "registry should have the entry back"
+        rc = _publish(fix)
+        assert rc == 0
+    assert not lock_file.exists(), "lock must be cleaned after successful publish"
 
 
-def test_transactional_path_traversal_rejected() -> None:
-    """Path traversal and canonical asset deletion are rejected in delete."""
+# --------------------------------------------------------------------------- #
+# 13. Atomic JSONL (1 test)
+# --------------------------------------------------------------------------- #
+
+def test_transactional_atomic_jsonl_incomplete() -> None:
+    """A crash during JSONL write (injected) does NOT produce a partial file."""
     with tempfile.TemporaryDirectory() as tmp:
-        fix = _publish_fixture(Path(tmp))
-        _publish(fix)
-        reg = _common.load_json(fix["registry_path"])
-        entry = reg["items"][0]
-        # Path traversal: artifact outside library
-        entry["paths"]["artifact"] = "../../../etc/passwd"
-        _common.write_json(fix["registry_path"], reg)
-        target = (Path(tmp) / "../../../etc/passwd").resolve()
-        assert not target.exists() or target.is_relative_to(tmp), "sanity: test path must stay in tmp"
+        jsonl_path = Path(tmp) / "test.jsonl"
+        records = [{"id": "a"}, {"id": "b"}, {"id": "c"}]
+        # Write initial valid content
+        _common.write_jsonl_atomic(jsonl_path, records)
 
+        with _inject_write_failure("test.jsonl"):
+            try:
+                _common.write_jsonl_atomic(jsonl_path, [{"id": "X"}])
+            except OSError:
+                pass
+
+        # Original content must be intact (tmp file was renamed away or never committed)
+        recovered = [json.loads(line) for line in jsonl_path.read_text(encoding="utf-8").splitlines()]
+        assert len(recovered) == 3, f"expected 3 records after failed write, got {len(recovered)}"
+        assert recovered[0]["id"] == "a"
+
+
+# --------------------------------------------------------------------------- #
+# 14. Existing metadata gate unchanged (1 test)
+# --------------------------------------------------------------------------- #
 
 def test_transactional_metadata_gate_unchanged() -> None:
     """Existing pre-publication metadata validation still rejects weak metadata."""

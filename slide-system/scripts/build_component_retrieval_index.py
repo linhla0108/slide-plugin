@@ -20,7 +20,7 @@ import json
 import re
 from pathlib import Path
 
-from _common import content_blocks, load_json
+from _common import content_blocks, load_json, write_jsonl_atomic
 
 SYSTEM_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = SYSTEM_ROOT.parent
@@ -155,10 +155,7 @@ def build_records(registry: dict) -> list[dict]:
 
 
 def write_jsonl(path: Path, records: list[dict]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as f:
-        for record in records:
-            f.write(json.dumps(record, ensure_ascii=True, sort_keys=True) + "\n")
+    write_jsonl_atomic(path, records)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -181,8 +178,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print(f"clean retrieval index: {len(records)} records")
         return 0
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(desired, encoding="utf-8", newline="\n")
+    write_jsonl_atomic(output, records)
     print(f"wrote {len(records)} retrieval records -> {output}")
     return 0
 

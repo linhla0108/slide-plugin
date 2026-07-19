@@ -8,8 +8,10 @@ import json
 import os
 import platform
 import shutil
+import socket
 import subprocess
 import tempfile
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -244,30 +246,100 @@ def write_json_atomic(path: str | Path, data: Any) -> None:
         raise
 
 
-def replace_dir_atomically(src: Path, dst: Path) -> None:
+def write_jsonl_atomic(path: str | Path, records: list[dict]) -> None:
+    """Write JSONL records atomically using temp-file + os.replace.
+
+    Preserves deterministic JSONL formatting (sorted keys, one record
+    per line, trailing newline, \\n line endings).  On failure the temp
+    file is cleaned up and the destination is never touched.
+    """
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.parent / f".tmp.{target.name}.{os.getpid()}"
+    try:
+        content = "".join(
+            json.dumps(r, ensure_ascii=True, sort_keys=True) + "\n"
+            for r in records
+        )
+        with tmp.open("w", encoding="utf-8", newline="\n") as f:
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(str(tmp), str(target))
+    except BaseException:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def snapshot_path(path: Path) -> tuple[bool, bytes] | None:
+    """Snapshot whether *path* existed and its original bytes.
+
+    Returns ``(existed, original_bytes)`` or ``None`` if the path did
+    not exist (caller uses this to decide whether to remove or restore).
+    """
+    try:
+        if path.exists():
+            return (True, path.read_bytes())
+    except OSError:
+        pass
+    return None
+
+
+def restore_path(path: Path, snapshot: tuple[bool, bytes] | None) -> None:
+    """Restore *path* to the exact state from *snapshot*.
+
+    When the snapshot says the path originally did not exist, the path
+    is removed (if it exists now).  When it did exist, the original
+    bytes are written back exactly.
+    """
+    if snapshot is None:
+        path.unlink(missing_ok=True)
+        return
+    existed, original_bytes = snapshot
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if existed:
+        path.write_bytes(original_bytes)
+    else:
+        path.unlink(missing_ok=True)
+
+
+def replace_dir_atomically(src: Path, dst: Path) -> Path | None:
     """Swap *src* (a fully-written temp directory) into *dst*.
 
-    *   If *dst* exists it is first moved to a backup sibling so the
-        destination is never empty or partially written — even if the
-        rename of *src* fails, the backup is restored.
-    *   The backup (``.backup.<pid>``) is removed only after the rename
-        succeeds, so every intermediate state is recoverable.
-    *   Works on Windows and POSIX (uses ``os.rename`` which is the
-        same-filesystem atomic directory rename available on both).
+    Returns the backup path (or ``None`` when *dst* did not exist before
+    the swap).  The caller is responsible for deleting the backup after
+    all subsequent operations succeed, or restoring it on failure.
+
+    If *dst* exists it is first moved to a backup sibling so the
+    destination is never empty or partially written — even if the
+    rename of *src* fails, the backup is restored.  Works on Windows and
+    POSIX (uses ``os.rename`` which is the same-filesystem atomic
+    directory rename available on both).
     """
     backup = dst.parent / f"{dst.name}.backup.{os.getpid()}"
+    if backup.exists():
+        shutil.rmtree(backup)
     if dst.exists():
         os.rename(str(dst), str(backup))
+    else:
+        backup = None
     try:
         os.rename(str(src), str(dst))
     except BaseException:
-        # Restore the backup if the rename of src failed.
-        if backup.exists():
+        if backup and backup.exists():
             os.rename(str(backup), str(dst))
         raise
-    # Success – remove the backup.
-    if backup.exists():
-        shutil.rmtree(backup)
+    return backup
+
+
+def restore_dir_from_backup(dst: Path, backup: Path) -> None:
+    """Restore *dst* from *backup*, removing the current *dst* if any."""
+    if dst.exists():
+        shutil.rmtree(dst)
+    os.rename(str(backup), str(dst))
 
 
 def quarantine_path(path: Path) -> Path:
@@ -275,44 +347,67 @@ def quarantine_path(path: Path) -> Path:
     return path.parent / f"{path.name}.quarantine.{os.getpid()}"
 
 
-def library_mutation_lock(lock_dir: Path) -> bool:
+def _ownership_token() -> str:
+    """Return a unique, verifiable ownership token for this process."""
+    return f"{socket.gethostname()}:{os.getpid()}:{time.time_ns()}"
+
+
+def library_mutation_lock(lock_dir: Path) -> str | None:
     """Acquire an exclusive, cross-platform file-system mutex.
 
-    Returns ``True`` when the lock was acquired, ``False`` when another
-    process holds it.  The lock is a directory — ``mkdir`` is atomic on
-    every OS and fails when the directory already exists.
+    Returns an ownership token (opaque ``str``) on success, or ``None``
+    when another live process holds the lock.
 
-    Stale locks are detected by checking whether the PID written inside
-    the lock directory is still alive; if not, the lock is reaped and
-    re-acquired transparently.
+    The lock is a single file created with ``O_CREAT | O_EXCL`` — the
+    only truly exclusive file creation primitive on both Windows and
+    POSIX (``os.rename`` replaces existing files on POSIX).
+
+    The lock file contains an ownership token (``hostname:pid:ns``).
+    Stale locks are detected by parsing the owner PID from the token
+    and checking whether it is still alive.  Stale locks are reaped
+    transparently.
     """
     lock_dir.mkdir(parents=True, exist_ok=True)
-    lock_anchor = lock_dir / ".lock"
-    lock_tmp = lock_dir / f".tmp.{os.getpid()}"
-    lock_tmp.write_text(str(os.getpid()), encoding="utf-8")
+    anchor = lock_dir / ".lock"
+    token = _ownership_token()
     try:
-        os.rename(str(lock_tmp), str(lock_anchor))
+        fd = os.open(str(anchor), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except OSError:
-        # Another process got there first — check for staleness.
-        lock_tmp.unlink(missing_ok=True)
+        # Lock held — check for staleness.
         stale = False
         try:
-            owner = int(lock_anchor.read_text(encoding="utf-8").strip())
-            if not _pid_alive(owner):
+            raw = anchor.read_bytes().decode("utf-8")
+            parts = raw.split(":")
+            owner_pid = int(parts[1]) if len(parts) >= 2 else 0
+            if not owner_pid or not _pid_alive(owner_pid):
                 stale = True
-        except (OSError, ValueError):
+        except (OSError, ValueError, IndexError):
             stale = True
         if stale:
-            lock_anchor.unlink(missing_ok=True)
+            anchor.unlink(missing_ok=True)
             return library_mutation_lock(lock_dir)  # retry
-        return False
-    return True
+        return None
+    try:
+        os.write(fd, token.encode("utf-8"))
+    finally:
+        os.close(fd)
+    return token
 
 
-def library_mutation_unlock(lock_dir: Path) -> None:
-    """Release the mutation lock."""
+def library_mutation_unlock(lock_dir: Path, token: str) -> None:
+    """Release the mutation lock owned by *token*.
+
+    If the lock file no longer contains *token* (another process reaped
+    it, or this is not the owner), the unlock is a no-op.  This prevents
+    accidentally removing another process's lock.
+    """
     anchor = lock_dir / ".lock"
-    anchor.unlink(missing_ok=True)
+    try:
+        current = anchor.read_bytes().decode("utf-8")
+    except (OSError, ValueError):
+        return
+    if current.strip() == token.strip():
+        anchor.unlink(missing_ok=True)
 
 
 def _pid_alive(pid: int) -> bool:
