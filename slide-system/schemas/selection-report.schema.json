@@ -2,71 +2,26 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sun.studio/slide-system/selection-report.schema.json",
   "title": "Visual Selection Report",
-  "type": "object",
-  "required": [
-    "request_id",
-    "generated_at",
-    "decision",
-    "candidates"
+  "description": "Schema for score_visual_items.py output — single-slide or batch report.",
+  "oneOf": [
+    { "$ref": "#/$defs/single_report" },
+    { "$ref": "#/$defs/batch_report" }
   ],
-  "properties": {
-    "request_id": {
-      "type": "string"
-    },
-    "generated_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "generated_by": {
-      "type": "string"
-    },
-    "scorer_version": {
-      "type": "string"
-    },
-    "retrieval_index": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
+  "$defs": {
     "decision": {
       "type": "object",
-      "required": [
-        "action",
-        "score"
-      ],
+      "required": ["action", "score"],
       "properties": {
         "action": {
-          "enum": [
-            "reuse",
-            "needs_component",
-            "custom-local",
-            "blank"
-          ],
+          "enum": ["reuse", "needs_component", "custom-local", "blank"],
           "description": "reuse = auto high-confidence OR explicit user selection; needs_component = UNRESOLVED (user must pick a library component, explicitly blank it, or approve custom — an unresolved job is NOT a deliverable and produces no PPTX/PDF); custom-local = explicit user approval only; blank = explicit user choice to leave the slide blank. adapt-local/blocked are retired."
         },
-        "item_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "score": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100
-        },
-        "reason": {
-          "type": "string"
-        },
-        "extraction_recommended": {
-          "type": "boolean"
-        },
+        "item_id": { "type": ["string", "null"] },
+        "score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reason": { "type": "string" },
+        "extraction_recommended": { "type": "boolean" },
         "suggested_search": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "type": "array", "items": { "type": "string" },
           "description": "needs_component: plain search terms for the catalog."
         },
         "next_action": {
@@ -75,7 +30,7 @@
         },
         "shortlist": {
           "type": "array",
-          "description": "needs_component: a small ranked list of SAFE published near-matches to preview (published, auto-reuse-eligible, immutable-clean, slot-ready). Advisory only — the scorer never selects a shortlist item; each says which required concept groups are still missing.",
+          "description": "needs_component: a small ranked list of SAFE published near-matches to preview. Advisory only — the scorer never selects a shortlist item.",
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -92,75 +47,101 @@
           }
         },
         "selected_by": {
-          "enum": [
-            "user"
-          ],
+          "enum": ["user"],
           "description": "Present when the outcome came from an explicit user choice (component_id or unresolved_policy)."
         },
         "allow_component_reuse": {
           "type": "boolean",
           "description": "Present + true when the user overrode the per-deck no-duplicate rule for this slide."
         },
+        "capacity_conflict": {
+          "type": "object",
+          "description": "Present on an explicit user selection when the planned content exceeds the component's slot capacity. The choice is allowed but warned; downstream fidelity/export gates still apply.",
+          "required": ["planned_items", "content_blocks"],
+          "properties": {
+            "planned_items": { "type": "integer", "minimum": 0 },
+            "content_blocks": { "type": ["integer", "null"], "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
         "immutable_text_conflict": {
           "type": "object",
           "description": "Present ONLY on an explicit user selection whose artwork carries fixed, non-editable copy that this deck's context does not match (registry `immutable_text`). Recorded by the scorer so the render/fidelity gate fails the build closed rather than shipping a slide about the wrong subject.",
-          "required": [
-            "terms",
-            "reason"
-          ],
+          "required": ["contexts", "reason"],
           "properties": {
-            "terms": {
+            "contexts": {
               "type": "array",
+              "description": "Declared immutable context groups — a list of groups, each a set of terms that must ALL be present for that group to count.",
               "items": {
-                "type": "string"
+                "type": "array",
+                "items": { "type": "string" }
               }
             },
-            "reason": {
-              "type": "string"
-            }
+            "reason": { "type": "string" }
           },
           "additionalProperties": false
         }
       },
       "additionalProperties": false
     },
-    "candidates": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "item_id",
-          "eligible",
-          "score",
-          "criteria",
-          "reasons"
-        ],
-        "properties": {
-          "item_id": {
-            "type": "string"
-          },
-          "eligible": {
-            "type": "boolean"
-          },
-          "score": {
-            "type": "number"
-          },
-          "criteria": {
-            "type": "object"
-          },
-          "reasons": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "retrieval": {
-            "type": "object"
+    "candidate": {
+      "type": "object",
+      "required": ["item_id", "eligible", "score", "criteria", "reasons"],
+      "properties": {
+        "item_id": { "type": "string" },
+        "eligible": { "type": "boolean" },
+        "score": { "type": "number" },
+        "criteria": { "type": "object" },
+        "reasons": { "type": "array", "items": { "type": "string" } },
+        "retrieval": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "single_report": {
+      "type": "object",
+      "required": ["request_id", "generated_at", "decision", "candidates"],
+      "properties": {
+        "request_id": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "generated_by": { "type": "string" },
+        "scorer_version": { "type": "string" },
+        "retrieval_index": { "type": ["string", "null"] },
+        "decision": { "$ref": "#/$defs/decision" },
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/candidate" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "batch_report": {
+      "type": "object",
+      "required": ["job_id", "generated_at", "slides"],
+      "properties": {
+        "job_id": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "generated_by": { "type": "string" },
+        "scorer_version": { "type": "string" },
+        "retrieval_index": { "type": ["string", "null"] },
+        "slides": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["request_id", "decision", "candidates"],
+            "properties": {
+              "request_id": { "type": "string" },
+              "decision": { "$ref": "#/$defs/decision" },
+              "candidates": {
+                "type": "array",
+                "items": { "$ref": "#/$defs/candidate" }
+              }
+            },
+            "additionalProperties": false
           }
-        },
-        "additionalProperties": false
-      }
+        }
+      },
+      "additionalProperties": false
     }
-  },
-  "additionalProperties": false
+  }
 }

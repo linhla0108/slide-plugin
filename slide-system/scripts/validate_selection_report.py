@@ -18,7 +18,7 @@ VALID_ACTIONS = {"reuse", "needs_component", "custom-local", "blank"}
 REQUIRED_CRITERIA = {"semantic_intent", "content_structure", "density", "brand", "export_compatibility", "accessibility"}
 DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended",
                    "suggested_search", "next_action", "selected_by", "allow_component_reuse",
-                   "immutable_text_conflict", "shortlist"}
+                   "immutable_text_conflict", "capacity_conflict", "shortlist"}
 SINGLE_REPORT_FIELDS = {
     "request_id", "generated_at", "generated_by", "scorer_version",
     "retrieval_index", "decision", "candidates",

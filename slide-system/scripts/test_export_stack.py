@@ -285,9 +285,13 @@ def main() -> int:
         elif not npm_pw:
             b_pw.skip(f"run {SETUP_HINT} (installs Playwright)")
         else:
+            # Untracked sample deck (no sibling selection-report) -> --skip-delivery-gate.
+            # The delivery gate runs fail-closed for tracked jobs only; this test exercises
+            # the HTML->PDF path, not the gate.
             rc, log, ms = run([node, str(SCRIPTS / "export-pdf.js"),
                                "--url", url, "--slides", str(SLIDES),
-                               "--showJs", "goToSlide({n})", "--output", str(pdf_pw)])
+                               "--showJs", "goToSlide({n})", "--output", str(pdf_pw),
+                               "--skip-delivery-gate"])
             if rc == 0 and pdf_pw.exists():
                 b_pw.ok(ms, f"{pdf_pw.stat().st_size // 1024} KB, ~{pdf_pages(pdf_pw)} page(s)")
             else:

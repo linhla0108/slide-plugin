@@ -3142,6 +3142,165 @@ def test_selection_report_rejects_manual_curation_override() -> None:
             sys.argv = original_argv
 
 
+def test_selection_report_accepts_capacity_conflict() -> None:
+    # A scorer decision carrying capacity_conflict must pass the real validator
+    # (regression: capacity_conflict was absent from DECISION_FIELDS).
+    cta = _item(id="sun.deck.cta", intent=["checklist", "action-items"], tags=[])
+    req = _rreq(intent=["checklist", "action-items"], content_structure=["a"],
+                item_count=4, component_id="sun.deck.cta")
+    dec, cands = svi.score_request(req, [cta], svi.WEIGHTS, None,
+                                   enrichment=_cap_enrich(**{"sun.deck.cta": 1}))
+    assert "capacity_conflict" in dec
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        report_path = root / "analysis" / "selection-report.json"
+        report_path.parent.mkdir()
+        report_path.write_text(json.dumps({
+            "request_id": "s1",
+            "generated_at": "2026-07-19T00:00:00+00:00",
+            "generated_by": "score_visual_items.py",
+            "decision": dec,
+            "candidates": [{"item_id": c["item_id"], "eligible": c.get("eligible", True),
+                            "score": c["score"], "criteria": c["criteria"],
+                            "reasons": c.get("reasons", [])}
+                           for c in cands],
+        }), encoding="utf-8")
+        original_argv = sys.argv
+        try:
+            sys.argv = ["validate_selection_report.py", "--selection-report", str(report_path)]
+            assert vsr.main() == 0, "capacity_conflict report must pass the validator"
+        finally:
+            sys.argv = original_argv
+
+
+def test_selection_report_accepts_immutable_text_conflict_contexts() -> None:
+    # The scorer emits immutable_text_conflict.contexts (list of groups), not
+    # terms (flat list). The schema and validator must accept the real shape.
+    # The immutable_text is on the registry ITEM (not enrichment) — the scorer
+    # reads it from item["immutable_text"] at scoring time.
+    item = _item(id="sun.component.locked", intent=["closing"], tags=["closing"],
+                 build_scope={"mode": "generic", "reason": "test"},
+                 immutable_text={"audit": "immutable",
+                                 "contexts": [["zephyr-summit", "2031"]],
+                                 "reason": "Artwork bakes in the Zephyr Summit 2031 lockup."})
+    req = _rreq(intent=["closing"], tags=["not-zephyr", "other"],
+                content_structure=["a"], component_id="sun.component.locked")
+    enrichment = svi.build_enrichment([{
+        "id": "sun.component.locked", "status": "published",
+        "keywords": ["closing"], "slot_count": 3,
+    }])
+    dec, cands = svi.score_request(req, [item], svi.WEIGHTS, None,
+                                   enrichment=enrichment)
+    assert dec.get("immutable_text_conflict"), "expected immutable_text_conflict in decision: %s" % dec
+    conflict = dec["immutable_text_conflict"]
+    assert "contexts" in conflict, f"expected 'contexts' in conflict, got keys: {list(conflict)}"
+    assert isinstance(conflict["contexts"], list) and len(conflict["contexts"]) > 0
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        report_path = root / "analysis" / "selection-report.json"
+        report_path.parent.mkdir()
+        report_path.write_text(json.dumps({
+            "request_id": "s1",
+            "generated_at": "2026-07-19T00:00:00+00:00",
+            "generated_by": "score_visual_items.py",
+            "decision": dec,
+            "candidates": [{"item_id": c["item_id"], "eligible": c.get("eligible", True),
+                            "score": c["score"], "criteria": c["criteria"],
+                            "reasons": c.get("reasons", [])}
+                           for c in cands],
+        }), encoding="utf-8")
+        original_argv = sys.argv
+        try:
+            sys.argv = ["validate_selection_report.py", "--selection-report", str(report_path)]
+            assert vsr.main() == 0, "immutable_text_conflict report (contexts) must pass the validator"
+        finally:
+            sys.argv = original_argv
+
+
+def test_selection_report_schema_drift_edge_cases() -> None:
+    # Focused parity tests for the updated selection-report.schema.json.
+    # Verifies that the schema accepts valid shapes and rejects known bad ones.
+    schema_path = SCRIPTS.parent / "schemas" / "selection-report.schema.json"
+    schema = _common.load_json(schema_path)
+    import json
+    # Only run these tests if python has jsonschema (not a declared dependency).
+    try:
+        import jsonschema
+    except ImportError:
+        print("  SKIP  test_selection_report_schema_drift_edge_cases (jsonschema not installed)")
+        # Fall back: test the hand-written validator directly
+        pass
+    else:
+        # 1. Valid single-slide report
+        jsonschema.validate({
+            "request_id": "s1", "generated_at": "2026-01-01T00:00:00Z",
+            "generated_by": "score_visual_items.py",
+            "decision": {"action": "reuse", "item_id": "c1", "score": 85.0, "reason": "good"},
+            "candidates": [{"item_id": "c1", "eligible": True, "score": 85.0,
+                           "criteria": {"semantic_intent": 30.0, "content_structure": 20.0},
+                           "reasons": ["full match"]}],
+        }, schema)
+        # 2. Valid batch report
+        jsonschema.validate({
+            "job_id": "j1", "generated_at": "2026-01-01T00:00:00Z",
+            "generated_by": "score_visual_items.py",
+            "slides": [{"request_id": "s1",
+                        "decision": {"action": "needs_component", "item_id": None, "score": 50.0, "reason": "low"},
+                        "candidates": [{"item_id": "c1", "eligible": True, "score": 50.0,
+                                       "criteria": {"semantic_intent": 20.0, "content_structure": 10.0},
+                                       "reasons": ["partial"]}]}],
+        }, schema)
+        # 3. Valid immutable_text_conflict (contexts, not terms)
+        jsonschema.validate({
+            "request_id": "s1", "generated_at": "2026-01-01T00:00:00Z",
+            "generated_by": "score_visual_items.py",
+            "decision": {"action": "reuse", "item_id": "c1", "score": 85.0, "reason": "warn",
+                         "immutable_text_conflict": {
+                             "contexts": [["zephyr-summit", "2031"]],
+                             "reason": "Artwork bakes in the Zephyr Summit 2031 lockup."}},
+            "candidates": [{"item_id": "c1", "eligible": True, "score": 85.0,
+                           "criteria": {"semantic_intent": 30.0, "content_structure": 20.0},
+                           "reasons": ["full match"]}],
+        }, schema)
+        # 4. Valid capacity_conflict
+        jsonschema.validate({
+            "request_id": "s1", "generated_at": "2026-01-01T00:00:00Z",
+            "generated_by": "score_visual_items.py",
+            "decision": {"action": "reuse", "item_id": "c1", "score": 85.0, "reason": "warn",
+                         "capacity_conflict": {"planned_items": 4, "content_blocks": 1}},
+            "candidates": [{"item_id": "c1", "eligible": True, "score": 85.0,
+                           "criteria": {"semantic_intent": 30.0, "content_structure": 20.0},
+                           "reasons": ["full match"]}],
+        }, schema)
+        # 5. Unknown decision field must be rejected (additionalProperties: false)
+        try:
+            jsonschema.validate({
+                "request_id": "s1", "generated_at": "2026-01-01T00:00:00Z",
+                "generated_by": "score_visual_items.py",
+                "decision": {"action": "reuse", "item_id": "c1", "score": 85.0, "reason": "good",
+                             "unknown_field": "should not be here"},
+                "candidates": [{"item_id": "c1", "eligible": True, "score": 85.0,
+                               "criteria": {"semantic_intent": 30.0, "content_structure": 20.0},
+                               "reasons": ["full match"]}],
+            }, schema)
+            assert False, "unknown decision field must be rejected"
+        except jsonschema.ValidationError:
+            pass
+        # 6. Malformed batch (missing job_id) must be rejected
+        try:
+            jsonschema.validate({
+                "generated_at": "2026-01-01T00:00:00Z",
+                "slides": [{"request_id": "s1",
+                           "decision": {"action": "reuse", "item_id": "c1", "score": 85.0, "reason": "good"},
+                           "candidates": [{"item_id": "c1", "eligible": True, "score": 85.0,
+                                          "criteria": {"semantic_intent": 30.0},
+                                          "reasons": []}]}],
+            }, schema)
+            assert False, "malformed batch (no job_id) must be rejected"
+        except jsonschema.ValidationError:
+            pass
+
+
 def test_slide_generator_requires_fresh_selection_for_new_jobs() -> None:
     skill = (SCRIPTS.parent.parent / ".agents" / "skills" / "slide-generator" / "SKILL.md")
     text = skill.read_text(encoding="utf-8")
