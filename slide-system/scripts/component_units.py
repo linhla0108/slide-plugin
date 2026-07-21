@@ -234,7 +234,12 @@ def display_surface(contract: dict[str, Any]) -> dict[str, Any] | None:
 def unit_profile(contract: dict[str, Any]) -> dict[str, Any]:
     """The layout-grammar facts selection needs from one component."""
     model = unit_model(contract)
+    editable_slot_count = sum(
+        1 for slot in contract.get("slots") or []
+        if isinstance(slot, dict) and slot.get("id")
+    )
     return {
+        "editable_slot_count": editable_slot_count,
         "unit_count": model["primary_unit_count"],
         "group_sizes": sorted(len(group["units"]) for group in model["groups"]),
         "display_surface": display_surface(contract),

@@ -729,9 +729,13 @@ def score_request(
                     f"a statement layout is a weak host for {item_count} parallel items: "
                     f"-{DISPLAY_SURFACE_PENALTY}"
                 )
-            if record and record.get("slot_count") is not None:
-                retrieval["slot_count"] = record["slot_count"]
-            if record and record.get("slot_count") == 0 and request_needs_text:
+            contract_slot_count = profile.get("editable_slot_count")
+            indexed_slot_count = record.get("slot_count") if record else None
+            slot_count = (contract_slot_count if isinstance(contract_slot_count, int)
+                          else indexed_slot_count)
+            if slot_count is not None:
+                retrieval["slot_count"] = slot_count
+            if slot_count == 0 and request_needs_text:
                 score = max(0.0, score - NO_TEXT_SLOT_PENALTY)
                 reasons.append(
                     f"Buildability: component has no editable text slots: "

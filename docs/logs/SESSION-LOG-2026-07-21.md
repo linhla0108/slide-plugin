@@ -835,3 +835,19 @@ schema, skill, workflow, or brand asset modified.
 **Symbols:** hasInlineTextChild, isInlineRunOfCapturedAncestor, inlineRuns, set_text_run_style, add_text_box_v2, test_pptx_inline_rich_text_exports_as_one_editable_box
 **Run:** outputs/slide-jobs/inline-rich-run-manual-review-20260721 (ai-workflow-inline-runs-fixed.pptx, ai-workflow-inline-runs-fixed.pdf, _export/export-result.json)
 **State:** Not committed
+
+## 2026-07-21.22 — Recover editable slots from raster-only previews
+
+**When:** 2026-07-21
+**Request:** Make PR #9 mergeable without hardcoding after a real AI-workflow selection could not build from its published component scaffolds.
+**Actions:**
+- Reproduced the failure from a fresh PR #9 selection: the scorer selected 9 published items, while several corresponding `preview.html` files emitted zero `.slot` elements despite their published `text-slots.json` contracts declaring editable geometry.
+- Added a generic scaffold fallback: when a preview has no slots, reconstruct positioned editable elements from normalized bounds, typography, and alignment in the companion published slot contract. No component ids, source PDFs, or slide-specific geometry are encoded in the implementation.
+- Made slot capacity prefer the read-only published contract profile over a possibly incomplete retrieval-index projection. This preserves the existing zero-slot rejection even when the derived index lacks `slot_count`.
+- Added regression coverage for a missing-index zero-slot contract and for contract-based scaffold reconstruction; ran the scaffold CLI on three affected published items.
+**Result:**
+- The three real scaffolded items now expose 6, 38, and 13 native slot elements respectively instead of background-only fragments.
+- `test_gates.py` 262/262 PASS. The PR still carries source-topic mismatch warnings for its intentionally component-first selection policy; this change repairs the build-contract gap without changing that ranking policy.
+**Files:** slide-system/scripts/component_units.py, slide-system/scripts/score_visual_items.py, slide-system/scripts/scaffold_slide_from_component.py, slide-system/scripts/test_gates.py, docs/logs/SESSION-LOG-2026-07-21.md
+**Symbols:** unit_profile, score_request, _text_slots_path, _slots_from_contract, build_scaffold
+**State:** Not committed

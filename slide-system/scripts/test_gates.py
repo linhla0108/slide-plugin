@@ -1257,6 +1257,26 @@ def test_retrieval_zero_slot_only_candidate_becomes_text_only() -> None:
     assert any("no editable text slots" in reason for reason in cands[0]["reasons"])
 
 
+def test_scorer_uses_slot_contract_when_retrieval_index_omits_slot_count() -> None:
+    """The published text-slot contract, not index completeness, decides capacity."""
+    deco = _item(id="sun.component.ring-panel", intent=["team", "profile"], tags=[])
+    req = _rreq(intent=["team", "profile"], content_structure=["heading", "label"])
+
+    dec, cands = svi.score_request(
+        req,
+        [deco],
+        svi.WEIGHTS,
+        None,
+        enrichment={},
+        unit_profiles={"sun.component.ring-panel": {"editable_slot_count": 0}},
+    )
+
+    assert dec["action"] == "text-only", dec
+    assert dec["item_id"] is None, dec
+    assert cands[0]["retrieval"]["slot_count"] == 0, cands[0]
+    assert any("no editable text slots" in reason for reason in cands[0]["reasons"])
+
+
 def test_canonicalize_drops_filler_symmetrically_with_index_tokens() -> None:
     """Both sides of the semantic comparison must use one filler rule.
 
@@ -2133,6 +2153,34 @@ def test_scaffold_preserves_slots_no_base64() -> None:
     assert 'class="bg"' in frag, "scaffold must include a .bg placeholder"
     assert ".slide-scaffold .slot { z-index: 20; }" in frag, \
         "editable slot copy must remain above decomposed artwork overlays"
+
+
+def test_scaffold_falls_back_to_text_slot_contract_when_preview_has_no_slots() -> None:
+    contract = {
+        "source": {"view_box": [0, 0, 1000, 500]},
+        "slots": [{
+            "id": "headline",
+            "html_tag": "h2",
+            "bounds": {"x": 0.1, "y": 0.2, "width": 0.5, "height": 0.1},
+            "typography": {
+                "font_family": "Arial",
+                "font_size": 30,
+                "font_weight": "bold",
+                "font_style": "normal",
+                "line_height": 1.1,
+                "color": "#ffffff",
+            },
+            "horizontal_align": "left",
+        }],
+    }
+
+    slots = scaffold._slots_from_contract(contract)
+    fragment = scaffold.build_scaffold("sun.component.example", slots)
+
+    assert len(slots) == 1
+    assert 'data-slot-id="headline"' in fragment
+    assert "left:10.0000%" in fragment
+    assert "font-size:64.8000px" in fragment
 
 
 def test_scaffold_rejects_compact_registry() -> None:
