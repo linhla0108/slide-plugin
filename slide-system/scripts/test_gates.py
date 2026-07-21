@@ -3,7 +3,7 @@
 
 Covers the highest-consequence, previously-untested paths:
   - cleanup_run: deck.html + .pptx survive; intermediates are removed.
-  - score_visual_items: 65/75 decision thresholds + extraction recommendation.
+  - score_visual_items: published-only reuse/text-only decisions + extraction recommendation.
   - score_visual_items hybrid retrieval: capped secondary lexical credit,
     anti-use-case / count-fit / zero-slot penalties, published-only enrichment.
   - validate_selection_report: equal-score plausibility, provenance, T1 shape-lock.
@@ -33,13 +33,540 @@ import score_visual_items as svi
 import validate_selection_report as vsr
 import scaffold_slide_from_component as scaffold
 import validate_component_fidelity as fidelity
+import validate_export_objects as export_objects
+import validate_deck_assets as deck_assets
 import read_text_slots
 import _common
+import validate_slot_content_plan as slot_plan
+import component_units as units
 
 REGISTRY = SCRIPTS.parent / "registries" / "visual-library.json"
 
 # A real template item with positioned slots (verified to have .slot divs).
 ITEM_WITH_SLOTS = "sun.interview-workshop-sunriser.04-mindset"
+
+
+# --------------------------------------------------------------------------- #
+# slot-content-plan — pre-build capacity contract
+# --------------------------------------------------------------------------- #
+def _slot_contract(slot_id: str = "headline", *, role: str = "heading",
+                   width: float = 0.5, height: float = 0.1,
+                   font_size: float = 48.0) -> dict:
+    return {
+        "slots": [{
+            "id": slot_id,
+            "role": role,
+            "bounds": {"x": 0.1, "y": 0.1, "width": width, "height": height},
+            "typography": {"font_size": font_size, "line_height": 1.0},
+        }]
+    }
+
+
+def _slot_plan(copy: str, *, slot_id: str = "headline") -> dict:
+    return {
+        "schema_version": 1,
+        "slides": [{
+            "request_id": "slide-01",
+            "item_id": "sun.component.example",
+            "slots": [{"slot_id": slot_id, "display_copy": copy}],
+        }],
+    }
+
+
+def test_slot_content_plan_requires_one_reuse_entry_per_selected_slide() -> None:
+    report = {"slides": [{"request_id": "slide-01", "decision": {
+        "action": "reuse", "item_id": "sun.component.example"}}]}
+    errors = slot_plan.validate_plan({"schema_version": 1, "slides": []}, report, {})
+    assert any("missing a reuse entry" in error for error in errors), errors
+
+
+def test_slot_content_plan_rejects_copy_that_exceeds_native_slot_capacity() -> None:
+    report = {"slides": [{"request_id": "slide-01", "decision": {
+        "action": "reuse", "item_id": "sun.component.example"}}]}
+    contracts = {"sun.component.example": _slot_contract(width=0.12, height=0.04, font_size=28)}
+    errors = slot_plan.validate_plan(_slot_plan("A deliberately long sentence that cannot fit this narrow slot."),
+                                     report, contracts)
+    assert any("exceeds native capacity" in error for error in errors), errors
+
+
+def test_slot_content_plan_rejects_slot_below_projection_readability_floor() -> None:
+    report = {"slides": [{"request_id": "slide-01", "decision": {
+        "action": "reuse", "item_id": "sun.component.example"}}]}
+    contracts = {"sun.component.example": _slot_contract(role="body", font_size=14)}
+    errors = slot_plan.validate_plan(_slot_plan("Readable body", slot_id="headline"), report, contracts)
+    assert any("below the projection floor" in error for error in errors), errors
+
+
+def test_slot_content_plan_accepts_compact_copy_in_readable_native_slot() -> None:
+    report = {"slides": [{"request_id": "slide-01", "decision": {
+        "action": "reuse", "item_id": "sun.component.example"}}]}
+    contracts = {"sun.component.example": _slot_contract(width=0.5, height=0.1, font_size=48)}
+    errors = slot_plan.validate_plan(_slot_plan("Build with AI"), report, contracts)
+    assert errors == [], errors
+
+
+# --------------------------------------------------------------------------- #
+# component_units — repeatable visual-unit contract
+#
+# Fixtures are synthetic geometry only. The gate must work from a component's
+# own bounds/typography, so no test may branch on a real item id or deck name.
+# --------------------------------------------------------------------------- #
+def _slot(slot_id: str, x: float, y: float, w: float, h: float, font: float,
+          role: str = "body") -> dict:
+    return {
+        "id": slot_id, "role": role,
+        "bounds": {"x": x, "y": y, "width": w, "height": h},
+        "typography": {"font_size": font, "line_height": 1.2},
+    }
+
+
+def _card_row_contract(units: int, *, with_chrome: bool = True, body_lines: int = 1) -> dict:
+    """A title + footer chrome + `units` congruent cards laid out in a row.
+
+    Each card is a label over `body_lines` body line(s), separated from its
+    neighbours by a real gutter — the same grammar as any published card/column/
+    step set. Extraction splits a card's wrapped paragraph into one slot per
+    drawn line, so `body_lines > 1` is what a dense published card looks like.
+    """
+    slots: list[dict] = []
+    if with_chrome:
+        slots += [
+            _slot("deck-title", 0.08, 0.15, 0.60, 0.08, 55.0, role="heading"),
+            _slot("footer-legal", 0.04, 0.92, 0.21, 0.02, 20.0, role="footer"),
+            _slot("page-number", 0.95, 0.92, 0.01, 0.02, 20.0, role="label"),
+        ]
+    for i in range(units):
+        x = 0.08 + i * 0.30
+        slots.append(_slot(f"card-{i + 1}-label", x, 0.35, 0.22, 0.04, 32.0, role="label"))
+        for line in range(body_lines):
+            suffix = "" if line == 0 else f"-{line + 1}"
+            slots.append(_slot(f"card-{i + 1}-body{suffix}", x, 0.41 + line * 0.035, 0.22, 0.03, 20.0))
+    return {"source": {"view_box": [0, 0, 1920, 1080]}, "slots": slots}
+
+
+def _unit_plan(item_id: str, slot_ids: list[str]) -> dict:
+    return {"schema_version": 1, "slides": [{
+        "request_id": "slide-02", "item_id": item_id,
+        "slots": [{"slot_id": sid, "display_copy": "Short label"} for sid in slot_ids],
+    }]}
+
+
+def _unit_report(item_id: str) -> dict:
+    return {"slides": [{"request_id": "slide-02",
+                        "decision": {"action": "reuse", "item_id": item_id}}]}
+
+
+def test_visual_units_are_inferred_from_geometry_not_slot_names() -> None:
+    model = units.unit_model(_card_row_contract(3))
+    assert model["primary_unit_count"] == 3, model
+    # Title, footer and page number are chrome/singletons: never repeat units.
+    grouped = {s["id"] for group in model["groups"] for unit in group["units"] for s in unit}
+    assert grouped == {f"card-{i}-{part}" for i in (1, 2, 3) for part in ("label", "body")}, grouped
+
+
+def test_visual_units_scale_with_the_number_of_repeats_drawn() -> None:
+    for drawn in (2, 4, 5):
+        assert units.unit_model(_card_row_contract(drawn))["primary_unit_count"] == drawn
+
+
+def test_plan_gate_rejects_a_blank_card_in_an_engaged_repeat_set() -> None:
+    """The observed defect: every mapped slot fits, but card 3 ships blank."""
+    contract = _card_row_contract(3)
+    errors = slot_plan.validate_plan(
+        _unit_plan("sun.component.cards", ["card-1-label", "card-1-body",
+                                           "card-2-label", "card-2-body"]),
+        _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+    assert len(errors) == 1, errors
+    assert "slide 'slide-02'" in errors[0], errors
+    assert "2 of 3 native unit(s) carry copy" in errors[0], errors
+    assert "1 drawn unit(s) would ship blank" in errors[0], errors
+    assert "unit 3 [card-3-label, card-3-body]" in errors[0], errors
+
+
+def test_plan_gate_accepts_a_fully_filled_repeat_set() -> None:
+    contract = _card_row_contract(3)
+    errors = slot_plan.validate_plan(
+        _unit_plan("sun.component.cards", [f"card-{i}-{p}" for i in (1, 2, 3)
+                                           for p in ("label", "body")]),
+        _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+    assert errors == [], errors
+
+
+def test_plan_gate_still_allows_empty_titles_footers_and_page_numbers() -> None:
+    """Non-unit slots stay deliberately empty; only repeats must be finished."""
+    contract = _card_row_contract(3)
+    errors = slot_plan.validate_plan(
+        _unit_plan("sun.component.cards", [f"card-{i}-label" for i in (1, 2, 3)]),
+        _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+    assert errors == [], errors
+
+
+def test_plan_gate_leaves_an_untouched_repeat_group_alone() -> None:
+    """A component may carry a second grammar the brief never engages."""
+    contract = _card_row_contract(3)
+    contract["slots"] += [
+        _slot("tab-1", 0.08, 0.62, 0.10, 0.03, 24.0, role="label"),
+        _slot("tab-2", 0.40, 0.62, 0.10, 0.03, 24.0, role="label"),
+    ]
+    errors = slot_plan.validate_plan(
+        _unit_plan("sun.component.cards", [f"card-{i}-label" for i in (1, 2, 3)]),
+        _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+    assert errors == [], errors
+
+
+# --------------------------------------------------------------------------- #
+# Repeated-unit readability budget
+#
+# Physical capacity is not the ceiling inside a repeated card/strip: copy can
+# fit every native line and still project as four ragged narrow columns.
+# --------------------------------------------------------------------------- #
+def test_plan_gate_rejects_a_repeated_card_that_fits_physically_but_reads_dense() -> None:
+    """The observed defect: every slot fits, the card is unreadable anyway."""
+    contract = _card_row_contract(4, body_lines=4)
+    slot_ids = [f"card-{i}-{p}" for i in (1, 2, 3, 4)
+                for p in ("label", "body", "body-2", "body-3", "body-4")]
+    errors = slot_plan.validate_plan(
+        _unit_plan("sun.component.cards", slot_ids),
+        _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+    # Every slot is individually within native capacity...
+    assert not any("exceeds native capacity" in error for error in errors), errors
+    # ...but each card carries 5 display lines against a budget of 3.
+    assert len(errors) == 4, errors
+    assert "slide 'slide-02'" in errors[0], errors
+    assert "unit 1 of 4" in errors[0], errors
+    assert "5 display lines" in errors[0] and "budget 3" in errors[0], errors
+    assert "'card-1-label'" in errors[0] and "'card-1-body-4'" in errors[0], errors
+    assert "speaker notes" in errors[0], errors
+
+
+def test_plan_gate_rejects_a_repeated_label_that_needs_more_than_one_line() -> None:
+    contract = _card_row_contract(3)
+    # Tall enough that the label physically holds four lines; the budget still
+    # rejects a label that needs more than one.
+    for slot in contract["slots"]:
+        if slot["id"].endswith("-label"):
+            slot["bounds"]["height"] = 0.12
+    plan = _unit_plan("sun.component.cards", [f"card-{i}-{p}" for i in (1, 2, 3)
+                                              for p in ("label", "body")])
+    plan["slides"][0]["slots"][0]["display_copy"] = (
+        "A label long enough to wrap across the card")
+    errors = slot_plan.validate_plan(plan, _unit_report("sun.component.cards"),
+                                     {"sun.component.cards": contract})
+    assert len(errors) == 1, errors
+    assert "label copy fills" in errors[0] and "budget 1" in errors[0], errors
+    assert "'card-1-label'" in errors[0], errors
+
+
+def test_plan_gate_accepts_a_concise_card_row_and_strip() -> None:
+    """A 4-card row and a 5-cell strip, one label plus one compact line each."""
+    for count in (4, 5):
+        contract = _card_row_contract(count)
+        errors = slot_plan.validate_plan(
+            _unit_plan("sun.component.cards", [f"card-{i}-{p}" for i in range(1, count + 1)
+                                               for p in ("label", "body")]),
+            _unit_report("sun.component.cards"), {"sun.component.cards": contract})
+        assert errors == [], (count, errors)
+
+
+def test_readability_budget_leaves_non_repeating_long_form_copy_alone() -> None:
+    """A long-form body slot is read, not scanned: no unit budget applies."""
+    contract = {"source": {"view_box": [0, 0, 1920, 1080]}, "slots": [
+        _slot("section-title", 0.08, 0.15, 0.60, 0.10, 55.0, role="heading"),
+        _slot("prose", 0.08, 0.35, 0.80, 0.40, 30.0, role="body"),
+    ]}
+    plan = _unit_plan("sun.component.essay", ["section-title", "prose"])
+    plan["slides"][0]["slots"][1]["display_copy"] = (
+        "Long-form slides still carry real paragraphs. This one runs several lines and "
+        "explains the argument in full, because nothing here repeats and the audience "
+        "reads it rather than scanning a row of cards.")
+    errors = slot_plan.validate_plan(plan, _unit_report("sun.component.essay"),
+                                     {"sun.component.essay": contract})
+    assert errors == [], errors
+
+
+def _unit_selection_report() -> dict:
+    return {"slides": [{"request_id": "slide-07", "decision": {
+        "action": "reuse", "item_id": "sun.component.steps"}}]}
+
+
+def test_selection_gate_rejects_repeat_count_that_cannot_host_the_item_count() -> None:
+    """The observed defect: a 4-step flow selected for 3 parallel items."""
+    errs = vsr._validate_unit_model(
+        _unit_selection_report(), True, {"slide-07": 3},
+        {"sun.component.steps": _card_row_contract(4)})
+    assert len(errs) == 1, errs
+    assert "slide 'slide-07'" in errs[0], errs
+    assert "needs 3 parallel item(s)" in errs[0] and "repeats 4 native unit(s)" in errs[0], errs
+    assert "1 unit(s) would ship blank" in errs[0], errs
+
+
+def test_selection_gate_accepts_a_matching_repeat_count() -> None:
+    assert vsr._validate_unit_model(
+        _unit_selection_report(), True, {"slide-07": 3},
+        {"sun.component.steps": _card_row_contract(3)}) == []
+
+
+def test_selection_gate_ignores_components_with_no_repeat_structure() -> None:
+    """Unknown unit model is not a mismatch — same rule as the set-of-N guard."""
+    cover = {"source": {"view_box": [0, 0, 1920, 1080]}, "slots": [
+        _slot("kicker", 0.08, 0.30, 0.20, 0.03, 24.0, role="label"),
+        _slot("headline", 0.08, 0.40, 0.70, 0.12, 88.0, role="heading"),
+    ]}
+    assert vsr._validate_unit_model(_unit_selection_report(), True,
+                                    {"slide-07": 3}, {"sun.component.steps": cover}) == []
+
+
+def _unit_registry(tmp: Path, spec: dict[str, int]) -> Path:
+    """A minimal published registry whose items point at real slot contracts."""
+    items = []
+    for item_id, unit_count in spec.items():
+        contract = tmp / f"{item_id}.json"
+        contract.write_text(json.dumps(_card_row_contract(unit_count)), encoding="utf-8")
+        items.append({"id": item_id, "status": "published",
+                      "intent": ["timeline"], "tags": ["timeline"],
+                      "paths": {"text_slots": str(contract)}})
+    registry = tmp / "registry.json"
+    registry.write_text(json.dumps({"items": items}), encoding="utf-8")
+    return registry
+
+
+def test_scorer_skips_top_ranked_incompatible_unit_count_for_next_candidate() -> None:
+    """The P1 fallback: unit fit is decided during selection, not after it.
+
+    The best-scoring candidate repeats four units and cannot host three ideas,
+    so the scorer must fall through to the lower-scored three-unit component
+    rather than emitting a report a later gate can only reject.
+    """
+    with tempfile.TemporaryDirectory() as td:
+        counts = svi.load_unit_profiles(_unit_registry(Path(td), {
+            "sun.set.four-step": 4, "sun.set.three-card": 3}))
+        assert {k: v["unit_count"] for k, v in counts.items()} == {
+            "sun.set.four-step": 4, "sun.set.three-card": 3}, counts
+
+    best = _item(id="sun.set.four-step", content_structure=["a"])
+    worse = _item(id="sun.set.three-card", content_structure=[], density="fixed")
+    dec, cands = svi.score_request(dict(_req(), item_count=3), [best, worse],
+                                   svi.WEIGHTS, None, unit_profiles=counts)
+
+    assert cands[0]["item_id"] == "sun.set.four-step", "incompatible candidate must stay ranked"
+    assert cands[0]["score"] > cands[1]["score"], cands
+    assert any("Visual-unit fit" in r and "repeats 4 native unit(s)" in r
+               for r in cands[0]["reasons"]), cands[0]["reasons"]
+    assert cands[0]["retrieval"]["unit_count"] == 4, cands[0]
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.set.three-card", dec
+
+
+def test_scorer_emits_text_only_when_every_candidate_has_the_wrong_unit_count() -> None:
+    """No compatible published component means text-only — never a gate failure."""
+    with tempfile.TemporaryDirectory() as td:
+        counts = svi.load_unit_profiles(_unit_registry(Path(td), {
+            "sun.set.four-step": 4, "sun.set.six-card": 6}))
+
+    dec, cands = svi.score_request(
+        dict(_req(), item_count=3),
+        [_item(id="sun.set.four-step"), _item(id="sun.set.six-card")],
+        svi.WEIGHTS, None, unit_profiles=counts)
+
+    assert dec["action"] == "text-only", dec
+    assert dec["item_id"] is None and dec["score"] == 0, dec
+    assert dec["extraction_recommended"] is True, "text-only fallback keeps extraction evidence"
+    assert "visual-unit" in dec["reason"], dec
+    assert {c["item_id"] for c in cands} == {"sun.set.four-step", "sun.set.six-card"}, cands
+
+
+def test_scorer_keeps_components_without_a_repeat_model_compatible() -> None:
+    cover = {"source": {"view_box": [0, 0, 1920, 1080]}, "slots": [
+        _slot("headline", 0.08, 0.40, 0.70, 0.12, 88.0, role="heading")]}
+    with tempfile.TemporaryDirectory() as td:
+        contract = Path(td) / "cover.json"
+        contract.write_text(json.dumps(cover), encoding="utf-8")
+        registry = Path(td) / "registry.json"
+        registry.write_text(json.dumps({"items": [{
+            "id": "sun.set.cover", "status": "published",
+            "paths": {"text_slots": str(contract)}}]}), encoding="utf-8")
+        counts = svi.load_unit_profiles(registry)
+
+    assert counts["sun.set.cover"]["unit_count"] is None, counts
+    dec, _ = svi.score_request(dict(_req(), item_count=3), [_item(id="sun.set.cover")],
+                               svi.WEIGHTS, None, unit_profiles=counts)
+    assert dec["action"] == "reuse", dec
+
+
+def test_scorer_unit_fit_is_inert_below_two_parallel_items() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        counts = svi.load_unit_profiles(_unit_registry(Path(td), {"sun.set.six-card": 6}))
+    for count in (None, 1):
+        request = dict(_req())
+        if count is not None:
+            request["item_count"] = count
+        dec, _ = svi.score_request(request, [_item(id="sun.set.six-card")],
+                                   svi.WEIGHTS, None, unit_profiles=counts)
+        assert dec["action"] == "reuse", (count, dec)
+
+
+def _quote_panel_contract() -> dict:
+    """A two-panel editorial layout: display/quote panel + dense working list.
+
+    Structurally the grammar that hosts one statement, not N parallel items —
+    no repeat group, a short slot set in display type, and a much denser
+    surface beside it.
+    """
+    slots = [_slot("deck-title", 0.08, 0.14, 0.50, 0.07, 55.0, role="heading"),
+             _slot("quote-line-1", 0.09, 0.50, 0.34, 0.06, 48.0, role="heading"),
+             _slot("quote-line-2", 0.09, 0.57, 0.30, 0.06, 48.0, role="heading")]
+    for i in range(12):
+        slots.append(_slot(f"list-{i + 1}", 0.56, 0.34 + i * 0.04, 0.34, 0.03, 28.0,
+                           role="list-item"))
+    return {"source": {"view_box": [0, 0, 1920, 1080]}, "slots": slots}
+
+
+def test_display_surface_detects_a_quote_panel_beside_a_dense_surface() -> None:
+    panel = units.display_surface(_quote_panel_contract())
+    assert panel is not None
+    assert panel["slot_ids"] == ["quote-line-1", "quote-line-2"], panel
+    assert panel["font_px"] == 48.0 and panel["body_slot_count"] == 12, panel
+
+
+def test_display_surface_ignores_an_evenly_repeating_card_layout() -> None:
+    """The signal must not fire on a component whose grammar IS parallel."""
+    assert units.display_surface(_card_row_contract(4)) is None
+    assert units.display_surface(_card_row_contract(2)) is None
+
+
+def test_display_surface_ignores_headers_that_are_not_display_type() -> None:
+    """Column headers are short and non-repeating but stay near body size."""
+    contract = _card_row_contract(3)
+    contract["slots"].append(_slot("section-note", 0.08, 0.62, 0.20, 0.03, 26.0,
+                                   role="label"))
+    assert units.display_surface(contract) is None
+
+
+def test_quote_layout_loses_to_a_matching_multi_item_layout() -> None:
+    """The reported defect: a quote-heavy panel chosen for a 4-principle brief."""
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        quote_contract = tmp / "quote.json"
+        quote_contract.write_text(json.dumps(_quote_panel_contract()), encoding="utf-8")
+        cards_contract = tmp / "cards.json"
+        cards_contract.write_text(json.dumps(_card_row_contract(4)), encoding="utf-8")
+        registry = tmp / "registry.json"
+        registry.write_text(json.dumps({"items": [
+            {"id": "sun.set.quote-panel", "status": "published",
+             "paths": {"text_slots": str(quote_contract)}},
+            {"id": "sun.set.four-card", "status": "published",
+             "paths": {"text_slots": str(cards_contract)}},
+        ]}), encoding="utf-8")
+        profiles = svi.load_unit_profiles(registry)
+
+    # The quote panel narrowly outranks the card set on metadata alone, the way
+    # two similarly-tagged published components realistically differ.
+    quote = _item(id="sun.set.quote-panel", content_structure=["a"])
+    cards = _item(id="sun.set.four-card", content_structure=["a"], density="fixed")
+    request = dict(_req(), item_count=4)
+
+    baseline, _ = svi.score_request(request, [quote, cards], svi.WEIGHTS, None)
+    assert baseline["item_id"] == "sun.set.quote-panel", "fixture must start mismatched"
+
+    dec, cands = svi.score_request(request, [quote, cards], svi.WEIGHTS, None,
+                                   unit_profiles=profiles)
+    assert dec["item_id"] == "sun.set.four-card", dec
+    penalised = [c for c in cands if c["item_id"] == "sun.set.quote-panel"][0]
+    assert any("Layout-grammar fit" in r and "display/quote surface" in r
+               for r in penalised["reasons"]), penalised["reasons"]
+    assert penalised["retrieval"]["display_surface"]["font_px"] == 48.0, penalised
+    assert penalised["score"] == baseline["score"] - svi.DISPLAY_SURFACE_PENALTY, penalised
+
+
+def test_quote_layout_still_wins_when_nothing_better_is_published() -> None:
+    """Penalty, not eligibility: the existing fallback must stay intact."""
+    with tempfile.TemporaryDirectory() as td:
+        contract = Path(td) / "quote.json"
+        contract.write_text(json.dumps(_quote_panel_contract()), encoding="utf-8")
+        registry = Path(td) / "registry.json"
+        registry.write_text(json.dumps({"items": [{
+            "id": "sun.set.quote-panel", "status": "published",
+            "paths": {"text_slots": str(contract)}}]}), encoding="utf-8")
+        profiles = svi.load_unit_profiles(registry)
+
+    dec, _ = svi.score_request(dict(_req(), item_count=4),
+                               [_item(id="sun.set.quote-panel")],
+                               svi.WEIGHTS, None, unit_profiles=profiles)
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.set.quote-panel", dec
+    assert any("layout-grammar mismatch" in w for w in dec["warnings"]), dec["warnings"]
+
+
+def test_quote_layout_is_untouched_by_a_single_statement_request() -> None:
+    """A cover/quote brief wants exactly this grammar — never penalise it."""
+    with tempfile.TemporaryDirectory() as td:
+        contract = Path(td) / "quote.json"
+        contract.write_text(json.dumps(_quote_panel_contract()), encoding="utf-8")
+        registry = Path(td) / "registry.json"
+        registry.write_text(json.dumps({"items": [{
+            "id": "sun.set.quote-panel", "status": "published",
+            "paths": {"text_slots": str(contract)}}]}), encoding="utf-8")
+        profiles = svi.load_unit_profiles(registry)
+
+    for request in (_req(), dict(_req(), item_count=1)):
+        dec, cands = svi.score_request(request, [_item(id="sun.set.quote-panel")],
+                                       svi.WEIGHTS, None, unit_profiles=profiles)
+        assert dec["action"] == "reuse", dec
+        assert dec["warnings"] == [] or not any(
+            "layout-grammar" in w for w in dec["warnings"]), dec
+        assert not any("Layout-grammar fit" in r for r in cands[0]["reasons"]), cands
+
+
+def test_scorer_produced_report_passes_the_selection_validator() -> None:
+    """End-to-end: the scorer's own fallback output must clear the pre-build gate."""
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        analysis = tmp / "analysis"
+        analysis.mkdir()
+        unit_registry = _unit_registry(tmp, {"sun.set.four-step": 4, "sun.set.three-card": 3})
+        compact = tmp / "compact.json"
+        compact.write_text(json.dumps({"items": [
+            dict(_item(id="sun.set.four-step"), tags=["timeline"]),
+            dict(_item(id="sun.set.three-card"), tags=["timeline"]),
+        ]}), encoding="utf-8")
+        requests = analysis / "visual-requests.json"
+        requests.write_text(json.dumps({"job_id": "unit-fit", "slides": [{
+            "request_id": "slide-01", "intent": ["timeline"], "tags": [],
+            "content_structure": ["a"], "content_shape": "timeline",
+            "density": "medium", "brand": "sun", "item_count": 3,
+        }]}), encoding="utf-8")
+        report = analysis / "selection-report.json"
+
+        scored = subprocess.run(
+            [sys.executable, str(SCRIPTS / "score_visual_items.py"),
+             "--batch-request", str(requests), "--registry", str(compact),
+             "--unit-registry", str(unit_registry), "--retrieval-index", "none",
+             "--output", str(report)],
+            capture_output=True, text=True)
+        assert scored.returncode == 0, scored.stderr
+
+        decision = json.loads(report.read_text(encoding="utf-8"))["slides"][0]["decision"]
+        assert decision["action"] == "reuse", decision
+        assert decision["item_id"] == "sun.set.three-card", decision
+
+        validated = subprocess.run(
+            [sys.executable, str(SCRIPTS / "validate_selection_report.py"),
+             "--selection-report", str(report), "--visual-requests", str(requests),
+             "--registry", str(unit_registry)],
+            capture_output=True, text=True)
+        assert validated.returncode == 0, validated.stdout + validated.stderr
+        # Defense in depth actually ran and agreed, rather than being skipped.
+        result = json.loads((analysis / "selection-validation.json").read_text(encoding="utf-8"))
+        assert result["valid"] is True, result
+        lock = [c for c in result["checks"] if c["name"] == "visual_unit_lock"]
+        assert lock and lock[0]["pass"] is True, result["checks"]
+
+
+def test_selection_gate_is_inert_without_a_declared_item_count() -> None:
+    for count in (None, 1, "three"):
+        assert vsr._validate_unit_model(
+            _unit_selection_report(), True, {"slide-07": count},
+            {"sun.component.steps": _card_row_contract(6)}) == []
 
 
 # --------------------------------------------------------------------------- #
@@ -110,6 +637,41 @@ def test_export_reuses_only_complete_fingerprint_bound_parity_reports() -> None:
         missing = parity / "slide-02" / "tier2" / "report.json"
         missing.unlink()
         assert not export_pptx.parity_cache_valid(parity, manifest, fingerprint)
+
+
+def test_export_generation_gates_apply_only_to_normal_slide_jobs() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        standalone = root / "standalone.html"
+        standalone.write_text("<html/>", encoding="utf-8")
+        assert export_pptx.generation_gate_commands(standalone) == []
+
+        run = root / "job" / "run-01"
+        analysis = run / "analysis"
+        analysis.mkdir(parents=True)
+        deck = run / "deck.html"
+        deck.write_text("<html/>", encoding="utf-8")
+        (analysis / "selection-report.json").write_text("{}", encoding="utf-8")
+        commands = export_pptx.generation_gate_commands(deck)
+
+        assert [label for _command, label in commands] == [
+            "selection report", "deck asset resolution", "deck stage runtime", "brand compliance", "component fidelity",
+        ]
+        assert "--visual-requests" not in commands[0][0]
+        (analysis / "visual-requests.json").write_text("[]", encoding="utf-8")
+        assert "--visual-requests" in export_pptx.generation_gate_commands(deck)[0][0]
+
+
+def test_deck_stage_starter_is_present_and_recognized() -> None:
+    starter = SCRIPTS.parent / "boilerplates" / "deck_stage.js"
+    source = starter.read_text(encoding="utf-8")
+    assert "customElements.define(TAG, DeckStage)" in source
+    assert "goTo(index)" in source
+    assert 'observedAttributes()' in source
+
+    html = '<script src="deck_stage.js"></script><deck-stage width="1920" height="1080"></deck-stage>'
+    check = importlib.import_module("validate_deck_stage_runtime").check_deck_stage(html)
+    assert check["pass"] is True, check
 
 
 def test_project_python_path_uses_windows_virtualenv_layout() -> None:
@@ -299,21 +861,55 @@ def test_score_perfect_match_is_reuse() -> None:
     assert dec["extraction_recommended"] is False
 
 
-def test_score_mid_band_is_adapt_local() -> None:
+def test_score_safe_mid_rank_is_reused() -> None:
     # semantic 35 + structure 0 + density 4 + brand 10 + export 15 + access 10 = 74
     item = _item(content_structure=[], density="fixed")
     dec, _ = svi.score_request(_req(), [item], svi.WEIGHTS, None)
     assert 65 <= dec["score"] < 75, dec
-    assert dec["action"] == "adapt-local", dec
+    assert dec["action"] == "reuse", dec
 
 
-def test_score_below_floor_is_custom_local_with_extraction() -> None:
-    # drop brand match too -> 64 -> custom-local + extraction recommended
-    item = _item(content_structure=[], density="fixed", brand="other")
+def test_score_without_buildable_candidate_is_text_only_with_extraction() -> None:
+    # Topic/semantic evidence ranks published items, but an incompatible content
+    # shape is still a hard physical constraint.
+    item = _item(intent=["timeline"], content_structure=["a"])
+    dec, _ = svi.score_request(dict(_req(), content_shape="profile"), [item], svi.WEIGHTS, None)
+    assert dec["item_id"] is None, dec
+    assert dec["score"] == 0, dec
+    assert dec["action"] == "text-only", dec
+    assert dec["extraction_recommended"] is True, "missing component must recommend extraction"
+
+
+def test_draft_and_staging_items_never_enter_selection() -> None:
+    """Only `published` is selectable — Draft/staging/qa never reach a deck.
+
+    `build_enrichment` already drops non-published records, but that only
+    governs the retrieval-index side. Selection eligibility is decided
+    independently in `score_request` off the registry item's own `status`, so
+    it needs its own proof: an item that would otherwise be a PERFECT match
+    (same intent, structure, density, brand as the request) must still fall
+    through to text-only purely because it is not published.
+    """
+    for status in ("staging", "qa", "draft"):
+        item = _item(id="sun.component.card-set-grid", status=status)
+        dec, cands = svi.score_request(_req(), [item], svi.WEIGHTS, None)
+        assert dec["action"] == "text-only", (status, dec)
+        assert dec["item_id"] is None, (status, dec)
+        assert dec["score"] == 0, (status, dec)
+        # It stays visible as ranked evidence for the user, but is not eligible.
+        assert cands and cands[0]["eligible"] is False, (status, cands)
+
+    # Control: the same item published IS selected, proving the exclusion above
+    # is the status check and not some other mismatch in the fixture.
+    published = _item(id="sun.component.card-set-grid", status="published")
+    assert svi.score_request(_req(), [published], svi.WEIGHTS, None)[0]["action"] == "reuse"
+
+
+def test_score_single_generic_semantic_signal_is_reused_when_buildable() -> None:
+    item = _item(intent=["layout"], content_structure=["a"])
     dec, _ = svi.score_request(_req(), [item], svi.WEIGHTS, None)
-    assert dec["score"] < 65, dec
-    assert dec["action"] == "custom-local", dec
-    assert dec["extraction_recommended"] is True, "weak match must recommend extraction"
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == item["id"], dec
 
 
 # --------------------------------------------------------------------------- #
@@ -336,7 +932,7 @@ def _template_item() -> dict:
 
 def _component_item() -> dict:
     # One fewer intent match -> lower raw score than the template above.
-    return _item(id="sun.component.team-circles", type="component",
+    return _item(id="sun.component.profile-circles", type="component",
                  intent=["team", "profile"], tags=["contributors"],
                  content_structure=["heading", "label"])
 
@@ -361,7 +957,7 @@ def test_type_intent_component_query_ranks_component_over_template() -> None:
     # Explicit component intent: the template is demoted; the component wins.
     dec_c, cands = svi.score_request(
         _typed_req("reusable component team roster"), items, svi.WEIGHTS, None)
-    assert dec_c["item_id"] == "sun.component.team-circles", dec_c
+    assert dec_c["item_id"] == "sun.component.profile-circles", dec_c
     tmpl = next(c for c in cands if c["item_id"] == "sun.deck.04-contributors")
     assert tmpl["retrieval"]["type_bias"] == "template-demoted"
     assert any("template demoted" in r for r in tmpl["reasons"])
@@ -397,8 +993,8 @@ def test_type_intent_leaves_components_unchanged() -> None:
 
 
 def test_type_intent_no_component_false_positive_when_nothing_fits() -> None:
-    # A component-intent query with no relevant component must NOT be forced into
-    # a confident reuse just because templates were demoted.
+    # A component-intent query may still reuse a semantically matching published
+    # template; it must not be forced onto the unrelated standalone component.
     template = _item(id="sun.deck.10-chart", type="template",
                      intent=["chart", "statistics"], tags=["pie"],
                      content_structure=["metric", "label"])
@@ -409,8 +1005,8 @@ def test_type_intent_no_component_false_positive_when_nothing_fits() -> None:
            "content_structure": ["metric", "label"], "density": "any",
            "brand": None, "required_exports": []}
     dec, _ = svi.score_request(req, [template, unrelated], svi.WEIGHTS, None)
-    assert dec["action"] != "reuse", dec
-    assert dec["item_id"] != "sun.component.timeline" or dec["action"] == "custom-local", dec
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.deck.10-chart", dec
 
 
 # --------------------------------------------------------------------------- #
@@ -426,13 +1022,13 @@ def _rreq(**over) -> dict:
 def test_retrieval_secondary_match_lifts_prose_metadata_item() -> None:
     # metric/KPI strip: docling-style prose intent is invisible to primary
     # matching; index keywords must lift it via capped secondary credit.
-    strip = _item(id="sun.component.kpi-strip",
+    strip = _item(id="sun.component.metric-strip",
                   intent=["revenue team size metric strip"], tags=["strip"],
                   content_structure=[])
     req = _rreq(intent=["statistics", "kpi"], tags=["strip"])
     _, plain = svi.score_request(req, [strip], svi.WEIGHTS, None)
     enrichment = svi.build_enrichment([{
-        "id": "sun.component.kpi-strip", "status": "published",
+        "id": "sun.component.metric-strip", "status": "published",
         "keywords": ["revenue", "team", "metric", "strip"],
         "component_type": "strip", "slot_count": 5,
     }])
@@ -464,42 +1060,41 @@ def test_retrieval_tier_strip_trap_stays_below_genuine_component() -> None:
     assert scores["sun.component.trap-strip"] < scores["sun.component.tier-set"]
 
 
-def test_retrieval_generic_overlap_capped_below_semantic_floor() -> None:
-    # negative case: an unrelated item whose index keywords happen to cover
-    # EVERY request term must stay below the semantic floor -> custom-local.
-    lure = _item(id="sun.component.lure", intent=["ai team visual"], tags=[],
+def test_retrieval_secondary_only_match_is_reused_when_buildable() -> None:
+    # A published component that clears capacity/shape gates may be reused even
+    # when its ranking evidence comes only from retrieval metadata.
+    lure = _item(id="sun.component.strip-block", intent=["ai team visual"], tags=[],
                  content_structure=["a"])
     enrichment = svi.build_enrichment([{
-        "id": "sun.component.lure", "status": "published",
+        "id": "sun.component.strip-block", "status": "published",
         "keywords": ["timeline", "roadmap"], "slot_count": 4,
     }])
     dec, cands = svi.score_request(_req(), [lure], svi.WEIGHTS, None,
                                    enrichment=enrichment)
     cap_points = svi.SECONDARY_CAP * svi.WEIGHTS["semantic_intent"]
     assert cands[0]["criteria"]["semantic_intent"] <= cap_points + 1e-9
-    assert dec["action"] == "custom-local", "generic overlap alone must never select"
-    assert dec["extraction_recommended"] is True
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.component.strip-block"
+    assert dec["extraction_recommended"] is False
 
 
-def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up() -> None:
-    # A secondary-only lure can outrank a relevant component by raw score. The
-    # decision must skip the lure because it is below the semantic floor, then
-    # choose the best semantically valid runner-up instead of returning
-    # custom-local.
+def test_retrieval_top_ranked_buildable_candidate_wins() -> None:
+    # The scorer ranks all published candidates. Once physical buildability is
+    # established, a secondary-only match can win over a lower-scored runner-up.
     lure = _item(
-        id="sun.component.lure",
+        id="sun.component.strip-block",
         intent=["decorative visual"],
         tags=[],
         content_structure=["heading", "label"],
     )
     good = _item(
-        id="sun.component.good-timeline",
+        id="sun.component.timeline-row-set",
         intent=["timeline", "roadmap"],
         tags=[],
         content_structure=["heading"],
     )
     enrichment = svi.build_enrichment([{
-        "id": "sun.component.lure", "status": "published",
+        "id": "sun.component.strip-block", "status": "published",
         "keywords": ["timeline", "roadmap", "milestones", "schedule"],
         "slot_count": 4,
     }])
@@ -509,19 +1104,18 @@ def test_retrieval_below_floor_top_candidate_does_not_block_relevant_runner_up()
     )
     dec, cands = svi.score_request(req, [lure, good], svi.WEIGHTS, None,
                                    enrichment=enrichment)
-    assert cands[0]["item_id"] == "sun.component.lure"
+    assert cands[0]["item_id"] == "sun.component.strip-block"
     assert cands[0]["criteria"]["semantic_intent"] < svi.WEIGHTS["semantic_intent"] * 0.3
-    assert dec["item_id"] == "sun.component.good-timeline", dec
-    assert dec["action"] == "adapt-local", dec
+    assert dec["item_id"] == "sun.component.strip-block", dec
+    assert dec["action"] == "reuse", dec
 
 
-def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
-    # The decision may skip several below-floor lures and choose an above-floor
-    # runner-up outside the top-N display slice. The chosen item must still be
-    # emitted so reviewers can inspect its score, criteria, and reasons.
+def test_retrieval_selected_candidate_stays_in_reported_candidates() -> None:
+    # The selected top-ranked candidate stays in the report even when top_n
+    # truncates other candidate evidence.
     lures = [
         _item(
-            id=f"sun.component.lure-{idx}",
+            id=f"sun.component.strip-block-{idx}",
             intent=["decorative visual"],
             tags=[],
             content_structure=["heading", "label"],
@@ -529,7 +1123,7 @@ def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
         for idx in range(6)
     ]
     good = _item(
-        id="sun.component.good-timeline",
+        id="sun.component.timeline-row-set",
         intent=["timeline", "roadmap"],
         tags=[],
         content_structure=["heading"],
@@ -548,22 +1142,22 @@ def test_retrieval_selected_runner_up_stays_in_reported_candidates() -> None:
     )
     dec, cands = svi.score_request(req, lures + [good], svi.WEIGHTS, None,
                                    top_n=5, enrichment=enrichment)
-    assert dec["item_id"] == "sun.component.good-timeline", dec
-    assert cands[0]["item_id"].startswith("sun.component.lure-"), cands
-    assert len(cands) == 6, cands
+    assert dec["item_id"].startswith("sun.component.strip-block-"), dec
+    assert cands[0]["item_id"].startswith("sun.component.strip-block-"), cands
+    assert len(cands) == 5, cands
     assert any(c["item_id"] == dec["item_id"] for c in cands), cands
 
 
 def test_retrieval_prose_component_outranks_unrelated_item() -> None:
     # team/contributor/profile: prose-only metadata gains capped rank credit,
     # so the right component surfaces above unrelated ones in candidates.
-    team = _item(id="sun.component.team-circles",
+    team = _item(id="sun.component.profile-circles",
                  intent=["team contributor profile circles layout"], tags=[],
                  content_structure=[])
     other = _item(id="sun.component.faq", intent=["faq"], tags=[],
                   content_structure=[])
     enrichment = svi.build_enrichment([
-        {"id": "sun.component.team-circles", "status": "published",
+        {"id": "sun.component.profile-circles", "status": "published",
          "name": "Team Contributor Circles",
          "intent": ["team contributor profile circles layout"], "slot_count": 0},
         {"id": "sun.component.faq", "status": "published",
@@ -572,15 +1166,15 @@ def test_retrieval_prose_component_outranks_unrelated_item() -> None:
     req = _rreq(intent=["team", "profile"], tags=["circles"])
     _, cands = svi.score_request(req, [other, team], svi.WEIGHTS, None,
                                  enrichment=enrichment)
-    assert cands[0]["item_id"] == "sun.component.team-circles", cands
+    assert cands[0]["item_id"] == "sun.component.profile-circles", cands
     assert cands[0]["retrieval"]["secondary_matches"], "must explain the lexical match"
 
 
 def test_retrieval_anti_use_case_penalty_for_undeclared_domain() -> None:
-    badge = _item(id="sun.component.badge", intent=["numbered", "grid"],
+    badge = _item(id="sun.component.badge-grid", intent=["numbered", "grid"],
                   tags=["cards"])
     req = _rreq(intent=["statistics"], tags=["numbered"], content_structure=["a"])
-    base_enr = {"id": "sun.component.badge", "status": "published",
+    base_enr = {"id": "sun.component.badge-grid", "status": "published",
                 "keywords": ["badge"], "slot_count": 6}
     _, plain = svi.score_request(req, [badge], svi.WEIGHTS, None,
                                  enrichment=svi.build_enrichment([base_enr]))
@@ -596,10 +1190,10 @@ def test_retrieval_anti_use_case_penalty_for_undeclared_domain() -> None:
 def test_retrieval_anti_hit_on_declared_intent_is_caveat_not_exclusion() -> None:
     # The item declares statistics as honest intent; its anti text mentioning
     # "metrics" is an editing caveat and must NOT be penalized.
-    circles = _item(id="sun.component.circles", intent=["statistics", "ranking"],
+    circles = _item(id="sun.component.circle-panel", intent=["statistics", "ranking"],
                     tags=[])
     enrichment = svi.build_enrichment([{
-        "id": "sun.component.circles", "status": "published",
+        "id": "sun.component.circle-panel", "status": "published",
         "anti_use_cases": ["Do not reuse the baked metrics without editing text slots."],
         "slot_count": 13,
     }])
@@ -614,37 +1208,667 @@ def test_retrieval_count_fit_penalty_prefers_matching_set_size() -> None:
     # buildability: wrong declared set size must not beat a better-fit item.
     three = _item(id="sun.component.three", intent=["roles"],
                   tags=["cards", "set-of-3"])
-    four = _item(id="sun.component.four", intent=["roles"],
+    four = _item(id="sun.component.quad-card-set", intent=["roles"],
                  tags=["cards", "set-of-4"])
     req = _rreq(intent=["roles"], tags=["cards"], content_structure=["a"],
                 item_count=4)
     dec, cands = svi.score_request(req, [three, four], svi.WEIGHTS, None)
-    assert dec["item_id"] == "sun.component.four", dec
+    assert dec["item_id"] == "sun.component.quad-card-set", dec
     three_cand = next(c for c in cands if c["item_id"] == "sun.component.three")
     assert three_cand["retrieval"]["set_sizes"] == [3]
     assert any("Count fit" in r for r in three_cand["reasons"])
 
 
 def test_retrieval_zero_slot_component_penalized_when_text_needed() -> None:
-    deco = _item(id="sun.component.deco", intent=["team", "profile"], tags=[])
-    slotted = _item(id="sun.component.slotted", intent=["team", "profile"], tags=[])
+    deco = _item(id="sun.component.ring-panel", intent=["team", "profile"], tags=[])
+    slotted = _item(id="sun.component.slot-panel", intent=["team", "profile"], tags=[])
     enrichment = svi.build_enrichment([
-        {"id": "sun.component.deco", "status": "published", "slot_count": 0},
-        {"id": "sun.component.slotted", "status": "published", "slot_count": 6},
+        {"id": "sun.component.ring-panel", "status": "published", "slot_count": 0},
+        {"id": "sun.component.slot-panel", "status": "published", "slot_count": 6},
     ])
     req = _rreq(intent=["team", "profile"], content_structure=["a"])
     dec, cands = svi.score_request(req, [deco, slotted], svi.WEIGHTS, None,
                                    enrichment=enrichment)
-    assert dec["item_id"] == "sun.component.slotted", dec
-    deco_cand = next(c for c in cands if c["item_id"] == "sun.component.deco")
+    assert dec["item_id"] == "sun.component.slot-panel", dec
+    deco_cand = next(c for c in cands if c["item_id"] == "sun.component.ring-panel")
     assert deco_cand["retrieval"]["slot_count"] == 0
     assert any("no editable text slots" in r for r in deco_cand["reasons"])
     # decoration-only requests (no text content) are NOT penalized
     _, cands2 = svi.score_request(_rreq(intent=["team", "profile"]),
                                   [deco, slotted], svi.WEIGHTS, None,
                                   enrichment=enrichment)
-    deco2 = next(c for c in cands2 if c["item_id"] == "sun.component.deco")
+    deco2 = next(c for c in cands2 if c["item_id"] == "sun.component.ring-panel")
     assert not any("no editable text slots" in r for r in deco2["reasons"])
+
+
+def test_retrieval_zero_slot_only_candidate_becomes_text_only() -> None:
+    deco = _item(id="sun.component.ring-panel", intent=["team", "profile"], tags=[])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.ring-panel", "status": "published", "slot_count": 0},
+    ])
+    req = _rreq(intent=["team", "profile"], content_structure=["heading", "label"])
+
+    dec, cands = svi.score_request(req, [deco], svi.WEIGHTS, None, enrichment=enrichment)
+
+    assert dec["action"] == "text-only", dec
+    assert dec["item_id"] is None, dec
+    assert dec["extraction_recommended"] is True, dec
+    assert cands[0]["item_id"] == "sun.component.ring-panel", cands
+    assert any("no editable text slots" in reason for reason in cands[0]["reasons"])
+
+
+def test_scorer_uses_slot_contract_when_retrieval_index_omits_slot_count() -> None:
+    """The published text-slot contract, not index completeness, decides capacity."""
+    deco = _item(id="sun.component.ring-panel", intent=["team", "profile"], tags=[])
+    req = _rreq(intent=["team", "profile"], content_structure=["heading", "label"])
+
+    dec, cands = svi.score_request(
+        req,
+        [deco],
+        svi.WEIGHTS,
+        None,
+        enrichment={},
+        unit_profiles={"sun.component.ring-panel": {"editable_slot_count": 0}},
+    )
+
+    assert dec["action"] == "text-only", dec
+    assert dec["item_id"] is None, dec
+    assert cands[0]["retrieval"]["slot_count"] == 0, cands[0]
+    assert any("no editable text slots" in reason for reason in cands[0]["reasons"])
+
+
+def test_canonicalize_drops_filler_symmetrically_with_index_tokens() -> None:
+    """Both sides of the semantic comparison must use one filler rule.
+
+    `_field_tokens` has always dropped STOPWORDS; `_canonicalize` did not, so a
+    request carrying prose connectors was scored against a larger denominator
+    than the index side ever contributed to.
+    """
+    assert svi._semantic_terms(["timeline", "of", "a", "the", "with"]) == {"timeline"}
+    assert svi._semantic_terms(["of"]) == set()
+    # Real vocabulary is still folded, not dropped.
+    assert svi._semantic_terms(["roadmap"]) == {"timeline"}
+    # content_structure keeps using the unfiltered path: slot names are not prose.
+    assert svi._canonicalize(["a"]) == {"a"}
+
+
+def test_count_mismatch_is_not_buildable_even_when_top_ranked() -> None:
+    """A set-of-3 cannot host 4 items; that is capacity, not preference."""
+    three = _item(id="sun.component.card-set-grid", intent=["timeline"],
+                  tags=["set-of-3"], content_structure=["a"])
+    enrichment = svi.build_enrichment([
+        {"id": "sun.component.card-set-grid", "status": "published", "slot_count": 6},
+    ])
+    dec, cands = svi.score_request(dict(_req(), item_count=4), [three], svi.WEIGHTS,
+                                   None, enrichment=enrichment)
+    assert dec["action"] == "text-only", dec
+    assert cands[0]["item_id"] == "sun.component.card-set-grid", cands
+    assert dec["extraction_recommended"] is True, dec
+
+    fits, _ = svi.score_request(dict(_req(), item_count=3), [three], svi.WEIGHTS,
+                                None, enrichment=enrichment)
+    assert fits["action"] == "reuse", fits
+
+
+def test_noisy_intent_scores_identically_to_canonical_intent() -> None:
+    """The headline contract: prose in `intent` must not cost coverage.
+
+    `semantic` is a ratio, so every extra word divides the score. Dropping
+    STOPWORDS was not enough — plain nouns like "real"/"case" are not filler
+    but are still not vocabulary, and they were halving a perfect match.
+    """
+    item = _item(id="sun.set.timeline", intent=["timeline"], tags=[],
+                 content_structure=["a"])
+    canonical = _req()
+    noisy = dict(canonical, intent=["timeline", "of", "a", "real", "case"])
+
+    dec_c, cands_c = svi.score_request(canonical, [item], svi.WEIGHTS, None)
+    dec_n, cands_n = svi.score_request(noisy, [item], svi.WEIGHTS, None)
+
+    assert cands_n[0]["criteria"]["semantic_intent"] == cands_c[0]["criteria"]["semantic_intent"]
+    assert dec_n["score"] == dec_c["score"], (dec_n, dec_c)
+    assert dec_n["item_id"] == dec_c["item_id"] == "sun.set.timeline"
+    # Dropped prose stays observable rather than vanishing.
+    assert dec_n["evidence"]["dropped_intent_terms"] == ["a", "case", "of", "real"]
+    assert dec_n["evidence"]["scored_intent_terms"] == ["timeline"]
+    assert any("non-canonical prose" in w for w in dec_n["warnings"])
+
+
+def test_normalize_intent_keeps_only_canonical_vocabulary() -> None:
+    """`intent` is canonical-only; literal tags belong in `tags`.
+
+    Corpus membership is not an escape hatch — a junk word survives it whenever
+    any single published item happens to carry that string, which would make
+    the no-dilution guarantee probabilistic instead of exact.
+    """
+    kept, dropped = svi.normalize_intent(["roadmap", "set-of-3", "kombucha", "what"])
+    assert kept == {"timeline"}, kept
+    assert dropped == ["kombucha", "set-of-3", "what"], dropped
+    # `tags` is still matched literally, so a real tag is never lost.
+    assert "set-of-3" in svi._semantic_terms(["set-of-3"])
+
+
+def test_content_structure_still_matches_literally() -> None:
+    """Intent normalization must not leak into slot-name matching."""
+    assert svi.overlap_score(["a", "of"], ["a", "of"]) == 1.0
+    assert svi._canonicalize(["a"]) == {"a"}
+
+
+def test_source_specific_artwork_is_selectable_with_topic_warning() -> None:
+    """Topic mismatch is disclosed, but does not block published reuse."""
+    themed = _item(id="sun.goal-setting-2026.01-cover", intent=["timeline"], tags=[])
+    dec, cands = svi.score_request(_req(), [themed], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.goal-setting-2026.01-cover"
+    assert dec["evidence"]["subject_warnings"] == ["sun.goal-setting-2026.01-cover"]
+    assert any("Subject mismatch" in r for r in cands[0]["reasons"]), cands[0]
+    assert any("Subject mismatch" in warning for warning in dec["warnings"]), dec
+    assert dec["extraction_recommended"] is False
+
+
+def test_generic_shell_and_on_topic_request_stay_selectable() -> None:
+    """Negative cases: the guard must not block legitimate reuse."""
+    # A generic shell has no topic tokens at all.
+    shell = _item(id="sun.component.card-set-grid", intent=["timeline"], tags=[])
+    dec, _ = svi.score_request(_req(), [shell], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+
+    # Placeholder-named artwork is still a generic shell.
+    lorem = _item(id="sun.component.lorem-ipsum-badge-set", intent=["timeline"], tags=[])
+    assert svi.subject_tokens("sun.component.lorem-ipsum-badge-set") == set()
+    assert svi.score_request(_req(), [lorem], svi.WEIGHTS, None)[0]["action"] == "reuse"
+
+    # A themed item IS reusable when the deck is about that topic. The support
+    # goes in `query`: adding it to `tags` would dilute the semantic ratio and
+    # test the floor instead of the subject guard.
+    themed = _item(id="sun.goal-setting-2026.01-cover", intent=["timeline"], tags=[])
+    on_topic = dict(_req(), query="goal setting review deck")
+    assert svi.score_request(on_topic, [themed], svi.WEIGHTS, None)[0]["action"] == "reuse"
+
+
+def test_subject_tokens_read_the_index_name_not_only_the_id() -> None:
+    """The index `name` is where a themed capture announces its source."""
+    record = {"name": "01 - Cover: Goal Setting 2026"}
+    assert svi.subject_tokens("sun.deck.01-cover", record) >= {"goal", "setting"}
+    assert svi.subject_tokens("sun.deck.01-cover", {"name": "Cover Slide"}) == set()
+
+
+def test_scorer_keeps_higher_ranked_subject_mismatch_with_warning() -> None:
+    """The topic signal informs review but does not suppress reuse."""
+    themed = _item(id="sun.goal-setting-2026.01-cover", intent=["timeline"],
+                   tags=["roadmap"], content_structure=["a"])
+    shell = _item(id="sun.component.card-set-grid", intent=["timeline"], tags=[])
+    dec, _ = svi.score_request(_req(), [themed, shell], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+    assert dec["item_id"] == "sun.goal-setting-2026.01-cover", dec
+    assert dec["evidence"]["subject_warnings"] == ["sun.goal-setting-2026.01-cover"]
+
+
+def test_rejected_items_are_persisted_for_reproducible_reruns() -> None:
+    good = _item(id="sun.component.card-set-grid", intent=["timeline"], tags=[])
+    bad = _item(id="sun.component.grid-set-card", intent=["timeline"], tags=["roadmap"])
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "reg.json").write_text(json.dumps({"items": [bad, good]}), encoding="utf-8")
+        (root / "req.json").write_text(json.dumps(_req()), encoding="utf-8")
+        out = root / "out.json"
+        rc = subprocess.run(
+            [sys.executable, str(SCRIPTS / "score_visual_items.py"),
+             "--request", str(root / "req.json"), "--registry", str(root / "reg.json"),
+             "--retrieval-index", "none", "--output", str(out),
+             "--reject-item", "sun.component.grid-set-card"],
+            capture_output=True, text=True)
+        assert rc.returncode == 0, rc.stderr
+        report = json.loads(out.read_text(encoding="utf-8"))
+        assert report["rejected_items"] == ["sun.component.grid-set-card"], report
+        assert report["decision"]["item_id"] == "sun.component.card-set-grid"
+
+        plain = json.loads((root / "req.json").read_text(encoding="utf-8"))
+        assert plain  # sanity
+        out2 = root / "out2.json"
+        subprocess.run(
+            [sys.executable, str(SCRIPTS / "score_visual_items.py"),
+             "--request", str(root / "req.json"), "--registry", str(root / "reg.json"),
+             "--retrieval-index", "none", "--output", str(out2)],
+            capture_output=True, text=True, check=True)
+        assert json.loads(out2.read_text(encoding="utf-8"))["rejected_items"] == []
+
+
+def test_superseded_pdfs_quarantined_but_foreign_ones_fail_delivery() -> None:
+    """One canonical PDF per job — without deleting files we did not create."""
+    with tempfile.TemporaryDirectory() as tmp:
+        run_dir = Path(tmp)
+        out_dir = run_dir / "_export"
+        out_dir.mkdir()
+        canonical = run_dir / "deck.pdf"
+        canonical.write_bytes(b"%PDF-1.4 canonical")
+        old = run_dir / "deck-v1.pdf"
+        old.write_bytes(b"%PDF-1.4 old")
+        (out_dir / export_pptx.PDF_HISTORY).write_text(json.dumps(["deck-v1.pdf"]),
+                                                       encoding="utf-8")
+        stranger = run_dir / "someone-elses.pdf"
+        stranger.write_bytes(b"%PDF-1.4 foreign")
+
+        quarantined, foreign = export_pptx.quarantine_superseded_pdfs(
+            run_dir, canonical, out_dir)
+
+        assert len(quarantined) == 1 and quarantined[0].endswith("deck-v1.pdf")
+        assert not old.exists(), "our own superseded artifact is moved aside"
+        assert (run_dir / export_pptx.SUPERSEDED_DIR / "deck-v1.pdf").exists()
+        assert foreign == ["someone-elses.pdf"], foreign
+        assert stranger.exists(), "a file we did not create must never be touched"
+        assert canonical.exists()
+
+
+def test_every_shape_lock_key_has_scorer_vocabulary() -> None:
+    """SHAPE_TYPE_MAP and SYNONYMS must not drift apart.
+
+    A content_shape the validator accepts but the scorer has no canonical token
+    for can never clear the semantic floor, which looks like a library gap and
+    is really a vocabulary gap.
+    """
+    smap = svi._build_synonym_map()
+    missing = sorted(shape for shape in vsr.SHAPE_TYPE_MAP if shape not in smap)
+    assert not missing, f"content_shape(s) with no canonical scorer vocabulary: {missing}"
+
+
+def test_semantic_score_ranks_candidates_without_a_reuse_floor() -> None:
+    """Semantic evidence orders reusable published candidates; it does not gate them."""
+    lure = _item(id="sun.component.low-semantic", intent=["unrelated"], tags=[])
+    dec, _ = svi.score_request(_req(), [lure], svi.WEIGHTS, None)
+    assert dec["action"] == "reuse", dec
+
+
+def test_pdf_geometry_reads_pages_and_landscape_orientation() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf = Path(tmp) / "d.pdf"
+        pdf.write_bytes(
+            b"%PDF-1.4\n/Type /Pages\n"
+            b"/Type /Page /MediaBox [ 0 0 1440 810 ]\n"
+            b"/Type /Page /MediaBox [ 0 0 1440 810 ]\n")
+        pages, (w, h) = export_pptx.pdf_geometry(pdf)
+        assert pages == 2, pages
+        assert (w, h) == (1440.0, 810.0), (w, h)
+        assert w > h, "16:9 deck pages must be landscape"
+
+
+def test_export_pdf_does_not_combine_landscape_with_explicit_paper() -> None:
+    """Chromium swaps the paper box when both are given — that was the P0."""
+    source = (SCRIPTS / "export-pdf.js").read_text(encoding="utf-8")
+    pdf_call = source[source.index("await page.pdf({"):]
+    pdf_call = pdf_call[:pdf_call.index("});")]
+    assert "width:" in pdf_call and "height:" in pdf_call, pdf_call
+    assert "landscape" not in pdf_call, "explicit width/height already fix orientation"
+
+
+def test_export_pdf_locks_the_stage_transform_for_print() -> None:
+    source = (SCRIPTS / "export-pdf.js").read_text(encoding="utf-8")
+    assert 'setProperty("transform", "none", "important")' in source, (
+        "deck-stage fit() re-runs on the print resize and must not win")
+
+
+# --------------------------------------------------------------------------- #
+# build_hybrid_pptx wrapping contract — PPTX-only card-text overlap
+# --------------------------------------------------------------------------- #
+CARD_CANVAS_W, CARD_CANVAS_H = 1920.0, 1080.0
+# Two 380px-wide cards 40px apart: the real narrow-card geometry from the
+# readability-budget run, where a wrapped 3-line body was exported as one line.
+CARD_BODY = "Claude Code: viết và review code, debug, tự động hoá dự án."
+CARD_LEFT = {"x": 200.0, "y": 500.0, "w": 380.0, "h": 99.0, "z": 10,
+             "text": CARD_BODY, "fontSize": "25px", "lineHeight": "33px",
+             "color": "rgb(23,23,23)", "align": "start"}
+CARD_RIGHT = dict(CARD_LEFT, x=620.0, text="Draft nội dung, brief slide, chỉnh tone bài viết.")
+CARD_HEADING = {"x": 200.0, "y": 420.0, "w": 380.0, "h": 48.0, "z": 9,
+                "text": "Chọn công cụ", "fontSize": "40px", "lineHeight": "48px",
+                "color": "rgb(23,23,23)", "align": "start"}
+RICH_LEAD = {
+    "x": 96.0, "y": 240.0, "w": 1560.0, "h": 81.0, "z": 3,
+    "text": "Claude Desktop app phù hợp mọi đối tượng — Chat · Cowork · Code.",
+    "fontSize": "30px", "lineHeight": "40.5px", "color": "rgb(23,23,23)",
+    "fontWeight": "400", "align": "start",
+    "runs": [
+        {"text": "Claude Desktop app phù hợp mọi đối tượng", "fontSize": "30px",
+         "fontWeight": "700", "color": "rgb(255,85,51)"},
+        {"text": " — Chat · Cowork · Code.", "fontSize": "30px",
+         "fontWeight": "400", "color": "rgb(23,23,23)"},
+    ],
+}
+
+
+def _export_text_items(items: list[dict], tmp: Path, name: str = "cards.pptx"):
+    """Run the real builder + a save/reload round-trip.
+
+    Returns (pptx_path, shapes) read back from the saved file, so assertions see
+    the actual exported PPTX objects rather than in-memory python-pptx state.
+    """
+    import build_hybrid_pptx as hybrid
+    from pptx import Presentation
+
+    prs = Presentation()
+    prs.slide_width = _pptx_inches(13.333333)
+    prs.slide_height = _pptx_inches(7.5)
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    for item in items:
+        hybrid.add_text_box_v2(slide, item, "Arial", CARD_CANVAS_W, CARD_CANVAS_H)
+    out = tmp / name
+    prs.save(str(out))
+    return out, list(Presentation(str(out)).slides)[0].shapes
+
+
+def _pptx_inches(value: float):
+    from pptx.util import Inches
+    return Inches(value)
+
+
+def _rendered_width_pt(shape) -> float:
+    """Widest single line this shape would paint if it never wrapped."""
+    import build_hybrid_pptx as hybrid
+    widest = 0.0
+    for para in shape.text_frame.paragraphs:
+        text = "".join(r.text for r in para.runs).strip()
+        size = max((r.font.size.pt for r in para.runs if r.font.size), default=0)
+        widest = max(widest, len(text) * size * hybrid.AVERAGE_GLYPH_WIDTH)
+    return widest
+
+
+def test_pptx_card_body_wraps_instead_of_overrunning_its_neighbour() -> None:
+    """Long card copy must stay inside its own box, not paint over the next card.
+
+    The browser wrapped this string to 3 lines inside a 380px card; exported
+    without word wrap PowerPoint lays it on ONE line and, because native PPTX
+    text is not clipped to its shape, it runs straight across the adjacent
+    card's text box. Browser/PDF parity cannot see that.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        _, shapes = _export_text_items([CARD_HEADING, CARD_LEFT, CARD_RIGHT], Path(tmpdir))
+        left = next(s for s in shapes if CARD_BODY[:20] in s.text_frame.text)
+        right = next(s for s in shapes if "Draft nội dung" in s.text_frame.text)
+
+        assert left.text_frame.word_wrap is True, "browser-wrapped body must wrap in PPTX"
+        # Geometry is untouched: the box still is the card, and stays clear of
+        # its neighbour, so a wrapping box can no longer reach it.
+        assert left.left < right.left, (left.left, right.left)
+        assert left.left + left.width <= right.left, "card boxes must not overlap"
+        expected_w = CARD_LEFT["w"] / CARD_CANVAS_W * 13.333333
+        assert abs(left.width / 914400 - expected_w) < 0.01, left.width
+        assert abs(left.left / 914400 - CARD_LEFT["x"] / CARD_CANVAS_W * 13.333333) < 0.01
+        assert abs(left.top / 914400 - CARD_LEFT["y"] / CARD_CANVAS_H * 7.5) < 0.01
+
+        # Height budget: room for the wrapped lines, still on the canvas.
+        assert left.height >= right.height > 0
+        assert left.height / 914400 >= 2 * 33.0 / CARD_CANVAS_H * 7.5, left.height
+        assert left.top + left.height <= _pptx_inches(7.5), "box must stay on the slide"
+
+
+def test_pptx_inline_rich_text_exports_as_one_editable_box() -> None:
+    """A lead with a bold coloured prefix must not become overlapping boxes."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        _, shapes = _export_text_items([RICH_LEAD], Path(tmpdir), "rich-lead.pptx")
+        assert len(shapes) == 1, "all inline runs belong to the same PowerPoint textbox"
+        paragraph = shapes[0].text_frame.paragraphs[0]
+        assert [run.text for run in paragraph.runs] == [
+            "Claude Desktop app phù hợp mọi đối tượng", " — Chat · Cowork · Code."
+        ]
+        assert str(paragraph.runs[0].font.color.rgb) == "FF5533"
+        assert paragraph.runs[0].font.bold is True
+        assert str(paragraph.runs[1].font.color.rgb) == "171717"
+        assert paragraph.runs[1].font.bold is False
+
+
+def test_pptx_short_heading_stays_one_unwrapped_line() -> None:
+    """A one-line heading must not be re-wrapped by PowerPoint's own metrics."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        _, shapes = _export_text_items([CARD_HEADING, CARD_LEFT], Path(tmpdir))
+        heading = next(s for s in shapes if "Chọn công cụ" in s.text_frame.text)
+
+        assert heading.text_frame.word_wrap is False, (
+            "a heading the browser fitted on one line must not be allowed to re-wrap")
+        assert len(heading.text_frame.paragraphs) == 1
+        # Not wrapping is only safe because the line genuinely fits its box.
+        assert _rendered_width_pt(heading) <= heading.width / 914400 * 72.0, (
+            "a non-wrapping heading must fit its own box width")
+
+
+def test_export_gate_catches_a_non_wrapping_line_wider_than_its_box() -> None:
+    """The post-export geometry gate must fail overflowing native text."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp = Path(tmpdir)
+        good, _ = _export_text_items([CARD_HEADING, CARD_LEFT, CARD_RIGHT], tmp)
+        failures: list[str] = []
+        summary = export_objects.check_text_overflow(good, failures)
+        assert failures == [], failures
+        assert summary["text_boxes_checked"] == 3 and summary["overflowing"] == 0, summary
+
+        # Same copy, but declared as a single captured line: the builder keeps
+        # word_wrap off, so the gate must report the overrun.
+        broken, _ = _export_text_items([dict(CARD_LEFT, h=33.0)], tmp, "overflow.pptx")
+        failures = []
+        summary = export_objects.check_text_overflow(broken, failures)
+        assert summary["overflowing"] == 1, summary
+        assert failures and "render over neighbouring shapes" in failures[0], failures
+
+
+def test_export_result_declares_the_editability_tier() -> None:
+    """`editable PPTX` must not be read as `every shape is editable`."""
+    layered = export_pptx.EDITABILITY_TIERS["layered"]
+    assert layered["tier"] == "text-editable", layered
+    assert "background" in layered["graphics"], layered
+    assert layered["limitation"], "the limitation must be spelled out for the reader"
+
+
+def test_fidelity_report_publishes_coverage_ratio() -> None:
+    report = {"slides": [
+        {"request_id": "s1", "decision": {"action": "reuse", "item_id": "sun.set.a"}},
+        {"request_id": "s2", "decision": {"action": "text-only", "item_id": None}},
+        {"request_id": "s3", "decision": {"action": "text-only", "item_id": None}},
+    ]}
+    checked = fidelity.check_fidelity("<html></html>", report, {"items": []})
+    assert len(checked) == 1, checked
+    assert len(list(fidelity._decisions(report))) == 3
+
+
+def test_fidelity_accepts_a_validated_planned_subset_of_native_slots() -> None:
+    """Unused component slots must stay empty when the run plan does not need them."""
+    with tempfile.TemporaryDirectory() as tmp:
+        preview = Path(tmp) / "preview.html"
+        preview.write_text(
+            '<div class="slot" data-slot-id="headline"></div>'
+            '<div class="slot" data-slot-id="unused-detail"></div>',
+            encoding="utf-8",
+        )
+        report = {"slides": [{"request_id": "slide-01", "decision": {
+            "action": "reuse", "item_id": "sun.component.example"}}]}
+        registry = {"items": [{"id": "sun.component.example", "paths": {"preview": str(preview)}}]}
+        plan = {"slides": [{"request_id": "slide-01", "item_id": "sun.component.example",
+                             "slots": [{"slot_id": "headline", "display_copy": "Short copy"}]}]}
+        checked = fidelity.check_fidelity(
+            '<div class="bg"></div><div data-slot-id="headline">Short copy</div>',
+            report, registry, plan,
+        )
+        assert checked[0]["pass_"] is True, checked
+        assert checked[0]["coverage"] == 1.0, checked
+        assert checked[0]["coverage_scope"] == "planned-slots", checked
+
+
+def test_export_validator_requires_svg_blip_only_when_vector_source_exists() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "present.svg").write_text("<svg/>", encoding="utf-8")
+        overlays = [
+            {"id": "present", "vector_source": "present.svg"},
+            {"id": "missing", "vector_source": "missing.svg"},
+            {"id": "effects", "vector_source": "present.svg", "css_effects": True},
+        ]
+        assert export_objects.expected_svg_blips(overlays, root) == 1
+
+
+def test_deck_asset_gate_rejects_missing_relative_visuals_but_ignores_data_urls() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        html = root / "deck.html"
+        html.write_text(
+            '<img src="assets/missing.svg"><div style="background:url(data:image/png;base64,abc)"></div>',
+            encoding="utf-8",
+        )
+        errors = deck_assets.missing_local_assets(html)
+        assert errors == ["assets/missing.svg"], errors
+        (root / "assets").mkdir()
+        (root / "assets" / "missing.svg").write_text("<svg/>", encoding="utf-8")
+        assert deck_assets.missing_local_assets(html) == []
+
+
+# --------------------------------------------------------------------------- #
+# Render legibility: reused components must render readably, not just match ids
+# --------------------------------------------------------------------------- #
+def _txt(x, y, w, h, text="copy", color="rgb(23, 23, 23)"):
+    return {"tag": "h3", "text": text, "x": x, "y": y, "w": w, "h": h, "color": color}
+
+
+def test_wrapped_text_colliding_with_the_next_slot_fails() -> None:
+    # Real slide 6 geometry: 28px copy that wrapped to 2 lines (h 56) inside a
+    # slot pitched 36px apart, so it lands on top of the bullet below it.
+    collisions = fidelity.find_text_collisions([
+        _txt(1107.7, 576.7, 663.6, 56.0, "Thông tin khách hàng, hợp đồng"),
+        _txt(1106.4, 612.7, 342.0, 28.0, "Phân vân thì hỏi lead trước."),
+    ])
+    assert collisions, "overflowing copy overlapping the next slot must be reported"
+    assert collisions[0]["ratio"] >= fidelity.TEXT_OVERLAP_MIN_RATIO
+
+
+def test_nested_and_neighbouring_text_boxes_are_not_collisions() -> None:
+    # A parent box enclosing its own child (DOM nesting) and two stacked
+    # single-line slots that merely touch are both legitimate layouts.
+    assert fidelity.find_text_collisions([
+        _txt(72, 353, 683, 549, "BẠN ĐANG TỐN THỜI GIAN"),
+        _txt(72, 512, 650, 274, "VÀO VIỆC GÌ?"),
+    ]) == []
+    assert fidelity.find_text_collisions([
+        _txt(403.1, 500.5, 345.7, 19.0),
+        _txt(421.1, 521.5, 367.1, 19.0),
+    ]) == []
+
+
+def test_white_copy_on_warm_paper_fails_contrast() -> None:
+    # Slides 4/5: the component artwork never rendered, leaving white text on
+    # the #FFFDF8 paper background — a ~1.03:1 ratio.
+    assert fidelity.contrast_ratio((255, 255, 255), (255, 253, 248)) < fidelity.CONTRAST_MIN
+    assert fidelity.contrast_ratio((23, 23, 23), (255, 253, 248)) >= fidelity.CONTRAST_MIN
+    assert fidelity.parse_css_color("rgb(255, 253, 248)") == (255, 253, 248)
+    assert fidelity.parse_css_color("#FFFDF8") == (255, 253, 248)
+
+
+def test_object_outside_the_canvas_is_reported() -> None:
+    slide = {"slide": 4, "objects": [
+        {"id": "page-04-obj-01", "bounds": {"x": 60, "y": -1491, "w": 593, "h": 593}},
+        {"id": "page-04-obj-04", "bounds": {"x": 224, "y": 40, "w": 1525, "h": 550}},
+    ]}
+    off = fidelity.off_canvas_objects(slide, 1920, 1080)
+    assert [o["id"] for o in off] == ["page-04-obj-01"], off
+
+
+def test_render_legibility_rejects_the_reproduced_deck_defects() -> None:
+    manifest = {"canvasW": 1920, "canvasH": 1080, "slides": [
+        {"slide": 4, "objects": [
+            {"id": "page-04-obj-01", "bounds": {"x": 60, "y": -1491, "w": 593, "h": 593}}],
+         "text": [_txt(293.8, 483.0, 241.0, 61.1, "Hỏi đáp,", "rgb(255, 255, 255)")]},
+        {"slide": 6, "objects": [], "text": [
+            _txt(1107.7, 576.7, 663.6, 56.0, "Thông tin khách hàng"),
+            _txt(1106.4, 612.7, 342.0, 28.0, "Phân vân thì hỏi lead"),
+        ]},
+    ]}
+    report = fidelity.check_render_legibility(manifest, renders_dir=None)
+    assert report["valid"] is False
+    kinds = {f["check"] for f in report["failures"]}
+    assert "off_canvas_object" in kinds, report["failures"]
+    assert "text_collision" in kinds, report["failures"]
+
+
+def test_render_legibility_passes_a_clean_slide() -> None:
+    # The headline band clears the artwork band: no text-vs-text overlap and no
+    # text standing on the component's illustration.
+    manifest = {"canvasW": 1920, "canvasH": 1080, "slides": [
+        {"slide": 1, "objects": [
+            {"id": "obj-01", "bounds": {"x": 100, "y": 300, "w": 400, "h": 300}}],
+         "text": [_txt(72, 129, 430, 55, "AI LÀM ĐƯỢC GÌ"),
+                  _txt(72, 189, 481, 55, "CHO TỪNG NGƯỜI")]},
+    ]}
+    assert fidelity.check_render_legibility(manifest, renders_dir=None)["valid"] is True
+
+
+# --------------------------------------------------------------------------- #
+# Placement contract: text vs component ARTWORK (not just text vs text).
+#
+# `find_text_collisions` compares text against text, so a generated caption
+# dropped over a component's illustration passed every legibility check while
+# being unreadable on the slide. Bounds here are synthetic but proportioned
+# like the real defect: a caption band directly above a circle-badge set whose
+# artwork reaches up into it.
+# --------------------------------------------------------------------------- #
+def _circle_band(prefix: str = "page-02") -> list[dict]:
+    return [{"id": f"{prefix}-obj-0{i + 1}",
+             "bounds": {"x": 57 + i * 615, "y": 433, "w": 571, "h": 570}}
+            for i in range(3)]
+
+
+def test_caption_intersecting_component_artwork_fails() -> None:
+    hits = fidelity.find_text_over_artwork(
+        {"slide": 4, "objects": _circle_band(),
+         "text": [_txt(168, 348, 380, 132, "Hỏi đáp, brainstorm, soạn thảo — việc nhanh")]})
+    assert hits, "a caption reaching into the component's artwork must be reported"
+    assert hits[0]["placement"] == "external"
+    assert hits[0]["object_id"] == "page-02-obj-01"
+    assert hits[0]["ratio"] >= fidelity.TEXT_ARTWORK_MAX_RATIO
+
+
+def test_chrome_title_clear_of_the_artwork_passes() -> None:
+    # Declared slide chrome is not exempt — it passes by clearing the artwork.
+    chrome = _txt(96, 130, 1728, 83, "CHỌN ĐÚNG APP CHO ĐÚNG VIỆC")
+    chrome["placement"] = "chrome"
+    assert fidelity.find_text_over_artwork(
+        {"slide": 4, "objects": _circle_band(), "text": [chrome]}) == []
+
+
+def test_native_slot_inside_its_own_component_artwork_passes() -> None:
+    # The component drew this box for this copy; the slot plan governs it.
+    slot = _txt(197, 699, 109, 42, "CHAT", "rgb(255, 255, 255)")
+    slot["slotId"] = "lorem-ipsum"
+    assert fidelity.find_text_over_artwork(
+        {"slide": 4, "objects": _circle_band(), "text": [slot]}) == []
+
+
+def test_undeclared_text_is_treated_as_external_not_exempt() -> None:
+    # A missing attribute must never buy an exemption from the artwork check.
+    assert fidelity.text_placement({"text": "x"}) == "external"
+    assert fidelity.text_placement({"text": "x", "placement": "nonsense"}) == "external"
+    assert fidelity.text_placement({"text": "x", "slotId": "01"}) == "slot"
+
+
+def test_render_legibility_rejects_the_reproduced_caption_over_circles() -> None:
+    # Slide 4 as reported: three captions above a reused circle-badge set whose
+    # artwork reaches up into them, with the component's own slots filled.
+    slots = []
+    for x, text in ((197, "CHAT"), (813, "COWORK"), (1428, "CODE")):
+        slot = _txt(x, 699, 109, 42, text, "rgb(255, 255, 255)")
+        slot["slotId"] = text.lower()
+        slots.append(slot)
+    captions = [_txt(168 + i * 616, 348, 380, 132, f"caption {i + 1}") for i in range(3)]
+    manifest = {"canvasW": 1920, "canvasH": 1080, "slides": [
+        {"slide": 4, "objects": _circle_band(), "text": slots + captions}]}
+    report = fidelity.check_render_legibility(manifest, renders_dir=None)
+    assert report["valid"] is False
+    over = [f for f in report["failures"] if f["check"] == "text_over_artwork"]
+    assert len(over) == 3, report["failures"]
+    assert {f["id"] for f in over} == {"page-02-obj-01", "page-02-obj-02", "page-02-obj-03"}
+    # Evidence names the slide, the text and the overlay, and rules out z-index.
+    assert all(f["slide"] == 4 and "caption" in f["detail"] for f in over)
+    assert all("z-index" in f["detail"] for f in over)
+
+
+def test_export_runs_render_legibility_on_the_capture_manifest() -> None:
+    source = (SCRIPTS / "export_pptx.py").read_text(encoding="utf-8")
+    assert "--export-manifest" in source, \
+        "capture output must be gated for legibility before the PPTX is built"
+    assert "VALIDATE_FIDELITY" in source
 
 
 def test_retrieval_enrichment_published_only_and_missing_index() -> None:
@@ -692,7 +1916,13 @@ def _single_report(item_id="sun.interview-workshop-sunriser.02-timeline", score=
         "request_id": "s1",
         "generated_at": "x",
         "generated_by": "score_visual_items.py",
-        "decision": {"action": action, "item_id": item_id, "score": score, "reason": "r"},
+        "decision": {
+            "action": action,
+            "item_id": item_id,
+            "score": score,
+            "reason": "r",
+            "extraction_recommended": False,
+        },
         "candidates": [{"item_id": f"c{i}", "eligible": True, "score": s, "criteria": crit}
                        for i, s in enumerate(scores)],
     }
@@ -712,23 +1942,141 @@ def test_eligible_all_zero_still_fails() -> None:
     assert plaus["pass"] is False, "eligible items all scoring 0 must fail"
 
 
+def test_selection_report_accepts_text_only_with_suggestions() -> None:
+    report = _single_report(item_id=None, score=0.0, action="text-only", scores=(32.0, 21.0))
+    report["decision"]["extraction_recommended"] = True
+    checks, errors, warnings = [], [], []
+    vsr._validate_single(report, checks, errors, warnings, errors.append)
+    assert not errors, errors
+    assert next(check for check in checks if check["name"] == "adoption_compliance")["pass"] is True
+
+
+def test_selection_report_rejects_text_only_with_component_or_score() -> None:
+    report = _single_report(item_id="sun.component.timeline", score=25.0, action="text-only")
+    checks, errors, warnings = [], [], []
+    vsr._validate_single(report, checks, errors, warnings, errors.append)
+    assert any("text-only action must have item_id null" in error for error in errors), errors
+    assert any("text-only action must have score 0" in error for error in errors), errors
+
+
+# --------------------------------------------------------------------------- #
+# T1 parallel-set allowance — shape lock reads declared repeated-item evidence
+# --------------------------------------------------------------------------- #
+def _set_request(shape: str, n: int, *, declare: bool = True, count: bool = True) -> dict:
+    request = {"content_shape": shape, "intent": [shape],
+               "content_structure": ["label", "heading", "body"]}
+    if declare:
+        request["content_structure"].append(f"repeatable-set-of-{n}")
+    if count:
+        request["item_count"] = n
+    return request
+
+
+def _set_item(n: int, *, terms: set[str] | None = None) -> tuple[set[str], set[int]]:
+    """A component that names its grammar, not the request's shape label."""
+    return (terms if terms is not None else {"role-cards", "cards", "personas"},
+            {n})
+
+
+def test_parallel_set_allowance_accepts_a_matching_repeated_component() -> None:
+    """The reported root cause: a 4-card set excluded from a 4-item checklist."""
+    terms, sizes = _set_item(4)
+    assert svi.shape_lock_ok("checklist", _set_request("checklist", 4), terms, sizes)
+
+
+def test_parallel_set_allowance_still_accepts_a_literal_checklist() -> None:
+    """The base rule is untouched: a real checklist matches on its own tokens."""
+    assert svi.shape_lock_ok("checklist", _set_request("checklist", 4),
+                             {"checklist", "preparation"}, set())
+
+
+def test_parallel_set_allowance_rejects_a_count_mismatch() -> None:
+    terms, sizes = _set_item(5)
+    assert not svi.shape_lock_ok("checklist", _set_request("checklist", 4), terms, sizes)
+
+
+def test_parallel_set_allowance_needs_declared_repeat_evidence() -> None:
+    """item_count alone must not reclassify an ordinary request."""
+    terms, sizes = _set_item(4)
+    assert not svi.shape_lock_ok("checklist", _set_request("checklist", 4, declare=False),
+                                 terms, sizes)
+    # ...and a stray tag without item_count is not evidence either.
+    assert not svi.shape_lock_ok("checklist", _set_request("checklist", 4, count=False),
+                                 terms, sizes)
+
+
+def test_parallel_set_allowance_never_applies_to_single_statement_shapes() -> None:
+    """A repeated set does not make a card set a cover or a closing."""
+    for shape in ("cover", "closing", "two-column"):
+        terms, sizes = _set_item(4)
+        assert not svi.shape_lock_ok(shape, _set_request(shape, 4), terms, sizes), shape
+
+
+def test_parallel_set_allowance_rejects_a_component_declaring_no_set() -> None:
+    assert not svi.shape_lock_ok("checklist", _set_request("checklist", 4),
+                                 {"role-cards"}, set())
+
+
+def test_real_ai_workflow_checklist_slides_select_count_compatible_components() -> None:
+    """End-to-end on the real library with the real AI-workflow requests.
+
+    Slides 6 and 8 must land on published components that genuinely repeat 4 and
+    5 units, rather than the quote-heavy prep template or a sparse CTA.
+    """
+    registry = SCRIPTS.parent / "registries" / "visual-library-compact.json"
+    if not registry.is_file() or not REGISTRY.is_file():
+        return
+    items = [i for i in read_text_slots.load_json(registry).get("items", [])
+             if i.get("status") == "published"]
+    profiles = svi.load_unit_profiles(REGISTRY)
+    enrichment = svi.load_retrieval_index(
+        SCRIPTS.parent / "registries" / "component-retrieval-index.jsonl")
+
+    real_requests = [
+        {"request_id": "slide-06-four-principles",
+         "query": "reusable component: four numbered usage principles checklist",
+         "prefer_type": "component", "intent": ["checklist"], "content_shape": "checklist",
+         "tags": ["numbered", "principles", "checklist", "set-of-4", "rules"],
+         "content_structure": ["label", "heading", "body", "repeatable-set-of-4"],
+         "item_count": 4, "density": "medium", "brand": "sun-studio"},
+        {"request_id": "slide-08-pro-tips",
+         "query": "reusable component: five numbered pro tips list with small tags",
+         "prefer_type": "component", "intent": ["checklist"], "content_shape": "checklist",
+         "tags": ["tips", "numbered", "list", "checklist", "set-of-5"],
+         "content_structure": ["label", "heading", "body", "repeatable-set-of-5"],
+         "item_count": 5, "density": "high", "brand": "sun-studio"},
+    ]
+    for request in real_requests:
+        decision, _ = svi.score_request(request, items, svi.WEIGHTS, None,
+                                        enrichment=enrichment, unit_profiles=profiles)
+        wanted = request["item_count"]
+        assert decision["action"] == "reuse", (request["request_id"], decision)
+        chosen = decision["item_id"]
+        assert profiles.get(chosen, {}).get("unit_count") == wanted, (
+            f"{request['request_id']}: {chosen} repeats "
+            f"{profiles.get(chosen, {}).get('unit_count')} units, needs {wanted}")
+        # The previously-selected mismatches must not come back.
+        assert chosen not in {"sun.interview-workshop-sunriser.05-prep",
+                              "sun.sun-presentation.08-next-steps-cta"}, chosen
+
+
 def test_shape_lock_matches_and_mismatches() -> None:
     reg_tokens = vsr._registry_tokens(read_text_slots.load_json(REGISTRY))
     rep = _single_report(item_id="sun.interview-workshop-sunriser.02-timeline")
     # match: timeline shape -> timeline item
-    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": "timeline"}, reg_tokens, strict_shape=False)
+    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": "timeline"}}, reg_tokens, strict_shape=False)
     assert not errs, f"timeline->timeline should pass: {errs}"
     # mismatch: cover shape -> timeline item
-    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": "cover"}, reg_tokens, strict_shape=False)
+    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": "cover"}}, reg_tokens, strict_shape=False)
     assert errs, "cover shape locked to a timeline item must fail"
 
 
 def test_missing_shape_warns_unless_strict() -> None:
     reg_tokens = vsr._registry_tokens(read_text_slots.load_json(REGISTRY))
     rep = _single_report(item_id="sun.interview-workshop-sunriser.02-timeline")
-    errs, warns = vsr._validate_shape_lock(rep, False, {"s1": None}, reg_tokens, strict_shape=False)
+    errs, warns = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": None}}, reg_tokens, strict_shape=False)
     assert not errs and warns, "missing shape is a warning by default"
-    errs, warns = vsr._validate_shape_lock(rep, False, {"s1": None}, reg_tokens, strict_shape=True)
+    errs, warns = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": None}}, reg_tokens, strict_shape=True)
     assert errs and not warns, "missing shape is an error under --strict-shape"
 
 
@@ -742,15 +2090,15 @@ def test_shape_lock_covers_component_first_shapes() -> None:
     }
     for shape, item_id in cases.items():
         rep = _single_report(item_id=item_id)
-        errs, _ = vsr._validate_shape_lock(rep, False, {"s1": shape}, reg_tokens, strict_shape=True)
+        errs, _ = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": shape}}, reg_tokens, strict_shape=True)
         assert not errs, f"{shape} -> {item_id} should pass: {errs}"
     rep = _single_report(item_id="sun.salary-benefits-2026.01-cover")
-    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": "tiers"}, reg_tokens, strict_shape=True)
+    errs, _ = vsr._validate_shape_lock(rep, False, {"s1": {"content_shape": "tiers"}}, reg_tokens, strict_shape=True)
     assert errs, "tiers shape locked to a cover template must fail"
 
 
-def test_selection_report_rejects_manual_curation_override() -> None:
-    """A scorer result cannot be relabeled custom-local by an agent."""
+def test_selection_report_rejects_non_contract_custom_action() -> None:
+    """A scorer result cannot be relabeled as a local custom build."""
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         report_path = root / "analysis" / "selection-report.json"
@@ -766,8 +2114,6 @@ def test_selection_report_rejects_manual_curation_override() -> None:
                     "item_id": None,
                     "score": 80.0,
                     "reason": "Manually rejected despite a strong match.",
-                    "scorer_action": "reuse",
-                    "scorer_item_id": "sun.component.timeline",
                 },
                 "candidates": [{
                     "item_id": "sun.component.timeline",
@@ -777,7 +2123,6 @@ def test_selection_report_rejects_manual_curation_override() -> None:
                                  "semantic_intent": 20.0},
                 }],
             }],
-            "curated_by": "agent override",
         }), encoding="utf-8")
         original_argv = sys.argv
         try:
@@ -806,6 +2151,36 @@ def test_scaffold_preserves_slots_no_base64() -> None:
     assert frag.count("data-slot-id=") >= len(slots), "every slot id must survive"
     assert "base64" not in frag, "scaffold must NOT embed the raster SVG"
     assert 'class="bg"' in frag, "scaffold must include a .bg placeholder"
+    assert ".slide-scaffold .slot { z-index: 20; }" in frag, \
+        "editable slot copy must remain above decomposed artwork overlays"
+
+
+def test_scaffold_falls_back_to_text_slot_contract_when_preview_has_no_slots() -> None:
+    contract = {
+        "source": {"view_box": [0, 0, 1000, 500]},
+        "slots": [{
+            "id": "headline",
+            "html_tag": "h2",
+            "bounds": {"x": 0.1, "y": 0.2, "width": 0.5, "height": 0.1},
+            "typography": {
+                "font_family": "Arial",
+                "font_size": 30,
+                "font_weight": "bold",
+                "font_style": "normal",
+                "line_height": 1.1,
+                "color": "#ffffff",
+            },
+            "horizontal_align": "left",
+        }],
+    }
+
+    slots = scaffold._slots_from_contract(contract)
+    fragment = scaffold.build_scaffold("sun.component.example", slots)
+
+    assert len(slots) == 1
+    assert 'data-slot-id="headline"' in fragment
+    assert "left:10.0000%" in fragment
+    assert "font-size:64.8000px" in fragment
 
 
 def test_scaffold_rejects_compact_registry() -> None:
@@ -973,6 +2348,58 @@ def test_validate_excludes_cropped_out_source_text() -> None:
         _build(item, with_marker=False)
         errs = vts.validate(item)
         assert any("Unmapped source text" in e for e in errs), errs
+
+
+# --------------------------------------------------------------------------- #
+# decompose_svg_objects — ancestor transforms and off-canvas geometry
+# --------------------------------------------------------------------------- #
+import decompose_svg_objects as decompose
+import xml.etree.ElementTree as _ET2
+
+_SVG_NS = "{http://www.w3.org/2000/svg}"
+_INK_NS = "{http://www.inkscape.org/namespaces/inkscape}"
+
+
+def _cropped_component_svg() -> "_ET2.Element":
+    # Shape of a real cropped extraction: the drawing sits under a layer that a
+    # crop offset translated into view. Measuring in the browser sees the
+    # translated position; copying the group alone does not.
+    return _ET2.fromstring(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1999" height="620" '
+        'viewBox="0 0 1999 620">'
+        '<defs><clipPath id="c"><path d="M0 0H2938V2623H0Z"/></clipPath></defs>'
+        '<g transform="translate(-499.89 -1859.3)">'
+        '  <g xmlns:ns="http://www.inkscape.org/namespaces/inkscape" '
+        '     ns:groupmode="layer">'
+        '    <g id="circle-a"><circle cx="998" cy="1900" r="271"/></g>'
+        '    <g id="circle-b"><circle cx="1400" cy="1900" r="271"/></g>'
+        '  </g>'
+        '</g></svg>')
+
+
+def test_decompose_carries_ancestor_transforms_into_fragments() -> None:
+    root = _cropped_component_svg()
+    groups = decompose.document_groups(root)
+    assert [g.get("id") for g in groups] == ["circle-a", "circle-b"], groups
+    parent_map = {c: p for p in root.iter() for c in p}
+    for group in groups:
+        assert decompose.ancestor_transform(root, parent_map, group) == \
+            "translate(-499.89 -1859.3)", (
+                "a fragment that drops the crop offset paints outside its own "
+                "viewBox and renders blank")
+
+
+def test_decompose_reads_the_viewbox_and_rejects_cropped_away_geometry() -> None:
+    root = _cropped_component_svg()
+    assert decompose.viewbox(root) == (0.0, 0.0, 1999.0, 620.0)
+    # y = -1491 is the real measurement for the circle set that rendered blank.
+    assert not decompose.intersects_canvas(
+        {"x": 60, "y": -1491, "w": 593, "h": 593}, 1999.0, 620.0)
+    assert decompose.intersects_canvas(
+        {"x": 224, "y": 40, "w": 1525, "h": 550}, 1999.0, 620.0)
+    # Straddling the top edge is still partly visible — keep it.
+    assert decompose.intersects_canvas(
+        {"x": 10, "y": -100, "w": 200, "h": 200}, 1999.0, 620.0)
 
 
 # --------------------------------------------------------------------------- #
@@ -2403,6 +3830,172 @@ def test_carved_slots_within_unit_and_subset() -> None:
         cy = s["bounds"]["y"] + s["bounds"]["height"] / 2
         assert region["x"] <= cx <= region["x"] + region["width"]
         assert region["y"] <= cy <= region["y"] + region["height"]
+
+
+# --------------------------------------------------------------------------- #
+# score_visual_items CLI — request/batch shape guards
+# --------------------------------------------------------------------------- #
+_SINGLE_REQUEST = {
+    "request_id": "slide-01", "intent": ["timeline"], "tags": [],
+    "content_structure": ["a"], "density": "medium", "brand": "sun",
+    "required_exports": [],
+}
+_BATCH_REQUEST = {"job_id": "j", "brief": "b", "slides": [_SINGLE_REQUEST]}
+
+
+def _run_scorer(tmp: Path, flag: str, payload) -> tuple[int, str, Path]:
+    request_path = tmp / "in.json"
+    output_path = tmp / "out.json"
+    request_path.write_text(json.dumps(payload), encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPTS / "score_visual_items.py"),
+         flag, str(request_path), "--output", str(output_path)],
+        capture_output=True, text=True,
+    )
+    return proc.returncode, proc.stdout + proc.stderr, output_path
+
+
+def _assert_scorer_rejects(flag: str, payload, note: str = "") -> None:
+    """Every rejection must be non-zero AND leave no report behind."""
+    with tempfile.TemporaryDirectory() as tmp:
+        code, out, output_path = _run_scorer(Path(tmp), flag, payload)
+        assert code != 0, (note, payload, out)
+        assert not output_path.exists(), (note, payload, "wrote a report anyway")
+        assert "reuse:" not in out, (note, payload, "printed a selection", out)
+
+
+def test_malformed_single_request_never_reaches_the_scorer() -> None:
+    """An unconstrained request scores generic assets at 90 — it must be refused.
+
+    Root cause: `overlap_score()` returns 1.0 when the request contributes no
+    terms (nothing asked for is trivially covered), so `{}` earned FULL semantic
+    credit, cleared the reuse floor and selected `sun.asset.logo` at 90.0 with
+    exit 0. Absence of `intent` is unscorable, not merely weak.
+    """
+    _assert_scorer_rejects("--request", {}, "empty object")
+    _assert_scorer_rejects("--request", [], "JSON array")
+    _assert_scorer_rejects("--request", "nope", "JSON string")
+    _assert_scorer_rejects("--request", _BATCH_REQUEST, "batch envelope")
+    # intent missing / wrong type / blank
+    _assert_scorer_rejects("--request", {"query": "a cover slide"}, "no intent")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, intent="cover"), "intent str")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, intent=[]), "intent empty")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, intent=["  "]), "intent blank")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, intent=[1, 2]), "intent non-str")
+    # other fields are type-checked so a typo fails loudly instead of being ignored
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, tags="cover"), "tags str")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, content_structure={}), "cs dict")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, item_count=0), "count 0")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, item_count="3"), "count str")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, item_count=True), "count bool")
+    _assert_scorer_rejects("--request", dict(_SINGLE_REQUEST, content_shape=3), "shape int")
+
+
+def test_malformed_batch_request_never_reaches_the_scorer() -> None:
+    _assert_scorer_rejects("--batch-request", _SINGLE_REQUEST, "single request")
+    _assert_scorer_rejects("--batch-request", [], "JSON array")
+    _assert_scorer_rejects("--batch-request", {"job_id": "j", "slides": []}, "empty slides")
+    _assert_scorer_rejects("--batch-request", {"job_id": "j", "slides": {}}, "slides dict")
+    _assert_scorer_rejects("--batch-request", {"job_id": "j"}, "no slides")
+    _assert_scorer_rejects("--batch-request",
+                           {"job_id": "j", "slides": [_SINGLE_REQUEST, "nope"]},
+                           "non-object slide entry")
+
+
+def test_batch_with_a_malformed_later_slide_writes_no_partial_report() -> None:
+    """Validation covers the WHOLE batch before slide 1 is scored.
+
+    Otherwise a bad slide 3 leaves a report describing slides 1-2 that
+    downstream gates would read as a complete selection.
+    """
+    good = dict(_SINGLE_REQUEST, request_id="slide-01")
+    payload = {
+        "job_id": "j",
+        "slides": [good, dict(good, request_id="slide-02"),
+                   {"request_id": "slide-03", "intent": "cover"}],  # malformed
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        code, out, output_path = _run_scorer(Path(tmp), "--batch-request", payload)
+        assert code != 0, out
+        assert not output_path.exists(), "partial report written for slides 1-2"
+        assert "slide-03" in out, out
+        # Nothing was scored, so no per-slide decision line was printed.
+        assert "slide-01:" not in out, out
+
+
+def test_valid_request_and_batch_modes_still_write_their_reports() -> None:
+    """Negative control: the guards must not break the two legitimate shapes."""
+    with tempfile.TemporaryDirectory() as tmp:
+        code, out, output_path = _run_scorer(Path(tmp), "--request", _SINGLE_REQUEST)
+        assert code == 0, out
+        report = json.loads(output_path.read_text(encoding="utf-8"))
+        assert "decision" in report and "slides" not in report, report
+        assert report["decision"]["action"] in ("reuse", "text-only"), report
+
+    with tempfile.TemporaryDirectory() as tmp:
+        code, out, output_path = _run_scorer(Path(tmp), "--batch-request", _BATCH_REQUEST)
+        assert code == 0, out
+        report = json.loads(output_path.read_text(encoding="utf-8"))
+        assert len(report["slides"]) == 1, report
+        assert report["slides"][0]["decision"]["action"] in ("reuse", "text-only"), report
+
+
+# --------------------------------------------------------------------------- #
+# export_pptx — selection inputs bound the export cache
+# --------------------------------------------------------------------------- #
+def _selection_report(action: str, item_id, rejected: list) -> dict:
+    return {
+        "job_id": "j",
+        "generated_at": "2026-07-21T00:00:00Z",  # varies per run; must NOT count
+        "rejected_items": rejected,
+        "slides": [{"request_id": "slide-01",
+                    "decision": {"action": action, "item_id": item_id}}],
+    }
+
+
+def test_selection_inputs_participate_in_the_export_fingerprint() -> None:
+    """A changed chosen/rejected item set must invalidate stale export reuse.
+
+    `html_sha` cannot bound this: a diagnostic re-score can change the decision
+    or the rejected set while leaving byte-identical deck HTML.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        run_dir = Path(tmp)
+        html = run_dir / "deck.html"
+        html.write_text("<deck-stage></deck-stage>", encoding="utf-8")
+        analysis = run_dir / "analysis"
+        analysis.mkdir()
+        report_path = analysis / "selection-report.json"
+
+        def identity(payload: dict):
+            report_path.write_text(json.dumps(payload), encoding="utf-8")
+            return export_pptx.selection_identity(html)
+
+        base = identity(_selection_report("text-only", None, []))
+
+        # Only `generated_at` differs -> identity must be stable, or every
+        # re-score would kill the cache and the reuse path would be dead code.
+        same = _selection_report("text-only", None, [])
+        same["generated_at"] = "2026-07-22T09:30:00Z"
+        assert identity(same) == base, "timestamp must not change identity"
+
+        # A different chosen item, and a different rejected set, must both move it.
+        assert identity(_selection_report("reuse", "sun.component.x", [])) != base
+        assert identity(_selection_report("text-only", None, ["sun.component.x"])) != base
+
+        # Rejected-item ORDER is not a semantic change.
+        a = identity(_selection_report("text-only", None, ["b", "a"]))
+        b = identity(_selection_report("text-only", None, ["a", "b"]))
+        assert a == b, "rejected_items order must not change identity"
+
+        # An unreadable report must not silently authorise reuse.
+        report_path.write_text("{not json", encoding="utf-8")
+        assert export_pptx.selection_identity(html) == ["unreadable-selection-report"]
+
+        # No selection report at all (non-slide-job export) stays None, so those
+        # runs keep their existing cache behaviour unchanged.
+        report_path.unlink()
+        assert export_pptx.selection_identity(html) is None
 
 
 # --------------------------------------------------------------------------- #

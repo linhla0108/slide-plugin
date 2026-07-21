@@ -10,6 +10,34 @@ metadata overlap alone can never make an item selectable. Anti-use-case hits,
 set-of-N count mismatches, and zero editable text slots apply bounded score
 penalties with explicit reasons (selection score != buildability). No
 embeddings, vector DB, network calls, or new dependencies.
+
+v3.3 adds visual-unit fit. For a request with `item_count` >= 2, a candidate's
+repeated-unit count — derived by `component_units` from the component's own
+published slot geometry — must equal the requested count, otherwise the
+component would ship visibly blank cards/steps/columns. The candidate keeps its
+rank and carries an explicit reason, but is not buildable, so selection falls
+through to the next compatible published component or to text-only. Components
+with no repeat structure declare no unit count and stay compatible. Score
+weights, floors, and the retrieval index format are unchanged.
+
+v3.4 adds layout-grammar fit. A component built around a display/quote panel
+beside a much denser working surface hosts one statement, not N parallel items.
+When a request explicitly wants N>=2 parallel items and such a component offers
+no N-unit repeat group, it takes a bounded DISPLAY_SURFACE_PENALTY so a
+better-matched published candidate can win. It stays eligible on purpose: when
+nothing better is published the existing fallback is preserved, and the
+decision carries a warning instead of silently shipping the mismatch.
+
+v3.5 widens T1 shape-lock with the parallel-set allowance. A request that
+explicitly declares N parallel peer items (`repeatable-set-of-N` in
+content_structure AND `item_count` of N) may also accept a published component
+declaring the same set size, even when that component names its grammar
+(`role-cards`, `levels`) rather than the request's shape label. Both sides use
+the same declared vocabulary, the shape must be one whose content is genuinely
+a set of peers, and the count/visual-unit gates still apply — so a generic
+checklist request can never absorb an arbitrary card set. `shape_lock_ok` owns
+the whole rule and `validate_selection_report` imports it, so the two cannot
+drift.
 """
 
 from __future__ import annotations
@@ -21,10 +49,11 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
-from _common import load_json, now_iso, write_json
+from _common import load_json, now_iso, resolve_repo_path, write_json
+from component_units import unit_profile
 
 
-SCORER_VERSION = "3.2.0"
+SCORER_VERSION = "3.5.0"
 
 WEIGHTS = {
     "semantic_intent": 35,
@@ -57,22 +86,81 @@ SYNONYMS: dict[str, set[str]] = {
     "instructions": {"steps", "how-to", "procedure", "process", "guide", "huong-dan"},
     "layout": {"two-column", "split-layout", "content", "information"},
     "overview": {"summary", "recap", "key-points", "tong-quan"},
+    # Shapes that validate_selection_report.SHAPE_TYPE_MAP already accepts but
+    # the scorer had no canonical vocabulary for. Without an entry here a
+    # request carrying one of these shapes has no canonical token to match, so
+    # it can never clear the semantic floor no matter what the library holds.
+    # Tokens are taken from SHAPE_TYPE_MAP, which is sourced from real
+    # published-item intent/tags. `test_gates` fails if the two drift apart.
+    # A token may only resolve to one canonical, so tokens SHAPE_TYPE_MAP
+    # shares with an existing entry (`evaluation` -> comparison, `questions`
+    # -> faq, `steps` -> instructions) are deliberately not repeated here.
+    # Kept narrow on purpose: `team` and `contributors` are common independent
+    # tags, and folding them in here would make every team-tagged item score
+    # identically to a true profile-set, destroying discrimination.
+    "profile": {"profile-layout", "profile-circles", "roles", "personas", "vai-tro"},
+    "tiers": {"levels", "ranking", "maturity-model", "capability-ladder", "ladder", "phan-cap"},
+    "icons": {"icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
+    "review": {"check-in", "assessment", "quarterly-review", "progress-check"},
 }
+# `stats` is the shape name for the existing `statistics` canonical. `grid`
+# is deliberately NOT folded in: a grid is a layout, not a statistics slide.
+SYNONYMS["statistics"] |= {"stats"}
+
+# T1 selection-lock: each content_shape maps to the intent/tag tokens a chosen
+# item must carry, matched against the registry item's intent + tags. Synonyms
+# are included so the map is lenient on phrasing but strict on category (a
+# `timeline` shape can never lock to a `cover` item).
+#
+# Owned by the scorer, imported by validate_selection_report. It used to live
+# in the validator only, so the scorer could happily select an item the gate
+# then rejected — the two must not drift. Every token is drawn from real
+# published-item intent/tags or the canonical vocabulary above; `test_gates`
+# fails if a shape here has no canonical SYNONYMS entry.
+SHAPE_TYPE_MAP: dict[str, set[str]] = {
+    "cover": {"cover", "hero", "title", "opening", "intro"},
+    "closing": {"closing", "thanks", "thank-you", "end", "end-slide", "farewell",
+                "conclusion", "outro", "final-slide", "ket-thuc", "cam-on"},
+    "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
+    "comparison": {"comparison", "versus", "do-dont", "what-how", "pros-cons", "contrast"},
+    "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
+    "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
+    "two-column": {"two-column", "split", "split-layout", "layout"},
+    "profile": {"team", "profile", "profile-layout", "profile-circles", "contributors", "roles", "personas"},
+    "tiers": {"levels", "tiers", "ranking", "maturity-model", "capability-ladder"},
+    "icons": {"icons", "icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
+    "review": {"review", "check-in", "evaluation", "assessment", "questions", "quarterly-review", "progress-check"},
+}
+
+# Shapes whose content is inherently a set of parallel peer items, and which may
+# therefore use the parallel-set allowance in `shape_lock_ok`. A repeated card /
+# tier / level / step grammar is a legitimate host for these. Single-statement
+# shapes (`cover`, `closing`) and container shapes (`two-column`, `layout`) are
+# deliberately excluded: a repeated set does not make a cover a cover.
+PARALLEL_SET_SHAPES = frozenset({
+    "checklist", "tiers", "timeline", "comparison", "profile", "stats",
+})
 
 # --- Hybrid retrieval (v3.2) -------------------------------------------------
 # Broadened lexical matches earn SECONDARY_WEIGHT credit per matched request
 # term, capped at SECONDARY_CAP of total semantic coverage. The cap is chosen
-# so pure-secondary evidence maxes at 0.25 * 35 = 8.75 points — below the 10.5
-# semantic floor — meaning an item can never become selectable on broadened
-# metadata overlap alone; it needs at least one canonical intent/tags match.
+# so pure-secondary evidence maxes at 0.25 * 35 = 8.75 points. It remains
+# weaker ranking evidence than canonical intent/tag overlap, but can still
+# select a published component that passes the physical buildability gates.
 SECONDARY_WEIGHT = 0.5
 SECONDARY_CAP = 0.25
 
 # Bounded post-criteria adjustments (same pattern as the +5 set bonus, always
-# surfaced in `reasons`). Floors (65/75) and the semantic floor are unchanged.
+# surfaced in `reasons`). Numeric score ranks published, physically buildable
+# candidates; it is not an approval band.
 ANTI_USE_CASE_PENALTY = 15
 COUNT_FIT_PENALTY = 10
 NO_TEXT_SLOT_PENALTY = 10
+# Layout-grammar mismatch: a display/quote-panel component asked to host N
+# parallel items. Same tier as the other structural-mismatch adjustments, and
+# deliberately a penalty rather than an eligibility rule — when no better
+# published candidate exists, the fallback must stay intact.
+DISPLAY_SURFACE_PENALTY = 15
 
 # Type-intent bias. When a request explicitly asks for a reusable COMPONENT, a
 # full-slide `template` is demoted by this modest amount so a genuinely relevant
@@ -100,6 +188,13 @@ DEFAULT_RETRIEVAL_INDEX = (
     Path(__file__).resolve().parents[1] / "registries/component-retrieval-index.jsonl"
 )
 
+# Visual-unit fit reads published slot geometry, which the compact registry does
+# not carry. The full registry is consulted read-only for `paths.text_slots`;
+# nothing here writes to the registry, the library, or the retrieval index.
+DEFAULT_UNIT_REGISTRY = (
+    Path(__file__).resolve().parents[1] / "registries/visual-library.json"
+)
+
 # Same token shape as build_component_retrieval_index.py (input lowercased).
 TOKEN_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)?")
 SET_SIZE_RE = re.compile(r"\bset-of-(\d+)\b")
@@ -110,6 +205,28 @@ STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "be", "before", "by", "do", "for",
     "from", "has", "in", "is", "it", "its", "not", "of", "on", "or", "so",
     "the", "this", "to", "use", "when", "with", "without",
+}
+
+# Shape/geometry nouns that appear in item names to describe HOW something is
+# drawn. They are structure, never subject matter, so `subject_tokens` ignores
+# them — otherwise every component would look topic-bound.
+STRUCTURAL_WORDS = {
+    "set", "card", "cards", "badge", "circle", "circles", "grid", "strip",
+    "diagram", "visual", "column", "columns", "row", "rows", "block", "blocks",
+    "panel", "list", "table", "chart", "flow", "node", "item", "items",
+    "overlap", "stack", "group", "box", "line", "bar", "ring", "hexagon",
+    "sunriser", "studio", "sun", "slide", "page", "layout", "set-of",
+    # Container words: a set literally named `deck`/`template` says nothing
+    # about what the artwork is ABOUT.
+    "deck", "template", "component", "master", "library", "asset",
+    # Count and slot nouns describe capacity, not subject.
+    "quad", "trio", "duo", "pair", "single", "slot", "slots", "cell", "tile",
+}
+
+# Placeholder markers. Artwork named after dummy copy carries no real subject
+# matter, so it stays a generic reusable shell rather than a topic-bound one.
+PLACEHOLDER_WORDS = {
+    "lorem", "ipsum", "placeholder", "sample", "example", "untitled", "dummy",
 }
 
 # Positive-evidence fields of a retrieval-index record. anti_use_cases is
@@ -149,6 +266,24 @@ def _canonicalize(terms: Iterable[str]) -> set[str]:
     return result
 
 
+def _semantic_terms(terms: Iterable[str]) -> set[str]:
+    """Canonical terms for the semantic channel, with filler removed.
+
+    `semantic` is a coverage ratio, so a prose token like "of" or "the" that no
+    published item can ever carry only inflates the denominator and drags a
+    genuine match below the reuse floor. `_field_tokens` has always applied
+    this STOPWORDS/min-length rule to the index side; applying it to
+    intent/tags too makes both sides of the comparison symmetric.
+
+    Deliberately NOT used for `content_structure`, whose tokens are slot names
+    rather than prose and must keep matching literally.
+    """
+    return _canonicalize(
+        t for t in terms
+        if str(t).lower() not in STOPWORDS and len(str(t).lower()) >= 2
+    )
+
+
 def _norm_token(term: str) -> str:
     """Normalize one token for broadened matching: synonym map first, then a
     naive singular fold so `metric`/`metrics` or `circle`/`circles` compare
@@ -161,6 +296,37 @@ def _norm_token(term: str) -> str:
         base = low[:-1]
         return smap.get(base, base)
     return smap.get(low + "s", low)
+
+
+def normalize_intent(intent: Iterable[str]) -> tuple[set[str], list[str]]:
+    """Split `intent` into scoring terms and dropped prose.
+
+    `intent` is a canonical semantic retrieval field, not free text. `semantic`
+    is a coverage ratio, so ANY word kept in it divides the score — and a word
+    the corpus cannot answer ("real", "case") therefore penalises a genuine
+    match for nothing. Dropping filler alone was not enough: the words that hurt
+    most are ordinary nouns that simply are not vocabulary.
+
+    Only terms that resolve to a canonical synonym are kept. Corpus membership
+    is deliberately NOT an escape hatch: a junk word survives it whenever any
+    one of the published items happens to carry that string ("what" did),
+    which makes the guarantee probabilistic instead of exact. Literal item tags
+    belong in `tags`, which is matched literally; prose belongs in `query`.
+
+    Everything dropped is REPORTED, never silently discarded.
+
+    Returns (scoring terms, dropped terms) — dropped is evidence, not garbage.
+    """
+    smap = _build_synonym_map()
+    kept: set[str] = set()
+    dropped: list[str] = []
+    for raw in intent:
+        low = str(raw).lower()
+        if low in smap:
+            kept.add(smap[low])
+        else:
+            dropped.append(low)
+    return kept, sorted(set(dropped))
 
 
 def _field_tokens(record: dict, fields: Iterable[str]) -> set[str]:
@@ -211,15 +377,105 @@ def load_retrieval_index(path: str | Path) -> dict[str, dict]:
     return build_enrichment(records)
 
 
-def _set_sizes(item: dict) -> set[int]:
+def wants_parallel_units(request: dict) -> bool:
+    """True when a request asks for N>=2 parallel items, so unit fit applies."""
+    count = request.get("item_count")
+    return isinstance(count, int) and not isinstance(count, bool) and count >= 2
+
+
+def load_unit_profiles(registry_path: str | Path,
+                       item_ids: set[str] | None = None) -> dict[str, dict]:
+    """Layout-grammar profile per published item, from its own slot geometry.
+
+    Read-only: opens the full registry for `paths.text_slots`, then each
+    candidate's published text-slot contract. Anything unreadable or
+    contract-less is simply absent from the result — unknown is not a mismatch,
+    exactly like the `set-of-N` rule.
+    """
+    try:
+        registry = load_json(registry_path)
+    except (OSError, ValueError):
+        return {}
+    profiles: dict[str, dict] = {}
+    for item in registry.get("items", []):
+        item_id = item.get("id")
+        if not item_id or item.get("status") != "published":
+            continue
+        if item_ids is not None and item_id not in item_ids:
+            continue
+        slots_path = (item.get("paths") or {}).get("text_slots")
+        if not slots_path:
+            continue
+        path = resolve_repo_path(slots_path)
+        if not path.is_file():
+            continue
+        try:
+            profiles[str(item_id)] = unit_profile(load_json(path))
+        except (OSError, ValueError):
+            continue
+    return profiles
+
+
+def load_unit_counts(registry_path: str | Path, item_ids: set[str] | None = None) -> dict[str, int]:
+    """Primary repeat count per published item; absent when it has none."""
+    return {
+        item_id: profile["unit_count"]
+        for item_id, profile in load_unit_profiles(registry_path, item_ids).items()
+        if isinstance(profile.get("unit_count"), int)
+    }
+
+
+def declared_set_sizes(payload: dict) -> set[int]:
     """Declared set sizes (`set-of-N` / `repeatable-set-of-N`) from compact
-    metadata. Empty when the item declares none (unknown ≠ mismatch)."""
+    metadata. Empty when none is declared (unknown ≠ mismatch).
+
+    Symmetric on purpose: requests and published items describe a repeated set
+    with the same vocabulary in the same two fields, so one reader serves both
+    sides of the parallel-set allowance below.
+    """
     sizes: set[int] = set()
-    for term in list(item.get("tags") or []) + list(item.get("content_structure") or []):
+    for term in list(payload.get("tags") or []) + list(payload.get("content_structure") or []):
         match = SET_SIZE_RE.search(str(term).lower())
         if match:
             sizes.add(int(match.group(1)))
     return sizes
+
+
+def parallel_set_request(request: dict) -> int | None:
+    """N when the request is explicitly a set of N parallel peer items.
+
+    Requires BOTH signals to agree: a declared `repeatable-set-of-N` and an
+    `item_count` of N. One alone is not evidence — `item_count` is set on many
+    ordinary requests, and a stray tag should not reclassify a slide.
+    """
+    count = request.get("item_count")
+    if not (isinstance(count, int) and not isinstance(count, bool) and count >= 2):
+        return None
+    return count if count in declared_set_sizes(request) else None
+
+
+def shape_lock_ok(shape: str | None, request: dict, item_terms: set[str],
+                  item_set_sizes: set[int]) -> bool:
+    """T1 selection-lock, owned here and imported by validate_selection_report.
+
+    Base rule unchanged: the chosen item's intent/tags must carry one of the
+    shape's tokens. The parallel-set allowance adds one narrow path — a request
+    that explicitly declares N parallel peer items may also accept a component
+    that declares the same set size, even when its own vocabulary names the
+    grammar (`role-cards`, `levels`) rather than the shape label (`checklist`).
+
+    Deliberately narrow. It needs declared repeated-item evidence on BOTH sides,
+    an exact N match, and a shape whose content is genuinely a set of peers, so
+    a generic checklist request can never absorb an arbitrary card set. Count
+    and geometry stay enforced separately by the set-of-N and visual-unit gates.
+    """
+    allowed = SHAPE_TYPE_MAP.get(shape) if shape else None
+    if not allowed:
+        return True
+    if allowed & item_terms:
+        return True
+    parallel = parallel_set_request(request)
+    return bool(parallel and shape in PARALLEL_SET_SHAPES and parallel in item_set_sizes)
 
 
 def request_type_intent(request: dict) -> str | None:
@@ -274,7 +530,7 @@ def _build_inverted_index(items: list[dict], enrichment: dict[str, dict] | None 
 
 
 def _prefilter(request: dict, items: list[dict], index: dict[str, list[int]]) -> list[dict]:
-    req_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
+    req_terms = _semantic_terms(request.get("intent", []) + request.get("tags", []))
     hit_indices: set[int] = set()
     for term in req_terms:
         for key in {term, _norm_token(term)}:
@@ -285,6 +541,67 @@ def _prefilter(request: dict, items: list[dict], index: dict[str, list[int]]) ->
     return [items[i] for i in sorted(hit_indices)]
 
 
+def subject_tokens(item_id: str, record: dict | None = None) -> set[str]:
+    """Topic words baked into a published item's identity.
+
+    Two metadata sources, both already in the registry/index:
+      * the id — `sun.<set>.<name>`, where `<set>` names the source deck for a
+        template and `<name>` names the artwork for a standalone component;
+      * the index record's human `name`, which is where a themed capture
+        announces its source ("01 - Cover: Goal Setting 2026").
+
+    Whatever survives after canonical vocabulary, shape/geometry nouns,
+    placeholder markers, and digits are removed is subject matter, not
+    structure. An empty result means a generic, reusable shell.
+    """
+    parts = item_id.split(".")
+    if len(parts) < 3:
+        return set()
+    segment = parts[-1] if parts[1] == "component" else parts[1]
+    words = set(TOKEN_RE.findall(segment.replace("-", " ")))
+    words |= set(TOKEN_RE.findall(str((record or {}).get("name") or "").lower()))
+    smap = _build_synonym_map()
+    return {
+        token for token in words
+        # Digits are years/versions; structural nouns describe the layout;
+        # placeholder markers mean "this artwork carries no real content".
+        if len(token) >= 3 and not token.isdigit()
+        and token not in smap and token not in STOPWORDS
+        and token not in STRUCTURAL_WORDS and token not in PLACEHOLDER_WORDS
+    }
+
+
+def topic_warning(item_id: str, request: dict, req_terms: set[str],
+                  record: dict | None = None) -> str | None:
+    """Return source-topic leakage warning, or None for a generic/on-topic item.
+
+    Shape-lock proves an item has the right STRUCTURE. It cannot tell whether
+    the artwork is about the right THING: a cover cut from a goal-setting deck
+    fits a cover request perfectly and still ships the wrong subject, with the
+    source deck's name baked into the pixels.
+
+    This is advisory under the component-first policy: a published item that
+    passes slot/count/shape gates remains selectable. The report must surface
+    the source-topic leakage for review. A generic shell never warns, and an
+    item does not warn for a topic the request explicitly asked for.
+    """
+    topic = subject_tokens(item_id, record)
+    if not topic:
+        return None
+    haystack = {_norm_token(t) for t in req_terms}
+    haystack |= {
+        _norm_token(t)
+        for field in ("query", "content_shape")
+        for t in TOKEN_RE.findall(str(request.get(field) or "").lower())
+    }
+    haystack |= {_norm_token(str(t).lower()) for t in request.get("tags", [])}
+    if topic & haystack or {_norm_token(t) for t in topic} & haystack:
+        return None
+    return ("Subject mismatch: artwork is about "
+            f"{', '.join(sorted(topic))}, which this deck never mentions. "
+            "Reused under the component-first policy; review baked source content.")
+
+
 def score_request(
     request: dict,
     registry_items: list[dict],
@@ -292,11 +609,15 @@ def score_request(
     prefer_set: str | None,
     top_n: int = 5,
     enrichment: dict[str, dict] | None = None,
+    unit_profiles: dict[str, dict] | None = None,
 ) -> tuple[dict, list[dict]]:
     candidates = []
-    req_terms = _canonicalize(request.get("intent", []) + request.get("tags", []))
+    intent_terms, dropped_intent = normalize_intent(request.get("intent", []))
+    # Tags stay literal: `set-of-3` / `quy-trinh` are real item tags, not prose.
+    req_terms = intent_terms | _semantic_terms(request.get("tags", []))
     item_count = request.get("item_count")
     request_needs_text = bool(request.get("content_structure"))
+    needs_parallel_units = wants_parallel_units(request)
     type_intent = request_type_intent(request)
 
     for item in registry_items:
@@ -306,7 +627,7 @@ def score_request(
         if not eligible:
             reasons.append(f"Rejected status: {item.get('status')}")
 
-        item_terms = _canonicalize(item.get("intent", []) + item.get("tags", []))
+        item_terms = _semantic_terms(item.get("intent", []) + item.get("tags", []))
         primary_matched = req_terms & item_terms
         semantic = 1.0 if not req_terms else len(primary_matched) / len(req_terms)
         record = (enrichment or {}).get(item.get("id"))
@@ -364,7 +685,7 @@ def score_request(
                     f"Anti-use-case match ({', '.join(sorted(anti_hits))}): "
                     f"-{ANTI_USE_CASE_PENALTY}"
                 )
-            sizes = _set_sizes(item)
+            sizes = declared_set_sizes(item)
             if sizes:
                 retrieval["set_sizes"] = sorted(sizes)
             if isinstance(item_count, int) and sizes and item_count not in sizes:
@@ -373,9 +694,48 @@ def score_request(
                     f"Count fit: request needs {item_count} items, component is "
                     f"set-of-{'/'.join(str(s) for s in sorted(sizes))}: -{COUNT_FIT_PENALTY}"
                 )
-            if record and record.get("slot_count") is not None:
-                retrieval["slot_count"] = record["slot_count"]
-            if record and record.get("slot_count") == 0 and request_needs_text:
+            # Visual-unit fit. A component draws its cards/steps/columns whether
+            # or not copy lands in them, so hosting N parallel items needs N
+            # native units. This is capacity like `set-of-N`, not preference:
+            # it is recorded as evidence here and enforced in `buildable()`, so
+            # the candidate keeps its rank and the reason travels in the report.
+            profile = (unit_profiles or {}).get(str(item.get("id"))) or {}
+            units = profile.get("unit_count")
+            if units is not None:
+                retrieval["unit_count"] = units
+                if needs_parallel_units and units != item_count:
+                    reasons.append(
+                        f"Visual-unit fit: request needs {item_count} parallel item(s), "
+                        f"component repeats {units} native unit(s); "
+                        f"{abs(units - item_count)} unit(s) would ship "
+                        f"{'blank' if units > item_count else 'unfilled'}: not buildable"
+                    )
+            # Layout-grammar fit. A component built around a display/quote panel
+            # hosts one statement, not N parallel items. Penalised (never made
+            # ineligible) only when the request explicitly wants N>=2 parallel
+            # items AND the component offers no repeat group of that size, so a
+            # better-matched published candidate can win while this one stays
+            # available if nothing else fits.
+            panel = profile.get("display_surface")
+            if (needs_parallel_units and panel
+                    and item_count not in (profile.get("group_sizes") or [])):
+                score = max(0.0, score - DISPLAY_SURFACE_PENALTY)
+                retrieval["display_surface"] = panel
+                reasons.append(
+                    f"Layout-grammar fit: component is built around a "
+                    f"{panel['font_px']}px display/quote surface "
+                    f"({', '.join(panel['slot_ids'])}) beside a {panel['body_slot_count']}-slot "
+                    f"dense surface, and offers no {item_count}-unit repeat group; "
+                    f"a statement layout is a weak host for {item_count} parallel items: "
+                    f"-{DISPLAY_SURFACE_PENALTY}"
+                )
+            contract_slot_count = profile.get("editable_slot_count")
+            indexed_slot_count = record.get("slot_count") if record else None
+            slot_count = (contract_slot_count if isinstance(contract_slot_count, int)
+                          else indexed_slot_count)
+            if slot_count is not None:
+                retrieval["slot_count"] = slot_count
+            if slot_count == 0 and request_needs_text:
                 score = max(0.0, score - NO_TEXT_SLOT_PENALTY)
                 reasons.append(
                     f"Buildability: component has no editable text slots: "
@@ -416,46 +776,215 @@ def score_request(
         candidates.append(candidate)
 
     candidates.sort(key=lambda item: (item["eligible"], item["score"]), reverse=True)
-    semantic_floor = weights["semantic_intent"] * 0.3
     ranked_best = next((item for item in candidates if item["eligible"]), None)
-    best = next(
-        (
-            item for item in candidates
-            if item["eligible"] and item["criteria"]["semantic_intent"] >= semantic_floor
-        ),
-        None,
-    )
-    chosen = best or ranked_best
-    score = chosen["score"] if chosen else 0
-    best_semantic = ranked_best["criteria"]["semantic_intent"] if ranked_best else 0
-    if not ranked_best:
-        action, reason = "blocked", "No published export-compatible item was eligible."
-    elif not best:
-        action, reason = "custom-local", f"Semantic intent too low ({best_semantic:.1f} < {semantic_floor:.1f}). No relevant component."
-    elif score >= 75:
-        action, reason = "reuse", "The best published item meets the reuse threshold."
-    elif score >= 65:
-        action, reason = "adapt-local", "Use a slide-local adaptation."
-    else:
-        action, reason = "custom-local", "No strong match (score < 65). Create a slide-local custom structure."
 
-    # Below the adapt-local floor (65) there is no strong match, so recommend
-    # extracting/authoring a new component rather than forcing a weak reuse.
-    low_score = bool(best) and score < 65
-    no_semantic_match = bool(ranked_best) and not best
+    shape = request.get("content_shape")
+    raw_item_terms = {
+        item["id"]: {str(t).lower() for t in (item.get("intent", []) + item.get("tags", []))}
+        for item in registry_items
+    }
+
+    def buildable(item: dict) -> bool:
+        """Hard guards — these are physical or categorical, not preferences.
+
+        A component with no text slots cannot host copy, and a set-of-3 cannot
+        host 4 items. Both already cost score, but a penalty only reorders: a
+        strong-metadata item can still win its band and ship a slide that
+        structurally cannot hold the approved content. Capacity is therefore an
+        eligibility question, while score stays a ranking question.
+
+        The same applies to content_shape. validate_selection_report enforces
+        T1 selection-lock and fails the run, so a candidate that cannot pass it
+        must never be selected here — otherwise the scorer proposes decisions
+        the very next gate rejects.
+        """
+        retrieval = item.get("retrieval") or {}
+        if request_needs_text and retrieval.get("slot_count") == 0:
+            return False
+        sizes = retrieval.get("set_sizes")
+        if isinstance(item_count, int) and sizes and item_count not in sizes:
+            return False
+        # Repeat structure is the same class of constraint as `set-of-N`, but
+        # measured from the component's real geometry instead of a declared tag.
+        # A 4-step flow cannot host 3 ideas without shipping a blank step, so it
+        # is skipped here and the next compatible published candidate wins.
+        units = retrieval.get("unit_count")
+        if needs_parallel_units and isinstance(units, int) and units != item_count:
+            return False
+        if not shape_lock_ok(shape, request,
+                             raw_item_terms.get(item["item_id"], set()),
+                             set(retrieval.get("set_sizes") or [])):
+            return False
+        return True
+
+    topic_warnings: dict[str, str] = {}
+    for candidate in candidates:
+        warning = topic_warning(candidate["item_id"], request, req_terms,
+                                (enrichment or {}).get(candidate["item_id"]))
+        if warning:
+            candidate["reasons"].append(warning)
+            topic_warnings[candidate["item_id"]] = warning
+
+    # Generation is published-component-only. The top physically buildable
+    # candidate is used directly; score ranks candidates rather than acting as
+    # a semantic approval threshold.
+    selectable = [
+        item for item in candidates
+        if item["eligible"]
+        and buildable(item)
+    ]
+    chosen = selectable[0] if selectable else None
+    score = chosen["score"] if chosen else 0
+    warnings: list[str] = []
+    blocked = [c for c in candidates if c.get("subject_safe") is False]
+    if chosen:
+        action, reason = "reuse", "Top published buildable component selected by retrieval ranking."
+    elif not ranked_best:
+        action, reason = "text-only", "No published export-compatible component was eligible; render approved text only."
+    else:
+        action, reason = (
+            "text-only",
+            "No published component passed the editable-content, count, visual-unit, and shape "
+            "requirements; render approved text only.",
+        )
+    if dropped_intent:
+        warnings.append(
+            "intent carried non-canonical prose that was excluded from the "
+            f"semantic ratio: {', '.join(dropped_intent)}. Use canonical "
+            "retrieval tokens in `intent` and keep prose in `query`."
+        )
+    if chosen and chosen["item_id"] in topic_warnings:
+        warnings.append(f"{chosen['item_id']}: {topic_warnings[chosen['item_id']]}")
+    # A penalised layout-grammar mismatch can still win when nothing better is
+    # published. That is the intended fallback, but the reviewer must see it.
+    chosen_panel = (chosen or {}).get("retrieval", {}).get("display_surface")
+    if chosen_panel:
+        warnings.append(
+            f"{chosen['item_id']}: selected despite a layout-grammar mismatch — it is a "
+            f"{chosen_panel['font_px']}px display/quote layout with no {item_count}-unit "
+            "repeat group, and no better published candidate was available. Review the "
+            "rendered slide, or render text-only."
+        )
+
+    no_buildable_candidate = chosen is None
     decision = {
         "action": action,
         "item_id": chosen["item_id"] if chosen else None,
         "score": score,
         "reason": reason,
         "extraction_recommended": (
-            bool(request.get("recommend_extraction", False)) or low_score or no_semantic_match
+            bool(request.get("recommend_extraction", False)) or no_buildable_candidate
         ),
+        "warnings": warnings,
+        "evidence": {
+            "scored_intent_terms": sorted(intent_terms),
+            "dropped_intent_terms": dropped_intent,
+            "subject_warnings": (
+                [chosen["item_id"]]
+                if chosen and chosen["item_id"] in topic_warnings else []
+            ),
+        },
     }
     top_candidates = candidates[:top_n]
     if chosen and all(item["item_id"] != chosen["item_id"] for item in top_candidates):
         top_candidates.append(chosen)
     return decision, top_candidates
+
+
+# --- CLI input preflight ----------------------------------------------------
+# A request that carries no canonical `intent` is not "a weak request" — it is
+# an UNSCORABLE one. `overlap_score()` returns 1.0 for an empty request-term set
+# (nothing asked for is trivially covered), so an empty or malformed payload
+# earns FULL semantic credit, clears the reuse floor, and selects a generic
+# published asset at score 90. That is how `{}` produced
+# `reuse: sun.asset.logo (90.0)` and exited 0.
+#
+# There is no visual-requests.schema.json in this repo, so the contract below is
+# derived from what `score_request()` actually reads plus the shape real jobs
+# emit (analysis/visual-requests.json). Only `intent` is required: it is the one
+# field whose absence silently inverts the score. Everything else is optional
+# but type-checked when present, so a typo fails loudly instead of being ignored.
+# Nothing is repaired or guessed.
+_BATCH_MARKERS = ("slides", "requests")
+_SINGLE_MARKERS = ("intent", "tags", "content_structure", "content_shape",
+                   "request_id", "query")
+_STR_FIELDS = ("request_id", "query", "content_shape", "density", "brand",
+               "prefer_type")
+_STR_LIST_FIELDS = ("intent", "tags", "content_structure", "required_exports")
+
+
+def validate_single_request(payload: object, label: str) -> list[str]:
+    """Plain-language errors for one visual request (empty list == valid)."""
+    if not isinstance(payload, dict):
+        return [f"{label}: expected a JSON object, got {type(payload).__name__}"]
+    errors: list[str] = []
+    batch_keys = [key for key in _BATCH_MARKERS if key in payload]
+    if batch_keys:
+        errors.append(
+            f"{label}: carries {'/'.join(batch_keys)}, so this is a batch "
+            "envelope, not a single request — re-run with --batch-request"
+        )
+    if not payload:
+        return errors + [f"{label}: is an empty object; a request with no "
+                         "`intent` scores every generic item at full semantic "
+                         "credit, so it can never be scored honestly"]
+    for field in _STR_LIST_FIELDS:
+        if field not in payload:
+            continue
+        value = payload[field]
+        if not isinstance(value, list):
+            errors.append(f"{label}: '{field}' must be a list of strings, got "
+                          f"{type(value).__name__}")
+        elif any(not isinstance(v, str) or not v.strip() for v in value):
+            errors.append(f"{label}: '{field}' contains a non-string or blank entry")
+    for field in _STR_FIELDS:
+        if field in payload and not isinstance(payload[field], str):
+            errors.append(f"{label}: '{field}' must be a string, got "
+                          f"{type(payload[field]).__name__}")
+    if "item_count" in payload:
+        count = payload["item_count"]
+        if not isinstance(count, int) or isinstance(count, bool) or count <= 0:
+            errors.append(f"{label}: 'item_count' must be a positive integer, "
+                          f"got {count!r}")
+    if "recommend_extraction" in payload and not isinstance(
+            payload["recommend_extraction"], bool):
+        errors.append(f"{label}: 'recommend_extraction' must be true or false")
+    intent = payload.get("intent")
+    if not isinstance(intent, list) or not [v for v in intent
+                                            if isinstance(v, str) and v.strip()]:
+        errors.append(f"{label}: 'intent' is required and must be a non-empty "
+                      "list of strings — without it every candidate scores full "
+                      "semantic credit and a generic asset wins")
+    return errors
+
+
+def validate_batch_request(payload: object, label: str) -> list[str]:
+    """Errors for a whole job envelope. Every slide is checked BEFORE scoring
+    starts, so one bad slide can never leave a partial report on disk."""
+    if not isinstance(payload, dict):
+        return [f"{label}: expected a JSON object, got {type(payload).__name__}"]
+    slides = payload.get("slides")
+    if not isinstance(slides, list) or not slides:
+        if any(key in payload for key in _SINGLE_MARKERS):
+            return [f"{label}: looks like a single visual request, not a job "
+                    "envelope — re-run with --request"]
+        return [f"{label}: 'slides' is missing, empty, or not a list"]
+    errors: list[str] = []
+    for position, slide in enumerate(slides, 1):
+        slide_label = f"{label}: slide {position}"
+        if isinstance(slide, dict) and slide.get("request_id"):
+            slide_label = f"{label}: slide {position} ({slide['request_id']})"
+        errors.extend(validate_single_request(slide, slide_label))
+    return errors
+
+
+def _reject(errors: list[str]) -> None:
+    """Abort before any scoring or output write. Nothing is written on failure."""
+    if errors:
+        raise SystemExit(
+            "Refusing to score: the request input is invalid (no output was "
+            "written).\n  - " + "\n  - ".join(errors)
+        )
 
 
 def main() -> int:
@@ -490,16 +1019,35 @@ def main() -> int:
         help="Published-only retrieval projection (JSONL) used to broaden "
              "lexical matching. Pass 'none' to disable enrichment.",
     )
+    parser.add_argument(
+        "--unit-registry",
+        default=str(DEFAULT_UNIT_REGISTRY),
+        help="Full registry read (read-only) for published text-slot geometry, "
+             "used to check that a component repeats as many native units as the "
+             "request has parallel items. Pass 'none' to disable.",
+    )
+    parser.add_argument(
+        "--reject-item", action="append", default=[], metavar="ITEM_ID",
+        help="DIAGNOSTIC ONLY. Exclude a published item from selection, "
+             "repeatable. Normal generation must not need this: if a candidate "
+             "is unsafe, fix eligibility instead. The value is persisted to "
+             "`rejected_items` in the report so a rerun is reproducible.",
+    )
     args = parser.parse_args()
 
     registry = load_json(args.registry)
     weights = weights_for(args.item_type)
 
+    rejected = set(args.reject_item)
     registry_items = [
         item
         for item in registry.get("items", [])
-        if args.item_type is None or item.get("type") == args.item_type
+        if (args.item_type is None or item.get("type") == args.item_type)
+        and item.get("id") not in rejected
     ]
+    unknown = rejected - {item.get("id") for item in registry.get("items", [])}
+    if unknown:
+        raise SystemExit(f"--reject-item: not in registry: {', '.join(sorted(unknown))}")
 
     if args.retrieval_index.strip().lower() == "none":
         enrichment: dict[str, dict] = {}
@@ -512,16 +1060,33 @@ def main() -> int:
 
     index = _build_inverted_index(registry_items, enrichment)
 
+    def unit_profiles_for(requests: list[dict]) -> dict[str, dict]:
+        """Load slot geometry once per run, and only when a request needs it."""
+        if args.unit_registry.strip().lower() == "none":
+            return {}
+        if not any(wants_parallel_units(r) for r in requests if isinstance(r, dict)):
+            return {}
+        profiles = load_unit_profiles(args.unit_registry,
+                                      {item.get("id") for item in registry_items})
+        if not profiles:
+            print(f"note: no published slot geometry available ({args.unit_registry}); "
+                  f"scoring without the visual-unit and layout-grammar checks", file=sys.stderr)
+        return profiles
+
     if args.request:
         request = load_json(args.request)
+        _reject(validate_single_request(request, args.request))
+        unit_profiles = unit_profiles_for([request])
         filtered = _prefilter(request, registry_items, index)
-        decision, candidates = score_request(request, filtered, weights, args.prefer_set, args.top_n, enrichment)
+        decision, candidates = score_request(request, filtered, weights, args.prefer_set,
+                                             args.top_n, enrichment, unit_profiles)
         report = {
             "request_id": request.get("request_id", "visual-request"),
             "generated_at": now_iso(),
             "generated_by": "score_visual_items.py",
             "scorer_version": SCORER_VERSION,
             "retrieval_index": retrieval_index_used,
+            "rejected_items": sorted(rejected),
             "decision": decision,
             "candidates": candidates,
         }
@@ -530,11 +1095,17 @@ def main() -> int:
 
     else:
         batch = load_json(args.batch_request)
+        # Whole-batch preflight: every slide is validated before the FIRST one is
+        # scored, so an invalid slide 9 cannot leave a report covering slides 1-8.
+        _reject(validate_batch_request(batch, args.batch_request))
+        slides = batch["slides"]
         job_id = batch.get("job_id", "batch")
+        unit_profiles = unit_profiles_for(slides)
         slide_results = []
-        for slide_req in batch.get("slides", []):
+        for slide_req in slides:
             filtered = _prefilter(slide_req, registry_items, index)
-            decision, candidates = score_request(slide_req, filtered, weights, args.prefer_set, args.top_n, enrichment)
+            decision, candidates = score_request(slide_req, filtered, weights, args.prefer_set,
+                                                 args.top_n, enrichment, unit_profiles)
             slide_results.append(
                 {
                     "request_id": slide_req.get("request_id", ""),
@@ -549,6 +1120,7 @@ def main() -> int:
             "generated_by": "score_visual_items.py",
             "scorer_version": SCORER_VERSION,
             "retrieval_index": retrieval_index_used,
+            "rejected_items": sorted(rejected),
             "slides": slide_results,
         }
         write_json(args.output, report)

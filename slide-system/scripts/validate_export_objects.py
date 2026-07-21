@@ -13,6 +13,9 @@ Checks:
      follows the manifest's merged z list).
   3. Parity report.json files (from compare_renders.py) vs the thresholds in
      slide-system/registries/export-qa-thresholds.json.
+  4. Native text geometry: no text box off-slide, and no non-wrapping box whose
+     line is wider than the box (PowerPoint does not clip text to its shape, so
+     that overruns the neighbouring shape — invisible to browser/PDF parity).
 
 Exit 0 = PASS, 1 = FAIL. Writes validation-report.json next to --pptx.
 
@@ -32,6 +35,21 @@ from _common import SYSTEM_ROOT, load_json, write_json
 
 EMU_PER_IN = 914400
 DEFAULT_THRESHOLDS = SYSTEM_ROOT / "registries" / "export-qa-thresholds.json"
+
+
+def expected_svg_blips(overlays: list[dict], vector_root: Path) -> int:
+    """Count only vector sources the builder could actually embed.
+
+    Missing relative SVGs intentionally fall back to an overlay PNG. That PPTX
+    remains layered and visually verifiable, so the validator must not demand
+    an svgBlip the builder could never have written.
+    """
+    return sum(
+        1 for overlay in overlays
+        if overlay.get("vector_source")
+        and not overlay.get("css_effects")
+        and (vector_root / overlay["vector_source"]).is_file()
+    )
 
 
 def check_manifest_contract(manifest: dict, failures: list[str]) -> None:
@@ -55,7 +73,7 @@ def check_manifest_contract(manifest: dict, failures: list[str]) -> None:
 
 
 def check_pptx_structure(pptx_path: Path, manifest: dict, tolerance_in: float,
-                         failures: list[str]) -> dict:
+                         failures: list[str], vector_root: Path) -> dict:
     from pptx import Presentation
     from pptx.enum.shapes import MSO_SHAPE_TYPE
 
@@ -124,13 +142,13 @@ def check_pptx_structure(pptx_path: Path, manifest: dict, tolerance_in: float,
                         failures.append(f"slide {sid} {name}: {label} off by "
                                         f"{abs(e - g):.4f}in (> {tolerance_in}in)")
 
-        # svgBlip: every clean vector_source overlay must carry the extension.
-        expected_svg = sum(1 for ov in declared_ov
-                           if ov.get("vector_source") and not ov.get("css_effects"))
+        # svgBlip only applies when the referenced source is available. The
+        # builder otherwise writes the same positioned PNG overlay as fallback.
+        expected_svg = expected_svg_blips(declared_ov, vector_root)
         actual_svg = slide_xml.get(sid, "").count("svgBlip")
         if actual_svg < expected_svg:
             failures.append(f"slide {sid}: svgBlip count {actual_svg} < expected "
-                            f"{expected_svg} (vector_source overlays without css effects)")
+                            f"{expected_svg} (available vector_source overlays without css effects)")
 
         # Z-order: shapes after the base must follow the manifest's merged z list.
         merged = sorted(
@@ -157,6 +175,76 @@ def check_pptx_structure(pptx_path: Path, manifest: dict, tolerance_in: float,
                                   "textboxes": len(textboxes),
                                   "svg_blips": actual_svg})
     return summary
+
+
+# A non-wrapping box is only reported once its single line is estimated to run
+# this far past its own width. PowerPoint does not clip text to its shape, so
+# anything beyond the box paints over whatever sits next to it. The slack
+# absorbs the glyph-width estimate's error on a heading that legitimately fills
+# its box (~10-15% high); the defect this gate exists for overruns by ~95%.
+TEXT_OVERFLOW_SLACK = 1.35
+# …and by at least one em in absolute terms. A ratio alone misjudges tiny boxes
+# shrink-wrapped to one glyph (a numbered badge in a 6pt box): the estimator is
+# a whole glyph off there, while an overrun narrower than a single character
+# cannot reach a neighbouring shape. Real card-body overruns are many ems wide.
+TEXT_OVERFLOW_MIN_EM = 1.0
+
+
+def check_text_overflow(pptx_path: Path, failures: list[str]) -> dict:
+    """Native text rendering outside its own text box — the PPTX-only defect.
+
+    Browser and PDF parity cannot see this: the browser wrapped the same string
+    inside the same box, so both look correct while PowerPoint paints one long
+    line across its neighbours. Checked here on the real exported shapes.
+    """
+    from pptx import Presentation
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+
+    from build_hybrid_pptx import AVERAGE_GLYPH_WIDTH
+
+    prs = Presentation(str(pptx_path))
+    slide_w_in = prs.slide_width / EMU_PER_IN
+    slide_h_in = prs.slide_height / EMU_PER_IN
+    checked = overflowing = 0
+
+    for index, slide in enumerate(prs.slides, start=1):
+        for shape in slide.shapes:
+            if shape.shape_type == MSO_SHAPE_TYPE.AUTO_SHAPE or not shape.has_text_frame:
+                continue
+            frame = shape.text_frame
+            if not frame.text.strip():
+                continue
+            checked += 1
+            left_in = shape.left / EMU_PER_IN
+            top_in = shape.top / EMU_PER_IN
+            width_pt = shape.width / EMU_PER_IN * 72.0
+
+            if (left_in + shape.width / EMU_PER_IN > slide_w_in + 0.02
+                    or top_in + shape.height / EMU_PER_IN > slide_h_in + 0.02):
+                failures.append(
+                    f"slide {index} text {shape.name!r}: box extends past the slide "
+                    f"({left_in:.2f}+{shape.width / EMU_PER_IN:.2f} x "
+                    f"{top_in:.2f}+{shape.height / EMU_PER_IN:.2f}in on "
+                    f"{slide_w_in:.2f}x{slide_h_in:.2f}in)")
+
+            if frame.word_wrap:
+                continue  # PowerPoint keeps a wrapping box inside its own width
+            for para in frame.paragraphs:
+                text = "".join(r.text for r in para.runs).strip()
+                if not text:
+                    continue
+                size_pt = max((r.font.size.pt for r in para.runs if r.font.size), default=0)
+                estimate_pt = len(text) * size_pt * AVERAGE_GLYPH_WIDTH
+                if (estimate_pt > width_pt * TEXT_OVERFLOW_SLACK
+                        and estimate_pt - width_pt > size_pt * TEXT_OVERFLOW_MIN_EM):
+                    overflowing += 1
+                    failures.append(
+                        f"slide {index} text {shape.name!r}: non-wrapping line needs "
+                        f"~{estimate_pt:.0f}pt in a {width_pt:.0f}pt box — it will render "
+                        f"over neighbouring shapes. Enable word wrap for this box "
+                        f"(build_hybrid_pptx wrapping contract)")
+
+    return {"text_boxes_checked": checked, "overflowing": overflowing}
 
 
 def check_parity(parity_dir: Path, thresholds: dict, failures: list[str]) -> list[dict]:
@@ -248,8 +336,11 @@ def main() -> int:
                         f"(one tag per card/arrow/icon/illustration), or pass "
                         f"--allow-full-bleed to accept the merged picture")
 
-    structure = check_pptx_structure(pptx_path, manifest, args.tolerance_in, failures) \
+    structure = check_pptx_structure(pptx_path, manifest, args.tolerance_in, failures,
+                                     Path(args.manifest).resolve().parent) \
         if not failures else {}
+    if structure:
+        structure["text_overflow"] = check_text_overflow(pptx_path, failures)
     parity = []
     if args.parity_dir:
         thresholds = load_json(args.thresholds)

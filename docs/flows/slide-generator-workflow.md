@@ -447,7 +447,7 @@ outputs/slide-jobs/<job-id>/
 | `compare_renders.py` | Python | Measure parity metrics (always exit 0, not a gate) |
 | `decompose_svg_objects.py` | Python | Split full-page SVG → fragments + tagged snippet.html |
 | `measure_svg_groups.js` | Node.js | Measure group bboxes in Chromium (used by decompose) |
-| `score_visual_items.py` | Python | Score visual candidates (75/65 thresholds) |
+| `score_visual_items.py` | Python | Rank published visual candidates; choose reuse or text-only |
 | `check_requirements.py` | Python | Validate requirements + capabilities |
 | `package_job.py` | Python | Delivery manifest + prune empty directories |
 | `build_component_catalog.py` | Python | Rebuild visual library review UI |

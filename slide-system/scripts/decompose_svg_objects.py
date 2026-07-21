@@ -103,6 +103,45 @@ def document_groups(root: ET.Element) -> list[ET.Element]:
     return groups
 
 
+def ancestor_transform(root: ET.Element, parent_map: dict, group_el: ET.Element) -> str:
+    """Transform chain from the SVG root down to ``group_el``'s parent.
+
+    The browser measures a group WITH these ancestor transforms applied, so a
+    fragment that copies the group alone paints its geometry somewhere else
+    entirely: a cropped component whose layer sits under
+    ``translate(-499 -1859)`` renders completely blank inside a viewBox that
+    starts at the origin. Re-applying the chain keeps the measured bounds and
+    the painted geometry in one space.
+    """
+    chain: list[str] = []
+    node = parent_map.get(group_el)
+    while node is not None and node is not root:
+        transform = (node.get("transform") or "").strip()
+        if transform:
+            chain.append(transform)
+        node = parent_map.get(node)
+    return " ".join(reversed(chain))
+
+
+def viewbox(root: ET.Element) -> tuple[float, float, float, float] | None:
+    """Parse the root viewBox as (min_x, min_y, width, height)."""
+    raw = (root.get("viewBox") or "").replace(",", " ").split()
+    if len(raw) != 4:
+        return None
+    try:
+        min_x, min_y, width, height = (float(v) for v in raw)
+    except ValueError:
+        return None
+    return (min_x, min_y, width, height) if width > 0 and height > 0 else None
+
+
+def intersects_canvas(bounds: dict, canvas_w: float, canvas_h: float,
+                      min_x: float = 0.0, min_y: float = 0.0) -> bool:
+    """True when any part of an object's bbox falls inside the visible canvas."""
+    return (bounds["x"] + bounds["w"] > min_x and bounds["x"] < min_x + canvas_w
+            and bounds["y"] + bounds["h"] > min_y and bounds["y"] < min_y + canvas_h)
+
+
 def cluster_consecutive(boxes: list[dict], merge_gap: float) -> list[list[dict]]:
     """Group consecutive document-order boxes whose bboxes overlap.
 
@@ -208,7 +247,15 @@ def main() -> int:
     boxes = measured["groups"]
 
     root = ET.fromstring(svg_path.read_text(encoding="utf-8"))
+    view_box = viewbox(root)
+    # The measurement is in CSS px of the rendered viewport; the document is in
+    # user units. They coincide only when the viewBox matches the rendered size
+    # and starts at the origin. Derive the mapping from the SVG's own metadata
+    # so cropped/scaled components land in the right space.
+    origin_x, origin_y = (view_box[0], view_box[1]) if view_box else (0.0, 0.0)
     groups = document_groups(root)
+    parent_map = {c: p for p in root.iter() for c in p}
+    group_chain = [ancestor_transform(root, parent_map, g) for g in groups]
     if len(groups) != len(boxes):
         raise SystemExit(f"group mismatch: parsed {len(groups)} vs measured "
                          f"{len(boxes)} — SVG structure not understood")
@@ -226,16 +273,29 @@ def main() -> int:
         [u for u in units if u not in full_bleed], args.merge_gap)
 
     objects, base_candidates, warnings, snippet_divs = [], [], [], []
+    off_canvas: list[dict] = []
     for n, members in enumerate(clusters, start=1):
-        x0 = min(u["x"] for u in members) - args.margin
-        y0 = min(u["y"] for u in members) - args.margin
-        x1 = max(u["x"] + u["w"] for u in members) + args.margin
-        y1 = max(u["y"] + u["h"] for u in members) + args.margin
+        x0 = min(u["x"] for u in members) - args.margin + origin_x
+        y0 = min(u["y"] for u in members) - args.margin + origin_y
+        x1 = max(u["x"] + u["w"] for u in members) + args.margin + origin_x
+        y1 = max(u["y"] + u["h"] for u in members) + args.margin + origin_y
         x0, y0 = math.floor(x0), math.floor(y0)
         w, h = math.ceil(x1) - x0, math.ceil(y1) - y0
         coverage = (w * h) / (canvas_w * canvas_h)
         obj_id = f"{prefix}-obj-{n:02d}"
         file_name = f"{obj_id}.svg"
+
+        bounds = {"x": x0, "y": y0, "w": w, "h": h}
+        if not intersects_canvas(bounds, canvas_w, canvas_h, origin_x, origin_y):
+            # Geometry the crop threw away. Emitting it produces an overlay the
+            # deck positions off-slide (or an empty PNG); it is not artwork.
+            off_canvas.append({"id": obj_id, "bounds": bounds,
+                               "groups": sorted({u["group"] for u in members})})
+            warnings.append(
+                f"{obj_id}: bounds {x0},{y0} {w}x{h} fall entirely outside the "
+                f"source viewBox ({canvas_w:.0f}x{canvas_h:.0f}) — dropped as "
+                f"cropped-away geometry, not emitted as an object")
+            continue
 
         frag = ET.Element(f"{{{SVG_NS}}}svg", {
             "viewBox": f"0 0 {w} {h}", "width": str(w), "height": str(h)})
@@ -245,12 +305,23 @@ def main() -> int:
         # misrender an svgBlip whose viewBox starts at the source-page x/y,
         # even though browsers display it correctly. Translate source geometry
         # into the normalized fragment viewport instead.
-        content = ET.SubElement(
+        normalized = ET.SubElement(
             frag, f"{{{SVG_NS}}}g",
             {"transform": f"translate({-x0} {-y0})"},
         )
+        chain_hosts: dict[str, ET.Element] = {}
+
+        def host_for(chain: str, _under=normalized) -> ET.Element:
+            """Re-create the group's ancestor transform chain inside the fragment."""
+            if chain not in chain_hosts:
+                chain_hosts[chain] = (
+                    ET.SubElement(_under, f"{{{SVG_NS}}}g", {"transform": chain})
+                    if chain else _under)
+            return chain_hosts[chain]
+
         for unit in members:
             source = groups[unit["group"]]
+            content = host_for(group_chain[unit["group"]])
             if unit["children"] is None:
                 content.append(copy.deepcopy(source))
             else:
@@ -280,11 +351,20 @@ def main() -> int:
                 f"tagged overlay; the export gate rejects full-bleed overlays")
             continue
         objects.append(record)
+        # Percentages of the SOURCE canvas, not raw px: a component cropped to
+        # its own viewBox (e.g. 1999x620) is not in slide coordinates, and
+        # pasting its px offsets into a 1920x1080 stage puts the artwork in the
+        # wrong place at the wrong size. Percent maps onto whatever box the
+        # snippet is dropped into, and is identity for a full-canvas source.
+        def pct(value: float, span: float) -> str:
+            return f"{value / span * 100:.4f}%"
+
         snippet_divs.append(
             f'<div data-export-layer="overlay" data-export-id="{obj_id}"\n'
             f'     data-export-vector-source="{href_base}/{file_name}"\n'
-            f'     style="position:absolute;left:{x0}px;top:{y0}px;'
-            f'width:{w}px;height:{h}px;z-index:{n}">\n'
+            f'     style="position:absolute;'
+            f'left:{pct(x0 - origin_x, canvas_w)};top:{pct(y0 - origin_y, canvas_h)};'
+            f'width:{pct(w, canvas_w)};height:{pct(h, canvas_h)};z-index:{n}">\n'
             f'  <img src="{href_base}/{file_name}" '
             f'style="width:100%;height:100%" alt=""></div>')
 
@@ -297,8 +377,14 @@ def main() -> int:
     manifest = {
         "source": str(svg_path), "source_sha256": sha256_file(svg_path),
         "canvas": {"w": canvas_w, "h": canvas_h},
+        # Snippet geometry is relative to this box, so a consumer never has to
+        # guess whether the numbers are slide px or source-page px.
+        "coordinate_space": {"origin_x": origin_x, "origin_y": origin_y,
+                             "w": canvas_w, "h": canvas_h, "units": "percent-of-canvas"},
         "prefix": prefix, "max_coverage_ratio": max_ratio,
         "objects": objects, "base_candidates": base_candidates,
+        "off_canvas": off_canvas,
+        "buildable": bool(objects or base_candidates),
         "split_notes": notes, "warnings": warnings,
     }
     write_json(out_dir / "decompose-manifest.json", manifest)
@@ -308,11 +394,20 @@ def main() -> int:
     for line in warnings:
         print(f"WARN {line}", file=sys.stderr)
     print(f"{prefix}: {len(objects)} object(s), {len(base_candidates)} "
-          f"base-candidate(s) -> {out_dir}/snippet.html")
+          f"base-candidate(s), {len(off_canvas)} off-canvas -> {out_dir}/snippet.html")
     for record in objects:
         b = record["bounds"]
         print(f"  {record['id']}: groups {record['groups']} "
               f"@ {b['x']},{b['y']} {b['w']}x{b['h']}")
+    if not manifest["buildable"]:
+        # Every measured object was cropped away. The component cannot be
+        # rendered at all, so the pipeline must reject it rather than build a
+        # slide of empty overlays and call it a faithful reuse.
+        print(f"ERROR: {prefix} is NOT BUILDABLE — all {len(off_canvas)} measured "
+              f"object(s) fall outside the source viewBox "
+              f"({canvas_w:.0f}x{canvas_h:.0f}); pick another component.",
+              file=sys.stderr)
+        return 2
     return 0
 
 

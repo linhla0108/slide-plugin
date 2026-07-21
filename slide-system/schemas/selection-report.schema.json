@@ -10,16 +10,41 @@
     "generated_by": { "type": "string" },
     "scorer_version": { "type": "string" },
     "retrieval_index": { "type": ["string", "null"] },
+    "rejected_items": { "type": "array", "items": { "type": "string" } },
     "decision": {
       "type": "object",
-      "required": ["action", "score"],
+      "required": ["action", "item_id", "score", "reason", "extraction_recommended"],
       "properties": {
-        "action": { "enum": ["reuse", "adapt-local", "custom-local", "blocked"] },
+        "action": { "enum": ["reuse", "text-only"] },
         "item_id": { "type": ["string", "null"] },
         "score": { "type": "number", "minimum": 0, "maximum": 100 },
         "reason": { "type": "string" },
-        "extraction_recommended": { "type": "boolean" }
+        "extraction_recommended": { "type": "boolean" },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "evidence": {
+          "type": "object",
+          "properties": {
+            "scored_intent_terms": { "type": "array", "items": { "type": "string" } },
+            "dropped_intent_terms": { "type": "array", "items": { "type": "string" } },
+            "subject_warnings": { "type": "array", "items": { "type": "string" } }
+          }
+        }
       },
+      "allOf": [
+        {
+          "if": { "properties": { "action": { "const": "reuse" } } },
+          "then": { "properties": { "item_id": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "action": { "const": "text-only" } } },
+          "then": {
+            "properties": {
+              "item_id": { "type": "null" },
+              "score": { "const": 0 }
+            }
+          }
+        }
+      ],
       "additionalProperties": false
     },
     "candidates": {
