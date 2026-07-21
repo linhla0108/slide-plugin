@@ -344,17 +344,81 @@ function extractLayeredScript(selector) {
         }
         return null;
       }
+      // Placement contract: every text item on a slide is a native component
+      // slot, declared slide chrome, or free external text. Only a native slot
+      // is allowed to sit on its component's own artwork — the component drew
+      // that box for that copy. Anything undeclared is treated as external,
+      // which is the checked (conservative) class, so forgetting the attribute
+      // can never buy a text item an exemption.
+      function placementOf(el) {
+        for (var n = el; n && n !== root.parentNode; n = n.parentElement) {
+          if (n.nodeType !== 1) continue;
+          if (n.hasAttribute('data-slot-id')) {
+            return { placement: 'slot', slotId: n.getAttribute('data-slot-id') };
+          }
+          var declared = n.getAttribute('data-placement');
+          if (declared) return { placement: declared, slotId: null };
+        }
+        return { placement: 'external', slotId: null };
+      }
+
+      // Inline rich text must export as one native PowerPoint textbox. Exporting
+      // a parent paragraph and its <b>/<span> children as independent boxes puts
+      // both at the parent's origin and makes the runs visibly collide.
+      function hasInlineTextChild(el) {
+        for (var i = 0; i < el.childNodes.length; i++) {
+          var node = el.childNodes[i];
+          if (node.nodeType !== 1 || node.tagName === 'BR') continue;
+          var childStyle = window.getComputedStyle(node);
+          if ((childStyle.display === 'inline' || childStyle.display === 'inline-block') &&
+              node.textContent && node.textContent.trim()) return true;
+        }
+        return false;
+      }
+
+      function isInlineRunOfCapturedAncestor(el) {
+        for (var parent = el.parentElement; parent && parent !== root.parentElement; parent = parent.parentElement) {
+          if (hasInlineTextChild(parent)) return true;
+        }
+        return false;
+      }
+
+      function inlineRuns(el, fallbackStyle) {
+        var runs = [];
+        for (var i = 0; i < el.childNodes.length; i++) {
+          var node = el.childNodes[i];
+          var style = fallbackStyle;
+          var value = '';
+          if (node.nodeType === 3) value = node.textContent;
+          else if (node.nodeType === 1 && node.tagName === 'BR') value = '\\n';
+          else if (node.nodeType === 1) {
+            value = node.textContent;
+            style = window.getComputedStyle(node);
+          }
+          if (!value) continue;
+          runs.push({ text: value, fontWeight: style.fontWeight, color: style.color,
+            fontFamily: style.fontFamily, fontSize: style.fontSize,
+            letterSpacing: style.letterSpacing });
+        }
+        return runs;
+      }
 
       var text = [];
       root.querySelectorAll('*').forEach(function(el) {
         if (!TEXT_TAGS.has(el.tagName.toLowerCase())) return;
         if (hasSkipAncestor(el)) return;
+        if (isInlineRunOfCapturedAncestor(el)) return;
         var t = '';
         var sawText = false;
+        var aggregateInlineRuns = hasInlineTextChild(el);
         for (var i = 0; i < el.childNodes.length; i++) {
           var node = el.childNodes[i];
           if (node.nodeType === 3) { t += node.textContent; sawText = sawText || !!node.textContent.trim(); }
           else if (node.nodeType === 1 && node.tagName === 'BR') t += '\\n';  // keep explicit line breaks
+          else if (aggregateInlineRuns && node.nodeType === 1) {
+            t += node.textContent;
+            sawText = sawText || !!node.textContent.trim();
+          }
         }
         t = t.replace(/[ \\t]*\\n[ \\t]*/g, '\\n').trim();
         if (!sawText || !t) return;
@@ -366,9 +430,12 @@ function extractLayeredScript(selector) {
         var lh = parseFloat(cs.lineHeight);
         if (!lh || isNaN(lh)) lh = fontPx * 1.2;
         var ovl = inOverlay(el);
+        var place = placementOf(el);
         text.push({
           tag: el.tagName.toLowerCase(),
           text: t,
+          placement: place.placement,
+          slotId: place.slotId,
           x: r.left - rootRect.left, y: r.top - rootRect.top,
           w: r.width, h: r.height,
           z: order.get(el) || 0,
@@ -378,6 +445,7 @@ function extractLayeredScript(selector) {
           textTransform: cs.textTransform,
           letterSpacing: cs.letterSpacing,
           fontFamily: cs.fontFamily,
+          runs: aggregateInlineRuns ? inlineRuns(el, cs) : null,
           lineCount: Math.max(1, Math.round(r.height / lh)),
           inOverlay: ovl ? (ovl.getAttribute('data-export-group') || ovl.getAttribute('data-export-id')) : null
         });

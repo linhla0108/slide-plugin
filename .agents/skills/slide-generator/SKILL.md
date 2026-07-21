@@ -42,9 +42,10 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
    (`var(--sun-orange)`, `var(--ink)`, etc.). Gate fails >5 non-brand colors.
 3. **NO hand-written selection reports.** Run `score_visual_items.py` — never
    fabricate `selection-report.json`. Gate: `validate_selection_report.py`.
-4. **NO skipping published components.** When scorer says `reuse` (≥75) or
-   `adapt-local`, pass the item path to `decompose_svg_objects.py` and use the
-   emitted `snippet.html` fragments. No raw CSS, no eyeballing the layout.
+4. **Published-only visuals.** When scorer says `reuse`, pass the item path to
+   `decompose_svg_objects.py` and use the emitted `snippet.html` fragments. A
+   `text-only` decision must render only the approved copy; never invent a
+   slide-local visual, component, or Draft.
 5. **NEVER `Read`/`cat` heavy library files into context.** `visual.svg` (up to
    12 MB, ~100% base64 PNG), `text-slots.json` (up to ~120 KB), `evidence/*`,
    `preview/*`, `catalog-data.json`, `picker-data.json`. Route them through
@@ -86,16 +87,17 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
    auto-reads `registries/component-retrieval-index.jsonl` for broadened
    (capped) lexical matching plus anti-use-case / count-fit / zero-slot
    penalties; read each candidate's `retrieval` block and `reasons` when
-   reviewing decisions. If the top raw scorer is below the semantic floor, the
-   decision may choose the best valid runner-up; review the emitted selected
-   candidate rather than assuming `candidates[0]` is always the decision.
-   Score != buildability — still verify geometry/count/domain fit before
-   building a reuse/adapt slide.
+    reviewing decisions. Score ranks candidates but is not an approval floor:
+    reuse the top published candidate that passes editable-content, count, and
+    content-shape gates. A source-topic mismatch is emitted as a warning for
+    review, not a selection blocker. Otherwise the action is `text-only`;
+    candidates remain suggestions for a user-approved future extraction, never
+    an automatic build instruction.
    The scorer owns this file: never edit `selection-report.json`, add
    `curation_note`/`scorer_*` fields, or relabel a decision. If the selected
    item has a real geometry or domain defect, show it during the approval step
-   and ask the user whether to proceed; regenerate the requests/report after
-   the decision rather than mutating scorer output.
+   and regenerate the requests/report after the decision rather than mutating
+   scorer output.
 8. **Validate selection (BLOCKING GATE).**
    ```bash
     <project-python> slide-system/scripts/validate_selection_report.py \
@@ -103,19 +105,61 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
        --visual-requests <run>/analysis/visual-requests.json
    ```
    EXIT 0 required. EXIT 1 = fix and re-run step 7.
-9. **Approval.** Show scorer decisions (reuse/adapt/custom per slide).
-10. **Build HTML** (after approval only).
-    - **Reuse/adapt-local slides:** scaffold from the component — do NOT redraw.
+9. **Plan reusable-slot copy (BLOCKING for reuse).** For every `reuse`
+   decision, create `<run>/analysis/slot-content-plan.json` using the selected
+   component's actual slot ids from `read_text_slots.py --with-typography`.
+   Use only compact display copy that belongs in the native layout; leave
+   unused slots empty and put detailed explanation in speaker notes or a
+   follow-up slide. Never solve capacity by shrinking below the native
+   projection floor, moving geometry, or filling every slot.
+   **Inside a repeated unit (card, step, column, strip cell): one short label
+   plus at most one compact support line.** Extraction splits the original
+   card's wrapped paragraph into one slot per drawn line, so a card with five
+   slots is still a one-label surface — filling all of them projects as narrow
+   ragged columns and the gate rejects it. Detail goes to `speaker_notes`.
+   **An explanation of a parallel item goes in that item's native slot or in
+   `speaker_notes` — never into an ad-hoc caption positioned near the
+   component.** A component's artwork is drawn to its own bounds and reaches
+   into space that looks empty in the HTML, so a caption placed above/below the
+   band lands on the artwork. The post-capture `text_over_artwork` gate rejects
+   that, and z-index does not fix it.
+   Validate:
+   ```bash
+   <project-python> slide-system/scripts/validate_slot_content_plan.py \
+       --plan <run>/analysis/slot-content-plan.json \
+       --selection-report <run>/analysis/selection-report.json \
+       --out <run>/qa/slot-content-plan-report.json
+   ```
+   Read `slide-system/rules/component-content-fit.md` for the contract.
+   `text-only` slides need no plan entry.
+10. **Build HTML.** A normal slide job does not wait for component selection.
+   - Copy `slide-system/boilerplates/deck_stage.js` to `<run>/deck_stage.js`,
+     load it with `<script src="deck_stage.js"></script>`, and place every
+     `<section>` inside `<deck-stage width="1920" height="1080">`. Do not
+     hand-roll fixed-canvas navigation or scaling.
+    - **Reuse slides:** scaffold from the component — do NOT redraw.
       Run `scaffold_slide_from_component.py --item-id <id>` for a fragment with
       the real `.bg` + `.slot` structure (from `preview.html`), then fill text
       into the slots. Decompose artwork via `decompose_svg_objects.py` (it reads
       the SVG); get slot metadata via `read_text_slots.py --slots-only`. Never
       `Read` `visual.svg`/`text-slots.json` directly.
-    - **Custom-local slides:** build from scratch with brand rules:
-      colors=CSS vars only, font=Proxima Nova only, icons=SVG only.
+    - **Text-only slides:** render the approved title/body in a simple readable
+      text layout. Do not add an invented visual, icon, decorative treatment,
+      or Draft. Keep `candidates` and `extraction_recommended` as suggestions
+      for the end user; create/extract a component only after their explicit
+      approval in the manual component workflow.
     - Tag ALL visuals with `data-export-layer`/`data-export-id` for PPTX.
+    - Declare each text item's placement: native slots carry `data-slot-id`
+      (kept by the scaffold); mark chrome `data-placement="chrome"` and free
+      slide text `data-placement="external"`. Only native slots may sit on
+      their component's artwork; everything else must clear it geometrically.
+      Keep bands/overlays below valid chrome, and set explicit z-order only
+      after the geometry is valid.
     - Full-page SVGs MUST go through `decompose_svg_objects.py` first.
     - Canvas: `1920×1080`. Keep text in leaf elements. Keep editable.
+    - Before export, every local `img`, `href`, and CSS `url()` asset must
+      resolve from the run. Do not leave a decomposer snippet pointing at an
+      asset directory that was never generated.
 11. **Validate brand compliance (BLOCKING GATE).**
     ```bash
     <project-python> slide-system/scripts/validate_brand_compliance.py \
@@ -124,7 +168,7 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
         --brand-pack slide-system/brand-packs/sun-studio/manifest.json
     ```
     EXIT 0 required. EXIT 1 = fix HTML and re-validate.
-    Then run the component-fidelity gate (T3) — confirms `reuse`/`adapt-local`
+    Then run the component-fidelity gate (T3) — confirms `reuse`
     slides actually use their selected component, not just a marker:
     ```bash
     <project-python> slide-system/scripts/validate_component_fidelity.py \
@@ -134,12 +178,26 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
     ```
     Runs in `--warn` mode during rollout (always exits 0); drop `--warn` to
     make it blocking once existing decks are rebuilt from scaffold.
+
+    Slot-id coverage proves the component was *used*; it does not prove the
+    slide is *readable*. Export runs a second, blocking pass on the capture
+    manifest (`--export-manifest`) that fails on overlapping text, text under
+    3.0:1 contrast against the rendered background, and overlays placed off the
+    canvas. When it fires: shorten or scale the copy inside its own native
+    slot, or — if the component has no viable placement — treat it as
+    non-buildable and select another. Never move or redraw component geometry,
+    and never hand-draw a replacement for artwork that would not render.
 12. **Export PPTX.** Single command:
     ```bash
     <project-python> slide-system/scripts/export_pptx.py \
-        --html <run>/deck.html --output <run>/<name>.pptx --mode layered
+        --html <run>/deck.html --slides <N> --out-dir <run> \
+        --output <run>/<name>.pptx --mode layered
     ```
-    `validate_export_objects.py` is the pass/fail gate.
+    For a normal slide-job run with `analysis/selection-report.json`, export
+    re-runs selection, deck-stage, brand, and component-fidelity gates before
+    capture, then the render-legibility gate on the capture manifest before the
+    PPTX is built. `validate_export_objects.py` remains the export-object
+    pass/fail gate after capture.
 13. **Cleanup (MANDATORY).** Run after export PASS:
     ```bash
     <project-python> slide-system/scripts/cleanup_run.py <run>
@@ -173,7 +231,7 @@ Never fall back to WindowsApps `python3`, a global Python, or a different venv.
 
 ## Component/Template Build Reference
 
-When scorer says `reuse` or `adapt-local`:
+When scorer says `reuse`:
 1. Take the item path **verbatim** from `selection-report.json` / the registry
    `paths` (`paths.visual`, `paths.preview`). Do NOT glob `library/` — that risks
    Reading the 12 MB SVGs. Library items are flat: `<item-dir>/visual.svg`,
@@ -221,6 +279,8 @@ Canvas: `1920×1080`, `16:9`
 ## Boundaries
 
 - Never extract/publish shared components. Recommend `/component-extractor`.
-- When no published item fits, use slide-local and record extraction rec.
+- When no published item fits, render approved text only and record the ranked
+  candidates plus an extraction recommendation. Never create a local visual or
+  trigger extraction without explicit end-user approval.
 - Never select staging, deprecated, or export-incompatible items.
 - Use SUN.STUDIO brand pack by default unless user selects another.

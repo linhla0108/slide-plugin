@@ -7,48 +7,23 @@ import argparse
 from pathlib import Path
 
 from _common import load_json, now_iso, write_json, SYSTEM_ROOT
+from component_units import unit_model
+from score_visual_items import SHAPE_TYPE_MAP, declared_set_sizes, shape_lock_ok
+from validate_slot_content_plan import _contracts_from_registry
 
 
-VALID_ACTIONS = {"reuse", "adapt-local", "custom-local", "blocked"}
+VALID_ACTIONS = {"reuse", "text-only"}
 REQUIRED_CRITERIA = {"semantic_intent", "content_structure", "density", "brand", "export_compatibility", "accessibility"}
-DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended"}
+DECISION_FIELDS = {"action", "item_id", "score", "reason", "extraction_recommended", "warnings", "evidence"}
 SINGLE_REPORT_FIELDS = {
     "request_id", "generated_at", "generated_by", "scorer_version",
-    "retrieval_index", "decision", "candidates",
+    "retrieval_index", "rejected_items", "decision", "candidates",
 }
 BATCH_REPORT_FIELDS = {
     "job_id", "generated_at", "generated_by", "scorer_version",
-    "retrieval_index", "slides",
+    "retrieval_index", "rejected_items", "slides",
 }
 SLIDE_FIELDS = {"request_id", "decision", "candidates"}
-
-# Adapt-local floor — kept in sync with score_visual_items.py decision branch.
-ADAPT_FLOOR = 65
-SEMANTIC_FLOOR = 10.5
-
-# T1 selection-lock: each content_shape maps to the intent/tag tokens a chosen
-# component must carry. Matched (lowercased) against the registry item's
-# intent + tags. Synonyms are included so the map is lenient on phrasing but
-# strict on category (a `timeline` shape can never lock to a `cover` item).
-# The last four shapes were added when component-first retrieval landed: the
-# original six template-era shapes could not express team/profile sets, tier
-# ladders, icon reference sheets, or review/check-in slides, which made
-# --strict-shape unusable for those legitimate published items. Every allowed
-# token below is drawn from real published-item intent/tags or the scorer's
-# canonical vocabulary — do not add generic filler words.
-SHAPE_TYPE_MAP: dict[str, set[str]] = {
-    "cover": {"cover", "hero", "title", "opening", "intro"},
-    "stats": {"statistics", "data", "metrics", "kpi", "numbers", "figures", "grid"},
-    "comparison": {"comparison", "versus", "do-dont", "what-how", "pros-cons", "contrast"},
-    "timeline": {"timeline", "schedule", "roadmap", "process", "milestones", "phases", "instructions"},
-    "checklist": {"checklist", "preparation", "steps", "action-items", "todo", "requirements"},
-    "two-column": {"two-column", "split", "split-layout", "layout"},
-    "profile": {"team", "profile", "profile-layout", "profile-circles", "contributors", "roles", "personas"},
-    "tiers": {"levels", "tiers", "ranking", "maturity-model", "capability-ladder"},
-    "icons": {"icons", "icon-reference", "icon-library", "reference-sheet", "glyph-grid"},
-    "review": {"review", "check-in", "evaluation", "assessment", "questions", "quarterly-review", "progress-check"},
-}
-
 
 def _chk(name: str, ok: bool, detail: str) -> dict:
     return {"name": name, "pass": ok, "detail": detail}
@@ -88,32 +63,35 @@ def _validate_report_fields(rep: dict, is_batch: bool, errors: list[str]) -> dic
                 else "Found non-scorer fields")
 
 
-def _validate_decision_band(slide: dict, prefix: str, errors: list[str]) -> None:
-    """The decision action must agree with the strongest eligible candidate.
+def _validate_decision_action(slide: dict, prefix: str, errors: list[str]) -> None:
+    """Enforce the scorer-owned published-only decision contract.
 
-    score_visual_items.py keeps the selected semantic runner-up in candidates,
-    including when a raw-score lure ranks higher. Recomputing its action band
-    here makes a post-score `reuse` -> `custom-local` rewrite fail closed.
+    A published, buildable candidate is reused directly. Otherwise generation
+    is text-only; it never creates a local visual structure.
     """
     decision = slide.get("decision") or {}
-    candidates = [c for c in slide.get("candidates") or [] if isinstance(c, dict) and c.get("eligible")]
-    if not candidates or not isinstance(decision, dict):
+    if not isinstance(decision, dict):
         return
-    semantic = [
-        candidate for candidate in candidates
-        if (candidate.get("criteria") or {}).get("semantic_intent", 0) >= SEMANTIC_FLOOR
-    ]
-    if not semantic:
-        expected_action = "custom-local"
-    else:
-        chosen = max(semantic, key=lambda candidate: candidate.get("score", 0))
-        score = chosen.get("score", 0)
-        expected_action = "reuse" if score >= 75 else "adapt-local" if score >= ADAPT_FLOOR else "custom-local"
-    if decision.get("action") != expected_action:
+    action = decision.get("action")
+    item_id = decision.get("item_id")
+    if action == "reuse":
+        candidates = [
+            candidate for candidate in slide.get("candidates") or []
+            if isinstance(candidate, dict)
+            and candidate.get("eligible")
+            and candidate.get("item_id") == item_id
+        ]
+        if candidates:
+            return
         errors.append(
-            f"{prefix}.decision action {decision.get('action')!r} conflicts with scorer band "
-            f"{expected_action!r}; regenerate the report instead of curating it."
+            f"{prefix}.decision reuse item {item_id!r} is not an eligible scored candidate; "
+            "regenerate the report instead of curating it."
         )
+    elif action == "text-only":
+        if item_id is not None:
+            errors.append(f"{prefix}.decision text-only action must have item_id null")
+        if decision.get("score") != 0:
+            errors.append(f"{prefix}.decision text-only action must have score 0")
 
 
 def _registry_tokens(registry: dict) -> dict[str, set[str]]:
@@ -125,9 +103,18 @@ def _registry_tokens(registry: dict) -> dict[str, set[str]]:
     return index
 
 
-def _content_shapes(vreqs) -> dict[str, str | None]:
-    """Map request_id -> content_shape from visual-requests.json (batch or single)."""
-    shapes: dict[str, str | None] = {}
+def _registry_set_sizes(registry: dict) -> dict[str, set[int]]:
+    """Map item_id -> declared `set-of-N` sizes, for the parallel-set allowance."""
+    return {item.get("id"): declared_set_sizes(item) for item in registry.get("items", [])}
+
+
+def _requests_by_id(vreqs) -> dict[str, dict]:
+    """Map request_id -> the whole request from visual-requests.json.
+
+    The full request is needed, not just `content_shape`: T1 now also reads the
+    declared `repeatable-set-of-N` and `item_count` evidence.
+    """
+    requests: dict[str, dict] = {}
     if isinstance(vreqs, list):
         pool = vreqs
     elif isinstance(vreqs, dict):
@@ -136,15 +123,21 @@ def _content_shapes(vreqs) -> dict[str, str | None]:
         pool = []
     for entry in pool:
         if isinstance(entry, dict) and entry.get("request_id"):
-            shapes[entry["request_id"]] = entry.get("content_shape")
-    return shapes
+            requests[entry["request_id"]] = entry
+    return requests
 
 
-def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: dict,
-                         strict_shape: bool) -> tuple[list[str], list[str]]:
-    """T1: a reuse/adapt-local item's intent/tags must match the slide's content_shape."""
+def _validate_shape_lock(rep: dict, is_batch: bool, requests: dict, reg_tokens: dict,
+                         strict_shape: bool, reg_sizes: dict | None = None
+                         ) -> tuple[list[str], list[str]]:
+    """T1: a reused item must match the slide's content_shape.
+
+    Delegates the decision to `score_visual_items.shape_lock_ok` so the scorer
+    and this gate cannot drift, including the parallel-set allowance.
+    """
     errs: list[str] = []
     warns: list[str] = []
+    reg_sizes = reg_sizes or {}
     if is_batch:
         decisions = [(s.get("request_id"), s.get("decision") or {})
                      for s in rep.get("slides", []) if isinstance(s, dict)]
@@ -153,9 +146,10 @@ def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: di
     for rid, dec in decisions:
         action = dec.get("action", "")
         item_id = dec.get("item_id")
-        if action not in ("reuse", "adapt-local") or not item_id:
+        if action != "reuse" or not item_id:
             continue
-        shape = shapes.get(rid)
+        request = requests.get(rid) or {}
+        shape = request.get("content_shape")
         if not shape:
             msg = f"slide {rid!r}: missing content_shape (required for T1 selection-lock)"
             (errs if strict_shape else warns).append(msg)
@@ -164,21 +158,87 @@ def _validate_shape_lock(rep: dict, is_batch: bool, shapes: dict, reg_tokens: di
             errs.append(f"slide {rid!r}: unknown content_shape {shape!r} "
                         f"(allowed: {', '.join(sorted(SHAPE_TYPE_MAP))})")
             continue
-        allowed = SHAPE_TYPE_MAP[shape]
         tokens = reg_tokens.get(item_id, set())
-        if not (allowed & tokens):
+        sizes = reg_sizes.get(item_id, set())
+        if not shape_lock_ok(shape, request, tokens, sizes):
             errs.append(
-                f"slide {rid!r}: content_shape {shape!r} requires one of {sorted(allowed)}, "
-                f"but chosen item {item_id!r} has intent/tags {sorted(tokens) or '[]'}"
+                f"slide {rid!r}: content_shape {shape!r} requires one of "
+                f"{sorted(SHAPE_TYPE_MAP[shape])}, but chosen item {item_id!r} has "
+                f"intent/tags {sorted(tokens) or '[]'} and declares set sizes "
+                f"{sorted(sizes) or '[]'} (no parallel-set match either)"
             )
     return errs, warns
+
+
+def _item_counts(vreqs) -> dict[str, object]:
+    """Map request_id -> item_count from visual-requests.json (batch or single)."""
+    counts: dict[str, object] = {}
+    if isinstance(vreqs, list):
+        pool = vreqs
+    elif isinstance(vreqs, dict):
+        pool = vreqs.get("slides") or vreqs.get("requests") or [vreqs]
+    else:
+        pool = []
+    for entry in pool:
+        if isinstance(entry, dict) and entry.get("request_id"):
+            counts[entry["request_id"]] = entry.get("item_count")
+    return counts
+
+
+def _reuse_decisions(rep: dict, is_batch: bool) -> list[tuple[str, dict]]:
+    if is_batch:
+        pairs = [(s.get("request_id"), s.get("decision") or {})
+                 for s in rep.get("slides", []) if isinstance(s, dict)]
+    else:
+        pairs = [(rep.get("request_id"), rep.get("decision") or {})]
+    return [(rid, dec) for rid, dec in pairs
+            if dec.get("action") == "reuse" and dec.get("item_id")]
+
+
+def _validate_unit_model(rep: dict, is_batch: bool, counts: dict,
+                         contracts: dict) -> list[str]:
+    """T2 visual-unit lock: repeat count must match the requested item count.
+
+    A component that repeats six cards cannot host four parallel ideas without
+    shipping two blank cards, and per-slot capacity cannot see that — every
+    mapped slot fits. Rejecting here is deterministic and lets the normal
+    pipeline fall back to another eligible published component or to text-only,
+    instead of inventing a custom-local visual.
+
+    Only the component's own geometry is consulted. A component with no repeat
+    structure (a cover, a quote, a closing) declares no unit count; unknown is
+    not a mismatch, exactly like the scorer's `set-of-N` rule.
+    """
+    errs: list[str] = []
+    for rid, dec in _reuse_decisions(rep, is_batch):
+        item_count = counts.get(rid)
+        if not isinstance(item_count, int) or isinstance(item_count, bool) or item_count < 2:
+            continue
+        contract = contracts.get(str(dec.get("item_id")))
+        if not contract:
+            continue
+        model = unit_model(contract)
+        units = model.get("primary_unit_count")
+        if not isinstance(units, int) or units == item_count:
+            continue
+        example = model["primary"]["slot_ids"][0] if model.get("primary") else []
+        errs.append(
+            f"slide {rid!r}: request needs {item_count} parallel item(s) but chosen component "
+            f"{dec.get('item_id')!r} repeats {units} native unit(s) "
+            f"(e.g. {', '.join(example) or 'n/a'}); "
+            f"{abs(units - item_count)} unit(s) would ship "
+            f"{'blank' if units > item_count else 'over-filled'}. "
+            "Reselect a published component with "
+            f"{item_count} unit(s), or render this slide text-only."
+        )
+    return errs
 
 
 def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: list[str]) -> list[dict]:
     checks: list[dict] = []
     prefix = f"slides[{idx}]"
     dec = slide.get("decision") or {}
-    missing_dec = {"action", "item_id", "score", "reason"} - set(dec)
+    missing_dec = {"action", "item_id", "score", "reason", "extraction_recommended"} - set(dec)
     action = dec.get("action", "")
     action_ok = action in VALID_ACTIONS
     if missing_dec or not action_ok:
@@ -196,14 +256,16 @@ def _validate_slide_entry(slide: dict, idx: int, errors: list[str], warnings: li
             errors.append(f"{prefix}.candidates[{j}] criteria missing: {', '.join(sorted(miss))}")
             break
     item_id = dec.get("item_id")
-    if action in ("reuse", "adapt-local") and not item_id:
+    if action == "reuse" and not item_id:
         errors.append(f"{prefix}: action={action!r} but item_id is null")
-    score_val = dec.get("score", 0)
-    if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        errors.append(f"{prefix}: score {score_val} >= 75 but action is {action!r}")
-    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        errors.append(f"{prefix}: score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
-    _validate_decision_band(slide, prefix, errors)
+    if action == "text-only" and item_id is not None:
+        errors.append(f"{prefix}: action='text-only' but item_id is not null")
+    # Scorer advisories (weak subject match, unscoreable request terms) are
+    # non-blocking, but they must reach the reviewer instead of staying buried
+    # in the report the gate summary replaces.
+    for note in dec.get("warnings") or []:
+        warnings.append(f"{slide.get('request_id', prefix)}: {note}")
+    _validate_decision_action(slide, prefix, errors)
     return checks
 
 
@@ -247,7 +309,7 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
         fail(f"Schema missing top-level keys: {', '.join(sorted(missing))}")
 
     dec = rep.get("decision") or {}
-    missing_dec = {"action", "item_id", "score", "reason"} - set(dec)
+    missing_dec = {"action", "item_id", "score", "reason", "extraction_recommended"} - set(dec)
     action = dec.get("action", "")
     action_ok = action in VALID_ACTIONS
     ok = not missing_dec and action_ok
@@ -284,7 +346,7 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
         errors.extend(crit_errors)
 
     # Equal scores across candidates are legitimate (two items can be equally
-    # relevant, or all blocked items score 0.0). The only implausible case is
+    # relevant, or all candidates can score 0.0). The only implausible case is
     # eligible items that all scored zero.
     scores = [c.get("score") for c in cands if isinstance(c, dict) and "score" in c]
     eligible_any = any(c.get("eligible") for c in cands if isinstance(c, dict))
@@ -296,17 +358,12 @@ def _validate_single(rep: dict, checks: list[dict], errors: list[str], warnings:
         fail(detail)
 
     item_id = dec.get("item_id")
-    score_val = dec.get("score", 0)
-    adopt_ok = not (action in ("reuse", "adapt-local") and not item_id)
+    adopt_ok = not ((action == "reuse" and not item_id) or (action == "text-only" and item_id is not None))
     checks.append(_chk("adoption_compliance", adopt_ok,
-        "Adoption rules satisfied" if adopt_ok else f"action={action!r} but item_id is null"))
+        "Published-only decision rules satisfied" if adopt_ok else f"action={action!r} has incompatible item_id={item_id!r}"))
     if not adopt_ok:
-        fail(f"Adoption: action={action!r} requires non-null item_id")
-    if isinstance(score_val, (int, float)) and score_val >= 75 and action != "reuse":
-        errors.append(f"Score {score_val} >= 75 but action is {action!r}, expected 'reuse'")
-    if isinstance(score_val, (int, float)) and 0 < score_val < ADAPT_FLOOR and action in ("reuse", "adapt-local"):
-        errors.append(f"Score {score_val} < {ADAPT_FLOOR} but action is {action!r} (below adapt-local floor)")
-    _validate_decision_band(rep, "report", errors)
+        fail(f"Adoption: action={action!r} has incompatible item_id={item_id!r}")
+    _validate_decision_action(rep, "report", errors)
 
 
 def main() -> int:
@@ -354,9 +411,12 @@ def main() -> int:
     # the per-slide content_shape).
     if args.visual_requests:
         try:
-            reg_tokens = _registry_tokens(load_json(args.registry))
-            shapes = _content_shapes(load_json(args.visual_requests))
-            s_errs, s_warns = _validate_shape_lock(rep, is_batch, shapes, reg_tokens, args.strict_shape)
+            shape_registry = load_json(args.registry)
+            reg_tokens = _registry_tokens(shape_registry)
+            reg_sizes = _registry_set_sizes(shape_registry)
+            requests = _requests_by_id(load_json(args.visual_requests))
+            s_errs, s_warns = _validate_shape_lock(rep, is_batch, requests, reg_tokens,
+                                                   args.strict_shape, reg_sizes)
             ok = not s_errs
             checks.append(_chk("shape_lock", ok,
                 "content_shape <-> component type consistent" if ok else f"{len(s_errs)} shape mismatch(es)"))
@@ -364,6 +424,22 @@ def main() -> int:
             warnings.extend(s_warns)
         except Exception as exc:
             warnings.append(f"shape-lock skipped: {exc}")
+
+        # T2 visual-unit lock: the chosen component's repeat structure must be
+        # able to host exactly the requested number of parallel items.
+        try:
+            registry = load_json(args.registry)
+            reused = {dec["item_id"] for _, dec in _reuse_decisions(rep, is_batch)}
+            contracts = _contracts_from_registry(registry, reused)
+            u_errs = _validate_unit_model(rep, is_batch, _item_counts(load_json(args.visual_requests)),
+                                          contracts)
+            ok = not u_errs
+            checks.append(_chk("visual_unit_lock", ok,
+                "item_count <-> component repeat structure consistent" if ok
+                else f"{len(u_errs)} unit-model mismatch(es)"))
+            errors.extend(u_errs)
+        except Exception as exc:
+            warnings.append(f"visual-unit lock skipped: {exc}")
 
     # Cross-check with visual-requests (optional)
     if args.visual_requests:

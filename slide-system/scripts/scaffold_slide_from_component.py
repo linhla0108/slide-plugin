@@ -78,6 +78,7 @@ def build_scaffold(item_id: str, slots: list[str]) -> str:
 <style>
   .slide-scaffold {{ position: relative; width: 1920px; height: 1080px; overflow: hidden; }}
   .slide-scaffold > .bg {{ position: absolute; inset: 0; width: 1920px; height: 1080px; }}
+  .slide-scaffold .slot {{ z-index: 20; }}
   .slide-scaffold .slot > * {{ margin: 0; }}
 </style>
 <div class="slide-scaffold" data-base-component="{item_id}" data-content-shape="">

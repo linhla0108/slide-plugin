@@ -179,8 +179,21 @@ def pptx_is_editable(pptx_path: Path) -> tuple[bool, str]:
     return (ok, f"{runs} native text runs, sample words: {sorted(found)}")
 
 
+def pdf_page_size(pdf_path: Path) -> tuple[float, float]:
+    """Largest page box as (width_pt, height_pt). Shares export_pptx's reader."""
+    sys.path.insert(0, str(SCRIPTS))
+    from export_pptx import pdf_geometry
+    return pdf_geometry(pdf_path)[1]
+
+
 def pdf_pages(pdf_path: Path) -> int:
-    """Page count without external tools (parse the PDF trailer best-effort)."""
+    """Return the page count, preferring the existing PyMuPDF dependency."""
+    try:
+        import fitz
+        with fitz.open(pdf_path) as doc:
+            return len(doc)
+    except Exception:
+        pass
     data = pdf_path.read_bytes()
     # Count /Type /Page (not /Pages) — good enough for a sanity check.
     return data.count(b"/Type /Page") or data.count(b"/Type/Page")
@@ -288,10 +301,19 @@ def main() -> int:
             rc, log, ms = run([node, str(SCRIPTS / "export-pdf.js"),
                                "--url", url, "--slides", str(SLIDES),
                                "--showJs", "goToSlide({n})", "--output", str(pdf_pw)])
-            if rc == 0 and pdf_pw.exists():
-                b_pw.ok(ms, f"{pdf_pw.stat().st_size // 1024} KB, ~{pdf_pages(pdf_pw)} page(s)")
+            pages = pdf_pages(pdf_pw) if pdf_pw.exists() else 0
+            # Page count alone once passed while every sheet printed portrait:
+            # `landscape:true` plus an explicit width/height made Chromium swap
+            # the paper box. Assert the real geometry too.
+            width, height = (pdf_page_size(pdf_pw) if pdf_pw.exists() else (0.0, 0.0))
+            if rc == 0 and pages >= SLIDES and width > height:
+                b_pw.ok(ms, f"{pdf_pw.stat().st_size // 1024} KB, {pages} page(s), "
+                            f"{width:.0f}x{height:.0f}pt landscape")
+            elif rc == 0 and pages >= SLIDES:
+                b_pw.fail(f"page {width:.0f}x{height:.0f}pt is not landscape "
+                          "(a 16:9 deck must print wider than tall)")
             else:
-                b_pw.fail(log.strip().splitlines()[-1] if log.strip() else f"rc={rc}")
+                b_pw.fail(log.strip().splitlines()[-1] if log.strip() else f"rc={rc}, pages={pages}")
 
         b_lo = R("B2 LibreOffice (PPTX→PDF, baseline)")
         if not soffice:

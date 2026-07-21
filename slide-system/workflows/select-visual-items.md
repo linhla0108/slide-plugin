@@ -34,18 +34,23 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
    `registries/component-retrieval-index.jsonl` (published items only; pass
    `--retrieval-index none` to disable). Keywords, `component_type`,
    `layout_role`, `visual_summary`, `retrieval_notes`, and `use_cases`
-   matches earn reduced, capped credit that improves ranking but can never
-   cross the semantic floor on its own — canonical `intent`/`tags` overlap is
-   still what makes an item selectable, so generic metadata overlap cannot
-   force a bad pick. Anti-use-case hits, `set-of-N` vs `item_count`
+   matches earn reduced, capped credit that improves ranking. Anti-use-case
+   hits, `set-of-N` vs `item_count`
    mismatches, and components with zero editable text slots subtract score
    with explicit `reasons`; each candidate carries a `retrieval` block
-   explaining its matches. Selection score still != buildability — verify
-   geometry/count/domain fit before building (see the 2026-07-07 session
-   lessons). If the highest raw scorer is below the semantic floor, the
-   decision may select the best semantically valid runner-up; that selected
-   item is still emitted in `candidates` with its score and reasons. Keep the
-   index fresh via
+   explaining its matches. The top published candidate is reusable when it
+   passes the editable-content, count, visual-unit, and content-shape gates.
+   Declare `repeatable-set-of-N` in `content_structure` alongside `item_count: N`
+   whenever a slide is N parallel peer items: that evidence lets T1 shape-lock
+   also accept a published component declaring the same set size, so a 4-card
+   role set can host a 4-item checklist. Without both signals the base
+   shape-lock applies unchanged. A
+   candidate that repeats a different number of native units than the request's
+   `item_count` (2 or more) stays ranked but is not buildable, so selection falls
+   through to the next compatible published component or to `text-only`. Semantic score
+   orders those candidates but does not block reuse. A source-topic mismatch is
+   retained as a review warning rather than a blocker. When no published item
+   is physically buildable, the decision is `text-only`. Keep the index fresh via
    `build_component_retrieval_index.py --check`.
 5. **Validate the selection report (BLOCKING):**
    ```bash
@@ -54,11 +59,17 @@ Use `<project-python>` below: `.venv\Scripts\python.exe` on Windows and
        --visual-requests <run>/analysis/visual-requests.json
    ```
    EXIT 0 required before HTML build. EXIT 1 = re-run step 4.
-6. Reuse scores of 75 or higher.
-7. Use a slide-local adaptation for scores from 65 through 74.
-8. Use a slide-local custom structure below 65 (no strong match).
-9. Record selected and rejected candidates with reasons.
-10. Record an extraction recommendation when useful. Never trigger extraction.
+   The T2 `visual_unit_lock` re-checks visual-unit fit here as defense in depth.
+   The scorer already applies it during selection, so a passing report is the
+   normal outcome; a failure here means the report was hand-edited or produced
+   with `--unit-registry none`.
+6. Reuse the top published candidate that passes the editable-content, count,
+   and content-shape gates. Score orders candidates; it is not an approval band.
+7. When no buildable candidate exists, generate a `text-only` slide from approved
+   copy. Do not make a slide-local visual or custom component.
+8. Record selected and rejected candidates with reasons.
+9. Record an extraction recommendation when useful. Never trigger extraction;
+   a user must explicitly approve any new component work.
 
 Write one `analysis/visual-requests.json` and one `analysis/selection-report.json`
 per run. Do not emit a separate file per section.

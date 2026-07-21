@@ -129,14 +129,12 @@ THEN
 - Does not affect items from another set or items without the flag.
 - When `--prefer-set` is not passed, the scorer behaves exactly as before.
 
-### Decision thresholds
+### Published-only decision
 
-| Score | Decision | Meaning |
+| Condition | Decision | Meaning |
 |---|---|---|
-| ≥ 75 | **reuse** | Use the published item as-is |
-| 65–74 | **adapt-local** | Use it but adjust locally for the slide |
-| < 65 | **custom-local** | Build a new one for this slide |
-| 0 (no eligible item) | **blocked** | No suitable item available |
+| Published candidate passes slot/count/shape gates | **reuse** | Use the top-ranked published item as-is; surface source-topic leakage as a warning |
+| No buildable published candidate | **text-only** | Render approved copy only; retain candidates as suggestions |
 
 ---
 
@@ -286,9 +284,8 @@ FOR each slide in the deck:
   │
   ├── [SCORE] Run score_visual_items.py
   │     │
-  │     ├── score ≥ 75 → REUSE template as-is
-  │     ├── score 65-74 → ADAPT template + local tweaks
-  │     └── score < 65 → CUSTOM build from scratch
+   │     ├── buildable published candidate → REUSE as-is
+   │     └── no buildable candidate → TEXT-ONLY with extraction suggestion
   │
   ├── [COMPOSE] Read component-composition.md
   │     │

@@ -101,24 +101,71 @@ async function main() {
 
   await page.goto(args.url, { waitUntil: "networkidle" });
 
-  // For multi-slide decks: navigate to last slide so the full layout has rendered
-  // at least once before PDF capture. Chromium PDF captures current DOM state.
+  // For multi-slide decks: navigate through each slide once, then switch from
+  // presentation mode to a print layout. Chromium's page.pdf captures one DOM
+  // state, so leaving only the active slide visible would silently create a
+  // one-page PDF regardless of --slides.
   if (args.slides && args.showJs) {
     for (let i = 0; i < args.slides; i++) {
       const expr = args.showJs.replace("{n}", String(i));
       await page.evaluate(expr).catch(() => {});
       await page.waitForTimeout(args.delay);
     }
-    // Return to first slide for the actual PDF capture
-    const first = args.showJs.replace("{n}", "0");
-    await page.evaluate(first).catch(() => {});
+    await page.evaluate(({ width, height }) => {
+      const stage = document.querySelector("deck-stage");
+      const slides = stage
+        ? Array.from(stage.children)
+        : Array.from(document.querySelectorAll(".slide"));
+      if (stage) {
+        stage.setAttribute("noscale", "");
+        Object.assign(stage.style, {
+          position: "static",
+          left: "auto",
+          top: "auto",
+          width: `${width}px`,
+          height: "auto",
+          overflow: "visible",
+          background: "transparent",
+        });
+        // deck-stage re-applies its fit() transform on every resize, and
+        // Chromium resizes the layout viewport while printing. A plain inline
+        // style loses that race; `!important` wins it deterministically and
+        // only affects this throwaway print DOM, never the live preview.
+        stage.style.setProperty("transform", "none", "important");
+      }
+      slides.forEach((slide, index) => {
+        slide.hidden = false;
+        Object.assign(slide.style, {
+          display: "block",
+          position: "relative",
+          inset: "auto",
+          margin: "0",
+          // Pin every slide to the design canvas. Without an explicit box the
+          // slide takes its natural height, so a short slide leaves the rest
+          // of the sheet blank and a tall one bleeds onto the next page.
+          width: `${width}px`,
+          height: `${height}px`,
+          overflow: "hidden",
+          pageBreakAfter: index === slides.length - 1 ? "auto" : "always",
+          breakAfter: index === slides.length - 1 ? "auto" : "page",
+        });
+      });
+      // The flattened stage is longer than the viewport; a coloured body would
+      // print as a band under the final slide.
+      Object.assign(document.body.style, { margin: "0", background: "transparent" });
+      document.documentElement.style.background = "transparent";
+    }, { width: args.width, height: args.height });
+    await page.emulateMedia({ media: "print" });
     await page.waitForTimeout(args.delay);
   }
 
   console.log("[export-pdf] Printing to PDF…");
+  // `landscape` must NOT be combined with an explicit width/height: Chromium
+  // applies the orientation on top of the given paper box and swaps the two,
+  // which turned a 1920x1080 deck into a 1080x1920 portrait sheet. The
+  // width/height pair already fixes the orientation.
   await page.pdf({
     path: outputPath,
-    landscape: true,
     printBackground: true,
     width: `${args.width}px`,
     height: `${args.height}px`,

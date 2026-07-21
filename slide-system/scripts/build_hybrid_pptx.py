@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import zipfile
 from pathlib import Path
@@ -305,20 +306,99 @@ def apply_text_transform(text: str, transform: str) -> str:
     return text
 
 
+# Mean glyph advance as a fraction of font size, used only to estimate how many
+# lines PowerPoint will need for a string. Sibling estimators must agree with
+# this value: validate_slot_content_plan.AVERAGE_GLYPH_WIDTH (pre-build slot
+# capacity) and validate_export_objects (post-export overflow gate, which
+# imports the constant from here so the builder stays the single authority for
+# exported-PPTX text metrics).
+#
+# Ceiling: a fixed factor is not real font metrics, so it over-estimates narrow
+# strings and under-estimates wide ones. It only ever sizes the *height* budget
+# of a box that already wraps, so an error costs vertical slack, never a
+# geometry change. Upgrade trigger: if a deck needs exact line counts (e.g. to
+# auto-fit font size), replace this with real font-metric measurement.
+AVERAGE_GLYPH_WIDTH = 0.56
+
+
+def item_line_metrics(item: dict) -> tuple[float, float]:
+    """(font_px, line_px) for a captured text item, in the capture's own px."""
+    font_px = float(str(item.get("fontSize", "18px")).replace("px", "").strip() or 18)
+    lh_raw = str(item.get("lineHeight", "")).replace("px", "").strip()
+    try:
+        line_px = float(lh_raw)
+    except ValueError:
+        line_px = font_px * 1.2
+    if line_px <= 0:
+        line_px = font_px * 1.2
+    return font_px, line_px
+
+
+def wrapped_line_count(lines: list[str], width_px: float, font_px: float) -> int:
+    """Lines PowerPoint needs for these paragraphs at this width (estimate)."""
+    chars_per_line = max(1, math.floor(width_px / max(font_px * AVERAGE_GLYPH_WIDTH, 1)))
+    return sum(max(1, math.ceil(len(line.strip()) / chars_per_line)) for line in lines)
+
+
+def set_text_run_style(run, style: dict, fallback_font: str, canvas_w: float,
+                       slide_w_in: float) -> None:
+    """Apply captured CSS style to one editable PowerPoint text run."""
+    set_run_typefaces(run, first_font_family(style.get("fontFamily", ""), fallback_font))
+    set_letter_spacing(run, style.get("letterSpacing", ""), canvas_w, slide_w_in)
+    css_px = float(str(style.get("fontSize", "18px")).replace("px", "").strip())
+    run.font.size = Pt(max(4.0, round(css_px * slide_w_in * 72.0 / canvas_w, 1)))
+    weight = str(style.get("fontWeight", "400")).replace("bold", "700").replace("normal", "400")
+    run.font.bold = int(weight) >= 700
+    run.font.color.rgb = parse_css_color(style.get("color", "rgb(248,250,252)"))
+
+
 def add_text_box_v2(slide, item: dict, font_name: str, canvas_w: float, canvas_h: float,
                     slide_w_in: float = 13.333333, slide_h_in: float = 7.5) -> None:
     """Layered text box: no 1.35 height hack — exact line spacing instead,
-    and computed text-transform applied (P1 wrong-characters fix)."""
+    and computed text-transform applied (P1 wrong-characters fix).
+
+    Wrapping contract (PPTX-only overlap fix). The browser is the authority on
+    whether a string wraps: capture records the laid-out box, so h/lineHeight is
+    the line count CSS actually produced.
+
+      * captured 1 line  → word_wrap stays OFF. PowerPoint's font metrics differ
+        slightly from the browser's, so letting it re-wrap would break headings
+        and labels onto a second line the deck never had.
+      * captured 2+ lines → word_wrap ON, plus a height budget for the wrapped
+        lines. Without wrapping PowerPoint lays the whole paragraph on ONE line;
+        native PPTX text is not clipped to its shape, so a card body overruns
+        its card and paints straight over the neighbouring card's text box. The
+        browser render and the PDF look fine, which is why only PPTX shows it.
+
+    x/y/w are never touched, and the height budget is clamped at the canvas edge.
+    """
+    font_px, line_px = item_line_metrics(item)
+    line_spacing = round(line_px / font_px, 3) if font_px > 0 else None
+    content = apply_text_transform(item["text"], str(item.get("textTransform", "none")))
+    # Explicit <br> breaks arrive as \n from capture — one paragraph per line.
+    lines = content.split("\n")
+
+    captured_lines = max(1, int(round(float(item["h"]) / line_px)))
+    wrap = captured_lines > len(lines)
+    needed_px = float(item["h"]) * 1.05  # 5% slack for a box that already fits
+    if wrap:
+        needed_px = max(
+            needed_px,
+            max(captured_lines, wrapped_line_count(lines, float(item["w"]), font_px)) * line_px,
+        )
+    # Growing height must never push the box off the canvas.
+    needed_px = min(needed_px, max(float(item["h"]), canvas_h - float(item["y"])))
+
     x = item["x"] / canvas_w * slide_w_in
     y = item["y"] / canvas_h * slide_h_in
     w = max(item["w"] / canvas_w * slide_w_in, 0.08)
-    h = max(item["h"] / canvas_h * slide_h_in * 1.05, 0.14)  # 5% slack only
+    h = max(needed_px / canvas_h * slide_h_in, 0.14)
     box = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     box.name = f"Editable: {item['text'][:40]}"
 
     tf = box.text_frame
     tf.clear()
-    tf.word_wrap = False
+    tf.word_wrap = wrap
     tf.auto_size = None
     for side in ("margin_left", "margin_right", "margin_top", "margin_bottom"):
         setattr(tf, side, Inches(0))
@@ -327,29 +407,37 @@ def add_text_box_v2(slide, item: dict, font_name: str, canvas_w: float, canvas_h
     alignment = PP_ALIGN.CENTER if align == "center" else (
         PP_ALIGN.RIGHT if align in ("right", "end") else PP_ALIGN.LEFT
     )
-    font_px = float(str(item.get("fontSize", "18px")).replace("px", "").strip() or 18)
-    lh_raw = str(item.get("lineHeight", "")).replace("px", "").strip()
-    try:
-        line_px = float(lh_raw)
-    except ValueError:
-        line_px = font_px * 1.2
-    line_spacing = round(line_px / font_px, 3) if font_px > 0 else None
 
-    content = apply_text_transform(item["text"], str(item.get("textTransform", "none")))
-    # Explicit <br> breaks arrive as \n from capture — one paragraph per line.
-    for index, line in enumerate(content.split("\n")):
+    source_runs = item.get("runs") or [{
+        "text": content,
+        "fontFamily": item.get("fontFamily", ""),
+        "letterSpacing": item.get("letterSpacing", ""),
+        "fontSize": item.get("fontSize", "18px"),
+        "fontWeight": item.get("fontWeight", "400"),
+        "color": item.get("color", "rgb(248,250,252)"),
+    }]
+    paragraph_runs: list[list[dict]] = [[]]
+    for source_run in source_runs:
+        styled_run = dict(source_run)
+        transformed = apply_text_transform(
+            str(styled_run.get("text", "")), str(item.get("textTransform", "none"))
+        )
+        segments = transformed.split("\n")
+        for segment_index, segment in enumerate(segments):
+            if segment:
+                paragraph_runs[-1].append(dict(styled_run, text=segment))
+            if segment_index < len(segments) - 1:
+                paragraph_runs.append([])
+
+    for index, run_parts in enumerate(paragraph_runs):
         para = tf.paragraphs[0] if index == 0 else tf.add_paragraph()
         para.alignment = alignment
         if line_spacing:
             para.line_spacing = line_spacing
-        run = para.add_run()
-        run.text = line
-        set_run_typefaces(run, first_font_family(item.get("fontFamily", ""), font_name))
-        set_letter_spacing(run, item.get("letterSpacing", ""), canvas_w, slide_w_in)
-        css_px = float(str(item.get("fontSize", "18px")).replace("px", "").strip())
-        run.font.size = Pt(max(4.0, round(css_px * slide_w_in * 72.0 / canvas_w, 1)))
-        run.font.bold = int(str(item.get("fontWeight", "400")).replace("bold", "700").replace("normal", "400")) >= 700
-        run.font.color.rgb = parse_css_color(item.get("color", "rgb(248,250,252)"))
+        for run_part in run_parts:
+            run = para.add_run()
+            run.text = run_part["text"]
+            set_text_run_style(run, run_part, font_name, canvas_w, slide_w_in)
 
 
 def build_layered(args: argparse.Namespace) -> None:
